@@ -94,8 +94,7 @@ export class StreamModule {
     if (data) {
       try {
         return JSON.parse(data);
-      }
-      catch (err) {
+      } catch (err) {
         console.log('invalid channel data');
       }
     }
@@ -211,24 +210,24 @@ export class StreamModule {
     }
   }
 
-  public addChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void {
+  public addChannelListener(ev: (arg: { channels: Channel[]; cardId: string | null }) => void): void {
     this.emitter.on('channel', ev);
     const channels = Array.from(this.channelEntries, ([channelId, entry]) => entry.channel);
     ev({ channels, cardId: null });
   }
 
-  public removeChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void {
+  public removeChannelListener(ev: (arg: { channels: Channel[]; cardId: string | null }) => void): void {
     this.emitter.off('channel', ev);
   }
 
   private emitChannels() {
     const channels = Array.from(this.channelEntries, ([channelId, entry]) => entry.channel);
     this.emitter.emit('channel', { channels, cardId: null });
-  } 
+  }
 
   public async close(): Promise<void> {
     this.closing = true;
-    while (this.syncing) { 
+    while (this.syncing) {
       await new Promise((r) => setTimeout(r, CLOSE_POLL_MS));
     }
   }
@@ -238,7 +237,7 @@ export class StreamModule {
     await this.sync();
   }
 
-  public async addSealedChannel(type: string, subject: any, cardIds: string[], aesKeyHex: string, seals: { publicKey: string, sealedKey: string}[]): Promise<string> {
+  public async addSealedChannel(type: string, subject: any, cardIds: string[], aesKeyHex: string, seals: { publicKey: string; sealedKey: string }[]): Promise<string> {
     const { node, secure, token, crypto, seal } = this;
     if (!crypto) {
       throw new Error('crypto not set');
@@ -250,7 +249,7 @@ export class StreamModule {
     const { ivHex } = await crypto.aesIv();
     const subjectData = JSON.stringify(subject);
     const { encryptedDataB64 } = await crypto.aesEncrypt(subjectData, ivHex, aesKeyHex);
-    const sealedSubject = { subjectEncrypted: encryptedDataB64, subjectIv: ivHex, seals: [ ...seals, sealKey ] };
+    const sealedSubject = { subjectEncrypted: encryptedDataB64, subjectIv: ivHex, seals: [...seals, sealKey] };
     return await addChannel(node, secure, token, type, sealedSubject, cardIds);
   }
 
@@ -286,8 +285,7 @@ export class StreamModule {
       const { encryptedDataB64 } = await crypto.aesEncrypt(subjectData, subjectIv, item.channelKey);
       const sealedSubject = { subjectEncrypted, encryptedDataB64, subjectIv, seals };
       await setChannelSubject(node, secure, token, channelId, type, sealedSubject);
-    }
-    else {
+    } else {
       await setChannelSubject(node, secure, token, channelId, type, subject);
     }
   }
@@ -332,7 +330,7 @@ export class StreamModule {
       .map(([key, value]) => value.card);
   }
 
-  public async flagChannel(channelId: string): Promise<void> { 
+  public async flagChannel(channelId: string): Promise<void> {
     const { node, secure, guid } = this;
     await addFlag(node, secure, guid, { channelId });
   }
@@ -406,8 +404,8 @@ export class StreamModule {
     const value = `{ "marker": "${marker}", "cardId": null, "channelId": ${channel}, "topicId": ${topic}, "tagId": ${tag} }`;
     this.markers.add(value);
     await this.store.setMarker(this.guid, value);
-  }   
-      
+  }
+
   private async clearMarker(marker: string, channelId: string | null, topicId: string | null, tagId: string | null) {
     const channel = channelId ? `"${channelId}"` : 'null';
     const topic = topicId ? `"{topicId}"` : 'null';
@@ -415,19 +413,19 @@ export class StreamModule {
     const value = `{ "marker": "${marker}", "cardId": null, "channelId": ${channel}, "topicId": ${topic}, "tagId": ${tag} }`;
     this.markers.delete(value);
     await this.store.clearMarker(this.guid, value);
-  } 
-  
+  }
+
   private isChannelBlocked(channelId: string): boolean {
     return this.isMarked('blocked_channel', channelId, null, null);
-  }     
-          
+  }
+
   private async setChannelBlocked(channelId: string) {
     await this.setMarker('blocked_channel', channelId, null, null);
-  }       
-          
+  }
+
   private async clearChannelBlocked(channelId: string) {
     await this.clearMarker('blocked_channel', channelId, null, null);
-  }     
+  }
 
   private isChannelUnread(channelId: string): boolean {
     return this.isMarked('unread', channelId, null, null);
@@ -445,9 +443,9 @@ export class StreamModule {
     const { summary, detail } = item;
     const channelData = detail.sealed ? item.unsealedDetail : detail.data;
     const topicData = summary.sealed ? item.unsealedSummary : summary.data;
-  
+
     return {
-      channelId, 
+      channelId,
       cardId: null,
       lastTopic: {
         guid: summary.guid,
@@ -463,7 +461,7 @@ export class StreamModule {
       unread: this.isChannelUnread(channelId),
       sealed: detail.sealed,
       dataType: detail.dataType,
-      data: this.parse(channelData), 
+      data: this.parse(channelData),
       created: detail.created,
       updated: detail.updated,
       enableImage: detail.enableImage,
@@ -528,5 +526,4 @@ export class StreamModule {
     }
     return false;
   }
-
 }

@@ -6,4 +6,3 @@ export async function getChannelNotifications(node: string, secure: boolean, tok
   checkResponse(notify.status);
   return await notify.json();
 }
-

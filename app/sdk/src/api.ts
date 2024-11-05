@@ -83,8 +83,8 @@ export interface Contact {
   addCardListener(ev: (cards: Card[]) => void): void;
   removeCardListener(ev: (cards: Card[]) => void): void;
 
-  addChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void;
-  removeChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void;
+  addChannelListener(ev: (arg: { channels: Channel[]; cardId: string | null }) => void): void;
+  removeChannelListener(ev: (arg: { channels: Channel[]; cardId: string | null }) => void): void;
 }
 
 export interface Content {
@@ -104,8 +104,8 @@ export interface Content {
   setBlockedChannel(cardId: string | null, channelId: string, blocked: boolean): Promise<void>;
   getBlockedChannels(): Promise<Channel[]>;
 
-  addChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void;
-  removeChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void;
+  addChannelListener(ev: (arg: { channels: Channel[]; cardId: string | null }) => void): void;
+  removeChannelListener(ev: (arg: { channels: Channel[]; cardId: string | null }) => void): void;
 }
 
 export interface Alias {

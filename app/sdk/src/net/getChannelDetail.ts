@@ -7,4 +7,3 @@ export async function getChannelDetail(node: string, secure: boolean, token: str
   checkResponse(detail.status);
   return await detail.json();
 }
-

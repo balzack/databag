@@ -58,8 +58,7 @@ export class SessionModule implements Session {
     this.status = 'connecting';
     this.emitter = new EventEmitter();
 
-
-console.log(">>> ", channelTypes);
+    console.log('>>> ', channelTypes);
 
     this.identity = new IdentityModule(log, this.store, guid, token, node, secure);
     this.settings = new SettingsModule(log, this.store, this.crypto, guid, token, node, secure);

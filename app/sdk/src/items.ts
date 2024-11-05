@@ -163,5 +163,3 @@ export type TopicItem = {
   detail: TopicDetail;
   unsealedDetail: string | null;
 };
-
-

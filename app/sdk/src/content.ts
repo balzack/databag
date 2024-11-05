@@ -30,8 +30,7 @@ export class ContentModule implements Content {
         seals.push(seal);
       }
       return await this.stream.addSealedChannel(type, subject, cardIds, aesKeyHex, seals);
-    }
-    else {
+    } else {
       return await this.stream.addUnsealedChannel(type, subject, cardIds);
     }
   }
@@ -53,19 +52,19 @@ export class ContentModule implements Content {
   }
 
   public async leaveChannel(cardId: string, channelId: string): Promise<void> {
-    return await this.contact.leaveChannel(cardId, channelId)
+    return await this.contact.leaveChannel(cardId, channelId);
   }
 
   public async getChannelNotifications(cardId: string | null, channelId: string): Promise<boolean> {
     if (cardId) {
       return await this.contact.getChannelNotifications(cardId, channelId);
     }
-    return await this.stream.getChannelNotifications(channelId)
+    return await this.stream.getChannelNotifications(channelId);
   }
-    
+
   public async setChannelNotifications(cardId: string | null, channelId: string, enabled: boolean): Promise<void> {
     if (cardId) {
-      return await this.contact.setChannelNotifications(cardId, channelId, enabled)
+      return await this.contact.setChannelNotifications(cardId, channelId, enabled);
     }
     return await this.stream.setChannelNotifications(channelId, enabled);
   }
@@ -97,12 +96,12 @@ export class ContentModule implements Content {
     return channels.concat(cardChannels);
   }
 
-  public addChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void {
+  public addChannelListener(ev: (arg: { channels: Channel[]; cardId: string | null }) => void): void {
     this.stream.addChannelListener(ev);
     this.contact.addChannelListener(ev);
   }
 
-  public removeChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void {
+  public removeChannelListener(ev: (arg: { channels: Channel[]; cardId: string | null }) => void): void {
     this.stream.removeChannelListener(ev);
     this.contact.removeChannelListener(ev);
   }

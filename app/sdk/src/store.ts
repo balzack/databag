@@ -70,7 +70,7 @@ export interface Store {
 
   addContentChannel(guid: string, channelId: string, item: ChannelItem): Promise<void>;
   removeContentChannel(guid: string, channelId: string): Promise<void>;
-  getContentChannels(guid: string): Promise<{ channelId: string, item: ChannelItem }[]>;
+  getContentChannels(guid: string): Promise<{ channelId: string; item: ChannelItem }[]>;
 
   setContentChannelRevision(guid: string, channelId: string): Promise<void>;
   setContentChannelDetail(guid: string, channelId: string, detail: ChannelDetail, unsealedData: string): Promise<void>;
@@ -109,7 +109,10 @@ export class OfflineStore implements Store {
   }
 
   private async setValue(guid: string, table: string, idFields: string[], fields: string[], idValues: string[], values: (string | number | null)[]): Promise<void> {
-    return await this.sql.set(`UPDATE ${table}_${guid} SET ${fields.map((field) => `${field}=?`).join(',')} WHERE ${idFields.map((idField) => `${idField}=?`).join(' AND ')}`, [...values, ...idValues]);
+    return await this.sql.set(`UPDATE ${table}_${guid} SET ${fields.map((field) => `${field}=?`).join(',')} WHERE ${idFields.map((idField) => `${idField}=?`).join(' AND ')}`, [
+      ...values,
+      ...idValues,
+    ]);
   }
 
   private async removeValue(guid: string, table: string, idFields: string[], idValues: (string | number)[]): Promise<void> {
@@ -333,15 +336,8 @@ export class OfflineStore implements Store {
     await this.setValue(guid, 'card', ['card_id'], ['channel_revision'], [cardId], [revision]);
   }
 
-  public async getContactCardChannels(guid: string): Promise<{ cardId: string, channelId: string, item: ChannelItem }[]> {
-    const channels = await this.getValues(guid, 'card_channel', [
-      'card_id',
-      'channel_id',
-      'detail',
-      'unsealed_detail',
-      'summary',
-      'unsealed_summary',
-    ]);
+  public async getContactCardChannels(guid: string): Promise<{ cardId: string; channelId: string; item: ChannelItem }[]> {
+    const channels = await this.getValues(guid, 'card_channel', ['card_id', 'channel_id', 'detail', 'unsealed_detail', 'summary', 'unsealed_summary']);
     return channels.map((channel) => ({
       cardId: channel.card_id,
       channelId: channel.channel_id,
@@ -356,7 +352,7 @@ export class OfflineStore implements Store {
   }
 
   public async addContactCardChannel(guid: string, cardId: string, channelId: string, item: ChannelItem): Promise<void> {
-    const fields = ['card_id', 'channel_id', 'detail', 'unsealed_detail', 'summary', 'unsealed_summary', 'topic_revision', 'sync_revision' ];
+    const fields = ['card_id', 'channel_id', 'detail', 'unsealed_detail', 'summary', 'unsealed_summary', 'topic_revision', 'sync_revision'];
     const { detail, unsealedDetail, summary, unsealedSummary } = item;
     const value = [cardId, channelId, JSON.stringify(detail), JSON.stringify(unsealedDetail), JSON.stringify(summary), JSON.stringify(unsealedSummary), 0, 0];
     await this.addValue(guid, 'card_channel', fields, value);
@@ -390,14 +386,8 @@ export class OfflineStore implements Store {
     await this.setAppValue(guid, 'content_revision', revision);
   }
 
-  public async getContentChannels(guid: string): Promise<{ channelId: string, item: ChannelItem }[]> {
-    const channels = await this.getValues(guid, 'channel', [
-      'channel_id',
-      'detail',
-      'unsealed_detail',
-      'summary',
-      'unsealed_summary',
-    ]);
+  public async getContentChannels(guid: string): Promise<{ channelId: string; item: ChannelItem }[]> {
+    const channels = await this.getValues(guid, 'channel', ['channel_id', 'detail', 'unsealed_detail', 'summary', 'unsealed_summary']);
     return channels.map((channel) => ({
       channelId: channel.channel_id,
       item: {
@@ -411,7 +401,7 @@ export class OfflineStore implements Store {
   }
 
   public async addContentChannel(guid: string, channelId: string, item: ChannelItem): Promise<void> {
-    const fields = ['channel_id', 'detail', 'unsealed_detail', 'summary', 'unsealed_summary', 'topic_revision', 'sync_revision' ];
+    const fields = ['channel_id', 'detail', 'unsealed_detail', 'summary', 'unsealed_summary', 'topic_revision', 'sync_revision'];
     const { detail, unsealedDetail, summary, unsealedSummary } = item;
     const value = [channelId, JSON.stringify(detail), JSON.stringify(unsealedDetail), JSON.stringify(summary), JSON.stringify(unsealedSummary), 0, 0];
     await this.addValue(guid, 'channel', fields, value);
@@ -436,7 +426,6 @@ export class OfflineStore implements Store {
   public async setContentChannelUnsealedSummary(guid: string, channelId: string, unsealedSummary: any): Promise<void> {
     await this.setValue(guid, 'channel', ['channel_id'], ['unsealed_summary'], [channelId], [JSON.stringify(unsealedSummary)]);
   }
-
 
   public async getContactCardArticles(guid: string): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]> {
     return [];
@@ -622,7 +611,7 @@ export class OnlineStore implements Store {
 
   public async addContentChannel(guid: string, channelId: string, item: ChannelItem): Promise<void> {}
   public async removeContentChannel(guid: string, channelId: string): Promise<void> {}
-  public async getContentChannels(guid: string): Promise<{ channelId: string, item: ChannelItem }[]> {
+  public async getContentChannels(guid: string): Promise<{ channelId: string; item: ChannelItem }[]> {
     return [];
   }
 
@@ -761,7 +750,7 @@ export class NoStore implements Store {
 
   public async addContentChannel(guid: string, channelId: string, item: ChannelItem): Promise<void> {}
   public async removeContentChannel(guid: string, channelId: string): Promise<void> {}
-  public async getContentChannels(guid: string): Promise<{ channelId: string, item: ChannelItem }[]> {
+  public async getContentChannels(guid: string): Promise<{ channelId: string; item: ChannelItem }[]> {
     return [];
   }
 

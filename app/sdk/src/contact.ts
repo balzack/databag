@@ -950,7 +950,7 @@ export class ContactModule implements Contact {
     await this.sync();
   }
 
-  public async getSeal(cardId: string, keyData: string): Promise<{ publicKey: string, sealedKey: string }> {
+  public async getSeal(cardId: string, keyData: string): Promise<{ publicKey: string; sealedKey: string }> {
     if (!this.crypto) {
       throw new Error('crypto not set');
     }
@@ -964,7 +964,7 @@ export class ContactModule implements Contact {
     }
     const sealed = await this.crypto.rsaEncrypt(keyData, publicKey);
     const sealedKey = sealed.encryptedDataB64;
-    return { publicKey, sealedKey }; 
+    return { publicKey, sealedKey };
   }
 
   private async getChannelKey(seals: [{ publicKey: string; sealedKey: string }]): Promise<string | null> {
