@@ -10,8 +10,8 @@ import { Contacts } from '../contacts/Contacts'
 import { Registry } from '../registry/Registry'
 import { Profile, ProfileParams } from '../profile/Profile'
 import { Content } from '../content/Content'
-import { Conversation } from '../conversation/Conversation';
-import { Focus } from 'databag-client-sdk';
+import { Conversation } from '../conversation/Conversation'
+import { Focus } from 'databag-client-sdk'
 import { useDisclosure } from '@mantine/hooks'
 
 export function Session() {
@@ -22,7 +22,7 @@ export function Session() {
   const [contacts, { open: openContacts, close: closeContacts }] = useDisclosure(false)
   const [registry, { open: openRegistry, close: closeRegistry }] = useDisclosure(false)
   const [profile, { open: openProfile, close: closeProfile }] = useDisclosure(false)
-  const [focus, setFocus] = useState(null as Focus | null);
+  const [focus, setFocus] = useState(null as Focus | null)
 
   return (
     <div className={classes.session}>
@@ -32,7 +32,7 @@ export function Session() {
             <div className={classes.screen}>
               <Content select={(focus) => setFocus(focus)} />
             </div>
-            { focus && (
+            {focus && (
               <div className={classes.screen}>
                 <Conversation focus={focus} />
               </div>
@@ -114,11 +114,7 @@ export function Session() {
               <Content select={(focus) => setFocus(focus)} />
             </div>
           </div>
-          <div className={classes.right}>
-            { focus && (
-              <Conversation />
-            )}
-          </div>
+          <div className={classes.right}>{focus && <Conversation focus={focus} />}</div>
           <Drawer opened={contacts} onClose={closeContacts} withCloseButton={false} size="md" padding="0" position="right">
             <div style={{ height: '100vh' }}>
               <Contacts

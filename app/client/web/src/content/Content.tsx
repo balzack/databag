@@ -1,11 +1,12 @@
-import { useContent } from './useContent.hook';
-import { Text, ActionIcon, TextInput, Button } from '@mantine/core'
+import React from 'react';
+import { useContent } from './useContent.hook'
+import { TextInput, Button } from '@mantine/core'
 import { IconSearch, IconMessagePlus } from '@tabler/icons-react'
 import classes from './Content.module.css'
-import { Channel } from '../channel/Channel';
-import { Focus } from 'databag-client-sdk';
+import { Channel } from '../channel/Channel'
+import { Focus } from 'databag-client-sdk'
 
-export function Content({select}: {select: (focus: Focus)=>void}) {
+export function Content({ select }: { select: (focus: Focus) => void }) {
   const { state, actions } = useContent()
 
   const channels = state.filtered.map((channel, idx) => {
@@ -16,13 +17,12 @@ export function Content({select}: {select: (focus: Focus)=>void}) {
         unread={channel.unread}
         imageUrl={channel.imageUrl}
         subject={channel.subject}
-        messagePlaceholder={`[${state.strings.sealed}]`} 
+        messagePlaceholder={`[${state.strings.sealed}]`}
         notesPlaceholder={state.strings.notes}
-        subjectPlaceholder={state.strings.unknown} 
+        subjectPlaceholder={state.strings.unknown}
         message={channel.message}
-        placeholder={state.strings.name}
         select={() => {
-          select(actions.getFocus(channel.cardId, channel.channelId));
+          select(actions.getFocus(channel.cardId, channel.channelId))
         }}
       />
     )
@@ -40,19 +40,15 @@ export function Content({select}: {select: (focus: Focus)=>void}) {
           value={state.filter}
           onChange={(event) => actions.setFilter(event.currentTarget.value)}
         />
-        { state.layout === 'small' && (
+        {state.layout === 'small' && (
           <Button className={classes.add} leftSection={<IconMessagePlus size={20} />} onClick={actions.addChannel}>
             {state.strings.add}
           </Button>
         )}
       </div>
-      { channels.length === 0 && (
-        <div className={classes.none}>{state.strings.noContacts}</div>
-      )}
-      { channels.length !== 0 && (
-        <div className={classes.channels}>{channels}</div>
-      )}
-      { state.layout === 'large' && (
+      {channels.length === 0 && <div className={classes.none}>{state.strings.noContacts}</div>}
+      {channels.length !== 0 && <div className={classes.channels}>{channels}</div>}
+      {state.layout === 'large' && (
         <div className={classes.bar}>
           <Button className={classes.add} leftSection={<IconMessagePlus size={20} />} onClick={actions.addChannel}>
             {state.strings.add}
@@ -60,6 +56,5 @@ export function Content({select}: {select: (focus: Focus)=>void}) {
         </div>
       )}
     </div>
-  );
+  )
 }
-

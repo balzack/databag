@@ -15,6 +15,7 @@ export function useContacts() {
     filter: '',
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
@@ -54,13 +55,11 @@ export function useContacts() {
     return () => {
       contact.removeCardListener(setCards);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     const filtered = state.cards.sort(compare).filter(select);
     updateState({filtered});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.sortAsc, state.filter, state.cards]);
 
   const actions = {
@@ -70,6 +69,12 @@ export function useContacts() {
     },
     setFilter: (filter: string) => {
       updateState({filter});
+    },
+    call: async (cardId: string) => {
+      console.log('call', cardId);
+    },
+    text: async (cardId: string) => {
+      console.log('text', cardId);
     },
     cancel: async (cardId: string) => {
       const contact = app.state.session?.getContact();

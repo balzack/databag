@@ -71,22 +71,22 @@ export function useContacts() {
       updateState({ filter })
     },
     call: async (cardId: string) => {
-      console.log('call');
+      console.log('call', cardId)
     },
     text: async (cardId: string) => {
-      console.log('text');
+      console.log('text', cardId)
     },
     cancel: async (cardId: string) => {
-      const contact = app.state.session?.getContact();
-      await contact.disconnectCard(cardId);
+      const contact = app.state.session?.getContact()
+      await contact.disconnectCard(cardId)
     },
     accept: async (cardId: string) => {
-      const contact = app.state.session?.getContact();
-      await contact.connectCard(cardId);
+      const contact = app.state.session?.getContact()
+      await contact.connectCard(cardId)
     },
     resync: async (cardId: string) => {
-      const contact = app.state.session?.getContact();
-      await contact.resyncCard(cardId);
+      const contact = app.state.session?.getContact()
+      await contact.resyncCard(cardId)
     },
   }
 

@@ -1,19 +1,19 @@
-import React, {useState} from 'react'
+import React, { useState, ReactNode } from 'react'
 import { useContacts } from './useContacts.hook'
 import { Text, ActionIcon, TextInput, Button } from '@mantine/core'
 import { IconUserCheck, IconCancel, IconRefresh, IconSearch, IconUserPlus, IconSortAscending, IconSortDescending, IconMessage2, IconPhone } from '@tabler/icons-react'
 import classes from './Contacts.module.css'
 import { Card } from '../card/Card'
 import { ProfileParams } from '../profile/Profile'
-import { Colors } from '../constants/Colors';
+import { Colors } from '../constants/Colors'
 import { modals } from '@mantine/modals'
 
-function Action({ icon, color, select, strings }: { icon: string, color: string, select: ()=>Promise<void> }) {
-  const [loading, setLoading] = useState(false);
+function Action({ icon, color, strings, select }: { icon: ReactNode; color: string; strings: { operationFailed: string, tryAgain: string}; select: () => Promise<void> }) {
+  const [loading, setLoading] = useState(false)
   const onClick = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      await select();
+      await select()
     } catch (err) {
       console.log(err)
       modals.openConfirmModal({
@@ -28,9 +28,13 @@ function Action({ icon, color, select, strings }: { icon: string, color: string,
         confirmProps: { display: 'none' },
       })
     }
-    setLoading(false);
+    setLoading(false)
   }
-  return <ActionIcon variant="subtle" loading={loading} color={color} onClick={onClick}>{ icon }</ActionIcon>
+  return (
+    <ActionIcon variant="subtle" loading={loading} color={color} onClick={onClick}>
+      {icon}
+    </ActionIcon>
+  )
 }
 
 export function Contacts({ openRegistry, openContact }: { openRegistry: () => void; openContact: (params: ProfileParams) => void }) {
@@ -38,51 +42,40 @@ export function Contacts({ openRegistry, openContact }: { openRegistry: () => vo
 
   const cards = state.filtered.map((card, idx) => {
     const getOptions = () => {
-      const status = card.offsync ? 'offsync' : card.status;
+      const status = card.offsync ? 'offsync' : card.status
       if (status === 'connected') {
         const call = <IconPhone size={24} />
         const text = <IconMessage2 size={24} />
         return [
           <Action key="call" icon={call} color={Colors.connected} select={() => actions.call(card.cardId)} strings={state.strings} />,
-          <Action key="text" icon={text} color={Colors.connected} select={() => actions.text(card.cardId)} strings={state.strings} />
-        ];
+          <Action key="text" icon={text} color={Colors.connected} select={() => actions.text(card.cardId)} strings={state.strings} />,
+        ]
       } else if (status === 'offsync') {
         const resync = <IconRefresh size={24} />
-        return [<Action key="resync" icon={resync} color={Colors.offsync} select={() => actions.resync(card.cardId)} strings={state.strings} />];
-      } else if (status === 'received') {
+        return [<Action key="resync" icon={resync} color={Colors.offsync} select={() => actions.resync(card.cardId)} strings={state.strings} />]
+      } else if (status === 'requested') {
         const accept = <IconUserCheck size={24} />
-        return [<Action key="accept" icon={accept} color={Colors.received} select={() => actions.accept(card.cardId)} strings={state.strings} />];
+        return [<Action key="accept" icon={accept} color={Colors.requested} select={() => actions.accept(card.cardId)} strings={state.strings} />]
       } else if (status === 'connecting') {
         const cancel = <IconCancel size={24} />
-        return [<Action key="cancel" icon={cancel} color={Colors.connecting} select={() => actions.cancel(card.cardId)} strings={state.strings} />];
+        return [<Action key="cancel" icon={cancel} color={Colors.connecting} select={() => actions.cancel(card.cardId)} strings={state.strings} />]
       } else if (status === 'pending') {
         const accept = <IconUserCheck size={24} />
-        return [<Action key="accept" icon={accept} color={Colors.pending} select={() => actions.accept(card.cardId)} strings={state.strings} />];
+        return [<Action key="accept" icon={accept} color={Colors.pending} select={() => actions.accept(card.cardId)} strings={state.strings} />]
       } else {
-        return [];
+        return []
       }
     }
-    const options = getOptions();
+    const options = getOptions()
 
     const select = () => {
       const { guid, handle, node, name, location, description, offsync, imageUrl, cardId, status } = card
       const params = { guid, handle, node, name, location, description, offsync, imageUrl, cardId, status }
       openContact(params)
     }
-    const status = card.offsync ? classes.offsync : classes[card.status]
 
     return (
-      <Card
-        key={idx}
-        className={classes.card}
-        imageUrl={card.imageUrl}
-        name={card.name}
-        handle={card.handle}
-        node={card.node}
-        placeholder={state.strings.name}
-        select={select}
-        actions={options}
-      />
+      <Card key={idx} className={classes.card} imageUrl={card.imageUrl} name={card.name} handle={card.handle} node={card.node} placeholder={state.strings.name} select={select} actions={options} />
     )
   })
 

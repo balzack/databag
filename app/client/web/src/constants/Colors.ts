@@ -10,7 +10,7 @@ export const Colors = {
   connected: '#44aa44',
   offsync: '#dd6633',
   unread: '#448844',
-};
+}
 
 export const LightTheme = {
   remoteArea: '#080808',

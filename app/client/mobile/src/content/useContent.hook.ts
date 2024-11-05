@@ -2,7 +2,7 @@ import {useState, useContext, useEffect, useRef} from 'react';
 import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {ContextType} from '../context/ContextType';
-import {Channel, Card} from 'databag-client-sdk';
+import {Channel, Card, Profile} from 'databag-client-sdk';
 import {notes, unknown, iii_group, iiii_group, iiiii_group, group} from '../constants/Icons';
 
 type ChannelParams = {
@@ -30,6 +30,7 @@ export function useContent() {
     filter: '',
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
@@ -42,14 +43,14 @@ export function useContent() {
   useEffect(() => {
     const channels = state.sorted.map(channel => {
       const {cardId, channelId, unread, sealed, members, data, lastTopic} = channel;
-      const contacts = [];
+      const contacts = [] as (Card | undefined)[];
       if (cardId) {
         const card = state.cards.find(contact => contact.cardId === cardId);
         if (card) {
           contacts.push(card);
         }
       }
-      const guests = members.filter(contact => contact !== state.guid);
+      const guests = members.filter(contact => contact.guid !== state.guid);
       const guestCards = guests
         .map(contact => state.cards.find(card => card.guid === contact.guid))
         .sort((a, b) => {
@@ -75,19 +76,19 @@ export function useContent() {
       };
 
       const selectImage = () => {
-        if (contacts.length === 0) {
+        if (contacts.length == 0) {
           return notes;
-        } else if (contacts.length === 1) {
+        } else if (contacts.length == 1) {
           if (contacts[0]) {
             return contacts[0].imageUrl;
           } else {
             return unknown;
           }
-        } else if (contacts.length === 2) {
+        } else if (contacts.length == 2) {
           return iii_group;
-        } else if (contacts.length === 3) {
+        } else if (contacts.length == 3) {
           return iiii_group;
-        } else if (contacts.length === 4) {
+        } else if (contacts.length == 4) {
           return iiiii_group;
         } else {
           return group;
@@ -99,16 +100,7 @@ export function useContent() {
       const message = lastTopic ? (lastTopic.data ? lastTopic.data.text : null) : '';
       const imageUrl = selectImage();
 
-      return {
-        cardId,
-        channelId,
-        sealed,
-        hosted,
-        unread,
-        imageUrl,
-        subject,
-        message,
-      };
+      return {cardId, channelId, sealed, hosted, unread, imageUrl, subject, message};
     });
 
     const search = state.filter?.toLowerCase();
@@ -136,16 +128,16 @@ export function useContent() {
     const setCards = (cards: Card[]) => {
       updateState({cards});
     };
-    const setChannels = ({channels, cardId}) => {
+    const setChannels = ({channels, cardId}: {channels: Channel[]; cardId: string | null}) => {
       cardChannels.current.set(cardId, channels);
-      const merged = [];
+      const merged = [] as Channel[];
       cardChannels.current.forEach(values => {
         merged.push(...values);
       });
       const sorted = merged.sort((a, b) => {
         const aUpdated = a?.lastTopic?.created;
         const bUpdated = b?.lastTopic?.created;
-        if (aUpdated === bUpdated) {
+        if (aUpdated == bUpdated) {
           return 0;
         } else if (!aUpdated) {
           return 1;
@@ -170,11 +162,13 @@ export function useContent() {
       contact.removeCardListener(setCards);
       content.removeChannelListener(setChannels);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const actions = {
-    setFilter: filter => {
+    addChannel: () => {
+      console.log('add channel');
+    },
+    setFilter: (filter: string) => {
       updateState({filter});
     },
     getFocus: (cardId: string | null, channelId: string) => {

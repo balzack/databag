@@ -1,12 +1,10 @@
 import React from 'react'
-import { Image, span } from '@mantine/core'
+import { Image } from '@mantine/core'
 import classes from './Channel.module.css'
-import { Colors } from '../constants/Colors';
+import { Colors } from '../constants/Colors'
 
 export function Channel({
   className,
-  sealed,
-  hosted,
   unread,
   imageUrl,
   notesPlaceholder,
@@ -16,20 +14,31 @@ export function Channel({
   messagePlaceholder,
   select,
 }: {
-  className: string,
-  sealed: boolean,
-  hosted: boolean,
-  unread: boolean,
-  imageUrl: string;
-  notesPlaceholder: string;
-  subject: (string|null)[];
-  subjectPlaceholder: string;
-  message: string;
-  messagePlaceholder: string;
-  select?: () => void;
+  className: string
+  unread: boolean
+  imageUrl: string
+  notesPlaceholder: string
+  subject: (string | null)[]
+  subjectPlaceholder: string
+  message: string
+  messagePlaceholder: string
+  select?: () => void
 }) {
-
-  const title = subject.length ? subject.map((part, index) => part ? <span key={index} className={classes.known}>{ part + (index + 1 < subject.length ? ", " : "")}</span> : <span key={index} className={classes.unknown}>{ subjectPlaceholder + (index + 1 < subject.length ? ", " : "")}</span>) : <span className={classes.notes}>{ notesPlaceholder }</span>
+  const title = subject.length ? (
+    subject.map((part, index) =>
+      part ? (
+        <span key={index} className={classes.known}>
+          {part + (index + 1 < subject.length ? ', ' : '')}
+        </span>
+      ) : (
+        <span key={index} className={classes.unknown}>
+          {subjectPlaceholder + (index + 1 < subject.length ? ', ' : '')}
+        </span>
+      )
+    )
+  ) : (
+    <span className={classes.notes}>{notesPlaceholder}</span>
+  )
 
   return (
     <div className={className}>
@@ -37,20 +46,13 @@ export function Channel({
         <div className={select ? classes.cursor : classes.nocursor} onClick={select ? select : () => {}}>
           <Image radius="sm" className={classes.image} src={imageUrl} />
           <div className={classes.details}>
-            <span className={classes.subject}>{ title }</span>
-            { message != null && (
-              <span className={classes.messageSet}>{ message }</span>
-            )}
-            { message == null && (
-              <span className={classes.messageUnset}>{ messagePlaceholder }</span>
-            )}
+            <span className={classes.subject}>{title}</span>
+            {message != null && <span className={classes.messageSet}>{message}</span>}
+            {message == null && <span className={classes.messageUnset}>{messagePlaceholder}</span>}
           </div>
-          { unread && (
-            <div className={classes.unread} style={{ backgroundColor: Colors.connected }}/>
-          )}
+          {unread && <div className={classes.unread} style={{ backgroundColor: Colors.connected }} />}
         </div>
       </div>
     </div>
   )
 }
-
