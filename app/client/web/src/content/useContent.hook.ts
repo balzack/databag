@@ -100,7 +100,6 @@ export function useContent() {
 
       return { cardId, channelId, sealed, hosted, unread, imageUrl, subject, message };
     });
-
     updateState({ channels, filtered: channels });
   }, [state.sorted, state.cards, state.guid]);
 

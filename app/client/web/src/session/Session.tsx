@@ -9,10 +9,11 @@ import { Identity } from '../identity/Identity'
 import { Contacts } from '../contacts/Contacts'
 import { Registry } from '../registry/Registry'
 import { Profile, ProfileParams } from '../profile/Profile'
+import { Content } from '../content/Content'
 import { useDisclosure } from '@mantine/hooks'
 
 export function Session() {
-  const [tab, setTab] = useState('channels')
+  const [tab, setTab] = useState('content')
   const [profileParams, setProfileParams] = useState({ guid: '' } as ProfileParams)
   const display = useContext(DisplayContext) as ContextType
   const [settings, { open: openSettings, close: closeSettings }] = useDisclosure(false)
@@ -24,6 +25,9 @@ export function Session() {
     <div className={classes.session}>
       {display.state.layout === 'small' && (
         <>
+          <div className={tab === 'content' ? classes.show : classes.hide}>
+            <Content />
+          </div>
           <div className={tab === 'settings' ? classes.show : classes.hide}>
             <div className={classes.screen}>
               <Settings showLogout={true} />
@@ -57,13 +61,13 @@ export function Session() {
             )}
           </div>
           <div className={classes.tabs}>
-            {tab === 'channels' && (
+            {tab === 'content' && (
               <div className={classes.activeTabItem}>
                 <IconMessages className={classes.tabIcon} />
               </div>
             )}
-            {tab !== 'channels' && (
-              <div className={classes.idleTabItem} onClick={() => setTab('channels')}>
+            {tab !== 'content' && (
+              <div className={classes.idleTabItem} onClick={() => setTab('content')}>
                 <IconMessages className={classes.tabIcon} />
               </div>
             )}
@@ -96,6 +100,7 @@ export function Session() {
         <div className={classes.display}>
           <div className={classes.left}>
             <Identity settings={openSettings} contacts={openContacts} />
+            <Content />
           </div>
           <div className={classes.right}></div>
           <Drawer opened={contacts} onClose={closeContacts} withCloseButton={false} size="md" padding="0" position="right">

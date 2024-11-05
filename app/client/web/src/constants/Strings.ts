@@ -1,4 +1,8 @@
 export const en = {
+  unknown: 'Unknown',
+  sealed: 'Sealed',
+  notes: 'Notes',
+
   code: 'en',
   settings: 'Settings',
   contacts: 'Contacts',
@@ -213,7 +217,6 @@ export const en = {
   microphone: 'Microphone',
   camera: 'Camera',
 
-  notes: 'Notes',
 
   ignoring: 'Ignoring Contact',
   connfirmIgnoring: 'Are you sure you want to ignore the request?',
@@ -244,9 +247,12 @@ export const en = {
   disable: 'Disable',
   confirmDisable: 'Disabling Multi-Factor Authentication',
   disablePrompt: 'Are you sure you want to disable multi-factor authentication',
-}
+};
 
 export const fr = {
+  unknown: 'Inconnu',
+  sealed: 'Scellé',
+  notes: 'Notes',
   code: 'fr',
   settings: 'Paramètres',
   contacts: 'Contacts',
@@ -472,8 +478,6 @@ export const fr = {
   microphone: 'Microphone',
   camera: 'Caméra',
 
-  notes: 'Notes',
-
   removing: 'Suppression du contact',
   confirmRemove: 'Êtes-vous sûr de vouloir supprimer le contact?',
 
@@ -493,9 +497,13 @@ export const fr = {
   disable: 'Désactiver',
   confirmDisable: "Désactivation de l'authentification multi-facteurs",
   disablePrompt: "Êtes-vous sûr de vouloir désactiver l'authentification multi-facteurs",
-}
+};
 
 export const sp = {
+  unknown: 'Desconocido',
+  sealed: 'Sellado',
+  notes: 'Notas',
+
   code: 'sp',
   settings: 'Configuración',
   contacts: 'Contactos',
@@ -721,8 +729,6 @@ export const sp = {
   microphone: 'Micrófono',
   camera: 'Cámara',
 
-  notes: 'Notas',
-
   removing: 'Eliminando contacto',
   confirmRemove: '¿Estás seguro de que quieres eliminar el contacto?',
   message: 'Mensaje',
@@ -741,9 +747,13 @@ export const sp = {
   disable: 'Desactivar',
   confirmDisable: 'Desactivación de la autenticación de dos factores',
   disablePrompt: '¿Estás seguro de que quieres desactivar la autenticación de dos factores?',
-}
+};
 
 export const pt = {
+  unknown: 'Desconhecido',
+  sealed: 'Selado',
+  notes: 'Notas',
+
   code: 'pt',
   settings: 'Configurações',
   contacts: 'Contatos',
@@ -969,8 +979,6 @@ export const pt = {
   microphone: 'Microfone',
   camera: 'Câmera',
 
-  notes: 'Notas',
-
   removing: 'Removendo Contato',
   confirmRemove: 'Tem certeza de que deseja remover o contato?',
   message: 'Mensagem',
@@ -989,9 +997,13 @@ export const pt = {
   disable: 'Desativar',
   confirmDisable: 'Desativando Autenticação de Dois Fatores',
   disablePrompt: 'Tem certeza de que deseja desativar a autenticação de dois fatores?',
-}
+};
 
 export const de = {
+  unknown: 'Unbekannt',
+  sealed: 'Versiegelt',
+  notes: 'Notizen',
+
   code: 'de',
   settings: 'Einstellungen',
   contacts: 'Kontakte',
@@ -1217,8 +1229,6 @@ export const de = {
   microphone: 'Mikrofon',
   camera: 'Kamera',
 
-  notes: 'Notizen',
-
   removing: 'Kontakt wird gelöscht',
   confirmRemove: 'Sind Sie sicher, dass Sie den Kontakt löschen möchten?',
   message: 'Nachricht',
@@ -1237,9 +1247,13 @@ export const de = {
   disable: 'Deaktivieren',
   confirmDisable: 'Deaktivierung der Zwei-Faktor-Authentifizierung',
   disablePrompt: 'Sind Sie sicher, dass Sie die Zwei-Faktor-Authentifizierung deaktivieren möchten?',
-}
+};
 
 export const ru = {
+  unknown: 'Неизвестно',
+  sealed: 'Запечатано',
+  notes: 'Заметки',
+
   code: 'ru',
   settings: 'Настройки',
   contacts: 'Контакты',
@@ -1465,8 +1479,6 @@ export const ru = {
   microphone: 'Микрофон',
   camera: 'Камера',
 
-  notes: 'Заметки',
-
   removing: 'Удаление контакта',
   confirmRemove: 'Вы уверены, что хотите удалить контакт?',
   message: 'Cообщение',
@@ -1485,4 +1497,5 @@ export const ru = {
   disable: 'Отключить',
   confirmDisable: 'Отключение двухфакторной аутентификации',
   disablePrompt: 'Вы уверены, что хотите отключить двухфакторную аутентификацию?',
-}
+};
+
