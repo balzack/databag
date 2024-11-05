@@ -3,21 +3,21 @@ import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {ContextType} from '../context/ContextType';
 import {Channel, Card} from 'databag-client-sdk';
-import {notes, unknown, iii_group, iiii_group, iiiii_group, group } from '../constants/Icons';
+import {notes, unknown, iii_group, iiii_group, iiiii_group, group} from '../constants/Icons';
 
 type ChannelParams = {
-  cardId: string,
-  channelId: string,
-  sealed: boolean,
-  hosted: boolean,
-  unread: boolean,
-  imageUrl: string,
-  subject: (string | null)[],
-  message: string,
+  cardId: string;
+  channelId: string;
+  sealed: boolean;
+  hosted: boolean;
+  unread: boolean;
+  imageUrl: string;
+  subject: (string | null)[];
+  message: string;
 };
 
 export function useContent() {
-  const cardChannels = useRef(new Map<string|null, Channel[]>());
+  const cardChannels = useRef(new Map<string | null, Channel[]>());
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
@@ -35,13 +35,13 @@ export function useContent() {
   };
 
   useEffect(() => {
-    const { layout } = display.state;
-    updateState({ layout });
+    const {layout} = display.state;
+    updateState({layout});
   }, [display.state]);
 
   useEffect(() => {
     const channels = state.sorted.map(channel => {
-      const { cardId, channelId, unread, sealed, members, data, dataType, lastTopic } = channel;
+      const {cardId, channelId, unread, sealed, members, data, dataType, lastTopic} = channel;
       const contacts = [];
       if (cardId) {
         const card = state.cards.find(contact => contact.cardId === cardId);
@@ -50,19 +50,21 @@ export function useContent() {
         }
       }
       const guests = members.filter(contact => contact !== state.guid);
-      const guestCards = guests.map(contact => state.cards.find(card => card.guid === contact.guid)).sort((a, b) => {
-        if (!a && !b) {
-          return 0;
-        } else if (!a) {
-          return 1;
-        } else if (!b) {
-          return -1;
-        } else if (a.handle > b.handle) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
+      const guestCards = guests
+        .map(contact => state.cards.find(card => card.guid === contact.guid))
+        .sort((a, b) => {
+          if (!a && !b) {
+            return 0;
+          } else if (!a) {
+            return 1;
+          } else if (!b) {
+            return -1;
+          } else if (a.handle > b.handle) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
       contacts.push(...guestCards);
 
       const buildSubject = () => {
@@ -94,18 +96,18 @@ export function useContent() {
 
       const hosted = cardId == null;
       const subject = data?.subject ? [data.subject] : buildSubject();
-      const message = lastTopic ? lastTopic.data ? lastTopic.data.text : null : '';
+      const message = lastTopic ? (lastTopic.data ? lastTopic.data.text : null) : '';
       const imageUrl = selectImage();
 
-      return { cardId, channelId, sealed, hosted, unread, imageUrl, subject, message };
+      return {cardId, channelId, sealed, hosted, unread, imageUrl, subject, message};
     });
 
     const search = state.filter?.toLowerCase();
     const filtered = channels.filter(item => {
       if (search) {
-        if (item.subject?.find(value => (value?.toLowerCase().includes(search)))) {
+        if (item.subject?.find(value => value?.toLowerCase().includes(search))) {
           return true;
-        } 
+        }
         if (item.message?.toLowerCase().includes(search)) {
           return true;
         }
@@ -114,13 +116,13 @@ export function useContent() {
       return true;
     });
 
-    updateState({ filtered });
+    updateState({filtered});
   }, [state.sorted, state.cards, state.guid, state.filter]);
 
   useEffect(() => {
     const setProfile = (profile: Profile) => {
-      const { guid } = profile;
-      updateState({ guid });
+      const {guid} = profile;
+      updateState({guid});
     };
     const setCards = (cards: Card[]) => {
       updateState({cards});
@@ -149,7 +151,7 @@ export function useContent() {
       updateState({sorted});
     };
 
-    const { identity, contact, content } = app.state.session;
+    const {identity, contact, content} = app.state.session;
     identity.addProfileListener(setProfile);
     contact.addCardListener(setCards);
     content.addChannelListener(setChannels);
@@ -163,14 +165,13 @@ export function useContent() {
   }, []);
 
   const actions = {
-    setFilter: (filter) => {
-      updateState({ filter });
+    setFilter: filter => {
+      updateState({filter});
     },
     getFocus: (cardId: string | null, channelId: string) => {
       return app.state.session.setFocus(cardId, channelId);
     },
   };
 
-  return { state, actions };
+  return {state, actions};
 }
-

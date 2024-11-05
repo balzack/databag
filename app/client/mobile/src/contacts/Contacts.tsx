@@ -8,30 +8,28 @@ import {Card} from '../card/Card';
 import {ContactParams} from '../profile/Profile';
 import {Confirm} from '../confirm/Confirm';
 
-function Action({ icon, color, select }: { icon: string, color: string, select: ()=>Promise<void> }) {
+function Action({icon, color, select}: {icon: string; color: string; select: () => Promise<void>}) {
   const [loading, setLoading] = useState(false);
   const onPress = async () => {
     setLoading(true);
     await select();
     setLoading(false);
-  }
-  return <IconButton style={styles.icon} loading={loading} iconColor={color} mode="contained" icon={icon} onPress={onPress} />
+  };
+  return <IconButton style={styles.icon} loading={loading} iconColor={color} mode="contained" icon={icon} onPress={onPress} />;
 }
 
 export function Contacts({openRegistry, openContact}: {openRegistry: () => void; openContact: (params: ContactParams) => void}) {
   const theme = useTheme();
   const {state, actions} = useContacts();
   const [alert, setAlert] = useState(false);
-  const [alertParams] = useState(
-    {
-      title: state.strings.operationFailed,
-      prompt: state.strings.tryAgain,
-      confirm: {
-        label: state.strings.ok,
-        action: () => setAlert(false),
-      },
-    }
-  );
+  const [alertParams] = useState({
+    title: state.strings.operationFailed,
+    prompt: state.strings.tryAgain,
+    confirm: {
+      label: state.strings.ok,
+      action: () => setAlert(false),
+    },
+  });
 
   return (
     <View style={styles.contacts}>
@@ -70,58 +68,90 @@ export function Contacts({openRegistry, openContact}: {openRegistry: () => void;
             const getOptions = () => {
               if (status === 'connected') {
                 return [
-                  <Action key="call" icon="phone-outline" color={Colors.connected} select={async () => {
+                  <Action
+                    key="call"
+                    icon="phone-outline"
+                    color={Colors.connected}
+                    select={async () => {
                       await new Promise(r => setTimeout(r, 2000)); //call contact
-                    }
-                  }/>,
-                  <Action key="text" icon="message-outline" color={Colors.connected} select={async () => {
+                    }}
+                  />,
+                  <Action
+                    key="text"
+                    icon="message-outline"
+                    color={Colors.connected}
+                    select={async () => {
                       await new Promise(r => setTimeout(r, 2000)); //text contact
-                    }
-                  }/>
+                    }}
+                  />,
                 ];
               } else if (status === 'offsync') {
-                return [<Action key="resync" icon="cached" color={Colors.offsync} select={async () => {
-                    try {
-                      await actions.resync(item.cardId);
-                    } catch (err) {
-                      console.log(err);
-                      setAlert(true);
-                    }
-                  }
-                }/>];
+                return [
+                  <Action
+                    key="resync"
+                    icon="cached"
+                    color={Colors.offsync}
+                    select={async () => {
+                      try {
+                        await actions.resync(item.cardId);
+                      } catch (err) {
+                        console.log(err);
+                        setAlert(true);
+                      }
+                    }}
+                  />,
+                ];
               } else if (status === 'received') {
-                return [<Action key="accept" icon="account-check-outline" color={Colors.requested} select={async () => {
-                    try {
-                      await actions.accept(item.cardId);
-                    } catch (err) {
-                      console.log(err);
-                      setAlert(true);
-                    }
-                  }
-                }/>];
+                return [
+                  <Action
+                    key="accept"
+                    icon="account-check-outline"
+                    color={Colors.requested}
+                    select={async () => {
+                      try {
+                        await actions.accept(item.cardId);
+                      } catch (err) {
+                        console.log(err);
+                        setAlert(true);
+                      }
+                    }}
+                  />,
+                ];
               } else if (status === 'connecting') {
-                return [<Action key="cancel" icon="cancel" color={Colors.connecting} select={async () => {
-                    try {
-                      await actions.cancel(item.cardId);
-                    } catch (err) {
-                      console.log(err);
-                      setAlert(true);
-                    }
-                  }
-                }/>];
+                return [
+                  <Action
+                    key="cancel"
+                    icon="cancel"
+                    color={Colors.connecting}
+                    select={async () => {
+                      try {
+                        await actions.cancel(item.cardId);
+                      } catch (err) {
+                        console.log(err);
+                        setAlert(true);
+                      }
+                    }}
+                  />,
+                ];
               } else if (status === 'pending') {
-                return [<Action key="accept" icon="account-check-outline" color={Colors.pending} select={async () => {
-                    try {
-                      await actions.accept(item.cardId);
-                    } catch (err) {
-                      console.log(err);
-                      setAlert(true);
-                    }
-                  }
-                }/>];
+                return [
+                  <Action
+                    key="accept"
+                    icon="account-check-outline"
+                    color={Colors.pending}
+                    select={async () => {
+                      try {
+                        await actions.accept(item.cardId);
+                      } catch (err) {
+                        console.log(err);
+                        setAlert(true);
+                      }
+                    }}
+                  />,
+                ];
               }
               return [];
-            }
+            };
             const options = getOptions();
             const select = () => {
               const {guid, handle, node, name, location, description, offsync, imageUrl, cardId, status} = item;

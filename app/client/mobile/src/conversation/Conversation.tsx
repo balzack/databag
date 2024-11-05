@@ -1,6 +1,5 @@
-import { Text } from 'react-native-paper';
+import {Text} from 'react-native-paper';
 
 export function Conversation() {
-  return <Text>CONVERSATION</Text>
+  return <Text>CONVERSATION</Text>;
 }
-

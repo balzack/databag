@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     color: Colors.placeholder,
-    fontStyle: 'italic',    
+    fontStyle: 'italic',
   },
   image: {
     height: '100%',

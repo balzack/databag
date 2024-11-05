@@ -219,7 +219,6 @@ export const en = {
   microphone: 'Microphone',
   camera: 'Camera',
 
-
   ignoring: 'Ignoring Contact',
   connfirmIgnoring: 'Are you sure you want to ignore the request?',
   denying: 'Denyping Contact',

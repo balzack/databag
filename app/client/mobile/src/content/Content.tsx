@@ -7,7 +7,7 @@ import {useContent} from './useContent.hook';
 import {Channel} from '../channel/Channel';
 import {Focus} from 'databag-client-sdk';
 
-export function Content({ select }: { select: (focus: Focus)=>void }) {
+export function Content({select}: {select: (focus: Focus) => void}) {
   const {state, actions} = useContent();
   const theme = useTheme();
 
@@ -27,8 +27,14 @@ export function Content({ select }: { select: (focus: Focus)=>void }) {
             onChangeText={value => actions.setFilter(value)}
           />
         </Surface>
-        { state.layout !== 'large' && (
-          <Button icon="comment-plus" mode="contained" style={styles.button} onPress={() => {console.log("ADD CHANNEL")}}>
+        {state.layout !== 'large' && (
+          <Button
+            icon="comment-plus"
+            mode="contained"
+            style={styles.button}
+            onPress={() => {
+              console.log('ADD CHANNEL');
+            }}>
             {state.strings.new}
           </Button>
         )}
@@ -43,28 +49,49 @@ export function Content({ select }: { select: (focus: Focus)=>void }) {
             initialNumToRender={32}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
-              const { sealed, hosted, unread, imageUrl, subject, message } = item;
+              const {sealed, hosted, unread, imageUrl, subject, message} = item;
               const open = () => {
                 const focus = actions.getFocus(item.cardId, item.channelId);
                 select(focus);
-              }
+              };
               return (
                 <Channel
                   containerStyle={{
                     ...styles.channel,
                     borderColor: theme.colors.outlineVariant,
-                  }} select={open} unread={unread} sealed={sealed} hosted={hosted} imageUrl={imageUrl} notesPlaceholder={state.strings.notes} subjectPlaceholder={state.strings.unknown} subject={subject} messagePlaceholder={`[${state.strings.sealed}]`} message={message}  />
+                  }}
+                  select={open}
+                  unread={unread}
+                  sealed={sealed}
+                  hosted={hosted}
+                  imageUrl={imageUrl}
+                  notesPlaceholder={state.strings.notes}
+                  subjectPlaceholder={state.strings.unknown}
+                  subject={subject}
+                  messagePlaceholder={`[${state.strings.sealed}]`}
+                  message={message}
+                />
               );
             }}
             keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
           />
         )}
-        {state.filtered.length === 0 && <View style={styles.none}><Text style={styles.noneLabel}>{state.strings.noTopics}</Text></View>}
+        {state.filtered.length === 0 && (
+          <View style={styles.none}>
+            <Text style={styles.noneLabel}>{state.strings.noTopics}</Text>
+          </View>
+        )}
       </View>
-      { state.layout === 'large' && (
+      {state.layout === 'large' && (
         <View style={styles.bar}>
           <Divider style={styles.divider} />
-          <Button icon="comment-plus" mode="contained" style={styles.button} onPress={() => {console.log("ADD CHANNEL")}}>
+          <Button
+            icon="comment-plus"
+            mode="contained"
+            style={styles.button}
+            onPress={() => {
+              console.log('ADD CHANNEL');
+            }}>
             {state.strings.new}
           </Button>
         </View>

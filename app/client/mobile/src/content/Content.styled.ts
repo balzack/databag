@@ -101,6 +101,5 @@ export const styles = StyleSheet.create({
     borderColor: Colors.unread,
     borderRadius: 8,
   },
-  read: {
-  },
+  read: {},
 });

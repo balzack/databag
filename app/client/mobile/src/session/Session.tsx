@@ -156,7 +156,8 @@ function ContentTab({scheme}: {scheme: string}) {
       <ContentStack.Navigator initialRouteName="contacts" screenOptions={{headerShown: false}}>
         <ContentStack.Screen name="content" options={{headerBackTitleVisible: false}}>
           {props => (
-            <Content select={(focus: Focus) => {
+            <Content
+              select={(focus: Focus) => {
                 setFocus(focus);
                 props.navigation.navigate('conversation');
               }}
@@ -347,7 +348,7 @@ function SettingsScreen({nav}) {
 }
 
 function HomeScreen({nav}) {
-  const [focus, setFocus] = useState(null as Foucs | null)
+  const [focus, setFocus] = useState(null as Foucs | null);
 
   return (
     <View style={styles.frame}>
@@ -360,12 +361,8 @@ function HomeScreen({nav}) {
         </Surface>
       </View>
       <View style={styles.right}>
-        { focus && (
-          <Conversation />
-        )}
-        { !focus && (
-          <Text>FOCUS NOT SET</Text>
-        )}
+        {focus && <Conversation />}
+        {!focus && <Text>FOCUS NOT SET</Text>}
       </View>
     </View>
   );
