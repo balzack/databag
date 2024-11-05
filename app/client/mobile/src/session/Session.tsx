@@ -157,15 +157,15 @@ function ContentTab({scheme}: {scheme: string}) {
         <ContentStack.Screen name="content" options={{headerBackTitleVisible: false}}>
           {props => (
             <Content
-              select={(focus: Focus) => {
-                setFocus(focus);
+              select={channel => {
+                setFocus(channel);
                 props.navigation.navigate('conversation');
               }}
             />
           )}
         </ContentStack.Screen>
         <ContentStack.Screen name="conversation" options={{headerBackTitleVisible: false}}>
-          {() => <Conversation />}
+          {() => <Conversation focus={focus} />}
         </ContentStack.Screen>
       </ContentStack.Navigator>
     </NavigationContainer>
@@ -357,7 +357,7 @@ function HomeScreen({nav}) {
           <Identity openSettings={nav.settings.openDrawer} openContacts={nav.contacts.openDrawer} />
         </Surface>
         <Surface style={styles.channels} elevation={1} mode="flat">
-          <Content select={(focus: Focus) => setFocus(focus)} />
+          <Content select={channel => setFocus(channel)} />
         </Surface>
       </View>
       <View style={styles.right}>

@@ -1,8 +1,7 @@
 import React from 'react';
-import {Divider, Surface, IconButton, Button, Text, TextInput, useTheme} from 'react-native-paper';
+import {Divider, Surface, Button, Text, TextInput, useTheme} from 'react-native-paper';
 import {SafeAreaView, FlatList, View} from 'react-native';
 import {styles} from './Content.styled';
-import {Colors} from '../constants/Colors';
 import {useContent} from './useContent.hook';
 import {Channel} from '../channel/Channel';
 import {Focus} from 'databag-client-sdk';

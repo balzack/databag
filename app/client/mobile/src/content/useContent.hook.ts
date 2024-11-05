@@ -41,7 +41,7 @@ export function useContent() {
 
   useEffect(() => {
     const channels = state.sorted.map(channel => {
-      const {cardId, channelId, unread, sealed, members, data, dataType, lastTopic} = channel;
+      const {cardId, channelId, unread, sealed, members, data, lastTopic} = channel;
       const contacts = [];
       if (cardId) {
         const card = state.cards.find(contact => contact.cardId === cardId);
@@ -75,19 +75,19 @@ export function useContent() {
       };
 
       const selectImage = () => {
-        if (contacts.length == 0) {
+        if (contacts.length === 0) {
           return notes;
-        } else if (contacts.length == 1) {
+        } else if (contacts.length === 1) {
           if (contacts[0]) {
             return contacts[0].imageUrl;
           } else {
             return unknown;
           }
-        } else if (contacts.length == 2) {
+        } else if (contacts.length === 2) {
           return iii_group;
-        } else if (contacts.length == 3) {
+        } else if (contacts.length === 3) {
           return iiii_group;
-        } else if (contacts.length == 4) {
+        } else if (contacts.length === 4) {
           return iiiii_group;
         } else {
           return group;
@@ -99,7 +99,16 @@ export function useContent() {
       const message = lastTopic ? (lastTopic.data ? lastTopic.data.text : null) : '';
       const imageUrl = selectImage();
 
-      return {cardId, channelId, sealed, hosted, unread, imageUrl, subject, message};
+      return {
+        cardId,
+        channelId,
+        sealed,
+        hosted,
+        unread,
+        imageUrl,
+        subject,
+        message,
+      };
     });
 
     const search = state.filter?.toLowerCase();
@@ -136,7 +145,7 @@ export function useContent() {
       const sorted = merged.sort((a, b) => {
         const aUpdated = a?.lastTopic?.created;
         const bUpdated = b?.lastTopic?.created;
-        if (aUpdated == bUpdated) {
+        if (aUpdated === bUpdated) {
           return 0;
         } else if (!aUpdated) {
           return 1;

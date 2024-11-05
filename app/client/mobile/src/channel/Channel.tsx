@@ -1,12 +1,10 @@
-import React, {ReactNode} from 'react';
+import React from 'react';
 import {SafeAreaView, Image, View, Pressable} from 'react-native';
 import {Text} from 'react-native-paper';
 import {styles} from './Channel.styled';
 
 export function Channel({
   containerStyle,
-  sealed,
-  hosted,
   unread,
   imageUrl,
   notesPlaceholder,
@@ -17,8 +15,6 @@ export function Channel({
   select,
 }: {
   containerStyle: any;
-  sealed: boolean;
-  hosted: boolean;
   unread: boolean;
   imageUrl: string;
   notesPlaceholder: string;

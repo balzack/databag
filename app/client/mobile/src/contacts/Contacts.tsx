@@ -64,9 +64,9 @@ export function Contacts({openRegistry, openContact}: {openRegistry: () => void;
           contentContainerStyle={styles.cardsContainer}
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => {
-            const status = item.offsync ? 'offsync' : item.status;
+            const syncStatus = item.offsync ? 'offsync' : item.status;
             const getOptions = () => {
-              if (status === 'connected') {
+              if (syncStatus === 'connected') {
                 return [
                   <Action
                     key="call"
@@ -85,7 +85,7 @@ export function Contacts({openRegistry, openContact}: {openRegistry: () => void;
                     }}
                   />,
                 ];
-              } else if (status === 'offsync') {
+              } else if (syncStatus === 'offsync') {
                 return [
                   <Action
                     key="resync"
@@ -101,7 +101,7 @@ export function Contacts({openRegistry, openContact}: {openRegistry: () => void;
                     }}
                   />,
                 ];
-              } else if (status === 'received') {
+              } else if (syncStatus === 'received') {
                 return [
                   <Action
                     key="accept"
@@ -117,7 +117,7 @@ export function Contacts({openRegistry, openContact}: {openRegistry: () => void;
                     }}
                   />,
                 ];
-              } else if (status === 'connecting') {
+              } else if (syncStatus === 'connecting') {
                 return [
                   <Action
                     key="cancel"
@@ -133,7 +133,7 @@ export function Contacts({openRegistry, openContact}: {openRegistry: () => void;
                     }}
                   />,
                 ];
-              } else if (status === 'pending') {
+              } else if (syncStatus === 'pending') {
                 return [
                   <Action
                     key="accept"
