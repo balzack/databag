@@ -29,6 +29,12 @@
       width: 33%;
       min-width: 325px;
       background: var(--mantine-color-surface-2);
+
+      .content {
+        display: flex;
+        flex-grow: 1;
+        height: 1px;
+      }
     }
 
     .right {

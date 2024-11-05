@@ -10,6 +10,8 @@ import { Contacts } from '../contacts/Contacts'
 import { Registry } from '../registry/Registry'
 import { Profile, ProfileParams } from '../profile/Profile'
 import { Content } from '../content/Content'
+import { Conversation } from '../conversation/Conversation';
+import { Focus } from 'databag-client-sdk';
 import { useDisclosure } from '@mantine/hooks'
 
 export function Session() {
@@ -20,13 +22,21 @@ export function Session() {
   const [contacts, { open: openContacts, close: closeContacts }] = useDisclosure(false)
   const [registry, { open: openRegistry, close: closeRegistry }] = useDisclosure(false)
   const [profile, { open: openProfile, close: closeProfile }] = useDisclosure(false)
+  const [focus, setFocus] = useState(null as Focus | null);
 
   return (
     <div className={classes.session}>
       {display.state.layout === 'small' && (
         <>
           <div className={tab === 'content' ? classes.show : classes.hide}>
-            <Content />
+            <div className={classes.screen}>
+              <Content select={(focus) => setFocus(focus)} />
+            </div>
+            { focus && (
+              <div className={classes.screen}>
+                <Conversation focus={focus} />
+              </div>
+            )}
           </div>
           <div className={tab === 'settings' ? classes.show : classes.hide}>
             <div className={classes.screen}>
@@ -100,9 +110,15 @@ export function Session() {
         <div className={classes.display}>
           <div className={classes.left}>
             <Identity settings={openSettings} contacts={openContacts} />
-            <Content />
+            <div className={classes.content}>
+              <Content select={(focus) => setFocus(focus)} />
+            </div>
           </div>
-          <div className={classes.right}></div>
+          <div className={classes.right}>
+            { focus && (
+              <Conversation />
+            )}
+          </div>
           <Drawer opened={contacts} onClose={closeContacts} withCloseButton={false} size="md" padding="0" position="right">
             <div style={{ height: '100vh' }}>
               <Contacts

@@ -80,6 +80,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  noneLabel: {
+    fontSize: 20,
+    color: Colors.placeholder,
+  },
   channels: {
     width: '100%',
   },

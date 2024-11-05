@@ -53,6 +53,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
     font-style: italic;
+    color: #888888;
   }
   .subject {
     font-size: 14px;
@@ -73,6 +74,7 @@
   }
   .unknown {
     font-style: italic;
+    color: #888888;
   }
   .known {
     font-weight: bold;
@@ -80,6 +82,7 @@
   .notes {
     font-weight: bold;
     font-style: italic;
+    color: #888888;
   }
   .unread {
     width: 8px;

@@ -3,16 +3,12 @@ import { Text, ActionIcon, TextInput, Button } from '@mantine/core'
 import { IconSearch, IconMessagePlus } from '@tabler/icons-react'
 import classes from './Content.module.css'
 import { Channel } from '../channel/Channel';
+import { Focus } from 'databag-client-sdk';
 
-export function Content() {
+export function Content({select}: {select: (focus: Focus)=>void}) {
   const { state, actions } = useContent()
 
   const channels = state.filtered.map((channel, idx) => {
-
-    const select = () => {
-      console.log("SELECTED: ", channel.cardId, channnel.channelId);
-    }
-
     return (
       <Channel
         key={idx}
@@ -25,7 +21,9 @@ export function Content() {
         subjectPlaceholder={state.strings.unknown} 
         message={channel.message}
         placeholder={state.strings.name}
-        select={select}
+        select={() => {
+          select(actions.getFocus(channel.cardId, channel.channelId));
+        }}
       />
     )
   })

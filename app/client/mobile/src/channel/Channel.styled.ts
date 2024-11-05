@@ -54,6 +54,7 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   notes: {
+    color: Colors.placeholder,
     fontWeight: 'bold',
     fontStyle: 'italic',
   },

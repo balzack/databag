@@ -59,7 +59,7 @@ export function Content({ select }: { select: (focus: Focus)=>void }) {
             keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
           />
         )}
-        {state.filtered.length === 0 && <Text style={styles.none}>{state.strings.noTopics}</Text>}
+        {state.filtered.length === 0 && <View style={styles.none}><Text style={styles.noneLabel}>{state.strings.noTopics}</Text></View>}
       </View>
       { state.layout === 'large' && (
         <View style={styles.bar}>

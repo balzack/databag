@@ -26,7 +26,6 @@ export function useContent() {
     guid: '',
     cards: [] as Card[],
     sorted: [] as Channel[],
-    channels: [] as ChannelParams[],
     filtered: [] as ChannelParams[],
     filter: '',
   });
@@ -101,8 +100,22 @@ export function useContent() {
       return { cardId, channelId, sealed, hosted, unread, imageUrl, subject, message };
     });
 
-    updateState({ channels, filtered: channels });
-  }, [state.sorted, state.cards, state.guid]);
+    const search = state.filter?.toLowerCase();
+    const filtered = channels.filter(item => {
+      if (search) {
+        if (item.subject?.find(value => (value?.toLowerCase().includes(search)))) {
+          return true;
+        } 
+        if (item.message?.toLowerCase().includes(search)) {
+          return true;
+        }
+        return false;
+      }
+      return true;
+    });
+
+    updateState({ filtered });
+  }, [state.sorted, state.cards, state.guid, state.filter]);
 
   useEffect(() => {
     const setProfile = (profile: Profile) => {
