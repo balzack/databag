@@ -923,7 +923,7 @@ export class ContactModule implements Contact {
         guid: summary.guid,
         sealed: summary.sealed,
         dataType: summary.dataType,
-        data: topicData,
+        data: this.parse(topicData),
         created: summary.created,
         updated: summary.updated,
         status: summary.status,
@@ -933,7 +933,7 @@ export class ContactModule implements Contact {
       unread: this.isChannelUnread(cardId, channelId),
       sealed: detail.sealed,
       dataType: detail.dataType,
-      data: channelData,
+      data: this.parse(channelData),
       created: detail.created,
       updated: detail.updated,
       enableImage: detail.enableImage,
@@ -1053,5 +1053,17 @@ export class ContactModule implements Contact {
     channels.set(channelId, channelEntry);
     await this.store.addContactCardChannel(guid, cardId, channelId, item);
     return channelEntry;
+  }
+
+
+  private parse(data: string | null): any {
+    if (data) {
+      try {
+        return JSON.parse(data);
+      } catch (err) {
+        log.error('invalid contact data');
+      }
+    }
+    return null;
   }
 }
