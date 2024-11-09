@@ -4,6 +4,7 @@ export const en = {
   unknown: 'Unknown',
   sealed: 'Sealed',
   notes: 'Notes',
+  server: 'Server',
 
   code: 'en',
   settings: 'Settings',
@@ -254,6 +255,8 @@ export const fr = {
   unknown: 'Inconnu',
   sealed: 'Scellé',
   notes: 'Notes',
+  server: 'Serveur',
+
   code: 'fr',
   settings: 'Paramètres',
   contacts: 'Contacts',
@@ -504,7 +507,8 @@ export const sp = {
   unknown: 'Desconocido',
   sealed: 'Sellado',
   notes: 'Notas',
-
+  server: 'Server',
+ 
   code: 'sp',
   settings: 'Configuración',
   contacts: 'Contactos',
@@ -754,6 +758,7 @@ export const pt = {
   unknown: 'Desconhecido',
   sealed: 'Selado',
   notes: 'Notas',
+  server: 'Servidor',
 
   code: 'pt',
   settings: 'Configurações',
@@ -1004,6 +1009,7 @@ export const de = {
   unknown: 'Unbekannt',
   sealed: 'Versiegelt',
   notes: 'Notizen',
+  server: 'Servierer',
 
   code: 'de',
   settings: 'Einstellungen',
@@ -1254,6 +1260,7 @@ export const ru = {
   unknown: 'Неизвестно',
   sealed: 'Запечатано',
   notes: 'Заметки',
+  server: 'Сервер',
 
   code: 'ru',
   settings: 'Настройки',

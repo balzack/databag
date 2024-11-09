@@ -3,6 +3,15 @@ import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
   profile: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+  },
+  scrollWrapper: {
+    flexGrow: 1,
+    height: 1,
+  },
+  scrollContainer: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -49,6 +58,8 @@ export const styles = StyleSheet.create({
     flexShrink: 0,
     marginRight: 0,
     marginLeft: 0,
+    marginTop: 0,
+    marginBottom: 0,
     backgroundColor: 'transparent',
   },
   image: {
@@ -71,6 +82,10 @@ export const styles = StyleSheet.create({
     marginBottom: 16,
     height: 2,
     width: '100%',
+  },
+  border: {
+    width: '100%',
+    height: 2,
   },
   attributes: {
     display: 'flex',

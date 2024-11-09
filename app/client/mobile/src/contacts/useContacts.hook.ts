@@ -8,6 +8,7 @@ export function useContacts() {
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
+    layout: '',
     strings: display.state.strings,
     cards: [] as Card[],
     filtered: [] as Card[],
@@ -45,6 +46,11 @@ export function useContacts() {
     }
     return false;
   };
+
+  useEffect(() => {
+    const { layout } = display.state;
+    updateState({ layout });
+  }, [display.state]);
 
   useEffect(() => {
     const contact = app.state.session?.getContact();

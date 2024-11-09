@@ -18,11 +18,14 @@ export const styles = StyleSheet.create({
     paddingLeft: 8,
     width: '100%',
     zIndex: 1,
+    height: 48,
   },
   close: {
     flexShrink: 0,
     marginRight: 0,
     marginLeft: 0,
+    marginTop: 0,
+    marginBottom: 0,
     backgroundColor: 'transparent',
   },
   divider: {

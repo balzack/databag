@@ -61,7 +61,7 @@ export function Contacts({openRegistry, openContact}: {openRegistry: () => void;
           style={styles.cards}
           data={state.filtered}
           initialNumToRender={32}
-          contentContainerStyle={styles.cardsContainer}
+          contentContainerStyle={state.layout === 'large' ? styles.cardsContainer : {}}
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => {
             const syncStatus = item.offsync ? 'offsync' : item.status;

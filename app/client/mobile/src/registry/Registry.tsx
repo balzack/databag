@@ -13,7 +13,7 @@ export function Registry({close, openContact}: {close: () => void; openContact: 
   return (
     <View style={styles.registry}>
       <SafeAreaView style={styles.header}>
-        {close && <IconButton style={styles.close} compact="true" mode="contained" icon="arrow-left" size={24} onPress={close} />}
+        {close && <IconButton style={styles.close} compact="true" mode="contained" icon="arrow-left" size={28} onPress={close} />}
         <Surface mode="flat" style={styles.inputUsername}>
           <TextInput
             dense={true}
@@ -48,7 +48,7 @@ export function Registry({close, openContact}: {close: () => void; openContact: 
           style={styles.cards}
           data={state.profiles}
           initialNumToRender={32}
-          contentContainerStyle={styles.cardsContainer}
+          contentContainerStyle={state.layout === 'large' ? styles.cardsContainer : {}}
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => {
             const select = () => {

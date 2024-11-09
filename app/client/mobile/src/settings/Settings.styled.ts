@@ -8,6 +8,9 @@ export const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
   },
+  border: {
+    height: 2,
+  },
   blur: {
     position: 'absolute',
     top: 0,
@@ -42,9 +45,20 @@ export const styles = StyleSheet.create({
     paddingTop: 8,
   },
   settings: {
+    width: '100%',
+    height: '100%',
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'center',
+  },
+  scrollWrapper: {
+    width: '100%',
+    flexGrow: 1,
+    height: 1,
+  },
+  scrollContainer: {
+    display: 'flex',
     alignItems: 'center',
   },
   modalHeader: {
@@ -73,13 +87,18 @@ export const styles = StyleSheet.create({
   modalDescription: {
     paddingTop: 16,
   },
+  title: {
+    width: '100%',
+    height: 48,
+  },
   header: {
     fontSize: 22,
     textAlign: 'center',
     textWrap: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
-    paddingTop: 8,
+    padding: 8,
+    height: 48,
   },
   image: {
     position: 'relative',

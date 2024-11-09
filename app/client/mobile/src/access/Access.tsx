@@ -66,7 +66,7 @@ export function Access() {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={state.strings.node}
+                label={state.strings.server}
                 value={state.node}
                 left={<TextInput.Icon style={styles.icon} icon="server" />}
                 onChangeText={value => actions.setNode(value)}
@@ -131,7 +131,7 @@ export function Access() {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={state.strings.node}
+                label={state.strings.server}
                 value={state.node}
                 left={<TextInput.Icon style={styles.icon} icon="server" />}
                 onChangeText={value => actions.setNode(value)}
@@ -170,7 +170,7 @@ export function Access() {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={state.strings.node}
+                label={state.strings.server}
                 value={state.node}
                 left={<TextInput.Icon style={styles.icon} icon="server" />}
                 onChangeText={value => actions.setNode(value)}
@@ -247,7 +247,7 @@ export function Access() {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={state.strings.node}
+                label={state.strings.server}
                 value={state.node}
                 left={<TextInput.Icon style={styles.icon} icon="server" />}
                 onChangeText={value => actions.setNode(value)}

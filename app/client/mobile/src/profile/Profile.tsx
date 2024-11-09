@@ -86,534 +86,539 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.profile}>
+    <View style={styles.profile}>
       <SafeAreaView style={styles.header}>
         {close && (
           <View style={styles.spaceHolder}>
-            <IconButton style={styles.back} compact="true" mode="contained" icon="arrow-left" size={24} onPress={close} />
+            <IconButton style={styles.back} compact="true" mode="contained" icon="arrow-left" size={28} onPress={close} />
           </View>
         )}
         <Text style={styles.headerLabel} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.handle}${state.node ? '/' + state.node : ''}`}</Text>
         {close && <View style={styles.spaceHolder} />}
       </SafeAreaView>
+      <Divider style={styles.border} bold={true} />
 
-      <View style={styles.image}>
-        <Image style={styles.logo} resizeMode={'contain'} source={{uri: state.imageUrl}} />
-      </View>
+      <View style={styles.scrollWrapper}>
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
+          <View style={styles.image}>
+            <Image style={styles.logo} resizeMode={'contain'} source={{uri: state.imageUrl}} />
+          </View>
 
-      <View style={styles.body}>
-        <Divider style={styles.line} bold={true} />
-        <View style={styles.attributes}>
-          {!state.name && <Text style={styles.nameUnset}>{state.strings.name}</Text>}
-          {state.name && (
-            <Text style={styles.nameSet} adjustsFontSizeToFit={true} numberOfLines={1}>
-              {state.name}
-            </Text>
-          )}
-          <View style={styles.attribute}>
-            <View style={styles.icon}>
-              <Icon size={24} source="map-marker-outline" />
+          <View style={styles.body}>
+            <Divider style={styles.line} bold={true} />
+            <View style={styles.attributes}>
+              {!state.name && <Text style={styles.nameUnset}>{state.strings.name}</Text>}
+              {state.name && (
+                <Text style={styles.nameSet} adjustsFontSizeToFit={true} numberOfLines={1}>
+                  {state.name}
+                </Text>
+              )}
+              <View style={styles.attribute}>
+                <View style={styles.icon}>
+                  <Icon size={24} source="map-marker-outline" />
+                </View>
+                {!state.location && <Text style={styles.labelUnset}>{state.strings.location}</Text>}
+                {state.location && <Text style={styles.labelSet}>{state.location}</Text>}
+              </View>
+              <View style={styles.attribute}>
+                <View style={styles.icon}>
+                  <Icon size={24} source="book-open-outline" />
+                </View>
+                {!state.description && <Text style={styles.labelUnset}>{state.strings.description}</Text>}
+                {state.description && <Text style={styles.labelSet}>{state.description}</Text>}
+              </View>
             </View>
-            {!state.location && <Text style={styles.labelUnset}>{state.strings.location}</Text>}
-            {state.location && <Text style={styles.labelSet}>{state.location}</Text>}
-          </View>
-          <View style={styles.attribute}>
-            <View style={styles.icon}>
-              <Icon size={24} source="book-open-outline" />
+            <Divider style={styles.line} bold={true} />
+            <View style={styles.status}>
+              <Text style={styles[state.statusLabel]}>{state.strings[state.statusLabel]}</Text>
             </View>
-            {!state.description && <Text style={styles.labelUnset}>{state.strings.description}</Text>}
-            {state.description && <Text style={styles.labelSet}>{state.description}</Text>}
-          </View>
-        </View>
-        <Divider style={styles.line} bold={true} />
-        <View style={styles.status}>
-          <Text style={styles[state.statusLabel]}>{state.strings[state.statusLabel]}</Text>
-        </View>
 
-        {state.statusLabel === 'unknownStatus' && (
-          <View style={styles.actions}>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={saving}
-                compact="true"
-                mode="contained"
-                icon="content-save-outline"
-                size={32}
-                onPress={() => {
-                  applyAction(setSaving, actions.save);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.save}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={reporting}
-                compact="true"
-                mode="contained"
-                icon="alert-octagon-outline"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.report}</Text>
-            </View>
-          </View>
-        )}
+            {state.statusLabel === 'unknownStatus' && (
+              <View style={styles.actions}>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={saving}
+                    compact="true"
+                    mode="contained"
+                    icon="content-save-outline"
+                    size={32}
+                    onPress={() => {
+                      applyAction(setSaving, actions.save);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.save}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={reporting}
+                    compact="true"
+                    mode="contained"
+                    icon="alert-octagon-outline"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.report}</Text>
+                </View>
+              </View>
+            )}
 
-        {state.statusLabel === 'savedStatus' && (
-          <View style={styles.actions}>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={saving}
-                compact="true"
-                mode="contained"
-                icon="electric-switch-closed"
-                size={32}
-                onPress={() => {
-                  applyAction(setSaving, actions.connect);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.connect}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={removing}
-                compact="true"
-                mode="contained"
-                icon="account-remove"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.remove}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={blocking}
-                compact="true"
-                mode="contained"
-                icon="eye-remove-outline"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.block}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={reporting}
-                compact="true"
-                mode="contained"
-                icon="alert-octagon-outline"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.report}</Text>
-            </View>
-          </View>
-        )}
+            {state.statusLabel === 'savedStatus' && (
+              <View style={styles.actions}>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={saving}
+                    compact="true"
+                    mode="contained"
+                    icon="electric-switch-closed"
+                    size={32}
+                    onPress={() => {
+                      applyAction(setSaving, actions.connect);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.connect}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={removing}
+                    compact="true"
+                    mode="contained"
+                    icon="account-remove"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.remove}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={blocking}
+                    compact="true"
+                    mode="contained"
+                    icon="eye-remove-outline"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.block}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={reporting}
+                    compact="true"
+                    mode="contained"
+                    icon="alert-octagon-outline"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.report}</Text>
+                </View>
+              </View>
+            )}
 
-        {state.statusLabel === 'pendingStatus' && (
-          <View style={styles.actions}>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={saving}
-                compact="true"
-                mode="contained"
-                icon="content-save-outline"
-                size={32}
-                onPress={() => {
-                  applyAction(setSaving, actions.save);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.save}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={accepting}
-                compact="true"
-                mode="contained"
-                icon="account-check-outline"
-                size={32}
-                onPress={() => {
-                  applyAction(setAccepting, actions.accept);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.accept}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={ignoring}
-                compact="true"
-                mode="contained"
-                icon="volume-mute"
-                size={32}
-                onPress={() => {
-                  applyAction(setIgnoring, actions.ignore);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.ignore}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={denying}
-                compact="true"
-                mode="contained"
-                icon="close-circle-outline"
-                size={32}
-                onPress={() => {
-                  applyAction(setDenying, actions.deny);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.deny}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={removing}
-                compact="true"
-                mode="contained"
-                icon="account-remove"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.remove}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={blocking}
-                compact="true"
-                mode="contained"
-                icon="eye-remove-outline"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.block}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={reporting}
-                compact="true"
-                mode="contained"
-                icon="alert-octagon-outline"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.report}</Text>
-            </View>
-          </View>
-        )}
+            {state.statusLabel === 'pendingStatus' && (
+              <View style={styles.actions}>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={saving}
+                    compact="true"
+                    mode="contained"
+                    icon="content-save-outline"
+                    size={32}
+                    onPress={() => {
+                      applyAction(setSaving, actions.save);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.save}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={accepting}
+                    compact="true"
+                    mode="contained"
+                    icon="account-check-outline"
+                    size={32}
+                    onPress={() => {
+                      applyAction(setAccepting, actions.accept);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.accept}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={ignoring}
+                    compact="true"
+                    mode="contained"
+                    icon="volume-mute"
+                    size={32}
+                    onPress={() => {
+                      applyAction(setIgnoring, actions.ignore);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.ignore}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={denying}
+                    compact="true"
+                    mode="contained"
+                    icon="close-circle-outline"
+                    size={32}
+                    onPress={() => {
+                      applyAction(setDenying, actions.deny);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.deny}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={removing}
+                    compact="true"
+                    mode="contained"
+                    icon="account-remove"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.remove}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={blocking}
+                    compact="true"
+                    mode="contained"
+                    icon="eye-remove-outline"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.block}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={reporting}
+                    compact="true"
+                    mode="contained"
+                    icon="alert-octagon-outline"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.report}</Text>
+                </View>
+              </View>
+            )}
 
-        {state.statusLabel === 'requestedStatus' && (
-          <View style={styles.actions}>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={saving}
-                compact="true"
-                mode="contained"
-                icon="account-check-outline"
-                size={32}
-                onPress={() => {
-                  applyAction(setAccepting, actions.accept);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.accept}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={ignoring}
-                compact="true"
-                mode="contained"
-                icon="volume-mute"
-                size={32}
-                onPress={() => {
-                  applyAction(setIgnoring, actions.ignore);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.ignore}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={denying}
-                compact="true"
-                mode="contained"
-                icon="close-circle-outline"
-                size={32}
-                onPress={() => {
-                  applyAction(setDenying, actions.deny);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.deny}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={removing}
-                compact="true"
-                mode="contained"
-                icon="account-remove"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.remove}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={blocking}
-                compact="true"
-                mode="contained"
-                icon="eye-remove-outline"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.block}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={reporting}
-                compact="true"
-                mode="contained"
-                icon="alert-octagon-outline"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.report}</Text>
-            </View>
-          </View>
-        )}
+            {state.statusLabel === 'requestedStatus' && (
+              <View style={styles.actions}>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={saving}
+                    compact="true"
+                    mode="contained"
+                    icon="account-check-outline"
+                    size={32}
+                    onPress={() => {
+                      applyAction(setAccepting, actions.accept);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.accept}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={ignoring}
+                    compact="true"
+                    mode="contained"
+                    icon="volume-mute"
+                    size={32}
+                    onPress={() => {
+                      applyAction(setIgnoring, actions.ignore);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.ignore}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={denying}
+                    compact="true"
+                    mode="contained"
+                    icon="close-circle-outline"
+                    size={32}
+                    onPress={() => {
+                      applyAction(setDenying, actions.deny);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.deny}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={removing}
+                    compact="true"
+                    mode="contained"
+                    icon="account-remove"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.remove}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={blocking}
+                    compact="true"
+                    mode="contained"
+                    icon="eye-remove-outline"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.block}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={reporting}
+                    compact="true"
+                    mode="contained"
+                    icon="alert-octagon-outline"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.report}</Text>
+                </View>
+              </View>
+            )}
 
-        {state.statusLabel === 'connectingStatus' && (
-          <View style={styles.actions}>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={canceling}
-                compact="true"
-                mode="contained"
-                icon="cancel"
-                size={32}
-                onPress={() => {
-                  applyAction(setCanceling, actions.cancel);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.cancel}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={removing}
-                compact="true"
-                mode="contained"
-                icon="account-remove"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.remove}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={blocking}
-                compact="true"
-                mode="contained"
-                icon="eye-remove-outline"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.block}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={reporting}
-                compact="true"
-                mode="contained"
-                icon="alert-octagon-outline"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.report}</Text>
-            </View>
-          </View>
-        )}
+            {state.statusLabel === 'connectingStatus' && (
+              <View style={styles.actions}>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={canceling}
+                    compact="true"
+                    mode="contained"
+                    icon="cancel"
+                    size={32}
+                    onPress={() => {
+                      applyAction(setCanceling, actions.cancel);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.cancel}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={removing}
+                    compact="true"
+                    mode="contained"
+                    icon="account-remove"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.remove}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={blocking}
+                    compact="true"
+                    mode="contained"
+                    icon="eye-remove-outline"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.block}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={reporting}
+                    compact="true"
+                    mode="contained"
+                    icon="alert-octagon-outline"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.report}</Text>
+                </View>
+              </View>
+            )}
 
-        {state.statusLabel === 'connectedStatus' && (
-          <View style={styles.actions}>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={disconnecting}
-                compact="true"
-                mode="contained"
-                icon="electric-switch"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.disconnecting, state.strings.confirmDisconnect, state.strings.disconnect, setDisconnecting, actions.disconnect);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.disconnect}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={removing}
-                compact="true"
-                mode="contained"
-                icon="account-remove"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.remove}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={blocking}
-                compact="true"
-                mode="contained"
-                icon="eye-remove-outline"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.block}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={reporting}
-                compact="true"
-                mode="contained"
-                icon="alert-octagon-outline"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.report}</Text>
-            </View>
-          </View>
-        )}
+            {state.statusLabel === 'connectedStatus' && (
+              <View style={styles.actions}>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={disconnecting}
+                    compact="true"
+                    mode="contained"
+                    icon="electric-switch"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.disconnecting, state.strings.confirmDisconnect, state.strings.disconnect, setDisconnecting, actions.disconnect);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.disconnect}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={removing}
+                    compact="true"
+                    mode="contained"
+                    icon="account-remove"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.remove}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={blocking}
+                    compact="true"
+                    mode="contained"
+                    icon="eye-remove-outline"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.block}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={reporting}
+                    compact="true"
+                    mode="contained"
+                    icon="alert-octagon-outline"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.report}</Text>
+                </View>
+              </View>
+            )}
 
-        {state.statusLabel === 'offsyncStatus' && (
-          <View style={styles.actions}>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={resyncing}
-                compact="true"
-                mode="contained"
-                icon="cached"
-                size={32}
-                onPress={() => {
-                  applyAction(setResyncing, actions.resync);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.resync}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={disconnecting}
-                compact="true"
-                mode="contained"
-                icon="electric-switch"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.disconnecting, state.strings.confirmDisconnect, state.strings.disconnect, setDisconnecting, actions.disconnect);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.disconnect}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={removing}
-                compact="true"
-                mode="contained"
-                icon="account-remove"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.remove}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={blocking}
-                compact="true"
-                mode="contained"
-                icon="eye-remove-outline"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.block}</Text>
-            </View>
-            <View style={styles.action}>
-              <IconButton
-                style={styles.actionIcon}
-                loading={reporting}
-                compact="true"
-                mode="contained"
-                icon="alert-octagon-outline"
-                size={32}
-                onPress={() => {
-                  confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
-                }}
-              />
-              <Text style={styles.actionLabel}>{state.strings.report}</Text>
-            </View>
+            {state.statusLabel === 'offsyncStatus' && (
+              <View style={styles.actions}>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={resyncing}
+                    compact="true"
+                    mode="contained"
+                    icon="cached"
+                    size={32}
+                    onPress={() => {
+                      applyAction(setResyncing, actions.resync);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.resync}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={disconnecting}
+                    compact="true"
+                    mode="contained"
+                    icon="electric-switch"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.disconnecting, state.strings.confirmDisconnect, state.strings.disconnect, setDisconnecting, actions.disconnect);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.disconnect}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={removing}
+                    compact="true"
+                    mode="contained"
+                    icon="account-remove"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.remove}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={blocking}
+                    compact="true"
+                    mode="contained"
+                    icon="eye-remove-outline"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.block}</Text>
+                </View>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={reporting}
+                    compact="true"
+                    mode="contained"
+                    icon="alert-octagon-outline"
+                    size={32}
+                    onPress={() => {
+                      confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.report}</Text>
+                </View>
+              </View>
+            )}
           </View>
-        )}
+        </ScrollView>
       </View>
       <Confirm show={confirmShow} busy={busy} params={confirmParams} />
-    </ScrollView>
+    </View>
   );
 }
