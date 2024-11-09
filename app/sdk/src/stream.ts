@@ -38,7 +38,7 @@ export class StreamModule {
   private nextRevision: number | null;
   private seal: { privateKey: string; publicKey: string } | null;
   private unsealAll: boolean;
-  private markers: Map<string>;
+  private markers: Set<string>;
   private channelTypes: string[];
 
   // view of channels
@@ -165,7 +165,7 @@ export class StreamModule {
                 this.channelEntries.delete(id);
                 await this.store.removeContentChannel(guid, id);
                 if (this.focus) {
-                  await this.focus.disconnect(id);
+                  await this.focus.disconnect(null, id);
                 }
               }
             }
@@ -245,7 +245,7 @@ export class StreamModule {
     if (!seal) {
       throw new Error('seal not set');
     }
-    const sealKey = await this.crypto.rsaEncrypt(aesKeyHex, seal.publicKey);
+    const sealKey = await crypto.rsaEncrypt(aesKeyHex, seal.publicKey);
     const { ivHex } = await crypto.aesIv();
     const subjectData = JSON.stringify(subject);
     const { encryptedDataB64 } = await crypto.aesEncrypt(subjectData, ivHex, aesKeyHex);
@@ -260,7 +260,7 @@ export class StreamModule {
 
   public async removeChannel(channelId: string): Promise<void> {
     const { node, secure, token } = this;
-    return await removeChannel(node, secure, token);
+    return await removeChannel(node, secure, token, channelId);
   }
 
   public async setChannelSubject(channelId: string, type: string, subject: any): Promise<void> {
@@ -270,7 +270,7 @@ export class StreamModule {
     }
     const { item } = channel;
     const { node, secure, token, crypto, seal } = this;
-    if (item.sealed) {
+    if (item.detail.sealed) {
       if (!crypto) {
         throw new Error('crypto not set');
       }
@@ -281,9 +281,12 @@ export class StreamModule {
       if (!item.channelKey) {
         item.channelKey = await this.getChannelKey(seals);
       }
+      if (!item.channelKey) {
+        throw new Error('channel key not available');
+      }
       const subjectData = JSON.stringify(subject);
       const { encryptedDataB64 } = await crypto.aesEncrypt(subjectData, subjectIv, item.channelKey);
-      const sealedSubject = { subjectEncrypted, encryptedDataB64, subjectIv, seals };
+      const sealedSubject = { subjectEncrypted: encryptedDataB64, subjectIv, seals };
       await setChannelSubject(node, secure, token, channelId, type, sealedSubject);
     } else {
       await setChannelSubject(node, secure, token, channelId, type, subject);
@@ -296,7 +299,7 @@ export class StreamModule {
     if (!channel) {
       throw new Error('channel not found');
     }
-    if (channel.item.sealed) {
+    if (channel.item.detail.sealed) {
       throw new Error('sealed channels cannot add members');
     }
     await setChannelCard(node, secure, token, channelId, cardId);
@@ -308,7 +311,7 @@ export class StreamModule {
     if (!channel) {
       throw new Error('channel not found');
     }
-    await clearChannelCard(node, secure, token, channelid, cardId);
+    await clearChannelCard(node, secure, token, channelId, cardId);
   }
 
   public async setBlockedChannel(channelId: string, blocked: boolean): Promise<void> {
@@ -319,7 +322,7 @@ export class StreamModule {
       } else {
         await this.clearChannelBlocked(channelId);
       }
-      entry.card = this.setChannel(cardId, entry.item);
+      entry.channel = this.setChannel(channelId, entry.item);
       this.emitChannels();
     }
   }
@@ -327,7 +330,7 @@ export class StreamModule {
   public async getBlockedChannels(): Promise<Channel[]> {
     return Array.from(this.channelEntries.entries())
       .filter(([key, value]) => this.isChannelBlocked(key))
-      .map(([key, value]) => value.card);
+      .map(([key, value]) => value.channel);
   }
 
   public async flagChannel(channelId: string): Promise<void> {
@@ -337,7 +340,7 @@ export class StreamModule {
 
   public async getChannelNotifications(channelId: string): Promise<boolean> {
     const { node, secure, token } = this;
-    await getChannelNotifications(node, secure, token, channelId);
+    return await getChannelNotifications(node, secure, token, channelId);
   }
 
   public async setChannelNotifications(channelId: string, enabled: boolean): Promise<void> {
@@ -353,7 +356,7 @@ export class StreamModule {
       } else {
         await this.clearChannelUnread(channelId);
       }
-      entry.card = this.setChannel(cardId, entry.item);
+      entry.channel = this.setChannel(channelId, entry.item);
       this.emitChannels();
     }
   }

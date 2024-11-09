@@ -1061,7 +1061,7 @@ export class ContactModule implements Contact {
       try {
         return JSON.parse(data);
       } catch (err) {
-        log.error('invalid contact data');
+        this.log.error('invalid contact data');
       }
     }
     return null;

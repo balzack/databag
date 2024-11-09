@@ -83,7 +83,6 @@ const getCard = (id: string) => {
 jest.mock('../src/net/fetchUtil', () => {
 
   const fn = jest.fn().mockImplementation((url: string, options: { method: string, body: string }) => {
-console.log(url);
       if (url === 'http://test_url/contact/cards?agent=test_token' && options.method === 'GET') {
         return Promise.resolve({ status: 200, json: () => [getCard('A')] });
       }
