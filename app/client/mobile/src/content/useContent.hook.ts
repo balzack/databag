@@ -95,9 +95,32 @@ export function useContent() {
         }
       };
 
+      const getMessage = () => {
+        if (!lastTopic) {
+          return '';
+        }
+        if (lastTopic.dataType === 'superbasictopic') {
+          if (lastTopic.data?.text) {
+            return lastTopic.data.text;
+          } else {
+            return ''
+          }
+        } else if (lastTopic.dataType === 'sealedtopic') {
+          if (lastTopic.data) {
+            if (lastTopic.data.message?.text) {
+              return lastTopic.data.message.text;
+            } else {
+              return '';
+            }
+          } else {
+            return null;
+          }
+        }
+      }
+
       const hosted = cardId == null;
       const subject = data?.subject ? [data.subject] : buildSubject();
-      const message = lastTopic ? (lastTopic.data ? lastTopic.data.text : null) : '';
+      const message = getMessage();
       const imageUrl = selectImage();
 
       return {cardId, channelId, sealed, hosted, unread, imageUrl, subject, message};

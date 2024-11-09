@@ -447,6 +447,7 @@ export class ContactModule implements Contact {
               this.log.warn(err);
             }
           }
+          this.emitChannels(cardId);
         }
         this.unsealAll = false;
       }
@@ -985,8 +986,7 @@ export class ContactModule implements Contact {
         }
         if (item.channelKey) {
           const { data } = await this.crypto.aesDecrypt(subjectEncrypted, subjectIv, item.channelKey);
-          const { subject } = JSON.parse(data);
-          item.unsealedDetail = subject;
+          item.unsealedDetail = data;
           return true;
         }
       } catch (err) {
@@ -1006,8 +1006,7 @@ export class ContactModule implements Contact {
         if (item.channelKey) {
           const { messageEncrypted, messageIv } = JSON.parse(item.summary.data);
           const { data } = await this.crypto.aesDecrypt(messageEncrypted, messageIv, item.channelKey);
-          const { message } = JSON.parse(data);
-          item.unsealedSummary = message;
+          item.unsealedSummary = data;
           return true;
         }
       } catch (err) {

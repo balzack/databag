@@ -85,9 +85,10 @@ export class NativeCrypto implements Crypto {
 
   // decrypt data with private rsa key
   public async rsaDecrypt(encryptedDataB64: string, privateKeyB64: string): Promise<{data: string}> {
-    const crypto = new JSEncrypt();
-    crypto.setPrivateKey(privateKeyB64);
-    const data = await RSA.decrypt(encryptedDataB64, privateKeyB64);
+    const begin = '-----BEGIN RSA PRIVATE KEY-----\n';
+    const end = '\n-----END RSA PRIVATE KEY-----';
+    const key = `${begin}${privateKeyB64}${end}`;
+    const data = await RSA.decrypt(encryptedDataB64, key);
     if (!data) {
       throw new Error('rsaDecrypt failed');
     }
