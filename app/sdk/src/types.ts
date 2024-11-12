@@ -2,6 +2,7 @@ export type Card = {
   cardId: string;
   offsync: boolean;
   blocked: boolean;
+  sealable: boolean;
   status: string;
   statusUpdated: number;
   guid: string;

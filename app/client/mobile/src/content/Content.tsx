@@ -1,12 +1,15 @@
-import React from 'react';
-import {Divider, Surface, Button, Text, TextInput, useTheme} from 'react-native-paper';
-import {SafeAreaView, FlatList, View} from 'react-native';
+import React, { useState } from 'react';
+import {Divider, Switch, Surface, IconButton, Button, Text, TextInput, useTheme} from 'react-native-paper';
+import {SafeAreaView, Modal, FlatList, View} from 'react-native';
 import {styles} from './Content.styled';
 import {useContent} from './useContent.hook';
 import {Channel} from '../channel/Channel';
 import {Focus} from 'databag-client-sdk';
+import {BlurView} from '@react-native-community/blur';
 
 export function Content({select}: {select: (focus: Focus) => void}) {
+  const [add, setAdd] = useState(false);
+  const [sealable, setSealable] = useState(false);
   const {state, actions} = useContent();
   const theme = useTheme();
 
@@ -31,9 +34,7 @@ export function Content({select}: {select: (focus: Focus) => void}) {
             icon="comment-plus"
             mode="contained"
             style={styles.button}
-            onPress={() => {
-              console.log('ADD CHANNEL');
-            }}>
+            onPress={() => setAdd(true)}>
             {state.strings.new}
           </Button>
         )}
@@ -88,13 +89,35 @@ export function Content({select}: {select: (focus: Focus) => void}) {
             icon="comment-plus"
             mode="contained"
             style={styles.button}
-            onPress={() => {
-              console.log('ADD CHANNEL');
-            }}>
+            onPress={() => setAdd(true)}>
             {state.strings.new}
           </Button>
         </View>
       )}
+
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={add} onRequestClose={() => setAdd(false)}>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <View style={styles.addContainer}>
+            <Surface elevation={5} mode="flat" style={styles.addSurface}>
+              <Text style={styles.addLabel}>{ state.strings.newTopic }</Text>
+              <IconButton style={styles.addClose} icon="close" size={24} onPress={() => setAdd(false)} />
+              <TextInput
+                dense={true}
+                style={styles.input}
+                autoCapitalize={false}
+                unserlineStyle={styles.inputUnderline}
+                mode="outlined"
+                placeholder={state.strings.subjectOptional}
+                left={<TextInput.Icon style={styles.icon} icon="label-outline" />}
+                value={state.topic}
+                onChangeText={value => actions.setTopic(value)}
+              />
+              <Switch style={styles.sealSwitch} value={sealable} onValueChange={flag => setSealable(flag)} />
+            </Surface>
+          </View>
+        </View>
+      </Modal>  
     </View>
   );
 }

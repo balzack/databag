@@ -883,6 +883,7 @@ export class ContactModule implements Contact {
       cardId,
       offsync: Boolean(item.offsyncProfile || item.offsyncChannel || item.offsyncArticle),
       blocked: this.isCardBlocked(cardId),
+      sealable: Boolean(item.profile.seal),
       status: detail.status,
       statusUpdated: detail.statusUpdated,
       guid: profile.guid,

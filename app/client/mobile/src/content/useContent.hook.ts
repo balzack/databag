@@ -28,7 +28,19 @@ export function useContent() {
     sorted: [] as Channel[],
     filtered: [] as ChannelParams[],
     filter: '',
+    topic: '',
   });
+
+  const compare = (a: Card, b: Card) => {
+    const aval = `${a.handle}/${a.node}`;
+    const bval = `${b.handle}/${b.node}`;
+    if (aval < bval) {
+      return state.sortAsc ? 1 : -1;
+    } else if (aval > bval) {
+      return state.sortAsc ? -1 : 1;
+    }
+    return 0;
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
@@ -149,7 +161,18 @@ export function useContent() {
       updateState({guid});
     };
     const setCards = (cards: Card[]) => {
-      updateState({cards});
+      const sorted = cards.sort(compare);
+      const connected = [];
+      const sealable = [];
+      sorted.forEach(card => {
+        if (card.status === 'connected') {
+          connected.push(card);
+          if (card.sealable) {
+            sealable.push(card);
+          }
+        }
+      });
+      updateState({cards, connected, sealable});
     };
     const setChannels = ({channels, cardId}: {channels: Channel[]; cardId: string | null}) => {
       cardChannels.current.set(cardId, channels);
@@ -193,6 +216,9 @@ export function useContent() {
     },
     setFilter: (filter: string) => {
       updateState({filter});
+    },
+    setTopic: (topic: string) => {
+      updateState({topic});
     },
     getFocus: (cardId: string | null, channelId: string) => {
       return app.state.session.setFocus(cardId, channelId);

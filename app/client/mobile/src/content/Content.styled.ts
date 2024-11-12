@@ -102,4 +102,45 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
   },
   read: {},
+  modal: {
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  blur: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  addSurface: {
+    padding: 16,
+    borderRadius: 4,
+  },
+  addContainer: {
+    width: 500,
+    maxWidth: '80%',
+  },
+  addHeader: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  addClose: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    backgroundColor: 'transparent', 
+  },
+  addLabel: {
+    flexGrow: 1,
+    fontSize: 20,
+    paddingLeft: 4,
+    paddingBottom: 8,
+  },
+  sealSwitch: {
+    transform: [{scaleX: 0.7}, {scaleY: 0.7}],
+  },
 });
