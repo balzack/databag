@@ -2,7 +2,7 @@ import {useState, useContext, useEffect, useRef} from 'react';
 import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {ContextType} from '../context/ContextType';
-import {Channel, Card, Profile} from 'databag-client-sdk';
+import {Channel, Card, Profile, Config} from 'databag-client-sdk';
 import {notes, unknown, iii_group, iiii_group, iiiii_group, group} from '../constants/Icons';
 
 type ChannelParams = {
@@ -24,11 +24,13 @@ export function useContent() {
     strings: display.state.strings,
     layout: null,
     guid: '',
-    cards: [] as Card[],
+    connected: [] as Card[],
+    connectedAndSealable: [] as Cards[],
     sorted: [] as Channel[],
     filtered: [] as ChannelParams[],
     filter: '',
     topic: '',
+    sealable: false,
   });
 
   const compare = (a: Card, b: Card) => {
@@ -156,6 +158,10 @@ export function useContent() {
   }, [state.sorted, state.cards, state.guid, state.filter]);
 
   useEffect(() => {
+    const setConfig = (config: Config) => {
+      const { sealSet, sealUnlocked } = config;
+      updateState({ sealSet: sealSet && sealUnlocked });
+    };
     const setProfile = (profile: Profile) => {
       const {guid} = profile;
       updateState({guid});
@@ -198,15 +204,17 @@ export function useContent() {
       updateState({sorted});
     };
 
-    const {identity, contact, content} = app.state.session;
+    const {identity, contact, content, settings} = app.state.session;
     identity.addProfileListener(setProfile);
     contact.addCardListener(setCards);
     content.addChannelListener(setChannels);
+    settings.addConfigListener(setConfig);
 
     return () => {
       identity.removeProfileListener(setProfile);
       contact.removeCardListener(setCards);
       content.removeChannelListener(setChannels);
+      settings.removeConfigListener(setConfig);
     };
   }, []);
 

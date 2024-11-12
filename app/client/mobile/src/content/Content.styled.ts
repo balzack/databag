@@ -50,6 +50,10 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: 2,
   },
+  modalDivider: {
+    width: '100%',
+    height: 1,
+  },
   inputSurface: {
     flexGrow: 1,
     height: 40,
@@ -66,6 +70,7 @@ export const styles = StyleSheet.create({
     height: 40,
     maxHeight: 40,
     borderRadius: 8,
+    fontSize: 14,
   },
   inputUnderline: {
     display: 'none',
@@ -122,7 +127,7 @@ export const styles = StyleSheet.create({
   },
   addContainer: {
     width: 500,
-    maxWidth: '80%',
+    maxWidth: '90%',
   },
   addHeader: {
     display: 'flex',
@@ -136,11 +141,82 @@ export const styles = StyleSheet.create({
   },
   addLabel: {
     flexGrow: 1,
-    fontSize: 20,
+    fontSize: 18,
     paddingLeft: 4,
     paddingBottom: 8,
   },
   sealSwitch: {
     transform: [{scaleX: 0.7}, {scaleY: 0.7}],
+    flexGrow: 1,
+  },
+  addControls: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 16,
+    gap: 8,
+  },
+  sealable: {
+    flexGrow: 1,
+    flexShrink: 1,
+  },
+  sealableContent: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  switchLabel: {
+    fontSize: 14,
+    flexShrink: 1,
+  },
+  cancel: {
+    borderRadius: 8,
+  },
+  cancelLabel: {
+    fontSize: 14,
+    marginVertical: 0,
+    paddingVertical: 6,
+  },
+  create: {
+    borderRadius: 8,
+  },
+  createLabel: {
+    fontSize: 14,
+    marginVertical: 0,
+    paddingVertical: 6,
+  },
+  members: {
+    height: 256,
+  },
+  membersContainer: {
+  },
+  subjectInput: {
+    flexGrow: 1,
+    backgroundColor: 'transparent',
+    paddingTop: 0,
+    paddingBottom: 0,
+    display: 'flex',
+    height: 40,
+    maxHeight: 40,
+    borderRadius: 8,
+    fontSize: 14,
+    borderBottomWidth: 0,
+  },
+  subjectContainer: {
+    marginBottom: 8,
+  },
+  cards: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    overscrollBehavior: 'none',
+  },
+  card: {
+    width: '100%',
+    height: 48,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 16,
+    borderBottomWidth: 1,
   },
 });
