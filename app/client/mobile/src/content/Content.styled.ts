@@ -137,7 +137,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     top: 0,
-    backgroundColor: 'transparent', 
+    backgroundColor: 'transparent',
   },
   addLabel: {
     flexGrow: 1,
@@ -191,8 +191,7 @@ export const styles = StyleSheet.create({
   members: {
     height: 200,
   },
-  membersContainer: {
-  },
+  membersContainer: {},
   subjectInput: {
     flexGrow: 1,
     backgroundColor: 'transparent',

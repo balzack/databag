@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, {useState} from 'react';
 import {Divider, Switch, Surface, IconButton, Button, Text, TextInput, useTheme} from 'react-native-paper';
 import {SafeAreaView, Modal, FlatList, View} from 'react-native';
 import {styles} from './Content.styled';
@@ -12,10 +12,10 @@ import {Confirm} from '../confirm/Confirm';
 export function Content({select}: {select: (focus: Focus) => void}) {
   const [add, setAdd] = useState(false);
   const [adding, setAdding] = useState(false);
-  const [sealed, setSealed] = useState(false);
+  const [sealedTopic, setSealedTopic] = useState(false);
   const {state, actions} = useContent();
   const theme = useTheme();
-  const [subject, setSubject] = useState('');
+  const [subjectTopic, setSubjectTopic] = useState('');
   const [members, setMembers] = useState([]);
   const [alert, setAlert] = useState(false);
   const [alertParams] = useState({
@@ -26,21 +26,25 @@ export function Content({select}: {select: (focus: Focus) => void}) {
       action: () => setAlert(false),
     },
   });
-  const cards = (state.sealSet && sealed) ? state.sealable : state.connected;
+  const cards = state.sealSet && sealedTopic ? state.sealable : state.connected;
 
   const addTopic = async () => {
     setAdding(true);
     try {
-      await actions.addTopic(sealed, subject, members.filter(id => Boolean(cards.find(card => card.cardId === id))));
+      await actions.addTopic(
+        sealedTopic,
+        subjectTopic,
+        members.filter(id => Boolean(cards.find(card => card.cardId === id))),
+      );
       setAdd(false);
-      setSubject('');
+      setSubjectTopic('');
       setMembers([]);
-      setSealed(false);
+      setSealedTopic(false);
     } catch (err) {
       console.log(err);
       setAdd(false);
       setAlert(true);
-    } 
+    }
     setAdding(false);
   };
 
@@ -61,11 +65,7 @@ export function Content({select}: {select: (focus: Focus) => void}) {
           />
         </Surface>
         {state.layout !== 'large' && (
-          <Button
-            icon="comment-plus"
-            mode="contained"
-            style={styles.button}
-            onPress={() => setAdd(true)}>
+          <Button icon="comment-plus" mode="contained" style={styles.button} onPress={() => setAdd(true)}>
             {state.strings.new}
           </Button>
         )}
@@ -116,11 +116,7 @@ export function Content({select}: {select: (focus: Focus) => void}) {
       {state.layout === 'large' && (
         <View style={styles.bar}>
           <Divider style={styles.divider} />
-          <Button
-            icon="comment-plus"
-            mode="contained"
-            style={styles.button}
-            onPress={() => setAdd(true)}>
+          <Button icon="comment-plus" mode="contained" style={styles.button} onPress={() => setAdd(true)}>
             {state.strings.new}
           </Button>
         </View>
@@ -131,7 +127,7 @@ export function Content({select}: {select: (focus: Focus) => void}) {
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <View style={styles.addContainer}>
             <Surface elevation={5} mode="flat" style={styles.addSurface}>
-              <Text style={styles.addLabel}>{ state.strings.newTopic }</Text>
+              <Text style={styles.addLabel}>{state.strings.newTopic}</Text>
               <IconButton style={styles.addClose} icon="close" size={24} onPress={() => setAdd(false)} />
               <Surface elevation={0} style={styles.subjectContainer}>
                 <TextInput
@@ -141,8 +137,8 @@ export function Content({select}: {select: (focus: Focus) => void}) {
                   underlineStyle={styles.inputUnderline}
                   placeholder={state.strings.subjectOptional}
                   left={<TextInput.Icon style={styles.icon} icon="label-outline" />}
-                  value={subject}
-                  onChangeText={value => setSubject(value)}
+                  value={subjectTopic}
+                  onChangeText={value => setSubjectTopic(value)}
                 />
                 <Divider style={styles.modalDivider} />
               </Surface>
@@ -154,13 +150,20 @@ export function Content({select}: {select: (focus: Focus) => void}) {
                     data={cards}
                     initialNumToRender={32}
                     renderItem={({item}) => {
-                      const enable = (<Switch key="enable" style={styles.memberSwitch} value={Boolean(members.find(cardId => cardId === item.cardId))} onValueChange={flag => {
-                        if (flag) {
-                          setMembers([ item.cardId, ...members ]);
-                        } else {
-                          setMembers(members.filter(cardId => cardId != item.cardId));
-                        }
-                      }} />)
+                      const enable = (
+                        <Switch
+                          key="enable"
+                          style={styles.memberSwitch}
+                          value={Boolean(members.find(cardId => cardId === item.cardId))}
+                          onValueChange={flag => {
+                            if (flag) {
+                              setMembers([item.cardId, ...members]);
+                            } else {
+                              setMembers(members.filter(cardId => cardId !== item.cardId));
+                            }
+                          }}
+                        />
+                      );
                       return (
                         <Card
                           containerStyle={{
@@ -183,10 +186,10 @@ export function Content({select}: {select: (focus: Focus) => void}) {
               </View>
               <View style={styles.addControls}>
                 <View style={styles.sealable}>
-                  { state.sealSet && (
+                  {state.sealSet && (
                     <View style={styles.sealableContent}>
-                      <Text style={styles.switchLabel}>{ state.strings.sealedTopic }</Text>
-                      <Switch style={styles.sealSwitch} value={sealed} onValueChange={flag => setSealed(flag)} />
+                      <Text style={styles.switchLabel}>{state.strings.sealedTopic}</Text>
+                      <Switch style={styles.sealSwitch} value={sealedTopic} onValueChange={flag => setSealedTopic(flag)} />
                     </View>
                   )}
                 </View>
@@ -200,7 +203,7 @@ export function Content({select}: {select: (focus: Focus) => void}) {
             </Surface>
           </View>
         </View>
-      </Modal>  
+      </Modal>
       <Confirm show={alert} params={alertParams} />
     </View>
   );

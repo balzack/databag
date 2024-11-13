@@ -44,7 +44,6 @@ export function useContent() {
     return 0;
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
@@ -56,7 +55,7 @@ export function useContent() {
 
   useEffect(() => {
     const channels = state.sorted.map(channel => {
-      const {cardId, channelId, unread, sealed, members, dataType, data, lastTopic} = channel;
+      const {cardId, channelId, unread, sealed, members, data, lastTopic} = channel;
       const contacts = [] as (Card | undefined)[];
       if (cardId) {
         const card = state.cards.find(contact => contact.cardId === cardId);
@@ -90,19 +89,19 @@ export function useContent() {
       };
 
       const selectImage = () => {
-        if (contacts.length == 0) {
+        if (contacts.length === 0) {
           return notes;
-        } else if (contacts.length == 1) {
+        } else if (contacts.length === 1) {
           if (contacts[0]) {
             return contacts[0].imageUrl;
           } else {
             return unknown;
           }
-        } else if (contacts.length == 2) {
+        } else if (contacts.length === 2) {
           return iii_group;
-        } else if (contacts.length == 3) {
+        } else if (contacts.length === 3) {
           return iiii_group;
-        } else if (contacts.length == 4) {
+        } else if (contacts.length === 4) {
           return iiiii_group;
         } else {
           return group;
@@ -117,7 +116,7 @@ export function useContent() {
           if (lastTopic.data?.text) {
             return lastTopic.data.text;
           } else {
-            return ''
+            return '';
           }
         } else if (lastTopic.dataType === 'sealedtopic') {
           if (lastTopic.data) {
@@ -130,14 +129,23 @@ export function useContent() {
             return null;
           }
         }
-      }
+      };
 
       const hosted = cardId == null;
       const subject = data?.subject ? [data.subject] : buildSubject();
       const message = getMessage();
       const imageUrl = selectImage();
 
-      return {cardId, channelId, sealed, hosted, unread, imageUrl, subject, message};
+      return {
+        cardId,
+        channelId,
+        sealed,
+        hosted,
+        unread,
+        imageUrl,
+        subject,
+        message,
+      };
     });
 
     const search = state.filter?.toLowerCase();
@@ -159,8 +167,8 @@ export function useContent() {
 
   useEffect(() => {
     const setConfig = (config: Config) => {
-      const { sealSet, sealUnlocked } = config;
-      updateState({ sealSet: sealSet && sealUnlocked });
+      const {sealSet, sealUnlocked} = config;
+      updateState({sealSet: sealSet && sealUnlocked});
     };
     const setProfile = (profile: Profile) => {
       const {guid} = profile;
@@ -189,7 +197,7 @@ export function useContent() {
       const sorted = merged.sort((a, b) => {
         const aUpdated = a?.lastTopic?.created;
         const bUpdated = b?.lastTopic?.created;
-        if (aUpdated == bUpdated) {
+        if (aUpdated === bUpdated) {
           return 0;
         } else if (!aUpdated) {
           return 1;
@@ -216,6 +224,7 @@ export function useContent() {
       content.removeChannelListener(setChannels);
       settings.removeConfigListener(setConfig);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const actions = {

@@ -16,40 +16,13 @@ export function useContacts() {
     filter: '',
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
 
-  const compare = (a: Card, b: Card) => {
-    const aval = `${a.handle}/${a.node}`;
-    const bval = `${b.handle}/${b.node}`;
-    if (aval < bval) {
-      return state.sortAsc ? 1 : -1;
-    } else if (aval > bval) {
-      return state.sortAsc ? -1 : 1;
-    }
-    return 0;
-  };
-
-  const select = (c: Card) => {
-    if (!state.filter) {
-      return true;
-    }
-    const value = state.filter.toLowerCase();
-    if (c.name && c.name.toLowerCase().includes(value)) {
-      return true;
-    }
-    const handle = c.node ? `${c.handle}/${c.node}` : c.handle;
-    if (handle.toLowerCase().includes(value)) {
-      return true;
-    }
-    return false;
-  };
-
   useEffect(() => {
-    const { layout } = display.state;
-    updateState({ layout });
+    const {layout} = display.state;
+    updateState({layout});
   }, [display.state]);
 
   useEffect(() => {
@@ -61,9 +34,34 @@ export function useContacts() {
     return () => {
       contact.removeCardListener(setCards);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
+    const compare = (a: Card, b: Card) => {
+      const aval = `${a.handle}/${a.node}`;
+      const bval = `${b.handle}/${b.node}`;
+      if (aval < bval) {
+        return state.sortAsc ? 1 : -1;
+      } else if (aval > bval) {
+        return state.sortAsc ? -1 : 1;
+      }
+      return 0;
+    };
+    const select = (c: Card) => {
+      if (!state.filter) {
+        return true;
+      }
+      const value = state.filter.toLowerCase();
+      if (c.name && c.name.toLowerCase().includes(value)) {
+        return true;
+      }
+      const handle = c.node ? `${c.handle}/${c.node}` : c.handle;
+      if (handle.toLowerCase().includes(value)) {
+        return true;
+      }
+      return false;
+    };
     const filtered = state.cards.sort(compare).filter(select);
     updateState({filtered});
   }, [state.sortAsc, state.filter, state.cards]);

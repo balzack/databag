@@ -767,7 +767,7 @@ export const pt = {
   server: 'Servidor',
   token: 'Code',
   delayMessage: 'A geração da chave pode levar vários minutos.',
-  
+
   code: 'pt',
   settings: 'Configurações',
   contacts: 'Contatos',

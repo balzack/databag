@@ -45,8 +45,8 @@ export function useRegistry() {
   };
 
   useEffect(() => {
-    const { layout } = display.state;
-    updateState({ layout });
+    const {layout} = display.state;
+    updateState({layout});
   }, [display.state]);
 
   useEffect(() => {
