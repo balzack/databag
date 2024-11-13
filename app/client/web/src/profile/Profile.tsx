@@ -237,12 +237,12 @@ export function Profile({ params, close }: { params: ProfileParams; close?: () =
 
   return (
     <div className={classes.contact}>
+      <div className={classes.header}>
+        {close && <IconX size={28} className={classes.match} />}
+        <Text className={classes.label}>{`${state.handle}${state.node ? '/' + state.node : ''}`}</Text>
+        {close && <IconX size={30} className={classes.close} onClick={close} />}
+      </div>
       <div className={classes.detail}>
-        <div className={classes.header}>
-          {close && <IconX size={28} className={classes.match} />}
-          <Text className={classes.label}>{`${state.handle}${state.node ? '/' + state.node : ''}`}</Text>
-          {close && <IconX size={30} className={classes.close} onClick={close} />}
-        </div>
         <div className={classes.image}>
           <Image radius="md" src={state.imageUrl} />
         </div>

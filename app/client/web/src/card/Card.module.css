@@ -53,7 +53,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
     font-style: italic;
-    color: var(--mantine-color-text-9);
+    color: var(--mantine-color-text-7);
   }
 
   .handle {

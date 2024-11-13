@@ -46,7 +46,7 @@ export function Content({ select }: { select: (focus: Focus) => void }) {
           </Button>
         )}
       </div>
-      {channels.length === 0 && <div className={classes.none}>{state.strings.noContacts}</div>}
+      {channels.length === 0 && <div className={classes.none}>{state.strings.noTopics}</div>}
       {channels.length !== 0 && <div className={classes.channels}>{channels}</div>}
       {state.layout === 'large' && (
         <div className={classes.bar}>

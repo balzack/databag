@@ -1,21 +1,21 @@
 .contact {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-top: 8px;
-  padding-bottom: 4px;
   width: 100%;
+  height: 100%;
 
   .detail {
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2px;
     flex-grow: 1;
     width: 100%;
+    overflow: scroll;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   .header {
@@ -23,6 +23,11 @@
     flex-direction: row;
     align-items: center;
     width: 100%;
+    border-bottom: 1px solid var(--mantine-color-text-9);
+    padding-left: 16px;
+    padding-right: 16px;
+    height: 48px;
+    flex-shrink: 0;
   }
 
   .close {

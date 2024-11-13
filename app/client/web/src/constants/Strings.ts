@@ -1,5 +1,3 @@
-import {NativeModules, Platform} from 'react-native';
-
 export const en = {
   unknown: 'Unknown',
   sealed: 'Sealed',
