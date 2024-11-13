@@ -26,11 +26,12 @@ export function Content({select}: {select: (focus: Focus) => void}) {
       action: () => setAlert(false),
     },
   });
+  const cards = (state.sealSet && sealed) ? state.sealable : state.connected;
 
   const addTopic = async () => {
     setAdding(true);
     try {
-      await actions.addTopic(sealed, subject, members);
+      await actions.addTopic(sealed, subject, members.filter(id => Boolean(cards.find(card => card.cardId === id))));
       setAdd(false);
       setSubject('');
       setMembers([]);
@@ -42,8 +43,6 @@ export function Content({select}: {select: (focus: Focus) => void}) {
     } 
     setAdding(false);
   };
-
-  const cards = sealed ? state.sealable : state.connected;
 
   return (
     <View style={styles.container}>

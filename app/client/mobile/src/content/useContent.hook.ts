@@ -25,12 +25,12 @@ export function useContent() {
     layout: null,
     guid: '',
     connected: [] as Card[],
-    connectedAndSealable: [] as Cards[],
+    sealable: [] as Cards[],
     sorted: [] as Channel[],
     filtered: [] as ChannelParams[],
     filter: '',
     topic: '',
-    sealable: false,
+    sealSet: false,
   });
 
   const compare = (a: Card, b: Card) => {
