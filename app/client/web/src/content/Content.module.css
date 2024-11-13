@@ -15,7 +15,7 @@
     padding-left: 16px;
     padding-right: 16px;
     padding-bottom: 8px;
-    border-bottom: 2px solid var(--mantine-color-text-9);
+    border-bottom: 2px solid var(--mantine-color-text-7);
     width: 100%;
 
     .input {
@@ -37,7 +37,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-top: 2px solid var(--mantine-color-text-9);
+    border-top: 2px solid var(--mantine-color-text-7);
 
     .add {
       padding-left: 48px;
@@ -68,11 +68,23 @@
       padding-bottom: 8px;
       padding-right: 16px;
       padding-left: 16px;
-      border-bottom: 1px solid var(--mantine-color-text-9);
+      border-bottom: 1px solid var(--mantine-color-text-8);
 
       &:hover {
         background: var(--mantine-color-surface-4);
       }
     }
+  }
+}
+
+.addContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .addMembers {
+    width: 100%;
+    height: 200px;
+    background: var(--mantine-color-surface-0);
   }
 }
