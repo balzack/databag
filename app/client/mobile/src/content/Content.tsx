@@ -155,7 +155,7 @@ export function Content({select}: {select: (focus: Focus) => void}) {
                     data={cards}
                     initialNumToRender={32}
                     renderItem={({item}) => {
-                      const enable = (<Switch key="enable" style={styles.sealSwitch} value={Boolean(members.find(cardId => cardId === item.cardId))} onValueChange={flag => {
+                      const enable = (<Switch key="enable" style={styles.memberSwitch} value={Boolean(members.find(cardId => cardId === item.cardId))} onValueChange={flag => {
                         if (flag) {
                           setMembers([ item.cardId, ...members ]);
                         } else {

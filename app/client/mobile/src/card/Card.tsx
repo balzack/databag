@@ -31,7 +31,7 @@ export function Card({
           {!name && <Text numberOfLines={1} style={styles.nameUnset}>{placeholder}</Text>}
           <Text numberOfLines={1} style={styles.handle}>{node ? `${handle}/${node}` : handle}</Text>
         </View>
-        <View>
+        <View style={styles.actions}>
           {actions}
         </View>
       </SafeAreaView>

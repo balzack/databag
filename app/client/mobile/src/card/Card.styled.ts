@@ -60,4 +60,9 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
     fontWeight: 'bold',
   },
+  actions: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexShrink: 0,
+  },
 });

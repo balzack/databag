@@ -149,6 +149,9 @@ export const styles = StyleSheet.create({
     transform: [{scaleX: 0.7}, {scaleY: 0.7}],
     flexGrow: 1,
   },
+  memberSwitch: {
+    transform: [{scaleX: 0.7}, {scaleY: 0.7}],
+  },
   addControls: {
     display: 'flex',
     flexDirection: 'row',
@@ -186,7 +189,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   members: {
-    height: 256,
+    height: 200,
   },
   membersContainer: {
   },
