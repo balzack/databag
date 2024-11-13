@@ -192,7 +192,7 @@
   .divider {
     margin-top: 8px;
     margin-bottom: 8px;
-    border: 1px solid var(--mantine-color-text-9);
+    border: 1px solid var(--mantine-color-text-7);
     width: 100%;
   }
 
@@ -203,6 +203,7 @@
     text-wrap: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    flex-shrink: 0;
   }
 
   .nameUnset {
@@ -213,7 +214,8 @@
     text-overflow: ellipsis;
     overflow: hidden;
     font-style: italic;
-    color: var(--mantine-color-text-9);
+    flex-shrink: 0;
+    color: var(--mantine-color-text-7);
   }
 
   .entry {
@@ -239,7 +241,7 @@
     .entryUnset {
       font-size: 14px;
       font-style: italic;
-      color: var(--mantine-color-text-9);
+      color: var(--mantine-color-text-7);
     }
 
     .entryValue {
