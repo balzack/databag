@@ -5,6 +5,8 @@ export const en = {
   sealed: 'Sealed',
   notes: 'Notes',
   server: 'Server',
+  token: 'Token',
+  delayMessage: 'Key generation can take several minutes.',
 
   code: 'en',
   settings: 'Settings',
@@ -256,6 +258,8 @@ export const fr = {
   sealed: 'Scellé',
   notes: 'Notes',
   server: 'Serveur',
+  token: 'Code',
+  delayMessage: 'La génération de clé peut prendre plusieurs minutes.',
 
   code: 'fr',
   settings: 'Paramètres',
@@ -508,7 +512,9 @@ export const sp = {
   sealed: 'Sellado',
   notes: 'Notas',
   server: 'Server',
- 
+  token: 'Código',
+  delayMessage: 'La generación de claves puede tardar varios minutos.',
+
   code: 'sp',
   settings: 'Configuración',
   contacts: 'Contactos',
@@ -759,7 +765,9 @@ export const pt = {
   sealed: 'Selado',
   notes: 'Notas',
   server: 'Servidor',
-
+  token: 'Code',
+  delayMessage: 'A geração da chave pode levar vários minutos.',
+  
   code: 'pt',
   settings: 'Configurações',
   contacts: 'Contatos',
@@ -1010,6 +1018,8 @@ export const de = {
   sealed: 'Versiegelt',
   notes: 'Notizen',
   server: 'Servierer',
+  token: 'Token',
+  delayMessage: 'Die Schlüsselgenerierung kann mehrere Minuten dauern.',
 
   code: 'de',
   settings: 'Einstellungen',
@@ -1261,6 +1271,8 @@ export const ru = {
   sealed: 'Запечатано',
   notes: 'Заметки',
   server: 'Сервер',
+  token: 'Токен',
+  delayMessage: 'Генерация ключа может занять несколько минут.',
 
   code: 'ru',
   settings: 'Настройки',

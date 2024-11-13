@@ -56,7 +56,7 @@ export function useContent() {
 
   useEffect(() => {
     const channels = state.sorted.map(channel => {
-      const {cardId, channelId, unread, sealed, members, data, lastTopic} = channel;
+      const {cardId, channelId, unread, sealed, members, dataType, data, lastTopic} = channel;
       const contacts = [] as (Card | undefined)[];
       if (cardId) {
         const card = state.cards.find(contact => contact.cardId === cardId);
@@ -110,7 +110,7 @@ export function useContent() {
       };
 
       const getMessage = () => {
-        if (!lastTopic) {
+        if (!lastTopic || !lastTopic.status) {
           return '';
         }
         if (lastTopic.dataType === 'superbasictopic') {
@@ -219,9 +219,6 @@ export function useContent() {
   }, []);
 
   const actions = {
-    addChannel: () => {
-      console.log('add channel');
-    },
     setFilter: (filter: string) => {
       updateState({filter});
     },
@@ -230,6 +227,15 @@ export function useContent() {
     },
     getFocus: (cardId: string | null, channelId: string) => {
       return app.state.session.setFocus(cardId, channelId);
+    },
+    addTopic: async (sealed: boolean, subject: string, contacts: string[]) => {
+      const content = app.state.session.getContent();
+      await new Promise(r => setTimeout(r, 2000));
+      if (sealed) {
+        await content.addChannel(true, 'sealed', {subject}, contacts);
+      } else {
+        await content.addChannel(false, 'superbasic', {subject}, contacts);
+      }
     },
   };
 

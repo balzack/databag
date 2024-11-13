@@ -747,7 +747,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
               )}
               {!state.config.sealSet && (
                 <>
-                  <Text style={styles.modalDescription}>{state.strings.sealUnset}</Text>
+                  <Text style={styles.modalDescription}>{state.strings.sealCreate}</Text>
                   <Text style={styles.modalDescription}>{state.strings.delayMessage}</Text>
                   <TextInput
                     style={styles.input}

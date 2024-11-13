@@ -247,10 +247,11 @@ export class StreamModule {
       throw new Error('seal not set');
     }
     const sealKey = await crypto.rsaEncrypt(aesKeyHex, seal.publicKey);
+    const hostSeal = { publicKey: seal.publicKey, sealedKey: sealKey.encryptedDataB64 };
     const { ivHex } = await crypto.aesIv();
     const subjectData = JSON.stringify(subject);
     const { encryptedDataB64 } = await crypto.aesEncrypt(subjectData, ivHex, aesKeyHex);
-    const sealedSubject = { subjectEncrypted: encryptedDataB64, subjectIv: ivHex, seals: [...seals, sealKey] };
+    const sealedSubject = { subjectEncrypted: encryptedDataB64, subjectIv: ivHex, seals: [...seals, hostSeal] };
     return await addChannel(node, secure, token, type, sealedSubject, cardIds);
   }
 
@@ -497,6 +498,7 @@ export class StreamModule {
         if (!item.channelKey) {
           item.channelKey = await this.getChannelKey(seals);
         }
+
         if (item.channelKey) {
           const { data } = await this.crypto.aesDecrypt(subjectEncrypted, subjectIv, item.channelKey);
           item.unsealedDetail = data;

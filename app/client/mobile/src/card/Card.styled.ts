@@ -29,6 +29,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
+    flexShrink: 1,
     paddingLeft: 8,
     paddingRight: 8,
   },

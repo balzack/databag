@@ -27,11 +27,13 @@ export function Card({
       <SafeAreaView style={styles.card}>
         <Image style={styles.image} resizeMode={'contain'} source={{uri: imageUrl}} />
         <View style={styles.details}>
-          {name && <Text style={styles.nameSet}>{name}</Text>}
-          {!name && <Text style={styles.nameUnset}>{placeholder}</Text>}
-          <Text style={styles.handle}>{node ? `${handle}/${node}` : handle}</Text>
+          {name && <Text numberOfLines={1} style={styles.nameSet}>{name}</Text>}
+          {!name && <Text numberOfLines={1} style={styles.nameUnset}>{placeholder}</Text>}
+          <Text numberOfLines={1} style={styles.handle}>{node ? `${handle}/${node}` : handle}</Text>
         </View>
-        {actions}
+        <View>
+          {actions}
+        </View>
       </SafeAreaView>
     </Pressable>
   );

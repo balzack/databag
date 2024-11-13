@@ -7,6 +7,7 @@ import {Channel} from '../channel/Channel';
 import {Focus} from 'databag-client-sdk';
 import {BlurView} from '@react-native-community/blur';
 import {Card} from '../card/Card';
+import {Confirm} from '../confirm/Confirm';
 
 export function Content({select}: {select: (focus: Focus) => void}) {
   const [add, setAdd] = useState(false);
@@ -14,10 +15,32 @@ export function Content({select}: {select: (focus: Focus) => void}) {
   const [sealed, setSealed] = useState(false);
   const {state, actions} = useContent();
   const theme = useTheme();
-  const members = useRef(new Set<string>());
+  const [subject, setSubject] = useState('');
+  const [members, setMembers] = useState([]);
+  const [alert, setAlert] = useState(false);
+  const [alertParams] = useState({
+    title: state.strings.operationFailed,
+    prompt: state.strings.tryAgain,
+    confirm: {
+      label: state.strings.ok,
+      action: () => setAlert(false),
+    },
+  });
 
   const addTopic = async () => {
-    console.log('add topic');
+    setAdding(true);
+    try {
+      await actions.addTopic(sealed, subject, members);
+      setAdd(false);
+      setSubject('');
+      setMembers([]);
+      setSealed(false);
+    } catch (err) {
+      console.log(err);
+      setAdd(false);
+      setAlert(true);
+    } 
+    setAdding(false);
   };
 
   const cards = sealed ? state.sealable : state.connected;
@@ -119,49 +142,45 @@ export function Content({select}: {select: (focus: Focus) => void}) {
                   underlineStyle={styles.inputUnderline}
                   placeholder={state.strings.subjectOptional}
                   left={<TextInput.Icon style={styles.icon} icon="label-outline" />}
-                  value={state.topic}
-                  onChangeText={value => actions.setTopic(value)}
+                  value={subject}
+                  onChangeText={value => setSubject(value)}
                 />
                 <Divider style={styles.modalDivider} />
               </Surface>
               <View style={styles.membersContainer}>
-              <Divider style={styles.modalDivider} />
-              <Surface elevation={0} mode="flat" style={styles.members}>
-
-                <FlatList
-                  style={styles.cards}
-                  data={cards}
-                  initialNumToRender={32}
-                  renderItem={({item}) => {
-
-                    const enable = (<Switch style={styles.sealSwitch} value={members.current.has(item.guid)} onValueChange={flag => {
-                      if (flag) {
-                        members.current.add(item.guid);
-                      } else {
-                        members.current.delete(item.guid);
-                      }
-                    }} />)
-
-                    return (
-                      <Card
-                        containerStyle={{
-                          ...styles.card,
-                          borderColor: theme.colors.outlineVariant,
-                        }}
-                        imageUrl={item.imageUrl}
-                        name={item.name}
-                        handle={item.handle}
-                        node={item.node}
-                        placeholder={state.strings.name}
-                        actions={[enable]}
-                      />
-                    );
-                  }}
-                  keyExtractor={card => card.cardId}
-                />
-
-              </Surface>
-              <Divider style={styles.modalDivider} />
+                <Divider style={styles.modalDivider} />
+                <Surface elevation={0} mode="flat" style={styles.members}>
+                  <FlatList
+                    style={styles.cards}
+                    data={cards}
+                    initialNumToRender={32}
+                    renderItem={({item}) => {
+                      const enable = (<Switch key="enable" style={styles.sealSwitch} value={Boolean(members.find(cardId => cardId === item.cardId))} onValueChange={flag => {
+                        if (flag) {
+                          setMembers([ item.cardId, ...members ]);
+                        } else {
+                          setMembers(members.filter(cardId => cardId != item.cardId));
+                        }
+                      }} />)
+                      return (
+                        <Card
+                          containerStyle={{
+                            ...styles.card,
+                            borderColor: theme.colors.outlineVariant,
+                          }}
+                          imageUrl={item.imageUrl}
+                          name={item.name}
+                          handle={item.handle}
+                          node={item.node}
+                          placeholder={state.strings.name}
+                          actions={[enable]}
+                        />
+                      );
+                    }}
+                    keyExtractor={card => card.cardId}
+                  />
+                </Surface>
+                <Divider style={styles.modalDivider} />
               </View>
               <View style={styles.addControls}>
                 <View style={styles.sealable}>
@@ -183,6 +202,7 @@ export function Content({select}: {select: (focus: Focus) => void}) {
           </View>
         </View>
       </Modal>  
+      <Confirm show={alert} params={alertParams} />
     </View>
   );
 }

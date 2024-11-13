@@ -2,13 +2,12 @@ import {Crypto} from 'databag-client-sdk';
 import CryptoJS from 'crypto-js';
 import {JSEncrypt} from 'jsencrypt';
 import {RSA} from 'react-native-rsa-native';
-import {generateSecureRandom} from 'react-native-securerandom';
 
 export class NativeCrypto implements Crypto {
   // generate salt for pbk function
   public async pbkdfSalt(): Promise<{saltHex: string}> {
-    const salt = await generateSecureRandom(16);
-    const saltHex = this.uint8ToHexStr(salt);
+    const salt = CryptoJS.lib.WordArray.random(128 / 8);
+    const saltHex = salt.toString();
     return {saltHex};
   }
 
@@ -26,15 +25,15 @@ export class NativeCrypto implements Crypto {
 
   // generate random aes key
   public async aesKey(): Promise<{aesKeyHex: string}> {
-    const aesKey = await generateSecureRandom(32);
-    const aesKeyHex = this.uint8ToHexStr(aesKey);
+    const aesKey = CryptoJS.lib.WordArray.random(256 / 8);
+    const aesKeyHex = aesKey.toString();
     return {aesKeyHex};
   }
 
   // generate iv to use to aes function
   public async aesIv(): Promise<{ivHex: string}> {
-    const iv = await generateSecureRandom(16);
-    const ivHex = this.uint8ToHexStr(iv);
+    const iv = CryptoJS.lib.WordArray.random(128 / 8);
+    const ivHex = iv.toString();
     return {ivHex};
   }
 
