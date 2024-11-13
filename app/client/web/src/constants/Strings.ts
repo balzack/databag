@@ -249,7 +249,7 @@ export const en = {
   disable: 'Disable',
   confirmDisable: 'Disabling Multi-Factor Authentication',
   disablePrompt: 'Are you sure you want to disable multi-factor authentication',
-};
+}
 
 export const fr = {
   unknown: 'Inconnu',
@@ -503,7 +503,7 @@ export const fr = {
   disable: 'Désactiver',
   confirmDisable: "Désactivation de l'authentification multi-facteurs",
   disablePrompt: "Êtes-vous sûr de vouloir désactiver l'authentification multi-facteurs",
-};
+}
 
 export const sp = {
   unknown: 'Desconocido',
@@ -756,7 +756,7 @@ export const sp = {
   disable: 'Desactivar',
   confirmDisable: 'Desactivación de la autenticación de dos factores',
   disablePrompt: '¿Estás seguro de que quieres desactivar la autenticación de dos factores?',
-};
+}
 
 export const pt = {
   unknown: 'Desconhecido',
@@ -765,7 +765,7 @@ export const pt = {
   server: 'Servidor',
   token: 'Code',
   delayMessage: 'A geração da chave pode levar vários minutos.',
-  
+
   code: 'pt',
   settings: 'Configurações',
   contacts: 'Contatos',
@@ -1009,7 +1009,7 @@ export const pt = {
   disable: 'Desativar',
   confirmDisable: 'Desativando Autenticação de Dois Fatores',
   disablePrompt: 'Tem certeza de que deseja desativar a autenticação de dois fatores?',
-};
+}
 
 export const de = {
   unknown: 'Unbekannt',
@@ -1262,7 +1262,7 @@ export const de = {
   disable: 'Deaktivieren',
   confirmDisable: 'Deaktivierung der Zwei-Faktor-Authentifizierung',
   disablePrompt: 'Sind Sie sicher, dass Sie die Zwei-Faktor-Authentifizierung deaktivieren möchten?',
-};
+}
 
 export const ru = {
   unknown: 'Неизвестно',
@@ -1515,5 +1515,4 @@ export const ru = {
   disable: 'Отключить',
   confirmDisable: 'Отключение двухфакторной аутентификации',
   disablePrompt: 'Вы уверены, что хотите отключить двухфакторную аутентификацию?',
-};
-
+}

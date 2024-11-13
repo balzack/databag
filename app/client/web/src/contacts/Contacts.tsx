@@ -8,7 +8,7 @@ import { ProfileParams } from '../profile/Profile'
 import { Colors } from '../constants/Colors'
 import { modals } from '@mantine/modals'
 
-function Action({ icon, color, strings, select }: { icon: ReactNode; color: string; strings: { operationFailed: string, tryAgain: string}; select: () => Promise<void> }) {
+function Action({ icon, color, strings, select }: { icon: ReactNode; color: string; strings: { operationFailed: string; tryAgain: string }; select: () => Promise<void> }) {
   const [loading, setLoading] = useState(false)
   const onClick = async () => {
     setLoading(true)

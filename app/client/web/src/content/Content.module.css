@@ -103,7 +103,7 @@
       height: 128px;
       align-items: center;
       justify-content: center;
-    
+
       .noContactsLabel {
         color: var(--mantine-color-text-6);
       }
