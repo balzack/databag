@@ -14,7 +14,7 @@ export function Content({ select }: { select: (focus: Focus) => void }) {
   const [adding, setAdding] = useState(false)
   const [sealed, setSealed] = useState(false)
   const [subject, setSubject] = useState('')
-  const [added, setAdded] = useState([])
+  const [added, setAdded] = useState([] as string[])
   const cards = state.sealSet && sealed ? state.sealable : state.connected
 
   const addTopic = async () => {

@@ -24,8 +24,9 @@ export function useContent() {
     strings: display.state.strings,
     layout: null,
     guid: '',
+    cards: [] as Card[],
     connected: [] as Card[],
-    sealable: [] as Cards[],
+    sealable: [] as Card[],
     sorted: [] as Channel[],
     filtered: [] as ChannelParams[],
     filter: '',
@@ -37,9 +38,9 @@ export function useContent() {
     const aval = `${a.handle}/${a.node}`
     const bval = `${b.handle}/${b.node}`
     if (aval < bval) {
-      return state.sortAsc ? 1 : -1
+      return 1;
     } else if (aval > bval) {
-      return state.sortAsc ? -1 : 1
+      return -1;
     }
     return 0
   }
@@ -168,8 +169,8 @@ export function useContent() {
     }
     const setCards = (cards: Card[]) => {
       const sorted = cards.sort(compare)
-      const connected = []
-      const sealable = []
+      const connected = [] as Card[]
+      const sealable = [] as Card[]
       sorted.forEach((card) => {
         if (card.status === 'connected') {
           connected.push(card)
