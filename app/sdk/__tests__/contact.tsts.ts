@@ -6,41 +6,6 @@ import { defaultConfigEntity } from '../src/entities';
 import { Card } from '../src/types';
 import { waitFor } from '../__mocks__/waitFor';
 
-export type CardDetailEntity = {
-  status: string;
-  statusUpdated: number;
-  token: string;
-  notes: string;
-  groups: [string];
-};
-  
-export type CardProfileEntity = {
-  guid: string;
-  handle: string;
-  name: string;
-  description: string;
-  location: string;
-  imageSet: boolean;
-  version: string;
-  node: string;
-  seal: string;
-  revision: number;
-};
-  
-export type CardEntity = {
-  id: string;
-  revision: number;
-  data?: {
-    detailRevision: number;
-    profileRevision: number;
-    notifiedProfile: number;
-    notifiedArticle: number;
-    notifiedChannel: number;
-    cardDetail?: CardDetailEntity;
-    cardProfile?: CardProfileEntity;
-  };
-};
-
 let disconnected = false;
 let disconnecting = false;
 let connected = false;

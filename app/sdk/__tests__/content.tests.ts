@@ -5,49 +5,135 @@ import { NoStore } from '../src/store';
 import { Crypto } from '../src/crypto';
 import { ConsoleLogging } from '../src/logging';
 import { defaultConfigEntity } from '../src/entities';
-import { Card } from '../src/types';
+import { Channel } from '../src/types';
 import { waitFor } from '../__mocks__/waitFor';
 
-export type CardDetailEntity = {
-  status: string;
-  statusUpdated: number;
-  token: string;
-  notes: string;
-  groups: [string];
-};
-  
-export type CardProfileEntity = {
-  guid: string;
-  handle: string;
-  name: string;
-  description: string;
-  location: string;
-  imageSet: boolean;
-  version: string;
-  node: string;
-  seal: string;
-  revision: number;
-};
-  
-export type CardEntity = {
-  id: string;
-  revision: number;
-  data?: {
-    detailRevision: number;
-    profileRevision: number;
-    notifiedProfile: number;
-    notifiedArticle: number;
-    notifiedChannel: number;
-    cardDetail?: CardDetailEntity;
-    cardProfile?: CardProfileEntity;
-  };
-};
+const getCard = (id: string, revision: number) => {
+  return {
+    id: 'C000' + id,
+    revision: revision,
+    data: {
+      detailRevision: revision,
+      profileRevision: revision,
+      notifiedProfile: revision,
+      notifiedrticle: revision,
+      notifiedChannel: revision,
+      cardDetail: {
+        status: 'connected',
+        statusUpdated: 1,
+        token: 'T000' + id,
+        notes: '',
+        groups: [],
+      },
+      cardProfile: {
+        guid: 'G000' + id,
+        handle: 'H000' + id,
+        name: 'N000' + id,
+        description: 'D000' + id,
+        location: 'L000' + id,
+        imageSet: true,
+        version: 'V000' + id,
+        node: 'URL_' + id,
+        seal: '',
+        revision: 1,
+      }
+    }
+  }
+}
 
+const getChannel = (subject: string, message: string, revision: number) => {
+  return {
+    id: 'CHAN1',
+    revision: revision,
+    data: {
+      detailRevision: revision,
+      topicRevision: revision,
+      channelSummary: revision !== 1 ? undefined : { 
+        lastTopic: {
+          guid: 'guid1',
+          dataType: 'test',
+          data: JSON.stringify({ message: message }),
+          created: 2,
+          updated: 2,
+          status: 'ready',
+          transform: 'ready',
+        },
+      },
+      channelDetail: revision !== 1 ? undefined : {
+        dataType: 'test',
+        data: JSON.stringify({ subject: subject }),
+        created: 1,
+        updated: 1,
+        enableImage: false,
+        enbaleAudio: false,
+        enableVideo: false,
+        enableBinary: false,
+        contacts: {
+          groups: [],
+          cards: [],
+        },
+        members: [{
+          member: 'person',
+          pushEnabled: false,
+        }],
+      }
+    }
+  }
+}
+
+const getChannelDetail = (subject: string) => {
+  return {
+    dataType: 'test',
+    data: JSON.stringify({ subject: subject }),
+    created: 1,
+    updated: 1,
+    enableImage: false,
+    enbaleAudio: false,
+    enableVideo: false,
+    enableBinary: false,
+    contacts: {
+      groups: [],
+      cards: [],
+    },
+    members: [{
+      member: 'person',
+      pushEnabled: false,
+    }],
+  }
+}
+
+const getChannelSummary = (message: string) => {
+  return {
+    lastTopic: {
+      guid: 'guid1',
+      dataType: 'test',
+      data: JSON.stringify({ message: message }),
+      created: 2,
+      updated: 2,
+      status: 'ready',
+      transform: 'ready',
+    },
+  }
+}
 
 jest.mock('../src/net/fetchUtil', () => {
 
   const fn = jest.fn().mockImplementation((url: string, options: { method: string, body: string }) => {
+    if (url == 'http://test_url/contact/cards?agent=test_token') {
+      return Promise.resolve({ status: 200, json: () => [getCard('A', 1)] });
+    } else if (url == 'http://test_url/contact/cards?agent=test_token&revision=1') {
+      return Promise.resolve({ status: 200, json: () => [getCard('A', 2)] });
+    } else if (url == 'https://URL_A/content/channels?contact=G000A.T000A&viewRevision=1&types=%5B%5D') {
+      return Promise.resolve({ status: 200, json: () => [getChannel('test_subject_0', 'test_message_0', 1)] });
+    } else if (url == 'https://URL_A/content/channels?contact=G000A.T000A&viewRevision=1&channelRevision=1&types=%5B%5D') {
+      return Promise.resolve({ status: 200, json: () => [getChannel('test_subject_1', 'test_message_1', 2)] });
+    } else if (url == 'https://URL_A/content/channels/CHAN1/detail?contact=G000A.T000A') {
+      return Promise.resolve({ status: 200, json: () => getChannelDetail('test_subject_1') });
+    } else if (url == 'https://URL_A/content/channels/CHAN1/summary?contact=G000A.T000A') {
+      return Promise.resolve({ status: 200, json: () => getChannelSummary('test_message_1') });
+    } else {
       console.log(url, options.method);
+    }
   });
 
   return {
@@ -63,8 +149,26 @@ const log = new ConsoleLogging();
 const store = new TestStore();
 
 test('received content updates', async () => {
+  const cardChannels = new Map<string | null, Channel[]>();
   const stream = new StreamModule(log, store, null, 'test_guid', 'test_token', 'test_url', false, []);
   const contact = new ContactModule(log, store, null, 'test_guid', 'test_token', 'test_url', false, [], []);
   const content = new ContentModule(log, null, contact, stream);
+
+  const channelUpdate = ({ channels, cardId }: { channels: Channel[]; cardId: string | null }) => {
+    cardChannels.set(cardId, channels);
+  };
+  content.addChannelListener(channelUpdate);
+
+  await contact.setRevision(1);
+  await waitFor(() => cardChannels.get('C000A')?.length === 1);
+  await waitFor(() => cardChannels.get('C000A')?.[0].data.subject === 'test_subject_0');
+  await waitFor(() => cardChannels.get('C000A')?.[0].lastTopic.data.message === 'test_message_0');
+
+  await contact.setRevision(2);
+  await waitFor(() => cardChannels.get('C000A')?.[0].data.subject === 'test_subject_1');
+  await waitFor(() => cardChannels.get('C000A')?.[0].lastTopic.data.message === 'test_message_1');
+
+  await stream.close();
+  await contact.close();
 });
 

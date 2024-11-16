@@ -24,8 +24,9 @@ export function useContent() {
     strings: display.state.strings,
     layout: null,
     guid: '',
+    cards: [] as Card[],
     connected: [] as Card[],
-    sealable: [] as Cards[],
+    sealable: [] as Card[],
     sorted: [] as Channel[],
     filtered: [] as ChannelParams[],
     filter: '',
@@ -37,13 +38,14 @@ export function useContent() {
     const aval = `${a.handle}/${a.node}`;
     const bval = `${b.handle}/${b.node}`;
     if (aval < bval) {
-      return state.sortAsc ? 1 : -1;
+      return 1;
     } else if (aval > bval) {
-      return state.sortAsc ? -1 : 1;
+      return -1;
     }
     return 0;
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
@@ -89,19 +91,19 @@ export function useContent() {
       };
 
       const selectImage = () => {
-        if (contacts.length === 0) {
+        if (contacts.length == 0) {
           return notes;
-        } else if (contacts.length === 1) {
+        } else if (contacts.length == 1) {
           if (contacts[0]) {
             return contacts[0].imageUrl;
           } else {
             return unknown;
           }
-        } else if (contacts.length === 2) {
+        } else if (contacts.length == 2) {
           return iii_group;
-        } else if (contacts.length === 3) {
+        } else if (contacts.length == 3) {
           return iiii_group;
-        } else if (contacts.length === 4) {
+        } else if (contacts.length == 4) {
           return iiiii_group;
         } else {
           return group;
@@ -136,16 +138,7 @@ export function useContent() {
       const message = getMessage();
       const imageUrl = selectImage();
 
-      return {
-        cardId,
-        channelId,
-        sealed,
-        hosted,
-        unread,
-        imageUrl,
-        subject,
-        message,
-      };
+      return {cardId, channelId, sealed, hosted, unread, imageUrl, subject, message};
     });
 
     const search = state.filter?.toLowerCase();
@@ -176,8 +169,8 @@ export function useContent() {
     };
     const setCards = (cards: Card[]) => {
       const sorted = cards.sort(compare);
-      const connected = [];
-      const sealable = [];
+      const connected = [] as Card[];
+      const sealable = [] as Card[];
       sorted.forEach(card => {
         if (card.status === 'connected') {
           connected.push(card);
@@ -197,7 +190,7 @@ export function useContent() {
       const sorted = merged.sort((a, b) => {
         const aUpdated = a?.lastTopic?.created;
         const bUpdated = b?.lastTopic?.created;
-        if (aUpdated === bUpdated) {
+        if (aUpdated == bUpdated) {
           return 0;
         } else if (!aUpdated) {
           return 1;
@@ -224,7 +217,6 @@ export function useContent() {
       content.removeChannelListener(setChannels);
       settings.removeConfigListener(setConfig);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const actions = {
@@ -239,7 +231,6 @@ export function useContent() {
     },
     addTopic: async (sealed: boolean, subject: string, contacts: string[]) => {
       const content = app.state.session.getContent();
-      await new Promise(r => setTimeout(r, 2000));
       if (sealed) {
         await content.addChannel(true, 'sealed', {subject}, contacts);
       } else {

@@ -231,7 +231,6 @@ export function useContent() {
     },
     addTopic: async (sealed: boolean, subject: string, contacts: string[]) => {
       const content = app.state.session.getContent()
-      await new Promise((r) => setTimeout(r, 2000))
       if (sealed) {
         await content.addChannel(true, 'sealed', { subject }, contacts)
       } else {

@@ -74,13 +74,13 @@ export type ChannelDetailEntity = {
   enableVideo: boolean;
   enableBinary: boolean;
   contacts: {
-    groups: [string];
-    cards: [string];
+    groups: string[];
+    cards: string[];
   };
   members: {
     member: string;
     pushEnabled: boolean;
-  };
+  }[];
 };
 
 export type ChannelEntity = {
