@@ -91,17 +91,13 @@ export type Topic = {
   channelId: string;
   guid: string;
   sealed: boolean;
-  unsealed: boolean;
   dataType: string;
   data: any;
   created: number;
   updated: number;
   status: string;
   transform: string;
-  sortOrder: number;
-  tagCount: number;
-  tagComplete: boolean;
-  tags: Tag[];
+  assets: Asset[];
 };
 
 export type Tag = {
@@ -116,9 +112,19 @@ export type Tag = {
   sortOrder: number;
 };
 
-export type Asset = {
+export type AssetSource = {
+  type: string;
+  extension: string;
   path: string;
-  fileType: string;
+  transforms: string[],
+}
+
+export type Asset = {
+  encrypted: boolean;
+  assetId: string;
+  type: string;
+  transform: string;
+  extension: string;
 };
 
 export type Group = {

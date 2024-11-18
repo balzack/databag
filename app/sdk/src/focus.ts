@@ -1,6 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
 import type { Focus } from './api';
-import type { Topic, Asset, Participant } from './types';
+import type { Topic, Asset, AssetSource, Participant } from './types';
 import type { Logging } from './logging';
 import { Store } from './store';
 import { Crypto } from './crypto';
@@ -26,6 +26,9 @@ export class FocusModule implements Focus {
     this.connection = connection;
   }
 
+  public addTopicListener(ev: (topics: Topic[]) => void) {}
+  public removeTopicListener(ev: (topics: Topic[]) => void) {}
+
   public async disconnect(cardId: string | null, channelId: string) {
     if (cardId === this.cardId && channelId === this.channelId) {
       this.connection = null;
@@ -40,57 +43,28 @@ export class FocusModule implements Focus {
 
   public async close() {}
 
-  public async addTopic(type: string, message: string, assets: Asset[]): Promise<string> {
+  public async addTopic(sealed: boolean, type: string, subject: (assetId: {assetId: string, transform: string}[]) => any, files: AssetSource[]) {
     return '';
   }
 
-  public async removeTopic(topicId: string): Promise<void> {}
+  public async setTopicSubject(topicId: string, type: string, subject: (assets: {assetId: string, transform: string}[]) => any, files: AssetSource[]) {}
 
-  public async setTopicSubject(topicId: string, subject: string): Promise<void> {}
+  public async removeTopic(topicId: string) {}
 
-  public async setTopicSort(topicId: string, sort: number): Promise<void> {}
+  public async viewMoreTopics() {}
 
-  public async addTag(topicId: string, type: string, subject: string): Promise<string> {
+  public async setUnreadChannel() {}
+
+  public async clearUnreadChannel() {}
+
+  public async getTopicAssetUrl(topicId: string, assetId: string, progress: (percent: number) => void) {
     return '';
   }
 
-  public async removeTag(cardId: string, tagId: string): Promise<void> {}
+  public async flagTopic(topicId: string) {}
 
-  public async setTagSubject(topicId: string, tagId: string, subject: string): Promise<void> {}
+  public async setBlockTopic(topicId: string) {}
 
-  public async setTagSort(topicId: string, tagId: string, sort: number): Promise<void> {}
+  public async clearBlockTopic(topicId: string) {}
 
-  public async viewMoreTopics(): Promise<void> {}
-
-  public async viewMoreTags(topicId: string): Promise<void> {}
-
-  public async setUnreadChannel(cardId: string, channelId: string): Promise<void> {}
-
-  public async clearUnreadChannel(cardId: string, channelId: string): Promise<void> {}
-
-  public getTopicAssetUrl(topicId: string, assetId: string): string {
-    return '';
-  }
-
-  public async addParticipantAccess(name: string): Promise<Participant> {
-    return { id: '', name: '', node: '', secure: false, token: '' };
-  }
-
-  public async removeParticipantAccess(repeaterId: string): Promise<void> {}
-
-  public async flagTopic(topicId: string): Promise<void> {}
-
-  public async flagTag(topicId: string, tagId: string): Promise<void> {}
-
-  public async setBlockTopic(topicId: string): Promise<void> {}
-
-  public async setBlockTag(topicId: string, tagId: string): Promise<void> {}
-
-  public async clearBlockTopic(topicId: string): Promise<void> {}
-
-  public async clearBlockTag(topicId: string, tagId: string): Promise<void> {}
-
-  public addTopicListener(ev: (topics: Topic[]) => void): void {}
-
-  public removeTopicListener(ev: (topics: Topic[]) => void): void {}
 }

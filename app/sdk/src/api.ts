@@ -1,4 +1,4 @@
-import type { Channel, Topic, Asset, Tag, Article, Group, Card, Profile, Call, Config, NodeConfig, NodeAccount, Participant } from './types';
+import type { Channel, Topic, AssetSource, Asset, Tag, Article, Group, Card, Profile, Call, Config, NodeConfig, NodeAccount, Participant } from './types';
 
 export interface Session {
   getSettings(): Settings;
@@ -134,30 +134,20 @@ export interface Attribute {
 }
 
 export interface Focus {
-  addTopic(type: string, message: string, assets: Asset[]): Promise<string>;
+  addTopic(sealed: boolean, type: string, subject: (assetId: {assetId: string, transform: string}[]) => any, files: AssetSource[]): Promise<string>;
+  setTopicSubject(topicId: string, type: string, subject: (assets: {assetId: string, transform: string}[]) => any, files: AssetSource[]): Promise<void>;
   removeTopic(topicId: string): Promise<void>;
-  setTopicSubject(topicId: string, subject: string): Promise<void>;
-  addTag(topicId: string, type: string, subject: string): Promise<string>;
-  removeTag(cardId: string, tagId: string): Promise<void>;
-  setTagSubject(topicId: string, tagId: string, subject: string): Promise<void>;
 
   viewMoreTopics(): Promise<void>;
-  viewMoreTags(topicId: string): Promise<void>;
 
-  setUnreadChannel(cardId: string, channelId: string): Promise<void>;
-  clearUnreadChannel(cardId: string, channelId: string): Promise<void>;
+  setUnreadChannel(): Promise<void>;
+  clearUnreadChannel(): Promise<void>;
 
-  getTopicAssetUrl(topicId: string, assetId: string): string;
-
-  addParticipantAccess(name: string): Promise<Participant>;
-  removeParticipantAccess(participantId: string): Promise<void>;
+  getTopicAssetUrl(topicId: string, assetId: string, progress: (percent: number) => void): Promise<string>;
 
   flagTopic(topicId: string): Promise<void>;
-  flagTag(topicId: string, tagId: string): Promise<void>;
   setBlockTopic(topicId: string): Promise<void>;
-  setBlockTag(topicId: string, tagId: string): Promise<void>;
   clearBlockTopic(topicId: string): Promise<void>;
-  clearBlockTag(topicId: string, tagId: string): Promise<void>;
 
   addTopicListener(ev: (topics: Topic[]) => void): void;
   removeTopicListener(ev: (topics: Topic[]) => void): void;
