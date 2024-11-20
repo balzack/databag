@@ -87,8 +87,6 @@ export type Participant = {
 
 export type Topic = {
   topicId: string;
-  cardId: string | null;
-  channelId: string;
   guid: string;
   sealed: boolean;
   dataType: string;
@@ -120,9 +118,9 @@ export type AssetSource = {
 }
 
 export type Asset = {
-  encrypted: boolean;
   assetId: string;
   type: string;
+  encrypted: boolean;
   transform: string;
   extension: string;
 };

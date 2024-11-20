@@ -1,5 +1,5 @@
 import { Login, ProfileEntity, defaultProfileEntity, ConfigEntity, defaultConfigEntity } from './entities';
-import type { ArticleDetail, ArticleItem, ChannelItem, CardItem, CardProfile, CardDetail, ChannelSummary, ChannelDetail } from './items';
+import type { ArticleDetail, ArticleItem, ChannelItem, CardItem, CardProfile, CardDetail, ChannelSummary, ChannelDetail, TopicItem } from './items';
 import type { Logging } from './logging';
 
 export interface Store {
@@ -62,9 +62,6 @@ export interface Store {
   setContactCardChannelUnsealedDetail(guid: string, cardId: string, channelId: string, data: string | null): Promise<void>;
   setContactCardChannelUnsealedSummary(guid: string, cardId: string, channelId: string, data: string | null): Promise<void>;
 
-  setContactCardChannelTopicSyncRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void>;
-  setContactCardChannelTopicRemoteRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void>;
-
   getContentRevision(guid: string): Promise<number>;
   setContentRevision(guid: string, revision: number): Promise<void>;
 
@@ -72,11 +69,22 @@ export interface Store {
   removeContentChannel(guid: string, channelId: string): Promise<void>;
   getContentChannels(guid: string): Promise<{ channelId: string; item: ChannelItem }[]>;
 
-  setContentChannelRevision(guid: string, channelId: string): Promise<void>;
   setContentChannelDetail(guid: string, channelId: string, detail: ChannelDetail, unsealedData: string): Promise<void>;
   setContentChannelSummary(guid: string, channelId: string, summary: ChannelSummary, unsealedData: string): Promise<void>;
   setContentChannelUnsealedDetail(guid: string, channelId: string, data: string | null): Promise<void>;
   setContentChannelUnsealedSummary(guid: string, channelId: string, data: string | null): Promise<void>;
+
+  getContentChannelTopicSync(guid: string, channelId: string): Promise<{ revision: number, marker: number } | null>;
+  setContentChannelTopicSync(guid: string, channelId: string, sync: { revision: number, marker: number }): Promise<void>;
+  getContentChannelTopics(guid: string, channelId: string, count: number, position: { topicId: string, position: number } | null): Promise<{ topicId: string, item: TopicItem }[]>;
+  addContentChannelTopic(guid: string, channelId: string, topicId: string, item: TopicItem): Promise<void>;
+  removeContentChannelTopic(guid: string, channelId: string, topicId: string): Promise<void>;
+
+  getContactCardChannelTopicSync(guid: string, cardId: string, channelId: string): Promise<{ revision: number, marker: number } | null>;
+  setContactCardChannelTopicSync(guid: string, cardId: string, channelId: string, sync: { revision: number, marker: number }): Promise<void>;
+  getContactCardChannelTopics(guid: string, cardId: string, channelId: string, count: number, position: { topicId: string, position: number } | null): Promise<{ topicId: string, item: TopicItem }[]>;
+  addContactCardChannelTopic(guid: string, cardId: string, channelId: string, topicId: string, item: TopicItem): Promise<void>;
+  removeContactCardChannelTopic(guid: string, cardId: string, channelId: string, topicId: string): Promise<void>;
 }
 
 export interface SqlStore {
@@ -102,6 +110,10 @@ export class OfflineStore implements Store {
 
   private async getValues(guid: string, table: string, fields: string[]): Promise<any[]> {
     return await this.sql.get(`SELECT ${fields.join(', ')} FROM ${table}_${guid}`);
+  }
+
+  private async getFilteredOrderedValues(guid: string, table: string, fields: string[], where: {field: string, value: string}[], order: string[], limit: number): Promise<any[]> {
+    return await this.sql.get(`SELECT ${fields.join(', ')} FROM ${table}_${guid} WHERE ${where.map(({field, value}) => (field + '=' + value)).join(' AND ')} ORDER BY ${order.map((field) => (field + ' DESC')).join(', ')} LIMIT ${limit}`);
   }
 
   private async addValue(guid: string, table: string, fields: string[], value: (string | number | null)[]): Promise<void> {
@@ -148,23 +160,51 @@ export class OfflineStore implements Store {
     await this.sql.set('INSERT OR REPLACE INTO app (key, value) values (?, null)', [`${guid}::${id}`]);
   }
 
+  private async getTableValue(guid: string, table: string, field: string, where: {field: string, value: string}[], unset: any): Promise<any> {
+    try {
+      const rows = await this.sql.get(`SELECT ${field} FROM ${table} WHERE ${where.map(column => (column.field + '=' + column.value)).join(' AND ')}`)
+      if (rows.length == 1 && rows[0].value != null) {
+        return this.parse(rows[0].value);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    return unset;
+  }
+
+  private async setTableValue(guid: string, table: string, field: string, value: any, where: {field: string, value: string}[]): Promise<void> {
+    await this.sql.set(`UPDATE ${table}_${guid} SET ${field}=${JSON.stringify(value)} WHERE ${where.map(column => (column.field + '=' + column.value)).join(' AND ')}`)
+  }
+
+  private async clearTableValue(guid: string, table: string, field: string, where: {field: string, value: string}[]): Promise<void> {
+    await this.sql.set(`UPDATE ${table}_${guid} SET ${field}=null WHERE ${where.map(column => (column.field + '=' + column.value)).join(' AND ')}`)
+  }
+
   private async initLogin(guid: string): Promise<void> {
     await this.sql.set(
-      `CREATE TABLE IF NOT EXISTS channel_${guid} (channel_id text, detail text, unsealed_detail text, summary text, unsealed_summary text, topic_revision integer, sync_revision integer, topic_marker integer, unique(channel_id))`,
+      `CREATE TABLE IF NOT EXISTS channel_${guid} (channel_id text, detail text, unsealed_detail text, summary text, unsealed_summary text, sync text, unique(channel_id))`,
     );
     await this.sql.set(
-      `CREATE TABLE IF NOT EXISTS channel_topic_${guid} (channel_id text, topic_id text, revision integer, created integer, detail_revision integer, detail text, unsealed_detail text, unique(channel_id, topic_id))`,
+      `CREATE TABLE IF NOT EXISTS channel_topic_${guid} (channel_id text, topic_id text, position real, detail text, unsealed_detail text, unique(channel_id, topic_id))`,
     );
     await this.sql.set(
       `CREATE TABLE IF NOT EXISTS card_${guid} (card_id text, revision integer, detail text, profile text, offsync_profile integer, offsync_article integer, offsync_channel integer, profile_revision, article_revision, channel_revision, unique(card_id))`,
     );
     await this.sql.set(
-      `CREATE TABLE IF NOT EXISTS card_channel_${guid} (card_id text, channel_id text, detail text, unsealed_detail text, summary text, unsealed_summary text, topic_revision integer, sync_revision integer, topic_marker integer, unique(card_id, channel_id))`,
+      `CREATE TABLE IF NOT EXISTS card_channel_${guid} (card_id text, channel_id text, detail text, unsealed_detail text, summary text, unsealed_summary text, sync text, unique(card_id, channel_id))`,
     );
     await this.sql.set(
-      `CREATE TABLE IF NOT EXISTS card_channel_topic_${guid} (card_id text, channel_id text, topic_id text, revision integer, created integer, detail_revision integer, detail text, unsealed_detail text, unique(card_id, channel_id, topic_id))`,
+      `CREATE TABLE IF NOT EXISTS card_channel_topic_${guid} (card_id text, channel_id text, topic_id text, position real, detail text, unsealed_detail text, unique(card_id, channel_id, topic_id))`,
     );
     await this.sql.set(`CREATE TABLE IF NOT EXISTS marker_${guid} (value text)`);
+
+
+    await this.sql.set(
+      `CREATE INDEX IF NOT EXISTS card_channel_topic_sort_${guid} ON card_channel_topic_${guid} (card_id, channel_id, topic_id, position)`,
+    );
+    await this.sql.set(
+      `CREATE INDEX IF NOT EXISTS channel_topic_sort_${guid} ON channel_topic_${guid} (channel_id, topic_id, position)`,
+    );
   }
 
   public async init(): Promise<Login | null> {
@@ -352,9 +392,9 @@ export class OfflineStore implements Store {
   }
 
   public async addContactCardChannel(guid: string, cardId: string, channelId: string, item: ChannelItem): Promise<void> {
-    const fields = ['card_id', 'channel_id', 'detail', 'unsealed_detail', 'summary', 'unsealed_summary', 'topic_revision', 'sync_revision'];
+    const fields = ['card_id', 'channel_id', 'detail', 'unsealed_detail', 'summary', 'unsealed_summary'];
     const { detail, unsealedDetail, summary, unsealedSummary } = item;
-    const value = [cardId, channelId, JSON.stringify(detail), JSON.stringify(unsealedDetail), JSON.stringify(summary), JSON.stringify(unsealedSummary), 0, 0];
+    const value = [cardId, channelId, JSON.stringify(detail), JSON.stringify(unsealedDetail), JSON.stringify(summary), JSON.stringify(unsealedSummary)];
     await this.addValue(guid, 'card_channel', fields, value);
   }
 
@@ -377,6 +417,14 @@ export class OfflineStore implements Store {
   public async setContactCardChannelUnsealedSummary(guid: string, cardId: string, channelId: string, unsealedSummary: any): Promise<void> {
     await this.setValue(guid, 'card_channel', ['card_id', 'channel_id'], ['unsealed_summary'], [cardId, channelId], [JSON.stringify(unsealedSummary)]);
   }
+
+  public async getContactCardArticles(guid: string): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]> {
+    return [];
+  }
+  public async addContactCardArticle(guid: string, cardId: string, articleId: string, item: ArticleItem): Promise<void> {}
+  public async removeContactCardArticle(guid: string, cardId: string, articleId: string): Promise<void> {}
+  public async setContactCardArticleDetail(guid: string, cardId: string, articleId: string, detail: ChannelDetail, unsealedData: string | null): Promise<void> {}
+  public async setContactCardArticleUnsealed(guid: string, cardId: string, articleId: string, unsealedData: string | null): Promise<void> {}
 
   public async getContentRevision(guid: string): Promise<number> {
     return (await this.getAppValue(guid, 'content_revision', 0)) as number;
@@ -401,9 +449,9 @@ export class OfflineStore implements Store {
   }
 
   public async addContentChannel(guid: string, channelId: string, item: ChannelItem): Promise<void> {
-    const fields = ['channel_id', 'detail', 'unsealed_detail', 'summary', 'unsealed_summary', 'topic_revision', 'sync_revision'];
+    const fields = ['channel_id', 'detail', 'unsealed_detail', 'summary', 'unsealed_summary'];
     const { detail, unsealedDetail, summary, unsealedSummary } = item;
-    const value = [channelId, JSON.stringify(detail), JSON.stringify(unsealedDetail), JSON.stringify(summary), JSON.stringify(unsealedSummary), 0, 0];
+    const value = [channelId, JSON.stringify(detail), JSON.stringify(unsealedDetail), JSON.stringify(summary), JSON.stringify(unsealedSummary)];
     await this.addValue(guid, 'channel', fields, value);
   }
 
@@ -427,16 +475,64 @@ export class OfflineStore implements Store {
     await this.setValue(guid, 'channel', ['channel_id'], ['unsealed_summary'], [channelId], [JSON.stringify(unsealedSummary)]);
   }
 
-  public async getContactCardArticles(guid: string): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]> {
-    return [];
+  public async getContentChannelTopicSync(guid: string, channelId: string): Promise<{ revision: number, marker: number } | null> {
+    return await this.getTableValue(guid, 'channel', 'sync', [{field: 'channel_id', value: channelId}], null);
   }
-  public async addContactCardArticle(guid: string, cardId: string, articleId: string, item: ArticleItem): Promise<void> {}
-  public async removeContactCardArticle(guid: string, cardId: string, articleId: string): Promise<void> {}
-  public async setContactCardArticleDetail(guid: string, cardId: string, articleId: string, detail: ChannelDetail, unsealedData: string | null): Promise<void> {}
-  public async setContactCardArticleUnsealed(guid: string, cardId: string, articleId: string, unsealedData: string | null): Promise<void> {}
-  public async setContactCardChannelTopicSyncRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
-  public async setContactCardChannelTopicRemoteRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
-  public async setContentChannelRevision(guid: string, channelId: string): Promise<void> {}
+  public async setContentChannelTopicSync(guid: string, channelId: string, sync: { revision: number, marker: number }): Promise<void> {
+    return await this.setTableValue(guid, 'channel', 'sync', sync, [{field: 'channel_id', value: channelId}]);
+  }
+  public async getContentChannelTopics(guid: string, channelId: string, count: number, position: { topicId: string, position: number } | null): Promise<{ topicId: string, item: TopicItem }[]> {
+    const fields = ['topic_id', 'detail', 'unsealed_detail', 'position'];
+    const where = [{field: 'channel_id', value: channelId}];
+    const order = ['position', 'topic_id'];
+    const topics = await this.getFilteredOrderedValues(guid, 'channel_topic', fields, where, order, count); 
+    return topics.map((topic) => ({
+      topicId: topic.topic_id,
+      item: {
+        detail: this.parse(topic.detail),
+        unsealedDetail: this.parse(topic.unsealed_detail),
+        position: topic.position,
+      },
+    })); 
+  }
+  public async addContentChannelTopic(guid: string, channelId: string, topicId: string, item: TopicItem): Promise<void> { 
+    const fields = ['channel_id', 'topic_id', 'detail', 'unsealed_detail', 'position'];
+    const { detail, unsealedDetail, position } = item;
+    const value = [channelId, topicId, JSON.stringify(detail), JSON.stringify(unsealedDetail), position];
+    await this.addValue(guid, 'channel_topic', fields, value);
+  }
+  public async removeContentChannelTopic(guid: string, channelId: string, topicId: string): Promise<void> {
+    await this.removeValue(guid, 'channel_topic', ['channel_id', 'topic_id'], [channelId, topicId]);
+  }
+  public async getContactCardChannelTopicSync(guid: string, cardId: string, channelId: string): Promise<{ revision: number, marker: number } | null> {
+    return await this.getTableValue(guid, 'card_channel', 'sync', [{field: 'card_id', value: cardId},{field: 'channel_id', value: channelId}], null);
+  }
+  public async setContactCardChannelTopicSync(guid: string, cardId: string, channelId: string, sync: { revision: number, marker: number }): Promise<void> {
+    return await this.setTableValue(guid, 'card_channel', 'sync', sync, [{field: 'card_id', value: cardId}, {field: 'channel_id', value: channelId}]);
+  }
+  public async getContactCardChannelTopics(guid: string, cardId: string, channelId: string, count: number, position: { topicId: string, position: number } | null): Promise<{ topicId: string, item: TopicItem }[]> {
+    const fields = ['topic_id', 'detail', 'unsealed_detail', 'position'];
+    const where = [{field: 'card_id', value: cardId}, {field: 'channel_id', value: channelId}];
+    const order = ['position', 'topic_id'];
+    const topics = await this.getFilteredOrderedValues(guid, 'card_channel_topic', fields, where, order, count);
+    return topics.map((topic) => ({
+      topicId: topic.topic_id,
+      item: {
+        detail: this.parse(topic.detail),
+        unsealedDetail: this.parse(topic.unsealed_detail),
+        position: topic.position,
+      },
+    })); 
+  }
+  public async addContactCardChannelTopic(guid: string, cardId: string, channelId: string, topicId: string, item: TopicItem): Promise<void> {
+    const fields = ['card_id', 'channel_id', 'topic_id', 'detail', 'unsealed_detail', 'position'];
+    const { detail, unsealedDetail, position } = item;
+    const value = [cardId, channelId, topicId, JSON.stringify(detail), JSON.stringify(unsealedDetail), position];
+    await this.addValue(guid, 'channel_topic', fields, value);
+  }
+  public async removeContactCardChannelTopic(guid: string, cardId: string, channelId: string, topicId: string): Promise<void> {
+    await this.removeValue(guid, 'channel_topic', ['card_id', 'channel_id', 'topic_id'], [cardId, channelId, topicId]);
+  }
 }
 
 export class OnlineStore implements Store {
@@ -600,10 +696,6 @@ export class OnlineStore implements Store {
 
   public async setContactCardChannelUnsealedSummary(guid: string, cardId: string, channelId: string, unsealedSummary: any): Promise<void> {}
 
-  public async setContactCardChannelTopicSyncRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
-
-  public async setContactCardChannelTopicRemoteRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
-
   public async getContentRevision(guid: string): Promise<number> {
     return 0;
   }
@@ -615,11 +707,32 @@ export class OnlineStore implements Store {
     return [];
   }
 
-  public async setContentChannelRevision(guid: string, channelId: string): Promise<void> {}
   public async setContentChannelDetail(guid: string, channelId: string, detail: ChannelDetail, unsealedDetail: any): Promise<void> {}
   public async setContentChannelSummary(guid: string, channelId: string, summary: ChannelSummary, unsealedSummary: any): Promise<void> {}
   public async setContentChannelUnsealedDetail(guid: string, channelId: string, unsealedDetail: any): Promise<void> {}
   public async setContentChannelUnsealedSummary(guid: string, channelId: string, unsealedSummary: any): Promise<void> {}
+
+  public async getContentChannelTopicSync(guid: string, channelId: string): Promise<{ revision: number, marker: number } | null> {
+    return null;
+  }
+  public async setContentChannelTopicSync(guid: string, channelId: string, sync: { revision: number, marker: number }): Promise<void> {
+  }
+  public async getContentChannelTopics(guid: string, channelId: string, count: number, position: { topicId: string, position: number } | null): Promise<{ topicId: string, item: TopicItem }[]> {
+    return [];
+  }
+  public async addContentChannelTopic(guid: string, channelId: string, topicId: string, item: TopicItem): Promise<void> { }
+  public async removeContentChannelTopic(guid: string, channelId: string, topicId: string): Promise<void> { }
+  
+  public async getContactCardChannelTopicSync(guid: string, cardId: string, channelId: string): Promise<{ revision: number, marker: number } | null> {
+    return null;
+  }
+  public async setContactCardChannelTopicSync(guid: string, cardId: string, channelId: string, sync: { revision: number, marker: number }): Promise<void> {
+  }
+  public async getContactCardChannelTopics(guid: string, cardId: string, channelId: string, count: number, position: { topicId: string, position: number } | null): Promise<{ topicId: string, item: TopicItem }[]> {
+    return [];
+  }
+  public async addContactCardChannelTopic(guid: string, cardId: string, channelId: string, topicId: string, item: TopicItem): Promise<void> { }
+  public async removeContactCardChannelTopic(guid: string, cardId: string, channelId: string, topicId: string): Promise<void> { }
 }
 
 export class NoStore implements Store {
@@ -739,10 +852,6 @@ export class NoStore implements Store {
 
   public async setContactCardChannelUnsealedSummary(guid: string, cardId: string, channelId: string, unsealedSummary: any): Promise<void> {}
 
-  public async setContactCardChannelTopicSyncRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
-
-  public async setContactCardChannelTopicRemoteRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
-
   public async getContentRevision(guid: string): Promise<number> {
     return 0;
   }
@@ -754,9 +863,30 @@ export class NoStore implements Store {
     return [];
   }
 
-  public async setContentChannelRevision(guid: string, channelId: string): Promise<void> {}
   public async setContentChannelDetail(guid: string, channelId: string, detail: ChannelDetail, unsealedDetail: any): Promise<void> {}
   public async setContentChannelSummary(guid: string, channelId: string, summary: ChannelSummary, unsealedSummary: any): Promise<void> {}
   public async setContentChannelUnsealedDetail(guid: string, channelId: string, unsealedDetail: any): Promise<void> {}
   public async setContentChannelUnsealedSummary(guid: string, channelId: string, unsealedSummary: any): Promise<void> {}
+
+  public async getContentChannelTopicSync(guid: string, channelId: string): Promise<{ revision: number, marker: number } | null> {
+    return null;
+  }
+  public async setContentChannelTopicSync(guid: string, channelId: string, sync: { revision: number, marker: number }): Promise<void> {
+  }
+  public async getContentChannelTopics(guid: string, channelId: string, count: number, position: { topicId: string, position: number } | null): Promise<{ topicId: string, item: TopicItem }[]> {
+    return [];
+  }
+  public async addContentChannelTopic(guid: string, channelId: string, topicId: string, item: TopicItem): Promise<void> { }
+  public async removeContentChannelTopic(guid: string, channelId: string, topicId: string): Promise<void> { }
+ 
+  public async getContactCardChannelTopicSync(guid: string, cardId: string, channelId: string): Promise<{ revision: number, marker: number } | null> {
+    return null;
+  } 
+  public async setContactCardChannelTopicSync(guid: string, cardId: string, channelId: string, sync: { revision: number, marker: number }): Promise<void> {
+  }
+  public async getContactCardChannelTopics(guid: string, cardId: string, channelId: string, count: number, position: { topicId: string, position: number } | null): Promise<{ topicId: string, item: TopicItem }[]> {
+    return [];
+  }
+  public async addContactCardChannelTopic(guid: string, cardId: string, channelId: string, topicId: string, item: TopicItem): Promise<void> { }
+  public async removeContactCardChannelTopic(guid: string, cardId: string, channelId: string, topicId: string): Promise<void> { }
 }

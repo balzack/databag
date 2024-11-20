@@ -14,8 +14,12 @@ export class FocusModule implements Focus {
   private store: Store;
   private guid: string;
   private connection: { node: string; secure: boolean; token: string } | null;
+  private syncing: boolean;
+  private closing: boolean;
+  private revision: number;
+  private nextRevision: number;
 
-  constructor(log: Logging, store: Store, crypto: Crypto | null, cardId: string | null, channelId: string, guid: string, connection: { node: string; secure: boolean; token: string } | null) {
+  constructor(log: Logging, store: Store, crypto: Crypto | null, cardId: string | null, channelId: string, guid: string, connection: { node: string; secure: boolean; token: string } | null, revision: number) {
     this.cardId = cardId;
     this.channelId = channelId;
     this.log = log;
@@ -24,6 +28,32 @@ export class FocusModule implements Focus {
     this.crypto = crypto;
     this.guid = guid;
     this.connection = connection;
+
+    this.revision = 0;
+    this.syncing = true;
+    this.closing = false;
+    this.nextRevision = null;
+    this.init(revision);
+  }
+
+  private async getChannelTopicRevision() {
+    if (this.cardId) {
+      this.revision = await this.store.getContactCardChannelTopicRevision(guid, cardId, channelId);
+    } else {
+      this.revision = await this.store.getContentChannelTopicRevision(guid, channelId);
+    }
+  }
+
+  private async init(revision: number) {
+    const { guid } = this;
+    this.nextRevision = revision;
+    this.revision = this.getChannelTopicRevision();
+
+    // load map of topics
+
+    this.unsealAll = true;
+    this.syncing = false;
+    await this.sync();
   }
 
   public addTopicListener(ev: (topics: Topic[]) => void) {}

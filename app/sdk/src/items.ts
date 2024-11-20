@@ -157,9 +157,20 @@ export type TopicDetail = {
   created: number;
   updated: number;
   status: string;
+  assets: AssetItem[];
 };
 
 export type TopicItem = {
   detail: TopicDetail;
   unsealedDetail: string | null;
+  position: number;
+};
+
+export type AssetItem = {
+  assetId: string;
+  type: string;
+  encrypted: boolean;
+  transform: string;
+  extension: string;
+  partIds: string[];
 };
