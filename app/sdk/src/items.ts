@@ -151,12 +151,14 @@ export const defaultChannelItem = {
 
 export type TopicDetail = {
   revision: number;
+  guid: string;
   sealed: boolean;
   dataType: string;
   data: string;
   created: number;
   updated: number;
   status: string;
+  transform: string;
   assets: AssetItem[];
 };
 
