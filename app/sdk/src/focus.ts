@@ -27,6 +27,8 @@ export class FocusModule implements Focus {
   private moreLocal: boolean;
   private moreRemote: boolean;
 
+  private markers: Set<string>;
+
   // view of topics 
   private topicEntries: Map<string, { item: TopicItem; topic: Topic }>;
 
@@ -41,6 +43,7 @@ export class FocusModule implements Focus {
     this.connection = connection;
 
     this.topicEntries = new Map<string, { item: TopicItem; topic: Topic }>();
+    this.markers = new Set<string>();
 
     this.revision = null;
     this.syncing = true;
@@ -61,6 +64,12 @@ export class FocusModule implements Focus {
       this.moreLocal = true;
     }
 
+    // load markers
+    const values = await this.store.getMarkers(guid);
+    values.forEach((value) => {
+      this.markers.add(value);
+    });
+
     // load map of topics
     const topics = await this.getChannelTopics();
     topics.forEach(({ topicId, item }) => {
@@ -74,24 +83,17 @@ export class FocusModule implements Focus {
     await this.sync();
   }
 
-  public addTopicListener(ev: (topics: Topic[]) => void) {
-    this.emitter.on('topic', ev);
-    const topics = Array.from(this.topicEntries, ([topicId, entry]) => entry.topic);
-    ev(topics);
-  }
-  public removeTopicListener(ev: (topics: Topic[]) => void) {
-    this.emitter.of('topic', ev);
-  }
-
   public async disconnect(cardId: string | null, channelId: string) {
     if (cardId === this.cardId && channelId === this.channelId) {
       this.connection = null;
+      this.emitStatus();
     }
   }
 
   public async setRevision(cardId: string | null, channelId: string, revision: number) {
     if (cardId === this.cardId && channelId === this.channelId) {
-      // sync
+      this.nextRevision = revision;
+      await this.sync();
     }
   }
 
@@ -121,11 +123,43 @@ export class FocusModule implements Focus {
 
   public async clearBlockTopic(topicId: string) {}
 
+
+
+  public addTopicListener(ev: (topics: Topic[]) => void) {
+    this.emitter.on('topic', ev);
+    const topics = Array.from(this.topicEntries, ([topicId, entry]) => entry.topic);
+    ev(topics);
+  }
+  public removeTopicListener(ev: (topics: Topic[]) => void) {
+    this.emitter.off('topic', ev);
+  }
+
+  private emitTopics() {
+    const topics = Array.from(this.topicEntries, ([topicId, entry]) => entry.topic);
+    this.emitter.emit('topic', topics);
+  }
+
+  public addStatusListener(ev: (status: string) => void) {
+    this.emitter.on('status', ev);
+    const status = this.connection ? 'connected' : 'disconnected'
+    ev(status);
+  }
+
+  public removeStatusListener(ev: (status: string) => void) {
+    this.emitter.off('status', ev);
+  }
+
+  private emitStatus() {
+    const status = this.connection ? 'connected' : 'disconnected'
+    ev(status);
+  }
+
   private setTopic(topicId: string, item: TopicItem): Topic {
     const topicData = item.sealed ? item.unsealedDetail : item.detail.data;
     return {
       topicId,
       guid: item.detail.guid,
+      blocked: this.isTopicBlocked(topicId),
       sealed: item.detail.sealed,
       dataType: item.detail.dataType,
       data: topicData,
@@ -139,11 +173,6 @@ export class FocusModule implements Focus {
       }),
     }
   }   
-
-  private emitTopics() {
-    const topics = Array.from(this.topicEntries, ([topicId, entry]) => entry.topic);
-    this.emitter.emit('topic', topics);
-  }
 
   private async getChannelTopicRevision() {
     const { guid, cardId, channelId } = this;
@@ -190,4 +219,28 @@ export class FocusModule implements Focus {
       await this.store.removeContentChannelTopic(guid, channelId, topicId);
     }
   }
+
+  private isTopicBlocked(topicId: string): boolean {
+    const card = this.cardId ? `"${cardId}"` : 'null';
+    const channel = this.channelId ? `"${channelId}"` : 'null';
+    const value = `{ "marker": "blocked_topic", "cardId": "${card}", "channelId": "${channel}, "topicId": "${topicId}", "tagId": null }`;
+    return this.markers.has(value);
+  }
+
+  private async setTopicBlocked(topicId: string) {
+    const card = this.cardId ? `"${cardId}"` : 'null';
+    const channel = this.channelId ? `"${channelId}"` : 'null';
+    const value = `{ "marker": "blocked_topic", "cardId": "${card}", "channelId": "${channel}, "topicId": "${topicId}", "tagId": null }`;
+    this.markers.add(value);
+    await this.store.setMarker(this.guid, value);
+  }
+
+  private async clearTopicBlocked(topicId: string) {
+    const card = this.cardId ? `"${cardId}"` : 'null';
+    const channel = this.channelId ? `"${channelId}"` : 'null';
+    const value = `{ "marker": "blocked_topic", "cardId": "${card}", "channelId": "${channel}, "topicId": "${topicId}", "tagId": null }`;
+    this.markers.delete(value);
+    await this.store.clearMarker(this.guid, value);
+  }
+
 }

@@ -151,6 +151,9 @@ export interface Focus {
 
   addTopicListener(ev: (topics: Topic[]) => void): void;
   removeTopicListener(ev: (topics: Topic[]) => void): void;
+
+  addStatusListener(ev: (status: string) => void): void;
+  removeStatusListener(ev: (status: string) => void): void;
 }
 
 export interface Node {
