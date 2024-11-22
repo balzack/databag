@@ -94,21 +94,23 @@ export type ChannelEntity = {
   };
 };
 
+export type TopicDetailEntity = {
+  guid: string;
+  dataType: string;
+  data: string;
+  created: number;
+  updated: number;
+  status: string;
+  transform: string;
+}
+
 export type TopicEntity = {
   id: string;
   revision: number;
   data?: {
     detailRevision: number;
     tagRevision: number;
-    topicDetail: {
-      guid: string;
-      dataType: string;
-      data: string;
-      created: number;
-      updated: number;
-      status: string;
-      transform: string;
-    };
+    topicDetail: TopicDetailEntity;
   };
 };
 

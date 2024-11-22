@@ -1,5 +1,5 @@
 import { Login, ProfileEntity, defaultProfileEntity, ConfigEntity, defaultConfigEntity } from './entities';
-import type { ArticleDetail, ArticleItem, ChannelItem, CardItem, CardProfile, CardDetail, ChannelSummary, ChannelDetail, TopicItem } from './items';
+import type { ArticleDetail, ArticleItem, ChannelItem, CardItem, CardProfile, CardDetail, ChannelSummary, ChannelDetail, TopicItem, TopicDetail } from './items';
 import type { Logging } from './logging';
 
 export interface Store {
@@ -79,12 +79,16 @@ export interface Store {
   getContentChannelTopics(guid: string, channelId: string, count: number, position: { topicId: string, position: number } | null): Promise<{ topicId: string, item: TopicItem }[]>;
   addContentChannelTopic(guid: string, channelId: string, topicId: string, item: TopicItem): Promise<void>;
   removeContentChannelTopic(guid: string, channelId: string, topicId: string): Promise<void>;
+  setContentChannelTopicDetail(guid: string, channelId: string, topicId: string, detail: TopicDetail, unsealedDetail: any, position: number): Promise<void>;
+  setContentChannelTopicUnsealedDetail(guid: string, channelId: string, topicId: string, unsealedDetail: any): Promise<void>;
 
   getContactCardChannelTopicRevision(guid: string, cardId: string, channelId: string): Promise<{ revision: number, marker: number } | null>;
   setContactCardChannelTopicRevision(guid: string, cardId: string, channelId: string, sync: { revision: number, marker: number }): Promise<void>;
   getContactCardChannelTopics(guid: string, cardId: string, channelId: string, count: number, position: { topicId: string, position: number } | null): Promise<{ topicId: string, item: TopicItem }[]>;
   addContactCardChannelTopic(guid: string, cardId: string, channelId: string, topicId: string, item: TopicItem): Promise<void>;
   removeContactCardChannelTopic(guid: string, cardId: string, channelId: string, topicId: string): Promise<void>;
+  setContactCardChannelTopicDetail(guid: string, cardId: string, channelId: string, topicId: string, detail: TopicDetail, unsealedDetail: any, position: number): Promise<void>;
+  setContactCardChannelTopicUnsealedDetail(guid: string, cardId: string, channelId: string, topicId: string, unsealedDetail: any): Promise<void>;
 }
 
 export interface SqlStore {
@@ -523,6 +527,12 @@ export class OfflineStore implements Store {
   public async removeContentChannelTopic(guid: string, channelId: string, topicId: string): Promise<void> {
     await this.removeValue(guid, 'channel_topic', ['channel_id', 'topic_id'], [channelId, topicId]);
   }
+  public async setContentChannelTopicDetail(guid: string, channelId: string, topicId: string, detail: TopicDetail, unsealedDetail: any, position: number): Promise<void> {
+    await this.setValue(guid, 'channel_topic', ['channel_id', 'topic_id'], ['detail', 'unsealed_detail', 'position'], [channelId, topicId], [JSON.stringify(detail), JSON.stringify(unsealedDetail), position]);
+  }
+  public async setContentChannelTopicUnsealedDetail(guid: string, channelId: string, topicId: string, unsealedDetail: any): Promise<void> {
+    await this.setValue(guid, 'channel_topic', ['channel_id', 'topic_id'], ['unsealed_detail'], [channelId, topicId], [JSON.stringify(unsealedDetail)]);
+  }
   public async getContactCardChannelTopicRevision(guid: string, cardId: string, channelId: string): Promise<{ revision: number, marker: number } | null> {
     return await this.getTableValue(guid, 'card_channel', 'sync', [{field: 'card_id', value: cardId},{field: 'channel_id', value: channelId}], null);
   }
@@ -549,10 +559,16 @@ export class OfflineStore implements Store {
     const fields = ['card_id', 'channel_id', 'topic_id', 'detail', 'unsealed_detail', 'position'];
     const { detail, unsealedDetail, position } = item;
     const value = [cardId, channelId, topicId, JSON.stringify(detail), JSON.stringify(unsealedDetail), position];
-    await this.addValue(guid, 'channel_topic', fields, value);
+    await this.addValue(guid, 'card_channel_topic', fields, value);
   }
   public async removeContactCardChannelTopic(guid: string, cardId: string, channelId: string, topicId: string): Promise<void> {
-    await this.removeValue(guid, 'channel_topic', ['card_id', 'channel_id', 'topic_id'], [cardId, channelId, topicId]);
+    await this.removeValue(guid, 'card_channel_topic', ['card_id', 'channel_id', 'topic_id'], [cardId, channelId, topicId]);
+  }
+  public async setContactCardChannelTopicDetail(guid: string, cardId: string, channelId: string, topicId: string, detail: TopicDetail, unsealedDetail: any, position: number): Promise<void> {
+    await this.setValue(guid, 'card_channel_topic', ['card_id', 'channel_id', 'topic_id'], ['detail', 'unsealed_detail', 'position'], [cardId, channelId, topicId], [JSON.stringify(detail), JSON.stringify(unsealedDetail), position]);
+  }
+  public async setContactCardChannelTopicUnsealedDetail(guid: string, cardId: string, channelId: string, topicId: string, unsealedDetail: any): Promise<void> {
+    await this.setValue(guid, 'card_channel_topic', ['card_id', 'channel_id', 'topic_id'], ['unsealed_detail'], [cardId, channelId, topicId], [JSON.stringify(unsealedDetail)]);
   }
 }
 
@@ -743,6 +759,8 @@ export class OnlineStore implements Store {
   }
   public async addContentChannelTopic(guid: string, channelId: string, topicId: string, item: TopicItem): Promise<void> { }
   public async removeContentChannelTopic(guid: string, channelId: string, topicId: string): Promise<void> { }
+  public async setContentChannelTopicDetail(guid: string, channelId: string, topicId: string, detail: TopicDetail, unsealedDetail: any, position: number) { }
+  public async setContentChannelTopicUnsealedDetail(guid: string, channelId: string, topicId: string, unsealedDetail: any) { }
   
   public async getContactCardChannelTopicRevision(guid: string, cardId: string, channelId: string): Promise<{ revision: number, marker: number } | null> {
     return null;
@@ -754,6 +772,8 @@ export class OnlineStore implements Store {
   }
   public async addContactCardChannelTopic(guid: string, cardId: string, channelId: string, topicId: string, item: TopicItem): Promise<void> { }
   public async removeContactCardChannelTopic(guid: string, cardId: string, channelId: string, topicId: string): Promise<void> { }
+  public async setContactCardChannelTopicDetail(guid: string, cardId: string, channelId: string, topicId: string, detail: TopicDetail, unsealedDetail: any, position: number) { }
+  public async setContactCardChannelTopicUnsealedDetail(guid: string, cardId: string, channelId: string, topicId: string, unsealedDetail: any) { }
 }
 
 export class NoStore implements Store {
@@ -899,6 +919,8 @@ export class NoStore implements Store {
   }
   public async addContentChannelTopic(guid: string, channelId: string, topicId: string, item: TopicItem): Promise<void> { }
   public async removeContentChannelTopic(guid: string, channelId: string, topicId: string): Promise<void> { }
+  public async setContentChannelTopicDetail(guid: string, channelId: string, topicId: string, detail: TopicDetail, unsealedDetail: any, position: number) { }
+  public async setContentChannelTopicUnsealedDetail(guid: string, channelId: string, topicId: string, unsealedDetail: any) { }
  
   public async getContactCardChannelTopicRevision(guid: string, cardId: string, channelId: string): Promise<{ revision: number, marker: number } | null> {
     return null;
@@ -910,4 +932,6 @@ export class NoStore implements Store {
   }
   public async addContactCardChannelTopic(guid: string, cardId: string, channelId: string, topicId: string, item: TopicItem): Promise<void> { }
   public async removeContactCardChannelTopic(guid: string, cardId: string, channelId: string, topicId: string): Promise<void> { }
+  public async setContactCardChannelTopicDetail(guid: string, cardId: string, channelId: string, topicId: string, detail: TopicDetail, unsealedDetail: any, position: number) { }
+  public async setContactCardChannelTopicUnsealedDetail(guid: string, cardId: string, channelId: string, topicId: string, unsealedDetail: any) { }
 }

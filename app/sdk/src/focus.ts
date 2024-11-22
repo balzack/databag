@@ -5,6 +5,10 @@ import type { Topic, Asset, AssetSource, Participant } from './types';
 import type { Logging } from './logging';
 import { Store } from './store';
 import { Crypto } from './crypto';
+import { getChannelTopics } from './net/getChannelTopics';
+import { getChannelTopicDetail } from './net/getChannelTopicDetail';
+import { getContactChannelTopics } from './net/getContactChannelTopics'
+import { getContactChannelTopicDetail } from './net/getContactChannelTopicDetail';
 
 const BATCH_COUNT = 64;
 const CLOSE_POLL_MS = 100;
@@ -23,16 +27,19 @@ export class FocusModule implements Focus {
   private closing: boolean;
   private nextRevision: number;
   private revision: {revision: number, marker: number} | null;
-  private position: { topicId: string, position: number } | null;
+  private lastTopic: {topicId: string, position: number} | null;
   private moreLocal: boolean;
   private moreRemote: boolean;
+  private sealEnabled: boolean;
+  private channelKey: string | null;
+  private loadMore: boolean;
 
   private markers: Set<string>;
 
   // view of topics 
   private topicEntries: Map<string, { item: TopicItem; topic: Topic }>;
 
-  constructor(log: Logging, store: Store, crypto: Crypto | null, cardId: string | null, channelId: string, guid: string, connection: { node: string; secure: boolean; token: string } | null, revision: number) {
+  constructor(log: Logging, store: Store, crypto: Crypto | null, cardId: string | null, channelId: string, guid: string, connection: { node: string; secure: boolean; token: string } | null, channelKey: string, sealEnabled: boolean, revision: number) {
     this.cardId = cardId;
     this.channelId = channelId;
     this.log = log;
@@ -41,6 +48,8 @@ export class FocusModule implements Focus {
     this.crypto = crypto;
     this.guid = guid;
     this.connection = connection;
+    this.channelKey = channelKey;
+    this.sealEnabled = sealEnabled;
 
     this.topicEntries = new Map<string, { item: TopicItem; topic: Topic }>();
     this.markers = new Set<string>();
@@ -49,6 +58,8 @@ export class FocusModule implements Focus {
     this.syncing = true;
     this.closing = false;
     this.nextRevision = null;
+    this.lastTopic = null;
+    this.loadMore = false;
     this.moreLocal = true;
     this.moreRemote = true;
     this.init(revision);
@@ -71,11 +82,18 @@ export class FocusModule implements Focus {
     });
 
     // load map of topics
-    const topics = await this.getChannelTopics();
+    const topics = await this.getLocalChannelTopics(null);
     topics.forEach(({ topicId, item }) => {
       const topic = this.setTopic(topicId, item);
       this.topicEntries.set(topicId, { item, topic });
+
+      // identify cached windows
+      if (!this.lastTopic || this.lastTopic.position > item.detail.created || (this.lastTopic.position === item.detail.created && this.lastTopic.topicId > topicId)) {
+        this.lastTopic = {topicId, position: item.detail.created};
+      }
     });
+    this.moreLocal = Boolean(this.lastTopic);
+    this.loadMore = !this.moreLocal;
     this.emitTopics();
 
     this.unsealAll = true;
@@ -83,21 +101,67 @@ export class FocusModule implements Focus {
     await this.sync();
   }
 
-  public async disconnect(cardId: string | null, channelId: string) {
-    if (cardId === this.cardId && channelId === this.channelId) {
-      this.connection = null;
-      this.emitStatus();
+
+  private async sync(): Promise<void> {
+    if (!this.syncing) {
+      this.syncing = true;
+      const { guid, node, secure, token, channelTypes } = this;
+      while (this.nextRevision && !this.closing) {
+        if (this.nextRevision && this.revision !== this.nextRevision) {
+          const nextRev = this.nextRevision;
+          try {
+    
+            // get delta
+  
+              // forEach
+                // get detail
+                // if in window getEntry
+                // if out update store
+
+            this.revision = nextRev;
+            if (this.nextRevision === nextRev) {
+              this.nextRevision = null;
+            }
+            this.log.info(`topic revision: ${nextRev}`);
+          } catch (err) {
+            this.log.warn(err);
+            await new Promise((r) => setTimeout(r, RETRY_POLL_MS));
+          }
+        }
+
+        if (this.revision === this.nextRevision) {
+          this.nextRevision = null;
+        }
+
+        if (this.loadMore) {
+          if (this.moreLocal) {
+            const topics = await this.getLocalChannelTopics(this.lastTopic);
+            topics.forEach(({ topicId, item }) => {
+              const topic = this.setTopic(topicId, item);
+              this.topicEntries.set(topicId, { item, topic });
+
+              // identify cached windows
+              if (!this.lastTopic || this.lastTopic.position > item.detail.created || (this.lastTopic.position === item.detail.created && this.lastTopic.topicId > topicId)) {
+                this.lastTopic = {topicId, position: item.detail.created};
+              }
+            });
+            this.moreLocal = Boolean(topics.length);
+          } else if (this.moreRemote) {
+          }
+        }
+
+        if (this.unsealAll) {
+
+          // unseal stuff
+
+          this.unsealAll = false;
+          this.emitChannels();
+        }
+      }
+
+      this.syncing = false;
     }
   }
-
-  public async setRevision(cardId: string | null, channelId: string, revision: number) {
-    if (cardId === this.cardId && channelId === this.channelId) {
-      this.nextRevision = revision;
-      await this.sync();
-    }
-  }
-
-  public async close() {}
 
   public async addTopic(sealed: boolean, type: string, subject: (assetId: {assetId: string, transform: string}[]) => any, files: AssetSource[]) {
     return '';
@@ -107,13 +171,11 @@ export class FocusModule implements Focus {
 
   public async removeTopic(topicId: string) {}
 
-  public async viewMoreTopics() {}
-
   public async setUnreadChannel() {}
 
   public async clearUnreadChannel() {}
 
-  public async getTopicAssetUrl(topicId: string, assetId: string, progress: (percent: number) => void) {
+  public async getTopicAssetUrl(topicId: string, assetId: string, progress: (percent: number) => boolean) {
     return '';
   }
 
@@ -124,6 +186,12 @@ export class FocusModule implements Focus {
   public async clearBlockTopic(topicId: string) {}
 
 
+
+
+  public async viewMoreTopics() {
+    this.loadMore = true;
+    await this.sync();
+  }
 
   public addTopicListener(ev: (topics: Topic[]) => void) {
     this.emitter.on('topic', ev);
@@ -147,6 +215,41 @@ export class FocusModule implements Focus {
 
   public removeStatusListener(ev: (status: string) => void) {
     this.emitter.off('status', ev);
+  }
+
+  public disconnect(cardId: string | null, channelId: string) {
+    if (cardId === this.cardId && channelId === this.channelId) {
+      this.connection = null;
+      this.emitStatus();
+    }
+  }
+
+  public async setRevision(cardId: string | null, channelId: string, revision: number) {
+    if (cardId === this.cardId && channelId === this.channelId) {
+      this.nextRevision = revision;
+      await this.sync();
+    }
+  }
+
+  public async setSealEnabled(enable: boolean) {
+    this.sealEnabled = enable;
+    this.unsealAll = true;
+    await this.sync();
+  }
+
+  public async setChannelKey(cardId: string | null, channelId: string, channelKey: string) {
+    if (cardId === this.cardId && channelId === this.channelId) {
+      this.channelKey = channelKey;
+      this.unsealAll = true;
+      await this.sync();
+    }
+  }
+
+  public async close() {
+    this.closing = true;
+    while (this.syncing) {
+      await new Promise((r) => setTimeout(r, CLOSE_POLL_MS));
+    } 
   }
 
   private emitStatus() {
@@ -174,6 +277,24 @@ export class FocusModule implements Focus {
     }
   }   
 
+  private async getTopicEntry(topicId: string) {
+    const { cardId, channelId, guid } = this;
+    const entry = this.topicEntries.get(topicId);
+    if (entry) {
+      return entry;
+    }     
+    const item = JSON.parse(JSON.stringify(defaultTopicItem));
+    const topic = this.setTopic(topicId, item);
+    const topicEntry = { item, topic };
+    this.topicEntries.set(topicId, topicEntry);
+    try { 
+      await this.store.addChannelTopic(topicId, item);
+    } catch (err) {
+      log.error(err);
+    }
+    return topicEntry;
+  } 
+
   private async getChannelTopicRevision() {
     const { guid, cardId, channelId } = this;
     if (cardId) {
@@ -193,12 +314,12 @@ export class FocusModule implements Focus {
     }
   }
 
-  private async getChannelTopics() {
-    const { guid, cardId, channelId, position } = this;
+  private async getLocalChannelTopics(offset: {topicId: string, position: number}) {
+    const { guid, cardId, channelId } = this;
     if (cardId) {
-      return await this.store.getContactCardChannelTopics(guid, cardId, channelId, BATCH_COUNT, position);  
+      return await this.store.getContactCardChannelTopics(guid, cardId, channelId, BATCH_COUNT, offset);  
     } else {
-      return await this.store.getContentChannelTopics(guid, channelId, BATCH_COUNT, position);
+      return await this.store.getContentChannelTopics(guid, channelId, BATCH_COUNT, offset);
     }
   }
 
@@ -219,6 +340,32 @@ export class FocusModule implements Focus {
       await this.store.removeContentChannelTopic(guid, channelId, topicId);
     }
   }
+
+  private async getRemoteChannelTopics(revision: number | null, begin: number | null, end: number | null) {
+    const { cardId, channelId, connection } = this;
+    if (!connection) {
+      throw new Error('disconnected channel');
+    }
+    const { node, secure, token } = this.connection
+    if (cardId) {
+      return await getContactChannelTopcis(node, secure, token, cardId, channelId, revision, BATCH_COUNT, begin, end);
+    } else {
+      return await getChannelTopics(node, secure, token, channelId, revision, BATCH_COUNT, begin, end);
+    }
+  }
+
+  private async getRemoteChannelTopicDetail(topicId: string) {
+    const { cardId, channelId, connection } = this;
+    if (!connection) {
+      throw new Error('disconnected channel');
+    }
+    const { node, secure, token } = this.connection
+    if (cardId) {
+      return await getContactChannelTopicDetail(node, secure, token, cardId, channelId, topicId);
+    } else {
+      return await getChannelTopicDetail(node, secure, token, channelId, topicId);
+    }
+  } 
 
   private isTopicBlocked(topicId: string): boolean {
     const card = this.cardId ? `"${cardId}"` : 'null';

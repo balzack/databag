@@ -105,7 +105,7 @@ export class StreamModule {
     if (!this.syncing) {
       this.syncing = true;
       const { guid, node, secure, token, channelTypes } = this;
-      while (this.nextRevision && !this.closing) {
+      while ((this.unsealAll || this.nextRevision) && !this.closing) {
         if (this.nextRevision && this.revision !== this.nextRevision) {
           const nextRev = this.nextRevision;
           try {
@@ -163,10 +163,10 @@ export class StreamModule {
                 }
               } else {
                 this.channelEntries.delete(id);
-                await this.store.removeContentChannel(guid, id);
                 if (this.focus) {
-                  await this.focus.disconnect(null, id);
+                  this.focus.disconnect(null, id);
                 }
+                await this.store.removeContentChannel(guid, id);
               }
             }
 
@@ -186,25 +186,25 @@ export class StreamModule {
         if (this.revision === this.nextRevision) {
           this.nextRevision = null;
         }
-      }
 
-      if (this.unsealAll) {
-        for (const [channelId, entry] of this.channelEntries.entries()) {
-          try {
-            const { item } = entry;
-            if (await this.unsealChannelDetail(channelId, item)) {
-              await this.store.setContentChannelUnsealedDetail(guid, channelId, item.unsealedDetail);
+        if (this.unsealAll) {
+          for (const [channelId, entry] of this.channelEntries.entries()) {
+            try {
+              const { item } = entry;
+              if (await this.unsealChannelDetail(channelId, item)) {
+                await this.store.setContentChannelUnsealedDetail(guid, channelId, item.unsealedDetail);
+              }
+              if (await this.unsealChannelSummary(channelId, item)) {
+                await this.store.setContentChannelUnsealedSummary(guid, channelId, item.unsealedSummary);
+              }
+              entry.channel = this.setChannel(channelId, item);
+            } catch (err) {
+              this.log.warn(err);
             }
-            if (await this.unsealChannelSummary(channelId, item)) {
-              await this.store.setContentChannelUnsealedSummary(guid, channelId, item.unsealedSummary);
-            }
-            entry.channel = this.setChannel(channelId, item);
-          } catch (err) {
-            this.log.warn(err);
           }
+          this.unsealAll = false;
+          this.emitChannels();
         }
-        this.unsealAll = false;
-        this.emitChannels();
       }
 
       this.syncing = false;
@@ -368,7 +368,17 @@ export class StreamModule {
     if (focus) {
       focus.close();
     }
-    this.focus = new FocusModule(this.log, this.store, this.crypto, null, channelId, this.guid, { node, secure, token });
+    const entry = this.channelEntries.get(channelId);
+    if (entry) {
+      const channelKey = entry.item.channelKey;
+      const sealEnabled = Boolean(this.seal);
+      const revision = entry.item.summary.revision;
+      this.focus = new FocusModule(this.log, this.store, this.crypto, null, channelId, this.guid, { node, secure, token }, channelKey, sealEnabled, revision);
+    }
+    else {
+      this.focus = new FocusModule(this.log, this.store, this.crypto, cardId, channelId, this.guid, null, null, false, 0);
+    } 
+
     return this.focus;
   }
 
@@ -381,6 +391,9 @@ export class StreamModule {
 
   public async setSeal(seal: { privateKey: string; publicKey: string } | null) {
     this.seal = seal;
+    if (this.focus) {
+      await this.focus.setSealEnabled(Boolean(this.seal));
+    }
     this.unsealAll = true;
     await this.sync();
   }
@@ -487,7 +500,11 @@ export class StreamModule {
     const channel = this.setChannel(channelId, item);
     const channelEntry = { item, channel };
     this.channelEntries.set(channelId, channelEntry);
-    await this.store.addContentChannel(guid, channelId, item);
+    try {
+      await this.store.addContentChannel(guid, channelId, item);
+    } catch (err) {
+      log.error(err);
+    }
     return channelEntry;
   }
 
@@ -497,8 +514,14 @@ export class StreamModule {
         const { subjectEncrypted, subjectIv, seals } = JSON.parse(item.detail.data);
         if (!item.channelKey) {
           item.channelKey = await this.getChannelKey(seals);
+          if (this.focus) {
+            try {
+              await this.focus.setChannelKey(null, channelId, this.channelKey);
+            } catch (err) {
+              log.warn(err);
+            }
+          }
         }
-
         if (item.channelKey) {
           const { data } = await this.crypto.aesDecrypt(subjectEncrypted, subjectIv, item.channelKey);
           item.unsealedDetail = data;
@@ -517,6 +540,13 @@ export class StreamModule {
         if (!item.channelKey) {
           const { seals } = JSON.parse(item.detail.data);
           item.channelKey = await this.getChannelKey(seals);
+          if (this.focus) {
+            try {
+              await this.focus.setChannelKey(null, channelId, this.channelKey);
+            } catch (err) {
+              log.warn(err);
+            }
+          }
         }
         if (item.channelKey) {
           const { messageEncrypted, messageIv } = JSON.parse(item.summary.data);

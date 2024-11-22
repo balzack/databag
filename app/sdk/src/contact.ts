@@ -250,7 +250,7 @@ export class ContactModule implements Contact {
     if (!this.syncing) {
       this.syncing = true;
       const { guid, node, secure, token } = this;
-      while ((this.nextRevision || this.resync.size) && !this.closing) {
+      while ((this.unsealAll || this.nextRevision || this.resync.size) && !this.closing) {
         if (this.resync.size) {
           const entries = Array.from(this.cardEntries, ([key, value]) => ({ key, value }));
           for (const entry of entries) {
@@ -429,27 +429,27 @@ export class ContactModule implements Contact {
         if (this.revision === this.nextRevision) {
           this.nextRevision = null;
         }
-      }
 
-      if (this.unsealAll) {
-        for (const [cardId, channels] of this.channelEntries.entries()) {
-          for (const [channelId, entry] of channels.entries()) {
-            try {
-              const { item } = entry;
-              if (await this.unsealChannelDetail(cardId, channelId, item)) {
-                await this.store.setContactCardChannelUnsealedDetail(guid, cardId, channelId, item.unsealedDetail);
+        if (this.unsealAll) {
+          for (const [cardId, channels] of this.channelEntries.entries()) {
+            for (const [channelId, entry] of channels.entries()) {
+              try {
+                const { item } = entry;
+                if (await this.unsealChannelDetail(cardId, channelId, item)) {
+                  await this.store.setContactCardChannelUnsealedDetail(guid, cardId, channelId, item.unsealedDetail);
+                }
+                if (await this.unsealChannelSummary(cardId, channelId, item)) {
+                  await this.store.setContactCardChannelUnsealedSummary(guid, cardId, channelId, item.unsealedSummary);
+                }
+                entry.channel = this.setChannel(cardId, channelId, item);
+              } catch (err) {
+                this.log.warn(err);
               }
-              if (await this.unsealChannelSummary(cardId, channelId, item)) {
-                await this.store.setContactCardChannelUnsealedSummary(guid, cardId, channelId, item.unsealedSummary);
-              }
-              entry.channel = this.setChannel(cardId, channelId, item);
-            } catch (err) {
-              this.log.warn(err);
             }
+            this.emitChannels(cardId);
           }
-          this.emitChannels(cardId);
+          this.unsealAll = false;
         }
-        this.unsealAll = false;
       }
 
       this.syncing = false;
@@ -524,18 +524,16 @@ export class ContactModule implements Contact {
           entry.channel = this.setChannel(cardId, id, entry.item);
           await this.store.setContactCardChannelSummary(guid, cardId, id, entry.item.summary, entry.item.unsealedSummary);
         }
-
-        await this.store.setContactCardChannelTopicRemoteRevision(guid, cardId, id, topicRevision);
         if (this.focus) {
           await this.focus.setRevision(cardId, id, topicRevision);
         }
       } else {
         const channels = this.getChannelEntries(cardId);
         channels.delete(id);
-        await this.store.removeContactCardChannel(guid, cardId, id);
         if (this.focus) {
-          await this.focus.disconnect(cardId, id);
+          this.focus.disconnect(cardId, id);
         }
+        await this.store.removeContactCardChannel(guid, cardId, id);
       }
     }
   }
@@ -609,15 +607,20 @@ export class ContactModule implements Contact {
     if (this.focus) {
       this.focus.close();
     }
-    const entry = this.cardEntries.get(cardId);
-    if (entry) {
-      const node = entry.item.profile.node;
-      const guid = entry.item.profile.guid;
-      const token = entry.item.detail.token;
+    const cardEntry = this.cardEntries.get(cardId);
+    const channelsEntry = this.channelEntries.get(cardId);
+    const channelEntry = channelsEntry?.get(channelId);
+    if (cardEntry && channelEntry) {
+      const node = cardEntry.item.profile.node;
+      const guid = cardEntry.item.profile.guid;
+      const token = cardEntry.item.detail.token;
+      const revision = channelEntry.item.summary.revision;
+      const channelKey = channelEntry.item.channelKey;
+      const sealEnabled = Boolean(this.seal);
       const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(node);
-      this.focus = new FocusModule(this.log, this.store, this.crypto, cardId, channelId, this.guid, { node, secure: !insecure, token: `${guid}.${token}` });
+      this.focus = new FocusModule(this.log, this.store, this.crypto, cardId, channelId, this.guid, { node, secure: !insecure, token: `${guid}.${token}` }, channelKey, sealEnabled, revision);
     } else {
-      this.focus = new FocusModule(this.log, this.store, this.crypto, cardId, channelId, this.guid, null);
+      this.focus = new FocusModule(this.log, this.store, this.crypto, cardId, channelId, this.guid, null, null, false, 0);
     }
     return this.focus;
   }
@@ -948,6 +951,9 @@ export class ContactModule implements Contact {
 
   public async setSeal(seal: { privateKey: string; publicKey: string } | null) {
     this.seal = seal;
+    if (this.focus) {
+      await this.focus.setSealEnabled(Boolean(this.seal));
+    }
     this.unsealAll = true;
     await this.sync();
   }
@@ -984,6 +990,13 @@ export class ContactModule implements Contact {
         const { subjectEncrypted, subjectIv, seals } = JSON.parse(item.detail.data);
         if (!item.channelKey) {
           item.channelKey = await this.getChannelKey(seals);
+          if (this.focus) {
+            try {
+              await this.focus.setChannelKey(cardId, channelId, item.channelKey);
+            } catch (err) {
+              this.log.warn(err);
+            }
+          }
         }
         if (item.channelKey) {
           const { data } = await this.crypto.aesDecrypt(subjectEncrypted, subjectIv, item.channelKey);
@@ -1003,6 +1016,13 @@ export class ContactModule implements Contact {
         if (!item.channelKey) {
           const { seals } = JSON.parse(item.detail.data);
           item.channelKey = await this.getChannelKey(seals);
+          if (this.focus) {
+            try {
+              await this.focus.setChannelKey(cardId, channelId, item.channelKey);
+            } catch (err) {
+              this.log.warn(err);
+            }
+          }
         }
         if (item.channelKey) {
           const { messageEncrypted, messageIv } = JSON.parse(item.summary.data);
@@ -1027,7 +1047,11 @@ export class ContactModule implements Contact {
     const card = this.setCard(cardId, item);
     const cardEntry = { item, card };
     this.cardEntries.set(cardId, cardEntry);
-    await this.store.addContactCard(guid, cardId, item);
+    try {
+      await this.store.addContactCard(guid, cardId, item);
+    } catch (err) {
+      log.error(err);
+    }
     return cardEntry;
   }
 
@@ -1051,7 +1075,11 @@ export class ContactModule implements Contact {
     const channel = this.setChannel(cardId, channelId, item);
     const channelEntry = { item, channel };
     channels.set(channelId, channelEntry);
-    await this.store.addContactCardChannel(guid, cardId, channelId, item);
+    try {
+      await this.store.addContactCardChannel(guid, cardId, channelId, item);
+    } catch (err) {
+      log.error(err);
+    }
     return channelEntry;
   }
 

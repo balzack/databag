@@ -154,7 +154,7 @@ export type TopicDetail = {
   guid: string;
   sealed: boolean;
   dataType: string;
-  data: string;
+  data: any;
   created: number;
   updated: number;
   status: string;
@@ -175,4 +175,21 @@ export type AssetItem = {
   transform: string;
   extension: string;
   partIds: string[];
+};
+
+export const defaultTopicItem = {
+  detail: {
+    revision: 0,
+    guid: '',
+    sealed: false,
+    dataType: '',
+    data: '',
+    created: 0,
+    updated: 0,
+    status: '',
+    transform: '',
+    assets: [],
+  },
+  unsealedDetail: null,
+  position: 0,
 };
