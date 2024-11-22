@@ -3,6 +3,7 @@ import { Drawer } from '@mantine/core'
 import { DisplayContext } from '../context/DisplayContext'
 import { ContextType } from '../context/ContextType'
 import classes from './Session.module.css'
+import { useSession } from './useSession.hook'
 import { IconAddressBook, IconMessages, IconSettings } from '@tabler/icons-react'
 import { Settings } from '../settings/Settings'
 import { Identity } from '../identity/Identity'
@@ -15,26 +16,25 @@ import { Focus } from 'databag-client-sdk'
 import { useDisclosure } from '@mantine/hooks'
 
 export function Session() {
+  const { state } = useSession();
   const [tab, setTab] = useState('content')
   const [profileParams, setProfileParams] = useState({ guid: '' } as ProfileParams)
-  const display = useContext(DisplayContext) as ContextType
   const [settings, { open: openSettings, close: closeSettings }] = useDisclosure(false)
   const [contacts, { open: openContacts, close: closeContacts }] = useDisclosure(false)
   const [registry, { open: openRegistry, close: closeRegistry }] = useDisclosure(false)
   const [profile, { open: openProfile, close: closeProfile }] = useDisclosure(false)
-  const [focus, setFocus] = useState(null as Focus | null)
 
   return (
     <div className={classes.session}>
-      {display.state.layout === 'small' && (
+      {state.layout === 'small' && (
         <>
           <div className={tab === 'content' ? classes.show : classes.hide}>
             <div className={classes.screen}>
-              <Content select={(focus) => setFocus(focus)} />
+              <Content />
             </div>
-            {focus && (
+            {state.focus && (
               <div className={classes.screen}>
-                <Conversation focus={focus} />
+                <Conversation />
               </div>
             )}
           </div>
@@ -106,15 +106,15 @@ export function Session() {
           </div>
         </>
       )}
-      {display.state.layout === 'large' && (
+      {state.layout === 'large' && (
         <div className={classes.display}>
           <div className={classes.left}>
             <Identity settings={openSettings} contacts={openContacts} />
             <div className={classes.content}>
-              <Content select={(focus) => setFocus(focus)} />
+              <Content />
             </div>
           </div>
-          <div className={classes.right}>{focus && <Conversation focus={focus} />}</div>
+          <div className={classes.right}>{state.focus && <Conversation />}</div>
           <Drawer opened={contacts} onClose={closeContacts} withCloseButton={false} size="md" padding="0" position="right">
             <div style={{ height: '100vh' }}>
               <Contacts

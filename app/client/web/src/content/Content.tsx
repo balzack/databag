@@ -4,11 +4,10 @@ import { Modal, Text, Switch, TextInput, Button } from '@mantine/core'
 import { IconSearch, IconMessagePlus, IconLabel } from '@tabler/icons-react'
 import classes from './Content.module.css'
 import { Channel } from '../channel/Channel'
-import { Focus } from 'databag-client-sdk'
 import { Card } from '../card/Card'
 import { modals } from '@mantine/modals'
 
-export function Content({ select }: { select: (focus: Focus) => void }) {
+export function Content() {
   const { state, actions } = useContent()
   const [add, setAdd] = useState(false)
   const [adding, setAdding] = useState(false)
@@ -81,9 +80,7 @@ export function Content({ select }: { select: (focus: Focus) => void }) {
         notesPlaceholder={state.strings.notes}
         subjectPlaceholder={state.strings.unknown}
         message={channel.message}
-        select={() => {
-          select(actions.getFocus(channel.cardId, channel.channelId))
-        }}
+        select={() => actions.setFocus(channel.cardId, channel.channelId)}
       />
     )
   })

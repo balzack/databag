@@ -88,7 +88,6 @@ export class FocusModule implements Focus {
       this.syncing = true;
       const { guid, node, secure, token, channelTypes } = this;
       while ((this.loadMore || this.unsealAll || this.nextRevision) && !this.closing && this.connection) {
-
         if (this.loadMore) {
           try {
             if (this.cacheView) {
@@ -111,7 +110,7 @@ export class FocusModule implements Focus {
                 this.loadMore = false;
               }
             } else if (!this.storeView.revision || this.storeView.marker) {
-              const delta = await this.getRemoteChannelTopics(null, this.storeView.marker, null);
+              const delta = await this.getRemoteChannelTopics(null, null, this.storeView.marker);
               for (const entity of delta.topics) {
                 const { id, revision, data } = entity;
                 if (data) {
@@ -151,7 +150,7 @@ export class FocusModule implements Focus {
         if (this.nextRevision && this.storeView.revision !== this.nextRevision) {
           const nextRev = this.nextRevision;
           try {
-            const delta = await this.getRemoteChannelTopics(this.storeView.revision, null, this.storeView.marker);
+            const delta = await this.getRemoteChannelTopics(this.storeView.revision, this.storeView.marker, null);
             for (const entity of delta.topics) {
               const { id, revision, data } = entity;
               if (data) {
@@ -260,7 +259,6 @@ export class FocusModule implements Focus {
 
   private emitTopics() {
     const topics = Array.from(this.topicEntries, ([topicId, entry]) => entry.topic);
-console.log("EMIT: ", topics);
     this.emitter.emit('topic', topics);
   }
 

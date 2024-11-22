@@ -226,9 +226,8 @@ export function useContent() {
     setTopic: (topic: string) => {
       updateState({ topic })
     },
-    getFocus: (cardId: string | null, channelId: string) => {
-console.log("APP SET FOCUS");
-      return app.state.session.setFocus(cardId, channelId)
+    setFocus: (cardId: string | null, channelId: string) => {
+      app.actions.setFocus(cardId, channelId)
     },
     addTopic: async (sealed: boolean, subject: string, contacts: string[]) => {
       const content = app.state.session.getContent()

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { DatabagSDK, Session } from 'databag-client-sdk'
+import { DatabagSDK, Session, Focus } from 'databag-client-sdk'
 import { SessionStore } from '../SessionStore'
 import { WebCrypto } from '../WebCrypto'
 
@@ -9,6 +9,7 @@ export function useAppContext() {
   const sdk = useRef(databag)
   const [state, setState] = useState({
     session: null as null | Session,
+    focus: null as null | Focus,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -79,6 +80,18 @@ export function useAppContext() {
       }
       const session = await sdk.current.access(node, secure, token, params)
       updateState({ session })
+    },
+    setFocus: (cardId: string | null, channelId: string) => {
+      if (state.session) {
+        const focus = state.session.setFocus(cardId, channelId);
+        updateState({ focus });
+      }
+    },
+    clearFocus: () => {
+      if (state.session) {
+        state.session.clearFocus();
+        updateState({ focus: null });
+      }
     },
     getAvailable: async (node: string, secure: boolean) => {
       return await sdk.current.available(node, secure)
