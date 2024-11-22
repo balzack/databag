@@ -106,7 +106,7 @@ export class FocusModule implements Focus {
     if (!this.syncing) {
       this.syncing = true;
       const { guid, node, secure, token, channelTypes } = this;
-      while (this.nextRevision && !this.closing) {
+      while ((this.loadMore || this.unsealAll || this.nextRevision) && !this.closing && this.connection) {
         if (this.nextRevision && this.revision !== this.nextRevision) {
           const nextRev = this.nextRevision;
           try {
@@ -134,20 +134,36 @@ export class FocusModule implements Focus {
         }
 
         if (this.loadMore) {
-          if (this.moreLocal) {
-            const topics = await this.getLocalChannelTopics(this.lastTopic);
-            topics.forEach(({ topicId, item }) => {
-              const topic = this.setTopic(topicId, item);
-              this.topicEntries.set(topicId, { item, topic });
+          try {
+            if (this.moreLocal) {
+              const topics = await this.getLocalChannelTopics(this.lastTopic);
+              topics.forEach(({ topicId, item }) => {
+                const topic = this.setTopic(topicId, item);
+                this.topicEntries.set(topicId, { item, topic });
 
-              // identify cached windows
-              if (!this.lastTopic || this.lastTopic.position > item.detail.created || (this.lastTopic.position === item.detail.created && this.lastTopic.topicId > topicId)) {
-                this.lastTopic = {topicId, position: item.detail.created};
-              }
-            });
-            this.moreLocal = Boolean(topics.length);
-          } else if (this.moreRemote) {
-          }
+                // identify cached windows
+                if (!this.lastTopic || this.lastTopic.position > item.detail.created || (this.lastTopic.position === item.detail.created && this.lastTopic.topicId > topicId)) {
+                  this.lastTopic = {topicId, position: item.detail.created};
+                }
+              });
+              this.moreLocal = Boolean(topics.length);
+            } else if (this.moreRemote) {
+              const delta = this.revision ? await this.getRemoteChannelTopics(null, this.revision.marker, null) : await this.getRemoteChannelTopics(null, null, null);
+        console.log(delta);
+              for (const entity of delta.topics) {
+                const { id, revision, data } = entity;
+                if (data) {
+                  const { topicDetail } = data;
+                  const detail = topicDetail ? topicDetail : await getRemoteChannelTopicDetail(id);
+                } else {
+                  // remove topic
+                }
+            }
+            this.loadMore = false;
+          } catch (err) {
+            this.log.warn(err);
+            await new Promise((r) => setTimeout(r, RETRY_POLL_MS));
+          } 
         }
 
         if (this.unsealAll) {
@@ -155,7 +171,7 @@ export class FocusModule implements Focus {
           // unseal stuff
 
           this.unsealAll = false;
-          this.emitChannels();
+          this.emitTopics();
         }
       }
 
@@ -348,7 +364,7 @@ export class FocusModule implements Focus {
     }
     const { node, secure, token } = this.connection
     if (cardId) {
-      return await getContactChannelTopcis(node, secure, token, cardId, channelId, revision, BATCH_COUNT, begin, end);
+      return await getContactChannelTopics(node, secure, token, channelId, revision, BATCH_COUNT, begin, end);
     } else {
       return await getChannelTopics(node, secure, token, channelId, revision, BATCH_COUNT, begin, end);
     }

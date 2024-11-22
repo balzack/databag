@@ -153,10 +153,12 @@ export class SessionModule implements Session {
   }
 
   public setFocus(cardId: string | null, channelId: string): Focus {
+console.log("SESSION SET FOCUS");
     if (cardId) {
       return this.contact.setFocus(cardId, channelId);
+    } else {
+      return this.stream.setFocus(channelId);
     }
-    return this.stream.setFocus(channelId);
   }
 
   public async clearFocus() {

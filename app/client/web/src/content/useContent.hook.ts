@@ -227,6 +227,7 @@ export function useContent() {
       updateState({ topic })
     },
     getFocus: (cardId: string | null, channelId: string) => {
+console.log("APP SET FOCUS");
       return app.state.session.setFocus(cardId, channelId)
     },
     addTopic: async (sealed: boolean, subject: string, contacts: string[]) => {
