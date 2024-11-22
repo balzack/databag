@@ -1,16 +1,18 @@
 import { EventEmitter } from 'eventemitter3';
 import type { Focus } from './api';
-import { TopicItem } from './item';
+import type { TopicItem} from './items';
 import type { Topic, Asset, AssetSource, Participant } from './types';
 import type { Logging } from './logging';
 import { Store } from './store';
 import { Crypto } from './crypto';
+import { defaultTopicItem } from './items';
 import { getChannelTopics } from './net/getChannelTopics';
 import { getChannelTopicDetail } from './net/getChannelTopicDetail';
 import { getContactChannelTopics } from './net/getContactChannelTopics'
 import { getContactChannelTopicDetail } from './net/getContactChannelTopicDetail';
 
 const BATCH_COUNT = 64;
+const MIN_LOAD_SIZE = 32;
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
 
@@ -26,10 +28,9 @@ export class FocusModule implements Focus {
   private syncing: boolean;
   private closing: boolean;
   private nextRevision: number;
-  private revision: {revision: number, marker: number} | null;
-  private lastTopic: {topicId: string, position: number} | null;
-  private moreLocal: boolean;
-  private moreRemote: boolean;
+  private cacheView: {revision: number | null, marker: number | null};
+  private storeView: {topicId: string, position: number} | null;
+  private complete: boolean;
   private sealEnabled: boolean;
   private channelKey: string | null;
   private loadMore: boolean;
@@ -54,26 +55,20 @@ export class FocusModule implements Focus {
     this.topicEntries = new Map<string, { item: TopicItem; topic: Topic }>();
     this.markers = new Set<string>();
 
-    this.revision = null;
+    this.cacheView = null;
+    this.storeView = { revision: null, marker: null };
     this.syncing = true;
     this.closing = false;
     this.nextRevision = null;
-    this.lastTopic = null;
     this.loadMore = false;
-    this.moreLocal = true;
-    this.moreRemote = true;
+    this.complete = false;
     this.init(revision);
   }
 
   private async init(revision: number) {
     const { guid } = this;
     this.nextRevision = revision;
-    this.revision = this.getChannelTopicRevision();
-    if (this.revision == null) {
-      this.moreLocal = false;
-    } else {
-      this.moreLocal = true;
-    }
+    this.storeView = this.getChannelTopicRevision();
 
     // load markers
     const values = await this.store.getMarkers(guid);
@@ -81,49 +76,36 @@ export class FocusModule implements Focus {
       this.markers.add(value);
     });
 
-    // load map of topics
-    const topics = await this.getLocalChannelTopics(null);
-    for (const entry of topics) {
-      const { topicId, item } = entry
-      const topic = this.setTopic(topicId, item);
-      this.topicEntries.set(topicId, { item, topic });
-      if (!this.lastTopic || this.lastTopic.position > item.detail.created || (this.lastTopic.position === item.detail.created && this.lastTopic.topicId > topicId)) {
-        this.lastTopic = {topicId, position: item.detail.created};
-      }
-    }
-    this.moreLocal = Boolean(this.lastTopic);
-    this.loadMore = !this.moreLocal;
     this.emitTopics();
-
     this.unsealAll = true;
+    this.loadMore = true;
     this.syncing = false;
     await this.sync();
   }
-
 
   private async sync(): Promise<void> {
     if (!this.syncing) {
       this.syncing = true;
       const { guid, node, secure, token, channelTypes } = this;
       while ((this.loadMore || this.unsealAll || this.nextRevision) && !this.closing && this.connection) {
-        if (this.nextRevision && this.revision?.revision !== this.nextRevision) {
+        if (this.nextRevision && this.storeView.revision !== this.nextRevision) {
           const nextRev = this.nextRevision;
           try {
-            const delta = this.revision ? await this.getRemoteChannelTopics(this.revision.revision, null, this.revision.marker) : await this.getRemoteChannelTopics(null, null, null);
+            const delta = await this.getRemoteChannelTopics(this.storeView.revision, null, this.storeView.marker);
             for (const entity of delta.topics) {
               const { id, revision, data } = entity;
               if (data) {
                 const { detailRevision, topicDetail } = data;
-                if (!this.lastTopic || this.lastTipic.position > detail.created || (this.lastTopic.position === detail.created && this.lastTopic.lastTopic.topicId >= topicId)) {
-                  const entry = this.getTopicEntry(id);
-                  if (detailRevision > entry.detail.revision) {
+                if (!this.cacheView || this.cacheView.position > detail.created || (this.cacheView.position === detail.created && this.cacheView.topicId >= topicId)) {
+                  const entry = await this.getTopicEntry(id);
+                  if (detailRevision > entry.item.detail.revision) {
                     const detail = topicDetail ? topicDetail : await getRemoteChannelTopicDetail(id);
-                    entry.item.detail = detail;
+                    entry.item.detail = this.getTopicDetail(detail, detailRevision);
                     entry.item.unsealedDetail = null;
                     entry.item.position = detail.created;
                     await this.unsealTopicDetail(entry.item);
                     entry.topic = this.setTopic(id, entry.item);
-                    await this.store.setLocalChannelTopicDetail(id, detail, entry.item.unsealedDetail, detail.created);
+                    await this.setLocalChannelTopicDetail(id, detail, entry.item.unsealedDetail, detail.created);
                   }
                 } else {
                   const item = { detail, position: detail.created, unsealedDetail: null };
@@ -134,13 +116,13 @@ export class FocusModule implements Focus {
                 await this.store.removeLocalChannelTopic(id);
               }
             }
-            this.revision = this.revision ? { revision: nextRev, marker: this.revision.marker } : { revision: delta.revision, marker: delta.marker };
-            await this.store.setChannelTopicRevision(this.revision);
+            this.storeView = { revision: nextRev, marker: delta.marker };
+            await this.setChannelTopicRevision(this.storeView);
 
-            this.revision = nextRev;
             if (this.nextRevision === nextRev) {
               this.nextRevision = null;
             }
+            this.emitTopics();
             this.log.info(`topic revision: ${nextRev}`);
           } catch (err) {
             this.log.warn(err);
@@ -148,54 +130,58 @@ export class FocusModule implements Focus {
           }
         }
 
-        if (this.revision === this.nextRevision) {
+        if (this.storeView.revision === this.nextRevision) {
           this.nextRevision = null;
         }
 
         if (this.loadMore) {
           try {
-            if (this.moreLocal) {
-              const topics = await this.getLocalChannelTopics(this.lastTopic);
+            if (this.cacheView) {
+              const topics = await this.getLocalChannelTopics(this.cacheView);
               for (const entry of topics) {
                 const { topicId, item } = entry;
                 if (await this.unsealTopicDetail(item)) {
-                  await this.store.setLocalChannelTopicUnsealedDetail(topicId, item.unsealedDetail);
+                  await this.setLocalChannelTopicUnsealedDetail(topicId, item.unsealedDetail);
                 }
                 const topic = this.setTopic(topicId, item);
                 this.topicEntries.set(topicId, { item, topic });
-                if (!this.lastTopic || this.lastTopic.position > item.detail.created || (this.lastTopic.position === item.detail.created && this.lastTopic.topicId > topicId)) {
-                  this.lastTopic = {topicId, position: item.detail.created};
+                if (this.cacheView.position > item.detail.created || (this.cacheView.position === item.detail.created && this.cacheView.topicId > topicId)) {
+                  this.cacheView = {topicId, position: item.detail.created};
                 }
               }
-              this.moreLocal = Boolean(topics.length);
-              if (topics.length > BATCH_SIZE / 2) {
+              if (topics.length == 0) {
+                this.cacheView = null;
+              }
+              if (topics.length > MIN_LOAD_SIZE) {
                 this.loadMore = false;
               }
-            } else if (this.moreRemote) {
-              const delta = this.revision ? await this.getRemoteChannelTopics(null, this.revision.marker, null) : await this.getRemoteChannelTopics(null, null, null);
+            } else if (!this.storeView.revision || this.storeView.marker) {
+              const delta = await this.getRemoteChannelTopics(null, this.storeView.marker, null);
               for (const entity of delta.topics) {
                 const { id, revision, data } = entity;
                 if (data) {
                   const { detailRevision, topicDetail } = data;
-                  const entry = this.getTopicEntry(id);
-                  if (detailRevision > entry.detail.revision) {
+                  const entry = await this.getTopicEntry(id);
+                  if (detailRevision > entry.item.detail.revision) {
                     const detail = topicDetail ? topicDetail : await getRemoteChannelTopicDetail(id);
-                    entry.item.detail = detail;
+                    entry.item.detail = this.getTopicDetail(detail, detailRevision);
                     entry.item.unsealedDetail = null;
                     entry.item.position = detail.created;
                     await this.unsealTopicDetail(entry.item);
                     entry.topic = this.setTopic(id, entry.item);
-                    await this.store.setLocalChannelTopicDetail(id, detail, entry.item.unsealedDetail, detail.created);
+                    await this.setLocalChannelTopicDetail(id, detail, entry.item.unsealedDetail, detail.created);
                   }
                 } else {
                   log.error('ignoring unexpected delete entry on initial load');
                 }
               }
               if (delta.topics.length === 0) {
-                this.moreRemote = false;
+                this.completed = true;
               }
-              this.revision = this.revision ? { revision: this.revision.revision, marker: delta.marker } : { revision: delta.revision, marker: delta.marker };
-              await this.store.setChannelTopicRevision(this.revision);
+              const rev = this.storeView.revision ? this.storeView.revision : delta.revision;
+              const mark = delta.topics.length ? delta.marker : null;
+              this.storeView = { revision: rev, marker: mark };
+              await this.setChannelTopicRevision(this.storeView);
               this.loadMore = false;
             } else {
               this.loadMore = false;
@@ -212,9 +198,9 @@ export class FocusModule implements Focus {
             try {
               const { item } = entry;
               if (await this.unsealTopicDetail(item)) {
-                await this.store.setLocalChannelTopicUnsealedDetail(guid, topicId, item.unsealedDetail);
+                await this.setLocalChannelTopicUnsealedDetail(guid, topicId, item.unsealedDetail);
+                entry.topic = this.setTopic(topicId, item);
               }
-              entry.channel = this.setChannel(topicId, item);
             } catch (err) {
               this.log.warn(err);
             }
@@ -379,7 +365,7 @@ export class FocusModule implements Focus {
     const topic = this.setTopic(topicId, item);
     const topicEntry = { item, topic };
     this.topicEntries.set(topicId, topicEntry);
-    await this.store.addChannelTopic(topicId, item);
+    await this.addLocalChannelTopic(topicId, item);
     return topicEntry;
   } 
 
@@ -454,9 +440,9 @@ export class FocusModule implements Focus {
     }
     const { node, secure, token } = this.connection
     if (cardId) {
-      return await getContactChannelTopics(node, secure, token, channelId, revision, BATCH_COUNT, begin, end);
+      return await getContactChannelTopics(node, secure, token, channelId, revision, (begin || !revision) ? BATCH_COUNT : null, begin, end);
     } else {
-      return await getChannelTopics(node, secure, token, channelId, revision, BATCH_COUNT, begin, end);
+      return await getChannelTopics(node, secure, token, channelId, revision, (begin || !revision) ? BATCH_COUNT : null, begin, end);
     }
   }
 
@@ -474,26 +460,29 @@ export class FocusModule implements Focus {
   } 
 
   private isTopicBlocked(topicId: string): boolean {
-    const card = this.cardId ? `"${cardId}"` : 'null';
-    const channel = this.channelId ? `"${channelId}"` : 'null';
+    const { cardId, channelId } = this;
+    const card = cardId ? `"${cardId}"` : 'null';
+    const channel = channelId ? `"${channelId}"` : 'null';
     const value = `{ "marker": "blocked_topic", "cardId": "${card}", "channelId": "${channel}, "topicId": "${topicId}", "tagId": null }`;
     return this.markers.has(value);
   }
 
   private async setTopicBlocked(topicId: string) {
-    const card = this.cardId ? `"${cardId}"` : 'null';
-    const channel = this.channelId ? `"${channelId}"` : 'null';
+    const { guid, cardId, channelId } = this;
+    const card = cardId ? `"${cardId}"` : 'null';
+    const channel = channelId ? `"${channelId}"` : 'null';
     const value = `{ "marker": "blocked_topic", "cardId": "${card}", "channelId": "${channel}, "topicId": "${topicId}", "tagId": null }`;
     this.markers.add(value);
-    await this.store.setMarker(this.guid, value);
+    await this.store.setMarker(guid, value);
   }
 
   private async clearTopicBlocked(topicId: string) {
-    const card = this.cardId ? `"${cardId}"` : 'null';
-    const channel = this.channelId ? `"${channelId}"` : 'null';
+    const { guid, cardId, channelId } = this;
+    const card = cardId ? `"${cardId}"` : 'null';
+    const channel = channelId ? `"${channelId}"` : 'null';
     const value = `{ "marker": "blocked_topic", "cardId": "${card}", "channelId": "${channel}, "topicId": "${topicId}", "tagId": null }`;
     this.markers.delete(value);
-    await this.store.clearMarker(this.guid, value);
+    await this.store.clearMarker(guid, value);
   }
 
 }
