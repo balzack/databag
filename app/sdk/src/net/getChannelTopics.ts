@@ -7,8 +7,8 @@ export async function getChannelTopics(node: string, secure: boolean, token: str
   const topics = await fetchWithTimeout(endpoint, { method: 'GET' });
   checkResponse(topics.status);
   return {
-    marker: topics.headers.get('topic-marker'),
-    revision: topics.headers.get('topic-revision'),
+    marker: parseInt(topics.headers.get('topic-marker')),
+    revision: parseInt(topics.headers.get('topic-revision')),
     topics: await topics.json(),
   }
 }

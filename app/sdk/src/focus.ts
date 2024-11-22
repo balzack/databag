@@ -88,51 +88,6 @@ export class FocusModule implements Focus {
       this.syncing = true;
       const { guid, node, secure, token, channelTypes } = this;
       while ((this.loadMore || this.unsealAll || this.nextRevision) && !this.closing && this.connection) {
-        if (this.nextRevision && this.storeView.revision !== this.nextRevision) {
-          const nextRev = this.nextRevision;
-          try {
-            const delta = await this.getRemoteChannelTopics(this.storeView.revision, null, this.storeView.marker);
-            for (const entity of delta.topics) {
-              const { id, revision, data } = entity;
-              if (data) {
-                const { detailRevision, topicDetail } = data;
-                if (!this.cacheView || this.cacheView.position > detail.created || (this.cacheView.position === detail.created && this.cacheView.topicId >= topicId)) {
-                  const entry = await this.getTopicEntry(id);
-                  if (detailRevision > entry.item.detail.revision) {
-                    const detail = topicDetail ? topicDetail : await getRemoteChannelTopicDetail(id);
-                    entry.item.detail = this.getTopicDetail(detail, detailRevision);
-                    entry.item.unsealedDetail = null;
-                    entry.item.position = detail.created;
-                    await this.unsealTopicDetail(entry.item);
-                    entry.topic = this.setTopic(id, entry.item);
-                    await this.setLocalChannelTopicDetail(id, detail, entry.item.unsealedDetail, detail.created);
-                  }
-                } else {
-                  const item = { detail, position: detail.created, unsealedDetail: null };
-                  await this.store.addLocalChannelTopic(id, item);
-                }
-              } else {
-                this.topicEntries.delete(id);
-                await this.store.removeLocalChannelTopic(id);
-              }
-            }
-            this.storeView = { revision: nextRev, marker: delta.marker };
-            await this.setChannelTopicRevision(this.storeView);
-
-            if (this.nextRevision === nextRev) {
-              this.nextRevision = null;
-            }
-            this.emitTopics();
-            this.log.info(`topic revision: ${nextRev}`);
-          } catch (err) {
-            this.log.warn(err);
-            await new Promise((r) => setTimeout(r, RETRY_POLL_MS));
-          }
-        }
-
-        if (this.storeView.revision === this.nextRevision) {
-          this.nextRevision = null;
-        }
 
         if (this.loadMore) {
           try {
@@ -191,6 +146,52 @@ export class FocusModule implements Focus {
             this.log.warn(err);
             await new Promise((r) => setTimeout(r, RETRY_POLL_MS));
           } 
+        }
+
+        if (this.nextRevision && this.storeView.revision !== this.nextRevision) {
+          const nextRev = this.nextRevision;
+          try {
+            const delta = await this.getRemoteChannelTopics(this.storeView.revision, null, this.storeView.marker);
+            for (const entity of delta.topics) {
+              const { id, revision, data } = entity;
+              if (data) {
+                const { detailRevision, topicDetail } = data;
+                if (!this.cacheView || this.cacheView.position > detail.created || (this.cacheView.position === detail.created && this.cacheView.topicId >= topicId)) {
+                  const entry = await this.getTopicEntry(id);
+                  if (detailRevision > entry.item.detail.revision) {
+                    const detail = topicDetail ? topicDetail : await getRemoteChannelTopicDetail(id);
+                    entry.item.detail = this.getTopicDetail(detail, detailRevision);
+                    entry.item.unsealedDetail = null;
+                    entry.item.position = detail.created;
+                    await this.unsealTopicDetail(entry.item);
+                    entry.topic = this.setTopic(id, entry.item);
+                    await this.setLocalChannelTopicDetail(id, detail, entry.item.unsealedDetail, detail.created);
+                  }
+                } else {
+                  const item = { detail, position: detail.created, unsealedDetail: null };
+                  await this.store.addLocalChannelTopic(id, item);
+                }
+              } else {
+                this.topicEntries.delete(id);
+                await this.store.removeLocalChannelTopic(id);
+              }
+            }
+            this.storeView = { revision: nextRev, marker: delta.marker };
+            await this.setChannelTopicRevision(this.storeView);
+
+            if (this.nextRevision === nextRev) {
+              this.nextRevision = null;
+            }
+            this.emitTopics();
+            this.log.info(`topic revision: ${nextRev}`);
+          } catch (err) {
+            this.log.warn(err);
+            await new Promise((r) => setTimeout(r, RETRY_POLL_MS));
+          }
+        }
+
+        if (this.storeView.revision === this.nextRevision) {
+          this.nextRevision = null;
         }
 
         if (this.unsealAll) {
@@ -252,12 +253,14 @@ export class FocusModule implements Focus {
     const topics = Array.from(this.topicEntries, ([topicId, entry]) => entry.topic);
     ev(topics);
   }
+
   public removeTopicListener(ev: (topics: Topic[]) => void) {
     this.emitter.off('topic', ev);
   }
 
   private emitTopics() {
     const topics = Array.from(this.topicEntries, ([topicId, entry]) => entry.topic);
+console.log("EMIT: ", topics);
     this.emitter.emit('topic', topics);
   }
 
@@ -340,13 +343,14 @@ export class FocusModule implements Focus {
     }
   }   
 
-  private async getTopicDetail(entity: TopicDetailEntity, revision: number) {
+  private getTopicDetail(entity: TopicDetailEntity, revision: number) {
     const { guid, dataType, data, created, updated, status, transform } = entity;
     return {
       revision,
       guid,
       sealed: false, //todo
       data: {}, //todo
+      dataType,
       assets: [], //todo
       created,
       updated,
