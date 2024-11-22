@@ -130,7 +130,7 @@ export class OfflineStore implements Store {
   }
 
   private async addValue(guid: string, table: string, fields: string[], value: (string | number | null)[]): Promise<void> {
-    return await this.sql.set(`INSERT INTO ${table}_${guid} (${fields.join(', ')}) VALUES (${fields.map((field) => '?').join(', ')})`, value);
+    return await this.sql.set(`INSERT OR REPLACE INTO ${table}_${guid} (${fields.join(', ')}) VALUES (${fields.map((field) => '?').join(', ')})`, value);
   }
 
   private async setValue(guid: string, table: string, idFields: string[], fields: string[], idValues: string[], values: (string | number | null)[]): Promise<void> {

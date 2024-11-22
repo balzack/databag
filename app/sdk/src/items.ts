@@ -155,11 +155,11 @@ export type TopicDetail = {
   sealed: boolean;
   dataType: string;
   data: any;
+  assets: AssetItem[];
   created: number;
   updated: number;
   status: string;
   transform: string;
-  assets: AssetItem[];
 };
 
 export type TopicItem = {
@@ -188,8 +188,8 @@ export const defaultTopicItem = {
     updated: 0,
     status: '',
     transform: '',
-    assets: [],
   },
   unsealedDetail: null,
+  assets: [],
   position: 0,
 };

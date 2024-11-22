@@ -83,15 +83,14 @@ export class FocusModule implements Focus {
 
     // load map of topics
     const topics = await this.getLocalChannelTopics(null);
-    topics.forEach(({ topicId, item }) => {
+    for (const entry of topics) {
+      const { topicId, item } = entry
       const topic = this.setTopic(topicId, item);
       this.topicEntries.set(topicId, { item, topic });
-
-      // identify cached windows
       if (!this.lastTopic || this.lastTopic.position > item.detail.created || (this.lastTopic.position === item.detail.created && this.lastTopic.topicId > topicId)) {
         this.lastTopic = {topicId, position: item.detail.created};
       }
-    });
+    }
     this.moreLocal = Boolean(this.lastTopic);
     this.loadMore = !this.moreLocal;
     this.emitTopics();
@@ -107,16 +106,36 @@ export class FocusModule implements Focus {
       this.syncing = true;
       const { guid, node, secure, token, channelTypes } = this;
       while ((this.loadMore || this.unsealAll || this.nextRevision) && !this.closing && this.connection) {
-        if (this.nextRevision && this.revision !== this.nextRevision) {
+        if (this.nextRevision && this.revision?.revision !== this.nextRevision) {
           const nextRev = this.nextRevision;
           try {
-    
-            // get delta
-  
-              // forEach
-                // get detail
-                // if in window getEntry
-                // if out update store
+            const delta = this.revision ? await this.getRemoteChannelTopics(this.revision.revision, null, this.revision.marker) : await this.getRemoteChannelTopics(null, null, null);
+            for (const entity of delta.topics) {
+              const { id, revision, data } = entity;
+              if (data) {
+                const { detailRevision, topicDetail } = data;
+                if (!this.lastTopic || this.lastTipic.position > detail.created || (this.lastTopic.position === detail.created && this.lastTopic.lastTopic.topicId >= topicId)) {
+                  const entry = this.getTopicEntry(id);
+                  if (detailRevision > entry.detail.revision) {
+                    const detail = topicDetail ? topicDetail : await getRemoteChannelTopicDetail(id);
+                    entry.item.detail = detail;
+                    entry.item.unsealedDetail = null;
+                    entry.item.position = detail.created;
+                    await this.unsealTopicDetail(entry.item);
+                    entry.topic = this.setTopic(id, entry.item);
+                    await this.store.setLocalChannelTopicDetail(id, detail, entry.item.unsealedDetail, detail.created);
+                  }
+                } else {
+                  const item = { detail, position: detail.created, unsealedDetail: null };
+                  await this.store.addLocalChannelTopic(id, item);
+                }
+              } else {
+                this.topicEntries.delete(id);
+                await this.store.removeLocalChannelTopic(id);
+              }
+            }
+            this.revision = this.revision ? { revision: nextRev, marker: this.revision.marker } : { revision: delta.revision, marker: delta.marker };
+            await this.store.setChannelTopicRevision(this.revision);
 
             this.revision = nextRev;
             if (this.nextRevision === nextRev) {
@@ -137,29 +156,51 @@ export class FocusModule implements Focus {
           try {
             if (this.moreLocal) {
               const topics = await this.getLocalChannelTopics(this.lastTopic);
-              topics.forEach(({ topicId, item }) => {
+              for (const entry of topics) {
+                const { topicId, item } = entry;
+                if (await this.unsealTopicDetail(item)) {
+                  await this.store.setLocalChannelTopicUnsealedDetail(topicId, item.unsealedDetail);
+                }
                 const topic = this.setTopic(topicId, item);
                 this.topicEntries.set(topicId, { item, topic });
-
-                // identify cached windows
                 if (!this.lastTopic || this.lastTopic.position > item.detail.created || (this.lastTopic.position === item.detail.created && this.lastTopic.topicId > topicId)) {
                   this.lastTopic = {topicId, position: item.detail.created};
                 }
-              });
+              }
               this.moreLocal = Boolean(topics.length);
+              if (topics.length > BATCH_SIZE / 2) {
+                this.loadMore = false;
+              }
             } else if (this.moreRemote) {
               const delta = this.revision ? await this.getRemoteChannelTopics(null, this.revision.marker, null) : await this.getRemoteChannelTopics(null, null, null);
-        console.log(delta);
               for (const entity of delta.topics) {
                 const { id, revision, data } = entity;
                 if (data) {
-                  const { topicDetail } = data;
-                  const detail = topicDetail ? topicDetail : await getRemoteChannelTopicDetail(id);
+                  const { detailRevision, topicDetail } = data;
+                  const entry = this.getTopicEntry(id);
+                  if (detailRevision > entry.detail.revision) {
+                    const detail = topicDetail ? topicDetail : await getRemoteChannelTopicDetail(id);
+                    entry.item.detail = detail;
+                    entry.item.unsealedDetail = null;
+                    entry.item.position = detail.created;
+                    await this.unsealTopicDetail(entry.item);
+                    entry.topic = this.setTopic(id, entry.item);
+                    await this.store.setLocalChannelTopicDetail(id, detail, entry.item.unsealedDetail, detail.created);
+                  }
                 } else {
-                  // remove topic
+                  log.error('ignoring unexpected delete entry on initial load');
                 }
+              }
+              if (delta.topics.length === 0) {
+                this.moreRemote = false;
+              }
+              this.revision = this.revision ? { revision: this.revision.revision, marker: delta.marker } : { revision: delta.revision, marker: delta.marker };
+              await this.store.setChannelTopicRevision(this.revision);
+              this.loadMore = false;
+            } else {
+              this.loadMore = false;
             }
-            this.loadMore = false;
+            this.emitTopics();
           } catch (err) {
             this.log.warn(err);
             await new Promise((r) => setTimeout(r, RETRY_POLL_MS));
@@ -167,8 +208,17 @@ export class FocusModule implements Focus {
         }
 
         if (this.unsealAll) {
-
-          // unseal stuff
+          for (const [topicId, entry] of this.topicEntries.entries()) {
+            try {
+              const { item } = entry;
+              if (await this.unsealTopicDetail(item)) {
+                await this.store.setLocalChannelTopicUnsealedDetail(guid, topicId, item.unsealedDetail);
+              }
+              entry.channel = this.setChannel(topicId, item);
+            } catch (err) {
+              this.log.warn(err);
+            }
+          }
 
           this.unsealAll = false;
           this.emitTopics();
@@ -202,7 +252,9 @@ export class FocusModule implements Focus {
   public async clearBlockTopic(topicId: string) {}
 
 
-
+  private async unsealTopicDetail(item: TopicItem): Promise<boolean> {
+    return false;
+  }
 
   public async viewMoreTopics() {
     this.loadMore = true;
@@ -273,25 +325,49 @@ export class FocusModule implements Focus {
     ev(status);
   }
 
+  private getTopicData(item: TopicItem): any {
+    // construct data protion from data
+    return {};
+  }
+
+  private getTopicAssets(item: TopicItem): AssetItem[] {
+    // construct asset portion from data
+    return [];
+  }
+
   private setTopic(topicId: string, item: TopicItem): Topic {
-    const topicData = item.sealed ? item.unsealedDetail : item.detail.data;
     return {
       topicId,
       guid: item.detail.guid,
       blocked: this.isTopicBlocked(topicId),
       sealed: item.detail.sealed,
       dataType: item.detail.dataType,
-      data: topicData,
+      data: this.getTopicData(item),
       created: item.detail.created,
       updated: item.detail.updated,
       status: item.detail.status,
       transform: item.detail.transform,
-      assets: item.detail.assets.map(asset => {
+      assets: this.getTopicAssets(item).map(asset => {
         const { assetId, type, encrypted, transform, extension } = asset;
         return { assetId, type, encrypted, transform, extension };
       }),
     }
   }   
+
+  private async getTopicDetail(entity: TopicDetailEntity, revision: number) {
+    const { guid, dataType, data, created, updated, status, transform } = entity;
+    return {
+      revision,
+      guid,
+      sealed: false, //todo
+      data: {}, //todo
+      assets: [], //todo
+      created,
+      updated,
+      status,
+      transform,
+    }
+  }
 
   private async getTopicEntry(topicId: string) {
     const { cardId, channelId, guid } = this;
@@ -303,11 +379,7 @@ export class FocusModule implements Focus {
     const topic = this.setTopic(topicId, item);
     const topicEntry = { item, topic };
     this.topicEntries.set(topicId, topicEntry);
-    try { 
-      await this.store.addChannelTopic(topicId, item);
-    } catch (err) {
-      log.error(err);
-    }
+    await this.store.addChannelTopic(topicId, item);
     return topicEntry;
   } 
 
@@ -339,7 +411,7 @@ export class FocusModule implements Focus {
     }
   }
 
-  private async addChannelTopic(topicId: string, item: TopicItem) {
+  private async addLocalChannelTopic(topicId: string, item: TopicItem) {
     const { guid, cardId, channelId } = this;
     if (cardId) {
       await this.store.addContactCardChannelTopic(guid, cardId, channelId, topicId, item);
@@ -348,12 +420,30 @@ export class FocusModule implements Focus {
     }
   }
   
-  private async removeChannelTopic(topicId: string) {
+  private async removeLocalChannelTopic(topicId: string) {
     const { guid, cardId, channelId } = this;
     if (cardId) {
       await this.store.removeContactCardChannelTopic(guid, cardId, channelId, topicId);
     } else {
       await this.store.removeContentChannelTopic(guid, channelId, topicId);
+    }
+  }
+
+  private async setLocalChannelTopicDetail(topicId: string, detail: TopicDetail, unsealedDetail: any, position: number) {
+    const { guid, cardId, channelId } = this;
+    if (cardId) {
+      await this.store.setContactCardChannelTopicDetail(guid, cardId, channelId, topicId, detail, unsealedDetail, position);
+    } else {
+      await this.store.setContentChannelTopicDetail(guid, channelId, topicId, unsealedDetail);
+    }
+  }
+
+  private async setLocalChannelTopicUnsealedDetail(topicId: string, unsealedDetail: any) {
+    const { guid, cardId, channelId } = this;
+    if (cardId) {
+      await this.store.setContactCardChannelTopicUnsealedDetail(guid, cardId, channelId, topicId, unsealedDetail);
+    } else {
+      await this.store.setContentChannelTopicDetail(guid, channelId, topicId, unsealedDetail);
     }
   }
 

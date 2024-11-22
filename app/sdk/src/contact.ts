@@ -1047,11 +1047,7 @@ export class ContactModule implements Contact {
     const card = this.setCard(cardId, item);
     const cardEntry = { item, card };
     this.cardEntries.set(cardId, cardEntry);
-    try {
-      await this.store.addContactCard(guid, cardId, item);
-    } catch (err) {
-      log.error(err);
-    }
+    await this.store.addContactCard(guid, cardId, item);
     return cardEntry;
   }
 
@@ -1075,11 +1071,7 @@ export class ContactModule implements Contact {
     const channel = this.setChannel(cardId, channelId, item);
     const channelEntry = { item, channel };
     channels.set(channelId, channelEntry);
-    try {
-      await this.store.addContactCardChannel(guid, cardId, channelId, item);
-    } catch (err) {
-      log.error(err);
-    }
+    await this.store.addContactCardChannel(guid, cardId, channelId, item);
     return channelEntry;
   }
 

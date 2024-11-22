@@ -500,11 +500,7 @@ export class StreamModule {
     const channel = this.setChannel(channelId, item);
     const channelEntry = { item, channel };
     this.channelEntries.set(channelId, channelEntry);
-    try {
-      await this.store.addContentChannel(guid, channelId, item);
-    } catch (err) {
-      log.error(err);
-    }
+    await this.store.addContentChannel(guid, channelId, item);
     return channelEntry;
   }
 
