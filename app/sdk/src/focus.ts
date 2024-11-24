@@ -215,8 +215,30 @@ export class FocusModule implements Focus {
     }
   }
 
-  public async addTopic(sealed: boolean, type: string, subject: (assetId: {assetId: string, transform: string}[]) => any, files: AssetSource[]) {
+  public async addTopic(sealed: boolean, type: string, subject: (asset: {assetId: string, context: any}[]) => any, files: AssetSource[], progress: (percent: nunber)=>boolean): Promise<string> {
     return '';
+
+    // if not assets
+      // subject callback
+      // format
+      // if sealed
+        // encrypt
+      // add confirmed topic
+
+    // else
+      // add unconfirmed topic
+      // for each asset
+        // if split
+          // for each block
+            // encrypt
+            // upload reporting progress
+        // else
+          // upload reporting progress
+      // subject callback
+      // format
+      // if sealed
+        // encrypt
+      // set subject and confirm
   }
 
   public async setTopicSubject(topicId: string, type: string, subject: (assets: {assetId: string, transform: string}[]) => any, files: AssetSource[]) {}

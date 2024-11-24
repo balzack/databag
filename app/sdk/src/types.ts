@@ -110,19 +110,28 @@ export type Tag = {
   sortOrder: number;
 };
 
+enum HostingMode {
+  Inline, // sealed or unsealed, include data in message body
+  Split, // sealed only, split file into blocks
+  Thumb, // unsealed only, server side generate thumbnail from source
+  Copy, // unsealed only, server side preserve data while stripping metadata
+  HighQuality, // unsealed only, server side transcode to high quality
+  MediumQuality, // unsealed only, server side transcode to medium quality
+  LowQuality, // unsealed only, server side transcode to low quality
+}
+
 export type AssetSource = {
-  type: string;
+  name: string;
+  mimeType: string;
   extension: string;
-  path: string;
-  transforms: string[],
+  hosting: {mode: HostingMode, context: any, data?: string, position?: number, size?: number}[],
 }
 
 export type Asset = {
   assetId: string;
-  type: string;
-  encrypted: boolean;
-  transform: string;
+  mimeType: string;
   extension: string;
+  hosting: HostingMode;
 };
 
 export type Group = {
