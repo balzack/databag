@@ -918,8 +918,8 @@ export class ContactModule implements Contact {
 
   private setChannel(cardId: string, channelId: string, item: ChannelItem): Channel {
     const { summary, detail } = item;
-    const channelData = detail.sealed ? item.unsealedDetail : detail.data;
-    const topicData = summary.sealed ? item.unsealedSummary : summary.data;
+    const channelData = detail.sealed ? item.unsealedDetail : detail.data || '{}';
+    const topicData = summary.sealed ? item.unsealedSummary : summary.data || '{}';
 
     return {
       channelId,
@@ -1075,15 +1075,17 @@ export class ContactModule implements Contact {
     return channelEntry;
   }
 
-
   private parse(data: string | null): any {
     if (data) {
       try {
+        if (data == null) {
+          return null;
+        }
         return JSON.parse(data);
       } catch (err) {
         this.log.error('invalid contact data');
       }
     }
-    return null;
+    return {};
   }
 }

@@ -93,12 +93,15 @@ export class StreamModule {
   private parse(data: string | null): any {
     if (data) {
       try {
+        if (data == null) {
+          return null;
+        }
         return JSON.parse(data);
       } catch (err) {
         this.log.warn('invalid channel data');
       }
     }
-    return null;
+    return {};
   }
 
   private async sync(): Promise<void> {
@@ -459,8 +462,8 @@ export class StreamModule {
 
   private setChannel(channelId: string, item: ChannelItem): Channel {
     const { summary, detail } = item;
-    const channelData = detail.sealed ? item.unsealedDetail : detail.data;
-    const topicData = summary.sealed ? item.unsealedSummary : summary.data;
+    const channelData = detail.sealed ? item.unsealedDetail : detail.data || '{}';
+    const topicData = summary.sealed ? item.unsealedSummary : summary.data || '{}';
 
     return {
       channelId,

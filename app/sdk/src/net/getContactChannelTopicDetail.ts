@@ -5,5 +5,10 @@ export async function getContactChannelTopicDetail(node: string, secure: boolean
   const endpoint = `http${secure ? 's' : ''}://${node}/content/channels/${channelId}/topics/${topicId}/detail?contact=${guidToken}`;
   const detail = await fetchWithTimeout(endpoint, { method: 'GET' });
   checkResponse(detail.status);
-  return await detail.json();
+  const topic = await detail.json();
+  if (!topic?.data?.topicDetail) {
+    throw new Error('missing topic detail');
+  } else {
+    return topic.data.topicDetail;
+  }
 }

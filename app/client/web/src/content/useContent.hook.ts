@@ -131,6 +131,7 @@ export function useContent() {
             return null
           }
         }
+        return ''
       }
 
       const hosted = cardId == null
