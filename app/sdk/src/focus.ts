@@ -513,7 +513,7 @@ export class FocusModule implements Focus {
     }
     const { node, secure, token } = this.connection
     if (cardId) {
-      return await getContactChannelTopicDetail(node, secure, token, cardId, channelId, topicId);
+      return await getContactChannelTopicDetail(node, secure, token, channelId, topicId);
     } else {
       return await getChannelTopicDetail(node, secure, token, channelId, topicId);
     }
@@ -526,7 +526,7 @@ export class FocusModule implements Focus {
     }
     const { node, secure, token } = this.connection;
     if (cardId) {
-      return await addContactChannelTopic(node, secure, token, cardId, channelId, dataType, data, confirm);
+      return await addContactChannelTopic(node, secure, token, channelId, dataType, data, confirm);
     } else {
       return await addChannelTopic(node, secure, token, channelId, dataType, data, confirm);
     }
