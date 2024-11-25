@@ -49,7 +49,14 @@ export function useConversation() {
       if (focus) {
         focus.viewMoreTopics();
       }
-    }
+    },
+    add: async () => {
+      const { focus } = app.state;
+      if (focus) {
+        const topicId = await focus.addTopic(false, 'superbasictopic', (assets: {assetId: string, context: any}[])=> ({ text: 'sdktext' }), []);
+        console.log("NEW TOPIC: ", topicId);
+      }
+    },
   }
 
   return { state, actions }

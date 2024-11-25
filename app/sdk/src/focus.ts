@@ -10,6 +10,10 @@ import { getChannelTopics } from './net/getChannelTopics';
 import { getChannelTopicDetail } from './net/getChannelTopicDetail';
 import { getContactChannelTopics } from './net/getContactChannelTopics'
 import { getContactChannelTopicDetail } from './net/getContactChannelTopicDetail';
+import { addChannelTopic } from './net/addChannelTopic';
+import { addContactChannelTopic } from './net/addContactChannelTopic';
+import { setChannelTopicSubject } from './net/setChannelTopicSubject';
+import { addContactChannelTopicSubject } from './net/setContactChannelTopicSubject';
 
 const BATCH_COUNT = 64;
 const MIN_LOAD_SIZE = 32;
@@ -215,8 +219,32 @@ export class FocusModule implements Focus {
     }
   }
 
-  public async addTopic(sealed: boolean, type: string, subject: (asset: {assetId: string, context: any}[]) => any, files: AssetSource[], progress: (percent: nunber)=>boolean): Promise<string> {
-    return '';
+  private uploadFile(path: string, transforms: string[], topicId: string, progress: (percent: number)=>boolean): Promise<{assetId: string, transform: string}[]> {
+    const { cardId, channelId, node, secure, token } = this;
+    const params = `${cardId ? 'contact' : 'agent'}=${token}&transforms=${encodeURIComponent(JSON.stringify(transforms))}`
+    const url = `http${secure ? 's' : ''}//${node}/content/channels/${channelId}/topics/${topicId}/assets?${params}`
+    const formData = new FormData();
+    formData.append('asset', {uri: path, name: 'asset', type: 'application/octent-stream'});
+
+    return new Promise(function (resolve, reject) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', url);
+      xhr.progress = progress;
+      xhr.onload = () => {
+        if (this.status >= 200 && this.status < 300) {
+          resolve(xhr.response)
+        } else {
+          reject(xhr.statusText)
+        }
+      };
+      xhr.onerror = () => {
+        reject(xhr.statusText)
+      };
+      xhr.send(formData);
+    });
+  }
+
+  public async addTopic(sealed: boolean, type: string, subject: (asset: {assetId: string, context: any}[]) => any, files: AssetSource[], progress: (percent: nunber)=>boolean | null): Promise<string> {
 
     // if not assets
       // subject callback
@@ -225,6 +253,15 @@ export class FocusModule implements Focus {
         // encrypt
       // add confirmed topic
 
+    if (files.length == 0) {
+      const data = subject([]);
+      if (sealed) {
+        // encrypt
+      }
+      return this.addRemoteChannelTopic(type, data, true);
+    }
+      
+    return '';
     // else
       // add unconfirmed topic
       // for each asset
@@ -335,6 +372,8 @@ export class FocusModule implements Focus {
   }
 
   private getTopicData(item: TopicItem): any {
+console.log("DETAIL???", item.detail);
+
     // construct data protion from data
     return {};
   }
@@ -369,9 +408,8 @@ export class FocusModule implements Focus {
       revision,
       guid,
       sealed: false, //todo
-      data: {}, //todo
+      data: data,
       dataType,
-      assets: [], //todo
       created,
       updated,
       status,
@@ -482,6 +520,19 @@ export class FocusModule implements Focus {
       return await getChannelTopicDetail(node, secure, token, channelId, topicId);
     }
   } 
+
+  private async addRemoteChannelTopic(dataType: string, data: any, confirm: boolean) {
+    const { cardId, channelId, connection } = this;
+    if (!connection) {
+      throw new Error('disconnected channel');
+    }
+    const { node, secure, token } = this.connection;
+    if (cardId) {
+      return await addContactChannelTopic(node, secure, token, cardId, channelId, dataType, data, confirm);
+    } else {
+      return await addChannelTopic(node, secure, token, channelId, dataType, data, confirm);
+    }
+  }
 
   private isTopicBlocked(topicId: string): boolean {
     const { cardId, channelId } = this;
