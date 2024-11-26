@@ -53,7 +53,8 @@ export function useConversation() {
     add: async (file: File) => {
       const { focus } = app.state;
       if (focus) {
-        const asset = { name: 'image', extension: file.name.split('.').pop(), mimeType: file.type, hosting: [{ mode: HostingMode.Thumb, context: 'thumb' }, { mode: HostingMode.Copy, context: 'image' }] };
+console.log("UPLOAD", file);
+        const asset = { source: file, name: 'image', extension: file.name.split('.').pop(), mimeType: file.type, hosting: [{ mode: HostingMode.Thumb, context: 'thumb' }, { mode: HostingMode.Copy, context: 'image' }] };
         const topicId = await focus.addTopic(false, 'superbasictopic', (assets: {assetId: string, context: any}[])=> ({ text: 'sdkasset' }), [asset]);
       }
     },

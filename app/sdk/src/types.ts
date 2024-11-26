@@ -124,6 +124,7 @@ export type AssetSource = {
   name: string;
   mimeType: string;
   extension: string;
+  source: any;
   hosting: {mode: HostingMode, context: any, data?: string, position?: number, size?: number}[],
 }
 
