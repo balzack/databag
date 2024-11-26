@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect, useRef } from 'react'
 import { AppContext } from '../context/AppContext'
 import { DisplayContext } from '../context/DisplayContext'
-import { Focus, Topic } from 'databag-client-sdk'
+import { Focus, Topic, AssetSource, HostingMode } from 'databag-client-sdk'
 import { ContextType } from '../context/ContextType'
 
 export function useConversation() {
@@ -50,11 +50,11 @@ export function useConversation() {
         focus.viewMoreTopics();
       }
     },
-    add: async () => {
+    add: async (file: File) => {
       const { focus } = app.state;
       if (focus) {
-        const topicId = await focus.addTopic(false, 'superbasictopic', (assets: {assetId: string, context: any}[])=> ({ text: 'sdktext' }), []);
-        console.log("NEW TOPIC: ", topicId);
+        const asset = { name: 'image', extension: file.name.split('.').pop(), mimeType: file.type, hosting: [{ mode: HostingMode.Thumb, context: 'thumb' }, { mode: HostingMode.Copy, context: 'image' }] };
+        const topicId = await focus.addTopic(false, 'superbasictopic', (assets: {assetId: string, context: any}[])=> ({ text: 'sdkasset' }), [asset]);
       }
     },
   }

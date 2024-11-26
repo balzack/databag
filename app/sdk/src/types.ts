@@ -110,7 +110,7 @@ export type Tag = {
   sortOrder: number;
 };
 
-enum HostingMode {
+export enum HostingMode {
   Inline, // sealed or unsealed, include data in message body
   Split, // sealed only, split file into blocks
   Thumb, // unsealed only, server side generate thumbnail from source

@@ -220,18 +220,24 @@ export class FocusModule implements Focus {
   }
 
   private uploadFile(path: string, transforms: string[], topicId: string, progress: (percent: number)=>boolean): Promise<{assetId: string, transform: string}[]> {
-    const { cardId, channelId, node, secure, token } = this;
+    const { cardId, channelId, connection } = this;
+    if (!connection) {
+      throw new Error('disconnected from channel');
+    }
+    const { node, secure, token } = this.connection;
     const params = `${cardId ? 'contact' : 'agent'}=${token}&transforms=${encodeURIComponent(JSON.stringify(transforms))}`
-    const url = `http${secure ? 's' : ''}//${node}/content/channels/${channelId}/topics/${topicId}/assets?${params}`
+    const url = `http${secure ? 's' : ''}://${node}/content/channels/${channelId}/topics/${topicId}/assets?${params}`
     const formData = new FormData();
     formData.append('asset', {uri: path, name: 'asset', type: 'application/octent-stream'});
 
+console.log("USING URL", url);
+
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', url);
+      xhr.open('POST', url, true);
       xhr.progress = progress;
       xhr.onload = () => {
-        if (this.status >= 200 && this.status < 300) {
+        if (xhr.status >= 200 && xhr.status < 300) {
           resolve(xhr.response)
         } else {
           reject(xhr.statusText)
@@ -244,7 +250,7 @@ export class FocusModule implements Focus {
     });
   }
 
-  public async addTopic(sealed: boolean, type: string, subject: (asset: {assetId: string, context: any}[]) => any, files: AssetSource[], progress: (percent: nunber)=>boolean | null): Promise<string> {
+  public async addTopic(sealed: boolean, type: string, subject: (asset: {assetId: string, context: any}[]) => any, files: AssetSource[], progress: (percent: nunber)=>boolean): Promise<string> {
 
     // if not assets
       // subject callback
@@ -258,10 +264,22 @@ export class FocusModule implements Focus {
       if (sealed) {
         // encrypt
       }
-      return this.addRemoteChannelTopic(type, data, true);
+      return await this.addRemoteChannelTopic(type, data, true);
+    } else {
+      console.log("UPLOAD?");
+      const topicId = await this.addRemoteChannelTopic(type, {}, false);
+
+console.log("TOPIC??", topicId)
+
+      for (const asset of files) {
+        const upload = await this.uploadFile(asset.source, ['ithumb;photo', 'ilg;photo'], topicId, (progress: number) => {
+          console.log("PROGRESS", progress);
+        });
+        console.log("UPLOADED: ", upload);
+      }
+      return await this.setRemoteChannelTopicSubject(topicId, type, { text: 'asseted' });
     }
-      
-    return '';
+   
     // else
       // add unconfirmed topic
       // for each asset
@@ -529,6 +547,19 @@ export class FocusModule implements Focus {
       return await addContactChannelTopic(node, secure, token, channelId, dataType, data, confirm);
     } else {
       return await addChannelTopic(node, secure, token, channelId, dataType, data, confirm);
+    }
+  }
+
+  private async setRemoteChannelTopicSubject(topicId: string, dataType: string, data: any) {
+    const { cardId, channelId, connection } = this;
+    if (!connection) {
+      throw new Error('disconnected from channel');
+    }
+    const { node, secure, token } = this.connection;
+    if (cardId) {
+      return await setContactChannelTopicSubject(node, secure, token, channelId, topicId, dataType, data);
+    } else {
+      return await setChannelTopicSubject(node, secure, token, channelId, topicId, dataType, data);
     }
   }
 
