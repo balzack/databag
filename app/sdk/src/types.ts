@@ -113,11 +113,7 @@ export type Tag = {
 export enum HostingMode {
   Inline, // sealed or unsealed, include data in message body
   Split, // sealed only, split file into blocks
-  Thumb, // unsealed only, server side generate thumbnail from source
-  Copy, // unsealed only, server side preserve data while stripping metadata
-  HighQuality, // unsealed only, server side transcode to high quality
-  MediumQuality, // unsealed only, server side transcode to medium quality
-  LowQuality, // unsealed only, server side transcode to low quality
+  Basic, // unsealed only, basic download
 }
 
 export type AssetSource = {

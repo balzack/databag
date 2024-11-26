@@ -1,7 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
 import type { Focus } from './api';
 import type { TopicItem} from './items';
-import type { Topic, Asset, AssetSource, Participant } from './types';
+import type { Topic, Asset, AssetSource, HostingMode, Participant } from './types';
 import type { Logging } from './logging';
 import { Store } from './store';
 import { Crypto } from './crypto';
@@ -58,10 +58,6 @@ export class FocusModule implements Focus {
 
     this.topicEntries = new Map<string, { item: TopicItem; topic: Topic }>();
     this.markers = new Set<string>();
-
-console.log("FOCUS:", cardId, channelId, connection);
-
-
     this.cacheView = null;
     this.storeView = { revision: null, marker: null };
     this.syncing = true;
@@ -222,6 +218,34 @@ console.log("FOCUS:", cardId, channelId, connection);
     }
   }
 
+  private uploadBlock(block: string, topicId: string, progress: (percent: number)=>boolean): Promise<string> {
+    const { cardId, channelId, connection } = this;
+    if (!connection) {
+      throw new Error('disconnected from channel');
+    }
+    const { node, secure, token } = this.connection;
+    const params = `${cardId ? 'contact' : 'agent'}=${token}`
+    const url = `http${secure ? 's' : ''}://${node}/content/channels/${channelId}/topics/${topicId}/blocks?${params}`
+
+    return new Promise(function (resolve, reject) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader('Content-Type', 'text/plain');
+      xhr.progress = progress;
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300 && xhr.response?.assetId) {
+          resolve(xhr.response.assetId)
+        } else {
+          reject(xhr.statusText)
+        }
+      };
+      xhr.onerror = () => {
+        reject(xhr.statusText)
+      };
+      xhr.send(block);
+    });
+  }
+
   private uploadFile(source: any, transforms: string[], topicId: string, progress: (percent: number)=>boolean): Promise<{assetId: string, transform: string}[]> {
     const { cardId, channelId, connection } = this;
     if (!connection) {
@@ -232,8 +256,6 @@ console.log("FOCUS:", cardId, channelId, connection);
     const url = `http${secure ? 's' : ''}://${node}/content/channels/${channelId}/topics/${topicId}/assets?${params}`
     const formData = new FormData();
     formData.append('asset', source);
-
-console.log("USING URL", url);
 
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
@@ -254,6 +276,12 @@ console.log("USING URL", url);
   }
 
   public async addTopic(sealed: boolean, type: string, subject: (asset: {assetId: string, context: any}[]) => any, files: AssetSource[], progress: (percent: nunber)=>boolean): Promise<string> {
+    // { assets, text, textColor, textSize }
+    // asset: { image: { thumb: string, full: string }}
+    // asset encrypted: { encrypted: { type: string, thumb: string, parts: { blockIv: string, partId: string } } }
+    // superbasictopic: '{"text":"??","textColor":"#7ed321","textSize":20}'
+    // superbasictopic w/asset: '{"assets":[{"image":{"thumb":"ce543a92-8fa0-461f-8e4f-084136ee3f9c","full":"739a73b0-2e7b-47f8-9062-b6ed04215fbc"}}],"text":"asdf"}'
+    // sealedtopic: '{"messageEncrypted":"rTx+oacmCEW0VlfsykZunrOY81Fuk1S4+IjIHOGnn242P1jXl8VLR8AHH2Yj6Pr540qcixy69mraVTzKD45p537zWxdglks3KrWmRlXjT9w=","messageIv":"7c8d6e453649c5bfea929d6c5e41d36d"}'
 
     // if not assets
       // subject callback
@@ -271,8 +299,6 @@ console.log("USING URL", url);
     } else {
       console.log("UPLOAD?");
       const topicId = await this.addRemoteChannelTopic(type, {}, false);
-
-console.log("TOPIC??", topicId)
 
       for (const asset of files) {
         const upload = await this.uploadFile(asset.source, ['ithumb;photo', 'ilg;photo'], topicId, (progress: number) => {
@@ -392,31 +418,95 @@ console.log("TOPIC??", topicId)
     ev(status);
   }
 
-  private getTopicData(item: TopicItem): any {
-    // construct data protion from data
-    return {};
-  }
+  private getTopicData(item: TopicItem): { data: any, assets: AssetItem[] } {
+    const topicDetail = item.sealed ? item.unsealedDetail : item.data;
+    if (topicDetail == null) {
+      return { data: null, assets: [] };
+    }
+    const { text, textColor, textSize, assets } = topicDetail;
+    let index: number = 0;
+    const assetItems = new Set<AssetItem>();
+    return { text, textColor, textSize, assets: !assets ? [] : assets.map(({ encrypted, image, audio, video, binary }) => {
+      if (encrypted) {
+        const { type, thumb, label, extension, parts } = encrypted;
+        if (thumb) {
+          const asset = {
+            assetIndex: index,
+            mimeType: 'image/png',
+            extension: 'png',
+            encrypted: false,
+            hosting: HostingMode.Inline,
+            assetData: thumb,
+          }
+          assetItems.add(asset);
+          index += 1;
+        }
+        const asset = {
+          assetIndex: index,
+          mimeType: type,
+          extension: extension,
+          encrypted: true,
+          hosting: HostingMode.Split,
+          assetParts: parts,
+        }
+        assetItems.add(asset);
+        index += 1;
 
-  private getTopicAssets(item: TopicItem): AssetItem[] {
-    // construct asset portion from data
-    return [];
+        if (thumb) {
+          return { type, thumb: index-2, data: index-1 }
+        } else {
+          return { type, data: index-1 }
+        }
+      } else {
+        const { thumb, label, full, lq, hd, extension, data } = binary || image || audio || video;
+        if (thumb) {
+          const asset = {
+            assetIndex: index,
+            mimeType: 'image/png',
+            extension: 'png',
+            encrypted: false,
+            hosting: HostingMode.Basic,
+            assetId: thumb,
+          }
+          assetItem.add(asset);
+          index += 1;
+        }
+        const asset = {
+          assetIndex: index,
+          mimeType: image ? 'image' : audio ? 'audio' : video ? 'video' : 'binary',
+          extension: extension,
+          encrypted: false,
+          hosting: HostingMode.Basic,
+          assetId: full || hd || lq,
+        }
+        assetItem.add(asset);
+        index += 1;
+
+        if (thumb) {
+          return { type: asset.mimeType, thumb: index-2, data: index-1 }
+        } else {
+          return { type, data: index-1 }
+        }
+      }
+    })};
   }
 
   private setTopic(topicId: string, item: TopicItem): Topic {
+    const { data, assets } = this.getTopicData(item);
     return {
       topicId,
+      data,
       guid: item.detail.guid,
       blocked: this.isTopicBlocked(topicId),
       sealed: item.detail.sealed,
       dataType: item.detail.dataType,
-      data: this.getTopicData(item),
       created: item.detail.created,
       updated: item.detail.updated,
       status: item.detail.status,
       transform: item.detail.transform,
-      assets: this.getTopicAssets(item).map(asset => {
-        const { assetId, type, encrypted, transform, extension } = asset;
-        return { assetId, type, encrypted, transform, extension };
+      assets: assets.map(asset => {
+        const { assetId, mimeType, hosting, extension } = asset;
+        return { assetId, mimeType, hosting, extension };
       }),
     }
   }   
@@ -426,7 +516,7 @@ console.log("TOPIC??", topicId)
     return {
       revision,
       guid,
-      sealed: false, //todo
+      sealed: dataType == 'sealedtopic',
       data: data,
       dataType,
       created,

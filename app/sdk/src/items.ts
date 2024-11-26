@@ -1,3 +1,5 @@
+import { HostingMode } from './types';
+
 export type CardDetail = {
   revision: number;
   status: string;
@@ -169,12 +171,14 @@ export type TopicItem = {
 };
 
 export type AssetItem = {
-  assetId: string;
-  type: string;
+  assetIndex: number;
+  mimeType: string;
   encrypted: boolean;
-  transform: string;
+  hosting: string;
   extension: string;
-  partIds: string[];
+  parts?: { blockId: string, blockIv: string }[];
+  assetId?: string;
+  assetData?: string;
 };
 
 export const defaultTopicItem = {
@@ -190,6 +194,5 @@ export const defaultTopicItem = {
     transform: '',
   },
   unsealedDetail: null,
-  assets: [],
   position: 0,
 };
