@@ -34,7 +34,8 @@ export class FocusModule implements Focus {
   private nextRevision: number;
   private cacheView: {revision: number | null, marker: number | null};
   private storeView: {topicId: string, position: number} | null;
-  private complete: boolean;
+  private localComplete: boolean;
+  private remoteComplete: boolean;
   private sealEnabled: boolean;
   private channelKey: string | null;
   private loadMore: boolean;
@@ -64,7 +65,8 @@ export class FocusModule implements Focus {
     this.closing = false;
     this.nextRevision = null;
     this.loadMore = false;
-    this.complete = false;
+    this.localComplete = false;
+    this.remoteComplete = false;
     this.init(revision);
   }
 
@@ -93,7 +95,7 @@ export class FocusModule implements Focus {
       while ((this.loadMore || this.unsealAll || this.nextRevision) && !this.closing && this.connection) {
         if (this.loadMore) {
           try {
-            if (this.cacheView) {
+            if (!this.localComplete) {
               const topics = await this.getLocalChannelTopics(this.cacheView);
               for (const entry of topics) {
                 const { topicId, item } = entry;
@@ -102,12 +104,12 @@ export class FocusModule implements Focus {
                 }
                 const topic = this.setTopic(topicId, item);
                 this.topicEntries.set(topicId, { item, topic });
-                if (this.cacheView.position > item.detail.created || (this.cacheView.position === item.detail.created && this.cacheView.topicId > topicId)) {
+                if (!this.cacheView || this.cacheView.position > item.detail.created || (this.cacheView.position === item.detail.created && this.cacheView.topicId > topicId)) {
                   this.cacheView = {topicId, position: item.detail.created};
                 }
               }
               if (topics.length == 0) {
-                this.cacheView = null;
+                this.localComplete = true;
               }
               if (topics.length > MIN_LOAD_SIZE) {
                 this.loadMore = false;
@@ -133,7 +135,7 @@ export class FocusModule implements Focus {
                 }
               }
               if (delta.topics.length === 0) {
-                this.completed = true;
+                this.remoteCompleted = true;
               }
               const rev = this.storeView.revision ? this.storeView.revision : delta.revision;
               const mark = delta.topics.length ? delta.marker : null;
@@ -345,6 +347,17 @@ export class FocusModule implements Focus {
 
 
   private async unsealTopicDetail(item: TopicItem): Promise<boolean> {
+    if (item.detail.sealed && !item.unsealedDetail && this.sealEnabled && this.channelKey && this.crypto) {
+      try {
+        const { messageEncrypted, messageIv } = item.detail.data;
+        const { data } = await this.crypto.aesDecrypt(messageEncrypted, messageIv, this.channelKey);
+        const { message } = JSON.parse(data);
+        item.unsealedDetail = message;
+        return true;
+      } catch (err) {
+        this.log.warn(err);
+      }
+    }
     return false;
   }
 
@@ -419,14 +432,15 @@ export class FocusModule implements Focus {
   }
 
   private getTopicData(item: TopicItem): { data: any, assets: AssetItem[] } {
-    const topicDetail = item.sealed ? item.unsealedDetail : item.data;
+    const topicDetail = item.detail.sealed ? item.unsealedDetail : item.detail.data;
+
     if (topicDetail == null) {
       return { data: null, assets: [] };
     }
     const { text, textColor, textSize, assets } = topicDetail;
     let index: number = 0;
     const assetItems = new Set<AssetItem>();
-    return { text, textColor, textSize, assets: !assets ? [] : assets.map(({ encrypted, image, audio, video, binary }) => {
+    return { data: { text, textColor, textSize }, assets: !assets ? [] : assets.map(({ encrypted, image, audio, video, binary }) => {
       if (encrypted) {
         const { type, thumb, label, extension, parts } = encrypted;
         if (thumb) {
@@ -517,7 +531,7 @@ export class FocusModule implements Focus {
       revision,
       guid,
       sealed: dataType == 'sealedtopic',
-      data: data,
+      data: this.parse(data),
       dataType,
       created,
       updated,
@@ -682,4 +696,17 @@ export class FocusModule implements Focus {
     await this.store.clearMarker(guid, value);
   }
 
+  private parse(data: string | null): any {
+    if (data) {
+      try {
+        if (data == null) {
+          return null;
+        }
+        return JSON.parse(data);
+      } catch (err) {
+        this.log.warn('invalid channel data');
+      }
+    }
+    return {};
+  }
 }
