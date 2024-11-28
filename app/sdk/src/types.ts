@@ -111,9 +111,9 @@ export type Tag = {
 };
 
 export enum HostingMode {
-  Inline, // sealed or unsealed, include data in message body
-  Split, // sealed only, split file into blocks
-  Basic, // unsealed only, basic download
+  Inline = 'inline', // sealed or unsealed, include data in message body
+  Split = 'split', // sealed only, split file into blocks
+  Basic = 'basic', // unsealed only, basic download
 }
 
 export type AssetSource = {
@@ -125,7 +125,7 @@ export type AssetSource = {
 }
 
 export type Asset = {
-  assetId: string;
+  assetIndex: string;
   mimeType: string;
   extension: string;
   hosting: HostingMode;

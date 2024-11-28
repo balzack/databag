@@ -1,10 +1,11 @@
 import { EventEmitter } from 'eventemitter3';
 import type { Focus } from './api';
 import type { TopicItem} from './items';
-import type { Topic, Asset, AssetSource, HostingMode, Participant } from './types';
+import type { Topic, Asset, AssetSource, Participant } from './types';
 import type { Logging } from './logging';
 import { Store } from './store';
 import { Crypto } from './crypto';
+import { HostingMode } from './types';
 import { defaultTopicItem } from './items';
 import { getChannelTopics } from './net/getChannelTopics';
 import { getChannelTopicDetail } from './net/getChannelTopicDetail';
@@ -299,7 +300,6 @@ export class FocusModule implements Focus {
       }
       return await this.addRemoteChannelTopic(type, data, true);
     } else {
-      console.log("UPLOAD?");
       const topicId = await this.addRemoteChannelTopic(type, {}, false);
 
       for (const asset of files) {
@@ -433,6 +433,7 @@ export class FocusModule implements Focus {
 
   private getTopicData(item: TopicItem): { data: any, assets: AssetItem[] } {
     const topicDetail = item.detail.sealed ? item.unsealedDetail : item.detail.data;
+    const { revision } = item.detail;
 
     if (topicDetail == null) {
       return { data: null, assets: [] };
@@ -440,69 +441,70 @@ export class FocusModule implements Focus {
     const { text, textColor, textSize, assets } = topicDetail;
     let index: number = 0;
     const assetItems = new Set<AssetItem>();
-    return { data: { text, textColor, textSize }, assets: !assets ? [] : assets.map(({ encrypted, image, audio, video, binary }) => {
+    const dataAssets = !assets ? [] : assets.map(({ encrypted, image, audio, video, binary }) => {
       if (encrypted) {
         const { type, thumb, label, extension, parts } = encrypted;
         if (thumb) {
           const asset = {
-            assetIndex: index,
+            assetId: `${revision}.${index}`,
             mimeType: 'image/png',
             extension: 'png',
             encrypted: false,
             hosting: HostingMode.Inline,
-            assetData: thumb,
+            inline: thumb,
           }
           assetItems.add(asset);
           index += 1;
         }
         const asset = {
-          assetIndex: index,
+          assetId: `${revision}.${index}`,
           mimeType: type,
           extension: extension,
           encrypted: true,
           hosting: HostingMode.Split,
-          assetParts: parts,
+          split: parts,
         }
         assetItems.add(asset);
         index += 1;
 
         if (thumb) {
-          return { type, thumb: index-2, data: index-1 }
+          return { type, thumb: `${revision}.${index-2}`, data: `${revision}.${index-1}` }
         } else {
-          return { type, data: index-1 }
+          return { type, data: `${revision}.${index-1}` }
         }
       } else {
         const { thumb, label, full, lq, hd, extension, data } = binary || image || audio || video;
         if (thumb) {
           const asset = {
-            assetIndex: index,
+            assetId: `${revision}.${index}`,
             mimeType: 'image/png',
             extension: 'png',
             encrypted: false,
             hosting: HostingMode.Basic,
-            assetId: thumb,
+            basic: thumb,
           }
-          assetItem.add(asset);
+          assetItems.add(asset);
           index += 1;
         }
         const asset = {
-          assetIndex: index,
+          assetId: `${revision}.${index}`,
           mimeType: image ? 'image' : audio ? 'audio' : video ? 'video' : 'binary',
           extension: extension,
           encrypted: false,
           hosting: HostingMode.Basic,
-          assetId: full || hd || lq,
+          basic: full || hd || lq,
         }
-        assetItem.add(asset);
+        assetItems.add(asset);
         index += 1;
 
         if (thumb) {
-          return { type: asset.mimeType, thumb: index-2, data: index-1 }
+          return { type: asset.mimeType, thumb: `${revision}.${index-2}`, data: `${revision}.${index-1}` }
         } else {
-          return { type, data: index-1 }
+          return { type, data: `${revision}.${index-1}` }
         }
       }
-    })};
+    })
+    return { data: { text, textColor, textSize, assets: dataAssets }, assets: Array.from(assetItems.values()) }; 
   }
 
   private setTopic(topicId: string, item: TopicItem): Topic {

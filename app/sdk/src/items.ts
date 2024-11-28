@@ -176,9 +176,9 @@ export type AssetItem = {
   encrypted: boolean;
   hosting: string;
   extension: string;
-  parts?: { blockId: string, blockIv: string }[];
-  assetId?: string;
-  assetData?: string;
+  split?: { blockId: string, blockIv: string }[];
+  basic?: string;
+  inline?: string;
 };
 
 export const defaultTopicItem = {
@@ -187,7 +187,7 @@ export const defaultTopicItem = {
     guid: '',
     sealed: false,
     dataType: '',
-    data: '',
+    data: null,
     created: 0,
     updated: 0,
     status: '',
