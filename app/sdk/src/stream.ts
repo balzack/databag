@@ -6,7 +6,7 @@ import type { ChannelItem } from './items';
 import type { Channel, Topic, Asset, Tag, Participant } from './types';
 import { Store } from './store';
 import { Crypto } from './crypto';
-import { Files } from './files';
+import { Media } from './media';
 import { addChannel } from './net/addChannel';
 import { removeChannel } from './net/removeChannel';
 import { getChannels } from './net/getChannels';
@@ -27,7 +27,7 @@ export class StreamModule {
   private log: Logging;
   private store: Store;
   private crypto: Crypto | null;
-  private files: Files | null;
+  private media: Media | null;
   private guid: string;
   private token: string;
   private node: string;
@@ -46,7 +46,7 @@ export class StreamModule {
   // view of channels
   private channelEntries: Map<string, { item: ChannelItem; channel: Channel }>;
 
-  constructor(log: Logging, store: Store, crypto: Crypto | null, files: Files | null, guid: string, token: string, node: string, secure: boolean, channelTypes: string[]) {
+  constructor(log: Logging, store: Store, crypto: Crypto | null, media: Media | null, guid: string, token: string, node: string, secure: boolean, channelTypes: string[]) {
     this.guid = guid;
     this.token = token;
     this.node = node;
@@ -54,7 +54,7 @@ export class StreamModule {
     this.log = log;
     this.store = store;
     this.crypto = crypto;
-    this.files = files;
+    this.media = media;
     this.focus = null;
     this.seal = null;
     this.unsealAll = false;
@@ -379,10 +379,10 @@ export class StreamModule {
       const channelKey = entry.item.channelKey;
       const sealEnabled = Boolean(this.seal);
       const revision = entry.item.summary.revision;
-      this.focus = new FocusModule(this.log, this.store, this.crypto, this.files, null, channelId, this.guid, { node, secure, token }, channelKey, sealEnabled, revision);
+      this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, null, channelId, this.guid, { node, secure, token }, channelKey, sealEnabled, revision);
     }
     else {
-      this.focus = new FocusModule(this.log, this.store, this.crypto, this.files, cardId, channelId, this.guid, null, null, false, 0);
+      this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, cardId, channelId, this.guid, null, null, false, 0);
     } 
 
     return this.focus;

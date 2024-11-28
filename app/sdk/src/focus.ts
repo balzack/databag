@@ -5,8 +5,7 @@ import type { Topic, Asset, AssetSource, Participant } from './types';
 import type { Logging } from './logging';
 import { Store } from './store';
 import { Crypto } from './crypto';
-import { Files } from './files';
-import { Files } from './files';
+import { Media } from './media';
 import { HostingMode } from './types';
 import { defaultTopicItem } from './items';
 import { getChannelTopics } from './net/getChannelTopics';
@@ -29,7 +28,7 @@ export class FocusModule implements Focus {
   private log: Logging;
   private emitter: EventEmitter;
   private crypto: Crypto | null;
-  private files: Files | null;
+  private media: Media | null;
   private store: Store;
   private guid: string;
   private connection: { node: string; secure: boolean; token: string } | null;
@@ -49,14 +48,14 @@ export class FocusModule implements Focus {
   // view of topics 
   private topicEntries: Map<string, { item: TopicItem; topic: Topic }>;
 
-  constructor(log: Logging, store: Store, crypto: Crypto | null, files: Files | null, cardId: string | null, channelId: string, guid: string, connection: { node: string; secure: boolean; token: string } | null, channelKey: string, sealEnabled: boolean, revision: number) {
+  constructor(log: Logging, store: Store, crypto: Crypto | null, media: Media | null, cardId: string | null, channelId: string, guid: string, connection: { node: string; secure: boolean; token: string } | null, channelKey: string, sealEnabled: boolean, revision: number) {
     this.cardId = cardId;
     this.channelId = channelId;
     this.log = log;
     this.emitter = new EventEmitter();
     this.store = store;
     this.crypto = crypto;
-    this.files = files;
+    this.media = media;
     this.guid = guid;
     this.connection = connection;
     this.channelKey = channelKey;
@@ -282,7 +281,7 @@ export class FocusModule implements Focus {
     });
   }
 
-  public async addTopic(sealed: boolean, type: string, subject: (asset: {assetId: string, context: any}[]) => any, assets: AssetSource[], progress: (percent: number)=>boolean): Promise<string> {
+  public async addTopic(sealed: boolean, type: string, subject: (asset: {assetId: string, context: any}[]) => any, files: AssetSource[], progress: (percent: number)=>boolean): Promise<string> {
     // { assets, text, textColor, textSize }
     // asset: { image: { thumb: string, full: string }}
     // asset encrypted: { encrypted: { type: string, thumb: string, parts: { blockIv: string, partId: string } } }

@@ -8,7 +8,7 @@ import type { ArticleDetail, ChannelSummary, ChannelDetail, CardProfile, CardDet
 import { defaultCardItem, defaultChannelItem } from './items';
 import { Store } from './store';
 import { Crypto } from './crypto';
-import { Files } from './files';
+import { Media } from './media';
 import { getCards } from './net/getCards';
 import { getCardProfile } from './net/getCardProfile';
 import { getCardDetail } from './net/getCardDetail';
@@ -52,7 +52,7 @@ export class ContactModule implements Contact {
   private focus: FocusModule | null;
 
   private crypto: Crypto | null;
-  private files: Files | null;
+  private media: Media | null;
   private store: Store;
   private revision: number;
   private nextRevision: number | null;
@@ -74,7 +74,7 @@ export class ContactModule implements Contact {
   // view of channels
   private channelEntries: Map<string, Map<string, { item: ChannelItem; channel: Channel }>>;
 
-  constructor(log: Logging, store: Store, crypto: Crypto | null, files: Files | null, guid: string, token: string, node: string, secure: boolean, articleTypes: string[], channelTypes: string[]) {
+  constructor(log: Logging, store: Store, crypto: Crypto | null, media: Media | null, guid: string, token: string, node: string, secure: boolean, articleTypes: string[], channelTypes: string[]) {
     this.guid = guid;
     this.token = token;
     this.node = node;
@@ -82,7 +82,7 @@ export class ContactModule implements Contact {
     this.log = log;
     this.store = store;
     this.crypto = crypto;
-    this.files = files;
+    this.media = media;
     this.emitter = new EventEmitter();
     this.articleTypes = articleTypes;
     this.channelTypes = channelTypes;
@@ -621,9 +621,9 @@ export class ContactModule implements Contact {
       const channelKey = channelEntry.item.channelKey;
       const sealEnabled = Boolean(this.seal);
       const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(node);
-      this.focus = new FocusModule(this.log, this.store, this.crypto, this.files, cardId, channelId, this.guid, { node, secure: !insecure, token: `${guid}.${token}` }, channelKey, sealEnabled, revision);
+      this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, cardId, channelId, this.guid, { node, secure: !insecure, token: `${guid}.${token}` }, channelKey, sealEnabled, revision);
     } else {
-      this.focus = new FocusModule(this.log, this.store, this.crypto, this.files, cardId, channelId, this.guid, null, null, false, 0);
+      this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, cardId, channelId, this.guid, null, null, false, 0);
     }
     return this.focus;
   }

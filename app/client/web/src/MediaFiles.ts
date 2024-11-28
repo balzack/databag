@@ -1,6 +1,6 @@
-import { Files } from 'databag-client-sdk'
+import { Media } from 'databag-client-sdk'
 
-export class MediaFiles implements Files {
+export class MediaFiles implements Media {
   public async read(source: any): Promise<{ size: number, getData: (position: number, length: number)=>Promise<string> }> {
     return { size: 0, getData: async (position: number, length: number)=>('') };
   }
