@@ -2,8 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { DatabagSDK, Session, Focus } from 'databag-client-sdk'
 import { SessionStore } from '../SessionStore'
 import { WebCrypto } from '../WebCrypto'
+import { MediaFiles } from '../MediaFiles'
 
-const databag = new DatabagSDK({ tagBatch: 32, topicBatch: 32, articleTypes: [], channelTypes: ['sealed', 'superbasic'] }, new WebCrypto())
+const databag = new DatabagSDK({ tagBatch: 32, topicBatch: 32, articleTypes: [], channelTypes: ['sealed', 'superbasic'] }, new WebCrypto(), new MediaFiles())
 
 export function useAppContext() {
   const sdk = useRef(databag)

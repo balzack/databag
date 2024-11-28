@@ -128,7 +128,7 @@ export type AssetSource = {
   mimeType: string;
   extension: string;
   source: any;
-  transform: {type: TransformType, context: any, position?: number, thumb?: ()=>Promise<string>}[],
+  transforms: {type: TransformType, context: any, position?: number, thumb?: ()=>Promise<string>}[],
 }
 
 export type Asset = {

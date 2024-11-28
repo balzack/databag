@@ -18,11 +18,13 @@ import { Call } from './types';
 import { Store } from './store';
 import type { Logging } from './logging';
 import type { Crypto } from './crypto';
+import type { Files } from './files';
 
 export class SessionModule implements Session {
   private emitter: EventEmitter;
   private store: Store;
   private crypto: Crypto | null;
+  private files: Files | null;
   private log: Logging;
   private guid: string;
   private token: string;
@@ -42,11 +44,12 @@ export class SessionModule implements Session {
   private channelTypes: string[];
   private articleTypes: string[];
 
-  constructor(store: Store, crypto: Crypto | null, log: Logging, guid: string, token: string, node: string, secure: boolean, loginTimestamp: number, articleTypes: string[], channelTypes: string[]) {
+  constructor(store: Store, crypto: Crypto | null, log: Logging, files: Files | null, guid: string, token: string, node: string, secure: boolean, loginTimestamp: number, articleTypes: string[], channelTypes: string[]) {
     log.info('new databag session');
 
     this.store = store;
     this.crypto = crypto;
+    this.files = files;
     this.log = log;
     this.guid = guid;
     this.token = token;
@@ -60,10 +63,10 @@ export class SessionModule implements Session {
 
     this.identity = new IdentityModule(log, this.store, guid, token, node, secure);
     this.settings = new SettingsModule(log, this.store, this.crypto, guid, token, node, secure);
-    this.contact = new ContactModule(log, this.store, this.crypto, guid, token, node, secure, articleTypes, channelTypes);
+    this.contact = new ContactModule(log, this.store, this.crypto, this.files, guid, token, node, secure, articleTypes, channelTypes);
     this.alias = new AliasModule(log, this.settings, this.store, guid, token, node, secure);
     this.attribute = new AttributeModule(log, this.settings, this.store, guid, token, node, secure);
-    this.stream = new StreamModule(log, this.store, this.crypto, guid, token, node, secure, channelTypes);
+    this.stream = new StreamModule(log, this.store, this.crypto, this.files, guid, token, node, secure, channelTypes);
     this.content = new ContentModule(log, this.crypto, this.contact, this.stream);
     this.ring = new RingModule(log);
     this.connection = new Connection(log, token, node, secure);

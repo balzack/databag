@@ -171,11 +171,11 @@ export type TopicItem = {
 };
 
 export type AssetItem = {
-  assetIndex: number;
+  assetId: string;
   mimeType: string;
-  encrypted: boolean;
-  hosting: string;
   extension: string;
+  encrypted: boolean;
+  hosting: HostingMode;
   split?: { blockId: string, blockIv: string }[];
   basic?: string;
   inline?: string;

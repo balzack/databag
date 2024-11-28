@@ -5,6 +5,8 @@ import type { Topic, Asset, AssetSource, Participant } from './types';
 import type { Logging } from './logging';
 import { Store } from './store';
 import { Crypto } from './crypto';
+import { Files } from './files';
+import { Files } from './files';
 import { HostingMode } from './types';
 import { defaultTopicItem } from './items';
 import { getChannelTopics } from './net/getChannelTopics';
@@ -27,6 +29,7 @@ export class FocusModule implements Focus {
   private log: Logging;
   private emitter: EventEmitter;
   private crypto: Crypto | null;
+  private files: Files | null;
   private store: Store;
   private guid: string;
   private connection: { node: string; secure: boolean; token: string } | null;
@@ -46,13 +49,14 @@ export class FocusModule implements Focus {
   // view of topics 
   private topicEntries: Map<string, { item: TopicItem; topic: Topic }>;
 
-  constructor(log: Logging, store: Store, crypto: Crypto | null, cardId: string | null, channelId: string, guid: string, connection: { node: string; secure: boolean; token: string } | null, channelKey: string, sealEnabled: boolean, revision: number) {
+  constructor(log: Logging, store: Store, crypto: Crypto | null, files: Files | null, cardId: string | null, channelId: string, guid: string, connection: { node: string; secure: boolean; token: string } | null, channelKey: string, sealEnabled: boolean, revision: number) {
     this.cardId = cardId;
     this.channelId = channelId;
     this.log = log;
     this.emitter = new EventEmitter();
     this.store = store;
     this.crypto = crypto;
+    this.files = files;
     this.guid = guid;
     this.connection = connection;
     this.channelKey = channelKey;
@@ -293,6 +297,8 @@ export class FocusModule implements Focus {
         // encrypt
       // add confirmed topic
 
+
+
     if (files.length == 0) {
       if (sealed) {
         const decrypted = subject([]);
@@ -311,6 +317,34 @@ export class FocusModule implements Focus {
       }
     } else {
       const topicId = await this.addRemoteChannelTopic(type, {}, false);
+      if (sealed) {
+        const { sealEnabled, channelKey, crypto } = this;
+        if (!sealEnabled || !channelKey || !crypto) {
+          throw new Error('encryption not set');
+        }
+        const assetContext = [] as { assetId: string, context: string }[];
+        const assetItems = [] as AssetItem[];
+        for (const asset of assets) {
+          for (const transform of asset.transforms) {
+            if (transform.type === TransformType.Thumb && transform.thumb) {
+              const assetItem = {
+                assetId: `${assetList.size}`,
+                mimeType: 'image',
+                encrytped: true,
+                hosting: HostingMode.inline,
+                inline: await transform.thumb(),
+              }
+              const { assetId, context } = assetItem;
+              assetContext.push({ assetId, context });
+              assetItems.push(assetItem);
+            } else if (transform.type === TransformType.Copy) {
+            } else {
+              throw new Error('transform not supported')
+            }
+          }
+        }
+      } else {
+      }
 
       for (const asset of files) {
         const upload = await this.uploadFile(asset.source, ['ithumb;photo', 'ilg;photo'], topicId, (progress: number) => {
