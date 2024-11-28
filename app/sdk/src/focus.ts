@@ -278,7 +278,7 @@ export class FocusModule implements Focus {
     });
   }
 
-  public async addTopic(sealed: boolean, type: string, subject: (asset: {assetId: string, context: any}[]) => any, files: AssetSource[], progress: (percent: nunber)=>boolean): Promise<string> {
+  public async addTopic(sealed: boolean, type: string, subject: (asset: {assetId: string, context: any}[]) => any, assets: AssetSource[], progress: (percent: number)=>boolean): Promise<string> {
     // { assets, text, textColor, textSize }
     // asset: { image: { thumb: string, full: string }}
     // asset encrypted: { encrypted: { type: string, thumb: string, parts: { blockIv: string, partId: string } } }
@@ -294,11 +294,21 @@ export class FocusModule implements Focus {
       // add confirmed topic
 
     if (files.length == 0) {
-      const data = subject([]);
       if (sealed) {
-        // encrypt
+        const decrypted = subject([]);
+        const decryptedString = JSON.stringify(decrypted);
+        const { sealEnabled, channelKey, crypto } = this;
+        const { ivHex } = await crypto.aesIv();
+        if (!sealEnabled || !channelKey || !crypto) {
+          throw new Error('encryption not set');
+        }
+        const { encryptedDataB64 } = await crypto.aesEncrypt(decryptedString, ivHex, channelKey);
+        const data = { messageEncrypted: encryptedDataB64, messageIv: ivHex };
+        return await this.addRemoteChannelTopic(type, data, true);
+      } else {
+        const data = subject([]);
+        return await this.addRemoteChannelTopic(type, data, true);
       }
-      return await this.addRemoteChannelTopic(type, data, true);
     } else {
       const topicId = await this.addRemoteChannelTopic(type, {}, false);
 
@@ -327,7 +337,7 @@ export class FocusModule implements Focus {
       // set subject and confirm
   }
 
-  public async setTopicSubject(topicId: string, type: string, subject: (assets: {assetId: string, transform: string}[]) => any, files: AssetSource[]) {}
+  public async setTopicSubject(topicId: string, type: string, subject: (asset: {assetId: string, context: any}[]) => any, assets: AssetSource[], progress: (percent: number)=>boolean) { }
 
   public async removeTopic(topicId: string) {}
 

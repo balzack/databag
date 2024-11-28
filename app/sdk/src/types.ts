@@ -111,9 +111,16 @@ export type Tag = {
 };
 
 export enum HostingMode {
-  Inline = 'inline', // sealed or unsealed, include data in message body
+  Inline = 'inlien', // sealed or unsealed 
   Split = 'split', // sealed only, split file into blocks
   Basic = 'basic', // unsealed only, basic download
+}
+
+export enum TransformType {
+  Copy = 'copy', // server hosts copy of asset
+  Thumb = 'thumb', // extract thumb
+  HighQuality = 'high', // transcode at high quality
+  LowQuality = 'low', // transcode to low quality
 }
 
 export type AssetSource = {
@@ -121,7 +128,7 @@ export type AssetSource = {
   mimeType: string;
   extension: string;
   source: any;
-  hosting: {mode: HostingMode, context: any, data?: string, position?: number, size?: number}[],
+  transform: {type: TransformType, context: any, position?: number, thumb?: ()=>Promise<string>}[],
 }
 
 export type Asset = {
