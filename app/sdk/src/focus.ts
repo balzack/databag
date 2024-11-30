@@ -21,6 +21,7 @@ const BATCH_COUNT = 64;
 const MIN_LOAD_SIZE = 32;
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
+const ENCRYPT_BLOCK_SIZE = 1048576;
 
 export class FocusModule implements Focus {
   private cardId: string | null;
@@ -252,14 +253,14 @@ export class FocusModule implements Focus {
     });
   }
 
-  private uploadFile(source: any, transforms: string[], topicId: string, progress: (percent: number)=>boolean): Promise<{assetId: string, transform: string}[]> {
+  private mirrorFile(source: any, topicId: string, progress: (percent: number)=>boolean): Promise<string> {
     const { cardId, channelId, connection } = this;
     if (!connection) {
       throw new Error('disconnected from channel');
     }
     const { node, secure, token } = this.connection;
-    const params = `${cardId ? 'contact' : 'agent'}=${token}&transforms=${encodeURIComponent(JSON.stringify(transforms))}`
-    const url = `http${secure ? 's' : ''}://${node}/content/channels/${channelId}/topics/${topicId}/assets?${params}`
+    const params = `${cardId ? 'contact' : 'agent'}=${token}&body=multipart`
+    const url = `http${secure ? 's' : ''}://${node}/content/channels/${channelId}/topics/${topicId}/blocks?${params}`
     const formData = new FormData();
     formData.append('asset', source);
 
@@ -281,96 +282,204 @@ export class FocusModule implements Focus {
     });
   }
 
-  public async addTopic(sealed: boolean, type: string, subject: (asset: {assetId: string, context: any}[]) => any, files: AssetSource[], progress: (percent: number)=>boolean): Promise<string> {
-    // { assets, text, textColor, textSize }
-    // asset: { image: { thumb: string, full: string }}
-    // asset encrypted: { encrypted: { type: string, thumb: string, parts: { blockIv: string, partId: string } } }
-    // superbasictopic: '{"text":"??","textColor":"#7ed321","textSize":20}'
-    // superbasictopic w/asset: '{"assets":[{"image":{"thumb":"ce543a92-8fa0-461f-8e4f-084136ee3f9c","full":"739a73b0-2e7b-47f8-9062-b6ed04215fbc"}}],"text":"asdf"}'
-    // sealedtopic: '{"messageEncrypted":"rTx+oacmCEW0VlfsykZunrOY81Fuk1S4+IjIHOGnn242P1jXl8VLR8AHH2Yj6Pr540qcixy69mraVTzKD45p537zWxdglks3KrWmRlXjT9w=","messageIv":"7c8d6e453649c5bfea929d6c5e41d36d"}'
+  private transformFile(source: any, transforms: string[], topicId: string, progress: (percent: number)=>boolean): Promise<{assetId: string, transform: string}[]> {
+    const { cardId, channelId, connection } = this;
+    if (!connection) {
+      throw new Error('disconnected from channel');
+    }
+    const { node, secure, token } = this.connection;
+    const params = `${cardId ? 'contact' : 'agent'}=${token}&transforms=${encodeURIComponent(JSON.stringify(transforms))}`
+    const url = `http${secure ? 's' : ''}://${node}/content/channels/${channelId}/topics/${topicId}/assets?${params}`
+    const formData = new FormData();
+    formData.append('asset', source);
 
-    // if not assets
-      // subject callback
-      // format
-      // if sealed
-        // encrypt
-      // add confirmed topic
+    return new Promise(function (resolve, reject) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+      xhr.progress = progress;
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(xhr.response)
+        } else {
+          reject(xhr.statusText)
+        }
+      };
+      xhr.onerror = () => {
+        reject(xhr.statusText)
+      };
+      xhr.send(formData);
+    });
+  }
 
+  public async addTopic(sealed: boolean, type: string, subject: any, files: AssetSource[], progress: (percent: number)=>boolean): Promise<string> {
 
+    const { sealEnabled, channelKey, crypto } = this;
+    if (sealed && (!sealEnabled || !channelKey || !crypto)) {
+      throw new Error('encryption not set');
+    }
 
     if (files.length == 0) {
       if (sealed) {
-        const decrypted = subject([]);
-        const decryptedString = JSON.stringify(decrypted);
-        const { sealEnabled, channelKey, crypto } = this;
+        const subjectString = JSON.stringify(subject);
         const { ivHex } = await crypto.aesIv();
-        if (!sealEnabled || !channelKey || !crypto) {
-          throw new Error('encryption not set');
-        }
         const { encryptedDataB64 } = await crypto.aesEncrypt(decryptedString, ivHex, channelKey);
         const data = { messageEncrypted: encryptedDataB64, messageIv: ivHex };
         return await this.addRemoteChannelTopic(type, data, true);
       } else {
-        const data = subject([]);
-        return await this.addRemoteChannelTopic(type, data, true);
+        return await this.addRemoteChannelTopic(type, subject, true);
       }
     } else {
       const topicId = await this.addRemoteChannelTopic(type, {}, false);
+      const appAsset = new Map<string, number>();
       if (sealed) {
-        const { sealEnabled, channelKey, crypto } = this;
-        if (!sealEnabled || !channelKey || !crypto) {
-          throw new Error('encryption not set');
-        }
-        const assetContext = [] as { assetId: string, context: string }[];
         const assetItems = [] as AssetItem[];
         for (const asset of assets) {
           for (const transform of asset.transforms) {
             if (transform.type === TransformType.Thumb && transform.thumb) {
               const assetItem = {
-                assetId: `${assetList.size}`,
-                mimeType: 'image',
+                assetId: `${assetItems.size}`,
                 encrytped: true,
-                hosting: HostingMode.inline,
+                hosting: HostingMode.Inline,
                 inline: await transform.thumb(),
               }
-              const { assetId, context } = assetItem;
-              assetContext.push({ assetId, context });
+              appAsset.set(transform.appId, assetItems.size);
               assetItems.push(assetItem);
             } else if (transform.type === TransformType.Copy) {
+              const media = await this.file.read(asset.soure);
+              const split = [] as { blockId: string, blockIv: string }[];
+              for (let i = 0; media.size < i * ENCRYPT_BLOCK_SIZE; i++) {
+                const length = media.size - (i * ENCRYPT_BLOCK_SIZE) > ENCRYPT_BLOCK_SIZE ? ENCRYPT_BLOCK_SIZE : media.size - (i * ENCRYPT_BLOCK_SIZE);
+                const base64Data = await media.getData(i * ENCRYPT_BLOCK_SIZE, length);
+                const { ivHex } = await crypto.aesIv();
+                const { encryptedDataB64 } = await crypto.aesEncrypt(base64Data, ivHex, channelKey);
+                const blockId = await uploadBlock(encryptedDataB64, topicId, (percent: number) => { console.log(`percent: ${percent}`) });
+                split.push({ blockId, blockIv: ivHex });
+              }
+              const assetItem = {
+                assetId: `${assetItems.size}`,
+                encrypted: true,
+                hosting: HostingMode.Split,
+                split,
+              }
+              appAsset.set(transform.appId, assetItems.size);
+              assetItems.push(assetItem);
             } else {
               throw new Error('transform not supported')
             }
           }
         }
       } else {
+        const assetItems = [] as AssetItem[];
+        for (const asset of assets) {
+          const transforms = [];
+          const transformMap = new Map<string, string>();
+          for (let transform of asset.transforms) {
+            if (transform.type === TransformType.Thumb && asset.mimeType === 'image') {
+              transforms.push('ithumb;photo');
+              transformMap('ithumb;photo', transfrom.appId);
+            } else if (transform.type === TransformType.Copy && asset.mimeType === 'image') {
+              transforms.push('icopy;photo');
+              transformMap('icopy;photo', transform.appId);
+            } else if (transform.type === TransformType.Thumb && asset.mimeType === 'video') {
+              transforms.push('vthumb;video');
+              transformMap('vthumb;video', transform.appId);
+            } else if (transform.type === TransformType.Copy && asset.mimeType === 'video') {
+              transforms.push('vcopy;video');
+              transformMap('vcopy;video', transform.appId);
+            } else if (transform.type === TransformType.LowQuality && asset.mimeType === 'video') {
+              transforms.push('vlq;video');
+              transformMap('vlq;video', transform.appId);
+            } else if (transform.type === TransformType.Copy && asset.mimeType === 'audio') {
+              transforms.push('acopy;audio');
+              transformMap('acopy;audio', transform.appId);
+            } else if (transform.type === TransformType.Copy && asset.mimeType === 'binary') {
+              const assetId = await this.mirrorFile(asset.source, topicId, (percent: number)=>{console.log(`progress: ${percent}`)});
+              const assetItem = {
+                assetId: `${assetItems.size}`,
+                encrytped: false,
+                hosting: HostingMode.Basic,
+                basic: assetId,
+              }
+              appAsset.set(transform.appId, assetitems.size);
+              assetItems.push(assetItem);
+            } else {
+              throw new Error('transform not supported');
+            }
+          }
+          if (transforms.length > 0) {
+            const transformAssets = await this.transformFile(asset.source, topicId, transforms, (percent: number)=>{console.log(`progress: ${percent}`)});
+            for (transformAsset of transformAssets) {
+              const assetItem = {
+                assetId: `${assetItem.size}`,
+                encrypted: false,
+                hosting: HostingMode.Basic,
+                basic: transformAsset.assetId,
+              }
+              const appId = transformMap.get(transformAsset.transform)
+              appAsset.set(appId, assetItems.size);
+              assetItems.push(assetItem);
+            }
+          }
+        }
+      }
+      const { text, textColor, textSize, assets } = subject;
+
+      const getAsset = (appId: string) => {
+        if (!appAsset.has(appId)) {
+          throw new Error('invalid id in subject');
+        }
+        const index = appAsset.get(appId);
+        const item = assetItems[index];
+        if (item.hosting === HostingMode.Inline) {
+          return item.inline;
+        }
+        if (item.hosting === HostingMode.Split) {
+          return item.split;
+        }
+        if (item.hosting === HostingMode.Basic) {
+          return item.basic;
+        }
       }
 
-      for (const asset of files) {
-        const upload = await this.uploadFile(asset.source, ['ithumb;photo', 'ilg;photo'], topicId, (progress: number) => {
-          console.log("PROGRESS", progress);
-        });
-        console.log("UPLOADED: ", upload);
+      const mapped = assets.map(asset => {
+        if (asset.image) {
+          const { thumb, full } = asset.image;
+          return { image: { thumb: getAsset(thumb), full: getAsset(full) } };
+        }
+        if (asset.video) {
+          const { thumb, lq, hd } = asset.video;
+          return { video: { thumb: getAsset(thumb), lq: getAsset(lq), hd: getAsset(hd) } };
+        }
+        if (asset.audio) {
+          const { label, fulle } = asset.audio;
+          return { audio: { label, full: getAsset(full) } };
+        }
+        if (asset.binary) {
+          const { label, extension, data } = asset.binary;
+          return { binary: { label, extension, data: getAsset(data) } };
+        }
+        if (asset.encrypted) {
+          const { type, thumb, parts } = asset.encrypted;
+          return { encrypted: { type, thumb: getAsset(thumb), parts: getAsset(parts) } };
+        }
+      });
+
+      const updated = { text, textColor, textSize, assets: mapped };
+
+      if (sealed) {
+        const subjectString = JSON.stringify(updated);
+        const { ivHex } = await crypto.aesIv();
+        const { encryptedDataB64 } = await crypto.aesEncrypt(decryptedString, ivHex, channelKey);
+        const data = { messageEncrypted: encryptedDataB64, messageIv: ivHex };
+        return await this.setRemoteChannelTopicSubject(topicId, type, data);
+      } else {
+        return await this.setRemoteChannelTopicSubject(topicId, type, updated);
       }
-      return await this.setRemoteChannelTopicSubject(topicId, type, { text: 'asseted' });
     }
-   
-    // else
-      // add unconfirmed topic
-      // for each asset
-        // if split
-          // for each block
-            // encrypt
-            // upload reporting progress
-        // else
-          // upload reporting progress
-      // subject callback
-      // format
-      // if sealed
-        // encrypt
-      // set subject and confirm
   }
 
-  public async setTopicSubject(topicId: string, type: string, subject: (asset: {assetId: string, context: any}[]) => any, assets: AssetSource[], progress: (percent: number)=>boolean) { }
+  public async setTopicSubject(topicId: string, type: string, subject: any, assets: AssetSource[], progress: (percent: number)=>boolean) { }
 
   public async removeTopic(topicId: string) {}
 

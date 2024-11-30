@@ -125,10 +125,10 @@ export enum TransformType {
 
 export type AssetSource = {
   name: string;
-  mimeType: string;
+  type: string;
   extension: string;
   source: any;
-  transforms: {type: TransformType, context: any, position?: number, thumb?: ()=>Promise<string>}[],
+  transforms: {type: TransformType, appId: string, position?: number, thumb?: ()=>Promise<string>}[],
 }
 
 export type Asset = {
