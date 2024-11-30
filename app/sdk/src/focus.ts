@@ -312,7 +312,7 @@ export class FocusModule implements Focus {
     });
   }
 
-  public async addTopic(sealed: boolean, type: string, subject: any, files: AssetSource[], progress: (percent: number)=>boolean): Promise<string> {
+  public async addTopic(sealed: boolean, type: string, subject: (assets: {assetId: string, appId: string}[])=>any, files: AssetSource[], progress: (percent: number)=>boolean): Promise<string> {
 
     const { sealEnabled, channelKey, crypto } = this;
     if (sealed && (!sealEnabled || !channelKey || !crypto)) {
@@ -320,18 +320,19 @@ export class FocusModule implements Focus {
     }
 
     if (files.length == 0) {
+      const data = subject([]);
       if (sealed) {
-        const subjectString = JSON.stringify(subject);
+        const subjectString = JSON.stringify(data);
         const { ivHex } = await crypto.aesIv();
         const { encryptedDataB64 } = await crypto.aesEncrypt(decryptedString, ivHex, channelKey);
-        const data = { messageEncrypted: encryptedDataB64, messageIv: ivHex };
-        return await this.addRemoteChannelTopic(type, data, true);
+        const dataEncrypted = { messageEncrypted: encryptedDataB64, messageIv: ivHex };
+        return await this.addRemoteChannelTopic(type, dataEncrypted, true);
       } else {
-        return await this.addRemoteChannelTopic(type, subject, true);
+        return await this.addRemoteChannelTopic(type, data, true);
       }
     } else {
       const topicId = await this.addRemoteChannelTopic(type, {}, false);
-      const appAsset = new Map<string, number>();
+      const appAsset = [] as {assetId: string, appId: string}[];
       if (sealed) {
         const assetItems = [] as AssetItem[];
         for (const asset of assets) {
@@ -343,7 +344,7 @@ export class FocusModule implements Focus {
                 hosting: HostingMode.Inline,
                 inline: await transform.thumb(),
               }
-              appAsset.set(transform.appId, assetItems.size);
+              appAsset.push({appId: transform.appId, assetId: assetItem.assetId});
               assetItems.push(assetItem);
             } else if (transform.type === TransformType.Copy) {
               const media = await this.file.read(asset.soure);
@@ -362,7 +363,7 @@ export class FocusModule implements Focus {
                 hosting: HostingMode.Split,
                 split,
               }
-              appAsset.set(transform.appId, assetItems.size);
+              appAsset.push({appId: transform.appId, assetId: assetItems.assetId});
               assetItems.push(assetItem);
             } else {
               throw new Error('transform not supported')
@@ -401,7 +402,7 @@ export class FocusModule implements Focus {
                 hosting: HostingMode.Basic,
                 basic: assetId,
               }
-              appAsset.set(transform.appId, assetitems.size);
+              appAsset.push({appId: transform.appId, assetId: assetitem.assetId});
               assetItems.push(assetItem);
             } else {
               throw new Error('transform not supported');
@@ -417,19 +418,16 @@ export class FocusModule implements Focus {
                 basic: transformAsset.assetId,
               }
               const appId = transformMap.get(transformAsset.transform)
-              appAsset.set(appId, assetItems.size);
+              appAsset.push({appId, assetId: assetItem.assetId });
               assetItems.push(assetItem);
             }
           }
         }
       }
-      const { text, textColor, textSize, assets } = subject;
+      const { text, textColor, textSize, assets } = subject(appAsset);
 
-      const getAsset = (appId: string) => {
-        if (!appAsset.has(appId)) {
-          throw new Error('invalid id in subject');
-        }
-        const index = appAsset.get(appId);
+      const getAsset = (assetId: string) => {
+        const index = parseInt(assetId);
         const item = assetItems[index];
         if (item.hosting === HostingMode.Inline) {
           return item.inline;
@@ -464,7 +462,6 @@ export class FocusModule implements Focus {
           return { encrypted: { type, thumb: getAsset(thumb), parts: getAsset(parts) } };
         }
       });
-
       const updated = { text, textColor, textSize, assets: mapped };
 
       if (sealed) {

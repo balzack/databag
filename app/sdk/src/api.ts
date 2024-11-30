@@ -134,7 +134,7 @@ export interface Attribute {
 }
 
 export interface Focus {
-  addTopic(sealed: boolean, type: string, subject: any, assets: AssetSource[], progress: (percent: number)=>boolean): Promise<string>;
+  addTopic(sealed: boolean, type: string, subject: (assets: {assetId: string, appId: string}[])=>any, assets: AssetSource[], progress: (percent: number)=>boolean): Promise<string>;
   setTopicSubject(topicId: string, type: string, subject: any, assets: AssetSource[], progress: (percent: number)=>boolean): Promise<void>;
   removeTopic(topicId: string): Promise<void>;
 
