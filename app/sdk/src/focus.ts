@@ -2,6 +2,7 @@ import { EventEmitter } from 'eventemitter3';
 import type { Focus } from './api';
 import type { TopicItem} from './items';
 import type { Topic, Asset, AssetSource, Participant } from './types';
+import { TransformType, HostingMode } from './types';
 import type { Logging } from './logging';
 import { Store } from './store';
 import { Crypto } from './crypto';
@@ -282,7 +283,7 @@ export class FocusModule implements Focus {
     });
   }
 
-  private transformFile(source: any, transforms: string[], topicId: string, progress: (percent: number)=>boolean): Promise<{assetId: string, transform: string}[]> {
+  private transformFile(source: any, topicId: string, transforms: string[], progress: (percent: number)=>boolean): Promise<{assetId: string, transform: string}[]> {
     const { cardId, channelId, connection } = this;
     if (!connection) {
       throw new Error('disconnected from channel');
@@ -296,11 +297,14 @@ export class FocusModule implements Focus {
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', url, true);
-      xhr.setRequestHeader('Content-Type', 'application/octet-stream');
       xhr.progress = progress;
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
-          resolve(xhr.response)
+          try {
+            resolve(JSON.parse(xhr.response))
+          } catch (err) {
+            reject('invalid asset response')
+          }
         } else {
           reject(xhr.statusText)
         }
@@ -319,6 +323,7 @@ export class FocusModule implements Focus {
       throw new Error('encryption not set');
     }
 
+    const assetItems = [] as AssetItem[];
     if (files.length == 0) {
       const data = subject([]);
       if (sealed) {
@@ -334,8 +339,7 @@ export class FocusModule implements Focus {
       const topicId = await this.addRemoteChannelTopic(type, {}, false);
       const appAsset = [] as {assetId: string, appId: string}[];
       if (sealed) {
-        const assetItems = [] as AssetItem[];
-        for (const asset of assets) {
+        for (const asset of files) {
           for (const transform of asset.transforms) {
             if (transform.type === TransformType.Thumb && transform.thumb) {
               const assetItem = {
@@ -371,29 +375,34 @@ export class FocusModule implements Focus {
           }
         }
       } else {
-        const assetItems = [] as AssetItem[];
-        for (const asset of assets) {
+        for (const asset of files) {
           const transforms = [];
           const transformMap = new Map<string, string>();
           for (let transform of asset.transforms) {
             if (transform.type === TransformType.Thumb && asset.mimeType === 'image') {
               transforms.push('ithumb;photo');
-              transformMap('ithumb;photo', transfrom.appId);
+              transformMap.set('ithumb;photo', transform.appId);
+            } else if (transform.type === TransformType.HighQualirty && asset.mimeType === 'image') {
+              transforms.push('ilg;photo');
+              transformMap.set('ilg;photo', transform.appId);
             } else if (transform.type === TransformType.Copy && asset.mimeType === 'image') {
               transforms.push('icopy;photo');
-              transformMap('icopy;photo', transform.appId);
+              transformMap.set('icopy;photo', transform.appId);
             } else if (transform.type === TransformType.Thumb && asset.mimeType === 'video') {
               transforms.push('vthumb;video');
-              transformMap('vthumb;video', transform.appId);
+              transformMap.set('vthumb;video', transform.appId);
             } else if (transform.type === TransformType.Copy && asset.mimeType === 'video') {
               transforms.push('vcopy;video');
-              transformMap('vcopy;video', transform.appId);
+              transformMap.set('vcopy;video', transform.appId);
+            } else if (transform.type === TransformType.HighQuality && asset.mimeType === 'video') {
+              transforms.push('vhd;video');
+              transformMap.set('vhd;video', transform.appId);
             } else if (transform.type === TransformType.LowQuality && asset.mimeType === 'video') {
               transforms.push('vlq;video');
-              transformMap('vlq;video', transform.appId);
+              transformMap.set('vlq;video', transform.appId);
             } else if (transform.type === TransformType.Copy && asset.mimeType === 'audio') {
               transforms.push('acopy;audio');
-              transformMap('acopy;audio', transform.appId);
+              transformMap.set('acopy;audio', transform.appId);
             } else if (transform.type === TransformType.Copy && asset.mimeType === 'binary') {
               const assetId = await this.mirrorFile(asset.source, topicId, (percent: number)=>{console.log(`progress: ${percent}`)});
               const assetItem = {
@@ -410,17 +419,178 @@ export class FocusModule implements Focus {
           }
           if (transforms.length > 0) {
             const transformAssets = await this.transformFile(asset.source, topicId, transforms, (percent: number)=>{console.log(`progress: ${percent}`)});
-            for (transformAsset of transformAssets) {
+            for (let transformAsset of transformAssets) {
               const assetItem = {
-                assetId: `${assetItem.size}`,
+                assetId: `${assetItems.size}`,
                 encrypted: false,
                 hosting: HostingMode.Basic,
                 basic: transformAsset.assetId,
               }
-              const appId = transformMap.get(transformAsset.transform)
-              appAsset.push({appId, assetId: assetItem.assetId });
-              assetItems.push(assetItem);
+              if (transformMap.has(transformAsset.transform)) {
+                const appId = transformMap.get(transformAsset.transform)
+                appAsset.push({appId, assetId: transformAsset.assetId });
+                assetItems.push(assetItem);
+              }
             }
+          }
+        }
+      }
+      const { text, textColor, textSize, assets } = subject(appAsset);
+
+      const getAsset = (assetId: string) => {
+        const index = parseInt(assetId);
+        const item = assetItems[index];
+        if (item.hosting === HostingMode.Inline) {
+          return item.inline;
+        }
+        if (item.hosting === HostingMode.Split) {
+          return item.split;
+        }
+        if (item.hosting === HostingMode.Basic) {
+          return item.basic;
+        }
+      }
+
+      const mapped = !assets ? [] : assets.map(asset => {
+        if (asset.image) {
+          const { thumb, full } = asset.image;
+          return { image: { thumb: getAsset(thumb), full: getAsset(full) } };
+        }
+        if (asset.video) {
+          const { thumb, lq, hd } = asset.video;
+          return { video: { thumb: getAsset(thumb), lq: getAsset(lq), hd: getAsset(hd) } };
+        }
+        if (asset.audio) {
+          const { label, fulle } = asset.audio;
+          return { audio: { label, full: getAsset(full) } };
+        }
+        if (asset.binary) {
+          const { label, extension, data } = asset.binary;
+          return { binary: { label, extension, data: getAsset(data) } };
+        }
+        if (asset.encrypted) {
+          const { type, thumb, parts } = asset.encrypted;
+          return { encrypted: { type, thumb: getAsset(thumb), parts: getAsset(parts) } };
+        }
+      });
+      const updated = { text, textColor, textSize, assets: mapped };
+
+console.log("OK UPDATED: ", updated);
+
+      if (sealed) {
+        const subjectString = JSON.stringify(updated);
+        const { ivHex } = await crypto.aesIv();
+        const { encryptedDataB64 } = await crypto.aesEncrypt(decryptedString, ivHex, channelKey);
+        const data = { messageEncrypted: encryptedDataB64, messageIv: ivHex };
+        await this.setRemoteChannelTopicSubject(topicId, type, data);
+      } else {
+        await this.setRemoteChannelTopicSubject(topicId, type, updated);
+      }
+
+      return topicId;
+    }
+
+  }
+
+  public async setTopicSubject(topicId: string, type: string, subject: (assets: {assetId: string, appId: string}[])=>any, files: AssetSource[], progress: (percent: number)=>boolean) {
+
+    const { sealEnabled, channelKey, crypto } = this;
+    if (sealed && (!sealEnabled || !channelKey || !crypto)) {
+      throw new Error('encryption not set');
+    }
+
+    const item = this.topicEntries(topicId);
+    if (!item) {
+      throw new Error('topic not found');
+    }
+    const { assets: assetItems } = getTopicData(item);
+
+    const appAsset = [] as {assetId: string, appId: string}[];
+    if (sealed) {
+      for (const asset of assets) {
+        for (const transform of asset.transforms) {
+          if (transform.type === TransformType.Thumb && transform.thumb) {
+            const assetItem = {
+              assetId: `${assetItems.size}`,
+              encrytped: true,
+              hosting: HostingMode.Inline,
+              inline: await transform.thumb(),
+            }
+            appAsset.push({appId: transform.appId, assetId: assetItem.assetId});
+            assetItems.push(assetItem);
+          } else if (transform.type === TransformType.Copy) {
+            const media = await this.file.read(asset.soure);
+            const split = [] as { blockId: string, blockIv: string }[];
+            for (let i = 0; media.size < i * ENCRYPT_BLOCK_SIZE; i++) {
+              const length = media.size - (i * ENCRYPT_BLOCK_SIZE) > ENCRYPT_BLOCK_SIZE ? ENCRYPT_BLOCK_SIZE : media.size - (i * ENCRYPT_BLOCK_SIZE);
+              const base64Data = await media.getData(i * ENCRYPT_BLOCK_SIZE, length);
+              const { ivHex } = await crypto.aesIv();
+              const { encryptedDataB64 } = await crypto.aesEncrypt(base64Data, ivHex, channelKey);
+              const blockId = await uploadBlock(encryptedDataB64, topicId, (percent: number) => { console.log(`percent: ${percent}`) });
+              split.push({ blockId, blockIv: ivHex });
+            }
+            const assetItem = {
+              assetId: `${assetItems.size}`,
+              encrypted: true,
+              hosting: HostingMode.Split,
+              split,
+            }
+            appAsset.push({appId: transform.appId, assetId: assetItems.assetId});
+            assetItems.push(assetItem);
+          } else {
+            throw new Error('transform not supported')
+          }
+        }
+      }
+    } else {
+      for (const asset of assets) {
+        const transforms = [];
+        const transformMap = new Map<string, string>();
+        for (let transform of asset.transforms) {
+          if (transform.type === TransformType.Thumb && asset.mimeType === 'image') {
+            transforms.push('ithumb;photo');
+            transformMap.set('ithumb;photo', transform.appId);
+          } else if (transform.type === TransformType.Copy && asset.mimeType === 'image') {
+            transforms.push('icopy;photo');
+            transformMap.set('icopy;photo', transform.appId);
+          } else if (transform.type === TransformType.Thumb && asset.mimeType === 'video') {
+            transforms.push('vthumb;video');
+            transformMap.set('vthumb;video', transform.appId);
+          } else if (transform.type === TransformType.Copy && asset.mimeType === 'video') {
+            transforms.push('vcopy;video');
+            transformMap.set('vcopy;video', transform.appId);
+          } else if (transform.type === TransformType.LowQuality && asset.mimeType === 'video') {
+            transforms.push('vlq;video');
+            transformMap.set('vlq;video', transform.appId);
+          } else if (transform.type === TransformType.Copy && asset.mimeType === 'audio') {
+            transforms.push('acopy;audio');
+            transformMap.set('acopy;audio', transform.appId);
+          } else if (transform.type === TransformType.Copy && asset.mimeType === 'binary') {
+            const assetId = await this.mirrorFile(asset.source, topicId, (percent: number)=>{console.log(`progress: ${percent}`)});
+            const assetItem = {
+              assetId: `${assetItems.size}`,
+              encrytped: false,
+              hosting: HostingMode.Basic,
+              basic: assetId,
+            }
+            appAsset.push({appId: transform.appId, assetId: assetitem.assetId});
+            assetItems.push(assetItem);
+          } else {
+            throw new Error('transform not supported');
+          }
+        }
+        if (transforms.length > 0) {
+          const transformAssets = await this.transformFile(asset.source, topicId, transforms, (percent: number)=>{console.log(`progress: ${percent}`)});
+          for (transformAsset of transformAssets) {
+            const assetItem = {
+              assetId: `${assetItem.size}`,
+              encrypted: false,
+              hosting: HostingMode.Basic,
+              basic: transformAsset.assetId,
+            }
+            const appId = transformMap.get(assetItem.assetId)
+            appAsset.push({appId, assetId: assetItem.assetId });
+            assetItems.push(assetItem);
           }
         }
       }
@@ -475,8 +645,6 @@ export class FocusModule implements Focus {
       }
     }
   }
-
-  public async setTopicSubject(topicId: string, type: string, subject: any, assets: AssetSource[], progress: (percent: number)=>boolean) { }
 
   public async removeTopic(topicId: string) {}
 
@@ -649,7 +817,7 @@ export class FocusModule implements Focus {
         if (thumb) {
           return { type: asset.mimeType, thumb: `${revision}.${index-2}`, data: `${revision}.${index-1}` }
         } else {
-          return { type, data: `${revision}.${index-1}` }
+          return { type: asset.mimeType, data: `${revision}.${index-1}` }
         }
       }
     })
