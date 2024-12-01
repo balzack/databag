@@ -111,7 +111,7 @@ export type Tag = {
 };
 
 export enum HostingMode {
-  Inline = 'inlien', // sealed or unsealed 
+  Inline = 'inline', // sealed or unsealed 
   Split = 'split', // sealed only, split file into blocks
   Basic = 'basic', // unsealed only, basic download
 }

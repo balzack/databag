@@ -221,7 +221,6 @@ export class FocusModule implements Focus {
           this.emitTopics();
         }
       }
-
       this.syncing = false;
     }
   }
@@ -241,8 +240,12 @@ export class FocusModule implements Focus {
       xhr.setRequestHeader('Content-Type', 'text/plain');
       xhr.progress = progress;
       xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300 && xhr.response?.assetId) {
-          resolve(xhr.response.assetId)
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            resolve(JSON.parse(xhr.response).assetId);
+          } catch (err) {
+            reject('invalid block response');
+          }
         } else {
           reject(xhr.statusText)
         }
@@ -271,7 +274,11 @@ export class FocusModule implements Focus {
       xhr.progress = progress;
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
-          resolve(xhr.response)
+          try {
+            resolve(JSON.parse(xhr.response));
+          } catch (err) {
+            reject('invalid asset response');
+          }
         } else {
           reject(xhr.statusText)
         }
@@ -343,7 +350,7 @@ export class FocusModule implements Focus {
           for (const transform of asset.transforms) {
             if (transform.type === TransformType.Thumb && transform.thumb) {
               const assetItem = {
-                assetId: `${assetItems.size}`,
+                assetId: `${assetItems.length}`,
                 encrytped: true,
                 hosting: HostingMode.Inline,
                 inline: await transform.thumb(),
@@ -351,18 +358,18 @@ export class FocusModule implements Focus {
               appAsset.push({appId: transform.appId, assetId: assetItem.assetId});
               assetItems.push(assetItem);
             } else if (transform.type === TransformType.Copy) {
-              const media = await this.file.read(asset.soure);
-              const split = [] as { blockId: string, blockIv: string }[];
-              for (let i = 0; media.size < i * ENCRYPT_BLOCK_SIZE; i++) {
-                const length = media.size - (i * ENCRYPT_BLOCK_SIZE) > ENCRYPT_BLOCK_SIZE ? ENCRYPT_BLOCK_SIZE : media.size - (i * ENCRYPT_BLOCK_SIZE);
-                const base64Data = await media.getData(i * ENCRYPT_BLOCK_SIZE, length);
+              const mediaFile = await this.media.read(asset.source);
+              const split = [] as { partId: string, blockIv: string }[];
+              for (let i = 0; i * ENCRYPT_BLOCK_SIZE < mediaFile.size; i++) {
+                const length = mediaFile.size - (i * ENCRYPT_BLOCK_SIZE) > ENCRYPT_BLOCK_SIZE ? ENCRYPT_BLOCK_SIZE : mediaFile.size - (i * ENCRYPT_BLOCK_SIZE);
+                const base64Data = await mediaFile.getData(i * ENCRYPT_BLOCK_SIZE, length);
                 const { ivHex } = await crypto.aesIv();
                 const { encryptedDataB64 } = await crypto.aesEncrypt(base64Data, ivHex, channelKey);
-                const blockId = await uploadBlock(encryptedDataB64, topicId, (percent: number) => { console.log(`percent: ${percent}`) });
-                split.push({ blockId, blockIv: ivHex });
+                const partId = await this.uploadBlock(encryptedDataB64, topicId, (percent: number) => { console.log(`percent: ${percent}`) });
+                split.push({ partId, blockIv: ivHex });
               }
               const assetItem = {
-                assetId: `${assetItems.size}`,
+                assetId: `${assetItems.length}`,
                 encrypted: true,
                 hosting: HostingMode.Split,
                 split,
@@ -406,7 +413,7 @@ export class FocusModule implements Focus {
             } else if (transform.type === TransformType.Copy && asset.mimeType === 'binary') {
               const assetId = await this.mirrorFile(asset.source, topicId, (percent: number)=>{console.log(`progress: ${percent}`)});
               const assetItem = {
-                assetId: `${assetItems.size}`,
+                assetId: `${assetItems.length}`,
                 encrytped: false,
                 hosting: HostingMode.Basic,
                 basic: assetId,
@@ -421,7 +428,7 @@ export class FocusModule implements Focus {
             const transformAssets = await this.transformFile(asset.source, topicId, transforms, (percent: number)=>{console.log(`progress: ${percent}`)});
             for (let transformAsset of transformAssets) {
               const assetItem = {
-                assetId: `${assetItems.size}`,
+                assetId: `${assetItems.length}`,
                 encrypted: false,
                 hosting: HostingMode.Basic,
                 basic: transformAsset.assetId,
@@ -440,6 +447,9 @@ export class FocusModule implements Focus {
       const getAsset = (assetId: string) => {
         const index = parseInt(assetId);
         const item = assetItems[index];
+        if (!item) {
+          throw new Error('invalid assetId in subject');
+        }
         if (item.hosting === HostingMode.Inline) {
           return item.inline;
         }
@@ -451,36 +461,38 @@ export class FocusModule implements Focus {
         }
       }
 
-      const mapped = !assets ? [] : assets.map(asset => {
-        if (asset.image) {
+      const filtered = !assets ? [] : assets.filter(asset => {
+        if (sealed && asset.encrypted) {
+          return true;
+        } else if (!sealed && !asset.encrypted) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      const mapped = filtered.map(asset => {
+        if (sealed) {
+          const { type, thumb, parts } = asset.encrypted;
+          return { encrypted: { type, thumb: getAsset(thumb), parts: getAsset(parts) } };
+        } else if (asset.image) {
           const { thumb, full } = asset.image;
           return { image: { thumb: getAsset(thumb), full: getAsset(full) } };
-        }
-        if (asset.video) {
+        } else if (asset.video) {
           const { thumb, lq, hd } = asset.video;
           return { video: { thumb: getAsset(thumb), lq: getAsset(lq), hd: getAsset(hd) } };
-        }
-        if (asset.audio) {
+        } else if (asset.audio) {
           const { label, fulle } = asset.audio;
           return { audio: { label, full: getAsset(full) } };
-        }
-        if (asset.binary) {
+        } else if (asset.binary) {
           const { label, extension, data } = asset.binary;
           return { binary: { label, extension, data: getAsset(data) } };
         }
-        if (asset.encrypted) {
-          const { type, thumb, parts } = asset.encrypted;
-          return { encrypted: { type, thumb: getAsset(thumb), parts: getAsset(parts) } };
-        }
       });
       const updated = { text, textColor, textSize, assets: mapped };
-
-console.log("OK UPDATED: ", updated);
-
       if (sealed) {
-        const subjectString = JSON.stringify(updated);
+        const subjectString = JSON.stringify({ message: updated });
         const { ivHex } = await crypto.aesIv();
-        const { encryptedDataB64 } = await crypto.aesEncrypt(decryptedString, ivHex, channelKey);
+        const { encryptedDataB64 } = await crypto.aesEncrypt(subjectString, ivHex, channelKey);
         const data = { messageEncrypted: encryptedDataB64, messageIv: ivHex };
         await this.setRemoteChannelTopicSubject(topicId, type, data);
       } else {
@@ -489,7 +501,6 @@ console.log("OK UPDATED: ", updated);
 
       return topicId;
     }
-
   }
 
   public async setTopicSubject(topicId: string, type: string, subject: (assets: {assetId: string, appId: string}[])=>any, files: AssetSource[], progress: (percent: number)=>boolean) {
@@ -511,7 +522,7 @@ console.log("OK UPDATED: ", updated);
         for (const transform of asset.transforms) {
           if (transform.type === TransformType.Thumb && transform.thumb) {
             const assetItem = {
-              assetId: `${assetItems.size}`,
+              assetId: `${assetItems.length}`,
               encrytped: true,
               hosting: HostingMode.Inline,
               inline: await transform.thumb(),
@@ -519,18 +530,18 @@ console.log("OK UPDATED: ", updated);
             appAsset.push({appId: transform.appId, assetId: assetItem.assetId});
             assetItems.push(assetItem);
           } else if (transform.type === TransformType.Copy) {
-            const media = await this.file.read(asset.soure);
-            const split = [] as { blockId: string, blockIv: string }[];
-            for (let i = 0; media.size < i * ENCRYPT_BLOCK_SIZE; i++) {
-              const length = media.size - (i * ENCRYPT_BLOCK_SIZE) > ENCRYPT_BLOCK_SIZE ? ENCRYPT_BLOCK_SIZE : media.size - (i * ENCRYPT_BLOCK_SIZE);
-              const base64Data = await media.getData(i * ENCRYPT_BLOCK_SIZE, length);
+            const mediaFile = await this.file.read(asset.source);
+            const split = [] as { partId: string, blockIv: string }[];
+            for (let i = 0; i * ENCRYPT_BLOCK_SIZE < mediaFile.size; i++) {
+              const length = mediaFile.size - (i * ENCRYPT_BLOCK_SIZE) > ENCRYPT_BLOCK_SIZE ? ENCRYPT_BLOCK_SIZE : mediaFile.size - (i * ENCRYPT_BLOCK_SIZE);
+              const base64Data = await mediaFile.getData(i * ENCRYPT_BLOCK_SIZE, length);
               const { ivHex } = await crypto.aesIv();
               const { encryptedDataB64 } = await crypto.aesEncrypt(base64Data, ivHex, channelKey);
-              const blockId = await uploadBlock(encryptedDataB64, topicId, (percent: number) => { console.log(`percent: ${percent}`) });
-              split.push({ blockId, blockIv: ivHex });
+              const partId = await this.uploadBlock(encryptedDataB64, topicId, (percent: number) => { console.log(`percent: ${percent}`) });
+              split.push({ partId, blockIv: ivHex });
             }
             const assetItem = {
-              assetId: `${assetItems.size}`,
+              assetId: `${assetItems.length}`,
               encrypted: true,
               hosting: HostingMode.Split,
               split,
@@ -568,7 +579,7 @@ console.log("OK UPDATED: ", updated);
           } else if (transform.type === TransformType.Copy && asset.mimeType === 'binary') {
             const assetId = await this.mirrorFile(asset.source, topicId, (percent: number)=>{console.log(`progress: ${percent}`)});
             const assetItem = {
-              assetId: `${assetItems.size}`,
+              assetId: `${assetItems.length}`,
               encrytped: false,
               hosting: HostingMode.Basic,
               basic: assetId,
@@ -610,34 +621,39 @@ console.log("OK UPDATED: ", updated);
         }
       }
 
-      const mapped = assets.map(asset => {
-        if (asset.image) {
-          const { thumb, full } = asset.image;
-          return { image: { thumb: getAsset(thumb), full: getAsset(full) } };
+      const filtered = !assets ? [] : assets.filter(asset => {
+        if (sealed && asset.encrypted) {
+          return true;
+        } else if (!sealed && !asset.encrypted) {
+          return true;
+        } else {
+          return false;
         }
-        if (asset.video) {
-          const { thumb, lq, hd } = asset.video;
-          return { video: { thumb: getAsset(thumb), lq: getAsset(lq), hd: getAsset(hd) } };
-        }
-        if (asset.audio) {
-          const { label, fulle } = asset.audio;
-          return { audio: { label, full: getAsset(full) } };
-        }
-        if (asset.binary) {
-          const { label, extension, data } = asset.binary;
-          return { binary: { label, extension, data: getAsset(data) } };
-        }
-        if (asset.encrypted) {
+      });
+      const mapped = filtered.map(asset => {
+        if (sealed) {
           const { type, thumb, parts } = asset.encrypted;
           return { encrypted: { type, thumb: getAsset(thumb), parts: getAsset(parts) } };
+        } else if (asset.image) {
+          const { thumb, full } = asset.image;
+          return { image: { thumb: getAsset(thumb), full: getAsset(full) } };
+        } else if (asset.video) {
+          const { thumb, lq, hd } = asset.video;
+          return { video: { thumb: getAsset(thumb), lq: getAsset(lq), hd: getAsset(hd) } };
+        } else if (asset.audio) {
+          const { label, fulle } = asset.audio;
+          return { audio: { label, full: getAsset(full) } };
+        } else if (asset.binary) {
+          const { label, extension, data } = asset.binary;
+          return { binary: { label, extension, data: getAsset(data) } };
         }
       });
       const updated = { text, textColor, textSize, assets: mapped };
 
       if (sealed) {
-        const subjectString = JSON.stringify(updated);
+        const subjectString = JSON.stringify({ message: updated });
         const { ivHex } = await crypto.aesIv();
-        const { encryptedDataB64 } = await crypto.aesEncrypt(decryptedString, ivHex, channelKey);
+        const { encryptedDataB64 } = await crypto.aesEncrypt(subjectString, ivHex, channelKey);
         const data = { messageEncrypted: encryptedDataB64, messageIv: ivHex };
         return await this.setRemoteChannelTopicSubject(topicId, type, data);
       } else {
@@ -667,10 +683,14 @@ console.log("OK UPDATED: ", updated);
     if (item.detail.sealed && !item.unsealedDetail && this.sealEnabled && this.channelKey && this.crypto) {
       try {
         const { messageEncrypted, messageIv } = item.detail.data;
-        const { data } = await this.crypto.aesDecrypt(messageEncrypted, messageIv, this.channelKey);
-        const { message } = JSON.parse(data);
-        item.unsealedDetail = message;
-        return true;
+        if (!messageEncrypted || !messageIv) {
+          this.log.warn('invalid sealed topic');
+        } else {
+          const { data } = await this.crypto.aesDecrypt(messageEncrypted, messageIv, this.channelKey);
+          const { message } = JSON.parse(data);
+          item.unsealedDetail = message;
+          return true;
+        }
       } catch (err) {
         this.log.warn(err);
       }

@@ -31,7 +31,6 @@ export class MediaFiles implements Media {
   public async read(source: any): Promise<{ size: number, getData: (position: number, length: number)=>Promise<string>, close: ()=>Promise<void> }> {
     const data = await this.loadFileData(source);
     const size = data.byteLength;
-
     const getData = async (position: number, length: number) => {
       if (position + length > data.byteLength) {
         throw new Error('invalid read request');

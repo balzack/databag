@@ -1029,9 +1029,13 @@ export class ContactModule implements Contact {
         }
         if (item.channelKey) {
           const { messageEncrypted, messageIv } = JSON.parse(item.summary.data);
-          const { data } = await this.crypto.aesDecrypt(messageEncrypted, messageIv, item.channelKey);
-          item.unsealedSummary = data;
-          return true;
+          if (!messageEncrypted || !messageIv) {
+            this.log.warn('invalid sealed summary');
+          } else {
+            const { data } = await this.crypto.aesDecrypt(messageEncrypted, messageIv, item.channelKey);
+            item.unsealedSummary = data;
+            return true;
+          }
         }
       } catch (err) {
         this.log.warn(err);
