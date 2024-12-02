@@ -374,15 +374,30 @@ export class StreamModule {
     if (focus) {
       focus.close();
     }
+
     const entry = this.channelEntries.get(channelId);
+
+    const markRead = async () => {
+      try {
+        await this.setUnreadChannel(channelId, false);
+      } catch (err) {
+        this.log.error('failed to mark as read');
+      }
+    }
+
+    const flagTopic = async (topicId: string) => {
+      const { node, secure, guid } = this;
+      await addFlag(node, secure, guid, { channelId, topicId }); 
+    }
+      
     if (entry) {
       const channelKey = entry.item.channelKey;
       const sealEnabled = Boolean(this.seal);
       const revision = entry.item.summary.revision;
-      this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, null, channelId, this.guid, { node, secure, token }, channelKey, sealEnabled, revision);
+      this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, null, channelId, this.guid, { node, secure, token }, channelKey, sealEnabled, revision, markRead, flagTopic);
     }
     else {
-      this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, null, channelId, this.guid, null, null, false, 0);
+      this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, null, channelId, this.guid, null, null, false, 0, markRead, flagTopic);
     } 
 
     return this.focus;

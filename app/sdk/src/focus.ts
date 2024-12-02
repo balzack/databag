@@ -48,13 +48,15 @@ export class FocusModule implements Focus {
   private loadMore: boolean;
   private closeMedia: (()=>Promise<void>)[];
   private unsealAll: boolean;
+  private markRead: ()=>Promise<void>;
+  private flagChannelTopic: (string)=>Promise<void>;
 
   private markers: Set<string>;
 
   // view of topics 
   private topicEntries: Map<string, { item: TopicItem; topic: Topic }>;
 
-  constructor(log: Logging, store: Store, crypto: Crypto | null, media: Media | null, cardId: string | null, channelId: string, guid: string, connection: { node: string; secure: boolean; token: string } | null, channelKey: string | null, sealEnabled: boolean, revision: number) {
+  constructor(log: Logging, store: Store, crypto: Crypto | null, media: Media | null, cardId: string | null, channelId: string, guid: string, connection: { node: string; secure: boolean; token: string } | null, channelKey: string | null, sealEnabled: boolean, revision: number, markRead: ()=>Promise<void>, flagChannelTopic: (string)=>Promise<void>) {
     this.cardId = cardId;
     this.channelId = channelId;
     this.log = log;
@@ -66,6 +68,8 @@ export class FocusModule implements Focus {
     this.connection = connection;
     this.channelKey = channelKey;
     this.sealEnabled = sealEnabled;
+    this.markRead = markRead;
+    this.flagChannelTopic = flagChannelTopic;
 
     this.topicEntries = new Map<string, { item: TopicItem; topic: Topic }>();
     this.markers = new Set<string>();
@@ -198,6 +202,7 @@ export class FocusModule implements Focus {
             if (this.nextRevision === nextRev) {
               this.nextRevision = null;
             }
+            await this.markRead();
             this.emitTopics();
             this.log.info(`topic revision: ${nextRev}`);
           } catch (err) {
@@ -754,26 +759,27 @@ export class FocusModule implements Focus {
     }
   }
 
+  public async flagTopic(topicId: string) {
+    this.flagChannelTopic(topicId);
+  }
 
+  public async setBlockTopic(topicId: string) {
+    await this.setTopicBlocked(topicId);
+    const entry = this.topicEntries.get(topicId);
+    if (entry) {
+      entry.item.topic = this.setTopic(topicId, entry.item);
+      this.emitTopics();
+    }
+  }
 
-
-
-
-  public async setUnreadChannel() {}
-
-  public async clearUnreadChannel() {}
-
-  public async flagTopic(topicId: string) {}
-
-  public async setBlockTopic(topicId: string) {}
-
-  public async clearBlockTopic(topicId: string) {}
-
-
-
-
-
-
+  public async clearBlockTopic(topicId: string) {
+    await this.clearTopicBlocked(topicId);
+    const entry = this.topicEntries.get(topicId);
+    if (entry) {
+      entry.item.topic = this.setTopic(topicId, entry.item);
+      this.emitTopics();
+    }
+  }
 
   private async unsealTopicDetail(item: TopicItem): Promise<boolean> {
     if (item.detail.sealed && !item.unsealedDetail && this.sealEnabled && this.channelKey && this.crypto) {

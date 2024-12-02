@@ -610,6 +610,24 @@ export class ContactModule implements Contact {
     if (this.focus) {
       this.focus.close();
     }
+
+    const markRead = async () => {
+      try {
+        await this.setUnreadChannel(cardId, channelId, false);
+      } catch (err) {
+        this.log.error('failed to mark channel as read');
+      }
+    }
+
+    const flagTopic = async (topicId: string) => {
+      const entry = this.cardEntries.get(cardId);
+      if (entry) {
+        const server = entry.item.profile.node ? entry.item.profile.node : this.node;
+        const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+        await addFlag(server, !insecure, entry.item.profile.guid, { channelId, topicId });
+      }
+    }
+
     const cardEntry = this.cardEntries.get(cardId);
     const channelsEntry = this.channelEntries.get(cardId);
     const channelEntry = channelsEntry?.get(channelId);
@@ -621,9 +639,9 @@ export class ContactModule implements Contact {
       const channelKey = channelEntry.item.channelKey;
       const sealEnabled = Boolean(this.seal);
       const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(node);
-      this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, cardId, channelId, this.guid, { node, secure: !insecure, token: `${guid}.${token}` }, channelKey, sealEnabled, revision);
+      this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, cardId, channelId, this.guid, { node, secure: !insecure, token: `${guid}.${token}` }, channelKey, sealEnabled, revision, markRead, flagTopic);
     } else {
-      this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, cardId, channelId, this.guid, null, null, false, 0);
+      this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, cardId, channelId, this.guid, null, null, false, 0, markRead, flagTopic);
     }
     return this.focus;
   }

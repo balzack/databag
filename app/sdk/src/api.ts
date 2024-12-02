@@ -129,9 +129,6 @@ export interface Focus {
 
   viewMoreTopics(): Promise<void>;
 
-  setUnreadChannel(): Promise<void>;
-  clearUnreadChannel(): Promise<void>;
-
   getTopicAssetUrl(topicId: string, assetId: string, progress: (percent: number) => boolean): Promise<string>;
 
   flagTopic(topicId: string): Promise<void>;
