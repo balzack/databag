@@ -16,7 +16,9 @@ import { getContactChannelTopicDetail } from './net/getContactChannelTopicDetail
 import { addChannelTopic } from './net/addChannelTopic';
 import { addContactChannelTopic } from './net/addContactChannelTopic';
 import { setChannelTopicSubject } from './net/setChannelTopicSubject';
-import { addContactChannelTopicSubject } from './net/setContactChannelTopicSubject';
+import { setContactChannelTopicSubject } from './net/setContactChannelTopicSubject';
+import { removeChannelTopic } from './net/removeChannelTopic';
+import { removeContactChannelTopic } from './net/removeContactChannelTopic';
 
 const BATCH_COUNT = 64;
 const MIN_LOAD_SIZE = 32;
@@ -1078,6 +1080,19 @@ export class FocusModule implements Focus {
       return await setContactChannelTopicSubject(node, secure, token, channelId, topicId, dataType, data);
     } else {
       return await setChannelTopicSubject(node, secure, token, channelId, topicId, dataType, data);
+    }
+  }
+
+  private async removeRemoveChannelTopic(topicId: string) {
+    const { cardId, channelId, connection } = this;
+    if (!connection) {
+      throw new Error('disconnected from channel');
+    }
+    const { node, secure, token } = this.connection;
+    if (cardId) {
+      return await removeContactChannelTopicSubject(node, secure, token, channelId, topicId);
+    } else {
+      return await removeChannelTopic(node, secure, token, channelId, topicId);
     }
   }
 
