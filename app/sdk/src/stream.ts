@@ -382,7 +382,7 @@ export class StreamModule {
       this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, null, channelId, this.guid, { node, secure, token }, channelKey, sealEnabled, revision);
     }
     else {
-      this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, cardId, channelId, this.guid, null, null, false, 0);
+      this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, null, channelId, this.guid, null, null, false, 0);
     } 
 
     return this.focus;
@@ -518,9 +518,9 @@ export class StreamModule {
           item.channelKey = await this.getChannelKey(seals);
           if (this.focus) {
             try {
-              await this.focus.setChannelKey(null, channelId, this.channelKey);
+              await this.focus.setChannelKey(null, channelId, item.channelKey);
             } catch (err) {
-              log.warn(err);
+              this.log.warn(err);
             }
           }
         }
@@ -544,9 +544,9 @@ export class StreamModule {
           item.channelKey = await this.getChannelKey(seals);
           if (this.focus) {
             try {
-              await this.focus.setChannelKey(null, channelId, this.channelKey);
+              await this.focus.setChannelKey(null, channelId, item.channelKey);
             } catch (err) {
-              log.warn(err);
+              this.log.warn(err);
             }
           }
         }

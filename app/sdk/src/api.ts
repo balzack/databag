@@ -72,19 +72,8 @@ export interface Contact {
   getBlockedCards(): Promise<Card[]>;
   getRegistry(handle: string | null, server: string | null): Promise<Profile[]>;
 
-  leaveChannel(cardId: string, channelId: string): Promise<void>;
-  flagChannel(cardId: string, channelId: string): Promise<void>;
-  setBlockedChannel(cardId: string, channelId: string, blocked: boolean): Promise<void>;
-  getBlockedChannels(): Promise<Channel[]>;
-  setUnreadChannel(cardId: string, channelId: string, unread: boolean): Promise<void>;
-  getChannelNotifications(cardId: string, channelId: string): Promise<boolean>;
-  setChannelNotifications(cardId: string, channelId: string, enabled: boolean): Promise<void>;
-
   addCardListener(ev: (cards: Card[]) => void): void;
   removeCardListener(ev: (cards: Card[]) => void): void;
-
-  addChannelListener(ev: (arg: { channels: Channel[]; cardId: string | null }) => void): void;
-  removeChannelListener(ev: (arg: { channels: Channel[]; cardId: string | null }) => void): void;
 }
 
 export interface Content {

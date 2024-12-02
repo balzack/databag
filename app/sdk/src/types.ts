@@ -89,6 +89,7 @@ export type Topic = {
   topicId: string;
   guid: string;
   sealed: boolean;
+  blocked: boolean;
   dataType: string;
   data: any;
   created: number;
@@ -123,18 +124,21 @@ export enum TransformType {
   LowQuality = 'low', // transcode to low quality
 }
 
+export enum AssetType {
+  Image = 'image',
+  Video = 'video',
+  Audio = 'audio',
+  Binary = 'binary',
+}
+
 export type AssetSource = {
-  name: string;
-  type: string;
-  extension: string;
+  type: AssetType;
   source: any;
   transforms: {type: TransformType, appId: string, position?: number, thumb?: ()=>Promise<string>}[],
 }
 
 export type Asset = {
-  assetIndex: string;
-  mimeType: string;
-  extension: string;
+  assetId: string;
   hosting: HostingMode;
 };
 

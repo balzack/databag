@@ -129,10 +129,10 @@ jest.mock('../src/net/fetchUtil', () => {
         url == 'http://test_url/content/channels?agent=test_token&types=%5B%5D') {
       return Promise.resolve({ status: 200, json: () => [getChannel('test_subject_0', 'test_message_0', 1)] });
     } else if (url == 'https://URL_A/content/channels?contact=G000A.T000A&viewRevision=1&channelRevision=1&types=%5B%5D' ||
-        url == 'http://test_url/content/channels?agent=test_token&revision=1&types=%5B%5D') {
+        url == 'http://test_url/content/channels?agent=test_token&channelRevision=1&types=%5B%5D') {
       return Promise.resolve({ status: 200, json: () => [getChannel('test_subject_1', 'test_message_1', 2)] });
     } else if (url == 'https://URL_A/content/channels?contact=G000A.T000A&viewRevision=1&channelRevision=2&types=%5B%5D' ||
-        url == 'http://test_url/content/channels?agent=test_token&revision=2&types=%5B%5D') {
+        url == 'http://test_url/content/channels?agent=test_token&channelRevision=2&types=%5B%5D') {
       return Promise.resolve({ status: 200, json: () => [getChannel('test_subject_2', 'test_message_2', 3)] });
     } else if (url == 'https://URL_A/content/channels/CHAN1/detail?contact=G000A.T000A' ||
         url == 'http://test_url/content/channels/CHAN1/detail?agent=test_token') {
@@ -159,8 +159,8 @@ const store = new TestStore();
 
 test('received contact updates', async () => {
   const cardChannels = new Map<string | null, Channel[]>();
-  const stream = new StreamModule(log, store, null, 'test_guid', 'test_token', 'test_url', false, []);
-  const contact = new ContactModule(log, store, null, 'test_guid', 'test_token', 'test_url', false, [], []);
+  const stream = new StreamModule(log, store, null, null, 'test_guid', 'test_token', 'test_url', false, []);
+  const contact = new ContactModule(log, store, null, null, 'test_guid', 'test_token', 'test_url', false, [], []);
   const content = new ContentModule(log, null, contact, stream);
 
   const channelUpdate = ({ channels, cardId }: { channels: Channel[]; cardId: string | null }) => {
@@ -170,6 +170,7 @@ test('received contact updates', async () => {
 
   await contact.setRevision(1);
   await waitFor(() => cardChannels.get('C000A')?.length === 1);
+
   await waitFor(() => cardChannels.get('C000A')?.[0].data.subject === 'test_subject_0');
   await waitFor(() => cardChannels.get('C000A')?.[0].lastTopic.data.message === 'test_message_0');
 
@@ -186,8 +187,8 @@ test('received contact updates', async () => {
 
 test('received stream updates', async () => {
   const streamChannels = new Map<string | null, Channel[]>();
-  const stream = new StreamModule(log, store, null, 'test_guid', 'test_token', 'test_url', false, []);
-  const contact = new ContactModule(log, store, null, 'test_guid', 'test_token', 'test_url', false, [], []);
+  const stream = new StreamModule(log, store, null, null, 'test_guid', 'test_token', 'test_url', false, []);
+  const contact = new ContactModule(log, store, null, null, 'test_guid', 'test_token', 'test_url', false, [], []);
   const content = new ContentModule(log, null, contact, stream);
 
   const channelUpdate = ({ channels, cardId }: { channels: Channel[]; cardId: string | null }) => {

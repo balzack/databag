@@ -274,17 +274,19 @@ export type Login = {
   pushSupported: boolean;
 };
 
+export type BasicAsset = {
+  encrypted?: { type: string, thumb: string, label: string, extension: string, parts: { blockIv: string, partId: string }[] },
+  image?: { thumb: string, full: string },
+  audio?: { label: string, full: string },
+  video?: { thumb: string, lq: string, hd: string },
+  binary?: { label: string, extension: string, data: string }
+}
+
 export type BasicEntity = {
   text: string,
   textColor: string,
   textSize: string,
-  assets: {
-    encrypted?: { type: string, thumb: string, label: string, extension: string, parts: { blockIv: string, partId: string }[] },
-    image?: { thumb: string, full: string },
-    audio?: { label: string, full: string },
-    video?: { thumb: string, lq: string, hd: string },
-    binary?: { extension: string, data: string }
-  }
+  assets: BasicAsset[], 
 }
 
 export type SealedBasicEntity = {

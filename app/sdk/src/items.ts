@@ -157,7 +157,6 @@ export type TopicDetail = {
   sealed: boolean;
   dataType: string;
   data: any;
-  assets: AssetItem[];
   created: number;
   updated: number;
   status: string;
@@ -172,11 +171,8 @@ export type TopicItem = {
 
 export type AssetItem = {
   assetId: string;
-  mimeType: string;
-  extension: string;
-  encrypted: boolean;
   hosting: HostingMode;
-  split?: { blockId: string, blockIv: string }[];
+  split?: { partId: string, blockIv: string }[];
   basic?: string;
   inline?: string;
 };

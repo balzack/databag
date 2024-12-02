@@ -151,7 +151,7 @@ const crypto = new TestCrypto();
 test('received contact updates', async () => {
   let testCards: Card[] = [];
   const update = (cards: Card[]) => { testCards = cards }
-  const contact = new ContactModule(log, store, crypto, 'test_guid', 'test_token', 'test_url', false, [], []);
+  const contact = new ContactModule(log, store, crypto, null, 'test_guid', 'test_token', 'test_url', false, [], []);
   contact.addCardListener(update);
   contact.setRevision(1)
   await waitFor(() => testCards.length === 1);
@@ -162,7 +162,7 @@ test('received contact updates', async () => {
 test('adds new contact', async () => {
   let testCards: Card[] = [];
   const update = (cards: Card[]) => { testCards = cards }
-  const contact = new ContactModule(log, store, crypto, 'test_guid', 'test_token', 'test_url', false, [], []);
+  const contact = new ContactModule(log, store, crypto, null, 'test_guid', 'test_token', 'test_url', false, [], []);
   contact.addCardListener(update);
   contact.setRevision(3)
   await waitFor(() => testCards.length === 1);
@@ -175,7 +175,7 @@ test('adds new contact', async () => {
 test('removes contact', async () => {
   let testCards: Card[] = [];
   const update = (cards: Card[]) => { testCards = cards }
-  const contact = new ContactModule(log, store, crypto, 'test_guid', 'test_token', 'test_url', false, [], []);
+  const contact = new ContactModule(log, store, crypto, null, 'test_guid', 'test_token', 'test_url', false, [], []);
   contact.addCardListener(update);
   contact.setRevision(8)
   await waitFor(() => testCards.length === 1);
@@ -188,7 +188,7 @@ test('removes contact', async () => {
 test('connects and disconnects with known contact', async () => {
   let testCards: Card[] = [];
   const update = (cards: Card[]) => { testCards = cards }
-  const contact = new ContactModule(log, store, crypto, 'test_guid', 'test_token', 'test_url', false, [], []);
+  const contact = new ContactModule(log, store, crypto, null, 'test_guid', 'test_token', 'test_url', false, [], []);
   contact.addCardListener(update);
   contact.setRevision(11)
   await waitFor(() => testCards.length === 1);
