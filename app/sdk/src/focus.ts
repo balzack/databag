@@ -44,6 +44,7 @@ export class FocusModule implements Focus {
   private sealEnabled: boolean;
   private channelKey: string | null;
   private loadMore: boolean;
+  private closeMedia: (()=>Promsie<void>)[];
 
   private markers: Set<string>;
 
@@ -69,6 +70,7 @@ export class FocusModule implements Focus {
     this.storeView = { revision: null, marker: null };
     this.syncing = true;
     this.closing = false;
+    this.closeMedia = [];
     this.nextRevision = null;
     this.loadMore = false;
     this.localComplete = false;
@@ -223,6 +225,33 @@ export class FocusModule implements Focus {
       }
       this.syncing = false;
     }
+  }
+
+  private downloadBlock(topicId: string, blockId: string): Promise<string> {
+    const { cardId, channelId, connection } = this;
+    if (!connection) {
+      throw new Error('disconnected from channel');
+    }
+    const { node, secure, token } = this.connection;
+    const params = `${cardId ? 'contact' : 'agent'}=${token}`
+    const url = `http${secure ? 's' : ''}://${node}/content/channels/${channelId}/topics/${topicId}/assets/${blockId}?${params}`
+
+    return new Promise(function (resolve, reject) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.setRequestHeader('Content-Type', 'text/plain');
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(xhr.response);
+        } else {
+          reject(xhr.statusText)
+        }
+      };
+      xhr.onerror = () => {
+        reject(xhr.statusText)
+      };
+      xhr.send();
+    });
   }
 
   private uploadBlock(block: string, topicId: string, progress: (percent: number)=>boolean): Promise<string> {
@@ -668,8 +697,39 @@ export class FocusModule implements Focus {
 
   public async clearUnreadChannel() {}
 
-  public async getTopicAssetUrl(topicId: string, assetId: string, progress: (percent: number) => boolean) {
-    return '';
+  public async getTopicAssetUrl(topicId: string, assetId: string, progress: (percent: number) => boolean): Promise<string> {
+    const entry = this.topicEntries.get(topicId);
+    if (!entry) {
+      throw new Error('topic entry not found');
+    }
+    const { assets } = this.getTopicData(entry);
+    const asset = assets.find(item => item.assetId === assetid);
+    if (!asset) {
+      throw new Error('asset entry not found');
+    }
+    if (asset.hosting === HostingMode.Inline) {
+      return `data://${asset.inline}`;
+    } else if (asset.hosting === HostingMode.Basic) {
+      return this.getRemoteChannelTopicAsseturl(topicId, assset.basic);
+    } else if (asset.hosting === HostingMode.Split) {
+      const write = this.media.write();
+      this.closeMedia.push(write.close);
+      const { sealEnabled, channelKey, crypto, media } = this;
+      if (!sealEnabled || !channelKey || !crypto || !media) {
+        throw new Error('media decryption not set');
+      }
+      if (!asset.split || !asset.split.length) {
+        throw new Error('invalid split media');
+      }
+      for (let i = 0; i < asset.split.length; i++) {
+        const block = await this.downloadBlock(topiccId, asset.split[i].blockId);
+        const { data } = await this.crypto.aesDecrypt(block, asset.split[i].partIv, channelKey);
+        await write.setData(data);
+      }
+      return await write.getUrl();
+    } else {
+      throw new Error('unknown hosting mode')
+    }
   }
 
   public async flagTopic(topicId: string) {}
@@ -760,7 +820,10 @@ export class FocusModule implements Focus {
     this.closing = true;
     while (this.syncing) {
       await new Promise((r) => setTimeout(r, CLOSE_POLL_MS));
-    } 
+    }
+    this.closeMedia.forEach(item => {
+      item();
+    });
   }
 
   private emitStatus() {
@@ -955,6 +1018,15 @@ export class FocusModule implements Focus {
     } else {
       await this.store.setContentChannelTopicDetail(guid, channelId, topicId, unsealedDetail);
     }
+  }
+
+  private getRemoteChannelTopicAssetUrl(topicId: string, assetId: string): string {
+    const { cardId, channelId, connection } = this;
+    if (!connection) {
+      throw new Error('disconnected channel');
+    }
+    const { node, secure, token } = this.connection;
+    return `http${secure ? 's' : ''}//${node}/content/channels/${channelId}/topics/${topicId}/assets/${assetId}?${cardId ? 'contact' : 'agent'}=${token}`
   }
 
   private async getRemoteChannelTopics(revision: number | null, begin: number | null, end: number | null) {
