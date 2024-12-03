@@ -66,7 +66,7 @@ export function useConversation() {
         }
         const topicId = await focus.addTopic(true, 'sealedtopic', (assets: {assetId: string, appId: string}[])=>{
           console.log(assets);
-          return { text: 'addedasset', assets: [{ encrypted: { type: 'image', thumb: '0', parts: '1' } }] };
+          return { text: 'almost done', assets: [{ encrypted: { type: 'image', thumb: '0', parts: '1' } }] };
         }, [asset], (percent: number)=>{
           console.log(percent);
         });

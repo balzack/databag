@@ -49,14 +49,14 @@ export class FocusModule implements Focus {
   private closeMedia: (()=>Promise<void>)[];
   private unsealAll: boolean;
   private markRead: ()=>Promise<void>;
-  private flagChannelTopic: (string)=>Promise<void>;
+  private flagChannelTopic: (id: string)=>Promise<void>;
 
   private markers: Set<string>;
 
   // view of topics 
   private topicEntries: Map<string, { item: TopicItem; topic: Topic }>;
 
-  constructor(log: Logging, store: Store, crypto: Crypto | null, media: Media | null, cardId: string | null, channelId: string, guid: string, connection: { node: string; secure: boolean; token: string } | null, channelKey: string | null, sealEnabled: boolean, revision: number, markRead: ()=>Promise<void>, flagChannelTopic: (string)=>Promise<void>) {
+  constructor(log: Logging, store: Store, crypto: Crypto | null, media: Media | null, cardId: string | null, channelId: string, guid: string, connection: { node: string; secure: boolean; token: string } | null, channelKey: string | null, sealEnabled: boolean, revision: number, markRead: ()=>Promise<void>, flagChannelTopic: (id: string)=>Promise<void>) {
     this.cardId = cardId;
     this.channelId = channelId;
     this.log = log;
@@ -385,167 +385,173 @@ export class FocusModule implements Focus {
       }
     } else {
       const topicId = await this.addRemoteChannelTopic(type, {}, false);
-      const appAsset = [] as {assetId: string, appId: string}[];
-      if (sealed) {
-        for (const asset of files) {
-          for (const transform of asset.transforms) {
-            if (transform.type === TransformType.Thumb && transform.thumb) {
-              const assetItem = {
-                assetId: `${assetItems.length}`,
-                encrytped: true,
-                hosting: HostingMode.Inline,
-                inline: await transform.thumb(),
-              }
-              appAsset.push({appId: transform.appId, assetId: assetItem.assetId});
-              assetItems.push(assetItem);
-            } else if (transform.type === TransformType.Copy) {
-              const { media } = this;
-              if (!media) {
-                throw new Error('media file processing support not enabled');
-              }
-              if (!crypto || !channelKey) {
-                throw new Error('duplicate throw for build warning');
-              }
-              const mediaFile = await media.read(asset.source);
-              const split = [] as { partId: string, blockIv: string }[];
-              for (let i = 0; i * ENCRYPT_BLOCK_SIZE < mediaFile.size; i++) {
-                const length = mediaFile.size - (i * ENCRYPT_BLOCK_SIZE) > ENCRYPT_BLOCK_SIZE ? ENCRYPT_BLOCK_SIZE : mediaFile.size - (i * ENCRYPT_BLOCK_SIZE);
-                const base64Data = await mediaFile.getData(i * ENCRYPT_BLOCK_SIZE, length);
-                const { ivHex } = await crypto.aesIv();
-                const { encryptedDataB64 } = await crypto.aesEncrypt(base64Data, ivHex, channelKey);
-                const partId = await this.uploadBlock(encryptedDataB64, topicId, progress);
-                split.push({ partId, blockIv: ivHex });
-              }
-              const assetItem = {
-                assetId: `${assetItems.length}`,
-                encrypted: true,
-                hosting: HostingMode.Split,
-                split,
-              }
-              appAsset.push({appId: transform.appId, assetId: assetItem.assetId});
-              assetItems.push(assetItem);
-            } else {
-              throw new Error('transform not supported')
-            }
-          }
-        }
-      } else {
-        for (const asset of files) {
-          const transforms = [];
-          const transformMap = new Map<string, string>();
-          for (let transform of asset.transforms) {
-            if (transform.type === TransformType.Thumb && asset.type === AssetType.Image) {
-              transforms.push('ithumb;photo');
-              transformMap.set('ithumb;photo', transform.appId);
-            } else if (transform.type === TransformType.HighQuality && asset.type === AssetType.Image) {
-              transforms.push('ilg;photo');
-              transformMap.set('ilg;photo', transform.appId);
-            } else if (transform.type === TransformType.Copy && asset.type === AssetType.Image) {
-              transforms.push('icopy;photo');
-              transformMap.set('icopy;photo', transform.appId);
-            } else if (transform.type === TransformType.Thumb && asset.type === AssetType.Video) {
-              transforms.push('vthumb;video');
-              transformMap.set('vthumb;video', transform.appId);
-            } else if (transform.type === TransformType.Copy && asset.type === AssetType.Video) {
-              transforms.push('vcopy;video');
-              transformMap.set('vcopy;video', transform.appId);
-            } else if (transform.type === TransformType.HighQuality && asset.type === AssetType.Video) {
-              transforms.push('vhd;video');
-              transformMap.set('vhd;video', transform.appId);
-            } else if (transform.type === TransformType.LowQuality && asset.type === AssetType.Video) {
-              transforms.push('vlq;video');
-              transformMap.set('vlq;video', transform.appId);
-            } else if (transform.type === TransformType.Copy && asset.type === AssetType.Audio) {
-              transforms.push('acopy;audio');
-              transformMap.set('acopy;audio', transform.appId);
-            } else if (transform.type === TransformType.Copy && asset.type === AssetType.Binary) {
-              const assetId = await this.mirrorFile(asset.source, topicId, progress);
-              const assetItem = {
-                assetId: `${assetItems.length}`,
-                hosting: HostingMode.Basic,
-                basic: assetId,
-              }
-              appAsset.push({appId: transform.appId, assetId: assetItem.assetId});
-              assetItems.push(assetItem);
-            } else {
-              throw new Error('transform not supported');
-            }
-          }
-          if (transforms.length > 0) {
-            const transformAssets = await this.transformFile(asset.source, topicId, transforms, progress);
-            for (let transformAsset of transformAssets) {
-              const assetItem = {
-                assetId: `${assetItems.length}`,
-                hosting: HostingMode.Basic,
-                basic: transformAsset.assetId,
-              }
-              if (transformMap.has(transformAsset.transform)) {
-                const appId = transformMap.get(transformAsset.transform) || '' //or to make build happy
-                appAsset.push({appId, assetId: transformAsset.assetId });
+      try {
+        const appAsset = [] as {assetId: string, appId: string}[];
+        if (sealed) {
+          for (const asset of files) {
+            for (const transform of asset.transforms) {
+              if (transform.type === TransformType.Thumb && transform.thumb) {
+                const assetItem = {
+                  assetId: `${assetItems.length}`,
+                  encrytped: true,
+                  hosting: HostingMode.Inline,
+                  inline: await transform.thumb(),
+                }
+                appAsset.push({appId: transform.appId, assetId: assetItem.assetId});
                 assetItems.push(assetItem);
+              } else if (transform.type === TransformType.Copy) {
+                const { media } = this;
+                if (!media) {
+                  throw new Error('media file processing support not enabled');
+                }
+                if (!crypto || !channelKey) {
+                  throw new Error('duplicate throw for build warning');
+                }
+                const mediaFile = await media.read(asset.source);
+                const split = [] as { partId: string, blockIv: string }[];
+                for (let i = 0; i * ENCRYPT_BLOCK_SIZE < mediaFile.size; i++) {
+                  const length = mediaFile.size - (i * ENCRYPT_BLOCK_SIZE) > ENCRYPT_BLOCK_SIZE ? ENCRYPT_BLOCK_SIZE : mediaFile.size - (i * ENCRYPT_BLOCK_SIZE);
+                  const base64Data = await mediaFile.getData(i * ENCRYPT_BLOCK_SIZE, length);
+                  const { ivHex } = await crypto.aesIv();
+                  const { encryptedDataB64 } = await crypto.aesEncrypt(base64Data, ivHex, channelKey);
+                  const partId = await this.uploadBlock(encryptedDataB64, topicId, progress);
+                  split.push({ partId, blockIv: ivHex });
+                }
+                const assetItem = {
+                  assetId: `${assetItems.length}`,
+                  encrypted: true,
+                  hosting: HostingMode.Split,
+                  split,
+                }
+                appAsset.push({appId: transform.appId, assetId: assetItem.assetId});
+                assetItems.push(assetItem);
+              } else {
+                throw new Error('transform not supported')
+              }
+            }
+          }
+        } else {
+          for (const asset of files) {
+            const transforms = [];
+            const transformMap = new Map<string, string>();
+            for (let transform of asset.transforms) {
+              if (transform.type === TransformType.Thumb && asset.type === AssetType.Image) {
+                transforms.push('ithumb;photo');
+                transformMap.set('ithumb;photo', transform.appId);
+              } else if (transform.type === TransformType.HighQuality && asset.type === AssetType.Image) {
+                transforms.push('ilg;photo');
+                transformMap.set('ilg;photo', transform.appId);
+              } else if (transform.type === TransformType.Copy && asset.type === AssetType.Image) {
+                transforms.push('icopy;photo');
+                transformMap.set('icopy;photo', transform.appId);
+              } else if (transform.type === TransformType.Thumb && asset.type === AssetType.Video) {
+                transforms.push('vthumb;video');
+                transformMap.set('vthumb;video', transform.appId);
+              } else if (transform.type === TransformType.Copy && asset.type === AssetType.Video) {
+                transforms.push('vcopy;video');
+                transformMap.set('vcopy;video', transform.appId);
+              } else if (transform.type === TransformType.HighQuality && asset.type === AssetType.Video) {
+                transforms.push('vhd;video');
+                transformMap.set('vhd;video', transform.appId);
+              } else if (transform.type === TransformType.LowQuality && asset.type === AssetType.Video) {
+                transforms.push('vlq;video');
+                transformMap.set('vlq;video', transform.appId);
+              } else if (transform.type === TransformType.Copy && asset.type === AssetType.Audio) {
+                transforms.push('acopy;audio');
+                transformMap.set('acopy;audio', transform.appId);
+              } else if (transform.type === TransformType.Copy && asset.type === AssetType.Binary) {
+                const assetId = await this.mirrorFile(asset.source, topicId, progress);
+                const assetItem = {
+                  assetId: `${assetItems.length}`,
+                  hosting: HostingMode.Basic,
+                  basic: assetId,
+                }
+                appAsset.push({appId: transform.appId, assetId: assetItem.assetId});
+                assetItems.push(assetItem);
+              } else {
+                throw new Error('transform not supported');
+              }
+            }
+            if (transforms.length > 0) {
+              const transformAssets = await this.transformFile(asset.source, topicId, transforms, progress);
+              for (let transformAsset of transformAssets) {
+                const assetItem = {
+                  assetId: `${assetItems.length}`,
+                  hosting: HostingMode.Basic,
+                  basic: transformAsset.assetId,
+                }
+                if (transformMap.has(transformAsset.transform)) {
+                  const appId = transformMap.get(transformAsset.transform) || '' //or to make build happy
+                  appAsset.push({appId, assetId: transformAsset.assetId });
+                  assetItems.push(assetItem);
+                }
               }
             }
           }
         }
-      }
-      const { text, textColor, textSize, assets } = subject(appAsset);
+        const { text, textColor, textSize, assets } = subject(appAsset);
 
-      const getAsset = (assetId: string) => {
-        const index = parseInt(assetId);
-        const item = assetItems[index];
-        if (!item) {
-          throw new Error('invalid assetId in subject');
+        const getAsset = (assetId: string) => {
+          const index = parseInt(assetId);
+          const item = assetItems[index];
+          if (!item) {
+            throw new Error('invalid assetId in subject');
+          }
+          if (item.hosting === HostingMode.Inline) {
+            return item.inline; 
+          } else if (item.hosting === HostingMode.Split) {
+            return item.split;
+          } else if (item.hosting === HostingMode.Basic) {
+            return item.basic;
+          } else {
+            throw new Error('unknown hosting mode');
+          }
         }
-        if (item.hosting === HostingMode.Inline) {
-          return item.inline; 
-        } else if (item.hosting === HostingMode.Split) {
-          return item.split;
-        } else if (item.hosting === HostingMode.Basic) {
-          return item.basic;
-        } else {
-          throw new Error('unknown hosting mode');
-        }
-      }
 
-      const filtered = !assets ? [] : assets.filter((asset: any)=>{
-        if (sealed && asset.encrypted) {
-          return true;
-        } else if (!sealed && !asset.encrypted) {
-          return true;
+        const filtered = !assets ? [] : assets.filter((asset: any)=>{
+          if (sealed && asset.encrypted) {
+            return true;
+          } else if (!sealed && !asset.encrypted) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        const mapped = filtered.map((asset: any) => {
+          if (asset.encrypted) {
+            const { type, thumb, parts } = asset.encrypted;
+            return { encrypted: { type, thumb: getAsset(thumb), parts: getAsset(parts) } };
+          } else if (asset.image) {
+            const { thumb, full } = asset.image;
+            return { image: { thumb: getAsset(thumb), full: getAsset(full) } };
+          } else if (asset.video) {
+            const { thumb, lq, hd } = asset.video;
+            return { video: { thumb: getAsset(thumb), lq: getAsset(lq), hd: getAsset(hd) } };
+          } else if (asset.audio) {
+            const { label, full } = asset.audio;
+            return { audio: { label, full: getAsset(full) } };
+          } else if (asset.binary) {
+            const { label, extension, data } = asset.binary;
+            return { binary: { label, extension, data: getAsset(data) } };
+          }
+        });
+        const updated = { text, textColor, textSize, assets: mapped };
+        if (sealed) {
+          if (!crypto || !channelKey) {
+            throw new Error('duplicate throw to make build happy')
+          }
+          const subjectString = JSON.stringify({ message: updated });
+          const { ivHex } = await crypto.aesIv();
+          const { encryptedDataB64 } = await crypto.aesEncrypt(subjectString, ivHex, channelKey);
+          const data = { messageEncrypted: encryptedDataB64, messageIv: ivHex };
+          await this.setRemoteChannelTopicSubject(topicId, type, data);
         } else {
-          return false;
+          await this.setRemoteChannelTopicSubject(topicId, type, updated);
         }
-      });
-      const mapped = filtered.map((asset: any) => {
-        if (asset.encrypted) {
-          const { type, thumb, parts } = asset.encrypted;
-          return { encrypted: { type, thumb: getAsset(thumb), parts: getAsset(parts) } };
-        } else if (asset.image) {
-          const { thumb, full } = asset.image;
-          return { image: { thumb: getAsset(thumb), full: getAsset(full) } };
-        } else if (asset.video) {
-          const { thumb, lq, hd } = asset.video;
-          return { video: { thumb: getAsset(thumb), lq: getAsset(lq), hd: getAsset(hd) } };
-        } else if (asset.audio) {
-          const { label, full } = asset.audio;
-          return { audio: { label, full: getAsset(full) } };
-        } else if (asset.binary) {
-          const { label, extension, data } = asset.binary;
-          return { binary: { label, extension, data: getAsset(data) } };
-        }
-      });
-      const updated = { text, textColor, textSize, assets: mapped };
-      if (sealed) {
-        if (!crypto || !channelKey) {
-          throw new Error('duplicate throw to make build happy')
-        }
-        const subjectString = JSON.stringify({ message: updated });
-        const { ivHex } = await crypto.aesIv();
-        const { encryptedDataB64 } = await crypto.aesEncrypt(subjectString, ivHex, channelKey);
-        const data = { messageEncrypted: encryptedDataB64, messageIv: ivHex };
-        await this.setRemoteChannelTopicSubject(topicId, type, data);
-      } else {
-        await this.setRemoteChannelTopicSubject(topicId, type, updated);
+      } catch (err) {
+        this.log.error(err);
+        await this.removeRemoteChannelTopic(topicId);
+        throw new Error('failed to add topic');
       }
 
       return topicId;
@@ -767,7 +773,7 @@ export class FocusModule implements Focus {
     await this.setTopicBlocked(topicId);
     const entry = this.topicEntries.get(topicId);
     if (entry) {
-      entry.item.topic = this.setTopic(topicId, entry.item);
+      entry.topic = this.setTopic(topicId, entry.item);
       this.emitTopics();
     }
   }
@@ -776,7 +782,7 @@ export class FocusModule implements Focus {
     await this.clearTopicBlocked(topicId);
     const entry = this.topicEntries.get(topicId);
     if (entry) {
-      entry.item.topic = this.setTopic(topicId, entry.item);
+      entry.topic = this.setTopic(topicId, entry.item);
       this.emitTopics();
     }
   }
