@@ -491,6 +491,7 @@ export class FocusModule implements Focus {
         }
         const { text, textColor, textSize, assets } = subject(appAsset);
 
+        // legacy support of 'superbasictopic' and 'sealedtopic'
         const getAsset = (assetId: string) => {
           const index = parseInt(assetId);
           const item = assetItems[index];
@@ -507,7 +508,6 @@ export class FocusModule implements Focus {
             throw new Error('unknown hosting mode');
           }
         }
-
         const filtered = !assets ? [] : assets.filter((asset: any)=>{
           if (sealed && asset.encrypted) {
             return true;
@@ -536,9 +536,11 @@ export class FocusModule implements Focus {
           }
         });
         const updated = { text, textColor, textSize, assets: mapped };
+        // end of legacy support block
+
         if (sealed) {
           if (!crypto || !channelKey) {
-            throw new Error('duplicate throw to make build happy')
+            throw new Error('encryption not set');
           }
           const subjectString = JSON.stringify({ message: updated });
           const { ivHex } = await crypto.aesIv();
@@ -668,6 +670,7 @@ export class FocusModule implements Focus {
       }
       const { text, textColor, textSize, assets } = subject(appAsset);
 
+      // legacy support of 'superbasictopic' and 'sealedtopic'
       const getAsset = (assetId: string) => {
         const index = parseInt(assetId);
         const item = assetItems[index];
@@ -684,7 +687,6 @@ export class FocusModule implements Focus {
           throw new Error('unknown hosting mode');
         }
       }
-
       const filtered = !assets ? [] : assets.filter((asset: any) => {
         if (sealed && asset.encrypted) {
           return true;
@@ -713,10 +715,11 @@ export class FocusModule implements Focus {
         }
       });
       const updated = { text, textColor, textSize, assets: mapped };
+      // end of legacy support block
 
       if (sealed) {
         if (!crypto || !channelKey) {
-          throw new Error('duplicate throw to make build happy')
+          throw new Error('encryption not set');
         }
         const subjectString = JSON.stringify({ message: updated });
         const { ivHex } = await crypto.aesIv();
@@ -882,10 +885,11 @@ export class FocusModule implements Focus {
   private getTopicData(item: TopicItem): { data: any, assets: AssetItem[] } {
     const topicDetail = item.detail.sealed ? item.unsealedDetail : item.detail.data;
     const { revision } = item.detail;
-
     if (topicDetail == null) {
       return { data: null, assets: [] };
     }
+
+    // lagacy support for 'superbasictopic' and 'sealedtopic'
     const { text, textColor, textSize, assets } = topicDetail;
     let index: number = 0;
     const assetItems = new Set<AssetItem>();
@@ -910,9 +914,9 @@ export class FocusModule implements Focus {
         index += 1;
 
         if (thumb) {
-          return { encrypted: { type, thumb: `${revision}.${index-2}`, data: `${revision}.${index-1}`, label, extension } }
+          return { encrypted: { type, thumb: `${index-2}`, data: `${index-1}`, label, extension } }
         } else {
-          return { encrypted: { type, data: `${revision}.${index-1}`, label, extension } }
+          return { encrypted: { type, data: `${index-1}`, label, extension } }
         }
       } else {
         const { thumb, label, full, lq, hd, extension, data } = (binary || image || audio || video) as any;
@@ -936,14 +940,15 @@ export class FocusModule implements Focus {
         const type = image ? 'image' : audio ? 'audio' : video ? 'video' : 'binary';
         const assetEntry = {} as any;
         if (thumb) {
-          assetEntry[type] = { thumb: `${revision}.${index-2}`, data: `${revision}.${index-1}`, label, extension }
+          assetEntry[type] = { thumb: `${index-2}`, data: `${index-1}`, label, extension }
         } else {
-          assetEntry[type] = { data: `${revision}.${index-1}`, label, extension }
+          assetEntry[type] = { data: `${index-1}`, label, extension }
         }
         return assetEntry;
       }
     })
     return { data: { text, textColor, textSize, assets: dataAssets }, assets: Array.from(assetItems.values()) }; 
+    // end of legacy support block
   }
 
   private setTopic(topicId: string, item: TopicItem): Topic {
