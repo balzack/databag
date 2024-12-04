@@ -112,7 +112,6 @@
   .actions {
     display: flex;
     flex-direction: row;
-    flex-grow: 1;
     gap: 12px;
     padding-top: 16px;
     flex-wrap: wrap;
