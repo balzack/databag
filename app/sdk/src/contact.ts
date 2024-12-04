@@ -2,7 +2,7 @@ import { EventEmitter } from 'eventemitter3';
 import type { Contact, Focus } from './api';
 import { Logging } from './logging';
 import { FocusModule } from './focus';
-import type { Card, Channel, Article, Topic, Asset, Tag, Profile, Participant } from './types';
+import type { Card, Channel, Article, Topic, Asset, Tag, FocusDetail, Profile, Participant } from './types';
 import { type CardEntity, avatar } from './entities';
 import type { ArticleDetail, ChannelSummary, ChannelDetail, CardProfile, CardDetail, CardItem, ChannelItem, ArticleItem } from './items';
 import { defaultCardItem, defaultChannelItem } from './items';
@@ -504,6 +504,20 @@ export class ContactModule implements Contact {
           };
           entry.item.unsealedDetail = null;
           await this.unsealChannelDetail(cardId, id, entry.item);
+          if (this.focus) {
+            const { dataType, data, enableImage, enableAudio, enableVideo, enableBinary } = detail;
+            const sealed = dataType === 'sealed';
+            const focusDetail = {
+              sealed,
+              dataType,
+              data: sealed ? entry.item.unsealedDetail : data,
+              enableImage,
+              enableAudio,
+              enableVideo,
+              enableBinary,
+            }
+            this.focus.setDetail(cardId, id, focusDetail); 
+          }
           entry.channel = this.setChannel(cardId, id, entry.item);
           await this.store.setContactCardChannelDetail(guid, cardId, id, entry.item.detail, entry.item.unsealedDetail);
         }
@@ -526,9 +540,9 @@ export class ContactModule implements Contact {
           this.setChannelUnread(cardId, id);
           entry.channel = this.setChannel(cardId, id, entry.item);
           await this.store.setContactCardChannelSummary(guid, cardId, id, entry.item.summary, entry.item.unsealedSummary);
-        }
-        if (this.focus) {
-          await this.focus.setRevision(cardId, id, topicRevision);
+          if (this.focus) {
+            await this.focus.setRevision(cardId, id, topicRevision);
+          }
         }
       } else {
         const channels = this.getChannelEntries(cardId);
@@ -632,6 +646,7 @@ export class ContactModule implements Contact {
     const channelsEntry = this.channelEntries.get(cardId);
     const channelEntry = channelsEntry?.get(channelId);
     if (cardEntry && channelEntry) {
+      // allocate focus
       const node = cardEntry.item.profile.node;
       const guid = cardEntry.item.profile.guid;
       const token = cardEntry.item.detail.token;
@@ -640,6 +655,20 @@ export class ContactModule implements Contact {
       const sealEnabled = Boolean(this.seal);
       const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(node);
       this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, cardId, channelId, this.guid, { node, secure: !insecure, token: `${guid}.${token}` }, channelKey, sealEnabled, revision, markRead, flagTopic);
+
+      // set current detail
+      const { dataType, data, enableImage, enableAudio, enableVideo, enableBinary } = channelEntry.item.detail;
+      const sealed = dataType === 'sealed';
+      const focusDetail = {
+        sealed,
+        dataType,
+        data: sealed ? channelEntry.item.unsealedDetail : data,
+        enableImage,
+        enableAudio,
+        enableVideo,
+        enableBinary,
+      }
+      this.focus.setDetail(cardId, channelId, focusDetail);
     } else {
       this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, cardId, channelId, this.guid, null, null, false, 0, markRead, flagTopic);
     }
@@ -1022,6 +1051,19 @@ export class ContactModule implements Contact {
         if (item.channelKey) {
           const { data } = await this.crypto.aesDecrypt(subjectEncrypted, subjectIv, item.channelKey);
           item.unsealedDetail = data;
+          if (this.focus) {
+            const { dataType, enableImage, enableAudio, enableVideo, enableBinary } = item.detail;
+            const focusDetail = {
+              sealed: true,
+              dataType,
+              data,
+              enableImage,
+              enableAudio,
+              enableVideo,
+              enableBinary,
+            }
+            this.focus.setDetail(cardId, channelId, focusDetail);
+          }
           return true;
         }
       } catch (err) {

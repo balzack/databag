@@ -1,4 +1,4 @@
-import type { Channel, Topic, AssetSource, Asset, Tag, Article, Group, Card, Profile, Call, Config, NodeConfig, NodeAccount, Participant } from './types';
+import type { Channel, Topic, AssetSource, Asset, Tag, Article, Group, Card, Profile, Call, FocusDetail, Config, NodeConfig, NodeAccount, Participant } from './types';
 
 export interface Session {
   getSettings(): Settings;
@@ -138,8 +138,8 @@ export interface Focus {
   addTopicListener(ev: (topics: Topic[]) => void): void;
   removeTopicListener(ev: (topics: Topic[]) => void): void;
 
-  addStatusListener(ev: (status: string) => void): void;
-  removeStatusListener(ev: (status: string) => void): void;
+  addDetailListener(ev: (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => void): void;
+  removeDetailListener(ev: (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => void): void;
 }
 
 export interface Node {

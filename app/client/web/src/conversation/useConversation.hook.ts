@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect, useRef } from 'react'
 import { AppContext } from '../context/AppContext'
 import { DisplayContext } from '../context/DisplayContext'
-import { Focus, Topic, AssetSource, HostingMode, TransformType } from 'databag-client-sdk'
+import { Focus, FocusDetail, Topic, AssetSource, HostingMode, TransformType } from 'databag-client-sdk'
 import { ContextType } from '../context/ContextType'
 
 const img =
@@ -31,14 +31,14 @@ export function useConversation() {
       const setTopics = (topics: Topic[]) => {
         console.log(topics);
       }
-      const setStatus = (status: string) => {
-        console.log(status);
+      const setDetail = (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => {
+        console.log(focused);
       }
       focus.addTopicListener(setTopics);
-      focus.addStatusListener(setStatus);
+      focus.addDetailListener(setDetail);
       return () => {
         focus.removeTopicListener(setTopics);
-        focus.removeStatusListener(setStatus);
+        focus.removeDetailListener(setDetail);
       }
     }
   }, [app.state.focus]);

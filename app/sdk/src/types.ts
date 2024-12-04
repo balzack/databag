@@ -65,6 +65,16 @@ export type Channel = {
   members: Member[];
 };
 
+export type FocusDetail = {
+  sealed: boolean;
+  dataType: string;
+  data: any;
+  enableImage: boolean;
+  enableAudio: boolean;
+  enableVideo: boolean;
+  enableBinary: boolean;
+}
+
 export type Member = {
   guid: string;
   //pushEnabled: boolean;

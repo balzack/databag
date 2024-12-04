@@ -141,6 +141,20 @@ export class StreamModule {
                   entry.item.unsealedDetail = null;
                   await this.unsealChannelDetail(id, entry.item);
                   entry.channel = this.setChannel(id, entry.item);
+                  if (this.focus) {
+                    const { dataType, data, enableImage, enableAudio, enableVideo, enableBinary } = detail;
+                    const sealed = dataType === 'sealed';
+                    const focusDetail = { 
+                      sealed,
+                      dataType,
+                      data: sealed ? entry.item.unsealedDetail : data,
+                      enableImage,
+                      enableAudio, 
+                      enableVideo, 
+                      enableBinary, 
+                    }
+                    this.focus.setDetail(null, id, focusDetail);
+                  }
                   await this.store.setContentChannelDetail(guid, id, entry.item.detail, entry.item.unsealedDetail);
                 }
 
@@ -375,8 +389,6 @@ export class StreamModule {
       focus.close();
     }
 
-    const entry = this.channelEntries.get(channelId);
-
     const markRead = async () => {
       try {
         await this.setUnreadChannel(channelId, false);
@@ -390,15 +402,26 @@ export class StreamModule {
       await addFlag(node, secure, guid, { channelId, topicId }); 
     }
       
+    const entry = this.channelEntries.get(channelId);
+    const channelKey = entry ? entry.item.channelKey : null;
+    const revision = entry ? entry.item.summary.revision : 0;
+    const sealEnabled = Boolean(this.seal);
+    this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, null, channelId, this.guid, { node, secure, token }, channelKey, sealEnabled, revision, markRead, flagTopic);
+
     if (entry) {
-      const channelKey = entry.item.channelKey;
-      const sealEnabled = Boolean(this.seal);
-      const revision = entry.item.summary.revision;
-      this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, null, channelId, this.guid, { node, secure, token }, channelKey, sealEnabled, revision, markRead, flagTopic);
+      const { dataType, data, enableImage, enableAudio, enableVideo, enableBinary } = entry.item.detail;
+      const sealed = dataType === 'sealed';
+      const focusDetail = { 
+        sealed,
+        dataType,
+        data: sealed ? entry.item.unsealedDetail : data,
+        enableImage,
+        enableAudio, 
+        enableVideo, 
+        enableBinary, 
+      }
+      this.focus.setDetail(null, channelId, focusDetail);
     }
-    else {
-      this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, null, channelId, this.guid, null, null, false, 0, markRead, flagTopic);
-    } 
 
     return this.focus;
   }
@@ -542,6 +565,19 @@ export class StreamModule {
         if (item.channelKey) {
           const { data } = await this.crypto.aesDecrypt(subjectEncrypted, subjectIv, item.channelKey);
           item.unsealedDetail = data;
+          if (this.focus) {
+            const { dataType, enableImage, enableAudio, enableVideo, enableBinary } = item.detail;
+            const focusDetail = { 
+              sealed: true,
+              dataType,
+              data,
+              enableImage,
+              enableAudio, 
+              enableVideo, 
+              enableBinary, 
+            }
+            this.focus.setDetail(null, channelId, focusDetail);
+          }
           return true;
         }
       } catch (err) {

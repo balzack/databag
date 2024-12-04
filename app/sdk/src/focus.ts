@@ -2,7 +2,7 @@ import { EventEmitter } from 'eventemitter3';
 import type { Focus } from './api';
 import type { TopicItem, AssetItem, TopicDetail } from './items';
 import type { Topic, Asset, AssetSource, Participant } from './types';
-import { TransformType, HostingMode, AssetType } from './types';
+import { TransformType, HostingMode, AssetType, FocusDetail } from './types';
 import type { Logging } from './logging';
 import { Store } from './store';
 import { Crypto } from './crypto';
@@ -50,6 +50,7 @@ export class FocusModule implements Focus {
   private unsealAll: boolean;
   private markRead: ()=>Promise<void>;
   private flagChannelTopic: (id: string)=>Promise<void>;
+  private focusDetail: FocusDetail | null;
 
   private markers: Set<string>;
 
@@ -79,6 +80,7 @@ export class FocusModule implements Focus {
     this.closing = false;
     this.closeMedia = [];
     this.nextRevision = null;
+    this.focusDetail = null;
     this.loadMore = false;
     this.unsealAll = false;
     this.localComplete = false;
@@ -829,20 +831,36 @@ export class FocusModule implements Focus {
     this.emitter.emit('topic', topics);
   }
 
-  public addStatusListener(ev: (status: string) => void) {
-    this.emitter.on('status', ev);
-    const status = this.connection ? 'connected' : 'disconnected'
-    ev(status);
+  public addDetailListener(ev: (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => void) {
+    const { cardId, channelId } = this;
+    const access = Boolean(this.connection && (!this.focusDetail?.sealed || (this.sealEnabled && this.channelKey)))
+    const detail = access ? this.focusDetail : null;
+    this.emitter.on('detail', ev);
+    ev({ cardId, channelId, detail });
   }
 
-  public removeStatusListener(ev: (status: string) => void) {
-    this.emitter.off('status', ev);
+  public removeDetailListener(ev: (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => void) {
+    this.emitter.off('detail', ev);
+  }
+
+  private emitDetail() {
+    const { cardId, channelId } = this;
+    const access = Boolean(this.connection && (!this.focusDetail?.sealed || (this.sealEnabled && this.channelKey)))
+    const detail = access ? this.focusDetail : null;
+    this.emitter.emit('detail', { cardId, channelId, detail });
   }
 
   public disconnect(cardId: string | null, channelId: string) {
     if (cardId === this.cardId && channelId === this.channelId) {
       this.connection = null;
-      this.emitStatus();
+      this.emitDetail();
+    }
+  }
+
+  public setDetail(cardId: string | null, channelId: string, detail: FocusDetail) {
+    if (cardId === this.cardId && channelId === this.channelId) {
+      this.focusDetail = detail;
+      this.emitDetail();
     }
   }
 
@@ -856,6 +874,7 @@ export class FocusModule implements Focus {
   public async setSealEnabled(enable: boolean) {
     this.sealEnabled = enable;
     this.unsealAll = true;
+    this.emitDetail();
     await this.sync();
   }
 
@@ -863,6 +882,7 @@ export class FocusModule implements Focus {
     if (cardId === this.cardId && channelId === this.channelId) {
       this.channelKey = channelKey;
       this.unsealAll = true;
+      this.emitDetail();
       await this.sync();
     }
   }
@@ -875,11 +895,6 @@ export class FocusModule implements Focus {
     this.closeMedia.forEach(item => {
       item();
     });
-  }
-
-  private emitStatus() {
-    const status = this.connection ? 'connected' : 'disconnected'
-    this.emitter.emit('status', status);
   }
 
   private getTopicData(item: TopicItem): { data: any, assets: AssetItem[] } {
