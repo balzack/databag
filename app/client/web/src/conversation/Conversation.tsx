@@ -21,7 +21,10 @@ export function Conversation() {
         </div>
         <IconX size={30} className={classes.close} onClick={actions.close} />
       </div>
-      <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => onSelectImage(e)} style={{display: 'none'}}/>
+      <div className={classes.thread}/>
+      <div className={classes.add}>
+        <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => onSelectImage(e)} style={{display: 'none'}}/>
+      </div>
     </div>
   );
 }

@@ -93,7 +93,7 @@ export function Content() {
           size="sm"
           leftSectionPointerEvents="none"
           leftSection={<IconSearch size={20} />}
-          placeholder={state.strings.contacts}
+          placeholder={state.strings.topics}
           value={state.filter}
           onChange={(event) => actions.setFilter(event.currentTarget.value)}
         />
