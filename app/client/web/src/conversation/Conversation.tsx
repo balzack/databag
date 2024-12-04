@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react'
+import React, {useEffect, useRef, useCallback} from 'react'
 import { Focus } from 'databag-client-sdk'
 import classes from './Conversation.module.css'
 import { useConversation } from './useConversation.hook';
@@ -29,10 +29,12 @@ export function Conversation() {
         <div className={classes.title} onClick={() => attachImage.current.click()}> 
           <Text className={classes.label}>CONVERSATION</Text>
         </div>
-        <IconX size={30} className={classes.close} onClick={actions.close} />
+        <IconX size={24} className={classes.close} onClick={actions.close} />
       </div>
-      <div className={classes.thread}>
+      <div className={classes.frame}>
+        <div className={classes.thread}>
         {topics}
+        </div>
       </div>
       <div className={classes.add}>
         <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => onSelectImage(e)} style={{display: 'none'}}/>

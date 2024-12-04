@@ -20,12 +20,19 @@
     margin-right: 16px;
   }
 
-  .thread {
+  .frame {
     display: flex;
     flex-direction: column-reverse;
     flex-grow: 1;
     flex-shrink: 1;
     overflow: auto;
+    width: 100%;
+  }
+
+  .thread {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
     width: 100%;
     padding-left: 32px;
     padding-right: 32px;
