@@ -4,7 +4,7 @@ import classes from './Conversation.module.css'
 import { useConversation } from './useConversation.hook';
 import { IconX } from '@tabler/icons-react'
 import { Text } from '@mantine/core'
-import { Topic } from '../topic/Topic';
+import { Message } from '../message/Message';
 
 export function Conversation() {
   const { state, actions } = useConversation();
@@ -16,10 +16,9 @@ export function Conversation() {
 
   const topics = state.topics.map((topic, idx) => {
     return (
-      <Topic
+      <Message
         key={idx}
         topic={topic}
-        className={classes.topic}
       />
     )
   })
