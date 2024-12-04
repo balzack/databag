@@ -4,6 +4,7 @@ import classes from './Conversation.module.css'
 import { useConversation } from './useConversation.hook';
 import { IconX } from '@tabler/icons-react'
 import { Text } from '@mantine/core'
+import { Topic } from '../topic/Topic';
 
 export function Conversation() {
   const { state, actions } = useConversation();
@@ -13,6 +14,16 @@ export function Conversation() {
     actions.add(e.target.files[0]);
   };
 
+  const topics = state.topics.map((topic, idx) => {
+    return (
+      <Topic
+        key={idx}
+        topic={topic}
+        className={classes.topic}
+      />
+    )
+  })
+
   return (
     <div className={classes.conversation}>
       <div className={classes.header}>
@@ -21,7 +32,9 @@ export function Conversation() {
         </div>
         <IconX size={30} className={classes.close} onClick={actions.close} />
       </div>
-      <div className={classes.thread}/>
+      <div className={classes.thread}>
+        {topics}
+      </div>
       <div className={classes.add}>
         <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => onSelectImage(e)} style={{display: 'none'}}/>
       </div>
