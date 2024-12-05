@@ -91,7 +91,7 @@ export class IdentityModule implements Identity {
     }
   }
 
-  public setProfile() {
+  public setProfile(): Profile {
     const { guid, handle, name, description, location, image, revision, seal, version, node } = this.profile;
     return {
       guid,
@@ -100,6 +100,7 @@ export class IdentityModule implements Identity {
       description,
       location,
       imageSet: Boolean(image),
+      imageUrl: this.imageUrl,
       version,
       node,
       sealSet: Boolean(seal),

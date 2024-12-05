@@ -15,10 +15,14 @@ export function Conversation() {
   };
 
   const topics = state.topics.map((topic, idx) => {
+    const card = state.cards.get(topic.guid) || null;
+    const profile = state.profile?.guid === topic.guid ? state.profile : null;
     return (
       <Message
         key={idx}
         topic={topic}
+        card={card}
+        profile={profile}
       />
     )
   })

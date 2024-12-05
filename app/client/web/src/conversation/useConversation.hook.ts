@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect, useRef } from 'react'
 import { AppContext } from '../context/AppContext'
 import { DisplayContext } from '../context/DisplayContext'
-import { Focus, FocusDetail, Topic, AssetSource, HostingMode, TransformType } from 'databag-client-sdk'
+import { Focus, FocusDetail, Topic, Profile, Card, AssetSource, HostingMode, TransformType } from 'databag-client-sdk'
 import { ContextType } from '../context/ContextType'
 
 const img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII'
@@ -13,6 +13,8 @@ export function useConversation() {
     focus: null as Focus | null,
     layout: null,
     topics: [] as Topic[],
+    profile: null as Profile | null,
+    cards: new Map<string, Card>(),
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -27,7 +29,8 @@ export function useConversation() {
 
   useEffect(() => {
     const focus = app.state.focus;
-    if (focus) {
+    const { contact, identity } = app.state.session;
+    if (focus && contact && identity) {
       const setTopics = (topics: Topic[]) => {
         const sorted = topics.sort((a, b) => {
           if (a.created < b.created) {
@@ -40,14 +43,28 @@ export function useConversation() {
         });
         updateState({ topics: sorted });
       }
+      const setCards = (cards: Card[]) => {
+        const contacts = new Map<string, Card>();
+        cards.forEach(card => {
+          contacts.set(card.guid, card);
+        });
+        updateState({ cards: contacts });
+      }
+      const setProfile = (profile: Profile) => {
+        updateState({ profile });
+      }
       const setDetail = (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => {
         console.log(focused);
       }
       focus.addTopicListener(setTopics);
       focus.addDetailListener(setDetail);
+      contact.addCardListener(setCards);
+      identity.addProfileListener(setProfile);
       return () => {
         focus.removeTopicListener(setTopics);
         focus.removeDetailListener(setDetail);
+        contact.removeCardListener(setCards);
+        identity.removeProfileListener(setProfile);
       }
     }
   }, [app.state.focus]);
