@@ -502,7 +502,7 @@ export class StreamModule {
   }
 
   private setChannel(channelId: string, item: ChannelItem): Channel {
-    const { summary, detail } = item;
+    const { summary, detail, channelKey } = item;
     const channelData = detail.sealed ? item.unsealedDetail : detail.data || '{}';
     const topicData = summary.sealed ? item.unsealedSummary : summary.data || '{}';
 
@@ -522,6 +522,7 @@ export class StreamModule {
       blocked: this.isChannelBlocked(channelId),
       unread: this.isChannelUnread(channelId),
       sealed: detail.sealed,
+      locked: detail.sealed && (!this.seal || !channelKey),
       dataType: detail.dataType,
       data: this.parse(channelData),
       created: detail.created,

@@ -1,4 +1,5 @@
 export const en = {
+  unknownContact: 'Unknown Contact',
   unknown: 'Unknown',
   sealed: 'Sealed',
   notes: 'Notes',
@@ -252,6 +253,7 @@ export const en = {
 }
 
 export const fr = {
+  unknownContact: 'Contact inconnu',
   unknown: 'Inconnu',
   sealed: 'Scellé',
   notes: 'Notes',
@@ -506,6 +508,7 @@ export const fr = {
 }
 
 export const sp = {
+  unkownContact: 'Contacto Desconocido',
   unknown: 'Desconocido',
   sealed: 'Sellado',
   notes: 'Notas',
@@ -759,6 +762,7 @@ export const sp = {
 }
 
 export const pt = {
+  unknownContact: 'Contato Desconhecido',
   unknown: 'Desconhecido',
   sealed: 'Selado',
   notes: 'Notas',
@@ -1012,6 +1016,7 @@ export const pt = {
 }
 
 export const de = {
+  unknwonContact: 'Unbekannter Kontakt',
   unknown: 'Unbekannt',
   sealed: 'Versiegelt',
   notes: 'Notizen',
@@ -1265,6 +1270,7 @@ export const de = {
 }
 
 export const ru = {
+  unknownContact: 'Неизвестный контакт',
   unknown: 'Неизвестно',
   sealed: 'Запечатано',
   notes: 'Заметки',

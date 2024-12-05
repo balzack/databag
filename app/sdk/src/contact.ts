@@ -987,6 +987,7 @@ export class ContactModule implements Contact {
       blocked: this.isChannelBlocked(cardId, channelId),
       unread: this.isChannelUnread(cardId, channelId),
       sealed: detail.sealed,
+      locked: detail.sealed && (!this.seal || !channelKey),
       dataType: detail.dataType,
       data: this.parse(channelData),
       created: detail.created,

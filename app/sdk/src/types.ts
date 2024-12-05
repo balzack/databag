@@ -53,6 +53,7 @@ export type Channel = {
   blocked: boolean;
   unread: boolean;
   sealed: boolean;
+  locked: boolean;
   dataType: string;
   data: any;
   created: number;
@@ -99,6 +100,7 @@ export type Topic = {
   topicId: string;
   guid: string;
   sealed: boolean;
+  locked: boolean;
   blocked: boolean;
   dataType: string;
   data: any;

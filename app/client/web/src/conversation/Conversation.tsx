@@ -15,6 +15,7 @@ export function Conversation() {
   };
 
   const topics = state.topics.map((topic, idx) => {
+    const { host } = state;
     const card = state.cards.get(topic.guid) || null;
     const profile = state.profile?.guid === topic.guid ? state.profile : null;
     return (
@@ -23,6 +24,11 @@ export function Conversation() {
         topic={topic}
         card={card}
         profile={profile}
+        host={host}
+        getAssetUrl={actions.getAssetUrl}
+        strings={state.strings}
+        timeFormat={state.timeFormat}
+        dateFormat={state.dateFormat}
       />
     )
   })

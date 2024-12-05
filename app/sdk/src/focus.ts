@@ -738,7 +738,7 @@ export class FocusModule implements Focus {
     await this.removeRemoteChannelTopic(topicId);
   }
 
-  public async getTopicAssetUrl(topicId: string, assetId: string, progress: (percent: number) => boolean): Promise<string> {
+  public async getTopicAssetUrl(topicId: string, assetId: string, progress: null | (percent: number) => boolean): Promise<string> {
     const entry = this.topicEntries.get(topicId);
     if (!entry) {
       throw new Error('topic entry not found');
@@ -974,6 +974,7 @@ export class FocusModule implements Focus {
       guid: item.detail.guid,
       blocked: this.isTopicBlocked(topicId),
       sealed: item.detail.sealed,
+      locked: item.detail.sealed && (!this.sealEnabled || !this.channelKey),
       dataType: item.detail.dataType,
       created: item.detail.created,
       updated: item.detail.updated,

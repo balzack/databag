@@ -12,9 +12,13 @@ export function useConversation() {
   const [state, setState] = useState({
     focus: null as Focus | null,
     layout: null,
+    strings: display.state.strings,
+    timeFormat: display.state.timeFormat,
+    dateFormat: display.state.dateFormat,
     topics: [] as Topic[],
     profile: null as Profile | null,
     cards: new Map<string, Card>(),
+    host: false,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -23,8 +27,8 @@ export function useConversation() {
   }
 
   useEffect(() => {
-    const { layout } = display.state
-    updateState({ layout })
+    const { layout, timeFormat, dateFormat } = display.state
+    updateState({ layout, timeFormat, dateFormat })
   }, [display.state])
 
   useEffect(() => {
@@ -54,6 +58,11 @@ export function useConversation() {
         updateState({ profile });
       }
       const setDetail = (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => {
+        if (focused.cardId) {
+          updateState({ host: false });
+        } else {
+          updateState({ host: true });
+        }
         console.log(focused);
       }
       focus.addTopicListener(setTopics);
@@ -79,8 +88,14 @@ export function useConversation() {
         focus.viewMoreTopics();
       }
     },
+    getAssetUrl: async (topicId: string, assetId: string) => {
+      const { focus } = app.state;
+      if (!focus) {
+        throw new Error('no channel in focus');
+      }
+      return await focus.getTopicAssetUrl(topicId, assetId, (percent: number)=>true);
+    },
     add: async (file: File) => {
-
       const { focus } = app.state;
       if (focus) {
         const asset = {
