@@ -749,7 +749,7 @@ export class FocusModule implements Focus {
       throw new Error('asset entry not found');
     }
     if (asset.hosting === HostingMode.Inline && asset.inline) {
-      return `data://${asset.inline}`;
+      return `${asset.inline}`;
     } else if (asset.hosting === HostingMode.Basic && asset.basic) {
       return this.getRemoteChannelTopicAssetUrl(topicId, asset.basic);
     } else if (asset.hosting === HostingMode.Split && asset.split) {
@@ -913,7 +913,7 @@ export class FocusModule implements Focus {
         const { type, thumb, label, extension, parts } = encrypted;
         if (thumb) {
           const asset = {
-            assetId: `${revision}.${index}`,
+            assetId: `${index}`,
             hosting: HostingMode.Inline,
             inline: thumb,
           }
@@ -921,7 +921,7 @@ export class FocusModule implements Focus {
           index += 1;
         }
         const asset = {
-          assetId: `${revision}.${index}`,
+          assetId: `${index}`,
           hosting: HostingMode.Split,
           split: parts,
         }
@@ -937,7 +937,7 @@ export class FocusModule implements Focus {
         const { thumb, label, full, lq, hd, extension, data } = (binary || image || audio || video) as any;
         if (thumb) {
           const asset = {
-            assetId: `${revision}.${index}`,
+            assetId: `${index}`,
             hosting: HostingMode.Basic,
             basic: thumb,
           }
@@ -945,7 +945,7 @@ export class FocusModule implements Focus {
           index += 1;
         }
         const asset = {
-          assetId: `${revision}.${index}`,
+          assetId: `${index}`,
           hosting: HostingMode.Basic,
           basic: full || hd || lq,
         }

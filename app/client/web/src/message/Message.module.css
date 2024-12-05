@@ -5,7 +5,10 @@
 
   .assets {
     width: 100%;
-    height: 32px;
+    height: 128px;
+    padding-left: 72px;
+    margin-top: 8px;
+    margin-bottom: 16px;
   }
 
   .content {
@@ -20,7 +23,6 @@
     padding-top: 12px;
     border-top: 1px solid var(--mantine-color-text-8);
     
-
     .logo {
       width: 40px;
       height: 40px;

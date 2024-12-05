@@ -13,8 +13,6 @@ export function useConversation() {
     focus: null as Focus | null,
     layout: null,
     strings: display.state.strings,
-    timeFormat: display.state.timeFormat,
-    dateFormat: display.state.dateFormat,
     topics: [] as Topic[],
     profile: null as Profile | null,
     cards: new Map<string, Card>(),
@@ -27,8 +25,8 @@ export function useConversation() {
   }
 
   useEffect(() => {
-    const { layout, timeFormat, dateFormat } = display.state
-    updateState({ layout, timeFormat, dateFormat })
+    const { layout } = display.state
+    updateState({ layout })
   }, [display.state])
 
   useEffect(() => {
@@ -87,13 +85,6 @@ export function useConversation() {
       if (focus) {
         focus.viewMoreTopics();
       }
-    },
-    getAssetUrl: async (topicId: string, assetId: string) => {
-      const { focus } = app.state;
-      if (!focus) {
-        throw new Error('no channel in focus');
-      }
-      return await focus.getTopicAssetUrl(topicId, assetId, (percent: number)=>true);
     },
     add: async (file: File) => {
       const { focus } = app.state;

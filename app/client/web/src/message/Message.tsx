@@ -1,54 +1,37 @@
-import { useEffect, useState } from 'react';
 import { avatar } from '../constants/Icons'
 import { Topic, Card, Profile } from 'databag-client-sdk';
 import classes from './Message.module.css'
 import { Image } from '@mantine/core'
+import { ImageAsset } from './imageAsset/ImageAsset';
+import { AudioAsset } from './audioAsset/AudioAsset';
+import { VideoAsset } from './videoAsset/VideoAsset';
+import { BinaryAsset } from './binaryAsset/BinaryAsset';
+import type { MediaAsset } from '../conversation/Conversation';
+import { useMessage } from './useMessage.hook';
 
-function getTimestamp(created: number, timeFormat: string, dateFormat: string) {
-  const now = Math.floor((new Date()).getTime() / 1000)
-  const date = new Date(created * 1000);
-  const offset = now - created;
-  if(offset < 86400) {
-    if (timeFormat === '12h') {
-      return date.toLocaleTimeString("en-US", {hour: 'numeric', minute:'2-digit'});
-    }
-    else {
-      return date.toLocaleTimeString("en-GB", {hour: 'numeric', minute:'2-digit'});
-    }
-  }
-  else if (offset < 31449600) {
-    if (dateFormat === 'mm/dd') {
-      return date.toLocaleDateString("en-US", {day: 'numeric', month:'numeric'});
-    }
-    else {
-      return date.toLocaleDateString("en-GB", {day: 'numeric', month:'numeric'});
-    }
-  }
-  else {
-    if (dateFormat === 'mm/dd') {
-      return date.toLocaleDateString("en-US");
-    }
-    else {
-      return date.toLocaleDateString("en-GB");
-    }
-  }
-}
+export function Message({ topic, card, profile, host }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean }) {
+  const { state, actions } = useMessage();
 
-export function Message({ topic, card, profile, host, getAssetUrl, strings, timeFormat, dateFormat }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean, getAssetUrl: (topicId: string, assetId: string)=>Promise<string>, strings: any, timeFormat: string, dateFormat: string }) {
-
-  useEffect(() => {
-    console.log("NEW MESSAGE");
-  }, []);
-
-  const { locked, data, created } = topic;
+  const { locked, data, created, topicId } = topic;
   const { name, handle, node } = profile || card || { name: null, handle: null, node: null }  
-  const { text, textColor, textSize } = data || { text: null, textColor: null, textSize: null }
+  const { text, textColor, textSize, assets } = data || { text: null, textColor: null, textSize: null }
   const textStyle = textColor && textSize ? { color: textColor, fontSize: textSize } : textColor ? { color: textColor } : textSize ? { fontSize: textSize } : {}
   const logoUrl = profile ? profile.imageUrl : card ? card.imageUrl : avatar;
-  const timestamp = getTimestamp(created, timeFormat, dateFormat);
+  const timestamp = actions.getTimestamp(created);
   
   const options = [];
-  const assets = [];
+
+  const media = !assets ? [] : assets.map((asset: MediaAsset, index: number) => {
+    if (asset.image || asset.encrypted?.type === 'image') {
+      return <ImageAsset key={index} topicId={topicId} asset={asset as MediaAsset} />
+    } else if (asset.audio || asset.encrypted?.type === 'audio') {
+      return <AudioAsset key={index} topicId={topicId} asset={asset as MediaAsset} />
+    } else if (asset.video || asset.encrypted?.type === 'video') {
+      return <VideoAsset key={index} topicId={topicId} asset={asset as MediaAsset} />
+    } else {
+      return <></>
+    }
+  });
 
   return (
     <div className={classes.topic}>
@@ -64,7 +47,7 @@ export function Message({ topic, card, profile, host, getAssetUrl, strings, time
                 <span>{ `${handle}${node ? '/' + node : ''}` }</span>
               )}
               { !name && !handle && (
-                <span className={classes.unknown}>{ strings.unknownContact }</span>
+                <span className={classes.unknown}>{ state.strings.unknownContact }</span>
               )}
               <span className={classes.timestamp}> { timestamp }</span>
             </div>
@@ -75,7 +58,11 @@ export function Message({ topic, card, profile, host, getAssetUrl, strings, time
           )}
         </div>
       </div>
-      <div className={classes.assets}>ASSETS</div>
+      { media.length > 0 && (
+        <div className={classes.assets}>
+          { media }
+        </div>
+      )}
     </div>
   )
 }

@@ -6,6 +6,14 @@ import { IconX } from '@tabler/icons-react'
 import { Text } from '@mantine/core'
 import { Message } from '../message/Message';
 
+export type MediaAsset = {
+  encrypted?: { type: string, thumb: string, label: string, extension: string, parts: { blockIv: string, partId: string }[] },
+  image?: { thumb: string, full: string },
+  audio?: { label: string, full: string },
+  video?: { thumb: string, lq: string, hd: string },
+  binary?: { label: string, extension: string, data: string }
+}
+
 export function Conversation() {
   const { state, actions } = useConversation();
   const attachImage = useRef({ click: ()=>{} } as HTMLInputElement);
@@ -25,10 +33,6 @@ export function Conversation() {
         card={card}
         profile={profile}
         host={host}
-        getAssetUrl={actions.getAssetUrl}
-        strings={state.strings}
-        timeFormat={state.timeFormat}
-        dateFormat={state.dateFormat}
       />
     )
   })
