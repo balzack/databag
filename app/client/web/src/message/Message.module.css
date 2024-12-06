@@ -19,6 +19,15 @@
     overflow: auto;
   }
 
+  .failed {
+    width: 64px;
+    height: 64px;
+    margin-left: 72px;
+    margin-right: 32px;
+    margin-top: 8px;
+    border-radius: 8px;
+  }
+
   .content {
     display: flex;
     flex-direction: row;
@@ -52,6 +61,10 @@
       .locked {
         font-style: italic;
         color: var(--mantine-color-text-7);
+      }
+
+      .unconfirmed {
+        width: 100%;
       }
     
       .header {

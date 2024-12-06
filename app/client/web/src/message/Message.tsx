@@ -1,18 +1,19 @@
 import { avatar } from '../constants/Icons'
 import { Topic, Card, Profile } from 'databag-client-sdk';
 import classes from './Message.module.css'
-import { Image } from '@mantine/core'
+import { Image, Skeleton } from '@mantine/core'
 import { ImageAsset } from './imageAsset/ImageAsset';
 import { AudioAsset } from './audioAsset/AudioAsset';
 import { VideoAsset } from './videoAsset/VideoAsset';
 import { BinaryAsset } from './binaryAsset/BinaryAsset';
 import type { MediaAsset } from '../conversation/Conversation';
 import { useMessage } from './useMessage.hook';
+import failed from '../images/failed.png'
 
 export function Message({ topic, card, profile, host }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean }) {
   const { state, actions } = useMessage();
 
-  const { locked, data, created, topicId } = topic;
+  const { locked, data, created, topicId, status, transform } = topic;
   const { name, handle, node } = profile || card || { name: null, handle: null, node: null }  
   const { text, textColor, textSize, assets } = data || { text: null, textColor: null, textSize: null }
   const textStyle = textColor && textSize ? { color: textColor, fontSize: textSize } : textColor ? { color: textColor } : textSize ? { fontSize: textSize } : {}
@@ -53,9 +54,15 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
             </div>
             <div className={classes.options}>OPTIONS</div>
           </div>
-          { !locked && text && (
+          { !locked && status === 'confirmed' && text && (
             <div style={textStyle}>
               <span className={classes.text}>{ text }</span>
+            </div>
+          )}
+          { !locked && status !== 'confirmed' && (
+            <div className={classes.unconfirmed}>
+              <Skeleton height={8} mt={6} radius="xl" />
+              <Skeleton height={8} mt={6} width="70%" radius="xl" />
             </div>
           )}
           { locked && (
@@ -63,10 +70,16 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
           )}
         </div>
       </div>
-      { !locked && media.length > 0 && (
+      { !locked && media.length > 0 && transform === 'complete' && (
         <div className={classes.assets}>
           { media }
         </div>
+      )}
+      { !locked && media.length > 0 && transform === 'incomplete' && (
+        <Skeleton height={64} circle mb="xl" />
+      )}
+      { !locked && media.length > 0 && transform !== 'complete' && transform !== 'incomplete' && (
+        <Image className={classes.failed} src={failed} fit="contain" />
       )}
     </div>
   )
