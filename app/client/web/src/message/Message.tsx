@@ -53,14 +53,17 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
             </div>
             <div className={classes.options}>OPTIONS</div>
           </div>
-          { text && (
+          { !locked && text && (
             <div style={textStyle}>
               <span className={classes.text}>{ text }</span>
             </div>
           )}
+          { locked && (
+            <div className={classes.locked}>{ state.strings.encrypted }</div>
+          )}
         </div>
       </div>
-      { media.length > 0 && (
+      { !locked && media.length > 0 && (
         <div className={classes.assets}>
           { media }
         </div>

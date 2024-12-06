@@ -1,5 +1,6 @@
 export const en = {
   unknownContact: 'Unknown Contact',
+  encrypted: 'Encrypted',
   unknown: 'Unknown',
   sealed: 'Sealed',
   notes: 'Notes',
@@ -254,6 +255,7 @@ export const en = {
 
 export const fr = {
   unknownContact: 'Contact inconnu',
+  encrypted: 'Crypté',
   unknown: 'Inconnu',
   sealed: 'Scellé',
   notes: 'Notes',
@@ -509,6 +511,7 @@ export const fr = {
 
 export const sp = {
   unkownContact: 'Contacto Desconocido',
+  encrypted: 'Cifrado',
   unknown: 'Desconocido',
   sealed: 'Sellado',
   notes: 'Notas',
@@ -763,6 +766,7 @@ export const sp = {
 
 export const pt = {
   unknownContact: 'Contato Desconhecido',
+  encrypted: 'Criptografado',
   unknown: 'Desconhecido',
   sealed: 'Selado',
   notes: 'Notas',
@@ -1017,6 +1021,7 @@ export const pt = {
 
 export const de = {
   unknwonContact: 'Unbekannter Kontakt',
+  encrypted: 'Verschlüsselt',
   unknown: 'Unbekannt',
   sealed: 'Versiegelt',
   notes: 'Notizen',
@@ -1271,6 +1276,7 @@ export const de = {
 
 export const ru = {
   unknownContact: 'Неизвестный контакт',
+  encrypted: 'Зашифрованный',
   unknown: 'Неизвестно',
   sealed: 'Запечатано',
   notes: 'Заметки',
