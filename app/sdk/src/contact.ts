@@ -162,6 +162,10 @@ export class ContactModule implements Contact {
 
   public async close() {
     this.closing = true;
+    if (this.focus) {
+      await this.focus.close();
+      this.focus = null;
+    }
     while (this.syncing) {
       await new Promise((r) => setTimeout(r, CLOSE_POLL_MS));
     }
@@ -987,7 +991,7 @@ export class ContactModule implements Contact {
       blocked: this.isChannelBlocked(cardId, channelId),
       unread: this.isChannelUnread(cardId, channelId),
       sealed: detail.sealed,
-      locked: detail.sealed && (!this.seal || !channelKey),
+      locked: detail.sealed && (!this.seal || !this.channelKey),
       dataType: detail.dataType,
       data: this.parse(channelData),
       created: detail.created,

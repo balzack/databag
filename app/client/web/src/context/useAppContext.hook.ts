@@ -49,7 +49,7 @@ export function useAppContext() {
     accountLogout: async (all: boolean) => {
       if (state.session) {
         await sdk.current.logout(state.session, all)
-        updateState({ session: null })
+        updateState({ session: null, focus: null })
       }
     },
     accountCreate: async (handle: string, password: string, node: string, secure: boolean, token: string) => {

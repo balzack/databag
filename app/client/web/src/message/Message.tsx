@@ -54,7 +54,9 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
             <div className={classes.options}>OPTIONS</div>
           </div>
           { text && (
-            <div style={textStyle}>{ text }</div>
+            <div style={textStyle}>
+              <span className={classes.text}>{ text }</span>
+            </div>
           )}
         </div>
       </div>

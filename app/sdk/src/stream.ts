@@ -248,6 +248,10 @@ export class StreamModule {
 
   public async close(): Promise<void> {
     this.closing = true;
+    if (this.focus) {
+      await this.focus.close();
+      this.focus = null;
+    }
     while (this.syncing) {
       await new Promise((r) => setTimeout(r, CLOSE_POLL_MS));
     }

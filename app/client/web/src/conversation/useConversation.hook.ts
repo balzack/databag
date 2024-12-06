@@ -31,7 +31,7 @@ export function useConversation() {
 
   useEffect(() => {
     const focus = app.state.focus;
-    const { contact, identity } = app.state.session;
+    const { contact, identity } = app.state.session || { };
     if (focus && contact && identity) {
       const setTopics = (topics: Topic[]) => {
         const sorted = topics.sort((a, b) => {

@@ -744,6 +744,9 @@ export class FocusModule implements Focus {
       throw new Error('topic entry not found');
     }
     const { assets } = this.getTopicData(entry.item);
+
+console.log(">>> ", assetId, entry.item, assets);
+
     const asset = assets.find(item => item.assetId === assetId);
     if (!asset) {
       throw new Error('asset entry not found');
@@ -1086,7 +1089,7 @@ export class FocusModule implements Focus {
       throw new Error('disconnected channel');
     }
     const { node, secure, token } = connection;
-    return `http${secure ? 's' : ''}//${node}/content/channels/${channelId}/topics/${topicId}/assets/${assetId}?${cardId ? 'contact' : 'agent'}=${token}`
+    return `http${secure ? 's' : ''}://${node}/content/channels/${channelId}/topics/${topicId}/assets/${assetId}?${cardId ? 'contact' : 'agent'}=${token}`
   }
 
   private async getRemoteChannelTopics(revision: number | null, begin: number | null, end: number | null) {
