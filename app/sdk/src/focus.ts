@@ -51,6 +51,7 @@ export class FocusModule implements Focus {
   private markRead: ()=>Promise<void>;
   private flagChannelTopic: (id: string)=>Promise<void>;
   private focusDetail: FocusDetail | null;
+  private loaded: boolean;
 
   private markers: Set<string>;
 
@@ -92,6 +93,7 @@ export class FocusModule implements Focus {
     const { guid } = this;
     this.nextRevision = revision;
     this.storeView = await this.getChannelTopicRevision();
+    this.localComplete = this.storeView.revision == null;
 
     // load markers
     const values = await this.store.getMarkers(guid);
@@ -99,7 +101,6 @@ export class FocusModule implements Focus {
       this.markers.add(value);
     });
 
-    this.emitTopics();
     this.unsealAll = true;
     this.loadMore = true;
     this.syncing = false;
@@ -162,6 +163,7 @@ export class FocusModule implements Focus {
             } else {
               this.loadMore = false;
             }
+            await this.markRead();
             this.emitTopics();
           } catch (err) {
             this.log.warn(err);
@@ -744,9 +746,6 @@ export class FocusModule implements Focus {
       throw new Error('topic entry not found');
     }
     const { assets } = this.getTopicData(entry.item);
-
-console.log(">>> ", assetId, entry.item, assets);
-
     const asset = assets.find(item => item.assetId === assetId);
     if (!asset) {
       throw new Error('asset entry not found');
@@ -819,17 +818,18 @@ console.log(">>> ", assetId, entry.item, assets);
     await this.sync();
   }
 
-  public addTopicListener(ev: (topics: Topic[]) => void) {
+  public addTopicListener(ev: (topics: null | Topic[]) => void) {
     this.emitter.on('topic', ev);
-    const topics = Array.from(this.topicEntries, ([topicId, entry]) => entry.topic);
+    const topics = this.loaded ? Array.from(this.topicEntries, ([topicId, entry]) => entry.topic) : null;
     ev(topics);
   }
 
-  public removeTopicListener(ev: (topics: Topic[]) => void) {
+  public removeTopicListener(ev: (topics: | Topic[]) => void) {
     this.emitter.off('topic', ev);
   }
 
   private emitTopics() {
+    this.loaded = true;
     const topics = Array.from(this.topicEntries, ([topicId, entry]) => entry.topic);
     this.emitter.emit('topic', topics);
   }

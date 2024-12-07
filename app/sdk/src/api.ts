@@ -135,8 +135,8 @@ export interface Focus {
   setBlockTopic(topicId: string): Promise<void>;
   clearBlockTopic(topicId: string): Promise<void>;
 
-  addTopicListener(ev: (topics: Topic[]) => void): void;
-  removeTopicListener(ev: (topics: Topic[]) => void): void;
+  addTopicListener(ev: (topics: null | Topic[]) => void): void;
+  removeTopicListener(ev: (topics: null | Topic[]) => void): void;
 
   addDetailListener(ev: (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => void): void;
   removeDetailListener(ev: (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => void): void;

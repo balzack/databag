@@ -1,8 +1,21 @@
 .asset {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  .label {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+  }
 
   .thumb {
     width: auto;
     height: 128px;
+    border-radius: 4px;
   }
 }
 

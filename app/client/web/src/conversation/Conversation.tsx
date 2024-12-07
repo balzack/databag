@@ -3,7 +3,7 @@ import { Focus } from 'databag-client-sdk'
 import classes from './Conversation.module.css'
 import { useConversation } from './useConversation.hook';
 import { IconX } from '@tabler/icons-react'
-import { Text } from '@mantine/core'
+import { Text, Loader } from '@mantine/core'
 import { Message } from '../message/Message';
 
 export type MediaAsset = {
@@ -46,9 +46,16 @@ export function Conversation() {
         <IconX size={24} className={classes.close} onClick={actions.close} />
       </div>
       <div className={classes.frame}>
-        <div className={classes.thread}>
-        {topics}
-        </div>
+        { !state.loaded && (
+          <div className={classes.spinner}>
+            <Loader size={64} />
+          </div>
+        )}
+        { state.loaded && (
+          <div className={classes.thread}>
+            {topics}
+          </div>
+        )}
       </div>
       <div className={classes.add}>
         <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => onSelectImage(e)} style={{display: 'none'}}/>

@@ -7,9 +7,12 @@ import { Image } from '@mantine/core'
 
 export function AudioAsset({ topicId, asset }: { topicId: string, asset: MediaAsset }) {
   const { state, actions } = useAudioAsset(topicId, asset);
+  const { label } = asset.encrypted || asset.audio;
+
   return (
     <div className={classes.asset}>
       <Image className={classes.thumb} src={audio} fit="contain" />
+      <div className={classes.label}>{ label }</div>
     </div>
   )
 }

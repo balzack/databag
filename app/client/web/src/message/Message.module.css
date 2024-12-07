@@ -4,20 +4,51 @@
   width: 100%;
   margin-bottom: 8px;
 
+  .media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    .goleft {
+      position: absolute;
+      left: 32px;
+    }
+
+    .goright {
+      position: absolute;
+      right: 32px;
+    }
+  }
+
   .assets {
     width: 100%;
     height: 128px;
     padding-left: 72px;
     padding-right: 32px;
     margin-top: 8px;
-    display: flex;
     flex-grow: 1;
     flex-shrink: 1;
-    gap: 16px;
     min-width: 0;
     margin-bottom: 8px;
     overflow: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    display: flex;
+    flex-direction: row;
   }
+
+  .assets::-webkit-scrollbar {
+    display: none;
+  }
+
+  .thumbs {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 1;
+    gap: 16px;
+  } 
 
   .failed {
     width: 64px;

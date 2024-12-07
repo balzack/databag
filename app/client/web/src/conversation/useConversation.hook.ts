@@ -14,6 +14,7 @@ export function useConversation() {
     layout: null,
     strings: display.state.strings,
     topics: [] as Topic[],
+    loaded: false,
     profile: null as Profile | null,
     cards: new Map<string, Card>(),
     host: false,
@@ -34,16 +35,18 @@ export function useConversation() {
     const { contact, identity } = app.state.session || { };
     if (focus && contact && identity) {
       const setTopics = (topics: Topic[]) => {
-        const sorted = topics.sort((a, b) => {
-          if (a.created < b.created) {
-            return -1;
-          } else if (a.created > b.created) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });
-        updateState({ topics: sorted });
+        if (topics) {
+          const sorted = topics.sort((a, b) => {
+            if (a.created < b.created) {
+              return -1;
+            } else if (a.created > b.created) {
+              return 1;
+            } else {
+              return 0;
+            }
+          });
+          updateState({ topics: sorted, loaded: true });
+        }
       }
       const setCards = (cards: Card[]) => {
         const contacts = new Map<string, Card>();
@@ -63,6 +66,7 @@ export function useConversation() {
         }
         console.log(focused);
       }
+      updateState({ topics: [], loaded: false });
       focus.addTopicListener(setTopics);
       focus.addDetailListener(setDetail);
       contact.addCardListener(setCards);

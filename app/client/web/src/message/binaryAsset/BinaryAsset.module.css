@@ -1,8 +1,27 @@
 .asset {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .label {
+    position: absolute;
+    top: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .extension {
+    font-weight: bold;
+  }
 
   .thumb {
     width: auto;
     height: 128px;
+    border-radius: 4px;
   }
 }
 
