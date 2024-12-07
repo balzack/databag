@@ -395,7 +395,6 @@ export class StreamModule {
 
     const markRead = async () => {
       try {
-console.log("MARKING AS READ!!!");
         await this.setUnreadChannel(channelId, false);
       } catch (err) {
         this.log.error('failed to mark as read');

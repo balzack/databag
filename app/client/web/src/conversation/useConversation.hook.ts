@@ -6,6 +6,8 @@ import { ContextType } from '../context/ContextType'
 
 const img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII'
 
+const LOAD_DEBOUNCE = 1000;
+
 export function useConversation() {
   const app = useContext(AppContext) as ContextType
   const display = useContext(DisplayContext) as ContextType
@@ -15,6 +17,7 @@ export function useConversation() {
     strings: display.state.strings,
     topics: [] as Topic[],
     loaded: false,
+    loadingMore: false,
     profile: null as Profile | null,
     cards: new Map<string, Card>(),
     host: false,
@@ -84,10 +87,16 @@ export function useConversation() {
     close: () => {
       app.actions.clearFocus();
     },
-    more: () => {
+    more: async () => {
       const { focus } = app.state;
       if (focus) {
-        focus.viewMoreTopics();
+        if (!state.loadingMore) {
+          updateState({ loadingMore: true });
+          await focus.viewMoreTopics();
+          setTimeout(() => {
+            updateState({ loadingMore: false });
+          }, LOAD_DEBOUNCE);
+        }
       }
     },
     add: async (file: File) => {
