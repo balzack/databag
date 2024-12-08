@@ -10,7 +10,7 @@ import { BinaryAsset } from './binaryAsset/BinaryAsset';
 import type { MediaAsset } from '../conversation/Conversation';
 import { useMessage } from './useMessage.hook';
 import failed from '../images/failed.png'
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { IconChevronLeft, IconChevronRight, IconFileAlert } from '@tabler/icons-react';
 import { useResizeDetector } from 'react-resize-detector';
 
 export function Message({ topic, card, profile, host }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean }) {
@@ -118,7 +118,10 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
         <Skeleton height={64} circle mb="xl" />
       )}
       { !locked && media.length > 0 && transform !== 'complete' && transform !== 'incomplete' && (
-        <Image className={classes.failed} src={failed} fit="contain" />
+        <div className={classes.failed}>
+          <IconFileAlert />
+          <span>{ state.strings.processingError }</span>
+        </div>
       )}
     </div>
   )

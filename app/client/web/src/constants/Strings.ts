@@ -1,4 +1,5 @@
 export const en = {
+  processingError: 'Attachment Error',
   unknownContact: 'Unknown Contact',
   encrypted: 'Encrypted',
   unknown: 'Unknown',
@@ -254,7 +255,8 @@ export const en = {
 }
 
 export const fr = {
-  unknownContact: 'Contact inconnu',
+  processingError: 'erreur de Pièce Jointe',
+  unknownContact: 'Contact Inconnu',
   encrypted: 'Crypté',
   unknown: 'Inconnu',
   sealed: 'Scellé',
@@ -510,6 +512,7 @@ export const fr = {
 }
 
 export const sp = {
+  processingError: 'Error al Adjuntar',
   unkownContact: 'Contacto Desconocido',
   encrypted: 'Cifrado',
   unknown: 'Desconocido',
@@ -765,6 +768,7 @@ export const sp = {
 }
 
 export const pt = {
+  processingError: 'Erro de Anexo',
   unknownContact: 'Contato Desconhecido',
   encrypted: 'Criptografado',
   unknown: 'Desconhecido',
@@ -1020,6 +1024,7 @@ export const pt = {
 }
 
 export const de = {
+  processingError: 'Anhangsfehler',
   unknwonContact: 'Unbekannter Kontakt',
   encrypted: 'Verschlüsselt',
   unknown: 'Unbekannt',
@@ -1275,6 +1280,7 @@ export const de = {
 }
 
 export const ru = {
+  processingError: 'Ошибка прикрепления',
   unknownContact: 'Неизвестный контакт',
   encrypted: 'Зашифрованный',
   unknown: 'Неизвестно',

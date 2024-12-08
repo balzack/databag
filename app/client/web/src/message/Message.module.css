@@ -51,12 +51,13 @@
   } 
 
   .failed {
-    width: 64px;
-    height: 64px;
     margin-left: 72px;
     margin-right: 32px;
     margin-top: 8px;
     border-radius: 8px;
+    color: var(--mantine-color-red-9);
+    display: flex;
+    gap: 8px;
   }
 
   .content {
