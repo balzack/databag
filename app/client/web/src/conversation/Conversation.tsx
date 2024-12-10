@@ -18,8 +18,8 @@ export type MediaAsset = {
 }
 
 export function Conversation() {
-  const thread = useRef();
-  const scrollPos = useRef();
+  const thread = useRef(null as HTMLDivElement | null);
+  const scrollPos = useRef(0);
   const debounce = useRef(false);
   const { state, actions } = useConversation();
   const attachImage = useRef({ click: ()=>{} } as HTMLInputElement);
@@ -29,8 +29,8 @@ export function Conversation() {
   };
 
   const onScroll = () => {
-    const { scrollHeight, clientHeight, scrollTop } = thread.current || {}
-    if (state.loadingMore) {
+    const { scrollHeight, clientHeight, scrollTop } = thread.current || { scrollHeight: 0, clientHeight: 0, scrollTop: 0 }
+    if (thread.current && state.loadingMore) {
       thread.current.scrollTop = scrollPos.current;
     } else {
       if (scrollPos.current > scrollTop && scrollHeight - (clientHeight - scrollTop) < LOAD_MORE_POS) {

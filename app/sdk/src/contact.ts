@@ -58,9 +58,12 @@ export class ContactModule implements Contact {
   private nextRevision: number | null;
   private syncing: boolean;
   private closing: boolean;
+  private hasSynced: boolean;
 
   // set of markers
-  private markers: Set<string>;
+  private blockedCard: Set<string>;
+  private blockedCardChannel: Set<string>;
+  private read: Map<string, number>;
 
   // set of cards to resync
   private resync: Set<string>;
@@ -93,13 +96,16 @@ export class ContactModule implements Contact {
     this.cardEntries = new Map<string, { item: CardItem; card: Card }>();
     this.articleEntries = new Map<string, Map<string, { item: ArticleItem; article: Article }>>();
     this.channelEntries = new Map<string, Map<string, { item: ChannelItem; channel: Channel }>>();
-    this.markers = new Set<string>();
     this.resync = new Set<string>();
+    this.blockedCard = new Set<string>();
+    this.blockedCardChannel = new Set<string>();
+    this.read = new Map<string, number>();
 
     this.revision = 0;
     this.syncing = true;
     this.closing = false;
     this.nextRevision = null;
+    this.hasSynced = false;
     this.init();
   }
 
@@ -107,10 +113,20 @@ export class ContactModule implements Contact {
     const { guid } = this;
     this.revision = await this.store.getContactRevision(guid);
 
-    const values = await this.store.getMarkers(guid);
-    values.forEach((value) => {
-      this.markers.add(value);
+    const blockedCardMarkers = await this.store.getMarkers(guid, 'blocked_card');
+    blockedCardMarkers.forEach((marker) => {
+      this.blockedCard.add(marker.id);
     });
+    const blockedCardChannelMarkers = await this.store.getMarkers(guid, 'blocked_card_channel');
+    blockedCardChannelMarkers.forEach((marker) => {
+      this.blockedCardChannel.add(marker.id);
+    });
+    const readMarkers = await this.store.getMarkers(guid, 'read_card_channel');
+    readMarkers.forEach((marker) => {
+      this.read.set(marker.id, parseInt(marker.value));
+    });
+    const hasSyncedMarkers = await this.store.getMarkers(guid, 'first_sync_complete');
+    this.hasSynced = hasSyncedMarkers.filter((marker) => (marker.id === 'contact')).length !== 0;
 
     // load map of articles
     const articles = await this.store.getContactCardArticles(guid);
@@ -171,82 +187,109 @@ export class ContactModule implements Contact {
     }
   }
 
-  private isMarked(marker: string, cardId: string | null, channelId: string | null, topicId: string | null, tagId: string | null): boolean {
-    const card = cardId ? `"${cardId}"` : 'null';
-    const channel = channelId ? `"${channelId}"` : 'null';
-    const topic = topicId ? `"{topicId}"` : 'null';
-    const tag = tagId ? `"${tagId}"` : 'null';
-    const value = `{ "marker": "${marker}", "cardId": ${card}, "channelId": ${channel}, "topicId": ${topic}, "tagId": ${tag} }`;
-    return this.markers.has(value);
-  }
-
-  private async setMarker(marker: string, cardId: string | null, channelId: string | null, topicId: string | null, tagId: string | null) {
-    const card = cardId ? `"${cardId}"` : 'null';
-    const channel = channelId ? `"${channelId}"` : 'null';
-    const topic = topicId ? `"{topicId}"` : 'null';
-    const tag = tagId ? `"${tagId}"` : 'null';
-    const value = `{ "marker": "${marker}", "cardId": ${card}, "channelId": ${channel}, "topicId": ${topic}, "tagId": ${tag} }`;
-    this.markers.add(value);
-    await this.store.setMarker(this.guid, value);
-  }
-
-  private async clearMarker(marker: string, cardId: string | null, channelId: string | null, topicId: string | null, tagId: string | null) {
-    const card = cardId ? `"${cardId}"` : 'null';
-    const channel = channelId ? `"${channelId}"` : 'null';
-    const topic = topicId ? `"{topicId}"` : 'null';
-    const tag = tagId ? `"${tagId}"` : 'null';
-    const value = `{ "marker": "${marker}", "cardId": ${card}, "channelId": ${channel}, "topicId": ${topic}, "tagId": ${tag} }`;
-    this.markers.delete(value);
-    await this.store.clearMarker(this.guid, value);
-  }
-
   private isCardBlocked(cardId: string): boolean {
-    return this.isMarked('blocked_card', cardId, null, null, null);
+    return this.blockedCard.has(cardId);
   }
 
   private async setCardBlocked(cardId: string) {
-    await this.setMarker('blocked_card', cardId, null, null, null);
+    const entry = this.cardEntries.get(cardId);
+    if (!entry) {
+      throw new Error('card not found');
+    }
+    this.blockedCard.add(cardId);
+    entry.card = this.setCard(cardId, entry.item);
+    this.emitCards();
+    await this.store.setMarker(this.guid, 'blocked_card', cardId, '');
   }
-
+  
   private async clearCardBlocked(cardId: string) {
-    await this.clearMarker('blocked_card', cardId, null, null, null);
+    const entry = this.cardEntries.get(cardId);
+    if (!entry) {
+      throw new Error('card not found');
+    }
+    this.blockedCard.delete(cardId);
+    entry.card = this.setCard(cardId, entry.item);
+    this.emitCards();
+    await this.store.clearMarker(this.guid, 'blocked_card', cardId);
   }
 
   private isChannelBlocked(cardId: string, channelId: string): boolean {
-    return this.isMarked('blocked_channel', cardId, channelId, null, null);
+    const id = `${cardId}:${channelId}`;
+    return this.blockedCardChannel.has(id);
   }
 
   private async setChannelBlocked(cardId: string, channelId: string) {
-    await this.setMarker('blocked_channel', cardId, channelId, null, null);
+    const channelsEntry = this.channelEntries.get(cardId);
+    if (!channelsEntry) {
+      throw new Error('card not found');
+    }
+    const channelEntry = channelsEntry.get(channelId);
+    if (!channelEntry) {
+      throw new Error('channel not found');
+    }
+    const id = `${cardId}:${channelId}`;
+    this.blockedCardChannel.add(id);
+    channelEntry.channel = this.setChannel(cardId, channelId, channelEntry.item); 
+    this.emitChannels(cardId);
+    await this.store.setMarker(this.guid, 'blocked_card_channel', id, '');
   }
 
   private async clearChannelBlocked(cardId: string, channelId: string) {
-    await this.clearMarker('blocked_channel', cardId, channelId, null, null);
+    const channelsEntry = this.channelEntries.get(cardId);
+    if (!channelsEntry) {
+      throw new Error('card not found');
+    }
+    const channelEntry = channelsEntry.get(channelId);
+    if (!channelEntry) {
+      throw new Error('channel not found');
+    }
+    const id = `${cardId}:${channelId}`;
+    this.blockedCardChannel.delete(id);
+    channelEntry.channel = this.setChannel(cardId, channelId, channelEntry.item); 
+    this.emitChannels(cardId);
+    await this.store.clearMarker(this.guid, 'blocked_card_channel', id);
   }
 
   private isArticleBlocked(cardId: string, articleId: string): boolean {
-    return this.isMarked('blocked_article', cardId, articleId, null, null);
+    return false;
   }
 
   private async setArticleBlocked(cardId: string, articleId: string) {
-    await this.setMarker('blocked_article', cardId, articleId, null, null);
   }
 
   private async clearArticleBlocked(cardId: string, articleId: string) {
-    await this.clearMarker('blocked_article', cardId, articleId, null, null);
   }
 
-  private isChannelUnread(cardId: string, channelId: string): boolean {
-    return this.isMarked('unread', cardId, channelId, null, null);
+  private isChannelUnread(cardId: string, channelId: string, revision: number): boolean {
+    const id = `${cardId}:${channelId}`;
+    if (this.read.has(id)) {
+      const read = this.read.get(id);
+      if (read && read >= revision) {
+        return false;
+      }
+    }
+    return true; 
   }
 
-  private async setChannelUnread(cardId: string, channelId: string) {
-    await this.setMarker('unread', cardId, channelId, null, null);
+  private async markChannelUnread(cardId: string, channelId: string, revision: number) {
+    const id = `${cardId}:${channelId}`;
+    if (!this.read.has(id)) {
+      const read = this.read.get(id);
+      if (read && read < revision) {
+        this.read.delete(id);
+        await this.store.clearMarker(this.guid, 'read_card_channel', id);
+      }
+    } 
   }
 
-  private async clearChannelUnread(cardId: string, channelId: string) {
-    await this.clearMarker('unread', cardId, channelId, null, null);
-  }
+  private async markChannelRead(cardId: string, channelId: string, revision: number) {
+    const id = `${cardId}:${channelId}`;
+    const read = this.read.get(id);
+    if (!read || read < revision) {
+      this.read.set(id, revision);
+      await this.store.setMarker(this.guid, 'read_card_channel', id, revision.toString());
+    }
+  } 
 
   public async resyncCard(cardId: string): Promise<void> {
     this.resync.add(cardId);
@@ -459,6 +502,10 @@ export class ContactModule implements Contact {
         }
       }
 
+      if (this.revision && !this.hasSynced) {
+        this.hasSynced = true;
+        await this.store.setMarker(this.guid, 'first_sync_complete', 'contact', '');
+      }
       this.syncing = false;
     }
   }
@@ -541,7 +588,11 @@ export class ContactModule implements Contact {
           };
           entry.item.unsealedSummary = null;
           await this.unsealChannelSummary(cardId, id, entry.item);
-          this.setChannelUnread(cardId, id);
+          if (this.hasSynced) {
+            await this.markChannelUnread(cardId, id, topicRevision);
+          } else {
+            await this.markChannelRead(cardId, id, topicRevision);
+          }
           entry.channel = this.setChannel(cardId, id, entry.item);
           await this.store.setContactCardChannelSummary(guid, cardId, id, entry.item.summary, entry.item.unsealedSummary);
           if (this.focus) {
@@ -633,7 +684,7 @@ export class ContactModule implements Contact {
       try {
         await this.setUnreadChannel(cardId, channelId, false);
       } catch (err) {
-        this.log.error('failed to mark channel as read');
+        this.log.error(err);
       }
     }
 
@@ -879,18 +930,26 @@ export class ContactModule implements Contact {
   }
 
   public async setUnreadChannel(cardId: string, channelId: string, unread: boolean): Promise<void> {
-    const entries = this.channelEntries.get(cardId);
-    if (entries) {
-      const entry = entries.get(channelId);
-      if (entry) {
-        if (unread) {
-          await this.setChannelUnread(cardId, channelId);
-        } else {
-          await this.clearChannelUnread(cardId, channelId);
-        }
-        entry.channel = this.setChannel(cardId, channelId, entry.item);
-        this.emitChannels(cardId);
-      }
+    const channelsEntry = this.channelEntries.get(cardId);
+    if (!channelsEntry) {
+      throw new Error('card not found');
+    }
+    const channelEntry = channelsEntry.get(channelId);
+    if (!channelEntry) {
+      throw new Error('channel not found');
+    } 
+    const id = `${cardId}:${channelId}`;
+    if (unread) {
+      this.read.delete(id);
+      channelEntry.channel = this.setChannel(cardId, channelId, channelEntry.item);
+      this.emitChannels(cardId);
+      await this.store.clearMarker(this.guid, 'read_card_channel', id);
+    } else {
+      const revision = channelEntry.item.summary.revision;
+      this.read.set(id, revision);
+      channelEntry.channel = this.setChannel(cardId, channelId, channelEntry.item);
+      this.emitChannels(cardId);
+      await this.store.setMarker(this.guid, 'read_card_channel', id, revision.toString());
     }
   }
 
@@ -989,9 +1048,9 @@ export class ContactModule implements Contact {
         transform: summary.transform,
       },
       blocked: this.isChannelBlocked(cardId, channelId),
-      unread: this.isChannelUnread(cardId, channelId),
+      unread: this.isChannelUnread(cardId, channelId, summary.revision),
       sealed: detail.sealed,
-      locked: detail.sealed && (!this.seal || !this.channelKey),
+      locked: detail.sealed && (!this.seal || !item.channelKey),
       dataType: detail.dataType,
       data: this.parse(channelData),
       created: detail.created,

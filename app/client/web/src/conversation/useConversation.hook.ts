@@ -67,7 +67,6 @@ export function useConversation() {
         } else {
           updateState({ host: true });
         }
-        console.log(focused);
       }
       updateState({ topics: [], loaded: false });
       focus.addTopicListener(setTopics);

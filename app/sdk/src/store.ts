@@ -11,9 +11,9 @@ export interface Store {
   setSeal(guid: string, seal: { publicKey: string; privateKey: string }): Promise<void>;
   clearSeal(guid: string): Promise<void>;
 
-  setMarker(guid: string, value: string): Promise<void>;
-  clearMarker(guid: string, value: string): Promise<void>;
-  getMarkers(guid: string): Promise<string[]>;
+  setMarker(guid: string, type: string, id: string, value: string): Promise<void>;
+  clearMarker(guid: string, type: string, id: string): Promise<void>;
+  getMarkers(guid: string, type: string): Promise<{ id: string, value: string }[]>;
 
   getProfileRevision(guid: string): Promise<number>;
   setProfileRevision(guid: string, revision: number): Promise<void>;
@@ -121,6 +121,11 @@ export class OfflineStore implements Store {
     const params = where.map(({value}) => value);
     return await this.sql.get(`SELECT ${fields.join(', ')} FROM ${table}_${guid} WHERE ${condition} ORDER BY ${sort} LIMIT ${limit}`, params);
   }
+  private async getFilteredValues(guid: string, table: string, fields: string[], where: {field: string, value: string}[]): Promise<any[]> {
+    const condition = `${where.map(({field}) => (field + '=?')).join(' AND ')}`;
+    const params = where.map(({value}) => value);
+    return await this.sql.get(`SELECT ${fields.join(', ')} FROM ${table}_${guid} WHERE ${condition}`, params);
+  }
 
   private async getFilteredOrderedOffsetValues(guid: string, table: string, fields: string[], where: {field: string, value: string}[], order: string[], primaryOffset: {field: string, value: number}, secondaryOffset: {field: string, value: string}, limit: number): Promise<any[]> {
     const sort = order.map(field => (field + ' DESC')).join(', ')
@@ -213,7 +218,7 @@ export class OfflineStore implements Store {
     await this.sql.set(
       `CREATE TABLE IF NOT EXISTS card_channel_topic_${guid} (card_id text, channel_id text, topic_id text, position real, detail text, unsealed_detail text, unique(card_id, channel_id, topic_id))`,
     );
-    await this.sql.set(`CREATE TABLE IF NOT EXISTS marker_${guid} (value text)`);
+    await this.sql.set(`CREATE TABLE IF NOT EXISTS marker_${guid} (type text, id: text, value text, unique(type, id))`);
 
 
     await this.sql.set(
@@ -229,16 +234,17 @@ export class OfflineStore implements Store {
     return (await this.getAppValue('', 'login', null)) as Login | null;
   }
 
-  public async setMarker(guid: string, value: string) {
-    await this.addValue(guid, 'marker', ['value'], [value]);
+  public async setMarker(guid: string, type: string, id: string, value: string) {
+    await this.addValue(guid, 'marker', ['type', 'id', 'value'], [type, id, value]);
   }
 
-  public async clearMarker(guid: string, value: string) {
-    await this.removeValue(guid, 'marker', ['value'], [value]);
+  public async clearMarker(guid: string, type: string, id: string) {
+    await this.removeValue(guid, 'marker', ['type', 'id'], [type, id]);
   }
 
-  public async getMarkers(guid: string): Promise<string[]> {
-    return (await this.getValues(guid, 'marker', ['value'])).map((marker) => marker.value);
+  public async getMarkers(guid: string, type: string): Promise<{id: string, value: string}[]> {
+    const markers = await this.getFilteredValues(guid, 'marker', ['type', 'id'], [{ field: 'type', value: type }]);
+    return markers.map(marker => ({ id: marker.id, value: marker.id }));
   }
 
   public async setLogin(login: Login): Promise<void> {
@@ -601,23 +607,35 @@ export class OnlineStore implements Store {
     return (await this.getAppValue('', 'login', null)) as Login | null;
   }
 
-  public async setMarker(guid: string, value: string) {
-    const markers = await this.getAppValue(guid, 'marker', []);
-    markers.push(value);
-    this.setAppValue(guid, 'marker', markers);
+  public async setMarker(guid: string, type: string, id: string, value: string) {
+    const markers = await this.getAppValue(guid, `marker_${type}`, []);
+    try {
+      const updated = markers.filter((marker: {id: string, value: string}) => (marker.id !== id));
+      updated.push({ id, value });
+      this.setAppValue(guid, `marker_${type}`, updated);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  public async clearMarker(guid: string, value: string) {
-    const markers = (await this.getAppValue(guid, 'marker', [])) as string[];
-    this.setAppValue(
-      guid,
-      'marker',
-      markers.filter((marker) => value != marker),
-    );
+  public async clearMarker(guid: string, type: string, id: string) {
+    const markers = await this.getAppValue(guid, `marker_${type}`, []);
+    try {
+      const updated = markers.filter((marker: {id: string, value: string}) => (marker.id !== id));
+      this.setAppValue(guid, `marker_${type}`, updated);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  public async getMarkers(guid: string): Promise<string[]> {
-    return (await this.getAppValue(guid, 'marker', [])) as string[];
+  public async getMarkers(guid: string, type: string): Promise<{ id: string, value: string }[]> {
+    const markers = await this.getAppValue(guid, `marker_${type}`, []);
+    try {
+      return markers.map((marker: {id: string, value: string}) => ({ id: marker.id, value: marker.value }));
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 
   public async setLogin(login: Login): Promise<void> {
@@ -783,11 +801,11 @@ export class NoStore implements Store {
     return null;
   }
 
-  public async setMarker(guid: string, marker: string): Promise<void> {}
+  public async setMarker(guid: string, type: string, id: string, value: string): Promise<void> {}
 
-  public async clearMarker(guid: string, marker: string): Promise<void> {}
+  public async clearMarker(guid: string, type: string, id: string): Promise<void> {}
 
-  public async getMarkers(guid: string): Promise<string[]> {
+  public async getMarkers(guid: string, type: string): Promise<{ id: string, value: string }[]> {
     return [];
   }
 

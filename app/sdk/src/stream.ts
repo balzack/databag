@@ -40,8 +40,10 @@ export class StreamModule {
   private nextRevision: number | null;
   private seal: { privateKey: string; publicKey: string } | null;
   private unsealAll: boolean;
-  private markers: Set<string>;
+  private blocked: Set<string>;
+  private read: Map<string, number>
   private channelTypes: string[];
+  private hasSynced: boolean;
 
   // view of channels
   private channelEntries: Map<string, { item: ChannelItem; channel: Channel }>;
@@ -62,12 +64,14 @@ export class StreamModule {
     this.emitter = new EventEmitter();
 
     this.channelEntries = new Map<string, { item: ChannelItem; channel: Channel }>();
-    this.markers = new Set<string>();
+    this.read = new Map<string, number>();
+    this.blocked = new Set<string>();
 
     this.revision = 0;
     this.syncing = true;
     this.closing = false;
     this.nextRevision = null;
+    this.hasSynced = false;
     this.init();
   }
 
@@ -75,10 +79,16 @@ export class StreamModule {
     const { guid } = this;
     this.revision = await this.store.getContentRevision(guid);
 
-    const values = await this.store.getMarkers(guid);
-    values.forEach((value) => {
-      this.markers.add(value);
+    const blockedMarkers = await this.store.getMarkers(guid, 'blocked_channel');
+    blockedMarkers.forEach((marker) => {
+      this.blocked.add(marker.id);
     });
+    const readMarkers = await this.store.getMarkers(guid, 'read_channel');
+    readMarkers.forEach((marker) => {
+      this.read.set(marker.id, parseInt(marker.value));
+    });
+    const hasSyncedMarkers = await this.store.getMarkers(guid, 'first_sync_complete');
+    this.hasSynced = hasSyncedMarkers.filter((marker) => (marker.id === 'stream')).length !== 0;
 
     // load map of channels
     const channels = await this.store.getContentChannels(guid);
@@ -173,7 +183,11 @@ export class StreamModule {
                   };
                   entry.item.unsealedSummary = null;
                   await this.unsealChannelSummary(id, entry.item);
-                  this.setChannelUnread(id);
+                  if (this.hasSynced) {
+                    await this.markChannelUnread(id, topicRevision);
+                  } else {
+                    await this.markChannelRead(id, topicRevision);
+                  }
                   entry.channel = this.setChannel(id, entry.item);
                   await this.store.setContentChannelSummary(guid, id, entry.item.summary, entry.item.unsealedSummary);
                 }
@@ -227,6 +241,10 @@ export class StreamModule {
         }
       }
 
+      if (this.revision && !this.hasSynced) {
+        this.hasSynced = true;
+        await this.store.setMarker(this.guid, 'first_sync_complete', 'stream', '');
+      }
       this.syncing = false;
     }
   }
@@ -376,14 +394,20 @@ export class StreamModule {
 
   public async setUnreadChannel(channelId: string, unread: boolean): Promise<void> {
     const entry = this.channelEntries.get(channelId);
-    if (entry) {
-      if (unread) {
-        await this.setChannelUnread(channelId);
-      } else {
-        await this.clearChannelUnread(channelId);
-      }
+    if (!entry) {
+      throw new Error('channel not found');
+    }
+    if (unread) {
+      this.read.delete(channelId);
       entry.channel = this.setChannel(channelId, entry.item);
       this.emitChannels();
+      await this.store.clearMarker(this.guid, 'read_channel', channelId);
+    } else {
+      const revision = entry.item.summary.revision;
+      this.read.set(channelId, revision);
+      entry.channel = this.setChannel(channelId, entry.item);
+      this.emitChannels();
+      await this.store.setMarker(this.guid, 'read_channel', channelId, revision.toString());
     }
   }
 
@@ -397,7 +421,7 @@ export class StreamModule {
       try {
         await this.setUnreadChannel(channelId, false);
       } catch (err) {
-        this.log.error('failed to mark as read');
+        this.log.error(err);
       }
     }
 
@@ -455,54 +479,58 @@ export class StreamModule {
     return null;
   }
 
-  private isMarked(marker: string, channelId: string | null, topicId: string | null, tagId: string | null): boolean {
-    const channel = channelId ? `"${channelId}"` : 'null';
-    const topic = topicId ? `"{topicId}"` : 'null';
-    const tag = tagId ? `"${tagId}"` : 'null';
-    const value = `{ "marker": "${marker}", "cardId": null, "channelId": ${channel}, "topicId": ${topic}, "tagId": ${tag} }`;
-    return this.markers.has(value);
-  }
-
-  private async setMarker(marker: string, channelId: string | null, topicId: string | null, tagId: string | null) {
-    const channel = channelId ? `"${channelId}"` : 'null';
-    const topic = topicId ? `"{topicId}"` : 'null';
-    const tag = tagId ? `"${tagId}"` : 'null';
-    const value = `{ "marker": "${marker}", "cardId": null, "channelId": ${channel}, "topicId": ${topic}, "tagId": ${tag} }`;
-    this.markers.add(value);
-    await this.store.setMarker(this.guid, value);
-  }
-
-  private async clearMarker(marker: string, channelId: string | null, topicId: string | null, tagId: string | null) {
-    const channel = channelId ? `"${channelId}"` : 'null';
-    const topic = topicId ? `"{topicId}"` : 'null';
-    const tag = tagId ? `"${tagId}"` : 'null';
-    const value = `{ "marker": "${marker}", "cardId": null, "channelId": ${channel}, "topicId": ${topic}, "tagId": ${tag} }`;
-    this.markers.delete(value);
-    await this.store.clearMarker(this.guid, value);
-  }
-
   private isChannelBlocked(channelId: string): boolean {
-    return this.isMarked('blocked_channel', channelId, null, null);
+    return this.blocked.has(channelId);
   }
 
   private async setChannelBlocked(channelId: string) {
-    await this.setMarker('blocked_channel', channelId, null, null);
+    const entry = this.channelEntries.get(channelId);
+    if (!entry) {
+      throw new Error('channel not found');
+    }
+    this.blocked.add(channelId);
+    entry.channel = this.setChannel(channelId, entry.item);
+    this.emitChannels();
+    await this.store.setMarker(this.guid, 'blocked_channel', channelId, '');
   }
 
   private async clearChannelBlocked(channelId: string) {
-    await this.clearMarker('blocked_channel', channelId, null, null);
+    const entry = this.channelEntries.get(channelId);
+    if (!entry) {
+      throw new Error('channel not found');
+    }
+    this.blocked.delete(channelId);
+    entry.channel = this.setChannel(channelId, entry.item);
+    this.emitChannels();
+    await this.store.clearMarker(this.guid, 'blocked_channel', channelId);
   }
 
-  private isChannelUnread(channelId: string): boolean {
-    return this.isMarked('unread', channelId, null, null);
+  private isChannelUnread(channelId: string, revision: number): boolean {
+    if (this.read.has(channelId)) {
+      const read = this.read.get(channelId);
+      if (read && read >= revision) {
+        return false;
+      }
+    }
+    return true;
   }
 
-  private async setChannelUnread(channelId: string) {
-    await this.setMarker('unread', channelId, null, null);
+  private async markChannelUnread(channelId: string, revision: number) {
+    if (!this.read.has(channelId)) {
+      const read = this.read.get(channelId);
+      if (read && read < revision) {
+        this.read.delete(channelId);
+        await this.store.clearMarker(this.guid, 'read_channel', channelId);
+      }
+    }
   }
 
-  private async clearChannelUnread(channelId: string) {
-    await this.clearMarker('unread', channelId, null, null);
+  private async markChannelRead(channelId: string, revision: number) {
+    const read = this.read.get(channelId);
+    if (!read || read < revision) {
+      this.read.set(channelId, revision);
+      await this.store.setMarker(this.guid, 'read_channel', channelId, revision.toString());
+    } 
   }
 
   private setChannel(channelId: string, item: ChannelItem): Channel {
@@ -524,7 +552,7 @@ export class StreamModule {
         transform: summary.transform,
       },
       blocked: this.isChannelBlocked(channelId),
-      unread: this.isChannelUnread(channelId),
+      unread: this.isChannelUnread(channelId, summary.revision),
       sealed: detail.sealed,
       locked: detail.sealed && (!this.seal || !channelKey),
       dataType: detail.dataType,
