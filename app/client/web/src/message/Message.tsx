@@ -10,7 +10,7 @@ import { BinaryAsset } from './binaryAsset/BinaryAsset';
 import type { MediaAsset } from '../conversation/Conversation';
 import { useMessage } from './useMessage.hook';
 import failed from '../images/failed.png'
-import { IconChevronLeft, IconChevronRight, IconFileAlert } from '@tabler/icons-react';
+import { IconForbid, IconTrash, IconEdit, IconAlertSquareRounded, IconChevronLeft, IconChevronRight, IconFileAlert } from '@tabler/icons-react';
 import { useResizeDetector } from 'react-resize-detector';
 
 export function Message({ topic, card, profile, host }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean }) {
@@ -73,7 +73,18 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
               )}
               <span className={classes.timestamp}> { timestamp }</span>
             </div>
-            <div className={classes.options}>OPTIONS</div>
+            <div className={classes.options}>
+              <div className={classes.surface}>
+                { !locked && profile && (
+                  <IconEdit className={classes.option} />
+                )}
+                { (host || profile) && (
+                  <IconTrash className={classes.careful} />
+                )}
+                <IconForbid className={classes.careful} />
+                <IconAlertSquareRounded className={classes.careful} />
+              </div>
+            </div>
           </div>
           { !locked && status === 'confirmed' && text && (
             <div style={textStyle}>

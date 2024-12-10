@@ -107,6 +107,7 @@
         line-height: 16px;
         padding-bottom: 4px;
         gap: 16px;
+        position: relative;
 
         &:hover {
           .options {
@@ -118,6 +119,34 @@
 
         .options {
           display: none;
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
+
+        .surface {
+          display: flex;
+          background-color: var(--mantine-color-surface-4);
+          gap: 10px;
+          padding-top: 4px;
+          padding-bottom: 4px;
+          padding-left: 8px;
+          padding-right: 8px;
+          border-radius: 4px;
+        }
+
+        .option {
+          cursor: pointer;
+          width: 20px;
+          height: 20px;
+          color: var(--mantine-color-dbgreen-1);
+        }
+    
+        .careful {
+          cursor: pointer;
+          width: 20px;
+          height: 20px;
+          color: var(--mantine-color-red-2);
         }
 
         .name {
