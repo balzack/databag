@@ -1,9 +1,22 @@
 .channel {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
   height: 100%;
-  gap: 8px;
+
+  .unfocused {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .focused {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--mantine-color-surface-3);
+  }
 
   .details {
     display: flex;
@@ -14,6 +27,10 @@
   }
 
   .cursor {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-right: 16px;
+    padding-left: 16px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -25,6 +42,10 @@
   }
 
   .nocursor {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-right: 16px;
+    padding-left: 16px;
     display: flex;
     flex-direction: row;
     align-items: center;

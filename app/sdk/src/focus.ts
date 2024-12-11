@@ -20,8 +20,8 @@ import { setContactChannelTopicSubject } from './net/setContactChannelTopicSubje
 import { removeChannelTopic } from './net/removeChannelTopic';
 import { removeContactChannelTopic } from './net/removeContactChannelTopic';
 
-const BATCH_COUNT = 64;
-const MIN_LOAD_SIZE = 32;
+const BATCH_COUNT = 32;
+const MIN_LOAD_SIZE = (BATCH_COUNT / 2);
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
 const ENCRYPT_BLOCK_SIZE = 1048576;

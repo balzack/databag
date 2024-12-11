@@ -34,7 +34,7 @@ export function useConversation() {
   }, [display.state])
 
   useEffect(() => {
-    const focus = app.state.focus;
+    const focus = app.state.focus?.thread;
     const { contact, identity } = app.state.session || { };
     if (focus && contact && identity) {
       const setTopics = (topics: Topic[]) => {
@@ -87,7 +87,7 @@ export function useConversation() {
       app.actions.clearFocus();
     },
     more: async () => {
-      const { focus } = app.state;
+      const focus = app.state.focus?.thread;
       if (focus) {
         if (!state.loadingMore) {
           updateState({ loadingMore: true });
@@ -99,7 +99,7 @@ export function useConversation() {
       }
     },
     add: async (file: File) => {
-      const { focus } = app.state;
+      const focus = app.state.focus?.thread;
       if (focus) {
         const asset = {
           name: 'topic',

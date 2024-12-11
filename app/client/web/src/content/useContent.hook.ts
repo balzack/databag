@@ -9,6 +9,7 @@ type ChannelParams = {
   cardId: string
   channelId: string
   sealed: boolean
+  focused: boolean
   hosted: boolean
   unread: boolean
   imageUrl: string
@@ -32,6 +33,7 @@ export function useContent() {
     filter: '',
     topic: '',
     sealSet: false,
+    focused: null as null|{cardId: null|string, channelId},
   })
 
   const compare = (a: Card, b: Card) => {
@@ -134,12 +136,13 @@ export function useContent() {
         return ''
       }
 
+      const focused = (state.focused?.cardId === cardId && state.focused?.channelId === channelId);
       const hosted = cardId == null
       const subject = data?.subject ? [data.subject] : buildSubject()
       const message = getMessage()
       const imageUrl = selectImage()
 
-      return { cardId, channelId, sealed, hosted, unread, imageUrl, subject, message }
+      return { cardId, channelId, sealed, focused, hosted, unread, imageUrl, subject, message }
     })
 
     const search = state.filter?.toLowerCase()
@@ -157,7 +160,16 @@ export function useContent() {
     })
 
     updateState({ filtered })
-  }, [state.sorted, state.cards, state.guid, state.filter])
+  }, [state.sorted, state.cards, state.guid, state.filter, state.focused])
+
+  useEffect(() => {
+    if (app.state.focus) {
+      const { cardId, channelId } = app.state.focus;
+      updateState({ focused: { cardId, channelId } });
+    } else {
+      updateState({ focused: null });
+    }
+  }, [app.state.focus]);
 
   useEffect(() => {
     const setConfig = (config: Config) => {

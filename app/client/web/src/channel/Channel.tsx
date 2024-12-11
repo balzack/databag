@@ -6,6 +6,7 @@ import { Colors } from '../constants/Colors'
 export function Channel({
   className,
   unread,
+  focused,
   imageUrl,
   notesPlaceholder,
   subject,
@@ -16,6 +17,7 @@ export function Channel({
 }: {
   className: string
   unread: boolean
+  focused: boolean
   imageUrl: string
   notesPlaceholder: string
   subject: (string | null)[]
@@ -43,14 +45,16 @@ export function Channel({
   return (
     <div className={className}>
       <div className={classes.channel}>
-        <div className={select ? classes.cursor : classes.nocursor} onClick={select ? select : () => {}}>
-          <Image radius="sm" className={classes.image} src={imageUrl} />
-          <div className={classes.details}>
-            <span className={classes.subject}>{title}</span>
-            {message != null && <span className={classes.messageSet}>{message}</span>}
-            {message == null && <span className={classes.messageUnset}>{messagePlaceholder}</span>}
+        <div className={focused ? classes.focused : classes.unfocused}>
+          <div className={select ? classes.cursor : classes.nocursor} onClick={select ? select : () => {}}>
+            <Image radius="sm" className={classes.image} src={imageUrl} />
+            <div className={classes.details}>
+              <span className={classes.subject}>{title}</span>
+              {message != null && <span className={classes.messageSet}>{message}</span>}
+              {message == null && <span className={classes.messageUnset}>{messagePlaceholder}</span>}
+            </div>
+            {unread && <div className={classes.unread} style={{ backgroundColor: Colors.connected }} />}
           </div>
-          {unread && <div className={classes.unread} style={{ backgroundColor: Colors.connected }} />}
         </div>
       </div>
     </div>

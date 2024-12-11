@@ -74,6 +74,7 @@ export function Content() {
         key={idx}
         className={classes.channel}
         unread={channel.unread}
+        focused={channel.focused}
         imageUrl={channel.imageUrl}
         subject={channel.subject}
         messagePlaceholder={`[${state.strings.sealed}]`}
