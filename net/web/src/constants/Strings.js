@@ -1281,8 +1281,8 @@ export const el = {
   start: 'Έναρξη',
 
   communication: 'Επικοινωνία για τον Αποκεντρωμένο Ιστό',
-  setupProfile: 'Ρύθμιση του προφίλ σας',
-  connectPeople: 'Σύνδεση με άτομα',
+  setupProfile: 'Ρυθμίστε το προφίλ σας',
+  connectPeople: 'Συνδεθείτε με άτομα',
   startConversation: 'Ξεκινήστε μια συνομιλία',
 
   default: 'Προεπιλογή',
