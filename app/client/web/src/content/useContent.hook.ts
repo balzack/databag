@@ -33,7 +33,7 @@ export function useContent() {
     filter: '',
     topic: '',
     sealSet: false,
-    focused: null as null|{cardId: null|string, channelId},
+    focused: null as null|{cardId: null|string, channelId: string},
   })
 
   const compare = (a: Card, b: Card) => {
@@ -164,8 +164,8 @@ export function useContent() {
 
   useEffect(() => {
     if (app.state.focus) {
-      const { cardId, channelId } = app.state.focus;
-      updateState({ focused: { cardId, channelId } });
+      const focused = app.state.focus.getFocused();
+      updateState({ focused });
     } else {
       updateState({ focused: null });
     }

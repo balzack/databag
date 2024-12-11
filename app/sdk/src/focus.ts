@@ -913,6 +913,11 @@ export class FocusModule implements Focus {
     });
   }
 
+  public getFocused() {
+    const { cardId, channelId } = this;
+    return { cardId, channelId };
+  }
+
   private getTopicData(item: TopicItem): { data: any, assets: AssetItem[] } {
     const topicDetail = item.detail.sealed ? item.unsealedDetail : item.detail.data;
     const { revision } = item.detail;

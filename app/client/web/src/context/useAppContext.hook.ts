@@ -10,7 +10,7 @@ export function useAppContext() {
   const sdk = useRef(databag)
   const [state, setState] = useState({
     session: null as null | Session,
-    focus: null as null | { cardId: null | string, channelId: string, thread: Focus },
+    focus: null as null | Focus,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -84,8 +84,8 @@ export function useAppContext() {
     },
     setFocus: (cardId: string | null, channelId: string) => {
       if (state.session) {
-        const thread = state.session.setFocus(cardId, channelId);
-        updateState({ focus: {cardId, channelId, thread} });
+        const focus = state.session.setFocus(cardId, channelId);
+        updateState({ focus });
       }
     },
     clearFocus: () => {

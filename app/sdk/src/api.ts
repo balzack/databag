@@ -123,6 +123,8 @@ export interface Attribute {
 }
 
 export interface Focus {
+  getFocused(): {cardId: null|string, channelId: string};
+
   addTopic(sealed: boolean, type: string, subject: (assets: {assetId: string, appId: string}[])=>any, assets: AssetSource[], progress: (percent: number)=>boolean): Promise<string>;
   setTopicSubject(topicId: string, type: string, subject: (assets: {assetId: string, appId: string}[])=>any, files: AssetSource[], progress: (percent: number)=>boolean): Promise<void>;
   removeTopic(topicId: string): Promise<void>;
