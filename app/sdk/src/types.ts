@@ -68,12 +68,14 @@ export type Channel = {
 
 export type FocusDetail = {
   sealed: boolean;
+  locked: boolean;
   dataType: string;
   data: any;
   enableImage: boolean;
   enableAudio: boolean;
   enableVideo: boolean;
   enableBinary: boolean;
+  members: Member[];
 }
 
 export type Member = {

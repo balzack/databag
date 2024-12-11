@@ -2,8 +2,8 @@ import React, {useEffect, useRef, useCallback} from 'react'
 import { Focus } from 'databag-client-sdk'
 import classes from './Conversation.module.css'
 import { useConversation } from './useConversation.hook';
-import { IconX } from '@tabler/icons-react'
-import { Text, Loader } from '@mantine/core'
+import { IconX, IconSettings, IconHome, IconServer, IconShield, IconLock, IconExclamationCircle } from '@tabler/icons-react'
+import { Divider, Text, ActionIcon, Loader } from '@mantine/core'
 import { Message } from '../message/Message';
 
 const LOAD_MORE_POS = 12;
@@ -60,10 +60,41 @@ export function Conversation() {
   return (
     <div className={classes.conversation}>
       <div className={classes.header}>
-        <div className={classes.title} onClick={() => attachImage.current.click()}> 
-          <Text className={classes.label}>CONVERSATION</Text>
+        <div className={classes.status}>
+          <ActionIcon variant="subtle"> 
+            <IconSettings size={24} />
+          </ActionIcon>
+          <Divider size="sm" orientation="vertical" />
+          { state.detailSet && state.host === true && (
+            <IconHome size={24} />
+          )}
+          { state.detailSet && state.host === false && (
+            <IconServer size={24} />
+          )}
+          { state.detailSet && state.sealed === true && (
+            <IconShield size={24} />
+          )}
+          { state.detailSet && state.access === false && (
+            <IconExclamationCircle size={24} />
+          )}
         </div>
-        <IconX size={24} className={classes.close} onClick={actions.close} />
+        <div className={classes.title} onClick={() => attachImage.current.click()}> 
+          { state.detailSet && state.subject && (
+            <Text className={classes.label}>{ state.subject }</Text>
+          )}
+          { state.detailSet && state.host && !state.subject && state.subjectNames.length == 0 && (
+            <Text className={classes.label}>{ state.strings.notes }</Text>
+          )}
+          { state.detailSet && !state.subject && state.subjectNames.length > 0 && (
+            <Text className={classes.label}>{ state.subjectNames.join(', ') }</Text>
+          )}
+          { state.detailSet && !state.subject && state.unknownContacts > 0 && (
+            <Text className={classes.unknown}>{ `, ${state.strings.unknownContact} (${state.unknownContacts})` }</Text>
+          )}
+        </div>
+        <div className={classes.control}>
+          <IconX size={24} className={classes.close} onClick={actions.close} />
+        </div>
       </div>
       <div ref={thread} className={classes.frame} onScroll={onScroll}>
         { state.loaded && (
@@ -73,12 +104,12 @@ export function Conversation() {
         )}
         { state.loadingMore && (
           <div className={classes.topSpinner}>
-            <Loader size={64} />
+            <Loader size={32} />
           </div>
         )}
         { !state.loaded && (
           <div className={classes.bottomSpinner}>
-            <Loader size={64} />
+            <Loader size={48} />
           </div>
         )}
       </div>

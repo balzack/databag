@@ -12,15 +12,23 @@ export function useConversation() {
   const app = useContext(AppContext) as ContextType
   const display = useContext(DisplayContext) as ContextType
   const [state, setState] = useState({
+    detail: undefined as FocusDetail | null | undefined,
+    strings: display.state.strings,
+    cardId: null as null | string,
+    detailSet: false,
     focus: null as Focus | null,
     layout: null,
-    strings: display.state.strings,
     topics: [] as Topic[],
     loaded: false,
     loadingMore: false,
     profile: null as Profile | null,
     cards: new Map<string, Card>(),
     host: false,
+    sealed: false,
+    access: false,
+    subject: '',
+    subjectNames: [],
+    unknownContacts: 0,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -29,9 +37,25 @@ export function useConversation() {
   }
 
   useEffect(() => {
-    const { layout } = display.state
-    updateState({ layout })
+    const { layout, strings } = display.state
+    updateState({ layout, strings })
   }, [display.state])
+
+  useEffect(() => {
+    const host = state.cardId == null;
+    const sealed = state.detail ? state.detail.sealed : false;
+    const access = (state.detail != null);
+    const subject = state.detail?.data?.subject ? state.detail.data.subject : null;
+    const cards = Array.from(state.cards.values());
+    const card = cards.find(entry => entry.cardId == state.cardId);
+    const profileRemoved = state.detail?.members ? state.detail.members.filter(member => state.profile?.guid != member.guid) : [];
+    const unhostedCards = profileRemoved.map(member => state.cards.get(member.guid));
+    const contactCards = card ? [ card, ...unhostedCards ] : unhostedCards;
+    const subjectCards = contactCards.filter(member => Boolean(member));
+    const subjectNames = subjectCards.map(member => member?.name ? member.name : member?.handle);
+    const unknownContacts = contactCards.length - subjectCards.length;
+    updateState({ host, sealed, access, subject, subjectNames, unknownContacts, detailSet: state.detail !== undefined });
+  }, [state.detail, state.cards, state.profile, state.cardId]);
 
   useEffect(() => {
     const focus = app.state.focus;
@@ -62,11 +86,9 @@ export function useConversation() {
         updateState({ profile });
       }
       const setDetail = (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => {
-        if (focused.cardId) {
-          updateState({ host: false });
-        } else {
-          updateState({ host: true });
-        }
+        const detail = focused ? focused.detail : null;
+        const cardId = focused.cardId;
+        updateState({ detail, cardId });
       }
       updateState({ topics: [], loaded: false });
       focus.addTopicListener(setTopics);

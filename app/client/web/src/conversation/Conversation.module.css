@@ -11,8 +11,6 @@
     flex-direction: row;
     align-items: center;
     border-bottom: 1px solid var(--mantine-color-text-7);
-    padding-left: 16px;
-    padding-right: 16px;
     height: 48px;
     flex-shrink: 0;
     width: calc(100% - 32px);
@@ -69,7 +67,42 @@
     cursor: pointer;
     padding-top: 2px;
     position: relative;
-    right: -9px;
+  }
+
+  .settings {
+    width: 32px;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    color: var(--mantine-color-dbgreen-1);
+  }
+
+  .status {
+    width: 25%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  .control {
+    width: 25%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+
+  .title {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .unknown {
+    font-style: italic;
   }
 
   .label {
@@ -78,9 +111,5 @@
     text-wrap: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-  }
-
-  .title {
-    flex-grow: 1;
   }
 }
