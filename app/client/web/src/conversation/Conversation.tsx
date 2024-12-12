@@ -29,21 +29,23 @@ export function Conversation() {
   };
 
   const onScroll = () => {
-    const { scrollHeight, clientHeight, scrollTop } = thread.current || { scrollHeight: 0, clientHeight: 0, scrollTop: 0 }
-    if (thread.current && state.loadingMore) {
-      thread.current.scrollTop = scrollPos.current;
-    } else {
-      if (scrollPos.current > scrollTop && scrollHeight - (clientHeight - scrollTop) < PAD_HEIGHT) {
-        if (scrollTop < scrollPos.current) {
-          actions.more();
-        }
-        scrollPos.current = (clientHeight - scrollHeight) + PAD_HEIGHT;
+    if (thread.current) {
+      const { scrollHeight, clientHeight, scrollTop } = thread.current;
+      if (thread.current && state.loadingMore) {
         thread.current.scrollTop = scrollPos.current;
       } else {
-        if (scrollTop < (clientHeight - scrollHeight) + PAD_HEIGHT) {
-          scrollPos.current = (clientHeight - scrollHeight) + PAD_HEIGHT; 
+        if (scrollPos.current > scrollTop && scrollHeight - (clientHeight - scrollTop) < PAD_HEIGHT) {
+          if (scrollTop < scrollPos.current) {
+            actions.more();
+          }
+          scrollPos.current = (clientHeight - scrollHeight) + PAD_HEIGHT;
+          thread.current.scrollTop = scrollPos.current;
         } else {
-          scrollPos.current = scrollTop;
+          if (scrollTop < (clientHeight - scrollHeight) + PAD_HEIGHT) {
+            scrollPos.current = (clientHeight - scrollHeight) + PAD_HEIGHT; 
+          } else {
+            scrollPos.current = scrollTop;
+          }
         }
       }
     }
