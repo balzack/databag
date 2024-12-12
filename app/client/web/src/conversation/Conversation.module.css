@@ -23,11 +23,11 @@
     flex-direction: column-reverse;
     flex-grow: 1;
     flex-shrink: 1;
-    overflow: auto;
     width: 100%;
   }
 
   .thread {
+    padding-top: 1024px;
     display: flex;
     flex-direction: column;
     height: fit-content;

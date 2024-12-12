@@ -6,7 +6,7 @@ import { IconX, IconSettings, IconHome, IconServer, IconShield, IconLock, IconEx
 import { Divider, Text, ActionIcon, Loader } from '@mantine/core'
 import { Message } from '../message/Message';
 
-const LOAD_MORE_POS = 12;
+const PAD_HEIGHT = (1024 - 64);
 const LOAD_DEBOUNCE = 1000;
 
 export type MediaAsset = {
@@ -33,12 +33,19 @@ export function Conversation() {
     if (thread.current && state.loadingMore) {
       thread.current.scrollTop = scrollPos.current;
     } else {
-      if (scrollPos.current > scrollTop && scrollHeight - (clientHeight - scrollTop) < LOAD_MORE_POS) {
+      if (scrollPos.current > scrollTop && scrollHeight - (clientHeight - scrollTop) < PAD_HEIGHT) {
         if (scrollTop < scrollPos.current) {
           actions.more();
         }
+        scrollPos.current = (clientHeight - scrollHeight) + PAD_HEIGHT;
+        thread.current.scrollTop = scrollPos.current;
+      } else {
+        if (scrollTop < (clientHeight - scrollHeight) + PAD_HEIGHT) {
+          scrollPos.current = (clientHeight - scrollHeight) + PAD_HEIGHT; 
+        } else {
+          scrollPos.current = scrollTop;
+        }
       }
-      scrollPos.current = scrollTop;
     }
   };
 
@@ -96,9 +103,10 @@ export function Conversation() {
           <IconX size={24} className={classes.close} onClick={actions.close} />
         </div>
       </div>
-      <div ref={thread} className={classes.frame} onScroll={onScroll}>
+      <div ref={thread} className={classes.frame} style={state.loadingMore ? { overflow: 'hidden' } : { overflow: 'auto' }} onScroll={onScroll}>
         { state.loaded && (
           <div className={classes.thread}>
+            <div className="topicPad" />
             {topics}
           </div>
         )}
