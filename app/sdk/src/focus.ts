@@ -201,7 +201,7 @@ export class FocusModule implements Focus {
                 await this.removeLocalChannelTopic(id);
               }
             }
-            this.storeView = { revision: nextRev, marker: delta.marker };
+            this.storeView = { revision: nextRev, marker: this.storeView.marker };
             await this.setChannelTopicRevision(this.storeView);
 
             if (this.nextRevision === nextRev) {
@@ -1117,9 +1117,9 @@ export class FocusModule implements Focus {
     }
     const { node, secure, token } = connection
     if (cardId) {
-      return await getContactChannelTopics(node, secure, token, channelId, revision, (begin || !revision) ? BATCH_COUNT : null, begin, end);
+      return await getContactChannelTopics(node, secure, token, channelId, revision, (end || !revision) ? BATCH_COUNT : null, begin, end);
     } else {
-      return await getChannelTopics(node, secure, token, channelId, revision, (begin || !revision) ? BATCH_COUNT : null, begin, end);
+      return await getChannelTopics(node, secure, token, channelId, revision, (end || !revision) ? BATCH_COUNT : null, begin, end);
     }
   }
 

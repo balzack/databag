@@ -1,10 +1,11 @@
-import React, {useEffect, useRef, useCallback} from 'react'
+import React, {useState, useEffect, useRef, useCallback} from 'react'
 import { Focus } from 'databag-client-sdk'
 import classes from './Conversation.module.css'
 import { useConversation } from './useConversation.hook';
-import { IconX, IconSettings, IconHome, IconServer, IconShield, IconLock, IconExclamationCircle } from '@tabler/icons-react'
-import { Divider, Text, ActionIcon, Loader } from '@mantine/core'
+import { IconSend, IconTextSize, IconTextColor, IconVideo, IconFile, IconDisc, IconCamera, IconX, IconSettings, IconHome, IconServer, IconShield, IconLock, IconExclamationCircle } from '@tabler/icons-react'
+import { Divider, Text, Textarea, ActionIcon, Loader } from '@mantine/core'
 import { Message } from '../message/Message';
+import { modals } from '@mantine/modals'
 
 const PAD_HEIGHT = (1024 - 64);
 const LOAD_DEBOUNCE = 1000;
@@ -21,12 +22,40 @@ export function Conversation() {
   const thread = useRef(null as HTMLDivElement | null);
   const scrollPos = useRef(0);
   const debounce = useRef(false);
+  const [sending, setSending] = useState(false);
   const { state, actions } = useConversation();
   const attachImage = useRef({ click: ()=>{} } as HTMLInputElement);
 
   const onSelectImage = (e: any) => {
     actions.add(e.target.files[0]);
   };
+
+  const sendMessage = async () => {
+    if (!sending) {
+      setSending(true);
+      try {
+        await actions.send();
+      } catch (err) {
+        console.log(err);
+        showError();
+      }
+      setSending(false);
+    }
+  }
+
+  const showError = () => {
+    modals.openConfirmModal({
+      title: state.strings.operationFailed,
+      withCloseButton: true,
+      overlayProps: {
+        backgroundOpacity: 0.55,
+        blur: 3,
+      },
+      children: <Text>{state.strings.tryAgain}</Text>,
+      cancelProps: { display: 'none' },
+      confirmProps: { display: 'none' },
+    })
+  }
 
   const onScroll = () => {
     if (thread.current) {
@@ -87,7 +116,7 @@ export function Conversation() {
             <IconExclamationCircle size={24} />
           )}
         </div>
-        <div className={classes.title} onClick={() => attachImage.current.click()}> 
+        <div className={classes.title}> 
           { state.detailSet && state.subject && (
             <Text className={classes.label}>{ state.subject }</Text>
           )}
@@ -125,6 +154,33 @@ export function Conversation() {
       </div>
       <div className={classes.add}>
         <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => onSelectImage(e)} style={{display: 'none'}}/>
+        <Textarea className={classes.message} placeholder={state.strings.newMessage} value={state.message} onChange={(event) => actions.setMessage(event.currentTarget.value)} disabled={!state.detail || state.detail.locked} />
+        <div className={classes.controls}>
+          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked}> 
+            <IconCamera />
+          </ActionIcon>
+          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked}> 
+            <IconVideo />
+          </ActionIcon>
+          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked}> 
+            <IconDisc />
+          </ActionIcon>
+          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked}> 
+            <IconFile />
+          </ActionIcon>
+          <Divider size="sm" orientation="vertical" />
+          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked}> 
+            <IconTextSize />
+          </ActionIcon>
+          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked}> 
+            <IconTextColor />
+          </ActionIcon>
+          <div className={classes.send}>
+            <ActionIcon className={classes.attach} variant="light" disabled={!state.message || !state.detail || state.detail.locked} onClick={sendMessage} loading={sending}> 
+              <IconSend />
+            </ActionIcon>
+          </div>
+        </div> 
       </div>
     </div>
   );

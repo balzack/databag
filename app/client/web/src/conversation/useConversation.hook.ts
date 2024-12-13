@@ -29,6 +29,7 @@ export function useConversation() {
     subject: '',
     subjectNames: [],
     unknownContacts: 0,
+    message: '',
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -108,6 +109,9 @@ export function useConversation() {
     close: () => {
       app.actions.clearFocus();
     },
+    setMessage: (message: string) => {
+      updateState({ message });
+    },
     more: async () => {
       const focus = app.state.focus;
       if (focus) {
@@ -120,6 +124,16 @@ export function useConversation() {
         }
       }
     },
+    send: async () => {
+      const focus = app.state.focus;
+      const sealed = state.detail?.sealed ? true : false;
+      if (focus) {
+        const subject = (assets: {assetId: string, appId: string}[]) => ({ text: state.message });
+        const progress = (precent: number) => {};
+        await focus.addTopic(sealed, sealed ? 'sealedtopic' : 'superbasictopic', subject, [], progress);
+        updateState({ message: '' });
+      }
+    }, 
     add: async (file: File) => {
       const focus = app.state.focus;
       if (focus) {
