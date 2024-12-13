@@ -19,11 +19,12 @@ export function Content() {
   const addTopic = async () => {
     setAdding(true)
     try {
-      await actions.addTopic(
+      const id = await actions.addTopic(
         sealed,
         subject,
         added.filter((id) => Boolean(cards.find((card) => card.cardId === id)))
       )
+      actions.setFocus(null, id);
       setAdd(false)
       setSealed(false)
       setAdded([])

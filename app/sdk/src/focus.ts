@@ -380,7 +380,7 @@ export class FocusModule implements Focus {
         if (!crypto || !channelKey) {
           throw new Error('duplicate throw for build warning');
         }
-        const subjectString = JSON.stringify(data);
+        const subjectString = JSON.stringify({ message: data });
         const { ivHex } = await crypto.aesIv();
         const { encryptedDataB64 } = await crypto.aesEncrypt(subjectString, ivHex, channelKey);
         const dataEncrypted = { messageEncrypted: encryptedDataB64, messageIv: ivHex };

@@ -34,6 +34,13 @@
     width: 100%;
   }
 
+  .divider {
+    width: calc(100% - 32px);
+    margin-left: 16px;
+    margin-right: 16px;
+    border-bottom: 1px solid var(--mantine-color-text-7);
+  }
+
   .topSpinner {
     top: 64px;
     position: absolute;
@@ -57,10 +64,7 @@
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
-    border-top: 1px solid var(--mantine-color-text-7);
-    width: calc(100% - 32px);
-    margin-left: 16px;
-    margin-right: 16px;
+    width: 100%;
   }
 
   .close {
@@ -113,9 +117,17 @@
     overflow: hidden;
   }
 
+  .files {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
   .message {
-    width: calc(100% - 16px);
-    margin: 8px;
+    width: calc(100% - 32px);
+    margin: 16px;
   }
 
   .controls {
@@ -123,8 +135,8 @@
     flex-direction: row;
     gap: 12px;
     width: 100%;
-    padding-left: 8px;
-    padding-right: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
     padding-bottom: 12px;
   }
 

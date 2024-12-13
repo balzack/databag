@@ -6,6 +6,7 @@ import { IconSend, IconTextSize, IconTextColor, IconVideo, IconFile, IconDisc, I
 import { Divider, Text, Textarea, ActionIcon, Loader } from '@mantine/core'
 import { Message } from '../message/Message';
 import { modals } from '@mantine/modals'
+import { ImageFile } from './imageFile/ImageFile';
 
 const PAD_HEIGHT = (1024 - 64);
 const LOAD_DEBOUNCE = 1000;
@@ -25,10 +26,6 @@ export function Conversation() {
   const [sending, setSending] = useState(false);
   const { state, actions } = useConversation();
   const attachImage = useRef({ click: ()=>{} } as HTMLInputElement);
-
-  const onSelectImage = (e: any) => {
-    actions.add(e.target.files[0]);
-  };
 
   const sendMessage = async () => {
     if (!sending) {
@@ -95,6 +92,14 @@ export function Conversation() {
     )
   })
 
+  const media = state.assets.map((asset, index: number) => {
+    if (asset.type === 'image') {
+      return <ImageFile key={index} source={asset.file} />
+    } else {
+      return <div key={index}></div>
+    }
+  });
+
   return (
     <div className={classes.conversation}>
       <div className={classes.header}>
@@ -152,11 +157,15 @@ export function Conversation() {
           </div>
         )}
       </div>
+      <div className={classes.divider} />
       <div className={classes.add}>
-        <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => onSelectImage(e)} style={{display: 'none'}}/>
+        <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => actions.addImage(e.target.files[0])} style={{display: 'none'}}/>
+        <div className={classes.files}>
+          { media }
+        </div>
         <Textarea className={classes.message} placeholder={state.strings.newMessage} value={state.message} onChange={(event) => actions.setMessage(event.currentTarget.value)} disabled={!state.detail || state.detail.locked} />
         <div className={classes.controls}>
-          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked}> 
+          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked} onClick={() => attachImage.current.click()}> 
             <IconCamera />
           </ActionIcon>
           <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked}> 

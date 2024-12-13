@@ -30,6 +30,7 @@ export function useConversation() {
     subjectNames: [],
     unknownContacts: 0,
     message: '',
+    assets: [] as {type: string, file: File}[],
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -91,7 +92,7 @@ export function useConversation() {
         const cardId = focused.cardId;
         updateState({ detail, cardId });
       }
-      updateState({ topics: [], loaded: false });
+      updateState({ assets: [], message: '', topics: [], loaded: false });
       focus.addTopicListener(setTopics);
       focus.addDetailListener(setDetail);
       contact.addCardListener(setCards);
@@ -134,6 +135,10 @@ export function useConversation() {
         updateState({ message: '' });
       }
     }, 
+    addImage: (file: File) => {
+      const type = 'image';
+      updateState({ assets: [ ...state.assets, { type, file } ]});
+    },
     add: async (file: File) => {
       const focus = app.state.focus;
       if (focus) {
