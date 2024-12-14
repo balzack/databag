@@ -1,0 +1,26 @@
+.asset {
+  position: relative;
+  margin-top: 16px;
+  height: 92px;
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .left {
+    position: absolute;
+    left: 0;
+  }
+
+  .right {
+    position: absolute;
+    right: 0;
+  }
+
+  .thumb {
+    width: auto;
+    height: 64px;
+  }
+}
+

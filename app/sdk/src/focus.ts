@@ -450,8 +450,9 @@ export class FocusModule implements Focus {
                 transforms.push('icopy;photo');
                 transformMap.set('icopy;photo', transform.appId);
               } else if (transform.type === TransformType.Thumb && asset.type === AssetType.Video) {
-                transforms.push('vthumb;video');
-                transformMap.set('vthumb;video', transform.appId);
+                const transformKey = `vthumb;video;${ transform.position ? transform.position : 0}`;
+                transforms.push(transformKey);
+                transformMap.set(transformKey, transform.appId);
               } else if (transform.type === TransformType.Copy && asset.type === AssetType.Video) {
                 transforms.push('vcopy;video');
                 transformMap.set('vcopy;video', transform.appId);
@@ -487,7 +488,7 @@ export class FocusModule implements Focus {
                 }
                 if (transformMap.has(transformAsset.transform)) {
                   const appId = transformMap.get(transformAsset.transform) || '' //or to make build happy
-                  appAsset.push({appId, assetId: transformAsset.assetId });
+                  appAsset.push({appId, assetId: assetItem.assetId });
                   assetItems.push(assetItem);
                 }
               }

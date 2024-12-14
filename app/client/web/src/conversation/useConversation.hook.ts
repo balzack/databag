@@ -1,12 +1,80 @@
 import { useState, useContext, useEffect, useRef } from 'react'
 import { AppContext } from '../context/AppContext'
 import { DisplayContext } from '../context/DisplayContext'
-import { Focus, FocusDetail, Topic, Profile, Card, AssetSource, HostingMode, TransformType } from 'databag-client-sdk'
+import { Focus, FocusDetail, Topic, Profile, Card, AssetType, AssetSource, HostingMode, TransformType } from 'databag-client-sdk'
 import { ContextType } from '../context/ContextType'
+import Resizer from "react-image-file-resizer";
+import failed from '../images/failed.png'
 
-const img = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII'
-
+const IMAGE_SCALE_SIZE = (128 * 1024);
+const GIF_TYPE = 'image/gif';
+const WEBP_TYPE = 'image/webp';
 const LOAD_DEBOUNCE = 1000;
+
+function getImageThumb(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    if ((file.type === GIF_TYPE || file.type === WEBP_TYPE) && file.size < IMAGE_SCALE_SIZE) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function () {
+        resolve(reader.result as string);
+      };
+      reader.onerror = function (error) {
+        reject();
+      };
+    }
+    else {
+      Resizer.imageFileResizer(file, 192, 192, 'JPEG', 50, 0,
+      uri => {
+        resolve(uri as string);
+      }, 'base64', 128, 128 );
+    }
+  });
+}
+
+function getVideoThumb(file: File, position: number) {
+  return new Promise<string>((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    var video = document.createElement("video");
+    var timeupdate = function (ev: any) {
+      video.removeEventListener("timeupdate", timeupdate);
+      video.pause();
+      setTimeout(() => {
+        var canvas = document.createElement("canvas");
+        if (!canvas) {
+          reject();
+        } else {
+          if (video.videoWidth > video.videoHeight) {
+            canvas.width = 192;
+            canvas.height = Math.floor((192 * video.videoHeight / video.videoWidth));
+          }
+          else {
+            canvas.height  = 192;
+            canvas.width = Math.floor((192 * video.videoWidth / video.videoHeight));
+          }
+          const context = canvas.getContext("2d");
+          if (!context) {
+            reject();
+          } else {
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            var image = canvas.toDataURL("image/jpeg", 0.75);
+            resolve(image);
+          }
+        }
+        canvas.remove();
+        video.remove();
+        URL.revokeObjectURL(url);
+      }, 1000); 
+    };
+    video.addEventListener("timeupdate", timeupdate);
+    video.preload = "metadata";
+    video.src = url;
+    video.muted = true;
+    video.playsInline = true; 
+    video.currentTime = position; 
+    video.play();
+  });
+}
 
 export function useConversation() {
   const app = useContext(AppContext) as ContextType
@@ -37,6 +105,13 @@ export function useConversation() {
   const updateState = (value: any) => {
     setState((s) => ({ ...s, ...value }))
   }
+
+  const updateAsset = (index, value) => {
+    setState((s) => {
+      s.assets[index] = { ...s.assets[index], ...value };
+      return { ...s };
+    });
+  } 
 
   useEffect(() => {
     const { layout, strings } = display.state
@@ -113,6 +188,9 @@ export function useConversation() {
     setMessage: (message: string) => {
       updateState({ message });
     },
+    setThumbPosition: (index: number, position: number) => {
+      updateAsset(index, { position });
+    },
     more: async () => {
       const focus = app.state.focus;
       if (focus) {
@@ -129,33 +207,101 @@ export function useConversation() {
       const focus = app.state.focus;
       const sealed = state.detail?.sealed ? true : false;
       if (focus) {
-        const subject = (assets: {assetId: string, appId: string}[]) => ({ text: state.message });
+        const sources = [] as AssetSource[];
+        const uploadAssets = state.assets.map(asset => {
+          if (asset.type === 'image') {
+            if (sealed) {
+              sources.push({ type: AssetType.Image, source: asset.file, transforms: [
+                { type: TransformType.Thumb, appId: `it${sources.length}`, thumb: () => getImageThumb(asset.file) },
+                { type: TransformType.Copy, appId: `ic${sources.length}` }
+              ]});
+              return { encrypted: { type: 'image', thumb: `it${sources.length-1}`, parts: `ic${sources.length-1}` } };
+            } else {
+              sources.push({ type: AssetType.Image, source: asset.file, transforms: [
+                { type: TransformType.Thumb, appId: `it${sources.length}` },
+                { type: TransformType.Copy, appId: `ic${sources.length}` }
+              ]});
+              return { image: { thumb: `it${sources.length-1}`, full: `ic${sources.length-1}` } };
+            }
+          } else if (asset.type === 'video') {
+            if (sealed) {
+              sources.push({ type: AssetType.Video, source: asset.file, transforms: [
+                { type: TransformType.Thumb, appId: `vt${sources.length}`, thumb: () => getVideoThumb(asset.file, asset.position) },
+                { type: TransformType.Copy, appId: `vc${sources.length}` }
+              ]});
+              return { encrypted: { type: 'video', thumb: `vt${sources.length-1}`, parts: `vc${sources.length-1}` } };
+            } else {
+              sources.push({ type: AssetType.Video, source: asset.file, transforms: [
+                { type: TransformType.Thumb, appId: `vt${sources.length}`, position: asset.position},
+                { type: TransformType.HighQuality, appId: `vh${sources.length}` },
+                { type: TransformType.LowQuality, appId: `vl${sources.length}` }
+              ]});
+              return { video: { thumb: `vt${sources.length-1}`, hd: `vh${sources.length-1}`, lq: `vl${sources.length-1}` } };
+            }
+          } else if (asset.type === 'audio') {
+            if (sealed) {
+              sources.push({ type: AssetType.Audio, source: asset.file, transforms: [
+                { type: TransformType.Copy, appId: `ac${sources.length}` }
+              ]});
+              return { encrypted: { type: 'audio', parts: `ac${sources.length-1}` } };
+            } else {
+              sources.push({ type: AssetType.Video, source: asset.file, transforms: [
+                { type: TransformType.Copy, appId: `ac${sources.length}` }
+              ]});
+              return { audio: { full: `ac${sources.length-1}` } };
+            }
+          } else {
+            if (sealed) {
+              sources.push({ type: AssetType.Binary, source: asset.file, transforms: [
+                { type: TransformType.Copy, appId: `bc${sources.length}` }
+              ]});
+              return { encrypted: { type: 'binary', parts: `bc${sources.length-1}` } };
+            } else {
+              sources.push({ type: AssetType.Binary, source: asset.file, transforms: [
+                { type: TransformType.Copy, appId: `bc${sources.length}` }
+              ]});
+              return { binary: { data: `bc${sources.length-1}` } };
+            }
+          }
+        });
+        const subject = (uploaded: {assetId: string, appId: string}[]) => {
+          const assets = uploadAssets.map(asset => {
+            if(asset.encrypted) {
+              const type = asset.encrypted.type;
+              const thumb = uploaded.find(upload => upload.appId === asset.encrypted.thumb)?.assetId;
+              const parts = uploaded.find(upload => upload.appId === asset.encrypted.parts)?.assetId;
+              return { encrypted: { type, thumb, parts }};
+            } else if (asset.image) {
+              const thumb = uploaded.find(upload => upload.appId === asset.image.thumb)?.assetId;
+              const full = uploaded.find(upload => upload.appId === asset.image.full)?.assetId;
+              return { image: { thumb, full } };
+            } else if(asset.video) {
+              const thumb = uploaded.find(upload => upload.appId === asset.video.thumb)?.assetId;
+              const hd = uploaded.find(upload => upload.appId === asset.video.hd)?.assetId;
+              const lq = uploaded.find(upload => upload.appId === asset.video.lq)?.assetId;
+              return { video: { thumb, hd, lq } };
+            } else if (asset.audio) {
+              const full = uploaded.find(upload => upload.appId === asset.audio.full)?.assetId;
+              return { audio: { full } };
+            } else {
+              const data = uploaded.find(upload => upload.appId === asset.binary.data)?.assetId;
+              return { binary: { data } };
+            }
+          });
+          return { text: state.message, assets };
+        }
         const progress = (precent: number) => {};
-        await focus.addTopic(sealed, sealed ? 'sealedtopic' : 'superbasictopic', subject, [], progress);
-        updateState({ message: '' });
+        await focus.addTopic(sealed, sealed ? 'sealedtopic' : 'superbasictopic', subject, sources, progress);
+        updateState({ message: '', assets: [] });
       }
     }, 
     addImage: (file: File) => {
       const type = 'image';
       updateState({ assets: [ ...state.assets, { type, file } ]});
     },
-    add: async (file: File) => {
-      const focus = app.state.focus;
-      if (focus) {
-        const asset = {
-          name: 'topic',
-          mimeType: 'image',
-          extension: 'jpg',
-          source: file,
-          transforms: [ {type: TransformType.Thumb, thumb: ()=>(img), appId: '1'}, {type: TransformType.Copy, appId: '2'}],
-        }
-        const topicId = await focus.addTopic(true, 'sealedtopic', (assets: {assetId: string, appId: string}[])=>{
-          console.log(assets);
-          return { text: 'almost done', assets: [{ encrypted: { type: 'image', thumb: '0', parts: '1' } }] };
-        }, [asset], (percent: number)=>{
-          console.log(percent);
-        });
-      }
+    addVideo: (file: File) => {
+      const type = 'video';
+      updateState({ assets: [ ...state.assets, { type, file } ]});
     },
   }
 

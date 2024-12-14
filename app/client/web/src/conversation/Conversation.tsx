@@ -7,6 +7,7 @@ import { Divider, Text, Textarea, ActionIcon, Loader } from '@mantine/core'
 import { Message } from '../message/Message';
 import { modals } from '@mantine/modals'
 import { ImageFile } from './imageFile/ImageFile';
+import { VideoFile } from './videoFile/VideoFile';
 
 const PAD_HEIGHT = (1024 - 64);
 const LOAD_DEBOUNCE = 1000;
@@ -26,6 +27,19 @@ export function Conversation() {
   const [sending, setSending] = useState(false);
   const { state, actions } = useConversation();
   const attachImage = useRef({ click: ()=>{} } as HTMLInputElement);
+  const attachVideo = useRef({ click: ()=>{} } as HTMLInputElement);
+
+  const addImage = (image: File | undefined) => {
+    if (image) {
+      actions.addImage(image);
+    }
+  }
+
+  const addVideo = (video: File | undefined) => {
+    if (video) {
+      actions.addVideo(video);
+    }
+  }
 
   const sendMessage = async () => {
     if (!sending) {
@@ -95,10 +109,15 @@ export function Conversation() {
   const media = state.assets.map((asset, index: number) => {
     if (asset.type === 'image') {
       return <ImageFile key={index} source={asset.file} />
+    } else if (asset.type === 'video') {
+      return <VideoFile key={index} source={asset.file} thumbPosition={(position: number) => actions.setThumbPosition(index, position)} disabled={sending} />
     } else {
       return <div key={index}></div>
     }
   });
+
+console.log(state.assets);
+
 
   return (
     <div className={classes.conversation}>
@@ -159,33 +178,34 @@ export function Conversation() {
       </div>
       <div className={classes.divider} />
       <div className={classes.add}>
-        <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => actions.addImage(e.target.files[0])} style={{display: 'none'}}/>
+        <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => addImage(e.target?.files?.[0])} style={{display: 'none'}}/>
+        <input type='file' name="asset" accept="video/*" ref={attachVideo} onChange={e => addVideo(e.target?.files?.[0])} style={{display: 'none'}}/>
         <div className={classes.files}>
           { media }
         </div>
-        <Textarea className={classes.message} placeholder={state.strings.newMessage} value={state.message} onChange={(event) => actions.setMessage(event.currentTarget.value)} disabled={!state.detail || state.detail.locked} />
+        <Textarea className={classes.message} placeholder={state.strings.newMessage} value={state.message} onChange={(event) => actions.setMessage(event.currentTarget.value)} disabled={!state.detail || state.detail.locked || sending} />
         <div className={classes.controls}>
-          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked} onClick={() => attachImage.current.click()}> 
+          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachImage.current.click()}> 
             <IconCamera />
           </ActionIcon>
-          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked}> 
+          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachVideo.current.click()}> 
             <IconVideo />
           </ActionIcon>
-          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked}> 
+          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending}> 
             <IconDisc />
           </ActionIcon>
-          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked}> 
+          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending}> 
             <IconFile />
           </ActionIcon>
           <Divider size="sm" orientation="vertical" />
-          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked}> 
+          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending}> 
             <IconTextSize />
           </ActionIcon>
-          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked}> 
+          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending}> 
             <IconTextColor />
           </ActionIcon>
           <div className={classes.send}>
-            <ActionIcon className={classes.attach} variant="light" disabled={!state.message || !state.detail || state.detail.locked} onClick={sendMessage} loading={sending}> 
+            <ActionIcon className={classes.attach} variant="light" disabled={(!state.message && state.assets.length === 0) || !state.detail || state.detail.locked || sending} onClick={sendMessage} loading={sending}> 
               <IconSend />
             </ActionIcon>
           </div>

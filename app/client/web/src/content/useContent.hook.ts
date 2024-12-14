@@ -245,9 +245,11 @@ export function useContent() {
     addTopic: async (sealed: boolean, subject: string, contacts: string[]) => {
       const content = app.state.session.getContent()
       if (sealed) {
-        return await content.addChannel(true, 'sealed', { subject }, contacts)
+        const topic = await content.addChannel(true, 'sealed', { subject }, contacts)
+        return topic.id;
       } else {
-        return await content.addChannel(false, 'superbasic', { subject }, contacts)
+        const topic = await content.addChannel(false, 'superbasic', { subject }, contacts)
+        return topic.id;
       }
     },
   }

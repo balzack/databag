@@ -9,7 +9,6 @@ import { VideoAsset } from './videoAsset/VideoAsset';
 import { BinaryAsset } from './binaryAsset/BinaryAsset';
 import type { MediaAsset } from '../conversation/Conversation';
 import { useMessage } from './useMessage.hook';
-import failed from '../images/failed.png'
 import { IconForbid, IconTrash, IconEdit, IconAlertSquareRounded, IconChevronLeft, IconChevronRight, IconFileAlert } from '@tabler/icons-react';
 import { useResizeDetector } from 'react-resize-detector';
 
@@ -126,7 +125,9 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
         </div>
       )}
       { !locked && media.length > 0 && transform === 'incomplete' && (
-        <Skeleton height={64} circle mb="xl" />
+        <div className={classes.incomplete}>
+          <Skeleton height={64} circle mb="xl" />
+        </div>
       )}
       { !locked && media.length > 0 && transform !== 'complete' && transform !== 'incomplete' && (
         <div className={classes.failed}>

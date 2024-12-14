@@ -60,6 +60,12 @@
     gap: 8px;
   }
 
+  .incomplete {
+    margin-left: 72px;
+    margin-right: 32px;
+    margin-top: 8px;
+  }
+
   .content {
     display: flex;
     flex-direction: row;

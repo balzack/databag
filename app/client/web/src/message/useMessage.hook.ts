@@ -26,7 +26,7 @@ export function useMessage() {
       const now = Math.floor((new Date()).getTime() / 1000)
       const date = new Date(created * 1000);
       const offset = now - created;
-      if(offset < 86400) {
+      if(offset < 43200) {
         if (state.timeFormat === '12h') {
           return date.toLocaleTimeString("en-US", {hour: 'numeric', minute:'2-digit'});
         }
