@@ -2,6 +2,16 @@
 
 # Backlog
 
+**Call UI:** pop-up window does not appear outside the app, nor does it activate the lock screen for interaction.
+
+**Call UI:** The notification for an incoming call sends two alerts using the message notification sound and then stops ringing.
+
+**Call UI:** Notifications from the notification bar either open on the first tap, the second, or, at most, the third consecutive tap.
+
+**Call UI:** There is no "waiting to answer" sound until the recipient accepts the call and the proximity sensor engages after the call is been answered.
+
+**Call UI:** There is no timer to track the call duration.
+
 **SDK:** refactor mobile and browser code into an SDK and app
 
 **Typescript:** refactor mobile and browser apps to use typescript
