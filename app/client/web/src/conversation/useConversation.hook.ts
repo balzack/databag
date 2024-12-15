@@ -209,6 +209,8 @@ export function useConversation() {
       if (focus) {
         const sources = [] as AssetSource[];
         const uploadAssets = state.assets.map(asset => {
+          const name = asset.file.name.split('.').shift();
+          const extension = asset.file.name.split('.').pop();
           if (asset.type === 'image') {
             if (sealed) {
               sources.push({ type: AssetType.Image, source: asset.file, transforms: [
@@ -243,24 +245,24 @@ export function useConversation() {
               sources.push({ type: AssetType.Audio, source: asset.file, transforms: [
                 { type: TransformType.Copy, appId: `ac${sources.length}` }
               ]});
-              return { encrypted: { type: 'audio', parts: `ac${sources.length-1}` } };
+              return { encrypted: { type: 'audio', label: name, parts: `ac${sources.length-1}` } };
             } else {
               sources.push({ type: AssetType.Video, source: asset.file, transforms: [
                 { type: TransformType.Copy, appId: `ac${sources.length}` }
               ]});
-              return { audio: { full: `ac${sources.length-1}` } };
+              return { audio: { label: name, full: `ac${sources.length-1}` } };
             }
           } else {
             if (sealed) {
               sources.push({ type: AssetType.Binary, source: asset.file, transforms: [
                 { type: TransformType.Copy, appId: `bc${sources.length}` }
               ]});
-              return { encrypted: { type: 'binary', parts: `bc${sources.length-1}` } };
+              return { encrypted: { type: 'binary', label: name, extension, parts: `bc${sources.length-1}` } };
             } else {
               sources.push({ type: AssetType.Binary, source: asset.file, transforms: [
                 { type: TransformType.Copy, appId: `bc${sources.length}` }
               ]});
-              return { binary: { data: `bc${sources.length-1}` } };
+              return { binary: { label: name, extension, data: `bc${sources.length-1}` } };
             }
           }
         });
@@ -268,12 +270,16 @@ export function useConversation() {
           const assets = uploadAssets.map(asset => {
             if(asset.encrypted) {
               const type = asset.encrypted.type;
+              const label = asset.encrypted.label;
+              const extension = asset.encrypted.extension;
               const thumb = uploaded.find(upload => upload.appId === asset.encrypted.thumb)?.assetId;
               const parts = uploaded.find(upload => upload.appId === asset.encrypted.parts)?.assetId;
               if (type === 'image' || type === 'video') {
                 return { encrypted: { type, thumb, parts }};
+              } else if (type === 'audio') {
+                return { encrypted: { type, label, parts }};
               } else {
-                return { encrypted: { type, thumb, parts }};
+                return { encrypted: { type, label, extenstion, parts }};
               }
             } else if (asset.image) {
               const thumb = uploaded.find(upload => upload.appId === asset.image.thumb)?.assetId;
@@ -285,15 +291,15 @@ export function useConversation() {
               const lq = uploaded.find(upload => upload.appId === asset.video.lq)?.assetId;
               return { video: { thumb, hd, lq } };
             } else if (asset.audio) {
+              const label = asset.audio.label;
               const full = uploaded.find(upload => upload.appId === asset.audio.full)?.assetId;
-              return { audio: { full } };
+              return { audio: { label, full } };
             } else {
               const data = uploaded.find(upload => upload.appId === asset.binary.data)?.assetId;
-              return { binary: { data } };
+              const { label, extension } = asset.binary;
+              return { binary: { label, extension, data } };
             }
           });
-console.log(assets, uploaded);
-
           return { text: state.message, assets };
         }
         const progress = (precent: number) => {};
