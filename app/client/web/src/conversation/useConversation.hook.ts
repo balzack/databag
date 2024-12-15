@@ -212,7 +212,6 @@ export function useConversation() {
       if (focus) {
         const sources = [] as AssetSource[];
         const uploadAssets = state.assets.map(asset => {
-          const extension = asset.file.name.split('.').pop();
           if (asset.type === 'image') {
             if (sealed) {
               sources.push({ type: AssetType.Image, source: asset.file, transforms: [
@@ -255,16 +254,18 @@ export function useConversation() {
               return { audio: { label: asset.label, full: `ac${sources.length-1}` } };
             }
           } else {
+            const extension = asset.file.name.split('.').pop();
+            const label = asset.file.name.split('.').shift();
             if (sealed) {
               sources.push({ type: AssetType.Binary, source: asset.file, transforms: [
                 { type: TransformType.Copy, appId: `bc${sources.length}` }
               ]});
-              return { encrypted: { type: 'binary', label: name, extension, parts: `bc${sources.length-1}` } };
+              return { encrypted: { type: 'binary', label, extension, parts: `bc${sources.length-1}` } };
             } else {
               sources.push({ type: AssetType.Binary, source: asset.file, transforms: [
                 { type: TransformType.Copy, appId: `bc${sources.length}` }
               ]});
-              return { binary: { label: name, extension, data: `bc${sources.length-1}` } };
+              return { binary: { label, extension, data: `bc${sources.length-1}` } };
             }
           }
         });
