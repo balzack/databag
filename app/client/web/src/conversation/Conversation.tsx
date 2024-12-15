@@ -3,13 +3,14 @@ import { Focus } from 'databag-client-sdk'
 import classes from './Conversation.module.css'
 import { useConversation } from './useConversation.hook';
 import { IconSend, IconTextSize, IconTextColor, IconVideo, IconFile, IconDisc, IconCamera, IconX, IconSettings, IconHome, IconServer, IconShield, IconLock, IconExclamationCircle } from '@tabler/icons-react'
-import { Divider, Text, Textarea, ActionIcon, Loader } from '@mantine/core'
+import { Menu, Divider, Text, Textarea, ActionIcon, Loader } from '@mantine/core'
 import { Message } from '../message/Message';
 import { modals } from '@mantine/modals'
 import { ImageFile } from './imageFile/ImageFile';
 import { VideoFile } from './videoFile/VideoFile';
 import { AudioFile } from './audioFile/AudioFile';
 import { BinaryFile } from './binaryFile/BinaryFile';
+import { SketchPicker } from "react-color";
 
 const PAD_HEIGHT = (1024 - 64);
 const LOAD_DEBOUNCE = 1000;
@@ -200,7 +201,7 @@ export function Conversation() {
         <div className={classes.files}>
           { media }
         </div>
-        <Textarea className={classes.message} placeholder={state.strings.newMessage} value={state.message} onChange={(event) => actions.setMessage(event.currentTarget.value)} disabled={!state.detail || state.detail.locked || sending} />
+        <Textarea className={classes.message} placeholder={state.strings.newMessage} styles={{ input: {color: state.textColorSet ? state.textColor : null, fontSize: state.textSizeSet ? state.textSize : null }}} value={state.message} onChange={(event) => actions.setMessage(event.currentTarget.value)} disabled={!state.detail || state.detail.locked || sending} />
         <div className={classes.controls}>
           <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachImage.current.click()}> 
             <IconCamera />
@@ -215,12 +216,38 @@ export function Conversation() {
             <IconFile />
           </ActionIcon>
           <Divider size="sm" orientation="vertical" />
-          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending}> 
-            <IconTextSize />
-          </ActionIcon>
-          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending}> 
-            <IconTextColor />
-          </ActionIcon>
+          <Menu shadow="md" position="top">
+            <Menu.Target>
+              <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending}> 
+                <IconTextSize />
+              </ActionIcon>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item onClick={() => actions.setTextSize(12)}>
+                { state.strings.textSmall }
+              </Menu.Item>
+              <Menu.Item onClick={() => actions.setTextSize(16)}>
+                { state.strings.textMedium }
+              </Menu.Item>
+              <Menu.Item onClick={() => actions.setTextSize(20)}>
+                { state.strings.textLarge }
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+          <Menu shadow="md" position="top">
+            <Menu.Target>
+              <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending}> 
+                <IconTextColor />
+              </ActionIcon>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <SketchPicker disableAlpha={true}
+                color={state.textColor}
+                onChange={(color) => {
+                  actions.setTextColor(color.hex);
+                }} />
+            </Menu.Dropdown>
+          </Menu>
           <div className={classes.send}>
             <ActionIcon className={classes.attach} variant="light" disabled={(!state.message && state.assets.length === 0) || !state.detail || state.detail.locked || sending} onClick={sendMessage} loading={sending}> 
               <IconSend />

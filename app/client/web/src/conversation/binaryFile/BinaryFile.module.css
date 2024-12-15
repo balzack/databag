@@ -16,6 +16,8 @@
     left: 0;
     width: 100%;
     text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .extension {

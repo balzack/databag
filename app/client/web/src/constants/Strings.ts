@@ -1,4 +1,7 @@
 export const en = {
+  textSmall: 'Small',
+  textMedium: 'Medium',
+  textLarge: 'Large',
   processingError: 'Attachment Error',
   unknownContact: 'Unknown Contact',
   encrypted: 'Encrypted',
@@ -255,6 +258,9 @@ export const en = {
 }
 
 export const fr = {
+  textSmall: 'Petit',
+  textMedium: 'Moyen',
+  textLarge: 'Grand',
   processingError: 'erreur de Pièce Jointe',
   unknownContact: 'Contact Inconnu',
   encrypted: 'Crypté',
@@ -512,6 +518,9 @@ export const fr = {
 }
 
 export const sp = {
+  textSmall: 'Pequeño',
+  textMedium: 'Mediano',
+  textLarge: 'Grande',
   processingError: 'Error al Adjuntar',
   unkownContact: 'Contacto Desconocido',
   encrypted: 'Cifrado',
@@ -768,6 +777,9 @@ export const sp = {
 }
 
 export const pt = {
+  textSmall: 'Pequeno',
+  textMedium: 'Médio',
+  textLarge: 'Grande',
   processingError: 'Erro de Anexo',
   unknownContact: 'Contato Desconhecido',
   encrypted: 'Criptografado',
@@ -1024,6 +1036,9 @@ export const pt = {
 }
 
 export const de = {
+  textSmall: 'Klein',
+  textMedium: 'Mittel',
+  textLarge: 'Groß',
   processingError: 'Anhangsfehler',
   unknwonContact: 'Unbekannter Kontakt',
   encrypted: 'Verschlüsselt',
@@ -1280,6 +1295,9 @@ export const de = {
 }
 
 export const ru = {
+  textSmall: 'Маленький',
+  textMedium: 'Средний',
+  textLarge: 'Большой',
   processingError: 'Ошибка прикрепления',
   unknownContact: 'Неизвестный контакт',
   encrypted: 'Зашифрованный',

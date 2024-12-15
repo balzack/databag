@@ -98,7 +98,11 @@ export function useConversation() {
     subjectNames: [],
     unknownContacts: 0,
     message: '',
-    assets: [] as {type: string, file: File, position?: number}[],
+    assets: [] as {type: string, file: File, position?: number, label?: string}[],
+    textColor: '#444444',
+    textColorSet: false,
+    textSize: 16,
+    textSizeSet: false,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -187,6 +191,14 @@ export function useConversation() {
     },
     setMessage: (message: string) => {
       updateState({ message });
+    },
+    setTextSize: (textSize: number) => {
+      const textSizeSet = true;
+      updateState({ textSize, textSizeSet });
+    },
+    setTextColor: (textColor: string) => {
+      const textColorSet = true;
+      updateState({ textColor, textColorSet });
     },
     setThumbPosition: (index: number, position: number) => {
       updateAsset(index, { position });
@@ -282,7 +294,7 @@ export function useConversation() {
               } else if (type === 'audio') {
                 return { encrypted: { type, label, parts }};
               } else {
-                return { encrypted: { type, label, extenstion, parts }};
+                return { encrypted: { type, label, extension, parts }};
               }
             } else if (asset.image) {
               const thumb = uploaded.find(upload => upload.appId === asset.image.thumb)?.assetId;
@@ -303,7 +315,7 @@ export function useConversation() {
               return { binary: { label, extension, data } };
             }
           });
-          return { text: state.message, assets };
+          return { text: state.message, textColor: state.textColorSet ? state.textColor : null, textSize: state.textSizeSet ? state.textSize : null, assets };
         }
         const progress = (precent: number) => {};
         await focus.addTopic(sealed, sealed ? 'sealedtopic' : 'superbasictopic', subject, sources, progress);

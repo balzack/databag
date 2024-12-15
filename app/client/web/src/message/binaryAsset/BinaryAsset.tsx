@@ -12,7 +12,7 @@ export function BinaryAsset({ topicId, asset }: { topicId: string, asset: MediaA
     <div className={classes.asset}>
       <Image className={classes.thumb} src={binary} fit="contain" />
       <div className={classes.label}>
-        <div>{ label }</div>
+        <div className={classes.name}>{ label }</div>
         <div className={classes.extension}>{ extension }</div>
       </div>
     </div>
