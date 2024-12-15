@@ -21,8 +21,6 @@ export function useVideoAsset(topicId: string, asset: MediaAsset) {
     if (focus && assetId != null) {
       try {
         const thumbUrl = await focus.getTopicAssetUrl(topicId, assetId);
-console.log("THUMB:", thumbUrl);
-
         updateState({ thumbUrl });
       } catch (err) {
         console.log(err);

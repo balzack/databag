@@ -526,7 +526,11 @@ export class FocusModule implements Focus {
         const mapped = filtered.map((asset: any) => {
           if (asset.encrypted) {
             const { type, thumb, parts } = asset.encrypted;
-            return { encrypted: { type, thumb: getAsset(thumb), parts: getAsset(parts) } };
+            if (type === 'image' || type === 'video') {
+              return { encrypted: { type, thumb: getAsset(thumb), parts: getAsset(parts) } };
+            } else {
+              return { encrypted: { type, parts: getAsset(parts) } };
+            }
           } else if (asset.image) {
             const { thumb, full } = asset.image;
             return { image: { thumb: getAsset(thumb), full: getAsset(full) } };

@@ -8,7 +8,7 @@ export function VideoFile({ source, thumbPosition, disabled }: {source: File, th
   const { state, actions } = useVideoFile(source);
   const [loaded, setLoaded] = useState(false);
   const position = useRef(0);
-  const player = useRef();
+  const player = useRef(null as null | HTMLVideoElement);
 
   const seek = (offset: number) => {
     if (player.current) {
@@ -29,13 +29,15 @@ export function VideoFile({ source, thumbPosition, disabled }: {source: File, th
   }
 
   const onPause = () => {
-    player.current.pause();
+    if (player.current) {
+      player.current.pause();
+    }
   }
 
   return (
     <div className={classes.asset}>
       { state.videoUrl && (
-        <video ref={player} muted onLoadedMetadata={() => setLoaded(true)} onPlay={onPause} src={state.videoUrl} width={'auto'} height={'100%'} playsinline="true" />
+        <video ref={player} muted onLoadedMetadata={() => setLoaded(true)} onPlay={onPause} src={state.videoUrl} width={'auto'} height={'100%'} playsInline={true} />
       )}
       { loaded && !disabled && (
         <ActionIcon className={classes.right} variant="light" onClick={() => seek(1)}>

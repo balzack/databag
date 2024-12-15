@@ -32,7 +32,7 @@ function getImageThumb(file: File) {
   });
 }
 
-function getVideoThumb(file: File, position: number) {
+function getVideoThumb(file: File, position?: number) {
   return new Promise<string>((resolve, reject) => {
     const url = URL.createObjectURL(file);
     var video = document.createElement("video");
@@ -71,7 +71,7 @@ function getVideoThumb(file: File, position: number) {
     video.src = url;
     video.muted = true;
     video.playsInline = true; 
-    video.currentTime = position; 
+    video.currentTime = position ? position : 0; 
     video.play();
   });
 }
@@ -98,7 +98,7 @@ export function useConversation() {
     subjectNames: [],
     unknownContacts: 0,
     message: '',
-    assets: [] as {type: string, file: File}[],
+    assets: [] as {type: string, file: File, position?: number}[],
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -106,7 +106,7 @@ export function useConversation() {
     setState((s) => ({ ...s, ...value }))
   }
 
-  const updateAsset = (index, value) => {
+  const updateAsset = (index: number, value: any) => {
     setState((s) => {
       s.assets[index] = { ...s.assets[index], ...value };
       return { ...s };
@@ -270,7 +270,11 @@ export function useConversation() {
               const type = asset.encrypted.type;
               const thumb = uploaded.find(upload => upload.appId === asset.encrypted.thumb)?.assetId;
               const parts = uploaded.find(upload => upload.appId === asset.encrypted.parts)?.assetId;
-              return { encrypted: { type, thumb, parts }};
+              if (type === 'image' || type === 'video') {
+                return { encrypted: { type, thumb, parts }};
+              } else {
+                return { encrypted: { type, thumb, parts }};
+              }
             } else if (asset.image) {
               const thumb = uploaded.find(upload => upload.appId === asset.image.thumb)?.assetId;
               const full = uploaded.find(upload => upload.appId === asset.image.full)?.assetId;
@@ -288,6 +292,8 @@ export function useConversation() {
               return { binary: { data } };
             }
           });
+console.log(assets, uploaded);
+
           return { text: state.message, assets };
         }
         const progress = (precent: number) => {};
@@ -301,6 +307,14 @@ export function useConversation() {
     },
     addVideo: (file: File) => {
       const type = 'video';
+      updateState({ assets: [ ...state.assets, { type, file } ]});
+    },
+    addAudio: (file: File) => {
+      const type = 'audio';
+      updateState({ assets: [ ...state.assets, { type, file } ]});
+    },
+    addBinary: (file: File) => {
+      const type = 'binary';
       updateState({ assets: [ ...state.assets, { type, file } ]});
     },
   }

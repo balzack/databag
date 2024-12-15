@@ -8,6 +8,8 @@ import { Message } from '../message/Message';
 import { modals } from '@mantine/modals'
 import { ImageFile } from './imageFile/ImageFile';
 import { VideoFile } from './videoFile/VideoFile';
+import { AudioFile } from './audioFile/AudioFile';
+import { BinaryFile } from './binaryFile/BinaryFile';
 
 const PAD_HEIGHT = (1024 - 64);
 const LOAD_DEBOUNCE = 1000;
@@ -28,6 +30,8 @@ export function Conversation() {
   const { state, actions } = useConversation();
   const attachImage = useRef({ click: ()=>{} } as HTMLInputElement);
   const attachVideo = useRef({ click: ()=>{} } as HTMLInputElement);
+  const attachAudio = useRef({ click: ()=>{} } as HTMLInputElement);
+  const attachBinary = useRef({ click: ()=>{} } as HTMLInputElement);
 
   const addImage = (image: File | undefined) => {
     if (image) {
@@ -38,6 +42,18 @@ export function Conversation() {
   const addVideo = (video: File | undefined) => {
     if (video) {
       actions.addVideo(video);
+    }
+  }
+
+  const addAudio = (audio: File | undefined) => {
+    if (audio) {
+      actions.addAudio(audio);
+    }
+  }
+
+  const addBinary = (binary: File | undefined) => {
+    if (binary) {
+      actions.addBinary(binary);
     }
   }
 
@@ -111,13 +127,12 @@ export function Conversation() {
       return <ImageFile key={index} source={asset.file} />
     } else if (asset.type === 'video') {
       return <VideoFile key={index} source={asset.file} thumbPosition={(position: number) => actions.setThumbPosition(index, position)} disabled={sending} />
+    } else if (asset.type === 'audio') {
+      return <AudioFile key={index} source={asset.file} />
     } else {
-      return <div key={index}></div>
+      return <BinaryFile key={index} source={asset.file} />
     }
   });
-
-console.log(state.assets);
-
 
   return (
     <div className={classes.conversation}>
@@ -180,6 +195,8 @@ console.log(state.assets);
       <div className={classes.add}>
         <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => addImage(e.target?.files?.[0])} style={{display: 'none'}}/>
         <input type='file' name="asset" accept="video/*" ref={attachVideo} onChange={e => addVideo(e.target?.files?.[0])} style={{display: 'none'}}/>
+        <input type='file' name="asset" accept="audio/*" ref={attachAudio} onChange={e => addAudio(e.target?.files?.[0])} style={{display: 'none'}}/>
+        <input type='file' name="asset" accept="*/*" ref={attachBinary} onChange={e => addBinary(e.target?.files?.[0])} style={{display: 'none'}}/>
         <div className={classes.files}>
           { media }
         </div>
@@ -191,10 +208,10 @@ console.log(state.assets);
           <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachVideo.current.click()}> 
             <IconVideo />
           </ActionIcon>
-          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending}> 
+          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachAudio.current.click()}> 
             <IconDisc />
           </ActionIcon>
-          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending}> 
+          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachBinary.current.click()}>
             <IconFile />
           </ActionIcon>
           <Divider size="sm" orientation="vertical" />

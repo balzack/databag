@@ -1,0 +1,9 @@
+.asset {
+  padding-top: 16px;
+
+  .thumb {
+    width: auto;
+    height: 92px;
+  }
+}
+
