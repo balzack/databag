@@ -191,6 +191,9 @@ export function useConversation() {
     setThumbPosition: (index: number, position: number) => {
       updateAsset(index, { position });
     },
+    setLabel: (index: number, label: string) => {
+      updateAsset(index, { label });
+    },
     more: async () => {
       const focus = app.state.focus;
       if (focus) {
@@ -209,7 +212,6 @@ export function useConversation() {
       if (focus) {
         const sources = [] as AssetSource[];
         const uploadAssets = state.assets.map(asset => {
-          const name = asset.file.name.split('.').shift();
           const extension = asset.file.name.split('.').pop();
           if (asset.type === 'image') {
             if (sealed) {
@@ -245,12 +247,12 @@ export function useConversation() {
               sources.push({ type: AssetType.Audio, source: asset.file, transforms: [
                 { type: TransformType.Copy, appId: `ac${sources.length}` }
               ]});
-              return { encrypted: { type: 'audio', label: name, parts: `ac${sources.length-1}` } };
+              return { encrypted: { type: 'audio', label: asset.label, parts: `ac${sources.length-1}` } };
             } else {
               sources.push({ type: AssetType.Video, source: asset.file, transforms: [
                 { type: TransformType.Copy, appId: `ac${sources.length}` }
               ]});
-              return { audio: { label: name, full: `ac${sources.length-1}` } };
+              return { audio: { label: asset.label, full: `ac${sources.length-1}` } };
             }
           } else {
             if (sealed) {

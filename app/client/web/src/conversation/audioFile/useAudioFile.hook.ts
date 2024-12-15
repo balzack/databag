@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 
 export function useAudioFile(source: File) {
   const [state, setState] = useState({
-    thumbUrl: null,
+    label: '',
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -11,12 +11,14 @@ export function useAudioFile(source: File) {
   }
 
   useEffect(() => {
-    const thumbUrl = URL.createObjectURL(source);
-    updateState({ thumbUrl });
-    return () => { URL.revokeObjectURL(thumbUrl) };
+    const label = source.name.split('.').shift();
+    updateState({ label });
   }, [source]);    
 
   const actions = {
+    setLabel: (label: string) => {
+      updateState({ label });
+    }
   }
 
   return { state, actions }

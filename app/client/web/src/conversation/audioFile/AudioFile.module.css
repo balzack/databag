@@ -1,9 +1,21 @@
 .asset {
   padding-top: 16px;
+  position: relative;
 
   .thumb {
     width: auto;
     height: 92px;
+  }
+
+  .label {
+    padding-top: 16px;
+    padding-left: 2px;
+    padding-right: 2px;
+    position: absolute;
+    font-size: 8px;
+    top: 0;
+    left: 0;
+    height: 67%;
   }
 }
 

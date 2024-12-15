@@ -1,9 +1,28 @@
 .asset {
-  padding-top: 16px;
+  margin-top: 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   .thumb {
     width: auto;
     height: 92px;
+  }
+
+  .name {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .extension {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    text-align: center;
   }
 }
 

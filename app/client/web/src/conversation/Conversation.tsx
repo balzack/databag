@@ -128,7 +128,7 @@ export function Conversation() {
     } else if (asset.type === 'video') {
       return <VideoFile key={index} source={asset.file} thumbPosition={(position: number) => actions.setThumbPosition(index, position)} disabled={sending} />
     } else if (asset.type === 'audio') {
-      return <AudioFile key={index} source={asset.file} />
+      return <AudioFile key={index} source={asset.file} updateLabel={(label: string) => actions.setLabel(index, label)} disabled={sending} />
     } else {
       return <BinaryFile key={index} source={asset.file} />
     }
