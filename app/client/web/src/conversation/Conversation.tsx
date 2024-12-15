@@ -108,6 +108,12 @@ export function Conversation() {
     }
   };
 
+  const keyDown = (key: string, shift: boolean) => {
+    if (key === 'Enter' && !shift && state.message) {
+      sendMessage();
+    }
+  }
+
   const topics = state.topics.map((topic, idx) => {
     const { host } = state;
     const card = state.cards.get(topic.guid) || null;
@@ -201,7 +207,7 @@ export function Conversation() {
         <div className={classes.files}>
           { media }
         </div>
-        <Textarea className={classes.message} placeholder={state.strings.newMessage} styles={{ input: {color: state.textColorSet ? state.textColor : null, fontSize: state.textSizeSet ? state.textSize : null }}} value={state.message} onChange={(event) => actions.setMessage(event.currentTarget.value)} disabled={!state.detail || state.detail.locked || sending} />
+        <Textarea className={classes.message} placeholder={state.strings.newMessage} styles={{ input: {color: state.textColorSet ? state.textColor : null, fontSize: state.textSizeSet ? state.textSize : null }}} value={state.message} onChange={(event) => actions.setMessage(event.currentTarget.value)} disabled={!state.detail || state.detail.locked || sending} onKeyDown={(e) => { console.log(e); keyDown(e.key, e.shiftKey)}} />
         <div className={classes.controls}>
           <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachImage.current.click()}> 
             <IconCamera />
