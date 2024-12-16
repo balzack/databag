@@ -207,7 +207,7 @@ export function Conversation() {
         <div className={classes.files}>
           { media }
         </div>
-        <Textarea className={classes.message} placeholder={state.strings.newMessage} styles={{ input: {color: state.textColorSet ? state.textColor : null, fontSize: state.textSizeSet ? state.textSize : null }}} value={state.message} onChange={(event) => actions.setMessage(event.currentTarget.value)} disabled={!state.detail || state.detail.locked || sending} onKeyDown={(e) => { console.log(e); keyDown(e.key, e.shiftKey)}} />
+        <Textarea className={classes.message} placeholder={state.strings.newMessage} styles={{ input: {color: state.textColorSet ? state.textColor : undefined, fontSize: state.textSizeSet ? state.textSize : undefined }}} value={state.message} onChange={(event) => actions.setMessage(event.currentTarget.value)} disabled={!state.detail || state.detail.locked || sending} onKeyDown={(e) => { console.log(e); keyDown(e.key, e.shiftKey)}} />
         <div className={classes.controls}>
           <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachImage.current.click()}> 
             <IconCamera />
