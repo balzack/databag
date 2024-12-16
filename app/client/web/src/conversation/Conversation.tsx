@@ -141,6 +141,9 @@ export function Conversation() {
     }
   });
 
+console.log("SEND? ", sending, state.progress);
+
+
   return (
     <div className={classes.conversation}>
       <div className={classes.header}>
@@ -198,7 +201,12 @@ export function Conversation() {
           </div>
         )}
       </div>
-      <div className={classes.divider} />
+      <div className={classes.progressDivider}>
+        <div className={classes.divider} />
+        { sending && (
+          <div className={classes.progress} style={{ width: `${state.progress}%` }}/>
+        )}
+      </div>
       <div className={classes.add}>
         <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => addImage(e.target?.files?.[0])} style={{display: 'none'}}/>
         <input type='file' name="asset" accept="video/*" ref={attachVideo} onChange={e => addVideo(e.target?.files?.[0])} style={{display: 'none'}}/>

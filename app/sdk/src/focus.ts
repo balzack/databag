@@ -281,7 +281,7 @@ export class FocusModule implements Focus {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', url, true);
       xhr.setRequestHeader('Content-Type', 'text/plain');
-      xhr.onprogress = (ev: ProgressEvent<EventTarget>)=>{ progress(0) };
+      xhr.upload.onprogress = (ev: ProgressEvent<EventTarget>)=>{ progress((ev.loaded * 100) / ev.total) };
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
           try {
@@ -314,7 +314,7 @@ export class FocusModule implements Focus {
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', url, true);
-      xhr.onprogress = (ev: ProgressEvent<EventTarget>)=>{ progress(0) };
+      xhr.upload.onprogress = (ev: ProgressEvent<EventTarget>)=>{ progress((ev.loaded * 100) / ev.total) };
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
           try {
@@ -347,7 +347,7 @@ export class FocusModule implements Focus {
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', url, true);
-      xhr.onprogress = (ev: ProgressEvent<EventTarget>)=>{ progress(0) };
+      xhr.upload.onprogress = (ev: ProgressEvent<EventTarget>)=>{ progress((ev.loaded * 100) / ev.total) };
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
           try {
@@ -389,6 +389,12 @@ export class FocusModule implements Focus {
         return await this.addRemoteChannelTopic(type, data, true);
       }
     } else {
+
+      let uploadCount = 0;
+      const assetProgress = (percent: number) => {
+        progress(Math.floor((uploadCount * 100 + percent) / files.length));
+      }
+
       const topicId = await this.addRemoteChannelTopic(type, {}, false);
       try {
         const appAsset = [] as {assetId: string, appId: string}[];
@@ -419,9 +425,13 @@ export class FocusModule implements Focus {
                   const base64Data = await mediaFile.getData(i * ENCRYPT_BLOCK_SIZE, length);
                   const { ivHex } = await crypto.aesIv();
                   const { encryptedDataB64 } = await crypto.aesEncrypt(base64Data, ivHex, channelKey);
-                  const partId = await this.uploadBlock(encryptedDataB64, topicId, progress);
+                  const partId = await this.uploadBlock(encryptedDataB64, topicId, (percent: number) => {
+                    const count = Math.ceil(mediaFile.size / ENCRYPT_BLOCK_SIZE);
+                    assetProgress(Math.floor((i * 100 + percent) / count));
+                  });
                   split.push({ partId, blockIv: ivHex });
                 }
+                uploadCount += 1;
                 const assetItem = {
                   assetId: `${assetItems.length}`,
                   encrypted: true,
@@ -466,7 +476,8 @@ export class FocusModule implements Focus {
                 transforms.push('acopy;audio');
                 transformMap.set('acopy;audio', transform.appId);
               } else if (transform.type === TransformType.Copy && asset.type === AssetType.Binary) {
-                const assetId = await this.mirrorFile(asset.source, topicId, progress);
+                const assetId = await this.mirrorFile(asset.source, topicId, assetProgress);
+                uploadCount += 1;
                 const assetItem = {
                   assetId: `${assetItems.length}`,
                   hosting: HostingMode.Basic,
@@ -479,7 +490,9 @@ export class FocusModule implements Focus {
               }
             }
             if (transforms.length > 0) {
-              const transformAssets = await this.transformFile(asset.source, topicId, transforms, progress);
+              const transformAssets = await this.transformFile(asset.source, topicId, transforms, assetProgress);
+              uploadCount += 1;
+
               for (let transformAsset of transformAssets) {
                 const assetItem = {
                   assetId: `${assetItems.length}`,

@@ -103,6 +103,7 @@ export function useConversation() {
     textColorSet: false,
     textSize: 16,
     textSizeSet: false,
+    progress: 0,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -317,9 +318,9 @@ export function useConversation() {
           });
           return { text: state.message, textColor: state.textColorSet ? state.textColor : null, textSize: state.textSizeSet ? state.textSize : null, assets };
         }
-        const progress = (precent: number) => {};
-        await focus.addTopic(sealed, sealed ? 'sealedtopic' : 'superbasictopic', subject, sources, progress);
-        updateState({ message: '', assets: [] });
+        const upload = (progress: number) => { updateState({ progress }) };
+        await focus.addTopic(sealed, sealed ? 'sealedtopic' : 'superbasictopic', subject, sources, upload);
+        updateState({ message: '', assets: [], progress: 0 });
       }
     }, 
     addImage: (file: File) => {
