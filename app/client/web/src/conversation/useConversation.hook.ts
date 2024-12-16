@@ -207,6 +207,10 @@ export function useConversation() {
     setLabel: (index: number, label: string) => {
       updateAsset(index, { label });
     },
+    removeAsset: (index: number) => {
+      state.assets.splice(index, 1);
+      updateState({ assets: [ ...state.assets ] });
+    },
     more: async () => {
       const focus = app.state.focus;
       if (focus) {

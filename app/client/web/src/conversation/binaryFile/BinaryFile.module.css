@@ -26,5 +26,11 @@
     width: 100%;
     text-align: center;
   }
+
+  .close {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
 }
 

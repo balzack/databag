@@ -1,6 +1,9 @@
 .asset {
-  padding-top: 16px;
+  margin-top: 16px;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   .thumb {
     width: auto;
@@ -8,14 +11,17 @@
   }
 
   .label {
-    padding-top: 16px;
     padding-left: 2px;
     padding-right: 2px;
     position: absolute;
     font-size: 8px;
+    bottom: 0;
+  }
+
+  .close {
+    position: absolute;
+    right: 0;
     top: 0;
-    left: 0;
-    height: 67%;
   }
 }
 

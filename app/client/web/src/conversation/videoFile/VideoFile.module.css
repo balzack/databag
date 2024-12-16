@@ -22,5 +22,11 @@
     width: auto;
     height: 64px;
   }
+
+  .close {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
 }
 

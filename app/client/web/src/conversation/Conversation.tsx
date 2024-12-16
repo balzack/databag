@@ -134,17 +134,15 @@ export function Conversation() {
 
   const media = state.assets.map((asset, index: number) => {
     if (asset.type === 'image') {
-      return <ImageFile key={index} source={asset.file} />
+      return <ImageFile key={index} source={asset.file} disabled={sending} remove={() => actions.removeAsset(index)} />
     } else if (asset.type === 'video') {
-      return <VideoFile key={index} source={asset.file} thumbPosition={(position: number) => actions.setThumbPosition(index, position)} disabled={sending} />
+      return <VideoFile key={index} source={asset.file} thumbPosition={(position: number) => actions.setThumbPosition(index, position)} disabled={sending} remove={() => actions.removeAsset(index)}/>
     } else if (asset.type === 'audio') {
-      return <AudioFile key={index} source={asset.file} updateLabel={(label: string) => actions.setLabel(index, label)} disabled={sending} />
+      return <AudioFile key={index} source={asset.file} updateLabel={(label: string) => actions.setLabel(index, label)} disabled={sending} remove={() => actions.removeAsset(index)} />
     } else {
-      return <BinaryFile key={index} source={asset.file} />
+      return <BinaryFile key={index} source={asset.file} disabled={sending} remove={() => actions.removeAsset(index)} />
     }
   });
-
-console.log("HIIGHT: ", height);
 
   return (
     <div className={classes.conversation}>
@@ -209,7 +207,7 @@ console.log("HIIGHT: ", height);
           <div className={classes.progress} style={{ width: `${state.progress}%` }}/>
         )}
       </div>
-      <AnimateHeight className={classes.add} duration={500} height={height}>
+      <AnimateHeight className={classes.add} duration={333} height={height ? height : 132}>
         <div ref={ref} className={classes.staging}>
           <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => addImage(e.target?.files?.[0])} style={{display: 'none'}}/>
           <input type='file' name="asset" accept="video/*" ref={attachVideo} onChange={e => addVideo(e.target?.files?.[0])} style={{display: 'none'}}/>
