@@ -11,6 +11,8 @@ import { VideoFile } from './videoFile/VideoFile';
 import { AudioFile } from './audioFile/AudioFile';
 import { BinaryFile } from './binaryFile/BinaryFile';
 import { SketchPicker } from "react-color";
+import AnimateHeight from 'react-animate-height';
+import { useResizeDetector } from 'react-resize-detector';
 
 const PAD_HEIGHT = (1024 - 64);
 const LOAD_DEBOUNCE = 1000;
@@ -33,6 +35,7 @@ export function Conversation() {
   const attachVideo = useRef({ click: ()=>{} } as HTMLInputElement);
   const attachAudio = useRef({ click: ()=>{} } as HTMLInputElement);
   const attachBinary = useRef({ click: ()=>{} } as HTMLInputElement);
+  const { width, height, ref } = useResizeDetector();
 
   const addImage = (image: File | undefined) => {
     if (image) {
@@ -141,8 +144,7 @@ export function Conversation() {
     }
   });
 
-console.log("SEND? ", sending, state.progress);
-
+console.log("HIIGHT: ", height);
 
   return (
     <div className={classes.conversation}>
@@ -207,68 +209,70 @@ console.log("SEND? ", sending, state.progress);
           <div className={classes.progress} style={{ width: `${state.progress}%` }}/>
         )}
       </div>
-      <div className={classes.add}>
-        <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => addImage(e.target?.files?.[0])} style={{display: 'none'}}/>
-        <input type='file' name="asset" accept="video/*" ref={attachVideo} onChange={e => addVideo(e.target?.files?.[0])} style={{display: 'none'}}/>
-        <input type='file' name="asset" accept="audio/*" ref={attachAudio} onChange={e => addAudio(e.target?.files?.[0])} style={{display: 'none'}}/>
-        <input type='file' name="asset" accept="*/*" ref={attachBinary} onChange={e => addBinary(e.target?.files?.[0])} style={{display: 'none'}}/>
-        <div className={classes.files}>
-          { media }
-        </div>
-        <Textarea className={classes.message} placeholder={state.strings.newMessage} styles={{ input: {color: state.textColorSet ? state.textColor : undefined, fontSize: state.textSizeSet ? state.textSize : undefined }}} value={state.message} onChange={(event) => actions.setMessage(event.currentTarget.value)} disabled={!state.detail || state.detail.locked || sending} onKeyDown={(e) => { console.log(e); keyDown(e.key, e.shiftKey)}} />
-        <div className={classes.controls}>
-          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachImage.current.click()}> 
-            <IconCamera />
-          </ActionIcon>
-          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachVideo.current.click()}> 
-            <IconVideo />
-          </ActionIcon>
-          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachAudio.current.click()}> 
-            <IconDisc />
-          </ActionIcon>
-          <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachBinary.current.click()}>
-            <IconFile />
-          </ActionIcon>
-          <Divider size="sm" orientation="vertical" />
-          <Menu shadow="md" position="top">
-            <Menu.Target>
-              <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending}> 
-                <IconTextSize />
-              </ActionIcon>
-            </Menu.Target>
-            <Menu.Dropdown>
-              <Menu.Item onClick={() => actions.setTextSize(12)}>
-                { state.strings.textSmall }
-              </Menu.Item>
-              <Menu.Item onClick={() => actions.setTextSize(16)}>
-                { state.strings.textMedium }
-              </Menu.Item>
-              <Menu.Item onClick={() => actions.setTextSize(20)}>
-                { state.strings.textLarge }
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
-          <Menu shadow="md" position="top">
-            <Menu.Target>
-              <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending}> 
-                <IconTextColor />
-              </ActionIcon>
-            </Menu.Target>
-            <Menu.Dropdown>
-              <SketchPicker disableAlpha={true}
-                color={state.textColor}
-                onChange={(color) => {
-                  actions.setTextColor(color.hex);
-                }} />
-            </Menu.Dropdown>
-          </Menu>
-          <div className={classes.send}>
-            <ActionIcon className={classes.attach} variant="light" disabled={(!state.message && state.assets.length === 0) || !state.detail || state.detail.locked || sending} onClick={sendMessage} loading={sending}> 
-              <IconSend />
-            </ActionIcon>
+      <AnimateHeight className={classes.add} duration={500} height={height}>
+        <div ref={ref} className={classes.staging}>
+          <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => addImage(e.target?.files?.[0])} style={{display: 'none'}}/>
+          <input type='file' name="asset" accept="video/*" ref={attachVideo} onChange={e => addVideo(e.target?.files?.[0])} style={{display: 'none'}}/>
+          <input type='file' name="asset" accept="audio/*" ref={attachAudio} onChange={e => addAudio(e.target?.files?.[0])} style={{display: 'none'}}/>
+          <input type='file' name="asset" accept="*/*" ref={attachBinary} onChange={e => addBinary(e.target?.files?.[0])} style={{display: 'none'}}/>
+          <div className={classes.files}>
+            { media }
           </div>
-        </div> 
+          <Textarea className={classes.message} placeholder={state.strings.newMessage} styles={{ input: {color: state.textColorSet ? state.textColor : undefined, fontSize: state.textSizeSet ? state.textSize : undefined }}} value={state.message} onChange={(event) => actions.setMessage(event.currentTarget.value)} disabled={!state.detail || state.detail.locked || sending} onKeyDown={(e) => { console.log(e); keyDown(e.key, e.shiftKey)}} />
+          <div className={classes.controls}>
+            <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachImage.current.click()}> 
+              <IconCamera />
+            </ActionIcon>
+            <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachVideo.current.click()}> 
+              <IconVideo />
+            </ActionIcon>
+            <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachAudio.current.click()}> 
+              <IconDisc />
+            </ActionIcon>
+            <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachBinary.current.click()}>
+              <IconFile />
+            </ActionIcon>
+            <Divider size="sm" orientation="vertical" />
+            <Menu shadow="md" position="top">
+              <Menu.Target>
+                <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending}> 
+                  <IconTextSize />
+                </ActionIcon>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item onClick={() => actions.setTextSize(12)}>
+                  { state.strings.textSmall }
+                </Menu.Item>
+                <Menu.Item onClick={() => actions.setTextSize(16)}>
+                  { state.strings.textMedium }
+                </Menu.Item>
+                <Menu.Item onClick={() => actions.setTextSize(20)}>
+                  { state.strings.textLarge }
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+            <Menu shadow="md" position="top">
+              <Menu.Target>
+                <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending}> 
+                  <IconTextColor />
+                </ActionIcon>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <SketchPicker disableAlpha={true}
+                  color={state.textColor}
+                  onChange={(color) => {
+                    actions.setTextColor(color.hex);
+                  }} />
+              </Menu.Dropdown>
+            </Menu>
+            <div className={classes.send}>
+              <ActionIcon className={classes.attach} variant="light" disabled={(!state.message && state.assets.length === 0) || !state.detail || state.detail.locked || sending} onClick={sendMessage} loading={sending}> 
+                <IconSend />
+              </ActionIcon>
+            </div>
+          </div>
       </div>
+        </AnimateHeight>
     </div>
   );
 }
