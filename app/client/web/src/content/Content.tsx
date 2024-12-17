@@ -19,8 +19,7 @@ export function Content({ textCard }: { textCard: { cardId: null|string }}) {
   const openTopic = async (cardId: string) => {
     setAdding(true);
     try {
-      const id = await actions.openTopic(cardId);
-      actions.setFocus(null, id);
+      await actions.openTopic(cardId);
     } catch (err) {
       console.log(err);
       showError();
