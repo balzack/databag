@@ -11,11 +11,13 @@
   .left {
     position: absolute;
     left: 0;
+    bottom: 0;
   }
 
   .right {
     position: absolute;
     right: 0;
+    bottom: 0;
   }
 
   .thumb {
