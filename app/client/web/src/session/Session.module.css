@@ -27,7 +27,7 @@
       display: flex;
       flex-direction: column;
       height: 100%;
-      width: 33%;
+      width: 30%;
       min-width: 325px;
       background: var(--mantine-color-surface-2);
 
