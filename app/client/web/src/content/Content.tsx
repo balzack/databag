@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useContent } from './useContent.hook'
 import { Modal, Text, Switch, TextInput, Button } from '@mantine/core'
 import { IconSearch, IconMessagePlus, IconLabel } from '@tabler/icons-react'
@@ -7,7 +7,7 @@ import { Channel } from '../channel/Channel'
 import { Card } from '../card/Card'
 import { modals } from '@mantine/modals'
 
-export function Content() {
+export function Content({ textCard }: { textCard: { cardId: null|string }}) {
   const { state, actions } = useContent()
   const [add, setAdd] = useState(false)
   const [adding, setAdding] = useState(false)
@@ -15,6 +15,18 @@ export function Content() {
   const [subject, setSubject] = useState('')
   const [added, setAdded] = useState([] as string[])
   const cards = state.sealSet && sealed ? state.sealable : state.connected
+
+  const openTopic = async (cardId: string) => {
+    setAdding(true);
+    try {
+      const id = await actions.openTopic(cardId);
+      actions.setFocus(null, id);
+    } catch (err) {
+      console.log(err);
+      showError();
+    }
+    setAdding(false);
+  }
 
   const addTopic = async () => {
     setAdding(true)
@@ -86,6 +98,12 @@ export function Content() {
       />
     )
   })
+
+  useEffect(() => {
+    if (textCard.cardId) {
+      openTopic(textCard.cardId);
+    }
+  }, [textCard]);
 
   return (
     <div className={classes.content}>

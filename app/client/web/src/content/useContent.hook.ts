@@ -242,6 +242,26 @@ export function useContent() {
     setFocus: (cardId: string | null, channelId: string) => {
       app.actions.setFocus(cardId, channelId)
     },
+    openTopic: async (cardId: string) => {
+      const content = app.state.session.getContent()
+      const card = state.cards.find(card => card.cardId === cardId)
+      if (!card) {
+        throw new Error('contact not found');
+      }
+      const sealable = card.sealable && state.sealSet;
+      const thread = state.sorted.find(channel => {
+        const { sealed, cardId, members} = channel;
+        if (sealed === sealable && cardId == null && members.length === 1 && members[0].guid === card.guid) {
+          return true;
+        }
+        return false;
+      });
+      if (thread) {
+        return thread.channelId;
+      }
+      const topic = await content.addChannel(sealable, sealable ? 'sealed' : 'superbasic', {}, [cardId]);
+      return topic.id;
+    },
     addTopic: async (sealed: boolean, subject: string, contacts: string[]) => {
       const content = app.state.session.getContent()
       if (sealed) {

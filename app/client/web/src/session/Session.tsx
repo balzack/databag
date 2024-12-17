@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import { Drawer } from '@mantine/core'
 import { DisplayContext } from '../context/DisplayContext'
 import { ContextType } from '../context/ContextType'
@@ -23,6 +23,18 @@ export function Session() {
   const [contacts, { open: openContacts, close: closeContacts }] = useDisclosure(false)
   const [registry, { open: openRegistry, close: closeRegistry }] = useDisclosure(false)
   const [profile, { open: openProfile, close: closeProfile }] = useDisclosure(false)
+  const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
+
+  const textContact = (cardId: string) => {
+    console.log("MESSAGE: ", cardId);
+    setTextCard({ cardId });
+    closeContacts();
+    setTab('content');
+  }
+
+  const callContact = (cardId: string) => {
+    console.log("CALL: ", cardId);
+  }
 
   return (
     <div className={classes.session}>
@@ -30,7 +42,7 @@ export function Session() {
         <>
           <div className={tab === 'content' ? classes.show : classes.hide}>
             <div className={classes.screen}>
-              <Content />
+              <Content textCard={textCard} />
             </div>
             {state.focus && (
               <div className={classes.screen}>
@@ -46,6 +58,8 @@ export function Session() {
           <div className={tab === 'contacts' ? classes.show : classes.hide}>
             <div className={classes.screen}>
               <Contacts
+                callContact={callContact}
+                textContact={textContact}
                 openRegistry={openRegistry}
                 openContact={(params) => {
                   setProfileParams(params)
@@ -111,13 +125,15 @@ export function Session() {
           <div className={classes.left}>
             <Identity settings={openSettings} contacts={openContacts} />
             <div className={classes.content}>
-              <Content />
+              <Content textCard={textCard} />
             </div>
           </div>
           <div className={classes.right}>{state.focus && <Conversation />}</div>
           <Drawer opened={contacts} onClose={closeContacts} withCloseButton={false} size="md" padding="0" position="right">
             <div style={{ height: '100vh' }}>
               <Contacts
+                callContact={callContact}
+                textContact={textContact}
                 openRegistry={openRegistry}
                 openContact={(params) => {
                   setProfileParams(params)

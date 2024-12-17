@@ -70,12 +70,6 @@ export function useContacts() {
     setFilter: (filter: string) => {
       updateState({ filter })
     },
-    call: async (cardId: string) => {
-      console.log('call', cardId)
-    },
-    text: async (cardId: string) => {
-      console.log('text', cardId)
-    },
     cancel: async (cardId: string) => {
       const contact = app.state.session?.getContact()
       await contact.disconnectCard(cardId)

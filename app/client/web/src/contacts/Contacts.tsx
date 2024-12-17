@@ -37,18 +37,18 @@ function Action({ icon, color, strings, select }: { icon: ReactNode; color: stri
   )
 }
 
-export function Contacts({ openRegistry, openContact }: { openRegistry: () => void; openContact: (params: ProfileParams) => void }) {
+export function Contacts({ openRegistry, openContact, textContact, callContact }: { openRegistry: ()=>void; openContact: (params: ProfileParams)=>void, textContact: (cardId: string)=>void, callContact: (cardId: string)=>void }) {
   const { state, actions } = useContacts()
 
   const cards = state.filtered.map((card, idx) => {
     const getOptions = () => {
       const status = card.offsync ? 'offsync' : card.status
       if (status === 'connected') {
-        const call = <IconPhone size={24} />
+        const phone = <IconPhone size={24} />
         const text = <IconMessage2 size={24} />
         return [
-          <Action key="call" icon={call} color={Colors.connected} select={() => actions.call(card.cardId)} strings={state.strings} />,
-          <Action key="text" icon={text} color={Colors.connected} select={() => actions.text(card.cardId)} strings={state.strings} />,
+          <Action key="phone" icon={phone} color={Colors.connected} select={async () => callContact(card.cardId)} strings={state.strings} />,
+          <Action key="text" icon={text} color={Colors.connected} select={async () => textContact(card.cardId)} strings={state.strings} />,
         ]
       } else if (status === 'offsync') {
         const resync = <IconRefresh size={24} />
