@@ -1,4 +1,5 @@
 .asset {
+  cursor: pointer;
 
   .thumb {
     width: auto;
@@ -6,3 +7,15 @@
   }
 }
 
+.modal {
+  section {
+    background-color: transparent;
+  }
+
+  .body {
+
+    .image {
+    }
+
+  }
+}

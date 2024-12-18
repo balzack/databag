@@ -9,7 +9,7 @@ import { VideoAsset } from './videoAsset/VideoAsset';
 import { BinaryAsset } from './binaryAsset/BinaryAsset';
 import type { MediaAsset } from '../conversation/Conversation';
 import { useMessage } from './useMessage.hook';
-import { IconForbid, IconTrash, IconEdit, IconAlertSquareRounded, IconChevronLeft, IconChevronRight, IconFileAlert } from '@tabler/icons-react';
+import { IconForbid, IconTrash, IconShare, IconEdit, IconAlertSquareRounded, IconChevronLeft, IconChevronRight, IconFileAlert } from '@tabler/icons-react';
 import { useResizeDetector } from 'react-resize-detector';
 
 export function Message({ topic, card, profile, host }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean }) {
@@ -74,6 +74,7 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
             </div>
             <div className={classes.options}>
               <div className={classes.surface}>
+                <IconShare className={classes.option} />
                 { !locked && profile && (
                   <IconEdit className={classes.option} />
                 )}

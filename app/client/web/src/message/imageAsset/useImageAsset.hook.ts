@@ -8,6 +8,7 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
   const app = useContext(AppContext) as ContextType
   const [state, setState] = useState({
     thumbUrl: null,
+    dataUrl: null,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,13 +34,20 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
   }, [asset]);    
 
   const actions = {
-    getAssetUrl: async (topicId: string, assetId: string) => {
+    loadImage: async () => {
+console.log("CHECK0");
       const { focus } = app.state;
-      if (!focus) {
-        throw new Error('no channel in focus');
+      const assetId = asset.image ? asset.image.full : asset.encrypted ? asset.encrypted.parts : null;
+      if (focus && assetId != null) {
+        try {
+console.log("CHECK1");
+          const dataUrl = await focus.getTopicAssetUrl(topicId, assetId);
+          updateState({ dataUrl });
+        } catch (err) {
+          console.log(err);
+        }
       }
-      return await focus.getTopicAssetUrl(topicId, assetId, (percent: number)=>true);
-    },
+    }
   }
 
   return { state, actions }
