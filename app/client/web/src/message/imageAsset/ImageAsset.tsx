@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MediaAsset } from '../../conversation/Conversation';
 import { useImageAsset } from './useImageAsset.hook';
-import { ActionIcon, Image } from '@mantine/core'
+import { Progress, ActionIcon, Image } from '@mantine/core'
 import classes from './ImageAsset.module.css'
 import { IconX } from '@tabler/icons-react'
 
@@ -45,6 +45,9 @@ export function ImageAsset({ topicId, asset }: { topicId: string, asset: MediaAs
             <div className={classes.frame}>
               <img className={classes.image} src={state.dataUrl} />
             </div>
+          )}
+          { state.loading && state.loadPercent > 0 && (
+            <Progress className={classes.progress} value={state.loadPercent} />
           )}
           <ActionIcon className={classes.close} variant="subtle" size="lg" onClick={hide}>
             <IconX size="lg" />

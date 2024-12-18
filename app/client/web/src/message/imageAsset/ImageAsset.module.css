@@ -21,6 +21,12 @@
   z-index: 1;
   transition: all 400ms;
 
+  .progress {
+    position: absolute;
+    bottom: 16px;
+    width: 25%;
+  }
+
   .close {
     position: absolute;
     top: 16px;

@@ -241,7 +241,7 @@ export class FocusModule implements Focus {
     }
   }
 
-  private downloadBlock(topicId: string, blockId: string): Promise<string> {
+  private downloadBlock(topicId: string, blockId: string, progress: (percent: number)=>void): Promise<string> {
     const { cardId, channelId, connection } = this;
     if (!connection) {
       throw new Error('disconnected from channel');
@@ -253,6 +253,7 @@ export class FocusModule implements Focus {
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
       xhr.open('GET', url, true);
+      xhr.onprogress = (ev: ProgressEvent<EventTarget>)=>{ progress((ev.loaded * 100) / ev.total) };
       xhr.setRequestHeader('Content-Type', 'text/plain');
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
@@ -761,7 +762,7 @@ export class FocusModule implements Focus {
     await this.removeRemoteChannelTopic(topicId);
   }
 
-  public async getTopicAssetUrl(topicId: string, assetId: string, progress: null | ((percent: number) => boolean)): Promise<string> {
+  public async getTopicAssetUrl(topicId: string, assetId: string, progress?: ((percent: number) => boolean|void)): Promise<string> {
     const entry = this.topicEntries.get(topicId);
     if (!entry) {
       throw new Error('topic entry not found');
@@ -783,7 +784,21 @@ export class FocusModule implements Focus {
       const write = await media.write();
       this.closeMedia.push(write.close);
       for (let i = 0; i < asset.split.length; i++) {
-        const block = await this.downloadBlock(topicId, asset.split[i].partId);
+        let download = true;
+        const block = await this.downloadBlock(topicId, asset.split[i].partId, (percent: number)=>{
+          if (progress && download !== false) {
+            download = progress(Math.floor((i * 100 + percent) / asset.split.length));
+          }
+        });
+        if (download === false) {
+          throw new Error('aborted asset load');
+        }
+        if (progress) {
+          download =  progress(Math.floor((i * 100) / asset.split.length));
+        }
+        if (download === false) {
+          throw new Error('aborted asset load');
+        }
         const { data } = await crypto.aesDecrypt(block, asset.split[i].blockIv, channelKey);
         await write.setData(data);
       }

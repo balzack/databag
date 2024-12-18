@@ -9,6 +9,8 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
   const [state, setState] = useState({
     thumbUrl: null,
     dataUrl: null,
+    loading: false,
+    loadPercent: 0,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,13 +42,15 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
     loadImage: async () => {
       const { focus } = app.state;
       const assetId = asset.image ? asset.image.full : asset.encrypted ? asset.encrypted.parts : null;
-      if (focus && assetId != null) {
+      if (focus && assetId != null && !state.loading) {
+        updateState({ loading: true, loadPercent: 0 });
         try {
-          const dataUrl = await focus.getTopicAssetUrl(topicId, assetId);
+          const dataUrl = await focus.getTopicAssetUrl(topicId, assetId, (loadPercent: number)=>{ updateState({ loadPercent }) });
           updateState({ dataUrl });
         } catch (err) {
           console.log(err);
         }
+        updateState({ loading: false });
       }
     }
   }

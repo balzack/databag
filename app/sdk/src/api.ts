@@ -131,7 +131,7 @@ export interface Focus {
 
   viewMoreTopics(): Promise<void>;
 
-  getTopicAssetUrl(topicId: string, assetId: string, progress: (percent: number) => boolean): Promise<string>;
+  getTopicAssetUrl(topicId: string, assetId: string, progress?: (percent: number) => boolean|void): Promise<string>;
 
   flagTopic(topicId: string): Promise<void>;
   setBlockTopic(topicId: string): Promise<void>;
