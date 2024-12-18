@@ -1,49 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MediaAsset } from '../../conversation/Conversation';
 import { useImageAsset } from './useImageAsset.hook';
-import { ActionIcon, Modal, Image } from '@mantine/core'
+import { ActionIcon, Image } from '@mantine/core'
 import classes from './ImageAsset.module.css'
 import { IconX } from '@tabler/icons-react'
 
 export function ImageAsset({ topicId, asset }: { topicId: string, asset: MediaAsset }) {
   const { state, actions } = useImageAsset(topicId, asset);
-  const [show, setShow] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [showImage, setShowImage] = useState(false); 
 
-  const showImage = () => {
-    setShow(true);
-    actions.loadImage();
+  const show = () => {
+    setShowModal(true);
   }
+
+  const hide = () => {
+    setShowModal(false);
+  }
+
+  useEffect(() => {
+    if (showModal) {
+      setShowImage(true);
+      actions.loadImage();
+    } else {
+      setShowImage(false);
+      actions.unloadImage();
+    }
+  }, [showModal]);  
 
   return (
     <div>
       { state.thumbUrl && (
-        <div className={classes.asset} onClick={showImage}>
+        <div className={classes.asset} onClick={show}>
           <Image radius="sm" className={classes.thumb} src={state.thumbUrl} />
         </div>
       )}
 
-      <Modal className={classes.modal} opened={show} onClose={() => setShow(false)} padding={0} size="xl" overlayProps={{ backgroundOpacity: 0.65, blur: 3 }} centered withCloseButton={false}>
-          { !state.dataUrl && (
-            <div className={classes.body}>
-              <Image radius="lg" className={classes.image} fit="contain" src={state.thumbUrl} />
-              <div className={classes.frame}>
-                <ActionIcon variant="subtle" size="lg" onClick={() => setShow(false)}>
-                  <IconX size="lg" />
-                </ActionIcon>
-              </div>
-            </div>
-          )}
+      { showModal && (
+        <div className={classes.modal} style={ showImage ? { opacity: 1} : { opacity: 0 }}>
+          <div className={classes.frame}>
+            <Image className={classes.image} fit="contain" src={state.thumbUrl} />
+          </div>
           { state.dataUrl && (
-            <div className={classes.body}>
-              <Image radius="lg" className={classes.image} fit="contain" src={state.dataUrl} />
-              <div className={classes.frame}>
-                <ActionIcon variant="subtle" size="lg" onClick={() => setShow(false)}>
-                  <IconX size="lg" />
-                </ActionIcon>
-              </div>
+            <div className={classes.frame}>
+              <img className={classes.image} src={state.dataUrl} />
             </div>
           )}
-      </Modal>
+          <ActionIcon className={classes.close} variant="subtle" size="lg" onClick={hide}>
+            <IconX size="lg" />
+          </ActionIcon>
+        </div>
+      )}
     </div>
   );
 }

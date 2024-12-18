@@ -34,13 +34,14 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
   }, [asset]);    
 
   const actions = {
+    unloadImage: () => {
+      updateState({ dataUrl: null });
+    },
     loadImage: async () => {
-console.log("CHECK0");
       const { focus } = app.state;
       const assetId = asset.image ? asset.image.full : asset.encrypted ? asset.encrypted.parts : null;
       if (focus && assetId != null) {
         try {
-console.log("CHECK1");
           const dataUrl = await focus.getTopicAssetUrl(topicId, assetId);
           updateState({ dataUrl });
         } catch (err) {
