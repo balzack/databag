@@ -785,17 +785,17 @@ export class FocusModule implements Focus {
       this.closeMedia.push(write.close);
       for (let i = 0; i < asset.split.length; i++) {
         let download = true;
+        if (progress) {
+          download =  progress(Math.floor((i * 100) / asset.split.length));
+        }
+        if (download === false) {
+          throw new Error('aborted asset load');
+        }
         const block = await this.downloadBlock(topicId, asset.split[i].partId, (percent: number)=>{
           if (progress && download !== false) {
             download = progress(Math.floor((i * 100 + percent) / asset.split.length));
           }
         });
-        if (download === false) {
-          throw new Error('aborted asset load');
-        }
-        if (progress) {
-          download =  progress(Math.floor((i * 100) / asset.split.length));
-        }
         if (download === false) {
           throw new Error('aborted asset load');
         }
@@ -1021,14 +1021,14 @@ export class FocusModule implements Focus {
             hosting: HostingMode.Basic,
             basic: hd,
           }
-          assetItems.add(fullAsset);
+          assetItems.add(hdAsset);
           index += 1;
           const lqAsset = {
             assetId: `${index}`,
             hosting: HostingMode.Basic,
             basic: lq,
           }
-          assetItems.add(fullAsset);
+          assetItems.add(lqAsset);
           index += 1;
           return { video: { thumb: `${index-3}`, hd: `${index-2}`, lq: `${index-1}` }};
         } else if (audio) {
