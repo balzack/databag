@@ -60,6 +60,7 @@
 
   .play {
     position: absolute;
+    cursor: pointer;
   }
 
   .frame {

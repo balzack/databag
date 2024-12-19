@@ -7,6 +7,9 @@ import { MediaAsset } from '../../conversation/Conversation';
 export function useBinaryAsset(topicId: string, asset: MediaAsset) {
   const app = useContext(AppContext) as ContextType
   const [state, setState] = useState({
+    dataUrl: null,
+    loading: false,
+    loadPercent: 0,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -15,13 +18,23 @@ export function useBinaryAsset(topicId: string, asset: MediaAsset) {
   }
 
   const actions = {
-    getAssetUrl: async (topicId: string, assetId: string) => {
-      const { focus } = app.state;
-      if (!focus) {
-        throw new Error('no channel in focus');
-      }
-      return await focus.getTopicAssetUrl(topicId, assetId, (percent: number)=>true);
+    unloadBinary: () => {
+      updateState({ dataUrl: null });
     },
+    loadBinary: async () => {
+      const { focus } = app.state;
+      const assetId = asset.audio ? asset.audio.hd : asset.encrypted ? asset.encrypted.parts : null;
+      if (focus && assetId != null && !state.loading) {
+        updateState({ loading: true, loadPercent: 0 });
+        try {
+          const dataUrl = await focus.getTopicAssetUrl(topicId, assetId, (loadPercent: number)=>{ updateState({ loadPercent }) });
+          updateState({ dataUrl, loading: false });
+        } catch (err) {
+          updateState({ loading: false });
+          console.log(err);
+        }
+      }
+    }
   }
 
   return { state, actions }

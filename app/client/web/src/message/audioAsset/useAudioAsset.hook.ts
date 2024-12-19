@@ -7,7 +7,6 @@ import { MediaAsset } from '../../conversation/Conversation';
 export function useAudioAsset(topicId: string, asset: MediaAsset) {
   const app = useContext(AppContext) as ContextType
   const [state, setState] = useState({
-    thumbUrl: null,
     dataUrl: null,
     loading: false,
     loadPercent: 0,
@@ -17,23 +16,6 @@ export function useAudioAsset(topicId: string, asset: MediaAsset) {
   const updateState = (value: any) => {
     setState((s) => ({ ...s, ...value }))
   }
-
-  const setThumb = async () => {
-    const { focus } = app.state;
-    const assetId = asset.audio ? asset.audio.thumb : asset.encrypted ? asset.encrypted.thumb : null;
-    if (focus && assetId != null) {
-      try {
-        const thumbUrl = await focus.getTopicAssetUrl(topicId, assetId);
-        updateState({ thumbUrl });
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
-
-  useEffect(() => {
-    setThumb();
-  }, [asset]);    
 
   const actions = {
     unloadAudio: () => {
