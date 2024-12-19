@@ -46,7 +46,7 @@ export function VideoAsset({ topicId, asset }: { topicId: string, asset: MediaAs
           </div>
           { state.dataUrl && (
             <div className={classes.video} style={{ width, height }}>
-              <video className={classes.image} controls width={width} height={height} src={state.dataUrl} playsInline={true} />
+              <video className={classes.image} controls width={width} height={height} src={state.dataUrl} playsInline={true} autoPlay={true} />
             </div>
           )}
           { state.loading && state.loadPercent > 0 && (
