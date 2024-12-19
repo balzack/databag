@@ -1,4 +1,5 @@
 .asset {
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8,14 +9,77 @@
     position: absolute;
     top: 0;
     width: 100%;
-    overflow: hidden;
     text-align: center;
+    font-size: 12px;
+  }
+
+  .play {
+    position: absolute;
   }
 
   .thumb {
     width: auto;
     height: 128px;
-    border-radius: 4px;
   }
 }
 
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(8,8,8, .5);
+  backdrop-filter: blur(33px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  transition: all 400ms;
+
+  .progress {
+    position: absolute;
+    bottom: 16px;
+    width: 25%;
+  }
+
+  .label {
+    position: absolute;
+    top: 0px;
+  }
+
+  .close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
+
+  .audio {
+    display: none;
+  }
+
+  .play {
+    position: absolute;
+  }
+
+  .frame {
+    position: absolute;
+    width: 80vw;
+    height: 80vh;
+    max-width: 300px;
+    max-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .image {
+      width: 80vw;
+      height: 80vh;
+      max-width: 300px;
+      max-height: 300px;
+      background-color: transparent;
+      object-fit: contain;
+    }
+
+  }
+}

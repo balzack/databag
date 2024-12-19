@@ -41,7 +41,7 @@ export function VideoAsset({ topicId, asset }: { topicId: string, asset: MediaAs
 
       { showModal && (
         <div className={classes.modal} style={ showVideo ? { opacity: 1} : { opacity: 0 }}>
-          <div className={classes.frame}>
+          <div className={classes.frame} style={state.dataUrl? {opacity: 0} : {opacity: 1}}>
             <Image ref={ref} className={classes.image} fit="contain" src={state.thumbUrl} />
           </div>
           { state.dataUrl && (
