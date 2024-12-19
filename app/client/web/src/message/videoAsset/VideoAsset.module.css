@@ -1,5 +1,12 @@
 .asset {
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .play {
+    position: absolute;
+  }
 
   .thumb {
     width: auto;

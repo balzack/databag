@@ -12,7 +12,7 @@ export function ImageFile({ source, disabled, remove }: {source: File, disabled:
       { state.thumbUrl && ( 
         <Image radius="sm" className={classes.thumb} src={state.thumbUrl} />
       )}
-      { state.thumbUrl && ( 
+      { !disabled && state.thumbUrl && ( 
         <ActionIcon className={classes.close} variant="subtle" disabled={disabled} onClick={remove}>
           <IconX />
         </ActionIcon>

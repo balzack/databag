@@ -4,7 +4,7 @@ import { DisplayContext } from '../context/DisplayContext'
 import { Focus, FocusDetail, Topic, Profile, Card, AssetType, AssetSource, HostingMode, TransformType } from 'databag-client-sdk'
 import { ContextType } from '../context/ContextType'
 import Resizer from "react-image-file-resizer";
-import failed from '../images/failed.png'
+import { placeholder } from '../constants/Icons';
 
 const IMAGE_SCALE_SIZE = (128 * 1024);
 const GIF_TYPE = 'image/gif';
@@ -67,6 +67,11 @@ function getVideoThumb(file: File, position?: number) {
       }, 1000); 
     };
     video.addEventListener("timeupdate", timeupdate);
+    video.addEventListener("error", () => {
+      reject();
+      video.remove();
+      URL.revokeObjectURL(url);
+    });
     video.preload = "metadata";
     video.src = url;
     video.muted = true;
@@ -245,8 +250,16 @@ export function useConversation() {
             }
           } else if (asset.type === 'video') {
             if (sealed) {
+              const videoThumb = async () => {
+                try {
+                  return await getVideoThumb(asset.file, asset.position);
+                } catch (err) {
+                  console.log(err);
+                  return placeholder;
+                }
+              };
               sources.push({ type: AssetType.Video, source: asset.file, transforms: [
-                { type: TransformType.Thumb, appId: `vt${sources.length}`, thumb: () => getVideoThumb(asset.file, asset.position) },
+                { type: TransformType.Thumb, appId: `vt${sources.length}`, thumb: videoThumb },
                 { type: TransformType.Copy, appId: `vc${sources.length}` }
               ]});
               return { encrypted: { type: 'video', thumb: `vt${sources.length-1}`, parts: `vc${sources.length-1}` } };

@@ -3,9 +3,11 @@ import { ActionIcon, Image } from '@mantine/core'
 import { useVideoFile } from './useVideoFile.hook';
 import classes from './VideoFile.module.css'
 import { IconX, IconChevronLeft, IconChevronRight } from '@tabler/icons-react'
+import { placeholder } from '../../constants/Icons'
 
 export function VideoFile({ source, thumbPosition, disabled, remove }: {source: File, thumbPosition: (position: number)=>void, disabled: boolean, remove: ()=>void}) {
   const { state, actions } = useVideoFile(source);
+  const [ error, setError ] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const position = useRef(0);
   const player = useRef(null as null | HTMLVideoElement);
@@ -36,20 +38,23 @@ export function VideoFile({ source, thumbPosition, disabled, remove }: {source: 
 
   return (
     <div className={classes.asset}>
-      { state.videoUrl && (
-        <video ref={player} muted onLoadedMetadata={() => setLoaded(true)} onPlay={onPause} src={state.videoUrl} width={'auto'} height={'100%'} playsInline={true} />
+      { state.videoUrl && !error && (
+        <video ref={player} muted onLoadedMetadata={() => setLoaded(true)} onPlay={onPause} src={state.videoUrl} width={'auto'} height={'100%'} playsInline={true} onError={() => setError(true)} />
       )}
-      { loaded && !disabled && (
+      { error && (
+        <Image radius="sm" className={classes.thumb} src={placeholder} />
+      )}
+      { loaded && !disabled && !error && (
         <ActionIcon className={classes.right} variant="light" onClick={() => seek(1)}>
           <IconChevronRight />
         </ActionIcon>
       )}
-      { loaded && !disabled && (
+      { loaded && !disabled && !error && (
         <ActionIcon className={classes.left} variant="light" onClick={() => seek(-1)}>
           <IconChevronLeft />
         </ActionIcon>
       )}
-      { loaded && (
+      { (loaded || error) && !disabled && (
         <ActionIcon className={classes.close} variant="subtle" disabled={disabled} onClick={remove}>
           <IconX />
         </ActionIcon>

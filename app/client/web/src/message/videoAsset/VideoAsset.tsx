@@ -3,7 +3,7 @@ import { MediaAsset } from '../../conversation/Conversation';
 import { useVideoAsset } from './useVideoAsset.hook';
 import { Progress, ActionIcon, Image } from '@mantine/core'
 import classes from './VideoAsset.module.css'
-import { IconX } from '@tabler/icons-react'
+import { IconPlayerPlay, IconX } from '@tabler/icons-react'
 import { useResizeDetector } from 'react-resize-detector';
 
 export function VideoAsset({ topicId, asset }: { topicId: string, asset: MediaAsset }) {
@@ -35,6 +35,7 @@ export function VideoAsset({ topicId, asset }: { topicId: string, asset: MediaAs
       { state.thumbUrl && (
         <div className={classes.asset} onClick={show}>
           <Image radius="sm" className={classes.thumb} src={state.thumbUrl} />
+          <IconPlayerPlay className={classes.play} size={32} />
         </div>
       )}
 
