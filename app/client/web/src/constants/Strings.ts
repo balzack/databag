@@ -226,9 +226,15 @@ export const en = {
   microphone: 'Microphone',
   camera: 'Camera',
 
+  flagMessage: 'Flag Message',
+  flagMessagePrompt: 'Are you sure you want to flag the message to the admin?',
+  flag: 'Flag',
+  blockMessage: 'Block Message',
+  blockMessagePrompt: 'Are you sure you want to block the message?',
+
   ignoring: 'Ignoring Contact',
   connfirmIgnoring: 'Are you sure you want to ignore the request?',
-  denying: 'Denyping Contact',
+  denying: 'Denying Contact',
   confirmDenying: 'Are you sure you want to deny the request?',
   reporting: 'Reporting Contact',
   confirmReporting: 'Are you sure you want to report the contact?',
@@ -270,6 +276,12 @@ export const fr = {
   server: 'Serveur',
   token: 'Code',
   delayMessage: 'La génération de clé peut prendre plusieurs minutes.',
+
+  flagMessage: 'Signaler le message',
+  flagMessagePrompt: 'Êtes-vous sûr de vouloir signaler le message à l\'administrateur?',
+  flag: 'Signaler',
+  blockMessage: 'Bloquer le message',
+  blockMessagePrompt: 'Êtes-vous sûr de vouloir bloquer le message?',
 
   code: 'fr',
   settings: 'Paramètres',
@@ -531,6 +543,12 @@ export const sp = {
   token: 'Código',
   delayMessage: 'La generación de claves puede tardar varios minutos.',
 
+  flagMessage: 'Marcar mensaje',
+  flagMessagePrompt: '¿Está seguro de que desea marcar el mensaje para el administrador?',
+  flag: 'Marcar',
+  blockMessage: 'Bloquear mensaje',
+  blockMessagePrompt: '¿Está seguro de que desea bloquear el mensaje?',
+
   code: 'sp',
   settings: 'Configuración',
   contacts: 'Contactos',
@@ -789,6 +807,12 @@ export const pt = {
   server: 'Servidor',
   token: 'Code',
   delayMessage: 'A geração da chave pode levar vários minutos.',
+
+  flagMessage: 'Sinalizar mensagem',
+  flagMessagePrompt: 'Tem certeza de que deseja sinalizar a mensagem para o administrador?',
+  flag: 'Sinalizar',
+  blockMessage: 'Bloquear mensagem',
+  blockMessagePrompt: 'Tem certeza de que deseja bloquear a mensagem?',
 
   code: 'pt',
   settings: 'Configurações',
@@ -1049,6 +1073,12 @@ export const de = {
   token: 'Token',
   delayMessage: 'Die Schlüsselgenerierung kann mehrere Minuten dauern.',
 
+  flagMessage: 'Nachricht melden',
+  flagMessagePrompt: 'Sind Sie sicher, dass Sie die Nachricht an den Administrator melden möchten?',
+  flag: 'Melden',
+  blockMessage: 'Nachricht blockieren',
+  blockMessagePrompt: 'Sind Sie sicher, dass Sie die Nachricht blockieren möchten?',
+
   code: 'de',
   settings: 'Einstellungen',
   contacts: 'Kontakte',
@@ -1307,6 +1337,12 @@ export const ru = {
   server: 'Сервер',
   token: 'Токен',
   delayMessage: 'Генерация ключа может занять несколько минут.',
+
+  flagMessage: 'Пожаловаться на сообщение',
+  flagMessagePrompt: 'Вы уверены, что хотите пожаловаться на сообщение администратору?',
+  flag: 'Пожаловаться',
+  blockMessage: 'Заблокировать сообщение',
+  blockMessagePrompt: 'Вы уверены, что хотите заблокировать сообщение?',
 
   code: 'ru',
   settings: 'Настройки',

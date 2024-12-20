@@ -2,16 +2,17 @@ import { useRef, useEffect, useState, useCallback } from 'react';
 import { avatar } from '../constants/Icons'
 import { Topic, Card, Profile } from 'databag-client-sdk';
 import classes from './Message.module.css'
-import { Textarea, Button, Image, Skeleton, ActionIcon } from '@mantine/core'
+import { Textarea, Button, Image, Skeleton, ActionIcon, Text } from '@mantine/core'
 import { ImageAsset } from './imageAsset/ImageAsset';
 import { AudioAsset } from './audioAsset/AudioAsset';
 import { VideoAsset } from './videoAsset/VideoAsset';
 import { BinaryAsset } from './binaryAsset/BinaryAsset';
 import type { MediaAsset } from '../conversation/Conversation';
 import { useMessage } from './useMessage.hook';
-import { IconForbid, IconTrash, IconEdit, IconAlertSquareRounded, IconChevronLeft, IconChevronRight, IconFileAlert } from '@tabler/icons-react';
+import { IconForbid, IconTrash, IconEdit, IconFlag, IconChevronLeft, IconChevronRight, IconFileAlert } from '@tabler/icons-react';
 import { useResizeDetector } from 'react-resize-detector';
 import DOMPurify from 'dompurify';
+import { modals } from '@mantine/modals'
 
 export function Message({ topic, card, profile, host }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean }) {
   const { state, actions } = useMessage();
@@ -26,6 +27,83 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState('');
   const [saving, setSaving] = useState(false);
+
+  const remove = async () => {
+    modals.openConfirmModal({
+      title: state.strings.deleteMessage,
+      withCloseButton: false,
+      overlayProps: {
+        backgroundOpacity: 0.55,
+        blur: 3,
+      },
+      children: <Text>{ state.strings.messageHint }</Text>,
+      labels: { confirm: state.strings.remove, cancel: state.strings.cancel },
+      onConfirm: async () => {
+        try {
+          await actions.remove(topic.topicId);
+        } catch (err) {
+          console.log(err);
+          showError();
+        }
+      }
+    })
+  };
+
+  const report = async () => {
+    modals.openConfirmModal({
+      title: state.strings.flagMessage,
+      withCloseButton: false,
+      overlayProps: {
+        backgroundOpacity: 0.55,
+        blur: 3,
+      },
+      children: <Text>{ state.strings.flagMessagePrompt }</Text>,
+      labels: { confirm: state.strings.flag, cancel: state.strings.cancel },
+      onConfirm: async () => {
+        try {
+          await actions.flag(topic.topicId);
+        } catch (err) {
+          console.log(err);
+          showError();
+        }
+      }
+    })
+  }
+
+  const block = async () => {
+    modals.openConfirmModal({
+      title: state.strings.blockMessage,
+      withCloseButton: false,
+      overlayProps: {
+        backgroundOpacity: 0.55,
+        blur: 3,
+      },
+      children: <Text>{ state.strings.blockMessagePrompt }</Text>,
+      labels: { confirm: state.strings.block, cancel: state.strings.cancel },
+      onConfirm: async () => {
+        try {
+          await actions.block(topic.topicId);
+        } catch (err) {
+          console.log(err);
+          showError();
+        }
+      }
+    })
+  }
+
+  const showError = () => {
+    modals.openConfirmModal({
+      title: state.strings.operationFailed,
+      withCloseButton: true,
+      overlayProps: {
+        backgroundOpacity: 0.55,
+        blur: 3, 
+      },
+      children: <Text>{state.strings.tryAgain}</Text>,
+      cancelProps: { display: 'none' },
+      confirmProps: { display: 'none' },
+    })
+  }
   
   const save = async () => {
     setSaving(true);
@@ -128,10 +206,10 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
                   <IconEdit className={classes.option} onClick={edit} />
                 )}
                 { (host || profile) && (
-                  <IconTrash className={classes.careful} />
+                  <IconTrash className={classes.careful} onClick={remove} />
                 )}
-                <IconForbid className={classes.careful} />
-                <IconAlertSquareRounded className={classes.careful} />
+                <IconForbid className={classes.careful} onClick={block} />
+                <IconFlag className={classes.careful} onClick={report} />
               </div>
             </div>
           </div>

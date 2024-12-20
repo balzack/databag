@@ -150,7 +150,8 @@ export function useConversation() {
     if (focus && contact && identity) {
       const setTopics = (topics: Topic[]) => {
         if (topics) {
-          const sorted = topics.sort((a, b) => {
+          const filtered = topics.filter(topic => !topic.blocked);
+          const sorted = filtered.sort((a, b) => {
             if (a.created < b.created) {
               return -1;
             } else if (a.created > b.created) {

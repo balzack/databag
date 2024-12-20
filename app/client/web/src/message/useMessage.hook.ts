@@ -23,10 +23,27 @@ export function useMessage() {
   }, [display.state]);
 
   const actions = {
+    block: async (topicId: string) => {
+      const focus = app.state.focus;
+      if (focus) {
+        await focus.setBlockTopic(topicId);
+      }
+    },
+    flag: async (topicId: string) => {
+      const focus = app.state.focus;
+      if (focus) {
+        await focus.flagTopic(topicId);
+      }
+    },
+    remove: async (topicId: string) => {
+      const focus = app.state.focus;
+      if (focus) {
+        await focus.removeTopic(topicId);
+      }
+    },
     saveSubject: async (topicId: string, sealed: boolean, subject: any) => {
       const focus = app.state.focus;
       if (focus) {
-console.log("SAVING", subject);
         await focus.setTopicSubject(topicId, sealed ? 'sealedtopic' : 'superbasictopic', ()=>subject, [], ()=>true);
       }
     },
