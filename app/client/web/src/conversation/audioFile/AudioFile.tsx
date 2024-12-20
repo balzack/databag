@@ -8,18 +8,19 @@ import { IconX } from '@tabler/icons-react'
 export function AudioFile({ source, updateLabel, disabled, remove }: {source: File, updateLabel: (label: string)=>void, disabled: boolean, remove: ()=>void}) {
   const { state, actions } = useAudioFile(source);
 
-  const setLabel = (label: string) => {
-    updateLabel(label);
-    actions.setLabel(label);
-  }
+  useEffect(() => {
+    updateLabel(state.label);
+  }, [state.label]);
 
   return (
     <div className={classes.asset}>
       <Image radius="sm" className={classes.thumb} src={audio} />
       <Text className={classes.label}>{ state.label }</Text>
-      <ActionIcon className={classes.close} variant="subtle" disabled={disabled} onClick={remove}>
-        <IconX />
-      </ActionIcon>
+      { !disabled && (
+        <ActionIcon className={classes.close} variant="subtle" onClick={remove}>
+          <IconX />
+        </ActionIcon>
+      )}
     </div>
   );
 }
