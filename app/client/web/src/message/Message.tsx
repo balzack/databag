@@ -2,14 +2,14 @@ import { useRef, useEffect, useState, useCallback } from 'react';
 import { avatar } from '../constants/Icons'
 import { Topic, Card, Profile } from 'databag-client-sdk';
 import classes from './Message.module.css'
-import { Image, Skeleton, ActionIcon } from '@mantine/core'
+import { Textarea, Button, Image, Skeleton, ActionIcon } from '@mantine/core'
 import { ImageAsset } from './imageAsset/ImageAsset';
 import { AudioAsset } from './audioAsset/AudioAsset';
 import { VideoAsset } from './videoAsset/VideoAsset';
 import { BinaryAsset } from './binaryAsset/BinaryAsset';
 import type { MediaAsset } from '../conversation/Conversation';
 import { useMessage } from './useMessage.hook';
-import { IconForbid, IconTrash, IconShare, IconEdit, IconAlertSquareRounded, IconChevronLeft, IconChevronRight, IconFileAlert } from '@tabler/icons-react';
+import { IconForbid, IconTrash, IconEdit, IconAlertSquareRounded, IconChevronLeft, IconChevronRight, IconFileAlert } from '@tabler/icons-react';
 import { useResizeDetector } from 'react-resize-detector';
 import DOMPurify from 'dompurify';
 
@@ -19,11 +19,30 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
   const { locked, data, created, topicId, status, transform } = topic;
   const { name, handle, node } = profile || card || { name: null, handle: null, node: null }  
   const { text, textColor, textSize, assets } = data || { text: null, textColor: null, textSize: null }
-  const textStyle = textColor && textSize ? { color: textColor, fontSize: textSize } : textColor ? { color: textColor } : textSize ? { fontSize: textSize } : {}
+  const textStyle = { color: textColor ? textColor : undefined, fontSize: textSize ? textSize : undefined };
   const logoUrl = profile ? profile.imageUrl : card ? card.imageUrl : avatar;
   const timestamp = actions.getTimestamp(created);
   const [message, setMessage] = useState(<p></p>);
+  const [editing, setEditing] = useState(false);
+  const [editText, setEditText] = useState('');
+  const [saving, setSaving] = useState(false);
   
+  const save = async () => {
+    setSaving(true);
+    try {
+      await actions.saveSubject(topic.topicId, topic.sealed, {...topic.data, text: editText});
+    } catch (err) {
+      console.log(err);
+    }
+    setSaving(false);
+    setEditing(false);
+  }
+
+  const edit = () => {
+    setEditing(true);
+    setEditText(text);
+  }
+
   useEffect(() => {
     const urlPattern = new RegExp('(https?:\\/\\/)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)');
     const hostPattern = new RegExp('^https?:\\/\\/', 'i');
@@ -105,9 +124,8 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
             </div>
             <div className={classes.options}>
               <div className={classes.surface}>
-                <IconShare className={classes.option} />
                 { !locked && profile && (
-                  <IconEdit className={classes.option} />
+                  <IconEdit className={classes.option} onClick={edit} />
                 )}
                 { (host || profile) && (
                   <IconTrash className={classes.careful} />
@@ -117,11 +135,22 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
               </div>
             </div>
           </div>
-          { !locked && status === 'confirmed' && text && (
-            <div style={textStyle}>
-              <div className={classes.padding}>
-                <span className={classes.text}>{ message }</span> 
+          {! locked && status === 'confirmed' && editing && (
+            <div className={classes.editing}>
+              <Textarea styles={{ input: textStyle }} value={editText} onChange={(event) => setEditText(event.currentTarget.value)} placeholder={state.strings.newMessage} />
+              <div className={classes.controls}>
+                <Button variant="default" size="xs" onClick={() => setEditing(false)}>
+                  {state.strings.cancel}
+                </Button>
+                <Button variant="filled" size="xs" onClick={save} loading={saving}>
+                  {state.strings.save}
+                </Button>
               </div>
+            </div>
+          )}
+          { !locked && status === 'confirmed' && text && !editing && (
+            <div className={classes.padding} style={textStyle}>
+              <span className={classes.text}>{ message }</span> 
             </div>
           )}
           { !locked && status !== 'confirmed' && (

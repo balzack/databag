@@ -1,9 +1,10 @@
 import { useState, useContext, useEffect } from 'react'
 import { DisplayContext } from '../context/DisplayContext'
+import { AppContext } from '../context/AppContext';
 import { ContextType } from '../context/ContextType'
 
-
 export function useMessage() {
+  const app = useContext(AppContext) as ContextType
   const display = useContext(DisplayContext) as ContextType
   const [state, setState] = useState({
     strings: display.state.strings,
@@ -22,6 +23,13 @@ export function useMessage() {
   }, [display.state]);
 
   const actions = {
+    saveSubject: async (topicId: string, sealed: boolean, subject: any) => {
+      const focus = app.state.focus;
+      if (focus) {
+console.log("SAVING", subject);
+        await focus.setTopicSubject(topicId, sealed ? 'sealedtopic' : 'superbasictopic', ()=>subject, [], ()=>true);
+      }
+    },
     getTimestamp: (created: number) => {
       const now = Math.floor((new Date()).getTime() / 1000)
       const date = new Date(created * 1000);

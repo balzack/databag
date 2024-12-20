@@ -694,67 +694,67 @@ export class FocusModule implements Focus {
           }
         }
       }
-      const { text, textColor, textSize, assets } = subject(appAsset);
+    }
+    const { text, textColor, textSize, assets } = subject(appAsset);
 
-      // legacy support of 'superbasictopic' and 'sealedtopic'
-      const getAsset = (assetId: string) => {
-        const index = parseInt(assetId);
-        const item = assetItems[index];
-        if (!item) {
-          throw new Error('invalid assetId in subject');
-        }
-        if (item.hosting === HostingMode.Inline) {
-          return item.inline;
-        } if (item.hosting === HostingMode.Split) {
-          return item.split;
-        } if (item.hosting === HostingMode.Basic) {
-          return item.basic;
-        } else {
-          throw new Error('unknown hosting mode');
-        }
+    // legacy support of 'superbasictopic' and 'sealedtopic'
+    const getAsset = (assetId: string) => {
+      const index = parseInt(assetId);
+      const item = assetItems[index];
+      if (!item) {
+        throw new Error('invalid assetId in subject');
       }
-      const filtered = !assets ? [] : assets.filter((asset: any) => {
-        if (sealed && asset.encrypted) {
-          return true;
-        } else if (!sealed && !asset.encrypted) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-      const mapped = filtered.map((asset: any) => {
-        if (sealed) {
-          const { type, thumb, parts } = asset.encrypted;
-          return { encrypted: { type, thumb: getAsset(thumb), parts: getAsset(parts) } };
-        } else if (asset.image) {
-          const { thumb, full } = asset.image;
-          return { image: { thumb: getAsset(thumb), full: getAsset(full) } };
-        } else if (asset.video) {
-          const { thumb, lq, hd } = asset.video;
-          return { video: { thumb: getAsset(thumb), lq: getAsset(lq), hd: getAsset(hd) } };
-        } else if (asset.audio) {
-          const { label, full } = asset.audio;
-          return { audio: { label, full: getAsset(full) } };
-        } else if (asset.binary) {
-          const { label, extension, data } = asset.binary;
-          return { binary: { label, extension, data: getAsset(data) } };
-        }
-      });
-      const updated = { text, textColor, textSize, assets: mapped };
-      // end of legacy support block
-
-      if (sealed) {
-        if (!crypto || !channelKey) {
-          throw new Error('encryption not set');
-        }
-        const subjectString = JSON.stringify({ message: updated });
-        const { ivHex } = await crypto.aesIv();
-        const { encryptedDataB64 } = await crypto.aesEncrypt(subjectString, ivHex, channelKey);
-        const data = { messageEncrypted: encryptedDataB64, messageIv: ivHex };
-        return await this.setRemoteChannelTopicSubject(topicId, type, data);
+      if (item.hosting === HostingMode.Inline) {
+        return item.inline;
+      } if (item.hosting === HostingMode.Split) {
+        return item.split;
+      } if (item.hosting === HostingMode.Basic) {
+        return item.basic;
       } else {
-        return await this.setRemoteChannelTopicSubject(topicId, type, updated);
+        throw new Error('unknown hosting mode');
       }
+    }
+    const filtered = !assets ? [] : assets.filter((asset: any) => {
+      if (sealed && asset.encrypted) {
+        return true;
+      } else if (!sealed && !asset.encrypted) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    const mapped = filtered.map((asset: any) => {
+      if (sealed) {
+        const { type, thumb, parts } = asset.encrypted;
+        return { encrypted: { type, thumb: getAsset(thumb), parts: getAsset(parts) } };
+      } else if (asset.image) {
+        const { thumb, full } = asset.image;
+        return { image: { thumb: getAsset(thumb), full: getAsset(full) } };
+      } else if (asset.video) {
+        const { thumb, lq, hd } = asset.video;
+        return { video: { thumb: getAsset(thumb), lq: getAsset(lq), hd: getAsset(hd) } };
+      } else if (asset.audio) {
+        const { label, full } = asset.audio;
+        return { audio: { label, full: getAsset(full) } };
+      } else if (asset.binary) {
+        const { label, extension, data } = asset.binary;
+        return { binary: { label, extension, data: getAsset(data) } };
+      }
+    });
+    const updated = { text, textColor, textSize, assets: mapped };
+    // end of legacy support block
+
+    if (sealed) {
+      if (!crypto || !channelKey) {
+        throw new Error('encryption not set');
+      }
+      const subjectString = JSON.stringify({ message: updated });
+      const { ivHex } = await crypto.aesIv();
+      const { encryptedDataB64 } = await crypto.aesEncrypt(subjectString, ivHex, channelKey);
+      const data = { messageEncrypted: encryptedDataB64, messageIv: ivHex };
+      return await this.setRemoteChannelTopicSubject(topicId, type, data);
+    } else {
+      return await this.setRemoteChannelTopicSubject(topicId, type, updated);
     }
   }
 

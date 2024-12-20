@@ -36,7 +36,7 @@ export function Conversation() {
   const attachAudio = useRef({ click: ()=>{} } as HTMLInputElement);
   const attachBinary = useRef({ click: ()=>{} } as HTMLInputElement);
   const { width, height, ref } = useResizeDetector();
-  const input = useRef();
+  const input = useRef(null as null | HTMLTextAreaElement);
 
   const addImage = (image: File | undefined) => {
     if (image) {
@@ -118,8 +118,10 @@ export function Conversation() {
     }
   }
 
-  useEffect(() => {
-    input.current.focus();
+  useEffect(() => { 
+    if (input.current) {
+      input.current.focus();
+    }
   }, [sending]);
 
   const topics = state.topics.map((topic, idx) => {

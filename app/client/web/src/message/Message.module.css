@@ -42,6 +42,17 @@
     display: none;
   }
 
+  .editing {
+    margin-top: 12px;
+  }
+
+  .controls {
+    padding: 4px;
+    justify-content: flex-end;
+    display: flex;
+    gap: 8px;
+  }
+
   .thumbs {
     display: flex;
     flex-direction: row;
