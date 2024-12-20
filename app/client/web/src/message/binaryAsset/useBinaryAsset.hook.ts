@@ -7,7 +7,7 @@ import { MediaAsset } from '../../conversation/Conversation';
 export function useBinaryAsset(topicId: string, asset: MediaAsset) {
   const app = useContext(AppContext) as ContextType
   const [state, setState] = useState({
-    dataUrl: null,
+    dataUrl: '',
     loading: false,
     loadPercent: 0,
   })
@@ -23,7 +23,7 @@ export function useBinaryAsset(topicId: string, asset: MediaAsset) {
     },
     loadBinary: async () => {
       const { focus } = app.state;
-      const assetId = asset.audio ? asset.audio.hd : asset.encrypted ? asset.encrypted.parts : null;
+      const assetId = asset.binary ? asset.binary.data : asset.encrypted ? asset.encrypted.parts : null;
       if (focus && assetId != null && !state.loading) {
         updateState({ loading: true, loadPercent: 0 });
         try {

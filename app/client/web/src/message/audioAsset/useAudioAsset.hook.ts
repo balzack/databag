@@ -23,7 +23,7 @@ export function useAudioAsset(topicId: string, asset: MediaAsset) {
     },
     loadAudio: async () => {
       const { focus } = app.state;
-      const assetId = asset.audio ? asset.audio.hd : asset.encrypted ? asset.encrypted.parts : null;
+      const assetId = asset.audio ? asset.audio.full : asset.encrypted ? asset.encrypted.parts : null;
       if (focus && assetId != null && !state.loading) {
         updateState({ loading: true, loadPercent: 0 });
         try {

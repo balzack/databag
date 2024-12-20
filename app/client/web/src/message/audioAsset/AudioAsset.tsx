@@ -13,7 +13,7 @@ export function AudioAsset({ topicId, asset }: { topicId: string, asset: MediaAs
   const { label } = asset.encrypted || asset.audio || { label: '' };
   const [ loaded, setLoaded ] = useState(false);
   const [ playing, setPlaying ] = useState(false);
-  const player = useRef();
+  const player = useRef(null as HTMLVideoElement | null);
 
   const show = () => {
     setShowModal(true);

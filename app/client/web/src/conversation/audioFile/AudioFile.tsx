@@ -1,5 +1,5 @@
-import React from 'react';
-import { ActionIcon, Image, Textarea } from '@mantine/core'
+import React, { useEffect } from 'react';
+import { ActionIcon, Image, Text } from '@mantine/core'
 import { useAudioFile } from './useAudioFile.hook';
 import classes from './AudioFile.module.css'
 import audio from '../../images/audio.png'
@@ -16,7 +16,7 @@ export function AudioFile({ source, updateLabel, disabled, remove }: {source: Fi
   return (
     <div className={classes.asset}>
       <Image radius="sm" className={classes.thumb} src={audio} />
-      <Textarea className={classes.label} size="xs" value={state.label} onChange={(event) => setLabel(event.currentTarget.value)} disabled={disabled} />
+      <Text className={classes.label}>{ state.label }</Text>
       <ActionIcon className={classes.close} variant="subtle" disabled={disabled} onClick={remove}>
         <IconX />
       </ActionIcon>

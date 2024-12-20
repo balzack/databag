@@ -13,7 +13,7 @@ export function BinaryFile({ source, disabled, remove }: {source: File, disabled
       <Image radius="sm" className={classes.thumb} src={binary} />
       <Text className={classes.name}>{ state.name }</Text>
       <Text className={classes.extension}>{ state.extension }</Text>
-      { !state.disabled && (
+      { !disabled && (
         <ActionIcon className={classes.close} variant="subtle" onClick={remove}>
           <IconX />
         </ActionIcon>

@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { avatar } from '../constants/Icons'
 import { Topic, Card, Profile } from 'databag-client-sdk';
 import classes from './Message.module.css'
@@ -11,6 +11,7 @@ import type { MediaAsset } from '../conversation/Conversation';
 import { useMessage } from './useMessage.hook';
 import { IconForbid, IconTrash, IconShare, IconEdit, IconAlertSquareRounded, IconChevronLeft, IconChevronRight, IconFileAlert } from '@tabler/icons-react';
 import { useResizeDetector } from 'react-resize-detector';
+import DOMPurify from 'dompurify';
 
 export function Message({ topic, card, profile, host }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean }) {
   const { state, actions } = useMessage();
@@ -21,6 +22,36 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
   const textStyle = textColor && textSize ? { color: textColor, fontSize: textSize } : textColor ? { color: textColor } : textSize ? { fontSize: textSize } : {}
   const logoUrl = profile ? profile.imageUrl : card ? card.imageUrl : avatar;
   const timestamp = actions.getTimestamp(created);
+  const [message, setMessage] = useState(<p></p>);
+  
+  useEffect(() => {
+    const urlPattern = new RegExp('(https?:\\/\\/)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)');
+    const hostPattern = new RegExp('^https?:\\/\\/', 'i');
+
+    let plain = '';
+    let clickable = [];
+    const parsed = !text ? '' : DOMPurify.sanitize(text).split(' ');
+
+    if (parsed?.length > 0) {
+      const words = parsed as string[];
+      words.forEach((word, index) => {
+        if (!!urlPattern.test(word)) {
+          clickable.push(<span key={index}>{ plain }</span>);
+          plain = '';
+          const url = !!hostPattern.test(word) ? word : `https://${word}`;
+          clickable.push(<a key={'link-'+index} target="_blank" rel="noopener noreferrer" href={url}>{ `${word} ` }</a>);
+        }
+        else {
+          plain += `${word} `;
+        }
+      })
+    }
+
+    if (plain) {
+      clickable.push(<span key={parsed.length}>{ plain }</span>);
+    }
+    setMessage(<span>{ clickable }</span>)
+  }, [text, locked]);
   
   const [showScroll, setShowScroll] = useState(false);
   const onResize = useCallback(() => {
@@ -88,7 +119,7 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
           </div>
           { !locked && status === 'confirmed' && text && (
             <div style={textStyle}>
-              <span className={classes.text}>{ text }</span>
+              <span className={classes.text}>{ message }</span>
             </div>
           )}
           { !locked && status !== 'confirmed' && (
