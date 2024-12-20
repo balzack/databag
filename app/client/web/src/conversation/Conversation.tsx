@@ -25,7 +25,7 @@ export type MediaAsset = {
   binary?: { label: string, extension: string, data: string }
 }
 
-export function Conversation() {
+export function Conversation({ openDetails }: { openDetails: ()=>void }) {
   const thread = useRef(null as HTMLDivElement | null);
   const scrollPos = useRef(0);
   const debounce = useRef(false);
@@ -156,7 +156,7 @@ export function Conversation() {
       <div className={classes.header}>
         <div className={classes.status}>
           <ActionIcon variant="subtle"> 
-            <IconSettings size={24} />
+            <IconSettings size={24} onClick={openDetails} />
           </ActionIcon>
           <Divider size="sm" orientation="vertical" />
           { state.detailSet && state.host === true && (

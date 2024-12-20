@@ -10,6 +10,7 @@ import { Identity } from '../identity/Identity'
 import { Contacts } from '../contacts/Contacts'
 import { Registry } from '../registry/Registry'
 import { Profile, ProfileParams } from '../profile/Profile'
+import { Details } from '../details/Details';
 import { Content } from '../content/Content'
 import { Conversation } from '../conversation/Conversation'
 import { Focus } from 'databag-client-sdk'
@@ -22,6 +23,7 @@ export function Session() {
   const [settings, { open: openSettings, close: closeSettings }] = useDisclosure(false)
   const [contacts, { open: openContacts, close: closeContacts }] = useDisclosure(false)
   const [registry, { open: openRegistry, close: closeRegistry }] = useDisclosure(false)
+  const [details, { open: openDetails, close: closeDetails }] = useDisclosure(false)
   const [profile, { open: openProfile, close: closeProfile }] = useDisclosure(false)
   const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
 
@@ -46,7 +48,12 @@ export function Session() {
             </div>
             {state.focus && (
               <div className={classes.screen}>
-                <Conversation />
+                <Conversation openDetails={openDetails} />
+              </div>
+            )}
+            {details && (
+              <div className={classes.screen}>
+                <Details close={closeDetails} />
               </div>
             )}
           </div>
@@ -128,7 +135,7 @@ export function Session() {
               <Content textCard={textCard} />
             </div>
           </div>
-          <div className={classes.right}>{state.focus && <Conversation />}</div>
+          <div className={classes.right}>{state.focus && <Conversation openDetails={openDetails} />}</div>
           <Drawer opened={contacts} onClose={closeContacts} withCloseButton={false} size="md" padding="0" position="right">
             <div style={{ height: '100vh' }}>
               <Contacts
@@ -155,6 +162,11 @@ export function Session() {
           <Drawer opened={profile} onClose={closeProfile} withCloseButton={false} size="xs" padding="0" position="right">
             <div style={{ height: '100vh' }}>
               <Profile params={profileParams} />
+            </div>
+          </Drawer>
+          <Drawer opened={details} onClose={closeDetails} withCloseButton={false} size="xs" padding="0" position="right">
+            <div style={{ height: '100vh' }}>
+              <Details />
             </div>
           </Drawer>
           <Drawer opened={settings} onClose={closeSettings} withCloseButton={false} size="sm" padding="0" position="right">
