@@ -36,6 +36,7 @@ export function Conversation() {
   const attachAudio = useRef({ click: ()=>{} } as HTMLInputElement);
   const attachBinary = useRef({ click: ()=>{} } as HTMLInputElement);
   const { width, height, ref } = useResizeDetector();
+  const input = useRef();
 
   const addImage = (image: File | undefined) => {
     if (image) {
@@ -116,6 +117,10 @@ export function Conversation() {
       sendMessage();
     }
   }
+
+  useEffect(() => {
+    input.current.focus();
+  }, [sending]);
 
   const topics = state.topics.map((topic, idx) => {
     const { host } = state;
@@ -216,7 +221,7 @@ export function Conversation() {
           <div className={classes.files}>
             { media }
           </div>
-          <Textarea className={classes.message} placeholder={state.strings.newMessage} styles={{ input: {color: state.textColorSet ? state.textColor : undefined, fontSize: state.textSizeSet ? state.textSize : undefined }}} value={state.message} onChange={(event) => actions.setMessage(event.currentTarget.value)} disabled={!state.detail || state.detail.locked || sending} onKeyDown={(e) => { keyDown(e.key, e.shiftKey)}} />
+          <Textarea ref={input} className={classes.message} placeholder={state.strings.newMessage} styles={{ input: {color: state.textColorSet ? state.textColor : undefined, fontSize: state.textSizeSet ? state.textSize : undefined }}} value={state.message} onChange={(event) => actions.setMessage(event.currentTarget.value)} disabled={!state.detail || state.detail.locked || sending} onKeyDown={(e) => { keyDown(e.key, e.shiftKey)}} />
           <div className={classes.controls}>
             { state.detail?.enableImage && (
               <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachImage.current.click()}> 

@@ -119,7 +119,9 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
           </div>
           { !locked && status === 'confirmed' && text && (
             <div style={textStyle}>
-              <span className={classes.text}>{ message }</span>
+              <div className={classes.padding}>
+                <span className={classes.text}>{ message }</span> 
+              </div>
             </div>
           )}
           { !locked && status !== 'confirmed' && (

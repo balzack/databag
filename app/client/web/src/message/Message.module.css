@@ -91,6 +91,11 @@
       padding-right: 8px;
       min-width: 0;
 
+      .padding {
+        padding-top: 8px;
+        padding-bottom: 4px;
+      }
+
       .text {
         word-wrap:break-word;
         white-space: pre-wrap;
