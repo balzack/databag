@@ -6,9 +6,10 @@ import { Divider, Text, Textarea, Image, TextInput, ActionIcon } from '@mantine/
 import { Card } from '../card/Card';
 import { modals } from '@mantine/modals'
 
-export function Details({ close }: { close?: () => void }) {
+export function Details({ close }: { close: () => void }) {
   const { state, actions } = useDetails()
   const [saving, setSaving] = useState(false);
+  const [removing, setRemoving] = useState(false);
 
   const undo = () => {
     actions.undoSubject();
@@ -25,6 +26,58 @@ export function Details({ close }: { close?: () => void }) {
       }
       setSaving(false);
     }
+  }
+
+  const remove = async () => {
+    modals.openConfirmModal({
+      title: state.strings.confirmTopic,
+      withCloseButton: false,
+      overlayProps: {
+        backgroundOpacity: 0.55,
+        blur: 3,
+      },
+      children: <Text>{ state.strings.sureTopic }</Text>,
+      labels: { confirm: state.strings.remove, cancel: state.strings.cancel },
+      onConfirm: async () => {
+        if (!removing) {
+          setRemoving(true);
+          try {
+            await actions.remove();
+            close();
+          } catch (err) {
+            console.log(err);
+            showError();
+          }
+          setRemoving(false);
+        }
+      }
+    })
+  }
+
+  const leave = async () => {
+    modals.openConfirmModal({
+      title: state.strings.confirmLeave,
+      withCloseButton: false,
+      overlayProps: {
+        backgroundOpacity: 0.55,
+        blur: 3,
+      },
+      children: <Text>{ state.strings.sureLeave }</Text>,
+      labels: { confirm: state.strings.leave, cancel: state.strings.cancel },
+      onConfirm: async () => {
+        if (!removing) {
+          setRemoving(true);
+          try {
+            await actions.leave();
+            close();
+          } catch (err) {
+            console.log(err);
+            showError();
+          }
+          setRemoving(false);
+        }
+      }
+    })
   }
 
   const showError = () => {
@@ -49,9 +102,9 @@ export function Details({ close }: { close?: () => void }) {
   return (
     <div className={classes.details}>
       <div className={classes.header}>
-        {close && <IconX className={classes.match} />}
+        <IconX className={classes.match} />
         <Text className={classes.label}>{ state.strings.details }</Text>    
-        {close && <IconX className={classes.close} onClick={close} />}
+        <IconX className={classes.close} onClick={close} />
       </div>
       { state.access && (
         <div className={classes.body}>
@@ -119,7 +172,7 @@ export function Details({ close }: { close?: () => void }) {
           { !state.host && (
             <div className={classes.actions}>
               <div className={classes.action}>
-                <ActionIcon variant="subtle" size="lg">
+                <ActionIcon variant="subtle" size="lg" loading={removing} onClick={leave}>
                   <IconLogout2 size="lg" />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.leave}</Text>
@@ -141,7 +194,7 @@ export function Details({ close }: { close?: () => void }) {
           { state.host && (
             <div className={classes.actions}>
               <div className={classes.action}>
-                <ActionIcon variant="subtle" size="lg" >
+                <ActionIcon variant="subtle" size="lg" loading={removing} onClick={remove}>
                   <IconMessageX size="lg" />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.remove}</Text>

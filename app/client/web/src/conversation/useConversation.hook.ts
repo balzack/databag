@@ -334,7 +334,7 @@ export function useConversation() {
               return { binary: { label, extension, data } };
             }
           });
-          return { text: state.message, textColor: state.textColorSet ? state.textColor : null, textSize: state.textSizeSet ? state.textSize : null, assets };
+          return { text: state.message, textColor: state.textColorSet ? state.textColor : null, textSize: state.textSizeSet ? state.textSize : null, assets: assets.length > 0 ? assets : null };
         }
         const upload = (progress: number) => { updateState({ progress }) };
         await focus.addTopic(sealed, sealed ? 'sealedtopic' : 'superbasictopic', subject, sources, upload);

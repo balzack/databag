@@ -116,6 +116,16 @@ export function useDetails() {
   }, [app.state.focus, state.timeFormat, state.dateFormat]);
 
   const actions = {
+    remove: async () => {
+      const content = app.state.session.getContent()
+      await content.removeChannel(state.channelId);
+      app.actions.clearFocus();
+    },
+    leave: async () => {
+      const content = app.state.session.getContent()
+      await content.leaveChannel(state.cardId, state.channelId);
+      app.actions.clearFocus();
+    },
     setEditSubject: (editSubject: string) => {
       updateState({ editSubject });
     },

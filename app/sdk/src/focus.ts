@@ -562,6 +562,7 @@ export class FocusModule implements Focus {
           }
         });
         const updated = { text, textColor, textSize, assets: mapped };
+
         // end of legacy support block
 
         if (sealed) {
@@ -742,6 +743,7 @@ export class FocusModule implements Focus {
       }
     });
     const updated = { text, textColor, textSize, assets: mapped };
+
     // end of legacy support block
 
     if (sealed) {
