@@ -152,7 +152,7 @@ export class StreamModule {
                   await this.unsealChannelDetail(id, entry.item);
                   entry.channel = this.setChannel(id, entry.item);
                   if (this.focus) {
-                    const { dataType, data, enableImage, enableAudio, enableVideo, enableBinary, members } = detail;
+                    const { dataType, data, enableImage, enableAudio, enableVideo, enableBinary, members, created } = detail;
                     const sealed = dataType === 'sealed';
                     const channelData = sealed ? entry.item.unsealedDetail : data;
                     const focusDetail = { 
@@ -164,6 +164,7 @@ export class StreamModule {
                       enableAudio, 
                       enableVideo, 
                       enableBinary,
+                      created,
                       members: members.map(guid => ({ guid })),
                     }
                     this.focus.setDetail(null, id, focusDetail);
@@ -440,7 +441,7 @@ export class StreamModule {
     this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, null, channelId, this.guid, { node, secure, token }, channelKey, sealEnabled, revision, markRead, flagTopic);
 
     if (entry) {
-      const { dataType, data, enableImage, enableAudio, enableVideo, enableBinary, members } = entry.item.detail;
+      const { dataType, data, enableImage, enableAudio, enableVideo, enableBinary, members, created } = entry.item.detail;
       const sealed = dataType === 'sealed';
       const channelData = sealed ? entry.item.unsealedDetail : data;
       const focusDetail = { 
@@ -452,6 +453,7 @@ export class StreamModule {
         enableAudio, 
         enableVideo, 
         enableBinary,
+        created,
         members: members.map(guid => ({ guid })),
       }
       this.focus.setDetail(null, channelId, focusDetail);
@@ -605,7 +607,7 @@ export class StreamModule {
           const { data } = await this.crypto.aesDecrypt(subjectEncrypted, subjectIv, item.channelKey);
           item.unsealedDetail = data;
           if (this.focus) {
-            const { dataType, enableImage, enableAudio, enableVideo, enableBinary, members } = item.detail;
+            const { dataType, enableImage, enableAudio, enableVideo, enableBinary, members, created } = item.detail;
             const focusDetail = { 
               sealed: true,
               locked: false,
@@ -615,6 +617,7 @@ export class StreamModule {
               enableAudio, 
               enableVideo, 
               enableBinary, 
+              created,
               members: members.map(guid => ({ guid })),
             }
             this.focus.setDetail(null, channelId, focusDetail);

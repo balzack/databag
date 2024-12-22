@@ -75,6 +75,7 @@ export type FocusDetail = {
   enableAudio: boolean;
   enableVideo: boolean;
   enableBinary: boolean;
+  created: number;
   members: Member[];
 }
 

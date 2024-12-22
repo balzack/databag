@@ -556,7 +556,7 @@ export class ContactModule implements Contact {
           entry.item.unsealedDetail = null;
           await this.unsealChannelDetail(cardId, id, entry.item);
           if (this.focus) {
-            const { dataType, data, enableImage, enableAudio, enableVideo, enableBinary, members } = detail;
+            const { dataType, data, enableImage, enableAudio, enableVideo, enableBinary, members, created } = detail;
             const sealed = dataType === 'sealed';
             const channelData = sealed ? entry.item.unsealedDetail : data;
             const focusDetail = {
@@ -568,6 +568,7 @@ export class ContactModule implements Contact {
               enableAudio,
               enableVideo,
               enableBinary,
+              created,
               members: members.map(guid => ({ guid })),
             }
             this.focus.setDetail(cardId, id, focusDetail); 
@@ -715,7 +716,7 @@ export class ContactModule implements Contact {
       this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, cardId, channelId, this.guid, { node, secure: !insecure, token: `${guid}.${token}` }, channelKey, sealEnabled, revision, markRead, flagTopic);
 
       // set current detail
-      const { dataType, data, enableImage, enableAudio, enableVideo, enableBinary, members } = channelEntry.item.detail;
+      const { dataType, data, enableImage, enableAudio, enableVideo, enableBinary, members, created } = channelEntry.item.detail;
       const sealed = dataType === 'sealed';
       const channelData = sealed ? channelEntry.item.unsealedDetail : data;
       const focusDetail = {
@@ -727,6 +728,7 @@ export class ContactModule implements Contact {
         enableAudio,
         enableVideo,
         enableBinary,
+        created,
         members: members.map(guid => ({ guid })),
       }
       this.focus.setDetail(cardId, channelId, focusDetail);
@@ -1122,7 +1124,7 @@ export class ContactModule implements Contact {
           const { data } = await this.crypto.aesDecrypt(subjectEncrypted, subjectIv, item.channelKey);
           item.unsealedDetail = data;
           if (this.focus) {
-            const { dataType, enableImage, enableAudio, enableVideo, enableBinary, members } = item.detail;
+            const { dataType, enableImage, enableAudio, enableVideo, enableBinary, members, created } = item.detail;
             const focusDetail = {
               sealed: true,
               locked: false,
@@ -1132,6 +1134,7 @@ export class ContactModule implements Contact {
               enableAudio,
               enableVideo,
               enableBinary,
+              created,
               members: members.map(guid => ({ guid })),
             }
             this.focus.setDetail(cardId, channelId, focusDetail);

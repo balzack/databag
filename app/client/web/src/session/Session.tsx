@@ -164,7 +164,7 @@ export function Session() {
               <Profile params={profileParams} />
             </div>
           </Drawer>
-          <Drawer opened={details} onClose={closeDetails} withCloseButton={false} size="xs" padding="0" position="right">
+          <Drawer opened={details} onClose={closeDetails} withCloseButton={false} size="xs" padding="0" position="right" trapFocus={false}>
             <div style={{ height: '100vh' }}>
               <Details />
             </div>

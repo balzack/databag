@@ -5,4 +5,166 @@
   align-items: center;
   width: 100%;
   height: 100%;
+  min-width: 0;
+
+  .membership {
+    padding-top: 32px;
+    font-size: 12px;
+
+    .members {
+      font-size: 12px;
+    }
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+    overflow: auto;
+  }
+
+  .disconnected {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-top: 32px;
+    color: var(--mantine-color-red-2);
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    padding-top: 16px;
+    flex-wrap: wrap;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 32px;
+    padding-bottom: 16px;
+    justify-content: center;
+  
+    .action {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      height: fit-content;
+    
+      .actionLabel {
+        font-size: 12px;
+        color: var(--mantine-color-dbgreen-1);
+      }
+    }
+  }
+
+  .attributes {
+    display: flex;
+    flex-direction: column;
+    padding-left: 16px;
+    padding-right: 16px;
+    gap: 6px;
+    padding-top: 16px;
+    padding-bottom: 24px;
+
+    .attribute {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      padding-left: 4px;
+
+      .subjectLabel {
+      }
+
+      .subjectValue {
+        font-size: 28px;
+      }
+
+      .subjectPlaceholder {
+        font-size: 28px;
+        color: var(--mantine-color-text-7);
+      }
+
+      .attributeLabel {
+        font-size: 16px;
+      }
+
+      .attributeValue {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .label {
+    font-size: 24px;
+    padding: 8px;
+  }
+
+  .divider {
+    width: 100%;
+  }
+
+  .header {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    border-bottom: 1px solid var(--mantine-color-text-7);
+    padding-left: 16px;
+    padding-right: 16px;
+    height: 48px;
+    flex-shrink: 0;
+  }
+
+  .subject {
+    padding-bottom: 8px;
+
+    .subjectControls {
+      display: flex;
+      gap: 8;
+    }
+
+    .subjectLabel {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+
+      .guestSubject {
+        display: flex;
+        gap: 8px;
+      }
+
+      .guestPlaceholder {
+        display: flex;
+        font-style: italic;
+        gap: 8px;
+      }
+
+      .subjectValue {
+        font-size: 20px;
+      }
+
+      .subjectPlaceholder {
+        font-size: 20px;
+        font-style: italic;
+      }
+    }
+  }
+
+  .card {
+    width: 100%;
+    height: 48px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-right: 16px;
+    padding-left: 16px;
+    border-bottom: 1px solid var(--mantine-color-text-8);
+  }
+
+  .cards {
+    min-width: 0;
+    width: 100%;
+    flex-shink: 1;
+    overflow: auto;
+  }
 }
