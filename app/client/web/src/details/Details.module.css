@@ -99,6 +99,8 @@
   .label {
     font-size: 24px;
     padding: 8px;
+    flex-grow: 1;
+    text-align: center;
   }
 
   .divider {
@@ -114,6 +116,15 @@
     padding-right: 16px;
     height: 48px;
     flex-shrink: 0;
+    align-items: center;
+
+    .match {
+      opacity: 0;
+    }
+
+    .close {
+      cursor: pointer;
+    }
   }
 
   .subject {

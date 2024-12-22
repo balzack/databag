@@ -21,15 +21,12 @@ export function Details({ close }: { close?: () => void }) {
         handle={card.handle} node={card.node}/>
   ))
 
-
-console.log(state.hostCard, state.channelCards, state.unknownContacts);
-
   return (
     <div className={classes.details}>
       <div className={classes.header}>
-        {close && <IconX size={30} className={classes.match} />}
+        {close && <IconX className={classes.match} />}
         <Text className={classes.label}>{ state.strings.details }</Text>    
-        {close && <IconX size={30} className={classes.close} onClick={close} />}
+        {close && <IconX className={classes.close} onClick={close} />}
       </div>
       { state.access && (
         <div className={classes.body}>
