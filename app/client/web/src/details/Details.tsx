@@ -166,7 +166,7 @@ export function Details({ close }: { close: () => void }) {
             { state.host && (
               <div className={classes.subject}>
                 <div className={classes.subjectLabel}>
-                  <TextInput size={32} placeholder={state.strings.subject} value={state.editSubject} onChange={(event) => actions.setEditSubject(event.currentTarget.value)}
+                  <TextInput size="lg" placeholder={state.strings.subject} value={state.editSubject} onChange={(event) => actions.setEditSubject(event.currentTarget.value)}
                     leftSectionPointerEvents="none" leftSection={<IconLabel />}
                     rightSectionPointerEvents="all" rightSectionWidth={64} rightSection={
                       <div className={classes.subjectControls}>
