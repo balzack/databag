@@ -8,6 +8,9 @@ export function useDetails() {
   const display = useContext(DisplayContext) as ContextType
   const app = useContext(AppContext) as ContextType
   const [state, setState] = useState({
+    cardId: null as null | string,
+    channelId: '',
+    detail: undefined as undefined | FocusDetail,
     access: false,
     host: false,
     sealed: false,
@@ -18,10 +21,11 @@ export function useDetails() {
     subject: '',
     editSubject: '',
     created: '',
-    profile: null as null | Porfile,
-    cards: [] as Card[],
+    profile: null as null | Profile,
+    cards: new Map<string, Card>(),
     hostCard: null as null | Card,
     channelCards: [] as Card[],
+    unknownContacts: 0,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -89,16 +93,16 @@ export function useDetails() {
         updateState({ profile });
       }
       const setDetail = (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => {
-
         const detail = focused ? focused.detail : null;
         const cardId = focused.cardId;
+        const channelId = focused.channelId;
         const access = Boolean(detail);
         const sealed = detail?.sealed;
         const locked = detail?.locked;
         const host = cardId == null;
         const subject = detail?.data?.subject ? detail.data.subject : '';
         const created = detail?.created ? getTimestamp(detail.created) : '';
-        updateState({ detail, editSubject: subject, subject, cardId, access, sealed, locked, host, created });
+        updateState({ detail, editSubject: subject, subject, channelId, cardId, access, sealed, locked, host, created });
       }
       focus.addDetailListener(setDetail);
       contact.addCardListener(setCards);
@@ -118,8 +122,9 @@ export function useDetails() {
     undoSubject: () => {
       updateState({ editSubject: state.subject });
     },
-    saveSubject: () => {
-      console.log('saving subject');
+    saveSubject: async () => {
+      const content = app.state.session.getContent()
+      await content.setChannelSubject(state.channelId, state.sealed ? 'sealed' : 'superbasic', { subject: state.editSubject });
     },
   }
 

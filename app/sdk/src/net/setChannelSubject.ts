@@ -5,7 +5,7 @@ export async function setChannelSubject(node: string, secure: boolean, token: st
   const endpoint = `http${secure ? 's' : ''}://${node}/content/channels/${channelId}/subject?agent=${token}`;
   const { status } = await fetchWithTimeout(endpoint, {
     method: 'PUT',
-    body: JSON.stringify(data),
+    body: JSON.stringify(params),
   });
   checkResponse(status);
 }

@@ -4,21 +4,46 @@ import classes from './Details.module.css'
 import { IconUserCog, IconEyeOff, IconAlertHexagon, IconMessageX, IconLogout2, IconHome, IconServer, IconShield, IconShieldOff, IconCalendarClock, IconExclamationCircle, IconX, IconEdit, IconDeviceFloppy, IconArrowBack, IconLabel } from '@tabler/icons-react'
 import { Divider, Text, Textarea, Image, TextInput, ActionIcon } from '@mantine/core'
 import { Card } from '../card/Card';
+import { modals } from '@mantine/modals'
 
 export function Details({ close }: { close?: () => void }) {
   const { state, actions } = useDetails()
+  const [saving, setSaving] = useState(false);
 
   const undo = () => {
     actions.undoSubject();
   }
 
-  const save = () => {
-    console.log('save subject');
+  const save = async () => {
+    if (!saving) {
+      setSaving(true);
+      try {
+        await actions.saveSubject();
+      } catch (err) {
+        console.log(err);
+        showError();
+      }
+      setSaving(false);
+    }
+  }
+
+  const showError = () => {
+    modals.openConfirmModal({
+      title: state.strings.operationFailed,
+      withCloseButton: true,
+      overlayProps: {
+        backgroundOpacity: 0.55,
+        blur: 3,
+      },
+      children: <Text>{state.strings.tryAgain}</Text>,
+      cancelProps: { display: 'none' },
+      confirmProps: { display: 'none' },
+    })
   }
 
   const cards = state.channelCards.map((card, index) => (
-      <Card className={classes.card} key={index} imageUrl={card.imageUrl} name={card.name} placeHolder={state.strings.name}
-        handle={card.handle} node={card.node}/>
+      <Card className={classes.card} key={index} imageUrl={card.imageUrl} name={card.name} placeholder={state.strings.name}
+        handle={card.handle} node={card.node} actions={[]} />
   ))
 
   return (
@@ -42,7 +67,7 @@ export function Details({ close }: { close?: () => void }) {
                           <ActionIcon key="undo" variant="subtle" onClick={undo}><IconArrowBack /></ActionIcon>
                         )}
                         { state.editSubject != state.subject && (
-                          <ActionIcon key="save" variant="subtle" onClick={save}><IconDeviceFloppy /></ActionIcon>
+                          <ActionIcon key="save" variant="subtle" onClick={save} loading={saving}><IconDeviceFloppy /></ActionIcon>
                         )}
                       </div>
                     } />
@@ -135,8 +160,12 @@ export function Details({ close }: { close?: () => void }) {
           <Divider className={classes.divider} size="md" />
           <div className={classes.cards}>
             { state.hostCard && (
-              <Card className={classes.card} imageUrl={state.hostCard.imageUrl} name={state.hostCard.name} placeHolder={state.strings.name}
+              <Card className={classes.card} imageUrl={state.hostCard.imageUrl} name={state.hostCard.name} placeholder={state.strings.name}
                 handle={state.hostCard.handle} node={state.hostCard.node} actions={[<IconHome key="host" size={20} />]} />
+            )}
+            { state.profile && (
+              <Card className={classes.card} imageUrl={state.profile.imageUrl} name={state.profile.name} placeholder={state.strings.name}
+                handle={state.profile.handle} node={state.profile.node} actions={state.host ? [<IconHome key="me" size={20} />] : []} />
             )}
             { cards }
             { state.unknownContacts > 0 && (
