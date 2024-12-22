@@ -10,6 +10,8 @@ export function Details({ close }: { close: () => void }) {
   const { state, actions } = useDetails()
   const [saving, setSaving] = useState(false);
   const [removing, setRemoving] = useState(false);
+  const [blocking, setBlocking] = useState(false);
+  const [reporting, setReporting] = useState(false);
 
   const undo = () => {
     actions.undoSubject();
@@ -80,6 +82,58 @@ export function Details({ close }: { close: () => void }) {
     })
   }
 
+  const block = async () => {
+    modals.openConfirmModal({
+      title: state.strings.blockTopic,
+      withCloseButton: false,
+      overlayProps: {
+        backgroundOpacity: 0.55,
+        blur: 3,
+      },
+      children: <Text>{ state.strings.blockTopicPrompt }</Text>,
+      labels: { confirm: state.strings.block, cancel: state.strings.cancel },
+      onConfirm: async () => {
+        if (!removing) {
+          setBlocking(true);
+          try {
+            await actions.block();
+            close();
+          } catch (err) {
+            console.log(err);
+            showError();
+          }
+          setBlocking(false);
+        }
+      }
+    })
+  }
+
+  const report = async () => {
+    modals.openConfirmModal({
+      title: state.strings.reportTopic,
+      withCloseButton: false,
+      overlayProps: {
+        backgroundOpacity: 0.55,
+        blur: 3,
+      },
+      children: <Text>{ state.strings.reportTopicPrompt }</Text>,
+      labels: { confirm: state.strings.report, cancel: state.strings.cancel },
+      onConfirm: async () => {
+        if (!removing) {
+          setReporting(true);
+          try {
+            await actions.report();
+            close();
+          } catch (err) {
+            console.log(err);
+            showError();
+          }
+          setReporting(false);
+        }
+      }
+    })
+  }
+
   const showError = () => {
     modals.openConfirmModal({
       title: state.strings.operationFailed,
@@ -112,7 +166,7 @@ export function Details({ close }: { close: () => void }) {
             { state.host && (
               <div className={classes.subject}>
                 <div className={classes.subjectLabel}>
-                  <TextInput size="lg" placeholder={state.strings.subject} value={state.editSubject} onChange={(event) => actions.setEditSubject(event.currentTarget.value)}
+                  <TextInput size={32} placeholder={state.strings.subject} value={state.editSubject} onChange={(event) => actions.setEditSubject(event.currentTarget.value)}
                     leftSectionPointerEvents="none" leftSection={<IconLabel />}
                     rightSectionPointerEvents="all" rightSectionWidth={64} rightSection={
                       <div className={classes.subjectControls}>
@@ -172,20 +226,20 @@ export function Details({ close }: { close: () => void }) {
           { !state.host && (
             <div className={classes.actions}>
               <div className={classes.action}>
-                <ActionIcon variant="subtle" size="lg" loading={removing} onClick={leave}>
-                  <IconLogout2 size="lg" />
+                <ActionIcon variant="subtle" size={32} loading={removing} onClick={leave}>
+                  <IconLogout2 size={32} />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.leave}</Text>
               </div> 
               <div className={classes.action}>
-                <ActionIcon variant="subtle" size="lg">
-                  <IconEyeOff size="lg" />
+                <ActionIcon variant="subtle" size={32} loading={blocking} onClick={block}>
+                  <IconEyeOff size={32} />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.block}</Text>
               </div>
               <div className={classes.action}>
-                <ActionIcon variant="subtle" size="lg">
-                  <IconAlertHexagon size="lg" />
+                <ActionIcon variant="subtle" size={32} loading={reporting} onClick={report}>
+                  <IconAlertHexagon size={32} />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.report}</Text>
               </div> 
@@ -194,14 +248,14 @@ export function Details({ close }: { close: () => void }) {
           { state.host && (
             <div className={classes.actions}>
               <div className={classes.action}>
-                <ActionIcon variant="subtle" size="lg" loading={removing} onClick={remove}>
-                  <IconMessageX size="lg" />
+                <ActionIcon variant="subtle" size={32} loading={removing} onClick={remove}>
+                  <IconMessageX size={32} />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.remove}</Text>
               </div> 
               <div className={classes.action}>
-                <ActionIcon variant="subtle" size="lg" >
-                  <IconUserCog size="lg" />
+                <ActionIcon variant="subtle" size={32} >
+                  <IconUserCog size={32} />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.members}</Text>
               </div> 

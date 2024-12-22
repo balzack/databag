@@ -238,6 +238,11 @@ export const en = {
   blockMessage: 'Block Message',
   blockMessagePrompt: 'Are you sure you want to block the message?',
 
+  blockTopic: 'Blocking Topic',
+  blockTopicPrompt: 'Are you sure you want to block the topic?',
+  reportTopic: 'Flag Topic',
+  reportTopicPrompt: 'Are you sure you want to flag the topic for admin review?',
+
   ignoring: 'Ignoring Contact',
   connfirmIgnoring: 'Are you sure you want to ignore the request?',
   denying: 'Denying Contact',
@@ -283,6 +288,10 @@ export const fr = {
   server: 'Serveur',
   token: 'Code',
   delayMessage: 'La génération de clé peut prendre plusieurs minutes.',
+  blockTopic: 'Bloquer le sujet',
+  blockTopicPrompt: 'Êtes-vous sûr de vouloir bloquer ce sujet ?',
+  reportTopic: 'Signaler le sujet',
+  reportTopicPrompt: 'Êtes-vous sûr de vouloir signaler ce sujet pour examen par un administrateur ?',
 
   membership: 'Adhésion',
   channelHost: 'Hôte du Sujet',
@@ -555,6 +564,10 @@ export const sp = {
   server: 'Server',
   token: 'Código',
   delayMessage: 'La generación de claves puede tardar varios minutos.',
+  blockTopic: 'Bloquear tema',
+  blockTopicPrompt: '¿Estás seguro de que deseas bloquear este tema?',
+  reportTopic: 'Reportar tema',
+  reportTopicPrompt: '¿Estás seguro de que deseas reportar este tema para revisión del administrador?',
 
   membership: 'Afiliación',
   channelHost: 'Anfitrión del Tema',
@@ -826,6 +839,10 @@ export const pt = {
   server: 'Servidor',
   token: 'Code',
   delayMessage: 'A geração da chave pode levar vários minutos.',
+  blockTopic: 'Bloquear tópico',
+  blockTopicPrompt: 'Tem certeza de que deseja bloquear este tópico?',
+  reportTopic: 'Denunciar tópico',
+  reportTopicPrompt: 'Tem certeza de que deseja denunciar este tópico para revisão do administrador?',
 
   membership: 'Associação',
   channelHost: 'Anfitrião do Tópico',
@@ -1098,6 +1115,10 @@ export const de = {
   token: 'Token',
   delayMessage: 'Die Schlüsselgenerierung kann mehrere Minuten dauern.',
   membership: 'Mitgliedschaft',
+  blockTopic: 'Thema blockieren',
+  blockTopicPrompt: 'Sind Sie sicher, dass Sie dieses Thema blockieren möchten?',
+  reportTopic: 'Thema melden',
+  reportTopicPrompt: 'Sind Sie sicher, dass Sie dieses Thema zur Überprüfung durch den Administrator melden möchten?',
 
   channelHost: 'Themenhost',
   channelGuest: 'Thema Gast',
@@ -1369,6 +1390,10 @@ export const ru = {
   token: 'Токен',
   delayMessage: 'Генерация ключа может занять несколько минут.',
   created: 'Созданный',
+  blockTopic: 'Заблокировать тему',
+  blockTopicPrompt: 'Вы уверены, что хотите заблокировать эту тему?',
+  reportTopic: 'Пожаловаться на тему',
+  reportTopicPrompt: 'Вы уверены, что хотите отправить эту тему на рассмотрение администратору?',
 
   membership: 'Членство',
   channelHost: 'Ведущий темы',

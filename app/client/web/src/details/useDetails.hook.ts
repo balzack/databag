@@ -126,6 +126,15 @@ export function useDetails() {
       await content.leaveChannel(state.cardId, state.channelId);
       app.actions.clearFocus();
     },
+    block: async () => {
+      const content = app.state.session.getContent();
+      await content.setBlockedChannel(state.cardId, state.channelId, true);
+      app.actions.clearFocus();
+    },
+    report: async () => {
+      const content = app.state.session.getContent();
+      await content.flagChannel(state.cardId, state.channelId);
+    },
     setEditSubject: (editSubject: string) => {
       updateState({ editSubject });
     },

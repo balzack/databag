@@ -200,7 +200,8 @@ export function useContent() {
       cardChannels.current.forEach((values) => {
         merged.push(...values)
       })
-      const sorted = merged.sort((a, b) => {
+      const filtered = merged.filter(channel => !channel.blocked);
+      const sorted = filtered.sort((a, b) => {
         const aUpdated = a?.lastTopic?.created
         const bUpdated = b?.lastTopic?.created
         if (aUpdated == bUpdated) {
