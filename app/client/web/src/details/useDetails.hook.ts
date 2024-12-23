@@ -139,6 +139,14 @@ export function useDetails() {
       const content = app.state.session.getContent();
       await content.flagChannel(state.cardId, state.channelId);
     },
+    setMember: async (cardId: string) => {
+      const content = app.state.session.getContent();
+      await content.setChannelCard(state.channelId, cardId);
+    },
+    clearMember: async (cardId: string) => {
+      const content = app.state.session.getContent();
+      await content.clearChannelCard(state.channelId, cardId);
+    },
     setEditSubject: (editSubject: string) => {
       updateState({ editSubject });
     },

@@ -53,7 +53,7 @@ export function Session() {
             )}
             {details && (
               <div className={classes.screen}>
-                <Details close={closeDetails} />
+                <Details showClose={true} close={closeDetails} />
               </div>
             )}
           </div>
@@ -166,7 +166,7 @@ export function Session() {
           </Drawer>
           <Drawer opened={details} onClose={closeDetails} withCloseButton={false} size="xs" padding="0" position="right" trapFocus={false}>
             <div style={{ height: '100vh' }}>
-              <Details close={closeDetails} />
+              <Details showClose={false} close={closeDetails} />
             </div>
           </Drawer>
           <Drawer opened={settings} onClose={closeSettings} withCloseButton={false} size="sm" padding="0" position="right">

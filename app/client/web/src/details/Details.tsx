@@ -6,7 +6,7 @@ import { Switch, Button, Modal, Divider, Text, Textarea, Image, TextInput, Actio
 import { Card } from '../card/Card';
 import { modals } from '@mantine/modals'
 
-export function Details({ close }: { close: () => void }) {
+export function Details({ showClose, close }: { showClose: boolean, close: () => void }) {
   const { state, actions } = useDetails()
   const [saving, setSaving] = useState(false);
   const [removing, setRemoving] = useState(false);
@@ -163,34 +163,39 @@ export function Details({ close }: { close: () => void }) {
       return true;
     }
   }).map((card, index) => {
-    const enable = (
+    const enable = !state.detail ? [] : [
       <Switch
         key="enable"
         className={classes.setMember}
         size="sm"
         checked={Boolean(state.detail.members.find(member => member.guid === card.guid))}
-        onChange={(ev) => {
-          if (ev.currentTarget.checked) {
-            console.log("ADD MEMBER");
-          } else {
-            console.log("REMOVE MEMBER");
+        onChange={async (ev) => {
+          try {
+            if (ev.currentTarget.checked) {
+              await actions.setMember(card.cardId);
+            } else {
+              await actions.clearMember(card.cardId);
+            }
+          } catch (err) {
+            console.log(err);
+            showError();
           }
         }}
       />
-    )
+    ];
 
     return (
       <Card className={classes.card} key={index} imageUrl={card.imageUrl} name={card.name} placeholder={state.strings.name}
-        handle={card.handle} node={card.node} actions={[enable]} />
+        handle={card.handle} node={card.node} actions={enable} />
     )
   });
 
   return (
     <div className={classes.details}>
       <div className={classes.header}>
-        <IconX className={classes.match} />
+        { showClose && (<IconX className={classes.match} />)}
         <Text className={classes.label}>{ state.strings.details }</Text>    
-        <IconX className={classes.close} onClick={close} />
+        { showClose && (<IconX className={classes.close} onClick={close} />)}
       </div>
       { state.access && (
         <div className={classes.body}>

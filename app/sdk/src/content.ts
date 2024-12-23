@@ -44,7 +44,10 @@ export class ContentModule implements Content {
   }
 
   public async setChannelCard(channelId: string, cardId: string): Promise<void> {
-    return await this.stream.setChannelCard(channelId, cardId);
+    const getSeal = async (aesKey: string) => {
+      return await this.contact.getSeal(cardId, aesKey);
+    }
+    return await this.stream.setChannelCard(channelId, cardId, getSeal);
   }
 
   public async clearChannelCard(channelId: string, cardId: string): Promise<void> {

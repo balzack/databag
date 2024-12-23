@@ -341,14 +341,22 @@ export class StreamModule {
     }
   }
 
-  public async setChannelCard(channelId: string, cardId: string): Promise<void> {
+  public async setChannelCard(channelId: string, cardId: string, getSeal: (aesKey: string)=>Promise<{publicKey: string; sealedKey: string}>): Promise<void> {
     const { node, secure, token } = this;
     const channel = this.channelEntries.get(channelId);
     if (!channel) {
       throw new Error('channel not found');
     }
     if (channel.item.detail.sealed) {
-      throw new Error('sealed channels cannot add members');
+      const channelKey = channel.item.channelKey;
+      if (!channelKey) {
+        throw new Error('cannot add members to locked channels');
+      }
+      const seal = await getSeal(channelKey);
+      const data = JSON.parse(channel.item.detail.data);
+      const seals = [...data.seals, seal];
+      const subject = { ...data, seals };
+      await setChannelSubject(node, secure, token, channelId, channel.item.detail.dataType, subject); 
     }
     await setChannelCard(node, secure, token, channelId, cardId);
   }
