@@ -18,6 +18,10 @@
     margin-right: 16px;
   }
 
+  .alert {
+    color: var(--mantine-color-red-6);
+  }
+
   .frame {
     display: flex;
     flex-direction: column-reverse;

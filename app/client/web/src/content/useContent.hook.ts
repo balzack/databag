@@ -63,9 +63,10 @@ export function useContent() {
       const contacts = [] as (Card | undefined)[]
       if (cardId) {
         const card = state.cards.find((contact) => contact.cardId === cardId)
-        if (card) {
-          contacts.push(card)
+        if (!card || card.blocked) {
+          return null;
         }
+        contacts.push(card)
       }
       const guests = members.filter((contact) => contact.guid !== state.guid)
       const guestCards = guests
@@ -147,6 +148,9 @@ export function useContent() {
 
     const search = state.filter?.toLowerCase()
     const filtered = channels.filter((item) => {
+      if (!item) {
+        return false
+      }
       if (search) {
         if (item.subject?.find((value) => value?.toLowerCase().includes(search))) {
           return true

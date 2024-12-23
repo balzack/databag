@@ -87,7 +87,7 @@ export function Session() {
             )}
             {profile && (
               <div className={classes.screen}>
-                <Profile params={profileParams} close={closeProfile} />
+                <Profile params={profileParams} showClose={true} close={closeProfile} />
               </div>
             )}
           </div>
@@ -161,7 +161,7 @@ export function Session() {
           </Drawer>
           <Drawer opened={profile} onClose={closeProfile} withCloseButton={false} size="xs" padding="0" position="right">
             <div style={{ height: '100vh' }}>
-              <Profile params={profileParams} />
+              <Profile params={profileParams} showClose={false} close={closeProfile} />
             </div>
           </Drawer>
           <Drawer opened={details} onClose={closeDetails} withCloseButton={false} size="xs" padding="0" position="right" trapFocus={false}>

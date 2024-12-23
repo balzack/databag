@@ -33,7 +33,7 @@ export type ProfileParams = {
   offsync?: boolean
 }
 
-export function Profile({ params, close }: { params: ProfileParams; close?: () => void }) {
+export function Profile({ params, showClose, close }: { params: ProfileParams; showClose: boolean; close: () => void }) {
   const { state, actions } = useProfile(params)
   const [removing, setRemoving] = useState(false)
   const [blocking, setBlocking] = useState(false)
@@ -142,6 +142,7 @@ export function Profile({ params, close }: { params: ProfileParams; close?: () =
         if (!blocking) {
           setBlocking(true)
           await setAction(actions.block)
+          close();
           setBlocking(false)
         }
       },
@@ -238,9 +239,9 @@ export function Profile({ params, close }: { params: ProfileParams; close?: () =
   return (
     <div className={classes.contact}>
       <div className={classes.header}>
-        {close && <IconX size={28} className={classes.match} />}
+        {showClose && <IconX size={28} className={classes.match} />}
         <Text className={classes.label}>{`${state.handle}${state.node ? '/' + state.node : ''}`}</Text>
-        {close && <IconX size={30} className={classes.close} onClick={close} />}
+        {showClose && <IconX size={30} className={classes.close} onClick={close} />}
       </div>
       <div className={classes.detail}>
         <div className={classes.image}>

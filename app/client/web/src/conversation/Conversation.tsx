@@ -169,7 +169,7 @@ export function Conversation({ openDetails }: { openDetails: ()=>void }) {
             <IconShield size={24} />
           )}
           { state.detailSet && state.access === false && (
-            <IconExclamationCircle size={24} />
+            <IconExclamationCircle className={classes.alert} size={24} />
           )}
         </div>
         <div className={classes.title}> 
