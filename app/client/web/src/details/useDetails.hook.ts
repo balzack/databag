@@ -22,7 +22,7 @@ export function useDetails() {
     editSubject: '',
     created: '',
     profile: null as null | Profile,
-    cards: new Map<string, Card>(),
+    cards: [] as Card[],
     hostCard: null as null | Card,
     channelCards: [] as Card[],
     unknownContacts: 0,
@@ -69,10 +69,9 @@ export function useDetails() {
   }, [display.state]);
 
   useEffect(() => {
-    const cards = Array.from(state.cards.values());
-    const hostCard = cards.find(entry => entry.cardId == state.cardId);
+    const hostCard = state.cards.find(entry => entry.cardId == state.cardId);
     const profileRemoved = state.detail?.members ? state.detail.members.filter(member => state.profile?.guid != member.guid) : [];
-    const contactCards = profileRemoved.map(member => state.cards.get(member.guid));
+    const contactCards = profileRemoved.map(member => state.cards.find(card => card.guid === member.guid));
     const channelCards = contactCards.filter(member => Boolean(member));
     const unknownContacts = contactCards.length - channelCards.length;
     updateState({ hostCard, channelCards, unknownContacts });
@@ -83,11 +82,16 @@ export function useDetails() {
     const { contact, identity } = app.state.session || { };
     if (focus && contact && identity) {
       const setCards = (cards: Card[]) => {
-        const contacts = new Map<string, Card>();
-        cards.forEach(card => {
-          contacts.set(card.guid, card);
+        const sorted = cards.sort((a, b) => {
+          if (a.handle > b.handle) {
+            return 1;
+          } else if (a.handle < b.handle) {
+            return -1;
+          } else {
+            return 0;
+          }
         });
-        updateState({ cards: contacts });
+        updateState({ cards: sorted });
       }
       const setProfile = (profile: Profile) => {
         updateState({ profile });

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDetails } from './useDetails.hook'
 import classes from './Details.module.css'
 import { IconUserCog, IconEyeOff, IconAlertHexagon, IconMessageX, IconLogout2, IconHome, IconServer, IconShield, IconShieldOff, IconCalendarClock, IconExclamationCircle, IconX, IconEdit, IconDeviceFloppy, IconArrowBack, IconLabel } from '@tabler/icons-react'
-import { Divider, Text, Textarea, Image, TextInput, ActionIcon } from '@mantine/core'
+import { Switch, Button, Modal, Divider, Text, Textarea, Image, TextInput, ActionIcon } from '@mantine/core'
 import { Card } from '../card/Card';
 import { modals } from '@mantine/modals'
 
@@ -12,6 +12,7 @@ export function Details({ close }: { close: () => void }) {
   const [removing, setRemoving] = useState(false);
   const [blocking, setBlocking] = useState(false);
   const [reporting, setReporting] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const undo = () => {
     actions.undoSubject();
@@ -153,6 +154,37 @@ export function Details({ close }: { close: () => void }) {
         handle={card.handle} node={card.node} actions={[]} />
   ))
 
+  const members = state.cards.filter(card => {
+    if (state.detail && state.detail.members.find(member => member.guid === card.guid)) {
+      return true;
+    } else if(state.sealed && !card.sealable) {
+      return false;
+    } else {
+      return true;
+    }
+  }).map((card, index) => {
+    const enable = (
+      <Switch
+        key="enable"
+        className={classes.setMember}
+        size="sm"
+        checked={Boolean(state.detail.members.find(member => member.guid === card.guid))}
+        onChange={(ev) => {
+          if (ev.currentTarget.checked) {
+            console.log("ADD MEMBER");
+          } else {
+            console.log("REMOVE MEMBER");
+          }
+        }}
+      />
+    )
+
+    return (
+      <Card className={classes.card} key={index} imageUrl={card.imageUrl} name={card.name} placeholder={state.strings.name}
+        handle={card.handle} node={card.node} actions={[enable]} />
+    )
+  });
+
   return (
     <div className={classes.details}>
       <div className={classes.header}>
@@ -254,7 +286,7 @@ export function Details({ close }: { close: () => void }) {
                 <Text className={classes.actionLabel}>{state.strings.remove}</Text>
               </div> 
               <div className={classes.action}>
-                <ActionIcon variant="subtle" size={32} >
+                <ActionIcon variant="subtle" size={32} onClick={()=>setShowModal(true)}>
                   <IconUserCog size={32} />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.members}</Text>
@@ -287,6 +319,18 @@ export function Details({ close }: { close: () => void }) {
           <Text>{ state.strings.syncError }</Text>          
         </div>
       )}
+      <Modal title={state.strings.editMembership} opened={showModal} onClose={() => setShowModal(false)} overlayProps={{ backgroundOpacity: 0.65, blur: 3 }} centered>
+        <div className={classes.modalContainer}>
+          <div className={classes.cardMembers}>
+            { members }
+          </div>
+          <div className={classes.controls}>
+            <Button variant="default" onClick={() => setShowModal(false)}>
+              {state.strings.close}
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   )
 }
