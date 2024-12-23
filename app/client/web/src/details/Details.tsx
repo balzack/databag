@@ -326,9 +326,16 @@ export function Details({ showClose, close }: { showClose: boolean, close: () =>
       )}
       <Modal title={state.strings.editMembership} opened={showModal} onClose={() => setShowModal(false)} overlayProps={{ backgroundOpacity: 0.65, blur: 3 }} centered>
         <div className={classes.modalContainer}>
-          <div className={classes.cardMembers}>
-            { members }
-          </div>
+          { members.length > 0 && (
+            <div className={classes.cardMembers}>
+              { members }
+            </div>
+          )}
+          { members.length === 0 && (
+            <div className={classes.noContacts}>
+              <Text>{ state.strings.noContacts }</Text>
+            </div>
+          )}
           <div className={classes.controls}>
             <Button variant="default" onClick={() => setShowModal(false)}>
               {state.strings.close}

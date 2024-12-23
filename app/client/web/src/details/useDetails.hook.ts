@@ -82,7 +82,8 @@ export function useDetails() {
     const { contact, identity } = app.state.session || { };
     if (focus && contact && identity) {
       const setCards = (cards: Card[]) => {
-        const sorted = cards.sort((a, b) => {
+        const filtered = cards.filter(card => !card.blocked);
+        const sorted = filtered.sort((a, b) => {
           if (a.handle > b.handle) {
             return 1;
           } else if (a.handle < b.handle) {

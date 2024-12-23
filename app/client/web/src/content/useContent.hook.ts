@@ -185,7 +185,8 @@ export function useContent() {
       updateState({ guid })
     }
     const setCards = (cards: Card[]) => {
-      const sorted = cards.sort(compare)
+      const filtered = cards.filter(card => !card.blocked);
+      const sorted = filtered.sort(compare)
       const connected = [] as Card[]
       const sealable = [] as Card[]
       sorted.forEach((card) => {
