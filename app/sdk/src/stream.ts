@@ -509,7 +509,8 @@ export class StreamModule {
     this.blocked.add(channelId);
     entry.channel = this.setChannel(channelId, entry.item);
     this.emitChannels();
-    await this.store.setMarker(this.guid, 'blocked_channel', channelId, JSON.stringify({ cardId: null, channelId }));
+    const timestamp = Math.floor(Date.now() / 1000);
+    await this.store.setMarker(this.guid, 'blocked_channel', channelId, JSON.stringify({ cardId: null, channelId, timestamp }));
   }
 
   private async clearChannelBlocked(channelId: string) {

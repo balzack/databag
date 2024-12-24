@@ -280,7 +280,7 @@ export class SettingsModule implements Settings {
     await setAccountLogin(node, secure, token, username, password);
   }
 
-  public async getBlockedCards(): Promise<{cardId: string}[]> {
+  public async getBlockedCards(): Promise<{cardId: string, timestamp: number}[]> {
     const { guid } = this;
     const blockedContacts = await this.store.getMarkers(guid, 'blocked_card');
     return blockedContacts.map(marker => {
@@ -292,13 +292,28 @@ export class SettingsModule implements Settings {
     });
   }
 
-  public async getBlockedChannels(): Promise<{cardId: string | null, channelId: string}[]> {
-    const blockedChannels = await this.store.getMarkers(guid, 'blocked_card_channel');
-    return [];
+  public async getBlockedChannels(): Promise<{cardId: string | null, channelId: string, timestamp: number}[]> {
+    const { guid } = this;
+    const blockedChannels = await this.store.getMarkers(guid, 'blocked_channel');
+    const blockedCardChannels = await this.store.getMarkers(guid, 'blocked_card_channel');
+    return blockedChannels.concat(blockedCardChannels).map(marker => {
+      try {
+        return JSON.parse(marker.value);
+      } catch (err) {
+        return {};
+      }
+    });
   }
 
-  public async getBlockedTopics(): Promise<{cardId: string | null, channelId: string, topicId: string}[]> {
+  public async getBlockedTopics(): Promise<{cardId: string | null, channelId: string, topicId: string, timestamp: number}[]> {
+    const { guid } = this;
     const blockedTopics = await this.store.getMarkers(guid, 'blocked_topic');
-    return [];
+    return blockedTopics.map(marker => {
+      try {
+        return JSON.parse(marker.value);
+      } catch (err) {
+        return {};
+      }
+    });
   }
 }

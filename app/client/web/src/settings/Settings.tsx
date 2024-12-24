@@ -45,7 +45,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
   const [mfaOpened, { open: mfaOpen, close: mfaClose }] = useDisclosure(false)
   const [sealOpened, { open: sealOpen, close: sealClose }] = useDisclosure(false)
   const [blockedContactOpened, { open: blockedContactOpen, close: blockedContactClose }] = useDisclosure(false)
-  const [blockedTopicOpened, { open: blockedTopicOpen, close: blockedTopicClose }] = useDisclosure(false)
+  const [blockedChannelOpened, { open: blockedChannelOpen, close: blockedChannelClose }] = useDisclosure(false)
   const [blockedMessageOpened, { open: blockedMessageOpen, close: blockedMessageClose }] = useDisclosure(false)
   const [savingLogin, setSavingLogin] = useState(false)
   const [savingDetails, setSavingDetails] = useState(false)
@@ -66,19 +66,62 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
     blockedContactOpen();
   }
 
-  const unblockCard = async (cardId: string) => {
+  const unblockCard = async (blocked: {cardId: string, timestamp: number}) => {
     try {
-      await actions.unblockCard(cardId);
+      await actions.unblockCard(blocked.cardId);
     } catch (err) {
       console.log(err);
       showError();
     }
   }
 
-  const blockedCards = state.blockedCards.map(blocked => (
-    <div className={classes.blockedItem}>
-      <Text className={classes.blockedValue}>CardID: { blocked.cardId }</Text>
-      <ActionIcon variant="subtle" size="md" onClick={()=>unblockCard(blocked.cardId)}><IconRestore /></ActionIcon>
+  const blockedCards = state.blockedCards.map((blocked, index) => (
+    <div key={index} className={classes.blockedItem}>
+      <Text className={classes.blockedValue}> { actions.getTimestamp(blocked.timestamp) }</Text>
+      <ActionIcon variant="subtle" size="md" onClick={()=>unblockCard(blocked)}><IconRestore /></ActionIcon>
+    </div>
+  ));
+
+  const showBlockedChannels = async () => {
+    await actions.loadBlockedChannels();
+    blockedChannelOpen();
+  }
+
+  const unblockChannel = async (blocked: {cardId: string | null, channelId: string, timestamp: number}) => {
+    try {
+      await actions.unblockChannel(blocked.cardId, blocked.channelId);
+    } catch (err) {
+      console.log(err);
+      showError();
+    }
+  }
+ 
+  const blockedChannels = state.blockedChannels.map((blocked, index) => (
+    <div key={index} className={classes.blockedItem}>
+      <Text className={classes.blockedValue}> { actions.getTimestamp(blocked.timestamp) }</Text>
+      <ActionIcon variant="subtle" size="md" onClick={()=>unblockChannel(blocked)}><IconRestore /></ActionIcon>
+    </div>
+  ));
+
+
+  const showBlockedMessages = async () => {
+    await actions.loadBlockedMessages();
+    blockedMessageOpen();
+  }
+
+  const unblockMessage = async (blocked: {cardId: string | null, channelId: string, topicId: string, timestamp: number}) => {
+    try {
+      await actions.unblockMessage(blocked.cardId, blocked.channelId, blocked.topicId);
+    } catch (err) {
+      console.log(err);
+      showError();
+    }
+  }
+
+  const blockedMessages = state.blockedMessages.map((blocked, index) => (
+    <div key={index} className={classes.blockedItem}>
+      <Text className={classes.blockedValue}> { actions.getTimestamp(blocked.timestamp) }</Text>
+      <ActionIcon variant="subtle" size="md" onClick={()=>unblockMessage(blocked)}><IconRestore /></ActionIcon>
     </div>
   ));
 
@@ -461,13 +504,13 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               </div>
               <Text className={classes.entryLabel}>{state.strings.blockedContacts}</Text>
             </div>
-            <div className={classes.entry} onClick={blockedTopicOpen}>
+            <div className={classes.entry} onClick={showBlockedChannels}>
               <div className={classes.entryIcon}>
                 <IconFolderCancel />
               </div>
               <Text className={classes.entryLabel}>{state.strings.blockedTopics}</Text>
             </div>
-            <div className={classes.entry} onClick={blockedMessageOpen}>
+            <div className={classes.entry} onClick={showBlockedMessages}>
               <div className={classes.entryIcon}>
                 <IconMessage2Cancel />
               </div>
@@ -845,11 +888,39 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
           </Button>
         </div>
       </Modal>
-      <Modal title={state.strings.blockedTopics} opened={blockedTopicOpened} onClose={blockedTopicClose} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered>
-        <div className={classes.blocked}></div>
+      <Modal title={state.strings.blockedTopics} opened={blockedChannelOpened} onClose={blockedChannelClose} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered>
+        { blockedChannels.length > 0 && (
+          <div className={classes.blocked}>
+            { blockedChannels }
+          </div>
+        )}
+        { blockedChannels.length === 0 && (
+          <div className={classes.empty}>
+            <Text className={classes.emptyLabel}>{ state.strings.noTopics }</Text>
+          </div>
+        )}
+        <div className={classes.controls}>
+          <Button variant="default" onClick={blockedChannelClose}>
+            {state.strings.close}
+          </Button>
+        </div>
       </Modal>
       <Modal title={state.strings.blockedMessages} opened={blockedMessageOpened} onClose={blockedMessageClose} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered>
-        <div className={classes.blocked}></div>
+        { blockedMessages.length > 0 && (
+          <div className={classes.blocked}>
+            { blockedMessages }
+          </div>
+        )}
+        { blockedMessages.length === 0 && (
+          <div className={classes.empty}>
+            <Text className={classes.emptyLabel}>{ state.strings.noMessages }</Text>
+          </div>
+        )}
+        <div className={classes.controls}>
+          <Button variant="default" onClick={blockedMessageClose}>
+            {state.strings.close}
+          </Button>
+        </div>
       </Modal>
     </>
   )

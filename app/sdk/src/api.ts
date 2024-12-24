@@ -44,9 +44,9 @@ export interface Settings {
   updateSeal(password: string): Promise<void>;
   forgetSeal(): Promise<void>;
 
-  getBlockedCards(): Promise<{cardId: string}[]>;
-  getBlockedChannels(): Promise<{cardId: string | null, channelId: string}[]>;
-  getBlockedTopicis(): Promise<{cardId: string | null, channelId: string, topicId: string}[]>;
+  getBlockedCards(): Promise<{cardId: string, timestamp: number}[]>;
+  getBlockedChannels(): Promise<{cardId: string | null, channelId: string, timestamp: number}[]>;
+  getBlockedTopicis(): Promise<{cardId: string | null, channelId: string, topicId: string, timestamp: number}[]>;
 
   addConfigListener(ev: (config: Config) => void): void;
   removeConfigListener(ev: (config: Config) => void): void;

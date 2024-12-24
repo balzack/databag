@@ -199,7 +199,8 @@ export class ContactModule implements Contact {
     this.blockedCard.add(cardId);
     entry.card = this.setCard(cardId, entry.item);
     this.emitCards();
-    await this.store.setMarker(this.guid, 'blocked_card', cardId, JSON.stringify({cardId}));
+    const timestamp = Math.floor(Date.now() / 1000);
+    await this.store.setMarker(this.guid, 'blocked_card', cardId, JSON.stringify({cardId, timestamp}));
   }
   
   private async clearCardBlocked(cardId: string) {
@@ -231,7 +232,8 @@ export class ContactModule implements Contact {
     this.blockedCardChannel.add(id);
     channelEntry.channel = this.setChannel(cardId, channelId, channelEntry.item); 
     this.emitChannels(cardId);
-    await this.store.setMarker(this.guid, 'blocked_card_channel', id, JSON.stringify({ cardId, channelId }));
+    const timestamp = Math.floor(Date.now() / 1000);
+    await this.store.setMarker(this.guid, 'blocked_card_channel', id, JSON.stringify({ cardId, channelId, timestamp }));
   }
 
   private async clearChannelBlocked(cardId: string, channelId: string) {
@@ -871,6 +873,7 @@ export class ContactModule implements Contact {
   }
 
   public async clearBlockedChannelTopic(cardId: string, channelId: string, topicId: string) {
+    const { guid } = this;
     const id = `${cardId}:${channelId}:${topicId}`
     await this.store.clearMarker(guid, 'blocked_topic', id);
     if (this.focus) {

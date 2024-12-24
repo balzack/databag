@@ -280,7 +280,7 @@
 }
 
 .empty {
-  width: 600px;
+  width: 400px;
   height: 128px;
   display: flex;
   align-items: center;
@@ -295,7 +295,7 @@
   }
 }
 .blocked {
-  width: 600px;
+  width: 400px;
   min-height: 128px;
   max-height: 256px;
   border: 1px solid var(--mantine-color-text-7);
@@ -312,6 +312,10 @@
     padding-bottom: 8px;
     border-bottom: 1px solid var(--mantine-color-text-8);
     
+    &:hover {
+      background: var(--mantine-color-surface-2);
+    }
+
     .blockedValue {
       flex-grow: 1;
       font-size: 14px;

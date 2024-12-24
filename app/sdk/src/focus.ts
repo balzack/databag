@@ -822,7 +822,8 @@ export class FocusModule implements Focus {
       this.blocked.add(id);
       entry.topic = this.setTopic(topicId, entry.item);
       this.emitTopics();
-      await this.store.setMarker(guid, 'blocked_topic', id, JSON.stringify({ cardId, channelId, topicId }));
+      const timestamp = Math.floor(Date.now() / 1000);
+      await this.store.setMarker(guid, 'blocked_topic', id, JSON.stringify({ cardId, channelId, topicId, timestamp }));
     }
   }
 
