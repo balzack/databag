@@ -34,6 +34,7 @@ import { getCardOpenMessage } from './net/getCardOpenMessage';
 import { setCardOpenMessage } from './net/setCardOpenMessage';
 import { getCardCloseMessage } from './net/getCardCloseMessage';
 import { setCardCloseMessage } from './net/setCardCloseMessage';
+import { getLegacyData } from './legacy';
 
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
@@ -1028,6 +1029,7 @@ export class ContactModule implements Contact {
     const { summary, detail } = item;
     const channelData = detail.sealed ? item.unsealedDetail : detail.data || '{}';
     const topicData = summary.sealed ? item.unsealedSummary : summary.data || '{}';
+    const parsed = this.parse(topicData);
 
     return {
       channelId,
@@ -1036,7 +1038,7 @@ export class ContactModule implements Contact {
         guid: summary.guid,
         sealed: summary.sealed,
         dataType: summary.dataType,
-        data: this.parse(topicData),
+        data: getLegacyData(parsed).data,
         created: summary.created,
         updated: summary.updated,
         status: summary.status,
