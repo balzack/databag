@@ -279,4 +279,26 @@ export class SettingsModule implements Settings {
     const { node, secure, token } = this;
     await setAccountLogin(node, secure, token, username, password);
   }
+
+  public async getBlockedCards(): Promise<{cardId: string}[]> {
+    const { guid } = this;
+    const blockedContacts = await this.store.getMarkers(guid, 'blocked_card');
+    return blockedContacts.map(marker => {
+      try {
+        return JSON.parse(marker.value);
+      } catch (err) {
+        return {};
+      }
+    });
+  }
+
+  public async getBlockedChannels(): Promise<{cardId: string | null, channelId: string}[]> {
+    const blockedChannels = await this.store.getMarkers(guid, 'blocked_card_channel');
+    return [];
+  }
+
+  public async getBlockedTopics(): Promise<{cardId: string | null, channelId: string, topicId: string}[]> {
+    const blockedTopics = await this.store.getMarkers(guid, 'blocked_topic');
+    return [];
+  }
 }

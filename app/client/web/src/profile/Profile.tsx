@@ -18,7 +18,7 @@ import {
   IconCancel,
   IconDeviceFloppy,
 } from '@tabler/icons-react'
-import { Text, Image, ActionIcon } from '@mantine/core'
+import { CloseButton, Text, Image, ActionIcon } from '@mantine/core'
 
 export type ProfileParams = {
   guid: string
@@ -239,9 +239,9 @@ export function Profile({ params, showClose, close }: { params: ProfileParams; s
   return (
     <div className={classes.contact}>
       <div className={classes.header}>
-        {showClose && <IconX size={28} className={classes.match} />}
+        {showClose && <CloseButton className={classes.match} />}
         <Text className={classes.label}>{`${state.handle}${state.node ? '/' + state.node : ''}`}</Text>
-        {showClose && <IconX size={30} className={classes.close} onClick={close} />}
+        {showClose && <CloseButton className={classes.close} onClick={close} />}
       </div>
       <div className={classes.detail}>
         <div className={classes.image}>

@@ -383,10 +383,12 @@ export class StreamModule {
     }
   }
 
-  public async getBlockedChannels(): Promise<Channel[]> {
-    return Array.from(this.channelEntries.entries())
-      .filter(([key, value]) => this.isChannelBlocked(key))
-      .map(([key, value]) => value.channel);
+  public async clearBlockedChannelTopic(channelId: string, topicId: string) {
+    const id = `'':${channelId}:${topicId}`
+    await this.store.clearMarker(guid, 'blocked_topic', id);
+    if (this.focus) {
+      await this.focus.clearBlockedChannelTopic(null, channelId, topicId);
+    }
   }
 
   public async flagChannel(channelId: string): Promise<void> {
@@ -507,7 +509,7 @@ export class StreamModule {
     this.blocked.add(channelId);
     entry.channel = this.setChannel(channelId, entry.item);
     this.emitChannels();
-    await this.store.setMarker(this.guid, 'blocked_channel', channelId, '');
+    await this.store.setMarker(this.guid, 'blocked_channel', channelId, JSON.stringify({ cardId: null, channelId }));
   }
 
   private async clearChannelBlocked(channelId: string) {

@@ -208,8 +208,12 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
                 { (host || profile) && (
                   <IconTrash className={classes.careful} onClick={remove} />
                 )}
-                <IconForbid className={classes.careful} onClick={block} />
-                <IconFlag className={classes.careful} onClick={report} />
+                { !profile && (
+                  <IconForbid className={classes.careful} onClick={block} />
+                )}
+                { !profile && (
+                  <IconFlag className={classes.careful} onClick={report} />
+                )}
               </div>
             </div>
           </div>

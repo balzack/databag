@@ -50,6 +50,7 @@ export function useSettings() {
     sealConfirm: '',
     sealDelete: '',
     secretCopied: false,
+    blockedCards: [] as {cardId: string}[],
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -112,6 +113,17 @@ export function useSettings() {
   }, [display.state])
 
   const actions = {
+    loadBlockedCards: async () => {
+      const settings = app.state.session.getSettings(); 
+      const blockedCards = await settings.getBlockedCards();
+      updateState({ blockedCards });
+    },
+    unblockCard: async (cardId: string) => {
+      const contact = app.state.session.getContact();
+      await contact.setBlockedCard(cardId, false);
+      const blockedCards = state.blockedCards.filter(blocked => blocked.cardId != cardId);
+      updateState({ blockedCards });
+    },
     getUsernameStatus: async (username: string) => {
       const { settings } = getSession()
       return await settings.getUsernameStatus(username)

@@ -822,7 +822,7 @@ export class FocusModule implements Focus {
       this.blocked.add(id);
       entry.topic = this.setTopic(topicId, entry.item);
       this.emitTopics();
-      await this.store.setMarker(guid, 'blocked_topic', id, '');
+      await this.store.setMarker(guid, 'blocked_topic', id, JSON.stringify({ cardId, channelId, topicId }));
     }
   }
 
@@ -835,6 +835,12 @@ export class FocusModule implements Focus {
       entry.topic = this.setTopic(topicId, entry.item);
       this.emitTopics();
       await this.store.clearMarker(guid, 'blocked_topic', id);
+    }
+  }
+
+  public async clearBlockedChannelTopic(cardId: string | null, channelId: string, topicId: string) {
+    if (cardId === this.cardId && channelId === this.channelId) {
+      await this.clearBlockTopic(topicId);
     }
   }
 

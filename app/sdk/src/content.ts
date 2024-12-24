@@ -99,6 +99,13 @@ export class ContentModule implements Content {
     return channels.concat(cardChannels);
   }
 
+  public async clearBlockedChannelTopic(cardId: string | null, channelId: string, topicId: string): Promise<void> {
+    if (cardId) {
+      return await this.contact.clearBlockedChannelTopic(cardId, channelId, topicId);
+    }
+    return await this.stream.clearBlockedChannelTopic(channelId, topicId);
+  }
+
   public addChannelListener(ev: (arg: { channels: Channel[]; cardId: string | null }) => void): void {
     this.stream.addChannelListener(ev);
     this.contact.addChannelListener(ev);

@@ -44,6 +44,10 @@ export interface Settings {
   updateSeal(password: string): Promise<void>;
   forgetSeal(): Promise<void>;
 
+  getBlockedCards(): Promise<{cardId: string}[]>;
+  getBlockedChannels(): Promise<{cardId: string | null, channelId: string}[]>;
+  getBlockedTopicis(): Promise<{cardId: string | null, channelId: string, topicId: string}[]>;
+
   addConfigListener(ev: (config: Config) => void): void;
   removeConfigListener(ev: (config: Config) => void): void;
 }
@@ -69,7 +73,6 @@ export interface Contact {
   resyncCard(cardId: string): Promise<void>;
   flagCard(cardId: string): Promise<void>;
   setBlockedCard(cardId: string, blocked: boolean): Promise<void>;
-  getBlockedCards(): Promise<Card[]>;
   getRegistry(handle: string | null, server: string | null): Promise<Profile[]>;
 
   addCardListener(ev: (cards: Card[]) => void): void;
@@ -91,7 +94,7 @@ export interface Content {
 
   flagChannel(cardId: string | null, channelId: string): Promise<void>;
   setBlockedChannel(cardId: string | null, channelId: string, blocked: boolean): Promise<void>;
-  getBlockedChannels(): Promise<Channel[]>;
+  clearBlockedChannelTopic(cardId: string | null, channelId: string, topicId: string): Promise<void>;
 
   addChannelListener(ev: (arg: { channels: Channel[]; cardId: string | null }) => void): void;
   removeChannelListener(ev: (arg: { channels: Channel[]; cardId: string | null }) => void): void;

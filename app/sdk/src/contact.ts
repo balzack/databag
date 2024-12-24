@@ -199,7 +199,7 @@ export class ContactModule implements Contact {
     this.blockedCard.add(cardId);
     entry.card = this.setCard(cardId, entry.item);
     this.emitCards();
-    await this.store.setMarker(this.guid, 'blocked_card', cardId, '');
+    await this.store.setMarker(this.guid, 'blocked_card', cardId, JSON.stringify({cardId}));
   }
   
   private async clearCardBlocked(cardId: string) {
@@ -231,7 +231,7 @@ export class ContactModule implements Contact {
     this.blockedCardChannel.add(id);
     channelEntry.channel = this.setChannel(cardId, channelId, channelEntry.item); 
     this.emitChannels(cardId);
-    await this.store.setMarker(this.guid, 'blocked_card_channel', id, '');
+    await this.store.setMarker(this.guid, 'blocked_card_channel', id, JSON.stringify({ cardId, channelId }));
   }
 
   private async clearChannelBlocked(cardId: string, channelId: string) {
@@ -841,30 +841,6 @@ export class ContactModule implements Contact {
     }
   }
 
-  public async getBlockedCards(): Promise<Card[]> {
-    return Array.from(this.cardEntries.entries())
-      .filter(([key, value]) => this.isCardBlocked(key))
-      .map(([key, value]) => value.card);
-  }
-
-  public async getBlockedChannels(): Promise<Channel[]> {
-    const channels: Channel[] = [];
-    this.channelEntries.forEach((card, cardId) => {
-      const cardChannels = Array.from(card.entries())
-        .filter(([key, value]) => this.isChannelBlocked(cardId, key))
-        .map(([key, value]) => value.channel);
-      cardChannels.forEach((channel) => {
-        channels.push(channel);
-      });
-    });
-    return channels;
-  }
-
-  public async getBlockedArticles(): Promise<Article[]> {
-    const articles: Article[] = [];
-    return articles;
-  }
-
   public async setBlockedCard(cardId: string, blocked: boolean): Promise<void> {
     const entry = this.cardEntries.get(cardId);
     if (entry) {
@@ -891,6 +867,14 @@ export class ContactModule implements Contact {
         entry.channel = this.setChannel(cardId, channelId, entry.item);
         this.emitChannels(cardId);
       }
+    }
+  }
+
+  public async clearBlockedChannelTopic(cardId: string, channelId: string, topicId: string) {
+    const id = `${cardId}:${channelId}:${topicId}`
+    await this.store.clearMarker(guid, 'blocked_topic', id);
+    if (this.focus) {
+      await this.focus.clearBlockedChannelTopic(cardId, channelId, topicId);
     }
   }
 

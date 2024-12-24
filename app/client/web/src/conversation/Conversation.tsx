@@ -3,7 +3,7 @@ import { Focus } from 'databag-client-sdk'
 import classes from './Conversation.module.css'
 import { useConversation } from './useConversation.hook';
 import { IconSend, IconTextSize, IconTextColor, IconVideo, IconFile, IconDisc, IconCamera, IconX, IconSettings, IconHome, IconServer, IconShield, IconLock, IconExclamationCircle } from '@tabler/icons-react'
-import { Menu, Divider, Text, Textarea, ActionIcon, Loader } from '@mantine/core'
+import { CloseButton, Menu, Divider, Text, Textarea, ActionIcon, Loader } from '@mantine/core'
 import { Message } from '../message/Message';
 import { modals } from '@mantine/modals'
 import { ImageFile } from './imageFile/ImageFile';
@@ -187,7 +187,7 @@ export function Conversation({ openDetails }: { openDetails: ()=>void }) {
           )}
         </div>
         <div className={classes.control}>
-          <IconX size={24} className={classes.close} onClick={actions.close} />
+          <CloseButton className={classes.close} onClick={actions.close} />
         </div>
       </div>
       <div ref={thread} className={classes.frame} style={state.loadingMore ? { overflow: 'hidden' } : { overflow: 'auto' }} onScroll={onScroll}>

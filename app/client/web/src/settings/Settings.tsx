@@ -1,5 +1,5 @@
 import { useSettings } from './useSettings.hook'
-import { Modal, Textarea, TextInput, PasswordInput, Radio, Group, Select, Switch, Text, PinInput, Image, Button, UnstyledButton } from '@mantine/core'
+import { Modal, Textarea, TextInput, PasswordInput, ActionIcon, Radio, Group, Select, Switch, Text, PinInput, Image, Button, UnstyledButton } from '@mantine/core'
 import classes from './Settings.module.css'
 import {
   IconLock,
@@ -11,6 +11,7 @@ import {
   IconVideo,
   IconMicrophone,
   IconWorld,
+  IconRestore,
   IconBrightness,
   IconTicket,
   IconCloudLock,
@@ -43,6 +44,9 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
   const [imageOpened, { open: imageOpen, close: imageClose }] = useDisclosure(false)
   const [mfaOpened, { open: mfaOpen, close: mfaClose }] = useDisclosure(false)
   const [sealOpened, { open: sealOpen, close: sealClose }] = useDisclosure(false)
+  const [blockedContactOpened, { open: blockedContactOpen, close: blockedContactClose }] = useDisclosure(false)
+  const [blockedTopicOpened, { open: blockedTopicOpen, close: blockedTopicClose }] = useDisclosure(false)
+  const [blockedMessageOpened, { open: blockedMessageOpen, close: blockedMessageClose }] = useDisclosure(false)
   const [savingLogin, setSavingLogin] = useState(false)
   const [savingDetails, setSavingDetails] = useState(false)
   const [savingImage, setSavingImage] = useState(false)
@@ -56,6 +60,27 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
   const [sealReset, setSealReset] = useState(false)
   const [sealConfig, setSealConfig] = useState(false)
   const [authMessage, setAuthMessage] = useState('')
+
+  const showBlockedCards = async () => {
+    await actions.loadBlockedCards();
+    blockedContactOpen();
+  }
+
+  const unblockCard = async (cardId: string) => {
+    try {
+      await actions.unblockCard(cardId);
+    } catch (err) {
+      console.log(err);
+      showError();
+    }
+  }
+
+  const blockedCards = state.blockedCards.map(blocked => (
+    <div className={classes.blockedItem}>
+      <Text className={classes.blockedValue}>CardID: { blocked.cardId }</Text>
+      <ActionIcon variant="subtle" size="md" onClick={()=>unblockCard(blocked.cardId)}><IconRestore /></ActionIcon>
+    </div>
+  ));
 
   const logout = () =>
     modals.openConfirmModal({
@@ -430,19 +455,19 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               </Text>
             </div>
             <div className={classes.divider} />
-            <div className={classes.entry}>
+            <div className={classes.entry} onClick={showBlockedCards}>
               <div className={classes.entryIcon}>
                 <IconUserCancel />
               </div>
               <Text className={classes.entryLabel}>{state.strings.blockedContacts}</Text>
             </div>
-            <div className={classes.entry}>
+            <div className={classes.entry} onClick={blockedTopicOpen}>
               <div className={classes.entryIcon}>
                 <IconFolderCancel />
               </div>
               <Text className={classes.entryLabel}>{state.strings.blockedTopics}</Text>
             </div>
-            <div className={classes.entry}>
+            <div className={classes.entry} onClick={blockedMessageOpen}>
               <div className={classes.entryIcon}>
                 <IconMessage2Cancel />
               </div>
@@ -802,6 +827,29 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             </div>
           )}
         </>
+      </Modal>
+      <Modal title={state.strings.blockedContacts} size="auto" opened={blockedContactOpened} onClose={blockedContactClose} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered>
+        { blockedCards.length > 0 && (
+          <div className={classes.blocked}>
+            { blockedCards }
+          </div>
+        )}
+        { blockedCards.length === 0 && (
+          <div className={classes.empty}>
+            <Text className={classes.emptyLabel}>{ state.strings.noContacts }</Text>
+          </div>
+        )}
+        <div className={classes.controls}>
+          <Button variant="default" onClick={blockedContactClose}>
+            {state.strings.close}
+          </Button>
+        </div>
+      </Modal>
+      <Modal title={state.strings.blockedTopics} opened={blockedTopicOpened} onClose={blockedTopicClose} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered>
+        <div className={classes.blocked}></div>
+      </Modal>
+      <Modal title={state.strings.blockedMessages} opened={blockedMessageOpened} onClose={blockedMessageClose} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered>
+        <div className={classes.blocked}></div>
       </Modal>
     </>
   )

@@ -5,6 +5,7 @@ import { IconUserCog, IconEyeOff, IconAlertHexagon, IconMessageX, IconLogout2, I
 import { Switch, Button, Modal, Divider, Text, Textarea, Image, TextInput, ActionIcon } from '@mantine/core'
 import { Card } from '../card/Card';
 import { modals } from '@mantine/modals'
+import { useDisclosure } from '@mantine/hooks'
 
 export function Details({ showClose, close }: { showClose: boolean, close: () => void }) {
   const { state, actions } = useDetails()
@@ -12,7 +13,7 @@ export function Details({ showClose, close }: { showClose: boolean, close: () =>
   const [removing, setRemoving] = useState(false);
   const [blocking, setBlocking] = useState(false);
   const [reporting, setReporting] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, { open: setShowModal, close: clearShowModal }] = useDisclosure(false)
 
   const undo = () => {
     actions.undoSubject();
@@ -291,7 +292,7 @@ export function Details({ showClose, close }: { showClose: boolean, close: () =>
                 <Text className={classes.actionLabel}>{state.strings.remove}</Text>
               </div> 
               <div className={classes.action}>
-                <ActionIcon variant="subtle" size={32} onClick={()=>setShowModal(true)}>
+                <ActionIcon variant="subtle" size={32} onClick={setShowModal}>
                   <IconUserCog size={32} />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.members}</Text>
@@ -324,7 +325,7 @@ export function Details({ showClose, close }: { showClose: boolean, close: () =>
           <Text>{ state.strings.syncError }</Text>          
         </div>
       )}
-      <Modal title={state.strings.editMembership} opened={showModal} onClose={() => setShowModal(false)} overlayProps={{ backgroundOpacity: 0.65, blur: 3 }} centered>
+      <Modal title={state.strings.editMembership} opened={showModal} onClose={clearShowModal} overlayProps={{ backgroundOpacity: 0.65, blur: 3 }} centered>
         <div className={classes.modalContainer}>
           { members.length > 0 && (
             <div className={classes.cardMembers}>
@@ -337,7 +338,7 @@ export function Details({ showClose, close }: { showClose: boolean, close: () =>
             </div>
           )}
           <div className={classes.controls}>
-            <Button variant="default" onClick={() => setShowModal(false)}>
+            <Button variant="default" onClick={clearShowModal}>
               {state.strings.close}
             </Button>
           </div>
