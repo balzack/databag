@@ -149,23 +149,18 @@ export function Session() {
 }
 
 function ContentTab({scheme}: {scheme: string}) {
-  const [focus, setFocus] = useState(null as Focus | null);
-
   return (
     <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
       <ContentStack.Navigator initialRouteName="contacts" screenOptions={{headerShown: false}}>
         <ContentStack.Screen name="content" options={{headerBackTitleVisible: false}}>
           {props => (
-            <Content
-              select={channel => {
-                setFocus(channel);
-                props.navigation.navigate('conversation');
-              }}
-            />
+            <Content openConversation={()=>props.navigation.navigate('conversation')} />
           )}
         </ContentStack.Screen>
         <ContentStack.Screen name="conversation" options={{headerBackTitleVisible: false}}>
-          {() => <Conversation focus={focus} />}
+          {props => (
+            <Conversation close={()=>props.navigation.goBack()} />
+          )}
         </ContentStack.Screen>
       </ContentStack.Navigator>
     </NavigationContainer>
@@ -348,7 +343,7 @@ function SettingsScreen({nav}) {
 }
 
 function HomeScreen({nav}) {
-  const [focus, setFocus] = useState(null as Foucs | null);
+  const [focus, setFocus] = useState(false);
 
   return (
     <View style={styles.frame}>
@@ -357,11 +352,11 @@ function HomeScreen({nav}) {
           <Identity openSettings={nav.settings.openDrawer} openContacts={nav.contacts.openDrawer} />
         </Surface>
         <Surface style={styles.channels} elevation={1} mode="flat">
-          <Content select={channel => setFocus(channel)} />
+          <Content openConversation={()=>setFocus(true)} />
         </Surface>
       </View>
       <View style={styles.right}>
-        {focus && <Conversation />}
+        {focus && <Conversation close={()=>setFocus(false)} />}
         {!focus && <Text>FOCUS NOT SET</Text>}
       </View>
     </View>

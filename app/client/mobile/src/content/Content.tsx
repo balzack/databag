@@ -9,7 +9,7 @@ import {BlurView} from '@react-native-community/blur';
 import {Card} from '../card/Card';
 import {Confirm} from '../confirm/Confirm';
 
-export function Content({select}: {select: (focus: Focus) => void}) {
+export function Content({openConversation}: {openConversation: ()=>void}) {
   const [add, setAdd] = useState(false);
   const [adding, setAdding] = useState(false);
   const [sealedTopic, setSealedTopic] = useState(false);
@@ -82,8 +82,8 @@ export function Content({select}: {select: (focus: Focus) => void}) {
             renderItem={({item}) => {
               const {sealed, hosted, unread, imageUrl, subject, message} = item;
               const open = () => {
-                const focus = actions.getFocus(item.cardId, item.channelId);
-                select(focus);
+                actions.setFocus(item.cardId, item.channelId);
+                openConversation();
               };
               return (
                 <Channel
