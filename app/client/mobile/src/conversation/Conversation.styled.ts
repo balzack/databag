@@ -28,6 +28,10 @@ export const styles = StyleSheet.create({
     marginBottom: 0,
     backgroundColor: 'transparent',
   },
+  border: {
+    width: '100%',
+    height: 2,
+  },
   header: {
     display: 'flex',
     flexDirection: 'row',

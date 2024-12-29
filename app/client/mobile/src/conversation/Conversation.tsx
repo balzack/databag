@@ -33,6 +33,11 @@ export function Conversation({close}: {close: ()=>void}) {
     }
   }
 
+  const onClose = () => {
+    actions.close();
+    close();
+  }
+
   const onContent = (width, height) => {
     const currentLead = state.topics.length > 0 ? state.topics[0].topicId : null;
     if (scrolled.current) {
@@ -66,7 +71,7 @@ export function Conversation({close}: {close: ()=>void}) {
       <SafeAreaView style={styles.header}>
         {close && (
           <View style={styles.iconSpace}>
-            <IconButton style={styles.back} compact="true" mode="contained" icon="arrow-left" size={28} onPress={close} />
+            <IconButton style={styles.back} compact="true" mode="contained" icon="arrow-left" size={28} onPress={onClose} />
           </View>
         )}
         <View style={styles.title}>

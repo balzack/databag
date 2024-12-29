@@ -243,8 +243,8 @@ export class OfflineStore implements Store {
   }
 
   public async getMarkers(guid: string, type: string): Promise<{id: string, value: string}[]> {
-    const markers = await this.getFilteredValues(guid, 'marker', ['type', 'id'], [{ field: 'type', value: type }]);
-    return markers.map(marker => ({ id: marker.id, value: marker.id }));
+    const markers = await this.getFilteredValues(guid, 'marker', ['value', 'id'], [{ field: 'type', value: type }]);
+    return markers.map(marker => ({ id: marker.id, value: marker.value }));
   }
 
   public async setLogin(login: Login): Promise<void> {

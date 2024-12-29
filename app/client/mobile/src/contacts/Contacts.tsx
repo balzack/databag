@@ -188,7 +188,11 @@ export function Contacts({openRegistry, openContact}: {openRegistry: () => void;
           keyExtractor={card => card.cardId}
         />
       )}
-      {state.filtered.length === 0 && <Text style={styles.none}>{state.strings.noContacts}</Text>}
+      {state.filtered.length === 0 && (
+        <View style={styles.none}>
+          <Text style={styles.noneLabel}>{state.strings.noContacts}</Text>
+        </View>
+      )}
       <Confirm show={alert} params={alertParams} />
     </View>
   );

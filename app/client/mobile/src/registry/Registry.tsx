@@ -83,7 +83,11 @@ export function Registry({close, openContact}: {close: () => void; openContact: 
           keyExtractor={profile => profile.guid}
         />
       )}
-      {state.profiles.length === 0 && <Text style={styles.none}>{state.strings.noContacts}</Text>}
+      {state.profiles.length === 0 && (
+        <View style={styles.none}>
+          <Text style={styles.noneLabel}>{state.strings.noContacts}</Text>
+        </View>
+      )}
     </View>
   );
 }

@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import { Colors } from '../constants/Colors';
 
 export const styles = StyleSheet.create({
   contacts: {
@@ -61,6 +62,10 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  noneLabel: {
+    fontSize: 20,
+    color: Colors.placeholder,
   },
   cards: {
     display: 'flex',
