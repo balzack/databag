@@ -2,6 +2,9 @@ import {StyleSheet} from 'react-native';
 import { Colors } from '../constants/Colors';
 
 export const styles = StyleSheet.create({
+  session: {
+    position: 'relative',
+  },
   container: {
     width: '100%',
     height: '100%',

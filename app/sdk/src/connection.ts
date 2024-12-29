@@ -20,7 +20,7 @@ export class Connection {
 
     this.stale = setInterval(() => {
       if (this.websocket?.readyState == 1) {
-        this.websocket.ping();
+        this.websocket.ping?.(); // not defined in browser
       }
     }, PING_INTERVAL);
   }

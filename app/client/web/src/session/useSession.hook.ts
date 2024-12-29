@@ -10,6 +10,8 @@ export function useSession() {
   const [state, setState] = useState({
     focus: null as Focus | null,
     layout: null,
+    strings: display.state.strings,
+    disconnected: false,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,8 +20,23 @@ export function useSession() {
   }
 
   useEffect(() => {
-    const { layout } = display.state
-    updateState({ layout })
+    const setStatus = (status: string) => {
+      if (status === 'disconnected') {
+        updateState({ disconnected: true });
+      } if (status === 'connected') {
+        updateState({ disconnected: false });
+      }
+    }
+    const session = app.state.session;
+    if (session) {
+      session.addStatusListener(setStatus);
+      return () => session.removeStatusListener();
+    }
+  }, [app.state.session]);
+
+  useEffect(() => {
+    const { layout, strings } = display.state
+    updateState({ layout, strings })
   }, [display.state])
 
   useEffect(() => {

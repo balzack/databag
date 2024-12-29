@@ -135,14 +135,6 @@ export function Session() {
                 )}
               </View>
             </View>
-            { state.disconnected && (
-              <View style={styles.alert}>
-                <Surface elevation={5} style={styles.alertArea}>
-                  <Icon color={Colors.offsync} size={20} source="alert-circle-outline" />
-                  <Text style={styles.alertLabel}>{ state.strings.disconnected }</Text>
-                </Surface>
-              </View>
-            )}
           </SafeAreaView>
         </Surface>
       )}
@@ -152,6 +144,14 @@ export function Session() {
             <DetailsScreen nav={sessionNav} />
           </View>
         </NavigationContainer>
+      )}
+      { state.disconnected && (
+        <View style={styles.alert}>
+          <Surface elevation={5} style={styles.alertArea}>
+            <Icon color={Colors.offsync} size={20} source="alert-circle-outline" />
+            <Text style={styles.alertLabel}>{ state.strings.disconnected }</Text>
+          </Surface>
+        </View>
       )}
     </View>
   );

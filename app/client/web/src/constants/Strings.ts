@@ -23,7 +23,7 @@ export const en = {
   logout: 'Logout',
   confirmLogout: 'Are you sure you want to logout?',
   contactsUpdated: 'Updated contact status',
-  disconnected: 'Disconnected from server',
+  disconnected: 'Disconnected from Server',
   allDevices: 'Logout of all devices',
   ok: 'OK',
   cancel: 'Cancel',

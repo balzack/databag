@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Drawer } from '@mantine/core'
+import { Text, Drawer } from '@mantine/core'
 import { DisplayContext } from '../context/DisplayContext'
 import { ContextType } from '../context/ContextType'
 import classes from './Session.module.css'
@@ -15,6 +15,7 @@ import { Content } from '../content/Content'
 import { Conversation } from '../conversation/Conversation'
 import { Focus } from 'databag-client-sdk'
 import { useDisclosure } from '@mantine/hooks'
+import { IconAlertCircle } from '@tabler/icons-react'
 
 export function Session() {
   const { state } = useSession();
@@ -174,6 +175,14 @@ export function Session() {
               <Settings showLogout={false} />
             </div>
           </Drawer>
+        </div>
+      )}
+      { state.disconnected && (
+        <div className={classes.alert}>
+          <div className={classes.alertArea}>
+            <IconAlertCircle className={classes.alertLabel} />
+            <Text className={classes.alertLabel}>{ state.strings.disconnected }</Text>
+          </div>
         </div>
       )}
     </div>
