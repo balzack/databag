@@ -157,7 +157,11 @@ function ContentTab({scheme}: {scheme: string}) {
             <Content openConversation={()=>props.navigation.navigate('conversation')} />
           )}
         </ContentStack.Screen>
-        <ContentStack.Screen name="conversation" options={{headerBackTitleVisible: false}}>
+        <ContentStack.Screen name="conversation" 
+          options={{
+            headerBackTitleVisible: false,
+            ...TransitionPresets.ScaleFromCenterAndroid,
+          }}>
           {props => (
             <Conversation close={()=>props.navigation.goBack()} />
           )}

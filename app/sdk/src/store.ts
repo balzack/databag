@@ -153,7 +153,7 @@ export class OfflineStore implements Store {
     try {
       return JSON.parse(value);
     } catch (err) {
-      console.log(err);
+      this.log.error(err);
     }
     return {};
   }
@@ -166,7 +166,7 @@ export class OfflineStore implements Store {
         return JSON.parse(rows[0].value);
       }
     } catch (err) {
-      console.log(err);
+      this.log.error(err);
     }
     return unset;
   }
@@ -182,17 +182,17 @@ export class OfflineStore implements Store {
   private async getTableValue(guid: string, table: string, field: string, where: {field: string, value: string}[], unset: any): Promise<any> {
     try {
       const params = where.map(({value}) => value);
-      const rows = await this.sql.get(`SELECT ${field} FROM ${table} WHERE ${where.map(column => (column.field + '=?')).join(' AND ')}`, params)
-      if (rows.length == 1 && rows[0].value != null) {
-        return this.parse(rows[0].value);
+      const rows = await this.sql.get(`SELECT ${field} FROM ${table}_${guid} WHERE ${where.map(column => (column.field + '=?')).join(' AND ')}`, params)
+      if (rows.length == 1 && rows[0][field]) {
+        return this.parse(rows[0][field]);
       }
     } catch (err) {
-      console.log(err);
+      this.log.error(err);
     }
     return unset;
   }
 
-  private async setTableValue(guid: string, table: string, record: {field: string, value: string}[], where: {field: string, value: string}[]): Promise<void> {
+  private async setTableValue(guid: string, table: string, record: {field: string, value: any}[], where: {field: string, value: string}[]): Promise<void> {
     const params = [...record.map(({value}) => JSON.stringify(value)), ...where.map(({value}) => value)]
     await this.sql.set(`UPDATE ${table}_${guid} SET ${record.map(({field}) => (field + '=?')).join(', ')} WHERE ${where.map(({field}) => (field + '=?')).join(' AND ')}`, params);
   }
@@ -506,7 +506,7 @@ export class OfflineStore implements Store {
     return await this.getTableValue(guid, 'channel', 'sync', [{field: 'channel_id', value: channelId}], { revision: null, marker: null });
   }
   public async setContentChannelTopicRevision(guid: string, channelId: string, sync: { revision: number | null, marker: number | null }): Promise<void> {
-    await this.setTableValue(guid, 'channel', [{field: 'sync', value: JSON.stringify(sync)}], [{field: 'channel_id', value: channelId}]);
+    await this.setTableValue(guid, 'channel', [{field: 'sync', value: sync}], [{field: 'channel_id', value: channelId}]);
   }
   public async getContentChannelTopics(guid: string, channelId: string, count: number, offset: { topicId: string, position: number } | null): Promise<{ topicId: string, item: TopicItem }[]> {
     const fields = ['topic_id', 'detail', 'unsealed_detail', 'position'];
@@ -543,7 +543,7 @@ export class OfflineStore implements Store {
     return await this.getTableValue(guid, 'card_channel', 'sync', [{field: 'card_id', value: cardId},{field: 'channel_id', value: channelId}], { revision: null, marker: null });
   }
   public async setContactCardChannelTopicRevision(guid: string, cardId: string, channelId: string, sync: { revision: number | null, marker: number | null }): Promise<void> {
-    return await this.setTableValue(guid, 'card_channel', [{field: 'sync', value: JSON.stringify(sync)}], [{field: 'card_id', value: cardId}, {field: 'channel_id', value: channelId}]);
+    return await this.setTableValue(guid, 'card_channel', [{field: 'sync', value: sync}], [{field: 'card_id', value: cardId}, {field: 'channel_id', value: channelId}]);
   }
   public async getContactCardChannelTopics(guid: string, cardId: string, channelId: string, count: number, offset: { topicId: string, position: number } | null): Promise<{ topicId: string, item: TopicItem }[]> {
     const fields = ['topic_id', 'detail', 'unsealed_detail', 'position'];
@@ -614,7 +614,7 @@ export class OnlineStore implements Store {
       updated.push({ id, value });
       this.setAppValue(guid, `marker_${type}`, updated);
     } catch (err) {
-      console.log(err);
+      this.log.error(err);
     }
   }
 
@@ -624,7 +624,7 @@ export class OnlineStore implements Store {
       const updated = markers.filter((marker: {id: string, value: string}) => (marker.id !== id));
       this.setAppValue(guid, `marker_${type}`, updated);
     } catch (err) {
-      console.log(err);
+      this.log.error(err);
     }
   }
 
@@ -633,7 +633,7 @@ export class OnlineStore implements Store {
     try {
       return markers.map((marker: {id: string, value: string}) => ({ id: marker.id, value: marker.value }));
     } catch (err) {
-      console.log(err);
+      this.log.error(err);
       return [];
     }
   }

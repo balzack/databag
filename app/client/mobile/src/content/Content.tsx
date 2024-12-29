@@ -31,7 +31,7 @@ export function Content({openConversation}: {openConversation: ()=>void}) {
   const addTopic = async () => {
     setAdding(true);
     try {
-      await actions.addTopic(
+      const id = await actions.addTopic(
         sealedTopic,
         subjectTopic,
         members.filter(id => Boolean(cards.find(card => card.cardId === id))),
@@ -40,6 +40,8 @@ export function Content({openConversation}: {openConversation: ()=>void}) {
       setSubjectTopic('');
       setMembers([]);
       setSealedTopic(false);
+      actions.setFocus(null, id);
+      openConversation();
     } catch (err) {
       console.log(err);
       setAdd(false);

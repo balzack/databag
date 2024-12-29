@@ -33,6 +33,7 @@ export function useConversation() {
     focus: null as Focus | null,
     layout: null,
     topics: [] as Topic[],
+    topicCount: 0,
     loaded: false,
     loadingMore: false,
     profile: null as Profile | null,
@@ -90,20 +91,18 @@ export function useConversation() {
     const { contact, identity } = app.state.session || { };
     if (focus && contact && identity) {
       const setTopics = (topics: Topic[]) => {
-console.log(">>>", topics);
-
         if (topics) {
           const filtered = topics.filter(topic => !topic.blocked);
           const sorted = filtered.sort((a, b) => {
             if (a.created < b.created) {
-              return -1;
-            } else if (a.created > b.created) {
               return 1;
+            } else if (a.created > b.created) {
+              return -1;
             } else {
               return 0;
             }
           });
-          updateState({ topics: sorted, loaded: true });
+          updateState({ topics: sorted, topicCount: topics.length, loaded: true });
         }
       }
       const setCards = (cards: Card[]) => {

@@ -230,11 +230,13 @@ export function useContent() {
       app.actions.setFocus(cardId, channelId);
     },
     addTopic: async (sealed: boolean, subject: string, contacts: string[]) => {
-      const content = app.state.session.getContent();
+      const content = app.state.session.getContent()
       if (sealed) {
-        await content.addChannel(true, 'sealed', {subject}, contacts);
+        const topic = await content.addChannel(true, 'sealed', { subject }, contacts)
+        return topic.id;
       } else {
-        await content.addChannel(false, 'superbasic', {subject}, contacts);
+        const topic = await content.addChannel(false, 'superbasic', { subject }, contacts)
+        return topic.id;
       }
     },
   };

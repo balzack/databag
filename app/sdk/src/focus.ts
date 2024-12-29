@@ -182,7 +182,7 @@ export class FocusModule implements Focus {
               if (data) {
                 const { detailRevision, topicDetail } = data;
                 const detail = topicDetail ? topicDetail : await this.getRemoteChannelTopicDetail(id);
-                if (!this.cacheView || this.cacheView.position > detail.created || (this.cacheView.position === detail.created && this.cacheView.topicId >= id)) {
+                if (!this.cacheView || this.cacheView.position < detail.created || (this.cacheView.position === detail.created && this.cacheView.topicId >= id)) {
                   const entry = await this.getTopicEntry(id);
                   if (detailRevision > entry.item.detail.revision) {
                     entry.item.detail = this.getTopicDetail(detail, detailRevision);
@@ -208,6 +208,7 @@ export class FocusModule implements Focus {
             if (this.nextRevision === nextRev) {
               this.nextRevision = null;
             }
+
             await this.markRead();
             this.emitTopics();
             this.log.info(`topic revision: ${nextRev}`);
