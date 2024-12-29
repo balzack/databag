@@ -10,11 +10,27 @@ export function useSession() {
   const [state, setState] = useState({
     layout: null,
     strings: {},
+    disconnected: false,
   });
 
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
+
+  useEffect(() => {
+    const setStatus = (status: string) => {
+      if (status === 'disconnected') {
+        updateState({ disconnected: true });
+      } if (status === 'connected') {
+        updateState({ disconnected: false });
+      }
+    }
+    const session = app.state.session;
+    if (session) {
+      session.addStatusListener(setStatus);
+      return () => session.removeStatusListener();
+    }
+  }, [app.state.session]);
 
   useEffect(() => {
     const {layout, strings} = display.state;

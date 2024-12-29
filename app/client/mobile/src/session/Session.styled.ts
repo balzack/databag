@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import { Colors } from '../constants/Colors';
 
 export const styles = StyleSheet.create({
   container: {
@@ -8,6 +9,33 @@ export const styles = StyleSheet.create({
   full: {
     width: '100%',
     height: '100%',
+    position: 'relative',
+  },
+  alert: {
+    position: 'absolute',
+    top: '33%',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+  alertArea: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
+    borderRadius: 16,
+  },
+  alertLabel: {
+    color: Colors.offsync,
+    padding: 0,
+    textAlign: 'center',
+    lineHeight: 20,
+    fontSize: 16,
   },
   frame: {
     display: 'flex',

@@ -3,21 +3,31 @@ import { Logging } from './api';
 import { Revision } from './entities';
 import { Call } from './types';
 
+const PING_INTERVAL = 5000;
+
 export class Connection {
   private log: Logging;
   private closed: boolean;
   private emitter: EventEmitter;
   private websocket: WebSocket;
+  private stale: number;
 
   constructor(log: Logging, token: string, node: string, secure: boolean) {
     this.closed = false;
     this.log = log;
     this.emitter = new EventEmitter();
     this.websocket = this.setWebSocket(token, node, secure);
+
+    this.stale = setInterval(() => {
+      if (this.websocket?.readyState == 1) {
+        this.websocket.ping();
+      }
+    }, PING_INTERVAL);
   }
 
   public async close() {
     this.closed = true;
+    clearInterval(this.stale);
     if (this.websocket) {
       this.websocket.close();
     }

@@ -1,7 +1,7 @@
 import React, {useState, useCallback} from 'react';
 import {SafeAreaView, View, useColorScheme} from 'react-native';
 import {styles} from './Session.styled';
-import {IconButton, Surface, Text} from 'react-native-paper';
+import {IconButton, Surface, Text, Icon} from 'react-native-paper';
 import {Settings} from '../settings/Settings';
 import {Contacts} from '../contacts/Contacts';
 import {Content} from '../content/Content';
@@ -16,6 +16,7 @@ import {Focus} from 'databag-client-sdk';
 import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
+import {Colors} from '../constants/Colors';
 
 const SettingsDrawer = createDrawerNavigator();
 const ContactsDrawer = createDrawerNavigator();
@@ -134,6 +135,14 @@ export function Session() {
                 )}
               </View>
             </View>
+            { state.disconnected && (
+              <View style={styles.alert}>
+                <Surface elevation={5} style={styles.alertArea}>
+                  <Icon color={Colors.offsync} size={20} source="alert-circle-outline" />
+                  <Text style={styles.alertLabel}>{ state.strings.disconnected }</Text>
+                </Surface>
+              </View>
+            )}
           </SafeAreaView>
         </Surface>
       )}
