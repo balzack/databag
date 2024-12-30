@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { avatar } from '../constants/Icons'
-import { View, Image } from 'react-native';
-import {Icon, Text, IconButton, Divider} from 'react-native-paper';
+import { Pressable, View, Image } from 'react-native';
+import {Icon, Text, IconButton, Surface, Divider} from 'react-native-paper';
 import { Topic, Card, Profile } from 'databag-client-sdk';
 import { ImageAsset } from './imageAsset/ImageAsset';
 import { AudioAsset } from './audioAsset/AudioAsset';
@@ -22,6 +22,7 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState('');
   const [saving, setSaving] = useState(false);
+  const [options, setOptions] = useState(false);
 
   return (
     <View style={styles.message}>
@@ -29,7 +30,7 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
         <View style={styles.content}>
           <Image style={styles.logo} resizeMode={'contain'} source={{uri: logoUrl}} />
           <View style={styles.body}>
-            <View style={styles.header}>
+            <Pressable style={styles.header} onPress={()=>setOptions(!options)}>
               <View style={styles.name}>
                 { name && (
                   <Text style={styles.handle}>{ name }</Text>
@@ -42,7 +43,7 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
                 )}
                 <Text style={styles.timestamp}> { timestamp }</Text>
               </View>
-            </View>
+            </Pressable>
             <View style={styles.padding}>
               {! locked && status === 'confirmed' && editing && (
                 <View style={styles.editing}>
@@ -62,6 +63,15 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
           </View>
         </View>
       </View>
+      { options && (
+        <Surface style={styles.options}>
+          <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="share-variant-outline" size={24} onPress={() => {}} />
+          <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="square-edit-outline" size={24} onPress={() => {}} />
+          <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="trash-can-outline" size={24} onPress={() => {}} />
+          <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="eye-remove-outline" size={24} onPress={() => {}} />
+          <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="alert-octagon-outline" size={24} onPress={() => {}} />
+        </Surface>
+      )}
       <Divider style={styles.border} />
     </View>
   );

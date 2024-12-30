@@ -27,9 +27,11 @@ export const styles = StyleSheet.create({
     paddingTop: 16,
     position: 'absolute',
     top: 0,
+    opacity: 0.5,
   },
   loading: {
     position: 'absolute',
+    opacity: 0.3,
   },
   empty: {
     position: 'absolute',

@@ -35,7 +35,6 @@ export const styles = StyleSheet.create({
     alignItems: 'flexStart',
     width: '100%',
     lineHeight: '16',
-    paddingBottom: '4',
     gap: '16',
     position: 'relative',
   },
@@ -47,7 +46,6 @@ export const styles = StyleSheet.create({
   },
   handle: {
     fontSize: 14,
-    fontWeight: 'bold',
   },
   unknown: {
     fontSize: 14,
@@ -59,6 +57,19 @@ export const styles = StyleSheet.create({
   },
   timestamp: {
     fontSize: 12,
+  },
+  options: {
+    display: 'flex',
+    flexDirection: 'row',
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    borderRadius: 8,
+  },
+  option: {
+    backgroundColor: 'transparent',
+    padding: 0,
+    margin: 0,
   },
   padding: {
     paddingLeft: 12,
