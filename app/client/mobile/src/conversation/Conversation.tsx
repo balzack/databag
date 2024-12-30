@@ -80,7 +80,7 @@ export function Conversation({close}: {close: ()=>void}) {
             <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.label}>{ state.subject }</Text>
           )}
           { state.detailSet && state.host && !state.subject && state.subjectNames.length == 0 && (
-            <Text adjustsFontSizeToFit={true} numberOfLines={1} styles={styles.label}>{ state.strings.notes }</Text>
+            <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.label}>{ state.strings.notes }</Text>
           )}
           { state.detailSet && !state.subject && state.subjectNames.length > 0 && (
             <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.label}>{ state.subjectNames.join(', ') }</Text>
@@ -94,6 +94,7 @@ export function Conversation({close}: {close: ()=>void}) {
       <Divider style={styles.border} bold={true} />
       <View style={styles.thread}>
         <FlatList
+          style={styles.messageList}
           inverted
           ref={thread}
           onScroll={onScroll}
@@ -133,6 +134,7 @@ export function Conversation({close}: {close: ()=>void}) {
           </View>
         )}
       </View>
+      <Divider style={styles.border} bold={true} />
       <TouchableOpacity style={styles.add} onPress={() => thread.current.scrollToEnd()}>
         <Text>ADD</Text>
       </TouchableOpacity>

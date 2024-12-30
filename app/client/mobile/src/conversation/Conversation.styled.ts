@@ -8,6 +8,9 @@ export const styles = StyleSheet.create({
     height: '100%',
     minHeight: 0,
   },
+  messageList: {
+    width: '100%',
+  },
   messages: {
     paddingBottom: 64,
   },
