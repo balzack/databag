@@ -10,19 +10,18 @@ import { BinaryAsset } from './binaryAsset/BinaryAsset';
 import { useMessage } from './useMessage.hook';
 import {styles} from './Message.styled';
 
-export function Message({ topic, card, profile, host }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean }) {
+export function Message({ topic, card, profile, host, select, selected }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean, select: (id: string)=>void, selected: string }) {
   const { state, actions } = useMessage();
   const { locked, data, created, topicId, status, transform } = topic;
   const { name, handle, node } = profile || card || { name: null, handle: null, node: null }
   const { text, textColor, textSize, assets } = data || { text: null, textColor: null, textSize: null }
-  const textStyle = { color: textColor ? textColor : undefined, fontSize: textSize ? textSize : undefined };
+  const textStyle = textColor && textSize ? { fontSize: textSize, color: textColor } : textColor ? { color: textColor } : textSize ? { fontSize: textSize } : {}
   const logoUrl = profile ? profile.imageUrl : card ? card.imageUrl : avatar;
   const timestamp = actions.getTimestamp(created);
   const [message, setMessage] = useState('');
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState('');
   const [saving, setSaving] = useState(false);
-  const [options, setOptions] = useState(false);
 
   return (
     <View style={styles.message}>
@@ -30,7 +29,7 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
         <View style={styles.content}>
           <Image style={styles.logo} resizeMode={'contain'} source={{uri: logoUrl}} />
           <View style={styles.body}>
-            <Pressable style={styles.header} onPress={()=>setOptions(!options)}>
+            <Pressable style={styles.header} onPress={()=>select(topicId)}>
               <View style={styles.name}>
                 { name && (
                   <Text style={styles.handle}>{ name }</Text>
@@ -50,7 +49,7 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
                 </View>
               )}
               { !locked && status === 'confirmed' && text && !editing && (
-                  <Text style={styles.text}>{ text }</Text>
+                  <Text style={{ ...styles.text, ...textStyle }}>{ text }</Text>
               )}
               { !locked && status !== 'confirmed' && (
                 <View style={styles.unconfirmed}>
@@ -63,7 +62,7 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
           </View>
         </View>
       </View>
-      { options && (
+      { topicId === selected && (
         <Surface style={styles.options}>
           <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="share-variant-outline" size={24} onPress={() => {}} />
           <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="square-edit-outline" size={24} onPress={() => {}} />

@@ -55,6 +55,9 @@ export const styles = StyleSheet.create({
     fontStyle: 'italic',
     color: Colors.placeholder,
   },
+  text: {
+    fontSize: 16,
+  },
   timestamp: {
     fontSize: 12,
   },

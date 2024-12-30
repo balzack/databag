@@ -19,6 +19,7 @@ export type MediaAsset = {
 export function Conversation({close}: {close: ()=>void}) {
   const { state, actions } = useConversation();
   const [ more, setMore ] = useState(false);
+  const [ selected, setSelected ] = useState(null);
   const thread = useRef();
 
   const scrolled = useRef(false);
@@ -115,6 +116,8 @@ export function Conversation({close}: {close: ()=>void}) {
                 card={card}
                 profile={profile}
                 host={host}
+                select={(id: string)=>setSelected(id)}
+                selected={selected}
               />
             )
           }}
