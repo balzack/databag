@@ -4,6 +4,7 @@ import {styles} from './Conversation.styled';
 import {useConversation} from './useConversation.hook';
 import {Message} from '../message/Message';
 import {Icon, Text, IconButton, Divider} from 'react-native-paper';
+import { ActivityIndicator } from 'react-native-paper';
 
 const SCROLL_THRESHOLD = 16;
 
@@ -91,33 +92,47 @@ export function Conversation({close}: {close: ()=>void}) {
         {close && <View style={styles.iconSpace} />}
       </SafeAreaView>
       <Divider style={styles.border} bold={true} />
-      <FlatList
-        inverted
-        ref={thread}
-        onScroll={onScroll}
-        style={styles.messages}
-        data={state.topics}
-        initialNumToRender={32}
-        showsVerticalScrollIndicator={false}
-        onContentSizeChange={onContent}
-        onEndReached={loadMore}
-        onEndReachedThreshold={0}
-        contentContainerStyle={styles.messages}
-        renderItem={({item}) => {
-          const { host } = state;
-          const card = state.cards.get(item.guid) || null;
-          const profile = state.profile?.guid === item.guid ? state.profile : null;
-          return (
-            <Message
-              topic={item}
-              card={card}
-              profile={profile}
-              host={host}
-            />
-          )
-        }}
-        keyExtractor={topic => (topic.topicId)}
-      />
+      <View style={styles.thread}>
+        <FlatList
+          inverted
+          ref={thread}
+          onScroll={onScroll}
+          data={state.topics}
+          initialNumToRender={32}
+          showsVerticalScrollIndicator={false}
+          onContentSizeChange={onContent}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0}
+          contentContainerStyle={styles.messages}
+          renderItem={({item}) => {
+            const { host } = state;
+            const card = state.cards.get(item.guid) || null;
+            const profile = state.profile?.guid === item.guid ? state.profile : null;
+            return (
+              <Message
+                topic={item}
+                card={card}
+                profile={profile}
+                host={host}
+              />
+            )
+          }}
+          keyExtractor={topic => (topic.topicId)}
+        />
+        { state.loaded && state.topics.length === 0 && ( 
+          <Text style={styles.empty}>{state.strings.noMessages}</Text>
+        )} 
+        { !state.loaded && (
+          <View style={styles.loading}>
+            <ActivityIndicator size="large" />
+          </View>
+        )}
+        { more && (
+          <View style={styles.more}>
+            <ActivityIndicator />
+          </View>
+        )}
+      </View>
       <TouchableOpacity style={styles.add} onPress={() => thread.current.scrollToEnd()}>
         <Text>ADD</Text>
       </TouchableOpacity>

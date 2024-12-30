@@ -6,13 +6,32 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
+    minHeight: 0,
   },
   messages: {
     paddingBottom: 64,
   },
   thread: {
-    width: '100%',
+    display: 'flex',
     flexGrow: 1,
+    minHeight: 0,
+    height: '50%',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  more: {
+    paddingTop: 16,
+    position: 'absolute',
+    top: 0,
+  },
+  loading: {
+    position: 'absolute',
+  },
+  empty: {
+    position: 'absolute',
+    fontSize: 20,
+    color: Colors.placeholder,
   },
   add: {
     height: 72,

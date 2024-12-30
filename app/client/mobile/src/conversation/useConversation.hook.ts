@@ -33,7 +33,6 @@ export function useConversation() {
     focus: null as Focus | null,
     layout: null,
     topics: [] as Topic[],
-    topicCount: 0,
     loaded: false,
     loadingMore: false,
     profile: null as Profile | null,
@@ -102,7 +101,7 @@ export function useConversation() {
               return 0;
             }
           });
-          updateState({ topics: sorted, topicCount: topics.length, loaded: true });
+          updateState({ topics: sorted, loaded: true });
         }
       }
       const setCards = (cards: Card[]) => {
