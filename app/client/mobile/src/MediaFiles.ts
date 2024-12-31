@@ -25,7 +25,7 @@ export class MediaFiles implements Media {
     const close = async () => {
       await RNFS.unlink(path);
     }
-    return { setData, getUrl };
+    return { setData, getUrl, close };
   }
 }  
 

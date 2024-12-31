@@ -59,7 +59,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
               </View>
             </Pressable>
             <View style={styles.padding}>
-              {! locked && status === 'confirmed' && editing && (
+              { !locked && status === 'confirmed' && editing && (
                 <View style={styles.editing}>
                 </View>
               )}
@@ -77,7 +77,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
           </View>
         </View>
       </View>
-      { assets?.length > 0 && ( 
+      { !locked && assets?.length > 0 && ( 
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.carousel} contentContainerStyle={styles.assets}>
           { media }
         </ScrollView>

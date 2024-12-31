@@ -28,7 +28,7 @@ export function ImageAsset({ topicId, asset }: { topicId: string, asset: MediaAs
 
   const hideImage = () => {
     setModal(false);
-    actions.unloadImage();
+    actions.cancelLoad();
   }
 
   return (
