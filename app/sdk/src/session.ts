@@ -155,15 +155,15 @@ export class SessionModule implements Session {
     return this.ring;
   }
 
-  public setFocus(cardId: string | null, channelId: string): Focus {
+  public async setFocus(cardId: string | null, channelId: string): Promise<Focus> {
     if (cardId) {
-      return this.contact.setFocus(cardId, channelId);
+      return await this.contact.setFocus(cardId, channelId);
     } else {
-      return this.stream.setFocus(channelId);
+      return await this.stream.setFocus(channelId);
     }
   }
 
-  public async clearFocus() {
+  public clearFocus() {
     this.contact.clearFocus();
     this.stream.clearFocus();
   }

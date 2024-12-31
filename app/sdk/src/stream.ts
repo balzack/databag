@@ -426,7 +426,7 @@ export class StreamModule {
     }
   }
 
-  public setFocus(channelId: string): Focus {
+  public async setFocus(channelId: string): Promise<Focus> {
     const { node, secure, token, focus } = this;
     if (focus) {
       focus.close();
@@ -446,7 +446,7 @@ export class StreamModule {
     }
       
     const entry = this.channelEntries.get(channelId);
-    const channelKey = entry ? entry.item.channelKey : null;
+    const channelKey = entry ? await this.setChannelKey(entry.item) : null;
     const revision = entry ? entry.item.summary.revision : 0;
     const sealEnabled = Boolean(this.seal);
     this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, null, channelId, this.guid, { node, secure, token }, channelKey, sealEnabled, revision, markRead, flagTopic);
@@ -600,6 +600,18 @@ export class StreamModule {
     this.channelEntries.set(channelId, channelEntry);
     await this.store.addContentChannel(guid, channelId, item);
     return channelEntry;
+  }
+
+  private async setChannelKey(item: ChannelItem) {
+    if (!item.channelKey && item.detail.dataType === 'sealed' && this.seal && this.crypto) {
+      try {
+        const { seals } = JSON.parse(item.detail.data);
+        item.channelKey = await this.getChannelKey(seals);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    return item.channelKey;
   }
 
   private async unsealChannelDetail(channelId: string, item: ChannelItem): Promise<boolean> {

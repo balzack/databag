@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Modal, Pressable, Animated, View, Image, useAnimatedValue } from 'react-native'
-import { Text } from 'react-native-paper'
+import { SafeAreaView, Modal, Pressable, Animated, View, Image, useAnimatedValue } from 'react-native'
+import { ProgressBar, IconButton } from 'react-native-paper'
 import { useImageAsset } from './useImageAsset.hook';
 import { MediaAsset } from '../../conversation/Conversation';
 import { styles } from './ImageAsset.styled'
@@ -21,10 +21,20 @@ export function ImageAsset({ topicId, asset }: { topicId: string, asset: MediaAs
     }
   }, [state.loaded]);
 
+  const showImage = () => {
+    setModal(true);
+    actions.loadImage();
+  };
+
+  const hideImage = () => {
+    setModal(false);
+    actions.unloadImage();
+  }
+
   return (
     <View style={styles.image}>
       { state.thumbUrl && (
-        <Pressable onPress={()=>setModal(true)}>
+        <Pressable onPress={showImage}>
           <Animated.Image
             style={[styles.thumb,{opacity},]}
             resizeMode="contain"
@@ -35,10 +45,30 @@ export function ImageAsset({ topicId, asset }: { topicId: string, asset: MediaAs
           />
         </Pressable>
       )}
-      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={modal} onRequestClose={() => setModal(false)}>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={modal} onRequestClose={hideImage}>
         <View style={styles.modal}>
-          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-<View style={{ width: 200, height: 200, backgroundColor: 'yellow' }} />
+          <BlurView style={styles.blur} blurType="dark" blurAmount={16} reducedTransparencyFallbackColor="dark" />
+          <Image
+            style={styles.full}
+            resizeMode="contain"
+            source={{ uri: state.thumbUrl }}
+          />
+          { state.dataUrl && (
+            <Image
+              style={styles.full}
+              resizeMode="contain"
+              onError={(err)=>console.log(err)}
+              source={{ uri: state.dataUrl }}
+            />
+          )}
+          { state.loading && (
+            <View style={styles.progress}>
+              <ProgressBar progress={state.loadPercent / 100}  />
+            </View>
+          )}
+          <SafeAreaView style={styles.close}>
+            <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={28} onPress={hideImage} />
+          </SafeAreaView>
         </View>
       </Modal>
     </View>

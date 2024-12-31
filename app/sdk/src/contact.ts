@@ -682,7 +682,7 @@ export class ContactModule implements Contact {
     this.emitter.emit('channel', { cardId, channels });
   }
 
-  public setFocus(cardId: string, channelId: string): Focus {
+  public async setFocus(cardId: string, channelId: string): Promise<Focus> {
     if (this.focus) {
       this.focus.close();
     }
@@ -713,7 +713,7 @@ export class ContactModule implements Contact {
       const guid = cardEntry.item.profile.guid;
       const token = cardEntry.item.detail.token;
       const revision = channelEntry.item.summary.revision;
-      const channelKey = channelEntry.item.channelKey;
+      const channelKey = await this.setChannelKey(channelEntry.item);
       const sealEnabled = Boolean(this.seal);
       const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(node);
       this.focus = new FocusModule(this.log, this.store, this.crypto, this.media, cardId, channelId, this.guid, { node, secure: !insecure, token: `${guid}.${token}` }, channelKey, sealEnabled, revision, markRead, flagTopic);
@@ -741,7 +741,7 @@ export class ContactModule implements Contact {
     return this.focus;
   }
 
-  public async clearFocus() {
+  public clearFocus() {
     if (this.focus) {
       this.focus.close();
       this.focus = null;
@@ -1093,6 +1093,18 @@ export class ContactModule implements Contact {
       return key.data;
     }
     return null;
+  }
+
+  private async setChannelKey(item: ChannelItem) {
+    if (!item.channelKey && item.detail.dataType === 'sealed' && this.seal && this.crypto) {
+      try {
+        const { seals } = JSON.parse(item.detail.data);
+        item.channelKey = await this.getChannelKey(seals);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    return item.channelKey;
   }
 
   private async unsealChannelDetail(cardId: string, channelId: string, item: ChannelItem): Promise<boolean> {

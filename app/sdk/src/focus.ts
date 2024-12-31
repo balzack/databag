@@ -941,6 +941,8 @@ export class FocusModule implements Focus {
   }
 
   public async setChannelKey(cardId: string | null, channelId: string, channelKey: string | null) {
+console.log("!!!! SET CHANNEL KEY", cardId, channelId, channelKey);
+
     if (cardId === this.cardId && channelId === this.channelId) {
       this.channelKey = channelKey;
       this.unsealAll = true;

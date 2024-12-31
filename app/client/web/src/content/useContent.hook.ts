@@ -245,8 +245,8 @@ export function useContent() {
     setTopic: (topic: string) => {
       updateState({ topic })
     },
-    setFocus: (cardId: string | null, channelId: string) => {
-      app.actions.setFocus(cardId, channelId)
+    setFocus: async (cardId: string | null, channelId: string) => {
+      await app.actions.setFocus(cardId, channelId)
     },
     openTopic: async (cardId: string) => {
       const content = app.state.session.getContent()

@@ -9,7 +9,7 @@ export interface Session {
   getContent(): Content;
   getRing(): Ring;
 
-  setFocus(cardId: string | null, channelId: string): Focus;
+  setFocus(cardId: string | null, channelId: string): Promise<Focus>;
   clearFocus(): void;
 
   addStatusListener(ev: (status: string) => void): void;

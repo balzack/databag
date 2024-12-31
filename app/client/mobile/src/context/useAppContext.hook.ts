@@ -3,7 +3,8 @@ import {DatabagSDK, Session, Focus} from 'databag-client-sdk';
 import {SessionStore} from '../SessionStore';
 import {NativeCrypto} from '../NativeCrypto';
 import {LocalStore} from '../LocalStore';
-const DATABAG_DB = 'db_v237.db';
+import { MediaFiles } from '../MediaFiles'
+const DATABAG_DB = 'db_v239.db';
 const SETTINGS_DB = 'ls_v001.db';
 
 const databag = new DatabagSDK(
@@ -14,6 +15,7 @@ const databag = new DatabagSDK(
     channelTypes: ['sealed', 'superbasic'],
   },
   new NativeCrypto(),
+  new MediaFiles(),
 );
 
 export function useAppContext() {
@@ -117,9 +119,9 @@ export function useAppContext() {
       const session = await sdk.current.access(node, secure, token, params);
       updateState({session});
     },
-    setFocus: (cardId: string | null, channelId: string) => {
+    setFocus: async (cardId: string | null, channelId: string) => {
       if (state.session) {
-        const focus = state.session.setFocus(cardId, channelId);
+        const focus = await state.session.setFocus(cardId, channelId);
         updateState({ focus });
       }
     },

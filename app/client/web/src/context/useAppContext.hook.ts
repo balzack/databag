@@ -82,9 +82,9 @@ export function useAppContext() {
       const session = await sdk.current.access(node, secure, token, params)
       updateState({ session })
     },
-    setFocus: (cardId: string | null, channelId: string) => {
+    setFocus: async (cardId: string | null, channelId: string) => {
       if (state.session) {
-        const focus = state.session.setFocus(cardId, channelId);
+        const focus = async state.session.setFocus(cardId, channelId);
         updateState({ focus });
       }
     },
