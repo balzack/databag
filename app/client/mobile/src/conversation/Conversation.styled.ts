@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  back: {
+  icon: {
     flexShrink: 0,
     marginRight: 0,
     marginLeft: 0,
@@ -59,15 +59,14 @@ export const styles = StyleSheet.create({
   header: {
     display: 'flex',
     flexDirection: 'row',
-  },
-  iconSpace: {
-    width: '10%',
+    width: '100%',
+    minWidth: 0,
   },
   title: {
-    width: '80%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    flexGrow: 1,
   },
   label: {
     fontSize: 24,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text } from 'react-native'
+import { Text } from 'react-native-paper'
 import { useAudioAsset } from './useAudioAsset.hook';
 import { MediaAsset } from '../../conversation/Conversation';
 

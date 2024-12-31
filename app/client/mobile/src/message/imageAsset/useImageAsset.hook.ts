@@ -9,7 +9,9 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
   const [state, setState] = useState({
     thumbUrl: null,
     dataUrl: null,
+    ratio: 1,
     loading: false,
+    loaded: false,
     loadPercent: 0,
   })
 
@@ -36,6 +38,10 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
   }, [asset]);    
 
   const actions = {
+    loaded: (e) => {
+      const { width, height } = e.nativeEvent.source;
+      updateState({ loaded: true, ratio: width / height });
+    },
     unloadImage: () => {
       updateState({ dataUrl: null });
     },

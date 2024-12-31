@@ -19,7 +19,7 @@ export type MediaAsset = {
 export function Conversation({close}: {close: ()=>void}) {
   const { state, actions } = useConversation();
   const [ more, setMore ] = useState(false);
-  const [ selected, setSelected ] = useState(null);
+  const [ selected, setSelected ] = useState(null as null | string);
   const thread = useRef();
 
   const scrolled = useRef(false);
@@ -71,11 +71,7 @@ export function Conversation({close}: {close: ()=>void}) {
   return (
     <View style={styles.conversation}>
       <SafeAreaView style={styles.header}>
-        {close && (
-          <View style={styles.iconSpace}>
-            <IconButton style={styles.back} compact="true" mode="contained" icon="arrow-left" size={28} onPress={onClose} />
-          </View>
-        )}
+        <IconButton style={styles.icon} compact="true" mode="contained" icon="arrow-left" size={28} onPress={onClose} />
         <View style={styles.title}>
           { state.detailSet && state.subject && (
             <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.label}>{ state.subject }</Text>
@@ -90,7 +86,7 @@ export function Conversation({close}: {close: ()=>void}) {
             <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.unknown}>{ `, ${state.strings.unknownContact} (${state.unknownContacts})` }</Text>
           )}
         </View>
-        {close && <View style={styles.iconSpace} />}
+        <IconButton style={styles.icon} compact="true" mode="contained" icon="cog-outline" size={28} onPress={()=>{}} />
       </SafeAreaView>
       <Divider style={styles.border} bold={true} />
       <View style={styles.thread}>
@@ -116,7 +112,7 @@ export function Conversation({close}: {close: ()=>void}) {
                 card={card}
                 profile={profile}
                 host={host}
-                select={(id: string)=>setSelected(id)}
+                select={(id)=>setSelected(id)}
                 selected={selected}
               />
             )

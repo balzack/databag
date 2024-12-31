@@ -79,4 +79,18 @@ export const styles = StyleSheet.create({
     paddingRight: 12,
     paddingTop: 4,
   },
+  carousel: {
+    paddingLeft: 8,
+    paddingBottom: 8,
+  },
+  assets: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 16,
+  },
+  item: {
+    width: 64,
+    height: 64,
+    backgroundColor: 'yellow',
+  }
 })

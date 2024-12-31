@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { avatar } from '../constants/Icons'
-import { Pressable, View, Image } from 'react-native';
+import { Pressable, ScrollView, View, Image } from 'react-native';
 import {Icon, Text, IconButton, Surface, Divider} from 'react-native-paper';
 import { Topic, Card, Profile } from 'databag-client-sdk';
 import { ImageAsset } from './imageAsset/ImageAsset';
@@ -9,8 +9,9 @@ import { VideoAsset } from './videoAsset/VideoAsset';
 import { BinaryAsset } from './binaryAsset/BinaryAsset';
 import { useMessage } from './useMessage.hook';
 import {styles} from './Message.styled';
+import { MediaAsset } from '../conversation/Conversatin';
 
-export function Message({ topic, card, profile, host, select, selected }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean, select: (id: string)=>void, selected: string }) {
+export function Message({ topic, card, profile, host, select, selected }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean, select: (id: null | string)=>void, selected: string }) {
   const { state, actions } = useMessage();
   const { locked, data, created, topicId, status, transform } = topic;
   const { name, handle, node } = profile || card || { name: null, handle: null, node: null }
@@ -23,13 +24,27 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
   const [editText, setEditText] = useState('');
   const [saving, setSaving] = useState(false);
 
+  const media = !assets ? [] : assets.map((asset: MediaAsset, index: number) => {
+    if (asset.image || asset.encrypted?.type === 'image') {
+      return <ImageAsset key={index} topicId={topicId} asset={asset as MediaAsset} />
+    } else if (asset.audio || asset.encrypted?.type === 'audio') {
+      return <AudioAsset key={index} topicId={topicId} asset={asset as MediaAsset} />
+    } else if (asset.video || asset.encrypted?.type === 'video') {
+      return <VideoAsset key={index} topicId={topicId} asset={asset as MediaAsset} />
+    } else if (asset.binary || asset.encrypted?.type === 'binary') {
+      return <BinaryAsset key={index} topicId={topicId} asset={asset as MediaAsset} />
+    } else {
+      return <View key={index}></View>
+    }
+  });
+
   return (
     <View style={styles.message}>
       <View style={styles.topic}>
         <View style={styles.content}>
           <Image style={styles.logo} resizeMode={'contain'} source={{uri: logoUrl}} />
           <View style={styles.body}>
-            <Pressable style={styles.header} onPress={()=>select(topicId)}>
+            <Pressable style={styles.header} onPress={()=>select(topicId == selected ? null : topicId)}>
               <View style={styles.name}>
                 { name && (
                   <Text style={styles.handle}>{ name }</Text>
@@ -62,6 +77,11 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
           </View>
         </View>
       </View>
+      { assets?.length > 0 && ( 
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.carousel} contentContainerStyle={styles.assets}>
+          { media }
+        </ScrollView>
+      )}
       { topicId === selected && (
         <Surface style={styles.options}>
           <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="share-variant-outline" size={24} onPress={() => {}} />
