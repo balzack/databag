@@ -35,7 +35,7 @@ export function BinaryAsset({ topicId, asset }: { topicId: string, asset: MediaA
       actions.loadBinary();
     } else {
       setShowBinary(false);
-      actions.unloadBinary();
+      actions.cancelLoad();
     }
   }, [showModal]);  
 

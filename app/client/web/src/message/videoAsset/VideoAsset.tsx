@@ -26,7 +26,7 @@ export function VideoAsset({ topicId, asset }: { topicId: string, asset: MediaAs
       actions.loadVideo();
     } else {
       setShowVideo(false);
-      actions.unloadVideo();
+      actions.cancelLoad();
     }
   }, [showModal]);  
 

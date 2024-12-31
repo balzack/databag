@@ -43,7 +43,7 @@ export function AudioAsset({ topicId, asset }: { topicId: string, asset: MediaAs
       actions.loadAudio();
     } else {
       setShowAudio(false);
-      actions.unloadAudio();
+      actions.cancelLoad();
     }
   }, [showModal]);  
 

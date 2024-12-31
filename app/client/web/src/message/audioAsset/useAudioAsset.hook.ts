@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect, useRef } from 'react'
 import { AppContext } from '../../context/AppContext'
 import { Focus } from 'databag-client-sdk'
 import { ContextType } from '../../context/ContextType'
@@ -11,6 +11,7 @@ export function useAudioAsset(topicId: string, asset: MediaAsset) {
     loading: false,
     loadPercent: 0,
   })
+  const cancelled = useRef(false);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
@@ -18,16 +19,17 @@ export function useAudioAsset(topicId: string, asset: MediaAsset) {
   }
 
   const actions = {
-    unloadAudio: () => {
-      updateState({ dataUrl: null });
+    cancelLoad: () => {
+      cancelled.current = true;
     },
     loadAudio: async () => {
       const { focus } = app.state;
       const assetId = asset.audio ? asset.audio.full : asset.encrypted ? asset.encrypted.parts : null;
-      if (focus && assetId != null && !state.loading) {
+      if (focus && assetId != null && !state.loading && !state.dataUrl) {
+        cancelled.current = false;
         updateState({ loading: true, loadPercent: 0 });
         try {
-          const dataUrl = await focus.getTopicAssetUrl(topicId, assetId, (loadPercent: number)=>{ updateState({ loadPercent }) });
+          const dataUrl = await focus.getTopicAssetUrl(topicId, assetId, (loadPercent: number)=>{ updateState({ loadPercent }); return !cancelled.current });
           updateState({ dataUrl, loading: false });
         } catch (err) {
           updateState({ loading: false });

@@ -24,7 +24,7 @@ export function ImageAsset({ topicId, asset }: { topicId: string, asset: MediaAs
       actions.loadImage();
     } else {
       setShowImage(false);
-      actions.unloadImage();
+      actions.cancelLoad();
     }
   }, [showModal]);  
 

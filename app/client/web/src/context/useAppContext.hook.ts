@@ -84,7 +84,7 @@ export function useAppContext() {
     },
     setFocus: async (cardId: string | null, channelId: string) => {
       if (state.session) {
-        const focus = async state.session.setFocus(cardId, channelId);
+        const focus = await state.session.setFocus(cardId, channelId);
         updateState({ focus });
       }
     },
