@@ -1,6 +1,6 @@
-import { Media } from 'databag-client-sdk'
+import { Staging } from 'databag-client-sdk'
 
-export class MediaFiles implements Media {
+export class StagingFiles implements Staging {
 
   public clear(): Promise<void> {}
 

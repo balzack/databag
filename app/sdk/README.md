@@ -11,9 +11,9 @@ The API is provided through a set of interfaces; each interface groups methods b
 
   <ul>
     
-The crypto and log params are provided by implementing the [Crypto](https://github.com/balzack/databag/blob/sdk/app/sdk/src/crypto.ts) and [Logging](https://github.com/balzack/databag/blob/sdk/app/sdk/src/logging.ts) interface respectively. 
+The [Params](https://github.com/balzack/databag/blob/sdk/app/sdk/src/types.ts) argument specifies the data to syncrhonize. The crypto, staging and log arguments are provided by implementing the [Crypto](https://github.com/balzack/databag/blob/sdk/app/sdk/src/crypto.ts), [Staging](https://github.com/balzack/databag/blob/sdk/app/sdk/src/staging.ts) and [Logging](https://github.com/balzack/databag/blob/sdk/app/sdk/src/logging.ts) interface respectively.
   
-```DatabagClientSDK(crypto?: Crypto, log?: Logging)```
+```DatabagClientSDK(params: Params, crypto?: Crypto, staging?: Staging, log?: Logging)```
   </ul>
 <br>
 
