@@ -9,15 +9,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  container: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 16,
-    backgroundColor: 'yellow',
-  },
   button: {
     position: 'absolute',
+    borderRadius: 13,
+    backgroundColor: '#444444',
   },
   blur: {
     position: 'absolute',
@@ -27,9 +22,14 @@ export const styles = StyleSheet.create({
     height: '100%',
   },
   video: {
+    position: 'relative',
   },
   thumb: {
     borderRadius: 4,
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   full: {
     position: 'absolute',

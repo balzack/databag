@@ -33,17 +33,21 @@ export function VideoAsset({ topicId, asset }: { topicId: string, asset: MediaAs
   }
 
   return (
-    <View style={styles.image}>
+    <View style={styles.video}>
       { state.thumbUrl && (
-        <Pressable onPress={showVideo}>
-          <Animated.Image
-            style={[styles.thumb,{opacity},]}
-            resizeMode="contain"
-            height={92}
-            width={92 * state.ratio}
-            source={{ uri: state.thumbUrl }}
-            onLoad={actions.loaded}
-          />
+        <Pressable style={styles.container} onPress={showVideo}>
+          <Animated.View style={[styles.thumb,{opacity},]}>
+            <Image
+              resizeMode="contain"
+              height={92}
+              width={92 * state.ratio}
+              source={{ uri: state.thumbUrl }}
+              onLoad={actions.loaded}
+            />
+            <View style={styles.button}>
+              <Icon size={32} source="play-circle-outline" />
+            </View>
+          </Animated.View>
         </Pressable>
       )}
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={modal} onRequestClose={hideVideo}>
@@ -56,7 +60,7 @@ export function VideoAsset({ topicId, asset }: { topicId: string, asset: MediaAs
           />
           { state.dataUrl && (
           <Video source={{ uri: state.dataUrl }} style={styles.full}
-            controls={false} onLoad={(e)=>console.log("LOAD", e)} onError={(e)=>console.log("ERR", e)} resizeMode="contain" />
+            controls={false} resizeMode="contain" />
           )}
           { state.loading && (
             <View style={styles.progress}>
