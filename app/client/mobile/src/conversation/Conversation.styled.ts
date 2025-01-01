@@ -5,6 +5,36 @@ export const styles = StyleSheet.create({
   conversation: {
     flex: 1
   },
+  closeIcon: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    backgroundColor: 'transparent',
+  },
+  modal: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  colorArea: {
+    position: 'relative',
+    display: 'flex',
+    alignItem: 'center',
+    justifyContent: 'center',
+    height: 300,
+    width: 300,
+    padding: 16,
+    borderRadius: 8,
+  },
+  blur: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
   messageList: {
     width: '100%',
   },

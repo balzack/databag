@@ -3454,6 +3454,7 @@ __metadata:
     react-native-sqlite-storage: ^6.0.1
     react-native-vector-icons: ^10.1.0
     react-native-video: ^6.8.2
+    react-native-wheel-color-picker: ^1.3.1
     react-router-dom: ^6.26.0
     react-router-native: ^6.26.0
     react-test-renderer: 18.2.0
@@ -8860,6 +8861,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-elevation@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "react-native-elevation@npm:1.0.0"
+  checksum: 988edf86b441459e65f5121b0f916087c94dc0fb4bf7a36da4718b633644dbf10313054208cc4758302fbaa7e1d7b99d29004efc937466ecd7d66c2372f47129
+  languageName: node
+  linkType: hard
+
 "react-native-file-type@npm:^1.0.0":
   version: 1.0.0
   resolution: "react-native-file-type@npm:1.0.0"
@@ -9045,6 +9053,15 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: a6b8db987f163ecb7a32382f7b185660722c7bd71394de776009c10a180457f813d9c37b4083ab2ec20143ef1fc9d2186ed9f4fdd48eb2142ae85ef8ad4e1cf0
+  languageName: node
+  linkType: hard
+
+"react-native-wheel-color-picker@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "react-native-wheel-color-picker@npm:1.3.1"
+  dependencies:
+    react-native-elevation: ^1.0.0
+  checksum: a9f34ff91e4181c3fb77b436393f3bd2232d7644c0193553b2ccbe3a9f71dd77f1d61884577c3be882f16baed2e91ef533d341fc874795fe1acd613b27549506
   languageName: node
   linkType: hard
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {KeyboardAvoidingView, Platform, SafeAreaView, Pressable, View, FlatList, TouchableOpacity} from 'react-native';
+import {KeyboardAvoidingView, Modal, Platform, SafeAreaView, Pressable, View, FlatList, TouchableOpacity} from 'react-native';
 import {styles} from './Conversation.styled';
 import {useConversation} from './useConversation.hook';
 import {Message} from '../message/Message';
@@ -7,6 +7,8 @@ import {Surface, Icon, Text, TextInput, Menu, IconButton, Divider} from 'react-n
 import { ActivityIndicator } from 'react-native-paper';
 import { Colors } from '../constants/Colors';
 import { Confirm } from '../confirm/Confirm';
+import ColorPicker from 'react-native-wheel-color-picker'
+import {BlurView} from '@react-native-community/blur';
 
 const SCROLL_THRESHOLD = 16;
 
@@ -25,6 +27,7 @@ export function Conversation({close}: {close: ()=>void}) {
   const [ sending, setSending ] = useState(false);
   const [ selected, setSelected ] = useState(null as null | string);
   const [ sizeMenu, setSizeMenu ] = useState(false);
+  const [ colorMenu, setColorMenu ] = useState(false);
   const thread = useRef();
   const scrolled = useRef(false);
   const contentHeight = useRef(0);
@@ -167,27 +170,37 @@ export function Conversation({close}: {close: ()=>void}) {
       <Divider style={styles.border} bold={true} />
       <Confirm show={alert} params={alertParams} />
       <View style={styles.add}>
-        <TextInput multiline={true} mode="outlined" style={styles.message} spellcheck={false} autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage} 
-                value={state.message}
-                onChangeText={value => actions.setMessage(value)}
+        <TextInput multiline={true} mode="outlined" style={{ ...styles.message, fontSize: state.textSize }}
+            textColor={state.textColorSet ? state.textColor : undefined} outlineColor="transparent" activeOutlineColor="transparent"spellcheck={false}
+            autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage} placeholderTextColor={state.textColorSet ? state.textColor : undefined}
+            cursorColor={state.textColorSet ? state.textColor : undefined} value={state.message} onChangeText={value => actions.setMessage(value)} />
 
-/>
         <View style={styles.controls}>
           <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="camera" size={24} color={Colors.primary} /></Surface></Pressable>
           <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} /></Surface></Pressable>
           <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="volume-high" size={24} color={Colors.primary} /></Surface></Pressable>
           <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="file-outline" size={24} color={Colors.primary} /></Surface></Pressable>
           <Divider style={styles.separator} />
-          <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="format-color-text" size={24} color={Colors.primary} /></Surface></Pressable>
+          <Pressable style={styles.control} onPress={()=>setColorMenu(true)}>
+            <Surface style={styles.surface} elevation={2}>
+              <Icon style={styles.button} source="format-color-text" size={24} color={Colors.primary} />
+            </Surface>
+          </Pressable>
 
-        <Menu
-          visible={sizeMenu}
-          onDismiss={()=>setSizeMenu(false)}
-          anchor={<Pressable style={styles.control} onPress={()=>setSizeMenu(true)}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="format-size" size={24} color={Colors.primary} /></Surface></Pressable>}>
-          <Menu.Item onPress={() => { actions.setTextSize(12); setSizeMenu(false) }} title={state.strings.textSmall} />
-          <Menu.Item onPress={() => { actions.setTextSize(16); setSizeMenu(false) }} title={state.strings.textMedium} />
-          <Menu.Item onPress={() => { actions.setTextSize(20); setSizeMenu(false) }} title={state.strings.textLarge} />
-        </Menu>
+          <Menu
+            visible={sizeMenu}
+            onDismiss={()=>setSizeMenu(false)}
+            anchor={(
+              <Pressable style={styles.control} onPress={()=>setSizeMenu(true)}>
+                <Surface style={styles.surface} elevation={2}>
+                  <Icon style={styles.button} source="format-size" size={24} color={Colors.primary} />
+                </Surface>
+              </Pressable>
+            )}>
+            <Menu.Item onPress={() => { actions.setTextSize(12); setSizeMenu(false) }} title={state.strings.textSmall} />
+            <Menu.Item onPress={() => { actions.setTextSize(16); setSizeMenu(false) }} title={state.strings.textMedium} />
+            <Menu.Item onPress={() => { actions.setTextSize(20); setSizeMenu(false) }} title={state.strings.textLarge} />
+          </Menu>
 
           <View style={styles.end}>
             <Pressable style={styles.control} onPress={sendMessage}><Surface style={styles.surface} elevation={2}>
@@ -204,6 +217,18 @@ export function Conversation({close}: {close: ()=>void}) {
           </View>
         </View>
       </View>
+
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={colorMenu} onRequestClose={()=>setColorMenu(false)}>
+        <View style={styles.modal}>
+          <Pressable style={styles.blur} onPress={()=>setColorMenu(false)}>
+            <BlurView style={styles.blur} blurType="dark" blurAmount={6} reducedTransparencyFallbackColor="dark" />
+          </Pressable>
+          <Surface elevation={2} style={styles.colorArea}>
+            <ColorPicker color={state.textColorSet ? state.textColor : undefined} onColorChange={actions.setTextColor} onColorChangeComplete={actions.setTextColor} swatched={false} />
+            <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={20} onPress={()=>setColorMenu(false)} />
+          </Surface>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 }
