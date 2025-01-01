@@ -1,5 +1,6 @@
 import { Media } from 'databag-client-sdk'
 import RNFS from 'react-native-fs';
+import fileType from 'react-native-file-type'
 
 export class MediaFiles implements Media {
 
@@ -15,15 +16,27 @@ export class MediaFiles implements Media {
   }
 
   public async write(): Promise<{ setData: (data: string)=>Promise<void>, getUrl: ()=>Promise<string>, close: ()=>Promise<void> }> {
-    const path = RNFS.DocumentDirectoryPath + `/${Date.now()}.dat`
+    let extension = '';
+    const path = RNFS.DocumentDirectoryPath + `/${Date.now()}`
     const setData = async (data: string) => {
       await RNFS.appendFile(path, data, 'base64');
     }
     const getUrl = async () => {
-      return `${path}`
+      if (!extension) {
+        try {
+          const type = await fileType(path);
+          await RNFS.moveFile(path, `${path}.${type.ext}`);
+          extension = `.${type.ext}`;
+        } catch (err) {
+          console.log(err);
+          await RNFS.moveFile(path, `${path}.dat`);
+          extension = '.dat';
+        }
+      }
+      return `file://${path}${extension}`
     }
     const close = async () => {
-      await RNFS.unlink(path);
+      await RNFS.unlink(`${path}${extension}`);
     }
     return { setData, getUrl, close };
   }
