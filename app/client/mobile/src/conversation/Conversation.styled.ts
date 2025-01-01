@@ -3,10 +3,7 @@ import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
   conversation: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    minHeight: 0,
+    flex: 1
   },
   messageList: {
     width: '100%',
@@ -70,5 +67,47 @@ export const styles = StyleSheet.create({
   },
   label: {
     fontSize: 24,
+  },
+  add: {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingTop: 8,
+    paddingBottom: 8,
+  },
+  message: {
+    width: '100%',
+    fontSize: 14,
+    padding: 0,
+  },
+  controls: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingTop: 8,
+    paddingBottom: 8,
+    gap: 8,
+  },
+  control: {
+    borderRadius: 4,
+  },
+  surface: {
+    borderRadius: 4,
+    width: 36,
+    height: 36,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  button: {
+    color: Colors.primary,
+  },
+  end: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexGrow: 1,
+    justifyContent: 'flex-end',
+  },
+  separator: {
+    width: 1,
+    height: '100%',
   }
 });

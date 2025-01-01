@@ -95,7 +95,7 @@ export function getLegacyData(data: any): { data: any, assets: AssetItem[] } {
         }
         assetItems.add(dataAsset);
         index += 1;
-        return { audio: { label, extension, data: `${index-1}` }};
+        return { binary: { label, extension, data: `${index-1}` }};
       }
     }
   })

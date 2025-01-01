@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {SafeAreaView, View, FlatList, TouchableOpacity} from 'react-native';
+import {KeyboardAvoidingView, Platform, SafeAreaView, Pressable, View, FlatList, TouchableOpacity} from 'react-native';
 import {styles} from './Conversation.styled';
 import {useConversation} from './useConversation.hook';
 import {Message} from '../message/Message';
-import {Icon, Text, IconButton, Divider} from 'react-native-paper';
+import {Surface, Icon, Text, TextInput, IconButton, Divider} from 'react-native-paper';
 import { ActivityIndicator } from 'react-native-paper';
+import { Colors } from '../constants/Colors';
 
 const SCROLL_THRESHOLD = 16;
 
@@ -69,9 +70,9 @@ export function Conversation({close}: {close: ()=>void}) {
   }
 
   return (
-    <View style={styles.conversation}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 50}  style={styles.conversation}>
       <SafeAreaView style={styles.header}>
-        <IconButton style={styles.icon} compact="true" mode="contained" icon="arrow-left" size={28} onPress={onClose} />
+        <IconButton style={styles.icon} mode="contained" icon="arrow-left" size={28} onPress={onClose} />
         <View style={styles.title}>
           { state.detailSet && state.subject && (
             <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.label}>{ state.subject }</Text>
@@ -86,7 +87,7 @@ export function Conversation({close}: {close: ()=>void}) {
             <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.unknown}>{ `, ${state.strings.unknownContact} (${state.unknownContacts})` }</Text>
           )}
         </View>
-        <IconButton style={styles.icon} compact="true" mode="contained" icon="cog-outline" size={28} onPress={()=>{}} />
+        <IconButton style={styles.icon} mode="contained" icon="cog-outline" size={28} onPress={()=>{}} />
       </SafeAreaView>
       <Divider style={styles.border} bold={true} />
       <View style={styles.thread}>
@@ -134,9 +135,21 @@ export function Conversation({close}: {close: ()=>void}) {
         )}
       </View>
       <Divider style={styles.border} bold={true} />
-      <TouchableOpacity style={styles.add} onPress={() => thread.current.scrollToEnd()}>
-        <Text>ADD</Text>
-      </TouchableOpacity>
-    </View>
+      <View style={styles.add}>
+        <TextInput multiline={true} mode="outlined" style={styles.message} spellcheck={false} autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage} />
+        <View style={styles.controls}>
+          <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="camera" size={24} color={Colors.primary} /></Surface></Pressable>
+          <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} /></Surface></Pressable>
+          <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="volume-high" size={24} color={Colors.primary} /></Surface></Pressable>
+          <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="file-outline" size={24} color={Colors.primary} /></Surface></Pressable>
+          <Divider style={styles.separator} />
+          <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="format-color-text" size={24} color={Colors.primary} /></Surface></Pressable>
+          <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="format-size" size={24} color={Colors.primary} /></Surface></Pressable>
+          <View style={styles.end}>
+            <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="send" size={24} color={Colors.primary} /></Surface></Pressable>
+          </View>
+        </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
