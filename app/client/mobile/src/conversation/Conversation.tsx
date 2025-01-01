@@ -3,7 +3,7 @@ import {KeyboardAvoidingView, Platform, SafeAreaView, Pressable, View, FlatList,
 import {styles} from './Conversation.styled';
 import {useConversation} from './useConversation.hook';
 import {Message} from '../message/Message';
-import {Surface, Icon, Text, TextInput, IconButton, Divider} from 'react-native-paper';
+import {Surface, Icon, Text, TextInput, Menu, IconButton, Divider} from 'react-native-paper';
 import { ActivityIndicator } from 'react-native-paper';
 import { Colors } from '../constants/Colors';
 import { Confirm } from '../confirm/Confirm';
@@ -24,12 +24,14 @@ export function Conversation({close}: {close: ()=>void}) {
   const [ alert, setAlert ] = useState(false);
   const [ sending, setSending ] = useState(false);
   const [ selected, setSelected ] = useState(null as null | string);
+  const [ sizeMenu, setSizeMenu ] = useState(false);
   const thread = useRef();
   const scrolled = useRef(false);
   const contentHeight = useRef(0);
   const contentLead = useRef(null);
   const scrollOffset = useRef(0);
- 
+  const busy = useRef(false); 
+
   const alertParams = {
     title: state.strings.error,
     prompt: state.strings.tryAgain,
@@ -42,8 +44,8 @@ export function Conversation({close}: {close: ()=>void}) {
   };
 
   const sendMessage = async () => {
-console.log("CALLING SEND MESSAGE");
-    if (!sending) {
+    if (!busy.current && (state.message || state.assets.length > 0)) {
+      busy.current = true;
       setSending(true);
       try {
         await actions.send();
@@ -52,6 +54,7 @@ console.log("CALLING SEND MESSAGE");
         setAlert(true);
       }
       setSending(false);
+      busy.current = false;
     }
   }
 
@@ -176,14 +179,26 @@ console.log("CALLING SEND MESSAGE");
           <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="file-outline" size={24} color={Colors.primary} /></Surface></Pressable>
           <Divider style={styles.separator} />
           <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="format-color-text" size={24} color={Colors.primary} /></Surface></Pressable>
-          <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="format-size" size={24} color={Colors.primary} /></Surface></Pressable>
+
+        <Menu
+          visible={sizeMenu}
+          onDismiss={()=>setSizeMenu(false)}
+          anchor={<Pressable style={styles.control} onPress={()=>setSizeMenu(true)}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="format-size" size={24} color={Colors.primary} /></Surface></Pressable>}>
+          <Menu.Item onPress={() => { actions.setTextSize(12); setSizeMenu(false) }} title={state.strings.textSmall} />
+          <Menu.Item onPress={() => { actions.setTextSize(16); setSizeMenu(false) }} title={state.strings.textMedium} />
+          <Menu.Item onPress={() => { actions.setTextSize(20); setSizeMenu(false) }} title={state.strings.textLarge} />
+        </Menu>
+
           <View style={styles.end}>
             <Pressable style={styles.control} onPress={sendMessage}><Surface style={styles.surface} elevation={2}>
               { sending && (
                 <ActivityIndicator size="small" />
               )}
-              { !sending && (
+              { !sending && (state.message || state.assets.length != 0) && (
                 <Icon style={styles.button} source="send" size={24} color={Colors.primary} />
+              )}
+              { !sending && !state.message && state.assets.length == 0 && (
+                <Icon style={styles.button} source="send" size={24} color={Colors.placeholder} />
               )}
             </Surface></Pressable>
           </View>
