@@ -6,6 +6,7 @@ import {Message} from '../message/Message';
 import {Surface, Icon, Text, TextInput, IconButton, Divider} from 'react-native-paper';
 import { ActivityIndicator } from 'react-native-paper';
 import { Colors } from '../constants/Colors';
+import { Confirm } from '../confirm/Confirm';
 
 const SCROLL_THRESHOLD = 16;
 
@@ -20,14 +21,40 @@ export type MediaAsset = {
 export function Conversation({close}: {close: ()=>void}) {
   const { state, actions } = useConversation();
   const [ more, setMore ] = useState(false);
+  const [ alert, setAlert ] = useState(false);
+  const [ sending, setSending ] = useState(false);
   const [ selected, setSelected ] = useState(null as null | string);
   const thread = useRef();
-
   const scrolled = useRef(false);
   const contentHeight = useRef(0);
   const contentLead = useRef(null);
   const scrollOffset = useRef(0);
  
+  const alertParams = {
+    title: state.strings.error,
+    prompt: state.strings.tryAgain,
+    cancel: {
+      label: state.strings.close,
+      action: () => {
+        setAlert(false);
+      },
+    },
+  };
+
+  const sendMessage = async () => {
+console.log("CALLING SEND MESSAGE");
+    if (!sending) {
+      setSending(true);
+      try {
+        await actions.send();
+      } catch (err) {
+        console.log(err);
+        setAlert(true);
+      }
+      setSending(false);
+    }
+  }
+
   const loadMore = async () => {
     if (!more) {
       setMore(true);
@@ -135,8 +162,13 @@ export function Conversation({close}: {close: ()=>void}) {
         )}
       </View>
       <Divider style={styles.border} bold={true} />
+      <Confirm show={alert} params={alertParams} />
       <View style={styles.add}>
-        <TextInput multiline={true} mode="outlined" style={styles.message} spellcheck={false} autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage} />
+        <TextInput multiline={true} mode="outlined" style={styles.message} spellcheck={false} autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage} 
+                value={state.message}
+                onChangeText={value => actions.setMessage(value)}
+
+/>
         <View style={styles.controls}>
           <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="camera" size={24} color={Colors.primary} /></Surface></Pressable>
           <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} /></Surface></Pressable>
@@ -146,7 +178,14 @@ export function Conversation({close}: {close: ()=>void}) {
           <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="format-color-text" size={24} color={Colors.primary} /></Surface></Pressable>
           <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="format-size" size={24} color={Colors.primary} /></Surface></Pressable>
           <View style={styles.end}>
-            <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="send" size={24} color={Colors.primary} /></Surface></Pressable>
+            <Pressable style={styles.control} onPress={sendMessage}><Surface style={styles.surface} elevation={2}>
+              { sending && (
+                <ActivityIndicator size="small" />
+              )}
+              { !sending && (
+                <Icon style={styles.button} source="send" size={24} color={Colors.primary} />
+              )}
+            </Surface></Pressable>
           </View>
         </View>
       </View>
