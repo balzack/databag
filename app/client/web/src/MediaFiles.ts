@@ -2,6 +2,8 @@ import { Media } from 'databag-client-sdk'
 
 export class MediaFiles implements Media {
 
+  public clear(): Promise<void> {}
+
   private base64ToUint8Array(base64: string): Uint8Array {
     var binaryString = atob(base64);
     var bytes = new Uint8Array(binaryString.length);

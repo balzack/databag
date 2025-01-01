@@ -15,27 +15,27 @@ import type { Session, Node, Contributor } from './api';
 import type { Params, SessionParams } from './types';
 import type { Login } from './entities';
 import type { Crypto } from './crypto';
-import type { Media } from './media';
+import type { Staging } from './staging';
 import type { WebStore, SqlStore } from './store';
 
 export * from './api';
 export * from './types';
 export { WebStore, SqlStore } from './store';
 export { Crypto } from './crypto';
-export { Media } from './media';
+export { Staging } from './staging';
 
 export class DatabagSDK {
   private log: Logging;
   private crypto: Crypto | null;
-  private media: Media | null;
+  private staging: Staging | null;
   private store: Store;
   private params: Params;
 
-  constructor(params: Params, crypto?: Crypto, media?: Media, log?: Logging) {
+  constructor(params: Params, crypto?: Crypto, staging?: Staging, log?: Logging) {
     this.store = new NoStore();
     this.params = params;
     this.crypto = crypto ? crypto : null;
-    this.media = media ? media : null;
+    this.staging = staging ? staging : null;
     this.log = log ? log : new ConsoleLogging();
     this.log.info('databag sdk');
   }
@@ -43,15 +43,16 @@ export class DatabagSDK {
   public async initOfflineStore(sql: SqlStore): Promise<Session | null> {
     const { articleTypes, channelTypes } = this.params;
     this.store = new OfflineStore(this.log, sql);
+    await this.staging?.clear();
     const login = await this.store.init();
-    return login ? new SessionModule(this.store, this.crypto, this.log, this.media, login.guid, login.token, login.node, login.secure, login.timestamp, articleTypes, channelTypes) : null;
+    return login ? new SessionModule(this.store, this.crypto, this.log, this.staging, login.guid, login.token, login.node, login.secure, login.timestamp, articleTypes, channelTypes) : null;
   }
 
   public async initOnlineStore(web: WebStore): Promise<Session | null> {
     const { articleTypes, channelTypes } = this.params;
     this.store = new OnlineStore(this.log, web);
     const login = await this.store.init();
-    return login ? new SessionModule(this.store, this.crypto, this.log, this.media, login.guid, login.token, login.node, login.secure, login.timestamp, articleTypes, channelTypes) : null;
+    return login ? new SessionModule(this.store, this.crypto, this.log, this.staging, login.guid, login.token, login.node, login.secure, login.timestamp, articleTypes, channelTypes) : null;
   }
 
   public async available(node: string, secure: boolean): Promise<number> {
@@ -75,7 +76,7 @@ export class DatabagSDK {
       pushSupported,
     };
     await this.store.setLogin(login);
-    return new SessionModule(this.store, this.crypto, this.log, this.media, guid, appToken, node, secure, created, articleTypes, channelTypes);
+    return new SessionModule(this.store, this.crypto, this.log, this.staging, guid, appToken, node, secure, created, articleTypes, channelTypes);
   }
 
   public async access(node: string, secure: boolean, token: string, params: SessionParams): Promise<Session> {
@@ -91,7 +92,7 @@ export class DatabagSDK {
       pushSupported,
     };
     await this.store.setLogin(login);
-    return new SessionModule(this.store, this.crypto, this.log, this.media, guid, appToken, node, secure, created, articleTypes, channelTypes);
+    return new SessionModule(this.store, this.crypto, this.log, this.staging, guid, appToken, node, secure, created, articleTypes, channelTypes);
   }
 
   public async create(handle: string, password: string, node: string, secure: boolean, token: string | null, params: SessionParams): Promise<Session> {
@@ -108,7 +109,7 @@ export class DatabagSDK {
       pushSupported,
     };
     await this.store.setLogin(login);
-    return new SessionModule(this.store, this.crypto, this.log, this.media, guid, appToken, node, secure, created, articleTypes, channelTypes);
+    return new SessionModule(this.store, this.crypto, this.log, this.staging, guid, appToken, node, secure, created, articleTypes, channelTypes);
   }
 
   public async remove(session: Session): Promise<void> {

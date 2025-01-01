@@ -3,7 +3,7 @@ import {DatabagSDK, Session, Focus} from 'databag-client-sdk';
 import {SessionStore} from '../SessionStore';
 import {NativeCrypto} from '../NativeCrypto';
 import {LocalStore} from '../LocalStore';
-import { MediaFiles } from '../MediaFiles'
+import { StagingFiles } from '../StagingFiles'
 const DATABAG_DB = 'db_v239.db';
 const SETTINGS_DB = 'ls_v001.db';
 
@@ -15,7 +15,7 @@ const databag = new DatabagSDK(
     channelTypes: ['sealed', 'superbasic'],
   },
   new NativeCrypto(),
-  new MediaFiles(),
+  new StagingFiles(),
 );
 
 export function useAppContext() {

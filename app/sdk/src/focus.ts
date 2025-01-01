@@ -6,7 +6,7 @@ import { TransformType, HostingMode, AssetType, FocusDetail } from './types';
 import type { Logging } from './logging';
 import { Store } from './store';
 import { Crypto } from './crypto';
-import { Media } from './media';
+import { Staging } from './staging';
 import { BasicEntity, BasicAsset, SealedBasicEntity, TopicDetailEntity } from './entities';
 import { defaultTopicItem } from './items';
 import { getChannelTopics } from './net/getChannelTopics';
@@ -33,7 +33,7 @@ export class FocusModule implements Focus {
   private log: Logging;
   private emitter: EventEmitter;
   private crypto: Crypto | null;
-  private media: Media | null;
+  private staging: Staging | null;
   private store: Store;
   private guid: string;
   private connection: { node: string; secure: boolean; token: string } | null;
@@ -47,7 +47,7 @@ export class FocusModule implements Focus {
   private sealEnabled: boolean;
   private channelKey: string | null;
   private loadMore: boolean;
-  private closeMedia: (()=>Promise<void>)[];
+  private closeStaging: (()=>Promise<void>)[];
   private unsealAll: boolean;
   private markRead: ()=>Promise<void>;
   private flagChannelTopic: (id: string)=>Promise<void>;
@@ -59,14 +59,14 @@ export class FocusModule implements Focus {
   // view of topics 
   private topicEntries: Map<string, { item: TopicItem; topic: Topic }>;
 
-  constructor(log: Logging, store: Store, crypto: Crypto | null, media: Media | null, cardId: string | null, channelId: string, guid: string, connection: { node: string; secure: boolean; token: string } | null, channelKey: string | null, sealEnabled: boolean, revision: number, markRead: ()=>Promise<void>, flagChannelTopic: (id: string)=>Promise<void>) {
+  constructor(log: Logging, store: Store, crypto: Crypto | null, staging: Staging | null, cardId: string | null, channelId: string, guid: string, connection: { node: string; secure: boolean; token: string } | null, channelKey: string | null, sealEnabled: boolean, revision: number, markRead: ()=>Promise<void>, flagChannelTopic: (id: string)=>Promise<void>) {
     this.cardId = cardId;
     this.channelId = channelId;
     this.log = log;
     this.emitter = new EventEmitter();
     this.store = store;
     this.crypto = crypto;
-    this.media = media;
+    this.staging = staging;
     this.guid = guid;
     this.connection = connection;
     this.channelKey = channelKey;
@@ -81,7 +81,7 @@ export class FocusModule implements Focus {
     this.storeView = { revision: null, marker: null };
     this.syncing = true;
     this.closing = false;
-    this.closeMedia = [];
+    this.closeStaging = [];
     this.nextRevision = null;
     this.focusDetail = null;
     this.loadMore = false;
@@ -414,22 +414,22 @@ export class FocusModule implements Focus {
                 appAsset.push({appId: transform.appId, assetId: assetItem.assetId});
                 assetItems.push(assetItem);
               } else if (transform.type === TransformType.Copy) {
-                const { media } = this;
-                if (!media) {
-                  throw new Error('media file processing support not enabled');
+                const { staging } = this;
+                if (!staging) {
+                  throw new Error('staging file processing support not enabled');
                 }
                 if (!crypto || !channelKey) {
                   throw new Error('duplicate throw for build warning');
                 }
-                const mediaFile = await media.read(asset.source);
+                const stagingFile = await staging.read(asset.source);
                 const split = [] as { partId: string, blockIv: string }[];
-                for (let i = 0; i * ENCRYPT_BLOCK_SIZE < mediaFile.size; i++) {
-                  const length = mediaFile.size - (i * ENCRYPT_BLOCK_SIZE) > ENCRYPT_BLOCK_SIZE ? ENCRYPT_BLOCK_SIZE : mediaFile.size - (i * ENCRYPT_BLOCK_SIZE);
-                  const base64Data = await mediaFile.getData(i * ENCRYPT_BLOCK_SIZE, length);
+                for (let i = 0; i * ENCRYPT_BLOCK_SIZE < stagingFile.size; i++) {
+                  const length = stagingFile.size - (i * ENCRYPT_BLOCK_SIZE) > ENCRYPT_BLOCK_SIZE ? ENCRYPT_BLOCK_SIZE : stagingFile.size - (i * ENCRYPT_BLOCK_SIZE);
+                  const base64Data = await stagingFile.getData(i * ENCRYPT_BLOCK_SIZE, length);
                   const { ivHex } = await crypto.aesIv();
                   const { encryptedDataB64 } = await crypto.aesEncrypt(base64Data, ivHex, channelKey);
                   const partId = await this.uploadBlock(encryptedDataB64, topicId, (percent: number) => {
-                    const count = Math.ceil(mediaFile.size / ENCRYPT_BLOCK_SIZE);
+                    const count = Math.ceil(stagingFile.size / ENCRYPT_BLOCK_SIZE);
                     assetProgress(Math.floor((i * 100 + percent) / count));
                   });
                   split.push({ partId, blockIv: ivHex });
@@ -616,18 +616,18 @@ export class FocusModule implements Focus {
             appAsset.push({appId: transform.appId, assetId: assetItem.assetId});
             assetItems.push(assetItem);
           } else if (transform.type === TransformType.Copy) {
-            const { media } = this;
-            if (!media) {
-              throw new Error('media file processing support not enabled');
+            const { staging } = this;
+            if (!staging) {
+              throw new Error('staging file processing support not enabled');
             }
             if (!crypto || !channelKey) {
               throw new Error('duplicate throw for build warning');
             }
-            const mediaFile = await media.read(asset.source);
+            const stagingFile = await staging.read(asset.source);
             const split = [] as { partId: string, blockIv: string }[];
-            for (let i = 0; i * ENCRYPT_BLOCK_SIZE < mediaFile.size; i++) {
-              const length = mediaFile.size - (i * ENCRYPT_BLOCK_SIZE) > ENCRYPT_BLOCK_SIZE ? ENCRYPT_BLOCK_SIZE : mediaFile.size - (i * ENCRYPT_BLOCK_SIZE);
-              const base64Data = await mediaFile.getData(i * ENCRYPT_BLOCK_SIZE, length);
+            for (let i = 0; i * ENCRYPT_BLOCK_SIZE < stagingFile.size; i++) {
+              const length = stagingFile.size - (i * ENCRYPT_BLOCK_SIZE) > ENCRYPT_BLOCK_SIZE ? ENCRYPT_BLOCK_SIZE : stagingFile.size - (i * ENCRYPT_BLOCK_SIZE);
+              const base64Data = await stagingFile.getData(i * ENCRYPT_BLOCK_SIZE, length);
               const { ivHex } = await crypto.aesIv();
               const { encryptedDataB64 } = await crypto.aesEncrypt(base64Data, ivHex, channelKey);
               const partId = await this.uploadBlock(encryptedDataB64, topicId, progress);
@@ -781,12 +781,12 @@ export class FocusModule implements Focus {
     } else if (asset.hosting === HostingMode.Basic && asset.basic) {
       return this.getRemoteChannelTopicAssetUrl(topicId, asset.basic);
     } else if (asset.hosting === HostingMode.Split && asset.split) {
-      const { sealEnabled, channelKey, crypto, media } = this;
-      if (!sealEnabled || !channelKey || !crypto || !media) {
-        throw new Error('media file decryption not set');
+      const { sealEnabled, channelKey, crypto, staging } = this;
+      if (!sealEnabled || !channelKey || !crypto || !staging) {
+        throw new Error('staging file decryption not set');
       }
-      const write = await media.write();
-      this.closeMedia.push(write.close);
+      const write = await staging.write();
+      this.closeStaging.push(write.close);
       for (let i = 0; i < asset.split.length; i++) {
         let download = true;
         if (progress) {
@@ -954,7 +954,7 @@ export class FocusModule implements Focus {
     while (this.syncing) {
       await new Promise((r) => setTimeout(r, CLOSE_POLL_MS));
     }
-    this.closeMedia.forEach(item => {
+    this.closeStaging.forEach(item => {
       item();
     });
   }
