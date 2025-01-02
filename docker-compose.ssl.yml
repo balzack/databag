@@ -2,12 +2,14 @@ name: databag-ssl
 
 services:
   caddy:
-    image: caddy/caddy
+    image: caddy
     ports:
       - 80:80
       - 443:443
     # Replace mydomain.com with your domain of choice
     entrypoint: caddy reverse-proxy --from mydomain.com --to http://app:7000
+    depends_on:
+      - app
   app:
     build: .
     volumes:
