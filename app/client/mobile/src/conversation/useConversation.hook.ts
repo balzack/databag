@@ -44,7 +44,7 @@ export function useConversation() {
     subjectNames: [],
     unknownContacts: 0,
     message: '',
-    assets: [] as {type: string, file: File, position?: number, label?: string}[],
+    assets: [] as {type: string, path: string, mime?: string, position?: number, label?: string}[],
     textColor: '#444444',
     textColorSet: false,
     textSize: 16,
@@ -178,13 +178,13 @@ export function useConversation() {
         const uploadAssets = state.assets.map(asset => {
           if (asset.type === 'image') {
             if (sealed) {
-              sources.push({ type: AssetType.Image, source: asset.file, transforms: [
-                { type: TransformType.Thumb, appId: `it${sources.length}`, thumb: () => getImageThumb(asset.file) },
+              sources.push({ type: AssetType.Image, source: asset.path, transforms: [
+                { type: TransformType.Thumb, appId: `it${sources.length}`, thumb: () => getImageThumb(asset.path) },
                 { type: TransformType.Copy, appId: `ic${sources.length}` }
               ]});
               return { encrypted: { type: 'image', thumb: `it${sources.length-1}`, parts: `ic${sources.length-1}` } };
             } else {
-              sources.push({ type: AssetType.Image, source: asset.file, transforms: [
+              sources.push({ type: AssetType.Image, source: asset.path, transforms: [
                 { type: TransformType.Thumb, appId: `it${sources.length}` },
                 { type: TransformType.Copy, appId: `ic${sources.length}` }
               ]});
@@ -194,19 +194,19 @@ export function useConversation() {
             if (sealed) {
               const videoThumb = async () => {
                 try {
-                  return await getVideoThumb(asset.file, asset.position);
+                  return await getVideoThumb(asset.path, asset.position);
                 } catch (err) {
                   console.log(err);
                   return placeholder;
                 }
               };
-              sources.push({ type: AssetType.Video, source: asset.file, transforms: [
+              sources.push({ type: AssetType.Video, source: asset.path, transforms: [
                 { type: TransformType.Thumb, appId: `vt${sources.length}`, thumb: videoThumb },
                 { type: TransformType.Copy, appId: `vc${sources.length}` }
               ]});
               return { encrypted: { type: 'video', thumb: `vt${sources.length-1}`, parts: `vc${sources.length-1}` } };
             } else {
-              sources.push({ type: AssetType.Video, source: asset.file, transforms: [
+              sources.push({ type: AssetType.Video, source: asset.path, transforms: [
                 { type: TransformType.Thumb, appId: `vt${sources.length}`, position: asset.position},
                 { type: TransformType.HighQuality, appId: `vh${sources.length}` },
                 { type: TransformType.LowQuality, appId: `vl${sources.length}` }
@@ -215,26 +215,26 @@ export function useConversation() {
             }
           } else if (asset.type === 'audio') {
             if (sealed) {
-              sources.push({ type: AssetType.Audio, source: asset.file, transforms: [
+              sources.push({ type: AssetType.Audio, source: asset.path, transforms: [
                 { type: TransformType.Copy, appId: `ac${sources.length}` }
               ]});
               return { encrypted: { type: 'audio', label: asset.label, parts: `ac${sources.length-1}` } };
             } else {
-              sources.push({ type: AssetType.Video, source: asset.file, transforms: [
+              sources.push({ type: AssetType.Video, source: asset.path, transforms: [
                 { type: TransformType.Copy, appId: `ac${sources.length}` }
               ]});
               return { audio: { label: asset.label, full: `ac${sources.length-1}` } };
             }
           } else {
-            const extension = asset.file.name.split('.').pop();
-            const label = asset.file.name.split('.').shift();
+            const extension = asset.path.name.split('.').pop();
+            const label = asset.path.name.split('.').shift();
             if (sealed) {
-              sources.push({ type: AssetType.Binary, source: asset.file, transforms: [
+              sources.push({ type: AssetType.Binary, source: asset.path, transforms: [
                 { type: TransformType.Copy, appId: `bc${sources.length}` }
               ]});
               return { encrypted: { type: 'binary', label, extension, parts: `bc${sources.length-1}` } };
             } else {
-              sources.push({ type: AssetType.Binary, source: asset.file, transforms: [
+              sources.push({ type: AssetType.Binary, source: asset.path, transforms: [
                 { type: TransformType.Copy, appId: `bc${sources.length}` }
               ]});
               return { binary: { label, extension, data: `bc${sources.length-1}` } };
@@ -282,9 +282,9 @@ export function useConversation() {
         updateState({ message: '', assets: [], progress: 0 });
       }
     }, 
-    addImage: (file: File) => {
+    addImage: (path: string, mime: string) => {
       const type = 'image';
-      updateState({ assets: [ ...state.assets, { type, file } ]});
+      updateState({ assets: [ ...state.assets, { type, path, mime } ]});
     },
     addVideo: (file: File) => {
       const type = 'video';

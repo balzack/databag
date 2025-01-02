@@ -11,6 +11,15 @@ export const styles = StyleSheet.create({
     right: 0,
     backgroundColor: 'transparent',
   },
+  carousel: {
+    paddingLeft: 8,
+    paddingBottom: 8,
+  },
+  assets: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 16,
+  },
   modal: {
     width: '100%',
     height: '100%',

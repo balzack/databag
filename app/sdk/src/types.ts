@@ -148,7 +148,7 @@ export enum AssetType {
 
 export type AssetSource = {
   type: AssetType;
-  source: any;
+  source: File|string;
   transforms: {type: TransformType, appId: string, position?: number, thumb?: ()=>Promise<string>}[],
 }
 

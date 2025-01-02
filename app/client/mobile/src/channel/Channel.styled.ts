@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
+    height: 16,
   },
   messageUnset: {
     fontSize: 12,

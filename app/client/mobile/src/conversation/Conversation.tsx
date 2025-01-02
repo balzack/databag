@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {KeyboardAvoidingView, Modal, Platform, SafeAreaView, Pressable, View, FlatList, TouchableOpacity} from 'react-native';
+import {KeyboardAvoidingView, Modal, Platform, ScrollView, SafeAreaView, Pressable, View, FlatList, TouchableOpacity} from 'react-native';
 import {styles} from './Conversation.styled';
 import {useConversation} from './useConversation.hook';
 import {Message} from '../message/Message';
@@ -9,6 +9,8 @@ import { Colors } from '../constants/Colors';
 import { Confirm } from '../confirm/Confirm';
 import ColorPicker from 'react-native-wheel-color-picker'
 import {BlurView} from '@react-native-community/blur';
+import ImagePicker from 'react-native-image-crop-picker'
+import { ImageFile } from './imageFile/ImageFile';
 
 const SCROLL_THRESHOLD = 16;
 
@@ -102,6 +104,24 @@ export function Conversation({close}: {close: ()=>void}) {
     scrollOffset.current = offset;
   }
 
+  const addImage = async () => {
+    try {
+      const { path, mime } = await ImagePicker.openPicker({ mediaType: 'photo' });
+      actions.addImage(`file://${path}`, mime);
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+
+  const media = state.assets.map((asset, index) => {
+    if (asset.type === 'image') {
+      return <ImageFile key={index} path={asset.path} disabled={false} remove={()=>{}} />
+    } else {
+      return <></>
+    }
+  });
+
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 50}  style={styles.conversation}>
       <SafeAreaView style={styles.header}>
@@ -170,13 +190,18 @@ export function Conversation({close}: {close: ()=>void}) {
       <Divider style={styles.border} bold={true} />
       <Confirm show={alert} params={alertParams} />
       <View style={styles.add}>
+        { media.length > 0 && (
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.carousel} contentContainerStyle={styles.assets}>
+            { media }
+          </ScrollView>
+        )}
         <TextInput multiline={true} mode="outlined" style={{ ...styles.message, fontSize: state.textSize }}
             textColor={state.textColorSet ? state.textColor : undefined} outlineColor="transparent" activeOutlineColor="transparent"spellcheck={false}
             autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage} placeholderTextColor={state.textColorSet ? state.textColor : undefined}
             cursorColor={state.textColorSet ? state.textColor : undefined} value={state.message} onChangeText={value => actions.setMessage(value)} />
 
         <View style={styles.controls}>
-          <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="camera" size={24} color={Colors.primary} /></Surface></Pressable>
+          <Pressable style={styles.control} onPress={addImage}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="camera" size={24} color={Colors.primary} /></Surface></Pressable>
           <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} /></Surface></Pressable>
           <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="volume-high" size={24} color={Colors.primary} /></Surface></Pressable>
           <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="file-outline" size={24} color={Colors.primary} /></Surface></Pressable>

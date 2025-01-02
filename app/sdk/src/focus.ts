@@ -303,7 +303,7 @@ export class FocusModule implements Focus {
     });
   }
 
-  private mirrorFile(source: any, topicId: string, progress: (percent: number)=>boolean): Promise<string> {
+  private mirrorFile(source: File|string, topicId: string, progress: (percent: number)=>boolean): Promise<string> {
     const { cardId, channelId, connection } = this;
     if (!connection) {
       throw new Error('disconnected from channel');
@@ -312,7 +312,11 @@ export class FocusModule implements Focus {
     const params = `${cardId ? 'contact' : 'agent'}=${token}&body=multipart`
     const url = `http${secure ? 's' : ''}://${node}/content/channels/${channelId}/topics/${topicId}/blocks?${params}`
     const formData = new FormData();
-    formData.append('asset', source);
+    if (typeof source === 'string') { // file path used in mobile
+      formData.append("asset", {uri: source, name: 'asset', type: 'application/octent-stream'});
+    } else { // file object used in browser
+      formData.append('asset', source);
+    }
 
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
@@ -336,7 +340,7 @@ export class FocusModule implements Focus {
     });
   }
 
-  private transformFile(source: any, topicId: string, transforms: string[], progress: (percent: number)=>boolean): Promise<{assetId: string, transform: string}[]> {
+  private transformFile(source: File|string, topicId: string, transforms: string[], progress: (percent: number)=>boolean): Promise<{assetId: string, transform: string}[]> {
     const { cardId, channelId, connection } = this;
     if (!connection) {
       throw new Error('disconnected from channel');
@@ -345,7 +349,12 @@ export class FocusModule implements Focus {
     const params = `${cardId ? 'contact' : 'agent'}=${token}&transforms=${encodeURIComponent(JSON.stringify(transforms))}`
     const url = `http${secure ? 's' : ''}://${node}/content/channels/${channelId}/topics/${topicId}/assets?${params}`
     const formData = new FormData();
-    formData.append('asset', source);
+
+    if (typeof source === 'string') { // file path used in mobile
+      formData.append("asset", {uri: source, name: 'asset', type: 'application/octent-stream'});
+    } else { // file object used in browser
+      formData.append('asset', source);
+    }
 
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
