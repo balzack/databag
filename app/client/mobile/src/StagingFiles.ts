@@ -16,7 +16,7 @@ export class StagingFiles implements Staging {
   public async read(source: any): Promise<{ size: number, getData: (position: number, length: number)=>Promise<string>, close: ()=>Promise<void> }> {
     const path = source;
     const stat = await RNFS.stat(path);
-    const size = state.size;
+    const size = stat.size;
     const getData = async (position: number, length: number) => {
       return await RNFS.read(path, length, position, 'base64');
     }

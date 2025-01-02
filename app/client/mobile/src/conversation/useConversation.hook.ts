@@ -4,16 +4,18 @@ import { DisplayContext } from '../context/DisplayContext'
 import { Focus, FocusDetail, Topic, Profile, Card, AssetType, AssetSource, HostingMode, TransformType } from 'databag-client-sdk'
 import { ContextType } from '../context/ContextType'
 import { placeholder } from '../constants/Icons';
+import RNFS from 'react-native-fs';
+import ImageResizer from '@bam.tech/react-native-image-resizer';
 
 const IMAGE_SCALE_SIZE = (128 * 1024);
 const GIF_TYPE = 'image/gif';
 const WEBP_TYPE = 'image/webp';
 const LOAD_DEBOUNCE = 1000;
 
-function getImageThumb(file: File) {
-  return new Promise<string>((resolve, reject) => {
-    resolve('');
-  });
+async function getImageThumb(path: string) {
+  const thumb = await ImageResizer.createResizedImage(path, 192, 192, "JPEG", 50, 0, null);
+  const base = await RNFS.readFile(thumb.path, 'base64')
+  return `data:image/jpeg;base64,${base}`;
 }
 
 function getVideoThumb(file: File, position?: number) {
