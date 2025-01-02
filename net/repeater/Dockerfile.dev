@@ -3,4 +3,4 @@ FROM golang:alpine
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
-RUN rm go.sum go.sum
+RUN rm go.mod go.sum
