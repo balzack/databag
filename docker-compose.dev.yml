@@ -1,0 +1,41 @@
+name: databag-dev
+
+services:
+  net-web:
+    build:
+      context: ./net/web
+      dockerfile: Dockerfile.dev
+    working_dir: /app
+    volumes:
+      - ./net/web:/app
+    command: sh -c "yarn && chokidar '**/*.js' '**/*.ts' -c 'yarn run build' --debounce 18000 --initial --ignore node_modules --ignore build"
+  net-server:
+    build:
+      context: ./net/server
+      dockerfile: Dockerfile.dev
+    ports: 
+      - 127.0.0.1:7000:7000
+    volumes:
+      - ./net/server:/app/databag/net/server
+      - database:/var/lib/databag
+      - ./net/transform:/opt/databag/transform
+      - ./net/web/build:/app/databag/net/web/build
+    working_dir: /app
+    environment:
+      - ADMIN=password
+      - DEV=1
+    command: /app/databag/net/server/entrypoint.sh
+  net-repeater:
+    build:
+      context: ./net/repeater
+      dockerfile: Dockerfile.dev
+    working_dir: /app
+    volumes:
+      - ./net/repeater:/app
+    ports:
+      - 127.0.0.1:7878:7878
+    command: go run main.go
+
+
+volumes:
+  database:
