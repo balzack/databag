@@ -33,6 +33,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
   const [disconnecting, setDisconnecting] = useState(false);
   const [canceling, setCanceling] = useState(false);
   const [accepting, setAccepting] = useState(false);
+  const [connecting, setConnecting] = useState(false);
 
   const confirmAction = (title: string, prompt: string, label: string, loading: (boolean) => void, action: () => Promise<void>) => {
     setConfirmParams({
@@ -82,6 +83,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
           action: () => setConfirmShow(false),
         },
       });
+      setConfirmShow(true);
     }
   };
 
@@ -135,6 +137,20 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
 
             {state.statusLabel === 'unknownStatus' && (
               <View style={styles.actions}>
+                <View style={styles.action}>
+                  <IconButton
+                    style={styles.actionIcon}
+                    loading={connecting}
+                    compact="true"
+                    mode="contained"
+                    icon="electric-switch-closed"
+                    size={32}
+                    onPress={() => {
+                      applyAction(setConnecting, actions.saveAndConnect);
+                    }}
+                  />
+                  <Text style={styles.actionLabel}>{state.strings.connect}</Text>
+                </View>
                 <View style={styles.action}>
                   <IconButton
                     style={styles.actionIcon}

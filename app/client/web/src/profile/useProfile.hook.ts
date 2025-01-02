@@ -95,6 +95,11 @@ export function useProfile(params: ProfileParams) {
       const contact = app.state.session?.getContact()
       await contact.addCard(state.node, state.guid)
     },
+    saveAndConnect: async () => {
+      const contact = app.state.session?.getContact();
+      const added = await contact.addCard(state.node, state.guid);
+      await contact.connectCard(added);
+    },
     remove: async () => {
       const contact = app.state.session?.getContact()
       await contact.removeCard(state.cardId)

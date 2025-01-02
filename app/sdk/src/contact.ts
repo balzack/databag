@@ -752,7 +752,8 @@ export class ContactModule implements Contact {
     const { node, secure, token } = this;
     const insecure = server ? /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server) : false;
     const message = server ? await getContactListing(server, !insecure, guid) : await getContactListing(node, secure, guid);
-    return await addCard(node, secure, token, message);
+    const added = await addCard(node, secure, token, message);
+    return added.id;
   }
 
   public async removeCard(cardId: string): Promise<void> {

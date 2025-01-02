@@ -2,7 +2,7 @@ import { Staging } from 'databag-client-sdk'
 
 export class StagingFiles implements Staging {
 
-  public clear(): Promise<void> {}
+  public async clear(): Promise<void> {}
 
   private base64ToUint8Array(base64: string): Uint8Array {
     var binaryString = atob(base64);

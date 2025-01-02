@@ -185,6 +185,14 @@ export function Profile({ params, showClose, close }: { params: ProfileParams; s
     }
   }
 
+  const applySaveAndConnect = async () => {
+    if (!connecting) {
+      setConnecting(true)
+      await setAction(actions.saveAndConnect)
+      setConnecting(false)
+    }
+  }
+
   const applyConfirm = async () => {
     if (!confirming) {
       setConfirming(true)
@@ -270,6 +278,12 @@ export function Profile({ params, showClose, close }: { params: ProfileParams; s
         </div>
         {state.statusLabel === 'unknownStatus' && (
           <div className={classes.actions}>
+            <div className={classes.action} onClick={applySaveAndConnect}>
+              <ActionIcon variant="subtle" loading={connecting} size={32}>
+                <IconRoute2 size={32} />
+              </ActionIcon>
+              <Text className={classes.actionLabel}>{state.strings.connect}</Text>
+            </div>
             <div className={classes.action} onClick={applySave}>
               <ActionIcon variant="subtle" loading={saving} size={32}>
                 <IconDeviceFloppy size={32} />
