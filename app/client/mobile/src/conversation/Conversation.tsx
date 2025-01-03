@@ -231,7 +231,11 @@ export function Conversation({close}: {close: ()=>void}) {
           </View>
         )}
       </View>
-      <Divider style={styles.border} bold={true} />
+      <Divider style={styles.border} bold={true}>
+        { sending && (
+          <View style={{ ...styles.progress, width: `${state.progress}%` }} />
+        )}
+      </Divider>
       <Confirm show={alert} params={alertParams} />
       <View style={styles.add}>
         { media.length > 0 && (

@@ -92,6 +92,12 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: 2,
   },
+  progress: {
+    height: 1,
+    position: 'absolute',
+    width: '50%',
+    backgroundColor: Colors.primary,
+  },
   header: {
     display: 'flex',
     flexDirection: 'row',
