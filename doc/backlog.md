@@ -2,6 +2,16 @@
 
 # Backlog
 
+**Call UI:** pop-up window does not appear outside the app, nor does it activate the lock screen for interaction.
+
+**Call UI:** The notification for an incoming call sends two alerts using the message notification sound and then stops ringing.
+
+**Call UI:** Notifications from the notification bar either open on the first tap, the second, or, at most, the third consecutive tap.
+
+**Call UI:** There is no "waiting to answer" sound until the recipient accepts the call and the proximity sensor engages after the call is been answered.
+
+**Call UI:** There is no timer to track the call duration.
+
 **SDK:** refactor mobile and browser code into an SDK and app
 
 **Typescript:** refactor mobile and browser apps to use typescript
@@ -14,8 +24,6 @@
 
 **Embed STUN/TURN:** directly support nat translation for webrtc as part of the server
 
-**Mobile HTTP:** support plaintext communcation with server from mobile app
-
 **More Languages:** add any additional language requests
 
 **CLI:** create a CLI client for automation
@@ -23,8 +31,6 @@
 **Bots:** add support for bots
 
 **Preferred Nodes:** add an admin managed list of other nodes and present the nodes in a select box when searching for contacts
-
-**2-Factor Auth:** add 2-factor auth capabilities
 
 **SSO:** support single sign on
 
@@ -55,6 +61,8 @@
 **Arch Document:** software design and API document for contributors
 
 **APN:** avoid firebase for iOS and use APN directly
+
+**Password Recover:** add a mechanism for password recovery based on shared secret
 
 **Auto Archive:** add ability to auto delete old data
 

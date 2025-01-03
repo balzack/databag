@@ -619,3 +619,13 @@ type Ring struct {
 
   IcePassword string `json:"icePassword"`
 }
+
+type PushMessage struct {
+  Title string `json:"title"`
+  Body string `json:"body"`
+  Token string `json:"token"`
+}
+
+type PushResponse struct {
+  Message string `json:"message"`
+}

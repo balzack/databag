@@ -24,7 +24,7 @@ func AddMultiFactorAuth(w http.ResponseWriter, r *http.Request) {
     Issuer: APPMFAIssuer,
     AccountName: account.Handle,
     Digits: otp.DigitsSix,
-    Algorithm: otp.AlgorithmSHA256,
+    Algorithm: otp.AlgorithmSHA1,
   })
 
   err = store.DB.Transaction(func(tx *gorm.DB) error {

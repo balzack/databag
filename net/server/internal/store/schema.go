@@ -84,6 +84,7 @@ type Account struct {
   MFAEnabled        bool            `gorm:"not null;default:false"`
   MFAConfirmed      bool            `gorm:"not null;default:false"`
   MFASecret         string
+  MFAAlgorithm      string
   MFAFailedTime     int64
   MFAFailedCount    uint
   Forward           string

@@ -34,7 +34,11 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
       return;
     }
 
-    opts := totp.ValidateOpts{Period: 30, Skew: 1, Digits: otp.DigitsSix, Algorithm: otp.AlgorithmSHA256}
+    algorithm := otp.AlgorithmSHA256;
+    if account.MFAAlgorithm == APPMFASHA1 {
+      algorithm = otp.AlgorithmSHA1
+    }
+    opts := totp.ValidateOpts{Period: 30, Skew: 1, Digits: otp.DigitsSix, Algorithm: algorithm}
     if valid, _ := totp.ValidateCustom(code, account.MFASecret, time.Now(), opts); !valid {
       err := store.DB.Transaction(func(tx *gorm.DB) error {
         if account.MFAFailedTime + APPMFAFailPeriod > curTime {

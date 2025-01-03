@@ -40,8 +40,13 @@ func SetAdminAccess(w http.ResponseWriter, r *http.Request) {
       return;
     }
 
-    secret := getStrConfigValue(CNFMFASecret, "");
-    opts := totp.ValidateOpts{Period: 30, Skew: 1, Digits: otp.DigitsSix, Algorithm: otp.AlgorithmSHA256}
+    secret := getStrConfigValue(CNFMFASecret, "")
+    algorithm := getStrConfigValue(CNFMFAAlgorithm, APPMFASHA256)
+    mfaAlgorithm := otp.AlgorithmSHA256
+    if algorithm == APPMFASHA1 {
+      mfaAlgorithm = otp.AlgorithmSHA1
+    }
+    opts := totp.ValidateOpts{Period: 30, Skew: 1, Digits: otp.DigitsSix, Algorithm: mfaAlgorithm}
     if valid, _ := totp.ValidateCustom(code, secret, time.Now(), opts); !valid {
       err := store.DB.Transaction(func(tx *gorm.DB) error {
         if failedTime + APPMFAFailPeriod > curTime {
