@@ -8,15 +8,21 @@ import RNFS from 'react-native-fs';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
 import { createThumbnail } from "react-native-create-thumbnail";
 
-const IMAGE_SCALE_SIZE = (128 * 1024);
+const IMAGE_SCALE_SIZE = (50 * 1024);
 const GIF_TYPE = 'image/gif';
 const WEBP_TYPE = 'image/webp';
 const LOAD_DEBOUNCE = 1000;
 
-async function getImageThumb(path: string) {
-  const thumb = await ImageResizer.createResizedImage(path, 192, 192, "JPEG", 50, 0, null);
-  const base = await RNFS.readFile(thumb.path, 'base64')
-  return `data:image/jpeg;base64,${base}`;
+async function getImageThumb(path: string, type: string, size: number) {
+console.log("GET THUMB: ", path, type, size);
+  if (size < IMAGE_SCALE_SIZE) {
+    const base = await RNFS.readFile(path, 'base64')
+    return `data:image/jpeg;base64,${base}`;
+  } else {
+    const thumb = await ImageResizer.createResizedImage(path, 192, 192, "JPEG", 50, 0, null);
+    const base = await RNFS.readFile(thumb.path, 'base64')
+    return `data:image/jpeg;base64,${base}`;
+  }
 }
 
 async function getVideoThumb(path: string, position?: number) {
@@ -49,7 +55,7 @@ export function useConversation() {
     subjectNames: [],
     unknownContacts: 0,
     message: '',
-    assets: [] as {type: string, path: string, mime?: string, position?: number, label?: string}[],
+    assets: [] as {type: string, path: string, mime?: string, position?: number, label?: string, size?: number}[],
     textColor: '#444444',
     textColorSet: false,
     textSize: 16,
@@ -184,7 +190,7 @@ export function useConversation() {
           if (asset.type === 'image') {
             if (sealed) {
               sources.push({ type: AssetType.Image, source: asset.path, transforms: [
-                { type: TransformType.Thumb, appId: `it${sources.length}`, thumb: async () => await getImageThumb(asset.path) },
+                { type: TransformType.Thumb, appId: `it${sources.length}`, thumb: async () => await getImageThumb(asset.path, asset.type, asset.size) },
                 { type: TransformType.Copy, appId: `ic${sources.length}` }
               ]});
               return { encrypted: { type: 'image', thumb: `it${sources.length-1}`, parts: `ic${sources.length-1}` } };
@@ -223,8 +229,7 @@ export function useConversation() {
               return { audio: { label: asset.label, full: `ac${sources.length-1}` } };
             }
           } else {
-            const extension = asset.path.name.split('.').pop();
-            const label = asset.path.name.split('.').shift();
+            const { label, extension } = asset;
             if (sealed) {
               sources.push({ type: AssetType.Binary, source: asset.path, transforms: [
                 { type: TransformType.Copy, appId: `bc${sources.length}` }
@@ -279,21 +284,21 @@ export function useConversation() {
         updateState({ message: '', assets: [], progress: 0 });
       }
     }, 
-    addImage: (path: string, mime: string) => {
+    addImage: (path: string, mime: string, size: number) => {
       const type = 'image';
-      updateState({ assets: [ ...state.assets, { type, path, mime } ]});
+      updateState({ assets: [ ...state.assets, { type, path, mime, size } ]});
     },
     addVideo: (path: string, mime: string) => {
       const type = 'video';
       updateState({ assets: [ ...state.assets, { type, path, mime } ]});
     },
-    addAudio: (file: File) => {
+    addAudio: (path: string, name: string) => {
       const type = 'audio';
-      updateState({ assets: [ ...state.assets, { type, file } ]});
+      updateState({ assets: [ ...state.assets, { type, path, label: name.split('.').shift() } ]});
     },
-    addBinary: (file: File) => {
+    addBinary: (path: string, name: string) => {
       const type = 'binary';
-      updateState({ assets: [ ...state.assets, { type, file } ]});
+      updateState({ assets: [ ...state.assets, { type, path, label: name.split('.').shift(), extension: name.split('.').pop() } ]});
     },
   }
 

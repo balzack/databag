@@ -958,6 +958,27 @@ PODS:
     - Yoga
   - react-native-create-thumbnail (2.0.1):
     - React-Core
+  - react-native-document-picker (9.3.1):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-image-resizer (3.0.11):
     - React-Core
   - react-native-rsa-native (2.0.5):
@@ -1443,6 +1464,7 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
   - react-native-create-thumbnail (from `../node_modules/react-native-create-thumbnail`)
+  - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - "react-native-image-resizer (from `../node_modules/@bam.tech/react-native-image-resizer`)"
   - react-native-rsa-native (from `../node_modules/react-native-rsa-native`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -1552,6 +1574,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/blur"
   react-native-create-thumbnail:
     :path: "../node_modules/react-native-create-thumbnail"
+  react-native-document-picker:
+    :path: "../node_modules/react-native-document-picker"
   react-native-image-resizer:
     :path: "../node_modules/@bam.tech/react-native-image-resizer"
   react-native-rsa-native:
@@ -1660,6 +1684,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 9f68550e7c6839d01411ac8896aea5c868eff63a
   react-native-blur: 30d91a67da86a4d4d924b0c7c36f6e01479a246b
   react-native-create-thumbnail: 4ffd51a6c02a9313edc74e2460cd07264221f554
+  react-native-document-picker: c4f197741c327270453aa9840932098e0064fd52
   react-native-image-resizer: 6260ba497fb8d1a593c1c92ccd593f570df6f5b7
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
   react-native-safe-area-context: 4532f1a0c5d34a46b9324ccaaedcb5582a302b7d
