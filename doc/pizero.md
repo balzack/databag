@@ -23,7 +23,7 @@ These instructions assume you have the following setup:
   apt-get -y install curl<br/>
   apt-get -y install net-tools<br/>
   apt-get -y install jq<br/>
-  apt-get -y install netcat<br/>
+  apt-get -y install netcat-openbsd<br/>
   apt-get -y install unzip<br/>
   apt-get -y install wget<br/>
   apt-get -y install git<br/>

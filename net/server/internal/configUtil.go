@@ -78,6 +78,9 @@ const CNFMFAEnabled = "mfa_enabled"
 //CNFMFAConfirmed specified if mfa has been confirmed for admin
 const CNFMFAConfirmed = "mfa_confirmed"
 
+//CNFMFAAlgorirthm specifies internal mfa alogirhtm to use
+const CNFMFAAlgorithm = "mfa_algorithm"
+
 //CNFMFASecret specified the mfa secret
 const CNFMFASecret = "mfa_secret"
 
