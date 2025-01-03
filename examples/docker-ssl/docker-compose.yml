@@ -7,7 +7,6 @@ services:
     ports:
       - 80:80
       - 443:443
-      - 7000:7000
     volumes:
       # Edit the Caddyfile and replace "example.com" with your own domain
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
@@ -23,6 +22,7 @@ services:
       - database:/var/lib/databag
     environment:
       - ADMIN=password
+      - DATABAG_PORT=443
 volumes:
   database:
   caddy_data:
