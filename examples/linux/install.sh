@@ -1,9 +1,23 @@
 #!/bin/bash
 set -e
 
-if [ "$EUID" -eq 0 ]; then
-	echo "Do not run this as the root user"
-	exit 1
+function confirm() {
+	read -p "Are you sure you want to continue? [Y/n] " reply
+	if [ "$reply" != "Y" ] && [ "$reply" != "y" ]; then
+		echo "Aborting"
+		exit 1
+	fi
+}
+
+if [ "$USER" != "databag" ]; then
+	echo "Install script must be run as databag user"
+	if id "databag" >/dev/null 2>&1; then
+		echo "User databag not found, creating..."
+		confirm
+		sudo useradd databag
+	fi
+	sudo -i -u databag $0 "$@"
+	exit
 fi
 
 if [[ ! -d "/app/databag" ]]; then
@@ -54,19 +68,19 @@ mkdir -p /opt/databag/transform
 cp net/transform/*.sh /opt/databag/transform/
 
 if ![[ -f /etc/systemd/system/databag.service ]]; then
-	 function createService() {
-			echo "Creating databag service..."
-			echo "Copying databag service to /etc/systemd/system/databag.service requires sudo permissions"
-			sudo cp ./databag.service /etc/systemd/system/databag.service
-			sudo chmod 664 /etc/systemd/system/databag.service
-			sudo systemctl daemon-reload
-	 }
-	 function startService() {
-			echo "Starting databag service..."
-			sudo systemctl start databag.service
-	 }
-	 createService $? "Failed to install databag service"
-	 startService $? "Failed to start databag service"
+	function createService() {
+		echo "Creating databag service..."
+		echo "Copying databag service to /etc/systemd/system/databag.service requires sudo permissions"
+		sudo cp ./databag.service /etc/systemd/system/databag.service
+		sudo chmod 664 /etc/systemd/system/databag.service
+		sudo systemctl daemon-reload
+	}
+	function startService() {
+		echo "Starting databag service..."
+		sudo systemctl start databag.service
+	}
+	createService $? "Failed to install databag service"
+	startService $? "Failed to start databag service"
 fi
 echo ""
 echo "Done"
