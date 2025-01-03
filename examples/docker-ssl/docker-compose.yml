@@ -1,4 +1,4 @@
-name: databag-ssl
+name: databag-example-ssl
 
 services:
   caddy:
