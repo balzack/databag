@@ -13,11 +13,11 @@ services:
     build:
       context: ./net/server
       dockerfile: Dockerfile.dev
-    ports: 
+    ports:
       - 127.0.0.1:7000:7000
     volumes:
       - ./net/server:/app/databag/net/server
-      - database:/var/lib/databag
+      - ./dev_database:/var/lib/databag
       - ./net/transform:/opt/databag/transform
       - ./net/web/build:/app/databag/net/web/build
     working_dir: /app
@@ -35,7 +35,3 @@ services:
     ports:
       - 127.0.0.1:7878:7878
     command: go run main.go
-
-
-volumes:
-  database:
