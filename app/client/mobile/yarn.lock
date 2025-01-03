@@ -3451,6 +3451,7 @@ __metadata:
     react: 18.2.0
     react-dom: ^18.3.1
     react-native: 0.74.3
+    react-native-create-thumbnail: ^2.0.1
     react-native-file-type: ^1.0.0
     react-native-fs: ^2.20.0
     react-native-gesture-handler: ^2.19.0
@@ -8869,6 +8870,15 @@ __metadata:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 9d6d111d8990dc98bc5402c1266a808b0459b5d54830bbea24c12d908b536df7883f268a7868cfaedde3dd9d4e0d574db456f84d2e6df9c4526f99bb4b5344d8
+  languageName: node
+  linkType: hard
+
+"react-native-create-thumbnail@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "react-native-create-thumbnail@npm:2.0.1"
+  peerDependencies:
+    react-native: ">=0.59.0"
+  checksum: 2feb7d36fa02620b0e3f8a4d2275ddface6126f4788d62637fcac9d285caedcb1e967f769d4daf901f4085282e5afee75176d35209870842ea941efea5c77377
   languageName: node
   linkType: hard
 

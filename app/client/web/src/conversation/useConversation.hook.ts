@@ -251,16 +251,8 @@ export function useConversation() {
             }
           } else if (asset.type === 'video') {
             if (sealed) {
-              const videoThumb = async () => {
-                try {
-                  return await getVideoThumb(asset.file, asset.position);
-                } catch (err) {
-                  console.log(err);
-                  return placeholder;
-                }
-              };
               sources.push({ type: AssetType.Video, source: asset.file, transforms: [
-                { type: TransformType.Thumb, appId: `vt${sources.length}`, thumb: videoThumb },
+                { type: TransformType.Thumb, appId: `vt${sources.length}`, thumb: () => getVideoThumb(asset.file, asset.position) },
                 { type: TransformType.Copy, appId: `vc${sources.length}` }
               ]});
               return { encrypted: { type: 'video', thumb: `vt${sources.length-1}`, parts: `vc${sources.length-1}` } };

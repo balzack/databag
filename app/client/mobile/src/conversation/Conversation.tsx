@@ -11,6 +11,7 @@ import ColorPicker from 'react-native-wheel-color-picker'
 import {BlurView} from '@react-native-community/blur';
 import ImagePicker from 'react-native-image-crop-picker'
 import { ImageFile } from './imageFile/ImageFile';
+import { VideoFile } from './videoFile/VideoFile';
 
 const SCROLL_THRESHOLD = 16;
 
@@ -114,9 +115,21 @@ export function Conversation({close}: {close: ()=>void}) {
     }
   }
 
+  const addVideo = async () => {
+    try {
+      const { path, mime } = await ImagePicker.openPicker({ mediaType: 'video' });
+      actions.addVideo(path, mime);
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+
   const media = state.assets.map((asset, index) => {
     if (asset.type === 'image') {
       return <ImageFile key={index} path={asset.path} disabled={false} remove={()=>{}} />
+    } else if (asset.type === 'video') {
+      return <VideoFile key={index} path={asset.path} disabled={false} remove={()=>{}} />
     } else {
       return <></>
     }
@@ -202,7 +215,7 @@ export function Conversation({close}: {close: ()=>void}) {
 
         <View style={styles.controls}>
           <Pressable style={styles.control} onPress={addImage}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="camera" size={24} color={Colors.primary} /></Surface></Pressable>
-          <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} /></Surface></Pressable>
+          <Pressable style={styles.control} onPress={addVideo}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} /></Surface></Pressable>
           <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="volume-high" size={24} color={Colors.primary} /></Surface></Pressable>
           <Pressable style={styles.control}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="file-outline" size={24} color={Colors.primary} /></Surface></Pressable>
           <Divider style={styles.separator} />

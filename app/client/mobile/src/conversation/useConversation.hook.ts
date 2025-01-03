@@ -6,6 +6,7 @@ import { ContextType } from '../context/ContextType'
 import { placeholder } from '../constants/Icons';
 import RNFS from 'react-native-fs';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
+import { createThumbnail } from "react-native-create-thumbnail";
 
 const IMAGE_SCALE_SIZE = (128 * 1024);
 const GIF_TYPE = 'image/gif';
@@ -18,10 +19,12 @@ async function getImageThumb(path: string) {
   return `data:image/jpeg;base64,${base}`;
 }
 
-function getVideoThumb(file: File, position?: number) {
-  return new Promise<string>((resolve, reject) => {
-    resolve('');
-  });
+async function getVideoThumb(path: string, position?: number) {
+  const timeStamp = position ? position * 1000 : 0;
+  const shot = await createThumbnail({ url: path.slice(7), timeStamp })
+  const thumb = await ImageResizer.createResizedImage('file://' + shot.path, 192, 192, "JPEG", 50, 0, null);
+  const base = await RNFS.readFile(thumb.path, 'base64')
+  return `data:image/jpeg;base64,${base}`;
 }
 
 export function useConversation() {
@@ -181,7 +184,7 @@ export function useConversation() {
           if (asset.type === 'image') {
             if (sealed) {
               sources.push({ type: AssetType.Image, source: asset.path, transforms: [
-                { type: TransformType.Thumb, appId: `it${sources.length}`, thumb: () => getImageThumb(asset.path) },
+                { type: TransformType.Thumb, appId: `it${sources.length}`, thumb: async () => await getImageThumb(asset.path) },
                 { type: TransformType.Copy, appId: `ic${sources.length}` }
               ]});
               return { encrypted: { type: 'image', thumb: `it${sources.length-1}`, parts: `ic${sources.length-1}` } };
@@ -194,16 +197,8 @@ export function useConversation() {
             }
           } else if (asset.type === 'video') {
             if (sealed) {
-              const videoThumb = async () => {
-                try {
-                  return await getVideoThumb(asset.path, asset.position);
-                } catch (err) {
-                  console.log(err);
-                  return placeholder;
-                }
-              };
               sources.push({ type: AssetType.Video, source: asset.path, transforms: [
-                { type: TransformType.Thumb, appId: `vt${sources.length}`, thumb: videoThumb },
+                { type: TransformType.Thumb, appId: `vt${sources.length}`, thumb: async () => await getVideoThumb(asset.path, asset.position) },
                 { type: TransformType.Copy, appId: `vc${sources.length}` }
               ]});
               return { encrypted: { type: 'video', thumb: `vt${sources.length-1}`, parts: `vc${sources.length-1}` } };
@@ -288,9 +283,9 @@ export function useConversation() {
       const type = 'image';
       updateState({ assets: [ ...state.assets, { type, path, mime } ]});
     },
-    addVideo: (file: File) => {
+    addVideo: (path: string, mime: string) => {
       const type = 'video';
-      updateState({ assets: [ ...state.assets, { type, file } ]});
+      updateState({ assets: [ ...state.assets, { type, path, mime } ]});
     },
     addAudio: (file: File) => {
       const type = 'audio';
