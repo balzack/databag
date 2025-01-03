@@ -130,7 +130,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
         </Surface>
       )}
       <Divider style={styles.border} />
-      <Confirm show={confirmShow} params={confirmParams} />
+      <Confirm show={confirmShow} busy={removing} params={confirmParams} />
     </View>
   );
 }
