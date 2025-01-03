@@ -3,18 +3,27 @@ name: databag-ssl
 services:
   caddy:
     image: caddy
+    restart: unless-stopped
     ports:
       - 80:80
       - 443:443
-    # Replace mydomain.com with your domain of choice
-    entrypoint: caddy reverse-proxy --from mydomain.com --to http://app:7000
+      - 7000:7000
+    volumes:
+      # Edit the Caddyfile and replace "example.com" with your own domain
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # Recommended by Caddy
+      - caddy_data:/data
+      - caddy_config:/config
     depends_on:
       - app
   app:
-    build: .
+    image: balzack/databag:latest
+    restart: unless-stopped
     volumes:
       - database:/var/lib/databag
     environment:
       - ADMIN=password
 volumes:
   database:
+  caddy_data:
+  caddy_config:
