@@ -38,7 +38,7 @@ if [[ "/app/databag" != $(pwd) ]]; then
 	exit 1
 fi
 
-if [[ ! -z $(which yarn) ]]; then
+if [[ -z $(which yarn) ]]; then
 	echo "Yarn is not installed, installing..."
 	npm install --global yarn
 fi
