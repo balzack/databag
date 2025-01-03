@@ -10,6 +10,7 @@ import { BinaryAsset } from './binaryAsset/BinaryAsset';
 import { useMessage } from './useMessage.hook';
 import {styles} from './Message.styled';
 import { MediaAsset } from '../conversation/Conversatin';
+import { Confirm } from '../confirm/Confirm'; 
 
 export function Message({ topic, card, profile, host, select, selected }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean, select: (id: null | string)=>void, selected: string }) {
   const { state, actions } = useMessage();
@@ -23,6 +24,43 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState('');
   const [saving, setSaving] = useState(false);
+  const [confirmParams, setConfirmParams] = useState({});
+  const [confirmShow, setConfirmShow] = useState(false);
+  const [removing, setRemoving] = useState(false);
+
+  const remove = () => {
+    setConfirmParams({
+      title: state.strings.deleteMessage,
+      prompt: state.strings.messageHint,
+      cancel: {
+        label: state.strings.cancel,
+        action: () => setConfirmShow(false),
+      },
+      confirm: {
+        label: state.strings.remove,
+        action: async () => {
+          if (!removing) {
+            setRemoving(true);
+            try {
+              await actions.remove(topicId);
+            } catch (err) {
+              console.log(err);
+              setConfirmParams({
+                title: state.strings.operationFailed,
+                prompt: state.strings.tryAgain,
+                cancel: {
+                  label: state.strings.cancel,
+                  action: () => setConfirmShow(false),
+                },
+              });
+            }
+            setRemoving(false);
+          }
+        }
+      },
+    });
+    setConfirmShow(true);
+  };
 
   const media = !assets ? [] : assets.map((asset: MediaAsset, index: number) => {
     if (asset.image || asset.encrypted?.type === 'image') {
@@ -86,12 +124,13 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
         <Surface style={styles.options}>
           <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="share-variant-outline" size={24} onPress={() => {}} />
           <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="square-edit-outline" size={24} onPress={() => {}} />
-          <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="trash-can-outline" size={24} onPress={() => {}} />
+          <IconButton style={styles.option} loading={removing} compact="true"  mode="contained" icon="trash-can-outline" size={24} onPress={remove} />
           <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="eye-remove-outline" size={24} onPress={() => {}} />
           <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="alert-octagon-outline" size={24} onPress={() => {}} />
         </Surface>
       )}
       <Divider style={styles.border} />
+      <Confirm show={confirmShow} params={confirmParams} />
     </View>
   );
 }
