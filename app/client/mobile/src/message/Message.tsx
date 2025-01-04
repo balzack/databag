@@ -29,6 +29,19 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
   const [removing, setRemoving] = useState(false);
   const [blocking, setBlocking] = useState(false);
   const [reporting, setReporting] = useState(false);
+  const loadedCount = useRef(0);
+  const [showAsset, setShowAsset] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setShowAsset(true), 2000);
+  }, []);
+
+  const loaded = () => {
+    loadedCount.current += 1;
+    if (loadedCount.current >= assets.length) {
+      setShowAsset(true);
+    }
+  }
 
   const block = () => {
     setConfirmParams({
@@ -128,13 +141,13 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
 
   const media = !assets ? [] : assets.map((asset: MediaAsset, index: number) => {
     if (asset.image || asset.encrypted?.type === 'image') {
-      return <ImageAsset key={index} topicId={topicId} asset={asset as MediaAsset} />
+      return <ImageAsset key={index} topicId={topicId} asset={asset as MediaAsset} loaded={loaded} show={showAsset} />
     } else if (asset.audio || asset.encrypted?.type === 'audio') {
-      return <AudioAsset key={index} topicId={topicId} asset={asset as MediaAsset} />
+      return <AudioAsset key={index} topicId={topicId} asset={asset as MediaAsset} loaded={loaded} show={showAsset} />
     } else if (asset.video || asset.encrypted?.type === 'video') {
-      return <VideoAsset key={index} topicId={topicId} asset={asset as MediaAsset} />
+      return <VideoAsset key={index} topicId={topicId} asset={asset as MediaAsset} loaded={loaded} show={showAsset} />
     } else if (asset.binary || asset.encrypted?.type === 'binary') {
-      return <BinaryAsset key={index} topicId={topicId} asset={asset as MediaAsset} />
+      return <BinaryAsset key={index} topicId={topicId} asset={asset as MediaAsset} loaded={loaded} show={showAsset} />
     } else {
       return <View key={index}></View>
     }

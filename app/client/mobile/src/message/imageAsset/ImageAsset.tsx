@@ -6,20 +6,23 @@ import { MediaAsset } from '../../conversation/Conversation';
 import { styles } from './ImageAsset.styled'
 import {BlurView} from '@react-native-community/blur';
 
-export function ImageAsset({ topicId, asset }: { topicId: string, asset: MediaAsset }) {
+export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, asset: MediaAsset, loaded: ()=>void, show: boolean }) {
   const { state, actions } = useImageAsset(topicId, asset);
   const [modal, setModal] = useState(false);
   const opacity = useAnimatedValue(0);
 
   useEffect(() => {
-    if (state.loaded) {
+    if (state.loaded && show) {
       Animated.timing(opacity, {
         toValue: 1,
         duration: 100,
         useNativeDriver: true,
       }).start();
     }
-  }, [state.loaded]);
+    if (state.loaded) {
+      loaded();
+    }
+  }, [state.loaded, show]);
 
   const showImage = () => {
     setModal(true);
