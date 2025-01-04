@@ -8,4 +8,10 @@ export const styles = StyleSheet.create({
   thumb: {
     height: 72,
   },
+  icon: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    borderRadius: 4,
+  },
 });

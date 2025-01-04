@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {KeyboardAvoidingView, Modal, Platform, ScrollView, SafeAreaView, Pressable, View, FlatList, TouchableOpacity} from 'react-native';
+import {Animated, useAnimatedValue, KeyboardAvoidingView, Modal, Platform, ScrollView, SafeAreaView, Pressable, View, FlatList, TouchableOpacity} from 'react-native';
 import {styles} from './Conversation.styled';
 import {useConversation} from './useConversation.hook';
 import {Message} from '../message/Message';
@@ -40,6 +40,7 @@ export function Conversation({close}: {close: ()=>void}) {
   const contentLead = useRef(null);
   const scrollOffset = useRef(0);
   const busy = useRef(false); 
+  const scale = useAnimatedValue(0)
 
   const alertParams = {
     title: state.strings.error,
@@ -51,6 +52,25 @@ export function Conversation({close}: {close: ()=>void}) {
       },
     },
   };
+
+  useEffect(() => {
+
+console.log(">>>> ", state.assets.length);
+
+    if (state.assets.length > 0) {
+      Animated.timing(scale, {
+        toValue: 80,
+        duration: 100,
+        useNativeDriver: false,
+      }).start();
+    } else {
+      Animated.timing(scale, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: false,
+      }).start();
+    }
+  }, [state.assets]);
 
   const sendMessage = async () => {
     if (!busy.current && (state.message || state.assets.length > 0)) {
@@ -156,7 +176,7 @@ export function Conversation({close}: {close: ()=>void}) {
 
   const media = state.assets.map((asset, index) => {
     if (asset.type === 'image') {
-      return <ImageFile key={index} path={asset.path} disabled={false} remove={()=>{}} />
+      return <ImageFile key={index} path={asset.path} disabled={false} remove={()=>actions.removeAsset(index)} />
     } else if (asset.type === 'video') {
       return <VideoFile key={index} path={asset.path} disabled={false} remove={()=>{}} />
     } else if (asset.type === 'audio') {
@@ -238,11 +258,11 @@ export function Conversation({close}: {close: ()=>void}) {
       </Divider>
       <Confirm show={alert} params={alertParams} />
       <View style={styles.add}>
-        { media.length > 0 && (
+        <Animated.View style={[{},{height: scale}]}>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.carousel} contentContainerStyle={styles.assets}>
             { media }
           </ScrollView>
-        )}
+        </Animated.View>
         <TextInput multiline={true} mode="outlined" style={{ ...styles.message, fontSize: state.textSize }}
             textColor={state.textColorSet ? state.textColor : undefined} outlineColor="transparent" activeOutlineColor="transparent"spellcheck={false}
             autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage} placeholderTextColor={state.textColorSet ? state.textColor : undefined}

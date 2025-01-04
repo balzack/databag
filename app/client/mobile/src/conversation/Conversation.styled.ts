@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
   carousel: {
     paddingLeft: 8,
     paddingBottom: 8,
+    height: 80,
   },
   assets: {
     display: 'flex',
