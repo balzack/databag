@@ -54,9 +54,6 @@ export function Conversation({close}: {close: ()=>void}) {
   };
 
   useEffect(() => {
-
-console.log(">>>> ", state.assets.length);
-
     if (state.assets.length > 0) {
       Animated.timing(scale, {
         toValue: 80,
@@ -176,13 +173,13 @@ console.log(">>>> ", state.assets.length);
 
   const media = state.assets.map((asset, index) => {
     if (asset.type === 'image') {
-      return <ImageFile key={index} path={asset.path} disabled={false} remove={()=>actions.removeAsset(index)} />
+      return <ImageFile key={index} path={asset.path} disabled={sending} remove={()=>actions.removeAsset(index)} />
     } else if (asset.type === 'video') {
-      return <VideoFile key={index} path={asset.path} disabled={false} remove={()=>{}} />
+      return <VideoFile key={index} path={asset.path} disabled={sending} remove={()=>actions.removeAsset(index)} />
     } else if (asset.type === 'audio') {
-      return <AudioFile key={index} path={asset.path} disabled={false} remove={()=>{}} />
+      return <AudioFile key={index} path={asset.path} disabled={sending} remove={()=>actions.removeAsset(index)} />
     } else {
-      return <BinaryFile key={index} path={asset.path} disabled={false} remove={()=>{}} />
+      return <BinaryFile key={index} path={asset.path} disabled={sending} remove={()=>actions.removeAsset(index)} />
     }
   });
 

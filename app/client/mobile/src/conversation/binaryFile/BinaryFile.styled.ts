@@ -10,4 +10,10 @@ export const styles = StyleSheet.create({
     height: 72,
     width: 72,
   },
+  icon: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    borderRadius: 4,
+  },
 });

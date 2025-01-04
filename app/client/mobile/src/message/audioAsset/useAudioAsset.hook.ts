@@ -31,6 +31,8 @@ export function useAudioAsset(topicId: string, asset: MediaAsset) {
         updateState({ loading: true, loadPercent: 0 });
         try {
           const dataUrl = await focus.getTopicAssetUrl(topicId, assetId, (loadPercent: number)=>{ updateState({ loadPercent }); return !cancelled.current });
+console.log("AUDIO", dataUrl);
+
           updateState({ dataUrl });
         } catch (err) {
           console.log(err);

@@ -38,7 +38,7 @@ export function ImageFile({ path, disabled, remove }: {path: string, disabled: b
           source={{ uri: path }}
           onLoad={actions.loaded}
         />
-        <IconButton style={styles.icon} mode="contained" icon="close" size={20} onPress={remove} />
+        <IconButton style={styles.icon} mode="contained" icon="close" disabled={disabled} size={20} onPress={remove} />
       </Animated.View>
     </View>
   );

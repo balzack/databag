@@ -120,6 +120,7 @@ export class StreamModule {
 
   private async sync(): Promise<void> {
     if (!this.syncing) {
+console.log("--- SYNCING!");
       this.syncing = true;
       const { guid, node, secure, token, channelTypes } = this;
       while ((this.unsealAll || this.nextRevision) && !this.closing) {
@@ -134,6 +135,7 @@ export class StreamModule {
                 const entry = await this.getChannelEntry(id);
 
                 if (detailRevision !== entry.item.detail.revision) {
+console.log("--- SYNCING: detail");
                   const detail = channelDetail ? channelDetail : await getChannelDetail(node, secure, token, id);
                   entry.item.detail = {
                     revision: detailRevision,
@@ -174,6 +176,7 @@ export class StreamModule {
                 }
 
                 if (topicRevision !== entry.item.summary.revision) {
+console.log("--- SYNCING: summary");
                   const summary = channelSummary ? channelSummary : await getChannelSummary(node, secure, token, id);
                   entry.item.summary = {
                     revision: topicRevision,
@@ -201,6 +204,7 @@ export class StreamModule {
                   await this.focus.setRevision(null, id, topicRevision);
                 }
               } else {
+console.log("--- SYNCING: delete");
                 this.channelEntries.delete(id);
                 if (this.focus) {
                   this.focus.disconnect(null, id);
@@ -227,6 +231,7 @@ export class StreamModule {
         }
 
         if (this.unsealAll) {
+console.log("--- SYNCING: unseal");
           for (const [channelId, entry] of this.channelEntries.entries()) {
             try {
               const { item } = entry;
@@ -251,6 +256,7 @@ export class StreamModule {
         await this.store.setMarker(this.guid, 'first_sync_complete', 'stream', '');
       }
       this.syncing = false;
+console.log("--- SYNCING: DONE");
     }
   }
 

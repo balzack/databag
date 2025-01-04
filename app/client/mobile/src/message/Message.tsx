@@ -27,6 +27,65 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
   const [confirmParams, setConfirmParams] = useState({});
   const [confirmShow, setConfirmShow] = useState(false);
   const [removing, setRemoving] = useState(false);
+  const [blocking, setBlocking] = useState(false);
+  const [reporting, setReporting] = useState(false);
+
+  const block = () => {
+    setConfirmParams({
+      title: state.strings.blockMessage,
+      prompt: state.strings.blockMessagePrompt,
+      cancel: {
+        label: state.strings.cancel,
+        action: () => setConfirmShow(false),
+      },
+      confirm: {
+        label: state.strings.block,
+        action: async () => {
+          if (!blocking) {
+            setBlocking(true);
+            try {
+              await actions.block(topicId);
+              setConfirmShow(false);
+            } catch (err) {
+              console.log(err);
+              showError();
+            }
+            setBlocking(false);
+          }
+        }
+      },
+    });
+    setConfirmShow(true);
+  };
+
+  const report = () => {
+    setConfirmParams({
+      title: state.strings.flagMessage,
+      prompt: state.strings.flagMessagePrompt,
+      cancel: {
+        label: state.strings.cancel,
+        action: () => setConfirmShow(false),
+      },
+      confirm: {
+        label: state.strings.flag,
+        action: async () => {
+          if (!reporting) {
+            setReporting(true);
+            try {
+              await actions.flag(topicId);
+              setConfirmShow(false);
+            } catch (err) {
+              console.log(err);
+              showError();
+            }
+            setReporting(false);
+          }
+        }
+      },
+    });
+    setConfirmShow(true);
+  };
+
 
   const remove = () => {
     setConfirmParams({
@@ -45,14 +104,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
               await actions.remove(topicId);
             } catch (err) {
               console.log(err);
-              setConfirmParams({
-                title: state.strings.operationFailed,
-                prompt: state.strings.tryAgain,
-                cancel: {
-                  label: state.strings.cancel,
-                  action: () => setConfirmShow(false),
-                },
-              });
+              showError();
             }
             setRemoving(false);
           }
@@ -61,6 +113,18 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
     });
     setConfirmShow(true);
   };
+
+  const showError = () => {
+    setConfirmParams({
+      title: state.strings.operationFailed,
+      prompt: state.strings.tryAgain,
+      cancel: {
+        label: state.strings.cancel,
+        action: () => setConfirmShow(false),
+      },
+    });
+    setConfirmShow(true);
+  }
 
   const media = !assets ? [] : assets.map((asset: MediaAsset, index: number) => {
     if (asset.image || asset.encrypted?.type === 'image') {
@@ -122,15 +186,25 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
       )}
       { topicId === selected && (
         <Surface style={styles.options}>
-          <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="share-variant-outline" size={24} onPress={() => {}} />
-          <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="square-edit-outline" size={24} onPress={() => {}} />
-          <IconButton style={styles.option} loading={removing} compact="true"  mode="contained" icon="trash-can-outline" size={24} onPress={remove} />
-          <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="eye-remove-outline" size={24} onPress={() => {}} />
-          <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="alert-octagon-outline" size={24} onPress={() => {}} />
+          { !locked && (
+            <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="share-variant-outline" size={24} onPress={() => {}} />
+          )}
+          { !locked && profile && (
+            <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="square-edit-outline" size={24} onPress={() => {}} />
+          )}
+          { (host || profile) && (
+            <IconButton style={styles.option} loading={removing} compact="true"  mode="contained" icon="trash-can-outline" size={24} onPress={remove} />
+          )}
+          { !profile && (
+            <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="eye-remove-outline" size={24} onPress={block} />
+          )}
+          { !profile && (
+            <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="alert-octagon-outline" size={24} onPress={report} />
+          )}
         </Surface>
       )}
       <Divider style={styles.border} />
-      <Confirm show={confirmShow} busy={removing} params={confirmParams} />
+      <Confirm show={confirmShow} busy={removing || reporting || blocking} params={confirmParams} />
     </View>
   );
 }
