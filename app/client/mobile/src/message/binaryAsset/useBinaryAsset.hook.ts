@@ -1,12 +1,15 @@
 import { useState, useContext, useEffect, useRef } from 'react'
 import { AppContext } from '../../context/AppContext'
+import { DisplayContext } from '../../context/DisplayContext';
 import { Focus } from 'databag-client-sdk'
 import { ContextType } from '../../context/ContextType'
 import { MediaAsset } from '../../conversation/Conversation';
 
 export function useBinaryAsset(topicId: string, asset: MediaAsset) {
   const app = useContext(AppContext) as ContextType
+  const display = useContext(DisplayContext) as ContextType
   const [state, setState] = useState({
+    strings: display.state.strings,
     dataUrl: null,
     loading: false,
     loaded: false,
@@ -25,7 +28,7 @@ export function useBinaryAsset(topicId: string, asset: MediaAsset) {
     },
     loadBinary: async () => {
       const { focus } = app.state;
-      const assetId = asset.audio ? asset.audio.full : asset.encrypted ? asset.encrypted.parts : null;
+      const assetId = asset.binary ? asset.binary.data : asset.encrypted ? asset.encrypted.parts : null;
       if (focus && assetId != null && !state.loading && !state.dataUrl) {
         cancelled.current = false; 
         updateState({ loading: true, loadPercent: 0 });

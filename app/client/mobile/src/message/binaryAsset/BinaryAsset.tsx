@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { SafeAreaView, Modal, Pressable, View, Image, Animated, useAnimatedValue } from 'react-native'
-import { Icon, ProgressBar, IconButton } from 'react-native-paper'
+import { SafeAreaView, Modal, Share, Pressable, View, Image, Animated, useAnimatedValue } from 'react-native'
+import { Text, Icon, ProgressBar, IconButton } from 'react-native-paper'
 import { useBinaryAsset } from './useBinaryAsset.hook';
 import { MediaAsset } from '../../conversation/Conversation';
 import { styles } from './BinaryAsset.styled'
 import {BlurView} from '@react-native-community/blur';
 import Video from 'react-native-video'
 import thumb from '../../images/binary.png';
+import RNFetchBlob from 'rn-fetch-blob';
 
 export function BinaryAsset({ topicId, asset, loaded, show }: { topicId: string, asset: MediaAsset, loaded: ()=>void, show: boolean }) {
   const { state, actions } = useBinaryAsset(topicId, asset);
   const [modal, setModal] = useState(false);
   const opacity = useAnimatedValue(0);
+  const [alert, setAlert] = useState('');
 
   useEffect(() => {
     if (show) {
@@ -23,7 +25,21 @@ export function BinaryAsset({ topicId, asset, loaded, show }: { topicId: string,
     }
   }, [show]);
 
+  const share = async () => {
+    try {
+      setAlert('');
+      const extension = asset.binary?.extension || asset.encrypted?.extension;
+      const options = { fileCache: true, appendExt: extension.toLowerCase() };
+      const download = await RNFetchBlob.config(options).fetch("GET", state.dataUrl);
+      await Share.share({ url: download.path() });
+    } catch (err) {
+      console.log(err);
+      setAlert(state.strings.operationFailed)
+    }
+  }
+
   const showBinary = () => {
+    setAlert('');
     setModal(true);
     actions.loadBinary();
   };
@@ -48,6 +64,7 @@ export function BinaryAsset({ topicId, asset, loaded, show }: { topicId: string,
           <View style={styles.button}>
             <Icon size={28} source="download-outline" />
           </View>
+          <Text style={styles.info} numberOfLines={1}>{ asset.binary?.label || asset.encrypted?.label }</Text>
         </Animated.View>
       </Pressable>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={modal} onRequestClose={hideBinary}>
@@ -59,16 +76,22 @@ export function BinaryAsset({ topicId, asset, loaded, show }: { topicId: string,
               resizeMode="contain"
               source={thumb}
             />
-            <View style={styles.button}>
-              <Icon size={64} source="download-outline" />
-            </View>
+            { state.dataUrl && (
+              <View style={styles.button}>
+                <IconButton style={styles.control} size={64} icon="download-outline" onPress={share} />
+              </View>
+            )}
           </View>
           { state.loading && (
             <View style={styles.progress}>
               <ProgressBar progress={state.loadPercent / 100}  />
             </View>
           )}
+          <SafeAreaView style={styles.alert}>
+            <Text style={styles.alertLabel}>{ alert }</Text>
+          </SafeAreaView>
           <SafeAreaView style={styles.close}>
+            <Text style={styles.label} adjustsFontSizeToFit={true} numberOfLines={1}>{ asset.binary?.label || asset.encrypted?.label }</Text>
             <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={28} onPress={hideBinary} />
           </SafeAreaView>
         </View>

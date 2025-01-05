@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {Colors} from '../constants/Colors';
+import {Colors} from '../../constants/Colors';
 
 export const styles = StyleSheet.create({
   modal: {
@@ -13,6 +13,9 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     borderRadius: 4,
     backgroundColor: '#444444',
+  },
+  control: {
+    backgroundColor: 'transparent',
   },
   container: {
     position: 'relative',
@@ -29,6 +32,11 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  info: {
+    fontSize: 12,
+    position: 'absolute',
+    top: 0,
   },
   blur: {
     position: 'absolute',
@@ -52,10 +60,29 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  label: {
+    flexGrow: 1,
+    fontSize: 32,
+    paddingLeft: 16,
+    minWidth: 0,
+    textOverflow: 'ellipsis',
+    flexShrink: 1,
+  },
   close: {
+    display: 'flex',
+    flexDirection: 'row',
     position: 'absolute',
+    alignItems: 'center',
     top: 0,
-    right: 0,
+    minWidth: 0,
+    width: '100%',
+  },
+  alert: {
+    position: 'absolute',
+    bottom: 0,
+  },
+  alertLabel: {
+    color: Colors.offsync,
   },
   closeIcon: {
     backgroundColor: 'transparent',
