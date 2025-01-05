@@ -5,13 +5,17 @@ import { useVideoAsset } from './useVideoAsset.hook';
 import { MediaAsset } from '../../conversation/Conversation';
 import { styles } from './VideoAsset.styled'
 import {BlurView} from '@react-native-community/blur';
-import Video from 'react-native-video'
+import Video, { VideoRef } from 'react-native-video'
 
 export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, asset: MediaAsset, loaded: ()=>void, show: boolean }) {
   const { state, actions } = useVideoAsset(topicId, asset);
   const [modal, setModal] = useState(false);
   const opacity = useAnimatedValue(0);
-
+  const videoRef = useRef<VideoRef>(null as null | VideoRef);
+  const [status, setStatus] = useState('loading');
+  const [showControl, setShowControl] = useState(false);
+  const clear = useRef();
+ 
   useEffect(() => {
     if (state.loaded && show) {
       Animated.timing(opacity, {
@@ -35,6 +39,38 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
     actions.cancelLoad();
   }
 
+  const controls = () => {
+    clearTimeout(clear.current);
+    setShowControl(true);
+    clear.current = setTimeout(() => {
+      setShowControl(false);
+    }, 3000);
+  }
+
+  const play = () => {
+    videoRef.current.resume();
+  }
+
+  const pause = () => {
+    videoRef.current.pause();
+  }
+
+  const error = () => {
+    setStatus('failed');
+  }
+
+  const end = () => {
+    videoRef.current.seek(0);
+  }
+
+  const playbackRateChange = (e) => {
+    if (e.playbackRate === 0) {
+      setStatus('paused');
+    } else {
+      setStatus('playing');
+    }
+  }
+
   return (
     <View style={styles.video}>
       { state.thumbUrl && (
@@ -54,7 +90,7 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
         </Pressable>
       )}
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={modal} onRequestClose={hideVideo}>
-        <View style={styles.modal}>
+        <Pressable style={styles.modal} onPress={controls}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={16} reducedTransparencyFallbackColor="dark" />
           <Image
             style={styles.full}
@@ -62,8 +98,18 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
             source={{ uri: state.thumbUrl }}
           />
           { state.dataUrl && (
-          <Video source={{ uri: state.dataUrl }} style={styles.full}
-            controls={false} resizeMode="contain" />
+            <Video source={{ uri: state.dataUrl }} style={styles.full} ref={videoRef}
+              onPlaybackRateChange={playbackRateChange} onEnd={end} onError={error}
+              controls={false} resizeMode="contain" />
+          )}
+          { status === 'failed' && (
+            <Icon color={Colors.offsync} size={64} source="fire" />
+          )}
+          { status === 'playing' && showControl && (
+            <IconButton style={styles.control} size={64} icon="pause" onPress={pause} />
+          )}
+          { status === 'paused' && showControl && (
+            <IconButton style={styles.control} size={64} icon="play" onPress={play} />
           )}
           { state.loading && (
             <View style={styles.progress}>
@@ -73,7 +119,7 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
           <SafeAreaView style={styles.close}>
             <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={28} onPress={hideVideo} />
           </SafeAreaView>
-        </View>
+        </Pressable>
       </Modal>
     </View>
   );

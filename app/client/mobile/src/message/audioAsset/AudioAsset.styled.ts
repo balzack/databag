@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {Colors} from '../constants/Colors';
+import {Colors} from '../../constants/Colors';
 
 export const styles = StyleSheet.create({
   modal: {
@@ -8,6 +8,12 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  failed: {
+    color: Colors.offsync,
+  },
+  control: {
+    backgroundColor: 'transparent',
   },
   button: {
     position: 'absolute',
@@ -44,12 +50,30 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  close: {
+  info: {
+    fontSize: 12,
     position: 'absolute',
     top: 0,
-    right: 0,
+  },
+  label: {
+    flexGrow: 1,
+    fontSize: 32,
+    paddingLeft: 16,
+    minWidth: 0,
+    textOverflow: 'ellipsis',
+    flexShrink: 1,
+  },
+  close: {
+    display: 'flex',
+    flexDirection: 'row',
+    position: 'absolute',
+    alignItems: 'center',
+    top: 0,
+    minWidth: 0,
+    width: '100%',
   },
   closeIcon: {
+    flexShrink: 0,
     backgroundColor: 'transparent',
   },
   progress: {

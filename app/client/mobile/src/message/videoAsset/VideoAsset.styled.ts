@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {Colors} from '../constants/Colors';
+import {Colors} from '../../constants/Colors';
 
 export const styles = StyleSheet.create({
   modal: {
@@ -8,6 +8,13 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  failed: {
+    color: Colors.offsync,
+  },
+  control: {
+    position: 'absolute',
+    backgroundColor: 'transparent',
   },
   button: {
     position: 'absolute',

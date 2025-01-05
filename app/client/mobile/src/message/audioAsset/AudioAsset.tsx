@@ -1,17 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SafeAreaView, Modal, Pressable, View, Image, Animated, useAnimatedValue } from 'react-native'
-import { Icon, ProgressBar, IconButton } from 'react-native-paper'
+import { Icon, Text, ProgressBar, IconButton } from 'react-native-paper'
 import { useAudioAsset } from './useAudioAsset.hook';
 import { MediaAsset } from '../../conversation/Conversation';
 import { styles } from './AudioAsset.styled'
 import {BlurView} from '@react-native-community/blur';
-import Video from 'react-native-video'
+import Video, { VideoRef } from 'react-native-video'
 import thumb from '../../images/audio.png';
+import {Colors} from '../../constants/Colors';
 
 export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, asset: MediaAsset, loaded: ()=>void, show: boolean }) {
   const { state, actions } = useAudioAsset(topicId, asset);
   const [modal, setModal] = useState(false);
   const opacity = useAnimatedValue(0);
+  const videoRef = useRef<VideoRef>(null as null | VideoRef);
+  const [status, setStatus] = useState('loading');
 
   useEffect(() => {
     if (show) { 
@@ -33,6 +36,30 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
     actions.cancelLoad();
   }
 
+  const play = () => {
+    videoRef.current.resume();
+  }
+
+  const pause = () => {
+    videoRef.current.pause();
+  }
+
+  const error = () => {
+    setStatus('failed');
+  }
+
+  const end = () => {
+    videoRef.current.seek(0);
+  }
+
+  const playbackRateChange = (e) => {
+    if (e.playbackRate === 0) {
+      setStatus('paused');
+    } else {
+      setStatus('playing');
+    }
+  }
+
   return (
     <View style={styles.audio}>
       <Pressable onPress={showAudio}>
@@ -48,6 +75,7 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
           <View style={styles.button}>
             <Icon size={28} source="play-box-outline" />
           </View>
+          <Text style={styles.info} numberOfLines={1}>{ asset.audio?.label || asset.encrypted?.label }</Text>
         </Animated.View>
       </Pressable>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={modal} onRequestClose={hideAudio}>
@@ -59,8 +87,18 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
             source={thumb}
           />
           { state.dataUrl && (
-          <Video source={{ uri: state.dataUrl }} style={styles.full} paused={false}
-            onLoad={(e)=>console.log(e)} onError={(e)=>console.log(e)} controls={false} resizeMode="contain" />
+            <Video source={{ uri: state.dataUrl }} style={styles.full} paused={false} ref={videoRef}
+              onPlaybackRateChange={playbackRateChange} onEnd={end} onError={error}
+              controls={false} resizeMode="contain" />
+          )}
+          { status === 'failed' && (
+            <Icon color={Colors.offsync} size={64} source="fire" />
+          )}
+          { status === 'playing' && (
+            <IconButton style={styles.control} size={64} icon="pause" onPress={pause} />
+          )}
+          { status === 'paused' && (
+            <IconButton style={styles.control} size={64} icon="play" onPress={play} />
           )}
           { state.loading && (
             <View style={styles.progress}>
@@ -68,6 +106,7 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
             </View>
           )}
           <SafeAreaView style={styles.close}>
+            <Text style={styles.label} adjustsFontSizeToFit={true} numberOfLines={1}>{ asset.audio?.label || asset.encrypted?.label }</Text>
             <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={28} onPress={hideAudio} />
           </SafeAreaView>
         </View>
