@@ -11,6 +11,7 @@ import { useMessage } from './useMessage.hook';
 import {styles} from './Message.styled';
 import { MediaAsset } from '../conversation/Conversatin';
 import { Confirm } from '../confirm/Confirm'; 
+import { Shimmer } from './shimmer/Shimmer';
 
 export function Message({ topic, card, profile, host, select, selected }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean, select: (id: null | string)=>void, selected: string }) {
   const { state, actions } = useMessage();
@@ -182,7 +183,9 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
                   <Text style={{ ...styles.text, ...textStyle }}>{ text }</Text>
               )}
               { !locked && status !== 'confirmed' && (
-                <View style={styles.unconfirmed}>
+                <View>
+                  <Shimmer contentStyle={styles.longbone} />
+                  <Shimmer contentStyle={styles.shortbone} />
                 </View>
               )}
               { locked && (
@@ -192,10 +195,16 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
           </View>
         </View>
       </View>
-      { !locked && assets?.length > 0 && ( 
+      { !locked && assets?.length > 0 && transform === 'complete' && ( 
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.carousel} contentContainerStyle={styles.assets}>
           { media }
         </ScrollView>
+      )}
+      { !locked && media.length > 0 && transform === 'incomplete' && (
+        <Shimmer contentStyle={styles.dot} />
+      )}
+      { !locked && media.length > 0 && transform !== 'complete' && transform !== 'incomplete' && (
+        <Text style={styles.error}>{ state.strings.processingError }</Text>
       )}
       { topicId === selected && (
         <Surface style={styles.options}>

@@ -12,6 +12,33 @@ export const styles = StyleSheet.create({
     width: '100%',
     paddingBottom: 8,
   },
+  longbone: {
+    width: '100%',
+    height: 12,
+    borderRadius: 4,
+    backgroundColor: Colors.placeholder,
+    marginTop: 8,
+  },
+  shortbone: {
+    width: '50%',
+    height: 12,
+    borderRadius: 4,
+    backgroundColor: Colors.placeholder,
+    marginTop: 8,
+  },
+  dot: {
+    width: 64,
+    height: 64,
+    backgroundColor: Colors.placeholder,
+    marginLeft: 48,
+    borderRadius: 16,
+  },
+  error: {
+    marginLeft: 52,
+    marginTop: 8,
+    marginBottom: 16,
+    color: Colors.offsync,
+  },
   content: {
     display: 'flex',
     flexDirection: 'row',
