@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   topic: {
+    paddingTop: 8,
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
