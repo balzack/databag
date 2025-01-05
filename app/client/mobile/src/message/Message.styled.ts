@@ -119,5 +119,52 @@ export const styles = StyleSheet.create({
     width: 64,
     height: 64,
     backgroundColor: 'yellow',
-  }
+  },
+  message: { 
+    width: '100%',
+    fontSize: 14,
+    padding: 0,
+  },
+  modal: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  editArea: {
+    position: 'relative',
+    display: 'flex',
+    alignItem: 'center',
+    justifyContent: 'center',
+    width:'80%',
+    maxWidth: 400,
+    padding: 16,
+    borderRadius: 8,
+  },
+  blur: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  closeIcon: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    backgroundColor: 'transparent',
+  },
+  title: {
+    fontSize: 20,
+    paddingLeft: 4,
+    paddingBottom: 4,
+  },
+  controls: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingTop: 16,
+    gap: 8,
+  },
 })

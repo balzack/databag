@@ -40,8 +40,10 @@ export function Contacts({openRegistry, openContact}: {openRegistry: () => void;
           <TextInput
             dense={true}
             style={styles.input}
+            outlineColor="transparent"
+            activeOutlineColor="transparent"
             autoCapitalize={false}
-            unserlineStyle={styles.inputUnderline}
+            underlineStyle={styles.inputUnderline}
             mode="outlined"
             placeholder={state.strings.contacts}
             left={<TextInput.Icon style={styles.icon} icon="magnify" />}

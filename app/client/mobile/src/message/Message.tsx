@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { avatar } from '../constants/Icons'
-import { Pressable, ScrollView, View, Image } from 'react-native';
-import {Icon, Text, IconButton, Surface, Divider} from 'react-native-paper';
+import { Pressable, ScrollView, View, Image, Modal } from 'react-native';
+import {Icon, Text, TextInput, IconButton, Button, Surface, Divider} from 'react-native-paper';
 import { Topic, Card, Profile } from 'databag-client-sdk';
 import { ImageAsset } from './imageAsset/ImageAsset';
 import { AudioAsset } from './audioAsset/AudioAsset';
@@ -12,6 +12,7 @@ import {styles} from './Message.styled';
 import { MediaAsset } from '../conversation/Conversatin';
 import { Confirm } from '../confirm/Confirm'; 
 import { Shimmer } from './shimmer/Shimmer';
+import {BlurView} from '@react-native-community/blur';
 
 export function Message({ topic, card, profile, host, select, selected }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean, select: (id: null | string)=>void, selected: string }) {
   const { state, actions } = useMessage();
@@ -37,11 +38,32 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
     setTimeout(() => setShowAsset(true), 2000);
   }, []);
 
+  useEffect(() => {
+    setEditText(text);
+  }, [text]);
+
   const loaded = () => {
     loadedCount.current += 1;
     if (loadedCount.current >= assets.length) {
       setShowAsset(true);
     }
+  }
+
+  const edit = () => {
+    setEditing(true);
+    select(null);
+  }
+
+  const save = async () => {
+    setSaving(true);
+    try {
+      await actions.saveSubject(topic.topicId, topic.sealed, {...topic.data, text: editText});
+    } catch (err) {
+      console.log(err);
+      showError();
+    }
+    setSaving(false);
+    setEditing(false);
   }
 
   const block = () => {
@@ -175,11 +197,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
               </View>
             </Pressable>
             <View style={styles.padding}>
-              { !locked && status === 'confirmed' && editing && (
-                <View style={styles.editing}>
-                </View>
-              )}
-              { !locked && status === 'confirmed' && text && !editing && (
+              { !locked && status === 'confirmed' && text && (
                   <Text style={{ ...styles.text, ...textStyle }}>{ text }</Text>
               )}
               { !locked && status !== 'confirmed' && (
@@ -212,7 +230,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
             <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="share-variant-outline" size={24} onPress={() => {}} />
           )}
           { !locked && profile && (
-            <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="square-edit-outline" size={24} onPress={() => {}} />
+            <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="square-edit-outline" size={24} onPress={edit} />
           )}
           { (host || profile) && (
             <IconButton style={styles.option} loading={removing} compact="true"  mode="contained" icon="trash-can-outline" size={24} onPress={remove} />
@@ -227,6 +245,30 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
       )}
       <Divider style={styles.border} />
       <Confirm show={confirmShow} busy={removing || reporting || blocking} params={confirmParams} />
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={editing} onRequestClose={()=>setEditing(false)}>
+        <View style={styles.modal}>
+          <Pressable style={styles.blur} onPress={()=>setEditing(false)}>
+            <BlurView style={styles.blur} blurType="dark" blurAmount={6} reducedTransparencyFallbackColor="dark" />
+          </Pressable>
+          <Surface elevation={2} style={styles.editArea}>
+            <Text style={styles.title}>{ state.strings.edit }</Text>
+            <TextInput multiline={true} mode="outlined" style={styles.message}
+                outlineColor="transparent" activeOutlineColor="transparent" spellcheck={false}
+                autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage} 
+                value={editText} onChangeText={value => setEditText(value)} />
+            <View style={styles.controls}>
+              <Button mode="outlined" onPress={()=>setEditing(false)}>
+                {state.strings.cancel}
+              </Button>
+              <Button mode="contained" loading={saving} onPress={save}>
+                {state.strings.save}
+              </Button>
+            </View>
+            <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={24} onPress={()=>setEditing(false)} />
+          </Surface>
+        </View>
+      </Modal>
+
     </View>
   );
 }

@@ -59,6 +59,8 @@ export function Content({openConversation}: {openConversation: ()=>void}) {
             style={styles.input}
             autoCapitalize={false}
             unserlineStyle={styles.inputUnderline}
+            outlineColor="transparent"
+            activeOutlineColor="transparent"
             mode="outlined"
             placeholder={state.strings.topics}
             left={<TextInput.Icon style={styles.icon} icon="magnify" />}
