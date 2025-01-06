@@ -47,6 +47,8 @@ export const styles = StyleSheet.create({
   },
   close: {
     position: 'absolute',
+    display: 'flex',
+    flexDirection: 'row',
     top: 0,
     right: 0,
   },
@@ -57,5 +59,15 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     bottom: '10%',
     width: '50%',
+  },
+  alert: {
+    position: 'absolute',
+    bottom: 0,
+  },
+  alertLabel: {
+    color: Colors.offsync,
+  },
+  spacer: {
+    flexGrow: 1,
   },
 });

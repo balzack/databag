@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { SafeAreaView, Modal, Pressable, Animated, View, Image, useAnimatedValue } from 'react-native'
-import { ProgressBar, IconButton } from 'react-native-paper'
+import { SafeAreaView, Share, Modal, Pressable, Animated, View, Image, useAnimatedValue } from 'react-native'
+import { Text, ProgressBar, IconButton } from 'react-native-paper'
 import { useImageAsset } from './useImageAsset.hook';
 import { MediaAsset } from '../../conversation/Conversation';
 import { styles } from './ImageAsset.styled'
@@ -10,6 +10,7 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
   const { state, actions } = useImageAsset(topicId, asset);
   const [modal, setModal] = useState(false);
   const opacity = useAnimatedValue(0);
+  const [alert, setAlert] = useState('');
 
   useEffect(() => {
     if (state.loaded && show) {
@@ -32,6 +33,16 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
   const hideImage = () => {
     setModal(false);
     actions.cancelLoad();
+  }
+
+  const download = async () => {
+    try {
+      setAlert('');
+      await Share.share({ url: state.dataUrl });
+    } catch (err) {
+      console.log(err);
+      setAlert(state.strings.operationFailed)
+    }
   }
 
   return (
@@ -70,7 +81,14 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
             </View>
           )}
           <SafeAreaView style={styles.close}>
+            { state.dataUrl && (
+              <IconButton style={styles.closeIcon} icon="download" compact="true" mode="contained" size={28} onPress={download} />
+            )}
+            <View style={styles.spacer} />
             <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={28} onPress={hideImage} />
+          </SafeAreaView>
+          <SafeAreaView style={styles.alert}>
+            <Text style={styles.alertLabel}>{ alert }</Text>
           </SafeAreaView>
         </View>
       </Modal>

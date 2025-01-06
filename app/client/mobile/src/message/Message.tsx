@@ -226,9 +226,6 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
       )}
       { topicId === selected && (
         <Surface style={styles.options}>
-          { !locked && status === 'confirmed' && (
-            <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="share-variant-outline" size={24} onPress={() => {}} />
-          )}
           { !locked && profile && status === 'confirmed' && (
             <IconButton style={styles.option} loading={false} compact="true"  mode="contained" icon="square-edit-outline" size={24} onPress={edit} />
           )}

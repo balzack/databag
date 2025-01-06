@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { SafeAreaView, Modal, Pressable, Animated, View, Image, useAnimatedValue } from 'react-native'
-import { Icon, ProgressBar, IconButton } from 'react-native-paper'
+import { SafeAreaView, Share, Modal, Pressable, Animated, View, Image, useAnimatedValue } from 'react-native'
+import { Text, Icon, ProgressBar, IconButton } from 'react-native-paper'
 import { useVideoAsset } from './useVideoAsset.hook';
 import { MediaAsset } from '../../conversation/Conversation';
 import { styles } from './VideoAsset.styled'
@@ -15,6 +15,7 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
   const [status, setStatus] = useState('loading');
   const [showControl, setShowControl] = useState(false);
   const clear = useRef();
+  const [alert, setAlert] = useState('');
  
   useEffect(() => {
     if (state.loaded && show) {
@@ -71,6 +72,16 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
     }
   }
 
+  const download = async () => {
+    try {
+      setAlert('');
+      await Share.share({ url: state.dataUrl });
+    } catch (err) {
+      console.log(err);
+      setAlert(state.strings.operationFailed)
+    }
+  }
+
   return (
     <View style={styles.video}>
       { state.thumbUrl && (
@@ -117,7 +128,14 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
             </View>
           )}
           <SafeAreaView style={styles.close}>
+            { state.dataUrl && (
+              <IconButton style={styles.closeIcon} icon="download" compact="true" mode="contained" size={28} onPress={download} />
+            )}
+            <View style={styles.spacer} />
             <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={28} onPress={hideVideo} />
+          </SafeAreaView>
+          <SafeAreaView style={styles.alert}>
+            <Text style={styles.alertLabel}>{ alert }</Text>
           </SafeAreaView>
         </Pressable>
       </Modal>

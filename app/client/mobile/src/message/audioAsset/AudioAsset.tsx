@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { SafeAreaView, Modal, Pressable, View, Image, Animated, useAnimatedValue } from 'react-native'
+import { SafeAreaView, Modal, Share, Pressable, View, Image, Animated, useAnimatedValue } from 'react-native'
 import { Icon, Text, ProgressBar, IconButton } from 'react-native-paper'
 import { useAudioAsset } from './useAudioAsset.hook';
 import { MediaAsset } from '../../conversation/Conversation';
@@ -15,6 +15,7 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
   const opacity = useAnimatedValue(0);
   const videoRef = useRef<VideoRef>(null as null | VideoRef);
   const [status, setStatus] = useState('loading');
+  const [alert, setAlert] = useState('');
 
   useEffect(() => {
     if (show) { 
@@ -57,6 +58,16 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
       setStatus('paused');
     } else {
       setStatus('playing');
+    }
+  }
+
+  const download = async () => {
+    try {
+      setAlert('');
+      await Share.share({ url: state.dataUrl });
+    } catch (err) {
+      console.log(err);
+      setAlert(state.strings.operationFailed)
     }
   }
 
@@ -106,8 +117,14 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
             </View>
           )}
           <SafeAreaView style={styles.close}>
+            { state.dataUrl && (
+              <IconButton style={styles.closeIcon} icon="download" compact="true" mode="contained" size={28} onPress={download} />
+            )}
             <Text style={styles.label} adjustsFontSizeToFit={true} numberOfLines={1}>{ asset.audio?.label || asset.encrypted?.label }</Text>
             <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={28} onPress={hideAudio} />
+          </SafeAreaView>
+          <SafeAreaView style={styles.alert}>
+            <Text style={styles.alertLabel}>{ alert }</Text>
           </SafeAreaView>
         </View>
       </Modal>
