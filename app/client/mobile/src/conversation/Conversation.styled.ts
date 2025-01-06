@@ -16,6 +16,15 @@ export const styles = StyleSheet.create({
     paddingBottom: 8,
     height: 80,
   },
+  status: {
+    width: 40,
+    height: 32,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
+    gap: 4,
+  },
   assets: {
     display: 'flex',
     flexDirection: 'row',
@@ -104,12 +113,15 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     minWidth: 0,
+    alignItems: 'center',
   },
   title: {
     display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     flexGrow: 1,
+    gap: 8,
   },
   label: {
     fontSize: 24,

@@ -187,8 +187,10 @@ export function Conversation({close}: {close: ()=>void}) {
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 50}  style={styles.conversation}>
       <SafeAreaView style={styles.header}>
         <IconButton style={styles.icon} mode="contained" icon="arrow-left" size={28} onPress={onClose} />
+        <View style={styles.status}>
+        </View>
         <View style={styles.title}>
-          { state.detailSet && state.subject && (
+         { state.detailSet && state.subject && (
             <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.label}>{ state.subject }</Text>
           )}
           { state.detailSet && state.host && !state.subject && state.subjectNames.length == 0 && (
@@ -200,6 +202,18 @@ export function Conversation({close}: {close: ()=>void}) {
           { state.detailSet && !state.subject && state.unknownContacts > 0 && (
             <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.unknown}>{ `, ${state.strings.unknownContact} (${state.unknownContacts})` }</Text>
           )}
+        </View>
+        <View style={styles.status}>
+          { state.detailSet && state.host && (
+            <Icon source="home-outline" size={20} />
+          )}
+          { state.detailSet && !state.host && (
+            <Icon source="server" size={20} />
+          )}
+          { state.detailSet && state.sealed && (
+            <Icon source="shield-outline" size={18} />
+          )}
+
         </View>
         <IconButton style={styles.icon} mode="contained" icon="cog-outline" size={28} onPress={()=>{}} />
       </SafeAreaView>
