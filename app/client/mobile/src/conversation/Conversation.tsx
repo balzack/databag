@@ -175,7 +175,7 @@ export function Conversation({close}: {close: ()=>void}) {
     if (asset.type === 'image') {
       return <ImageFile key={index} path={asset.path} disabled={sending} remove={()=>actions.removeAsset(index)} />
     } else if (asset.type === 'video') {
-      return <VideoFile key={index} path={asset.path} disabled={sending} remove={()=>actions.removeAsset(index)} />
+      return <VideoFile key={index} path={asset.path} thumbPosition={(position: number) => actions.setThumbPosition(index, position)} disabled={sending} remove={()=>actions.removeAsset(index)} />
     } else if (asset.type === 'audio') {
       return <AudioFile key={index} path={asset.path} disabled={sending} remove={()=>actions.removeAsset(index)} />
     } else {

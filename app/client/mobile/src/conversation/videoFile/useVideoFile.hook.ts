@@ -4,6 +4,7 @@ export function useVideoFile(source: any) {
   const [state, setState] = useState({
     loaded: false,
     ratio: 1,
+    duration: 0,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,7 +15,7 @@ export function useVideoFile(source: any) {
   const actions = {
     loaded: (e) => {
       const { width, height } = e.naturalSize;
-      updateState({ loaded: true, ratio: width / height });
+      updateState({ loaded: true, ratio: width / height, duration: e.duration });
     },
   }
 

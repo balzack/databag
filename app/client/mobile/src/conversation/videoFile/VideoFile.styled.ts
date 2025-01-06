@@ -14,4 +14,9 @@ export const styles = StyleSheet.create({
     right: 0,
     borderRadius: 4,
   },
+  next: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+  }
 });
