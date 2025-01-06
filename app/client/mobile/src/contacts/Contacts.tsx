@@ -18,7 +18,7 @@ function Action({icon, color, select}: {icon: string; color: string; select: () 
   return <IconButton style={styles.icon} loading={loading} iconColor={color} mode="contained" icon={icon} onPress={onPress} />;
 }
 
-export function Contacts({openRegistry, openContact}: {openRegistry: () => void; openContact: (params: ContactParams) => void}) {
+export function Contacts({openRegistry, openContact, callContact, textContact}: {openRegistry: () => void; openContact: (params: ContactParams) => void, callContact: (cardId: null|string)=>void, textContact: (cardId: null|string)=>void}) {
   const theme = useTheme();
   const {state, actions} = useContacts();
   const [alert, setAlert] = useState(false);
@@ -74,17 +74,13 @@ export function Contacts({openRegistry, openContact}: {openRegistry: () => void;
                     key="call"
                     icon="phone-outline"
                     color={Colors.connected}
-                    select={async () => {
-                      await new Promise(r => setTimeout(r, 2000)); //call contact
-                    }}
+                    select={()=>callContact(item.cardId)}
                   />,
                   <Action
                     key="text"
                     icon="message-outline"
                     color={Colors.connected}
-                    select={async () => {
-                      await new Promise(r => setTimeout(r, 2000)); //text contact
-                    }}
+                    select={()=>textContact(item.cardId)}
                   />,
                 ];
               } else if (syncStatus === 'offsync') {

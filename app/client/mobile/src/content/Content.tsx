@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Divider, Switch, Surface, IconButton, Button, Text, TextInput, useTheme} from 'react-native-paper';
 import {SafeAreaView, Modal, FlatList, View} from 'react-native';
 import {styles} from './Content.styled';
@@ -9,7 +9,7 @@ import {BlurView} from '@react-native-community/blur';
 import {Card} from '../card/Card';
 import {Confirm} from '../confirm/Confirm';
 
-export function Content({openConversation}: {openConversation: ()=>void}) {
+export function Content({openConversation, textCard}: {openConversation: ()=>void, textCard: {cardId: null|string}}) {
   const [add, setAdd] = useState(false);
   const [adding, setAdding] = useState(false);
   const [sealedTopic, setSealedTopic] = useState(false);
@@ -27,6 +27,25 @@ export function Content({openConversation}: {openConversation: ()=>void}) {
     },
   });
   const cards = state.sealSet && sealedTopic ? state.sealable : state.connected;
+
+  useEffect(() => {
+    if (textCard.cardId) {
+      openTopic(textCard.cardId);
+    }
+  }, [textCard]);
+
+  const openTopic = async (cardId: string) => {
+    setAdding(true);
+    try {
+      const id = await actions.openTopic(cardId);
+      actions.setFocus(null, id);
+      openConversation();
+    } catch (err) {
+      console.log(err);
+      setAlert(true);
+    }
+    setAdding(false);
+  } 
 
   const addTopic = async () => {
     setAdding(true);

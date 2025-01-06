@@ -31,11 +31,17 @@ export function Session() {
   const {state} = useSession();
   const scheme = useColorScheme();
   const [tab, setTab] = useState('content');
+  const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
 
   const sessionNav = {strings: state.strings};
   const showContent = {display: tab === 'content' ? 'flex' : 'none'};
   const showContact = {display: tab === 'contacts' ? 'flex' : 'none'};
   const showSettings = {display: tab === 'settings' ? 'flex' : 'none'};
+
+  const textContact = (cardId: null|string) => {
+    setTextCard({ cardId });
+    setTab('content')
+  }
 
   return (
     <View style={styles.session}>
@@ -48,14 +54,14 @@ export function Session() {
                   ...styles.body,
                   ...showContent,
                 }}>
-                <ContentTab scheme={scheme} />
+                <ContentTab textCard={textCard} scheme={scheme} />
               </View>
               <View
                 style={{
                   ...styles.body,
                   ...showContact,
                 }}>
-                <ContactTab scheme={scheme} />
+                <ContactTab textContact={textContact} scheme={scheme} />
               </View>
               <View
                 style={{
@@ -157,13 +163,13 @@ export function Session() {
   );
 }
 
-function ContentTab({scheme}: {scheme: string}) {
+function ContentTab({scheme, textCard}: {scheme: string, textCard: {cardId: null|string}}) {
   return (
     <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
       <ContentStack.Navigator initialRouteName="contacts" screenOptions={{headerShown: false}}>
         <ContentStack.Screen name="content" options={{headerBackTitleVisible: false}}>
           {props => (
-            <Content openConversation={()=>props.navigation.navigate('conversation')} />
+            <Content textCard={textCard} openConversation={()=>props.navigation.navigate('conversation')} />
           )}
         </ContentStack.Screen>
         <ContentStack.Screen name="conversation" 
@@ -180,7 +186,7 @@ function ContentTab({scheme}: {scheme: string}) {
   );
 }
 
-function ContactTab({scheme}: {scheme: string}) {
+function ContactTab({scheme, textContact}: {scheme: string, textContact: (cardId: null|string)=>void}) {
   const [contactParams, setContactParams] = useState({
     guid: '',
   } as ContactParams);
@@ -198,6 +204,8 @@ function ContactTab({scheme}: {scheme: string}) {
                 setContactParams(params);
                 props.navigation.navigate('profile');
               }}
+              callContact={(cardId: string)=>console.log("CALL: ", cardId)}
+              textContact={textContact}
             />
           )}
         </ContactStack.Screen>
@@ -301,6 +309,7 @@ function RegistryScreen({nav}) {
 }
 
 function ContactsScreen({nav}) {
+  const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
   const ContactsComponent = useCallback(
     () => (
       <Surface elevation={1}>
@@ -309,6 +318,8 @@ function ContactsScreen({nav}) {
           openContact={(params: ContactParams) => {
             nav.openContact(params, nav.profile.openDrawer);
           }}
+          callContact={(cardId: string)=>console.log('CALL: ', cardId)}
+          textContact={(cardId: null|string)=>setTextCard({ cardId })}
         />
       </Surface>
     ),
@@ -325,7 +336,7 @@ function ContactsScreen({nav}) {
         drawerType: 'front',
         headerShown: false,
       }}>
-      <ContactsDrawer.Screen name="settings">{({navigation}) => <SettingsScreen nav={{...nav, contacts: navigation}} />}</ContactsDrawer.Screen>
+      <ContactsDrawer.Screen name="settings">{({navigation}) => <SettingsScreen nav={{...nav, textCard, contacts: navigation}} />}</ContactsDrawer.Screen>
     </ContactsDrawer.Navigator>
   );
 }
@@ -357,6 +368,7 @@ function SettingsScreen({nav}) {
 
 function HomeScreen({nav}) {
   const [focus, setFocus] = useState(false);
+  const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
 
   return (
     <View style={styles.frame}>
@@ -365,7 +377,7 @@ function HomeScreen({nav}) {
           <Identity openSettings={nav.settings.openDrawer} openContacts={nav.contacts.openDrawer} />
         </Surface>
         <Surface style={styles.channels} elevation={1} mode="flat">
-          <Content openConversation={()=>setFocus(true)} />
+          <Content textCard={nav.textCard} openConversation={()=>setFocus(true)} />
         </Surface>
       </View>
       <View style={styles.right}>
