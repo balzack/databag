@@ -5,6 +5,7 @@ import { useImageAsset } from './useImageAsset.hook';
 import { MediaAsset } from '../../conversation/Conversation';
 import { styles } from './ImageAsset.styled'
 import {BlurView} from '@react-native-community/blur';
+import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view';
 
 export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, asset: MediaAsset, loaded: ()=>void, show: boolean }) {
   const { state, actions } = useImageAsset(topicId, asset);
@@ -66,14 +67,18 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
             style={styles.full}
             resizeMode="contain"
             source={{ uri: state.thumbUrl }}
+            onLayout={actions.fullscreen}
           />
           { state.dataUrl && (
-            <Image
-              style={styles.full}
-              resizeMode="contain"
-              onError={(err)=>console.log(err)}
-              source={{ uri: state.dataUrl }}
-            />
+            <ReactNativeZoomableView width={state.width} height={state.height} minZoom={1} maxZoom={30}>
+              <Image
+                width={state.width}
+                height={state.height}
+                resizeMode="contain"
+                onError={(err)=>console.log(err)}
+                source={{ uri: state.dataUrl }}
+              />
+            </ReactNativeZoomableView>
           )}
           { state.loading && (
             <View style={styles.progress}>

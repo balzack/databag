@@ -2210,6 +2210,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@openspacelabs/react-native-zoomable-view@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "@openspacelabs/react-native-zoomable-view@npm:2.3.1"
+  dependencies:
+    prop-types: ^15.7.2
+  peerDependencies:
+    react: ">=16.8.0"
+    react-native: ">=0.54.0"
+  checksum: 2ac48d469c31b8c38aea5646544e591cbcfa1c5cd6c148cd876e77f9b95024af913ea48e1ff5c23e4f15dc846f4b27223fa93f4a9e86b7821b79de8243dc276f
+  languageName: node
+  linkType: hard
+
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0
   resolution: "@pkgjs/parseargs@npm:0.11.0"
@@ -3427,6 +3439,7 @@ __metadata:
     "@babel/preset-env": ^7.20.0
     "@babel/runtime": ^7.20.0
     "@bam.tech/react-native-image-resizer": ^3.0.11
+    "@openspacelabs/react-native-zoomable-view": ^2.3.1
     "@react-native-clipboard/clipboard": ^1.14.2
     "@react-native-community/blur": ^4.4.0
     "@react-native/babel-preset": 0.74.85

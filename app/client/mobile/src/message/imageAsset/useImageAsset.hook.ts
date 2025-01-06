@@ -13,6 +13,8 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
     loading: false,
     loaded: false,
     loadPercent: 0,
+    width: 0,
+    height: 0,
   })
   const cancelled = useRef(false);
 
@@ -42,6 +44,10 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
     loaded: (e) => {
       const { width, height } = e.nativeEvent.source;
       updateState({ loaded: true, ratio: width / height });
+    },
+    fullscreen: (e) => {
+      const { width, height } = e.nativeEvent.layout;
+      updateState({ width, height });
     },
     cancelLoad: () => {
       cancelled.current = true;
