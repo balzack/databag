@@ -12,6 +12,7 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
   const [modal, setModal] = useState(false);
   const opacity = useAnimatedValue(0);
   const [alert, setAlert] = useState('');
+  const [cleared, setCleared] = useState(false);
 
   useEffect(() => {
     if (state.loaded && show) {
@@ -28,6 +29,7 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
 
   const showImage = () => {
     setModal(true);
+    setCleared(false);
     actions.loadImage();
   };
 
@@ -63,12 +65,14 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={modal} onRequestClose={hideImage}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={16} reducedTransparencyFallbackColor="dark" />
-          <Image
-            style={styles.full}
-            resizeMode="contain"
-            source={{ uri: state.thumbUrl }}
-            onLayout={actions.fullscreen}
-          />
+          { !cleared && (
+            <Image
+              style={styles.full}
+              resizeMode="contain"
+              source={{ uri: state.thumbUrl }}
+              onLayout={actions.fullscreen}
+            />
+          )}
           { state.dataUrl && (
             <ReactNativeZoomableView width={state.width} height={state.height} minZoom={1} maxZoom={30}>
               <Image
@@ -77,6 +81,7 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
                 resizeMode="contain"
                 onError={(err)=>console.log(err)}
                 source={{ uri: state.dataUrl }}
+                onLoad={()=>setCleared(true)}
               />
             </ReactNativeZoomableView>
           )}
