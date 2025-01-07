@@ -9,8 +9,8 @@ const SETTINGS_DB = 'ls_v001.db';
 
 const databag = new DatabagSDK(
   {
-    tagBatch: 32,
-    topicBatch: 32,
+    tagBatch: 24,
+    topicBatch: 24,
     articleTypes: [],
     channelTypes: ['sealed', 'superbasic'],
   },

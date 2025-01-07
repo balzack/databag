@@ -38,7 +38,7 @@ export function Content({openConversation, textCard}: {openConversation: ()=>voi
     setAdding(true);
     try {
       const id = await actions.openTopic(cardId);
-      actions.setFocus(null, id);
+      await actions.setFocus(null, id);
       openConversation();
     } catch (err) {
       console.log(err);
@@ -59,7 +59,7 @@ export function Content({openConversation, textCard}: {openConversation: ()=>voi
       setSubjectTopic('');
       setMembers([]);
       setSealedTopic(false);
-      actions.setFocus(null, id);
+      await actions.setFocus(null, id);
       openConversation();
     } catch (err) {
       console.log(err);

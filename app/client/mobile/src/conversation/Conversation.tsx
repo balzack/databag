@@ -204,11 +204,11 @@ export function Conversation({close}: {close: ()=>void}) {
           )}
         </View>
         <View style={styles.status}>
-          { state.detailSet && (
+          { state.detailSet && !state.access && (
             <Icon source="alert-circle-outline" size={20} color={Colors.offsync} />
           )}
           { state.detailSet && state.host && (
-            <Icon source="home-outline" size={20} />
+            <Icon source="home-outline" size={22} />
           )}
           { state.detailSet && !state.host && (
             <Icon source="server" size={20} />

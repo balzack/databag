@@ -41,7 +41,6 @@ export function Session() {
 
   const textContact = (cardId: null|string) => {
     setTextCard({ cardId });
-    setTab('content')
   }
 
   const dismiss = () => {
@@ -49,6 +48,10 @@ export function Session() {
     setTimeout(() => {
       setDismissed(false);
     }, 60000);
+  }
+
+  const contentTab = () => {
+    setTab('content');
   }
 
   return (
@@ -62,7 +65,7 @@ export function Session() {
                   ...styles.body,
                   ...showContent,
                 }}>
-                <ContentTab textCard={textCard} scheme={scheme} />
+                <ContentTab textCard={textCard} scheme={scheme} contentTab={contentTab} />
               </View>
               <View
                 style={{
@@ -174,13 +177,18 @@ export function Session() {
   );
 }
 
-function ContentTab({scheme, textCard}: {scheme: string, textCard: {cardId: null|string}}) {
+function ContentTab({scheme, textCard, contentTab}: {scheme: string, textCard: {cardId: null|string}, contentTab: ()=>void}) {
+  const openConversation = (props) => {
+    props.navigation.navigate('conversation');
+    contentTab();
+  }
+
   return (
     <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
       <ContentStack.Navigator initialRouteName="contacts" screenOptions={{headerShown: false}}>
         <ContentStack.Screen name="content" options={{headerBackTitleVisible: false}}>
           {props => (
-            <Content textCard={textCard} openConversation={()=>props.navigation.navigate('conversation')} />
+            <Content textCard={textCard} openConversation={()=>openConversation(props)} />
           )}
         </ContentStack.Screen>
         <ContentStack.Screen name="conversation" 
