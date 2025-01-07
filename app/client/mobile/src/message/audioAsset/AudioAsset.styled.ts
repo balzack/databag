@@ -81,4 +81,11 @@ export const styles = StyleSheet.create({
     bottom: '10%',
     width: '50%',
   },
+  alert: {
+    position: 'absolute',
+    bottom: 0,
+  },
+  alertLabel: {
+    color: Colors.offsync,
+  },
 });

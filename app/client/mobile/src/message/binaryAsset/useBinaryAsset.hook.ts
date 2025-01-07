@@ -14,6 +14,7 @@ export function useBinaryAsset(topicId: string, asset: MediaAsset) {
     loading: false,
     loaded: false,
     loadPercent: 0,
+    failed: false,
   })
   const cancelled = useRef(false);
 
@@ -26,6 +27,15 @@ export function useBinaryAsset(topicId: string, asset: MediaAsset) {
     cancelLoad: () => {
       cancelled.current = true;
     },
+    download: async () => {
+      try {
+        updateState({ failed: false });
+        await Share.share({ url: state.dataUrl });
+      } catch (err) {
+        console.log(err);
+        updateState({ faled: true });
+      }
+    },
     loadBinary: async () => {
       const { focus } = app.state;
       const assetId = asset.binary ? asset.binary.data : asset.encrypted ? asset.encrypted.parts : null;
@@ -37,6 +47,7 @@ export function useBinaryAsset(topicId: string, asset: MediaAsset) {
           updateState({ dataUrl });
         } catch (err) {
           console.log(err);
+          updateState({ failed: true });
         }
         updateState({ loading: false });
       }

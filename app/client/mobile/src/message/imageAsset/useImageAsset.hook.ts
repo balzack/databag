@@ -1,12 +1,15 @@
 import { useState, useContext, useEffect, useRef } from 'react'
 import { AppContext } from '../../context/AppContext'
+import { DisplayContext } from '../../context/DisplayContext'
 import { Focus } from 'databag-client-sdk'
 import { ContextType } from '../../context/ContextType'
 import { MediaAsset } from '../../conversation/Conversation';
 
 export function useImageAsset(topicId: string, asset: MediaAsset) {
   const app = useContext(AppContext) as ContextType
+  const display = useContext(DisplayContext) as ContextType
   const [state, setState] = useState({
+    strings: display.state.strings,
     thumbUrl: null,
     dataUrl: null,
     ratio: 1,
@@ -15,6 +18,7 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
     loadPercent: 0,
     width: 0,
     height: 0,
+    failed: false,
   })
   const cancelled = useRef(false);
 
@@ -52,6 +56,18 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
     cancelLoad: () => {
       cancelled.current = true;
     },
+    failed: () => {
+      updateState({ failed: true });
+    },
+    download: async () => {
+      try {
+        updateState({ failed: false });
+        await Share.share({ url: state.dataUrl });
+      } catch (err) {
+        console.log(err);
+        updateState({ faled: true });
+      }
+    },
     loadImage: async () => {
       const { focus } = app.state;
       const assetId = asset.image ? asset.image.full : asset.encrypted ? asset.encrypted.parts : null;
@@ -63,6 +79,7 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
           updateState({ dataUrl });
         } catch (err) {
           console.log(err);
+          updateState({ failed: true });
         }
         updateState({ loading: false });
       }

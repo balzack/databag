@@ -15,7 +15,6 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
   const opacity = useAnimatedValue(0);
   const videoRef = useRef<VideoRef>(null as null | VideoRef);
   const [status, setStatus] = useState('loading');
-  const [alert, setAlert] = useState('');
 
   useEffect(() => {
     if (show) { 
@@ -45,10 +44,6 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
     videoRef.current.pause();
   }
 
-  const error = () => {
-    setStatus('failed');
-  }
-
   const end = () => {
     videoRef.current.seek(0);
   }
@@ -58,16 +53,6 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
       setStatus('paused');
     } else {
       setStatus('playing');
-    }
-  }
-
-  const download = async () => {
-    try {
-      setAlert('');
-      await Share.share({ url: state.dataUrl });
-    } catch (err) {
-      console.log(err);
-      setAlert(state.strings.operationFailed)
     }
   }
 
@@ -99,11 +84,8 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
           />
           { state.dataUrl && (
             <Video source={{ uri: state.dataUrl }} style={styles.full} paused={false} ref={videoRef}
-              onPlaybackRateChange={playbackRateChange} onEnd={end} onError={error}
+              onPlaybackRateChange={playbackRateChange} onEnd={end} onError={actions.failed}
               controls={false} resizeMode="contain" />
-          )}
-          { status === 'failed' && (
-            <Icon color={Colors.offsync} size={64} source="fire" />
           )}
           { status === 'playing' && (
             <IconButton style={styles.control} size={64} icon="pause" onPress={pause} />
@@ -118,13 +100,15 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
           )}
           <SafeAreaView style={styles.close}>
             { state.dataUrl && (
-              <IconButton style={styles.closeIcon} icon="download" compact="true" mode="contained" size={28} onPress={download} />
+              <IconButton style={styles.closeIcon} icon="download" compact="true" mode="contained" size={28} onPress={actions.download} />
             )}
             <Text style={styles.label} adjustsFontSizeToFit={true} numberOfLines={1}>{ asset.audio?.label || asset.encrypted?.label }</Text>
             <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={28} onPress={hideAudio} />
           </SafeAreaView>
           <SafeAreaView style={styles.alert}>
-            <Text style={styles.alertLabel}>{ alert }</Text>
+            { state.failed && (
+              <Text style={styles.alertLabel}>{ state.strings.failedLoad }</Text>
+            )}
           </SafeAreaView>
         </View>
       </Modal>

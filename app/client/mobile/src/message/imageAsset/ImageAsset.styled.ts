@@ -49,6 +49,10 @@ export const styles = StyleSheet.create({
   },
   alert: {
     position: 'absolute',
+    bottom: '10%'
+  },
+  alert: {
+    position: 'absolute',
     bottom: 0,
   },
   alertLabel: {

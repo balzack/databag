@@ -11,7 +11,6 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
   const { state, actions } = useImageAsset(topicId, asset);
   const [modal, setModal] = useState(false);
   const opacity = useAnimatedValue(0);
-  const [alert, setAlert] = useState('');
   const [cleared, setCleared] = useState(false);
 
   useEffect(() => {
@@ -36,16 +35,6 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
   const hideImage = () => {
     setModal(false);
     actions.cancelLoad();
-  }
-
-  const download = async () => {
-    try {
-      setAlert('');
-      await Share.share({ url: state.dataUrl });
-    } catch (err) {
-      console.log(err);
-      setAlert(state.strings.operationFailed)
-    }
   }
 
   return (
@@ -79,7 +68,7 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
                 width={state.width}
                 height={state.height}
                 resizeMode="contain"
-                onError={(err)=>console.log(err)}
+                onError={actions.failed}
                 source={{ uri: state.dataUrl }}
                 onLoad={()=>setCleared(true)}
               />
@@ -92,13 +81,15 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
           )}
           <SafeAreaView style={styles.close}>
             { state.dataUrl && (
-              <IconButton style={styles.closeIcon} icon="download" compact="true" mode="contained" size={28} onPress={download} />
+              <IconButton style={styles.closeIcon} icon="download" compact="true" mode="contained" size={28} onPress={actions.download} />
             )}
             <View style={styles.spacer} />
             <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={28} onPress={hideImage} />
           </SafeAreaView>
           <SafeAreaView style={styles.alert}>
-            <Text style={styles.alertLabel}>{ alert }</Text>
+            { state.failed && (
+              <Text style={styles.alertLabel}>{ state.strings.failedLoad }</Text>
+            )}
           </SafeAreaView>
         </View>
       </Modal>
