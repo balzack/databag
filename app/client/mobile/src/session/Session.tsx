@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import {SafeAreaView, View, useColorScheme} from 'react-native';
+import {SafeAreaView, Pressable, View, useColorScheme} from 'react-native';
 import {styles} from './Session.styled';
 import {IconButton, Surface, Text, Icon} from 'react-native-paper';
 import {Settings} from '../settings/Settings';
@@ -32,6 +32,7 @@ export function Session() {
   const scheme = useColorScheme();
   const [tab, setTab] = useState('content');
   const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
+  const [dismissed, setDismissed] = useState(false);
 
   const sessionNav = {strings: state.strings};
   const showContent = {display: tab === 'content' ? 'flex' : 'none'};
@@ -41,6 +42,13 @@ export function Session() {
   const textContact = (cardId: null|string) => {
     setTextCard({ cardId });
     setTab('content')
+  }
+
+  const dismiss = () => {
+    setDismissed(true);
+    setTimeout(() => {
+      setDismissed(false);
+    }, 60000);
   }
 
   return (
@@ -151,11 +159,14 @@ export function Session() {
           </View>
         </NavigationContainer>
       )}
-      { state.disconnected && (
+      { state.disconnected && !dismissed && (
         <View style={styles.alert}>
           <Surface elevation={5} style={styles.alertArea}>
             <Icon color={Colors.offsync} size={20} source="alert-circle-outline" />
             <Text style={styles.alertLabel}>{ state.strings.disconnected }</Text>
+            <Pressable onPress={dismiss}>
+              <Icon color={Colors.offsync} size={20} source="close" />
+            </Pressable>
           </Surface>
         </View>
       )}

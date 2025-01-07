@@ -25,9 +25,11 @@ export class StagingFiles implements Staging {
   }
 
   public async write(): Promise<{ setData: (data: string)=>Promise<void>, getUrl: ()=>Promise<string>, close: ()=>Promise<void> }> {
+    let set = false;
     let extension = '';
     const path = RNFS.DocumentDirectoryPath + `/dbTmp_${Date.now()}`
     const setData = async (data: string) => {
+      set = true;
       await RNFS.appendFile(path, data, 'base64');
     }
     const getUrl = async () => {
@@ -45,7 +47,13 @@ export class StagingFiles implements Staging {
       return `file://${path}${extension}`
     }
     const close = async () => {
-      await RNFS.unlink(`${path}${extension}`);
+      if (set) {
+        try {
+          await RNFS.unlink(`${path}${extension}`);
+        } catch (err) {
+          console.log(err);
+        }
+      }
     }
     return { setData, getUrl, close };
   }

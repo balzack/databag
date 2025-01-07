@@ -204,6 +204,9 @@ export function Conversation({close}: {close: ()=>void}) {
           )}
         </View>
         <View style={styles.status}>
+          { state.detailSet && (
+            <Icon source="alert-circle-outline" size={20} color={Colors.offsync} />
+          )}
           { state.detailSet && state.host && (
             <Icon source="home-outline" size={20} />
           )}
@@ -213,7 +216,6 @@ export function Conversation({close}: {close: ()=>void}) {
           { state.detailSet && state.sealed && (
             <Icon source="shield-outline" size={18} />
           )}
-
         </View>
         <IconButton style={styles.icon} mode="contained" icon="cog-outline" size={28} onPress={()=>{}} />
       </SafeAreaView>
