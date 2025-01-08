@@ -14,7 +14,6 @@ const WEBP_TYPE = 'image/webp';
 const LOAD_DEBOUNCE = 1000;
 
 async function getImageThumb(path: string, type: string, size: number) {
-console.log("GET THUMB: ", path, type, size);
   if (size < IMAGE_SCALE_SIZE) {
     const base = await RNFS.readFile(path, 'base64')
     return `data:image/jpeg;base64,${base}`;
@@ -26,8 +25,9 @@ console.log("GET THUMB: ", path, type, size);
 }
 
 async function getVideoThumb(path: string, position?: number) {
+console.log("GET FULL VID THUMB: ", path);
   const timeStamp = position ? position * 1000 : 0;
-  const shot = await createThumbnail({ url: path.slice(7), timeStamp })
+  const shot = await createThumbnail({ url: path, timeStamp })
   const thumb = await ImageResizer.createResizedImage('file://' + shot.path, 192, 192, "JPEG", 50, 0, null);
   const base = await RNFS.readFile(thumb.path, 'base64')
   return `data:image/jpeg;base64,${base}`;

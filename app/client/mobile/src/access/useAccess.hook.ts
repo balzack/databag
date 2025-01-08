@@ -10,7 +10,7 @@ export function useAccess() {
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
     layout: null,
-    strings: display.state.strings,
+    strings: {},
     mode: 'account',
     username: '',
     handle: '',
@@ -74,8 +74,8 @@ export function useAccess() {
   };
 
   useEffect(() => {
-    const {layout} = display.state;
-    updateState({layout});
+    const {layout, strings} = display.state;
+    updateState({layout, strings});
   }, [display.state]);
 
   const actions = {

@@ -128,7 +128,7 @@ export function Conversation({close}: {close: ()=>void}) {
   const addImage = async () => {
     try {
       const { path, mime, size } = await ImagePicker.openPicker({ mediaType: 'photo' });
-      actions.addImage(`file://${path}`, mime, size);
+      actions.addImage(path, mime, size);
     }
     catch (err) {
       console.log(err);

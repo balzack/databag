@@ -101,9 +101,16 @@ export function Access() {
                 }
                 onChangeText={value => actions.setPassword(value)}
               />
-              <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading} disabled={!state.username || !state.password || !state.node}>
-                {state.strings.login}
-              </Button>
+              { (!state.username || !state.password || !state.node) && (
+                <Button mode="contained" style={styles.submit} disabled={true}>
+                  {state.strings.login}
+                </Button>
+              )}
+              { state.username && state.password && state.node && (
+                <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading}>
+                  {state.strings.login}
+                </Button>
+              )}
               <Button mode="text" onPress={() => actions.setMode('create')}>
                 {state.strings.createAccount}
               </Button>
