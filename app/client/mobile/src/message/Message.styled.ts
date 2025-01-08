@@ -62,8 +62,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flexStart',
     width: '100%',
-    lineHeight: '16',
-    gap: '16',
+    lineHeight: 16,
+    gap: 16,
     position: 'relative',
   },
   name: {
