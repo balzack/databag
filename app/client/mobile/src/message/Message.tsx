@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { avatar } from '../constants/Icons'
-import { Pressable, ScrollView, View, Image, Modal } from 'react-native';
+import { Pressable, Linking, ScrollView, View, Image, Modal } from 'react-native';
 import {Icon, Text, TextInput, IconButton, Button, Surface, Divider} from 'react-native-paper';
 import { Topic, Card, Profile } from 'databag-client-sdk';
 import { ImageAsset } from './imageAsset/ImageAsset';
@@ -13,6 +13,7 @@ import { MediaAsset } from '../conversation/Conversatin';
 import { Confirm } from '../confirm/Confirm'; 
 import { Shimmer } from './shimmer/Shimmer';
 import {BlurView} from '@react-native-community/blur';
+import { sanitizeUrl } from '@braintree/sanitize-url';
 
 export function Message({ topic, card, profile, host, select, selected }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean, select: (id: null | string)=>void, selected: string }) {
   const { state, actions } = useMessage();
@@ -22,7 +23,6 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
   const textStyle = textColor && textSize ? { fontSize: textSize, color: textColor } : textColor ? { color: textColor } : textSize ? { fontSize: textSize } : {}
   const logoUrl = profile ? profile.imageUrl : card ? card.imageUrl : avatar;
   const timestamp = actions.getTimestamp(created);
-  const [message, setMessage] = useState('');
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState('');
   const [saving, setSaving] = useState(false);
@@ -33,6 +33,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
   const [reporting, setReporting] = useState(false);
   const loadedCount = useRef(0);
   const [showAsset, setShowAsset] = useState(false);
+  const [message, setMessage] = useState([]);
 
   useEffect(() => {
     setTimeout(() => setShowAsset(true), 2000);
@@ -41,6 +42,35 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
   useEffect(() => {
     setEditText(text);
   }, [text]);
+
+  useEffect(() => {
+    const urlPattern = new RegExp('(https?:\\/\\/)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)');
+    const hostPattern = new RegExp('^https?:\\/\\/', 'i');
+
+    let plain = '';
+    let clickable = [];
+    const parsed = !text ? '' : text.split(' ');
+
+    if (parsed?.length > 0) {
+      const words = parsed as string[];
+      words.forEach((word, index) => {
+        if (!!urlPattern.test(word)) {
+          clickable.push(<Text key={index}>{ plain }</Text>);
+          plain = '';
+          const url = !!hostPattern.test(word) ? word : `https://${word}`;
+          clickable.push(<Text key={'link-' + index} onPress={() => Linking.openURL(sanitizeUrl(url))} style={{ fontStyle: 'italic' }}>{ sanitizeUrl(word) + ' ' }</Text>);
+        }
+        else {
+          plain += `${word} `;
+        }
+      })
+    }
+
+    if (plain) {
+      clickable.push(<Text key={parsed.length}>{ plain }</Text>);
+    }
+    setMessage(clickable)
+  }, [text, locked]);
 
   const loaded = () => {
     loadedCount.current += 1;
@@ -198,7 +228,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
             </Pressable>
             <View style={styles.padding}>
               { !locked && status === 'confirmed' && text && (
-                  <Text style={{ ...styles.text, ...textStyle }}>{ text }</Text>
+                  <Text style={{ ...styles.text, ...textStyle }}>{ message }</Text>
               )}
               { !locked && status !== 'confirmed' && (
                 <View>
