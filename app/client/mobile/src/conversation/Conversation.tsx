@@ -43,7 +43,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
   const scale = useAnimatedValue(0)
 
   const alertParams = {
-    title: state.strings.error,
+    title: state.strings.operationFailed,
     prompt: state.strings.tryAgain,
     cancel: {
       label: state.strings.close,

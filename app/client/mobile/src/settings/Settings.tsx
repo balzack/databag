@@ -39,7 +39,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
   const [authMessage, setAuthMessage] = useState('');
 
   const alertParams = {
-    title: state.strings.error,
+    title: state.strings.operationFailed,
     prompt: state.strings.tryAgain,
     cancel: {
       label: state.strings.close,

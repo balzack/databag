@@ -23,6 +23,8 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
+    flexGrow: 1,
+    textAlign: 'center',
   },
   close: {
     width: 32,
@@ -38,5 +40,38 @@ export const styles = StyleSheet.create({
   divider: {
     width: '100%',
     height: 2,
+  },
+  info: {
+    width: '80%',
+  },
+  subject: {
+    width: '100%',
+    height: 52,
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingRight: 4,
+    marginTop: 16,
+    borderRadius: 8,
+  },
+  input: {
+    flexGrow: 1,
+    backgroundColor: 'transparent',
+  },
+  underline: {
+    display: 'none',
+  },
+  icon: {
+    backgroundColor: 'transparent',
+    padding: 0,
+    margin: 0,
+  },
+  inputControl: {
+    width: 32,
+    height: 32,
+    backgroundColor: 'yellow',
+  },
+  members: {
+    flexGrow: 1,
   },
 });
