@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
     color: Colors.offsync,
   },
   control: {
+    position: 'absolute',
     backgroundColor: 'transparent',
   },
   button: {
@@ -44,11 +45,16 @@ export const styles = StyleSheet.create({
     height: 92,
   },
   full: {
-    position: 'absolute',
     top: 0,
     left: 0,
     width: '100%',
     height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  player: {
+    display: 'none',
   },
   info: {
     fontSize: 12,

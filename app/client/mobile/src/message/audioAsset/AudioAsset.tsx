@@ -83,7 +83,7 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
             source={thumb}
           />
           { state.dataUrl && (
-            <Video source={{ uri: state.dataUrl }} style={styles.full} paused={false} ref={videoRef}
+            <Video source={{ uri: state.dataUrl }} style={styles.player} paused={false} ref={videoRef}
               onPlaybackRateChange={playbackRateChange} onEnd={end} onError={actions.failed}
               controls={false} resizeMode="contain" />
           )}
