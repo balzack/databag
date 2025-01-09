@@ -197,7 +197,16 @@ function ContentTab({scheme, textCard, contentTab}: {scheme: string, textCard: {
             ...TransitionPresets.ScaleFromCenterAndroid,
           }}>
           {props => (
-            <Conversation close={()=>props.navigation.goBack()} />
+            <Conversation openDetails={()=>props.navigation.navigate('details')} close={()=>props.navigation.goBack()} wide={false} />
+          )}
+        </ContentStack.Screen>
+        <ContentStack.Screen name="details"
+          options={{
+            headerBackTitleVisible: false,
+            ...TransitionPresets.ScaleFromCenterAndroid,
+          }}>
+          {props => (
+            <Details close={()=>props.navigation.goBack()} closeAll={()=>props.navigation.popToTop()} />
           )}
         </ContentStack.Screen>
       </ContentStack.Navigator>
@@ -258,16 +267,34 @@ function ContactTab({scheme, textContact}: {scheme: string, textContact: (cardId
 }
 
 function DetailsScreen({nav}) {
+  const [focus, setFocus] = useState(false);
+
+  const closeAll = (props) => {
+    props.navigation.closeDrawer();
+    setFocus(false);
+  }
+
+  const DetailsComponent = useCallback(
+    (props) => (
+      <Surface elevation={1}>
+        <Details
+          closeAll={()=>closeAll(props)}
+        />
+      </Surface>
+    ),
+    [nav],
+  );
+
   return (
     <DetailsDrawer.Navigator
       id="DetailsDrawer"
-      drawerContent={Details}
+      drawerContent={DetailsComponent}
       screenOptions={{
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
       }}>
-      <DetailsDrawer.Screen name="details">{({navigation}) => <ProfileScreen nav={{...nav, details: navigation}} />}</DetailsDrawer.Screen>
+      <DetailsDrawer.Screen name="details">{({navigation}) => <ProfileScreen nav={{...nav, focus, setFocus, details: navigation}} />}</DetailsDrawer.Screen>
     </DetailsDrawer.Navigator>
   );
 }
@@ -386,7 +413,6 @@ function SettingsScreen({nav}) {
 }
 
 function HomeScreen({nav}) {
-  const [focus, setFocus] = useState(false);
   const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
 
   return (
@@ -396,12 +422,12 @@ function HomeScreen({nav}) {
           <Identity openSettings={nav.settings.openDrawer} openContacts={nav.contacts.openDrawer} />
         </Surface>
         <Surface style={styles.channels} elevation={1} mode="flat">
-          <Content textCard={nav.textCard} openConversation={()=>setFocus(true)} />
+          <Content textCard={nav.textCard} openConversation={()=>nav.setFocus(true)} />
         </Surface>
       </View>
       <View style={styles.right}>
-        {focus && <Conversation close={()=>setFocus(false)} />}
-        {!focus && <Text>FOCUS NOT SET</Text>}
+        {nav.focus && <Conversation openDetails={nav.details.openDrawer} close={()=>nav.setFocus(false)} wide={true} />}
+        {!nav.focus && <Text>FOCUS NOT SET</Text>}
       </View>
     </View>
   );

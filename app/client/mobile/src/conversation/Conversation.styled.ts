@@ -22,7 +22,6 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    flexDirection: 'row',
     gap: 4,
   },
   assets: {
@@ -110,7 +109,6 @@ export const styles = StyleSheet.create({
   },
   header: {
     display: 'flex',
-    flexDirection: 'row',
     width: '100%',
     minWidth: 0,
     alignItems: 'center',

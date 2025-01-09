@@ -6,7 +6,7 @@ import {styles} from './Registry.styled';
 import {useRegistry} from './useRegistry.hook';
 import {Card} from '../card/Card';
 
-export function Registry({close, openContact}: {close: () => void; openContact: (params: ContactParams) => void}) {
+export function Registry({close, openContact}: {close?: () => void; openContact: (params: ContactParams) => void}) {
   const {state, actions} = useRegistry();
   const theme = useTheme();
 

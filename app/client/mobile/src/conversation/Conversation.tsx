@@ -26,7 +26,7 @@ export type MediaAsset = {
   binary?: { label: string, extension: string, data: string }
 }
 
-export function Conversation({close}: {close: ()=>void}) {
+export function Conversation({close, openDetails, wide}: {close: ()=>void, openDetails: ()=>void, wide: boolean}) {
   const { state, actions } = useConversation();
   const [ more, setMore ] = useState(false);
   const [ alert, setAlert ] = useState(false);
@@ -185,8 +185,8 @@ export function Conversation({close}: {close: ()=>void}) {
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 50}  style={styles.conversation}>
-      <SafeAreaView style={styles.header}>
-        <IconButton style={styles.icon} mode="contained" icon="arrow-left" size={28} onPress={onClose} />
+      <SafeAreaView style={{ ...styles.header, flexDirection: wide ? 'row-reverse' : 'row' }}>
+        <IconButton style={styles.icon} mode="contained" icon={wide ? 'close' : 'arrow-left'} size={28} onPress={onClose} />
         <View style={styles.status}>
         </View>
         <View style={styles.title}>
@@ -203,7 +203,7 @@ export function Conversation({close}: {close: ()=>void}) {
             <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.unknown}>{ `, ${state.strings.unknownContact} (${state.unknownContacts})` }</Text>
           )}
         </View>
-        <View style={styles.status}>
+        <View style={{ ...styles.status, flexDirection: wide ? 'row-reverse' : 'row' }}>
           { state.detailSet && !state.access && (
             <Icon source="alert-circle-outline" size={20} color={Colors.offsync} />
           )}
@@ -217,7 +217,7 @@ export function Conversation({close}: {close: ()=>void}) {
             <Icon source="shield-outline" size={18} />
           )}
         </View>
-        <IconButton style={styles.icon} mode="contained" icon="cog-outline" size={28} onPress={()=>{}} />
+        <IconButton style={styles.icon} mode="contained" icon="cog-outline" size={28} onPress={openDetails} />
       </SafeAreaView>
       <Divider style={styles.border} bold={true} />
       <View style={styles.thread}>
