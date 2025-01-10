@@ -13,22 +13,93 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
   const [removing, setRemoving] = useState(false);
   const [reporting, setReporting] = useState(false);
   const [blocking, setBlocking] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [confirmParams, setConfirmParams] = useState({});
+  const [confirm, setConfirm] = useState(false);
   const theme = useTheme();
 
   const members = () => {
   }
 
   const remove = () => {
+    const apply = async () => {
+      await actions.remove();
+      closeAll();
+    }
+    confirmAction(state.strings.confirmTopic, state.strings.sureTopic, state.strings.remove, setRemoving, apply);
   }
 
   const leave = () => {
+    const apply = async () => {
+      await actions.leave();
+      closeAll();
+    }
+    confirmAction(state.strings.confirmLeave, state.strings.sureLeave, state.strings.leave, setRemoving, apply);
   }
 
   const block = () => {
+    const apply = async () => {
+      await actions.block();
+      closeAll();
+    }
+    confirmAction(state.strings.blockTopic, state.strings.blockTopicPrompt, state.strings.block, setBlocking, apply);
   }
 
-  const reprot = () => {
+  const report = () => {
+    confirmAction(state.strings.reportTopic, state.strings.reportTopicPrompt, state.strings.report, setReporting, actions.report);
   }
+
+  const confirmAction = (title: string, prompt: string, label: string, loading: (boolean) => void, action: () => Promise<void>) => {
+    setConfirmParams({
+      title,
+      prompt,
+      cancel: {
+        label: state.strings.cancel,
+        action: () => setConfirm(false),
+      },
+      confirm: {
+        label,
+        action: async () => {
+          if (!busy) {
+            loading(true);
+            setBusy(true);
+            await setAction(action);
+            setBusy(false);
+            loading(false);
+          }
+        },
+      },
+    });
+    setConfirm(true);
+  };
+
+  const applyAction = async (loading: (boolean) => void, action: () => Promise<void>) => {
+    if (!busy) {
+      setBusy(true);
+      loading(true);
+      await setAction(action);
+      loading(false);
+      setBusy(false);
+    }
+  };
+
+  const setAction = async (action: () => Promise<void>) => {
+    try {
+      await action();
+      setConfirm(false);
+    } catch (err) {
+      console.log(err);
+      setConfirmParams({
+        title: state.strings.operationFailed,
+        prompt: state.strings.tryAgain,
+        cancel: {
+          label: state.strings.cancel,
+          action: () => setConfirm(false),
+        },
+      });
+      setConfirm(true);
+    }
+  };
 
   const alertParams = {
     title: state.strings.operationFailer,
@@ -141,7 +212,7 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
         </View>
       )}
       <Divider style={styles.divider} />
-      { !state.host && state.access && (
+      { !state.host && (
         <View style={styles.actions}>
           <View style={styles.action}>
             <IconButton
@@ -173,7 +244,7 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
               loading={reporting}
               compact="true"
               mode="contained"
-              icon="alert-octogon-outline"
+              icon="alert-octagon-outline"
               size={32}
               onPress={report}
             />
@@ -181,7 +252,7 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
           </View>
         </View>
       )}
-      { state.host && state.access && (
+      { state.host && (
         <View style={styles.actions}>
           <View style={styles.action}>
             <IconButton
@@ -224,7 +295,7 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
           <Text style={styles.unknown}>{ state.strings.unknown }: {state.unknownContacts}</Text>
         )}
       </ScrollView>
-      <Confirm show={alert} params={alertParams} />
+      <Confirm show={confirm} busy={busy} params={confirmParams} />
     </View>
   )
 }
