@@ -23,7 +23,7 @@ export function useSession() {
       if (status === 'disconnected') {
         disconnecting.current = setTimeout(() => {
           updateState({ disconnected: true });
-        }, 2000);
+        }, 4000);
       } if (status === 'connected') {
         clearTimeout(disconnecting.current);
         updateState({ disconnected: false });

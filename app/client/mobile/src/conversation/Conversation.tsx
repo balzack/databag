@@ -277,6 +277,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
           </ScrollView>
         </Animated.View>
         <TextInput multiline={true} mode="outlined" style={{ ...styles.message, fontSize: state.textSize }}
+            blurOnSubmit={true} onSubmitEditing={sendMessage} returnKeyType="send"
             textColor={state.textColorSet ? state.textColor : undefined} outlineColor="transparent" activeOutlineColor="transparent"spellcheck={false}
             autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage} placeholderTextColor={state.textColorSet ? state.textColor : undefined}
             cursorColor={state.textColorSet ? state.textColor : undefined} value={state.message} onChangeText={value => actions.setMessage(value)} />
