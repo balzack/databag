@@ -12,6 +12,7 @@ export const en = {
   server: 'Server',
   token: 'Token',
   delayMessage: 'Key generation can take several minutes.',
+  noAccess: 'No Access', 
 
   membership: 'Membership',
   channelGuest: 'Topic Guest',
@@ -293,6 +294,7 @@ export const fr = {
   blockTopicPrompt: 'Êtes-vous sûr de vouloir bloquer ce sujet ?',
   reportTopic: 'Signaler le sujet',
   reportTopicPrompt: 'Êtes-vous sûr de vouloir signaler ce sujet pour examen par un administrateur ?',
+  noAccess: 'Pas d\'Accès',
 
   membership: 'Adhésion',
   channelHost: 'Hôte du Sujet',
@@ -571,6 +573,7 @@ export const sp = {
   reportTopic: 'Reportar tema',
   reportTopicPrompt: '¿Estás seguro de que deseas reportar este tema para revisión del administrador?',
 
+  noAccess: 'Sin Acceso', 
   membership: 'Afiliación',
   channelHost: 'Anfitrión del Tema',
   channelGuest: 'Invitado de Tema',
@@ -847,6 +850,7 @@ export const pt = {
   reportTopic: 'Denunciar tópico',
   reportTopicPrompt: 'Tem certeza de que deseja denunciar este tópico para revisão do administrador?',
 
+  noAccess: 'Sem Acesso',
   membership: 'Associação',
   channelHost: 'Anfitrião do Tópico',
   channelGuest: 'Convidado do Tópico',
@@ -1124,6 +1128,7 @@ export const de = {
   reportTopic: 'Thema melden',
   reportTopicPrompt: 'Sind Sie sicher, dass Sie dieses Thema zur Überprüfung durch den Administrator melden möchten?',
 
+  noAccess: 'Kein Zugriff',
   channelHost: 'Themenhost',
   channelGuest: 'Thema Gast',
   created: 'Erstellt',
@@ -1400,6 +1405,7 @@ export const ru = {
   reportTopic: 'Пожаловаться на тему',
   reportTopicPrompt: 'Вы уверены, что хотите отправить эту тему на рассмотрение администратору?',
 
+  noAccess: 'Нет доступа',
   membership: 'Членство',
   channelHost: 'Ведущий темы',
   channelGuest: 'Тема Гость',
@@ -1655,3 +1661,4 @@ export const ru = {
   confirmDisable: 'Отключение двухфакторной аутентификации',
   disablePrompt: 'Вы уверены, что хотите отключить двухфакторную аутентификацию?',
 }
+
