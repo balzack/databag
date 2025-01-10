@@ -67,9 +67,16 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     paddingLeft: 8,
   },
-  itemSubject: {
+  itemHeader: {
     fontSize: 22,
     paddingLeft: 8,
+  },
+  guestSubject: {
+    paddingBottom: 8,
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingRight: 4,
   },
   subject: {
     width: '100%',
@@ -79,6 +86,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingRight: 4,
     marginTop: 16,
+    marginBottom: 16,
     borderRadius: 8,
   },
   input: {
@@ -137,7 +145,81 @@ export const styles = StyleSheet.create({
     paddingTop: 8,
     paddingLeft: 16,
     paddingRight: 16,
+    height: 48,
     width: '100%',
     borderBottomWidth: 1,
+  },
+  blur: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  memberModal: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  memberSurface: {
+    width: '80%',
+    maxWidth: 400,
+  },
+  modalHeader: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+  },
+  modalTitle: {
+    flexGrow: 1,
+    paddingLeft: 16,
+    fontSize: 20,
+  },
+  modalClose: {
+    backgroundColor: 'transparent',
+  },
+  modalMembers: {
+    minHeight: 128,
+    maxHeight: 256,
+    width: '100%',
+  },
+  modalArea: {
+    marginLeft: 16,
+    marginRight: 16,
+    borderRadius: 4,
+  },
+  modalButtons: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  modalButton: {
+    borderRadius: 4,
+    margin: 16,
+  },
+  noContacts: {
+    width: '100%',
+    height: 128,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  noContactsLabel: {
+    color: Colors.placeholder,
+    fontSize: 20,
+  },
+  memberSwitch: {
+    transform: [{scaleX: 0.7}, {scaleY: 0.7}],
+  },
+  error: {
+    flexGrow: 1,
+    paddingLeft: 32,
+    color: Colors.offsync,
   },
 });

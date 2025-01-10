@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, View } from 'react-native';
-import {useTheme, Surface, Icon, Divider, IconButton, Text, TextInput} from 'react-native-paper';
+import { SafeAreaView, Modal, ScrollView, View } from 'react-native';
+import {useTheme, Switch, Surface, Icon, Divider, Button, IconButton, Text, TextInput} from 'react-native-paper';
 import {styles} from './Details.styled';
 import {useDetails} from './useDetails.hook';
 import { Confirm } from '../confirm/Confirm';
 import { Card } from '../card/Card';
+import {BlurView} from '@react-native-community/blur';
 
 export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}) {
   const { state, actions } = useDetails();
@@ -16,9 +17,13 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
   const [busy, setBusy] = useState(false);
   const [confirmParams, setConfirmParams] = useState({});
   const [confirm, setConfirm] = useState(false);
+  const [memberModal, setMemberModal] = useState(false);
+  const [error, setError] = useState(false);
   const theme = useTheme();
 
-  const members = () => {
+  const membership = () => {
+    setError(false);
+    setMemberModal(true);
   }
 
   const remove = () => {
@@ -126,9 +131,44 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
   }
 
   const cards = state.channelCards.map((card, index) => (
-      <Card containerStyle={styles.card} key={index} imageUrl={card.imageUrl} name={card.name} placeholder={state.strings.name}
+      <Card containerStyle={{...styles.card, borderColor: theme.colors.outlineVariant }} key={index} imageUrl={card.imageUrl} name={card.name} placeholder={state.strings.name}
         handle={card.handle} node={card.node} actions={[]} />
   ))
+
+  const members = state.cards.filter(card => {
+    if (state.detail && state.detail.members.find(member => member.guid === card.guid)) {
+      return true;
+    } else if(state.sealed && !card.sealable) {
+      return false;
+    } else {
+      return true;
+    }
+  }).map((card, index) => {
+    const enable = !state.detail ? [] : [
+      <Switch
+        key="enable"
+        style={styles.memberSwitch}
+        value={Boolean(state.detail.members.find(member => member.guid === card.guid))}
+        onValueChange={async (flag) => {
+          try {
+            setError(false);
+            if (flag) {
+              await actions.setMember(card.cardId);
+            } else {
+              await actions.clearMember(card.cardId);
+            }
+          } catch (err) {
+            console.log(err);
+            setError(true);
+          }
+        }}
+      />
+    ];
+
+    return (
+      <Card containerStyle={{ ...styles.card, borderColor: theme.colors.outlineVariant }} key={index} imageUrl={card.imageUrl} name={card.name} placeholder={state.strings.name} handle={card.handle} node={card.node} actions={enable} />
+    )
+  });
 
   return (
     <View style={styles.details}>
@@ -176,36 +216,36 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
             </Surface>
           )}
           { !state.host && !state.locked && (
-            <View style={styles.item}>
-              <IconButton style={styles.icon} size={28} icon="label-outline" />
+            <View style={styles.guestSubject}>
+              <Icon size={28} source="label-outline" />
               <Text style={styles.itemHeader}>{ state.subject }</Text>
             </View>
           )}
           <View style={styles.item}>
-            <Icon source="calendar-month-outline" size={22} />
+            <Icon source="calendar-month-outline" size={20} />
             <Text style={styles.itemLabel}>{ state.created }</Text>
           </View>
           { state.host && (
             <View style={styles.item}>
-              <Icon source="home-outline" size={22} />
+              <Icon source="home-outline" size={20} />
               <Text style={styles.itemLabel}>{ state.strings.channelHost }</Text>
             </View>
           )}
           { !state.host && (
             <View style={styles.item}>
-              <Icon source="server" size={22} />
+              <Icon source="server" size={20} />
               <Text style={styles.itemLabel}>{ state.strings.channelGuest }</Text>
             </View>
           )}
           { state.sealed && (
             <View style={styles.item}>
-              <Icon source="shield-outline" size={22} />
+              <Icon source="shield-outline" size={20} />
               <Text style={styles.itemLabel}>{ state.strings.sealed }</Text>
             </View>
           )}
           { !state.sealed && (
             <View style={styles.item}>
-              <Icon source="shield-off-outline" size={22} />
+              <Icon source="shield-off-outline" size={20} />
               <Text style={styles.itemLabel}>{ state.strings.notSealed }</Text>
             </View>
           )}
@@ -273,7 +313,7 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
               mode="contained"
               icon="account-cog-outline"
               size={32}
-              onPress={members}
+              onPress={membership}
             />
             <Text style={styles.actionLabel}>{state.strings.members}</Text>
           </View>
@@ -296,6 +336,37 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
         )}
       </ScrollView>
       <Confirm show={confirm} busy={busy} params={confirmParams} />
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={memberModal} onRequestClose={() => setMemberModal(false)}>
+        <View style={styles.memberModal}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <Surface elevation={5} mode="flat" style={styles.memberSurface}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>{state.strings.editMembership}</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setMemberModal(false)} />
+            </View>
+              <Surface eleveation={2} style={styles.modalArea}>
+                { members.length === 0 && (
+                  <View style={styles.noContacts}>
+                    <Text style={styles.noContactsLabel}>{ state.strings.noContacts }</Text>
+                  </View>
+                )}
+                { members.length > 0 && (
+                  <ScrollView style={styles.modalMembers}>
+                    { members }
+                  </ScrollView>
+                )}
+              </Surface>
+            <View style={styles.modalButtons}>
+              { error && (
+                <Text style={styles.error}>{ state.strings.operationFailed }</Text>
+              )}
+              <Button style={styles.modalButton} compact={true} mode="outlined" onPress={() => setMemberModal(false)}>
+                {state.strings.close}
+              </Button>
+            </View>
+          </Surface>
+        </View>
+      </Modal>
     </View>
   )
 }
