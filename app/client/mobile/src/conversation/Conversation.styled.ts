@@ -5,6 +5,11 @@ export const styles = StyleSheet.create({
   conversation: {
     flex: 1
   },
+  avoid: {
+    width: '100%',
+    height: '30%',
+    flexShrink: 0,
+  },
   closeIcon: {
     position: 'absolute',
     top: 0,
@@ -62,6 +67,7 @@ export const styles = StyleSheet.create({
   thread: {
     display: 'flex',
     flexGrow: 1,
+    flexShrink: 1,
     minHeight: 0,
     height: '50%',
     width: '100%',

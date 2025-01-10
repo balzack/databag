@@ -34,6 +34,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
   const [ selected, setSelected ] = useState(null as null | string);
   const [ sizeMenu, setSizeMenu ] = useState(false);
   const [ colorMenu, setColorMenu ] = useState(false);
+  const [avoid, setAvoid] = useState(false);
   const thread = useRef();
   const scrolled = useRef(false);
   const contentHeight = useRef(0);
@@ -184,7 +185,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
   });
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 50}  style={styles.conversation}>
+    <View style={styles.conversation}>
       <SafeAreaView style={{ ...styles.header, flexDirection: wide ? 'row-reverse' : 'row' }}>
         <IconButton style={styles.icon} mode="contained" icon={wide ? 'close' : 'arrow-left'} size={28} onPress={onClose} />
         <View style={styles.status}>
@@ -278,9 +279,12 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
         </Animated.View>
         <TextInput multiline={true} mode="outlined" style={{ ...styles.message, fontSize: state.textSize }}
             blurOnSubmit={true} onSubmitEditing={sendMessage} returnKeyType="send"
+            onFocus={()=>setAvoid(true)} onBlur={()=>setAvoid(false)}
             textColor={state.textColorSet ? state.textColor : undefined} outlineColor="transparent" activeOutlineColor="transparent"spellcheck={false}
             autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage} placeholderTextColor={state.textColorSet ? state.textColor : undefined}
             cursorColor={state.textColorSet ? state.textColor : undefined} value={state.message} onChangeText={value => actions.setMessage(value)} />
+
+        { Platform.OS === 'ios' && avoid && (<View style={styles.avoid} />) }
 
         <View style={styles.controls}>
           <Pressable style={styles.control} onPress={addImage}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="camera" size={24} color={Colors.primary} /></Surface></Pressable>
@@ -336,6 +340,6 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
           </Surface>
         </View>
       </Modal>
-    </KeyboardAvoidingView>
+    </View>
   );
 }

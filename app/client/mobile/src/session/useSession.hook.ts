@@ -1,4 +1,5 @@
 import {useEffect, useState, useContext, useRef} from 'react';
+import { AppState } from 'react-native';
 import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {ContextType} from '../context/ContextType';
@@ -20,7 +21,7 @@ export function useSession() {
 
   useEffect(() => {
     const setStatus = (status: string) => {
-      if (status === 'disconnected') {
+      if (state.appState === 'active' && status === 'disconnected') {
         disconnecting.current = setTimeout(() => {
           updateState({ disconnected: true });
         }, 4000);
@@ -29,10 +30,17 @@ export function useSession() {
         updateState({ disconnected: false });
       }
     }
+    const setAppState = (appState: string) => {
+      updateState({ appState });
+    }
     const session = app.state.session;
     if (session) {
       session.addStatusListener(setStatus);
-      return () => session.removeStatusListener();
+      const sub = AppState.addEventListener('change', setAppState);
+      return () => {
+        session.removeStatusListener();
+        sub.remove();
+      }
     }
   }, [app.state.session]);
 
