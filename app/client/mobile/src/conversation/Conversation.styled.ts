@@ -119,10 +119,14 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexGrow: 1,
+    flexShrink: 1,
+    minWidth: 0,
     gap: 8,
   },
   label: {
     fontSize: 24,
+    minWidth: 0,
+    flexShrink: 1,
   },
   add: {
     display: 'flex',
