@@ -45,7 +45,6 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
   const block = () => {
     const apply = async () => {
       await actions.block();
-      closeAll();
     }
     confirmAction(state.strings.blockTopic, state.strings.blockTopicPrompt, state.strings.block, setBlocking, apply);
   }

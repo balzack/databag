@@ -274,14 +274,14 @@ export function useSettings() {
     },
     loadBlockedContacts: async () => {
       const settings = app.state.session.getSettings();
-      const blockedCards = await settings.getBlockedCards();
-      updateState({ blockedCards });
+      const blockedContacts = await settings.getBlockedCards();
+      updateState({ blockedContacts });
     },
-    unblockCard: async (cardId: string) => {
+    unblockContact: async (cardId: string) => {
       const contact = app.state.session.getContact();
       await contact.setBlockedCard(cardId, false);
-      const blockedCards = state.blockedCards.filter(blocked => blocked.cardId != cardId);
-      updateState({ blockedCards });
+      const blockedContactss = state.blockedContacts.filter(blocked => blocked.cardId != cardId);
+      updateState({ blockedContacts });
     },
     getTimestamp: (created: number) => {
       const now = Math.floor((new Date()).getTime() / 1000)

@@ -28,7 +28,8 @@ export function useContacts() {
   useEffect(() => {
     const contact = app.state.session?.getContact();
     const setCards = (cards: Card[]) => {
-      updateState({cards});
+      const filtered = cards.filter(card => !card.blocked);
+      updateState({cards: filtered});
     };
     contact.addCardListener(setCards);
     return () => {
