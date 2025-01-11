@@ -56,7 +56,7 @@ export function Session() {
   }
 
   useEffect(() => {
-    if (state.appState && !sdkState) {
+    if (state.appState && !state.sdkState) {
       setDisconnected(true);
     } else {
       setDisconnected(false);
@@ -171,7 +171,7 @@ export function Session() {
           </View>
         </NavigationContainer>
       )}
-      { state.disconnected && !dismissed && (
+      { disconnected && !dismissed && (
         <View style={styles.alert}>
           <Surface elevation={5} style={styles.alertArea}>
             <Icon color={Colors.offsync} size={20} source="alert-circle-outline" />

@@ -11,7 +11,6 @@ export function useSession() {
   const [state, setState] = useState({
     layout: null,
     strings: {},
-    disconnected,
     appState: true,
     sdkState: true,
   });
