@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   border: {
     height: 2,
@@ -326,5 +327,75 @@ export const styles = StyleSheet.create({
   },
   radio: {
     borderRadius: 32,
+  },
+  blocked: {
+    minHeight: 128,
+    maxHeight: 256,
+    width: '100%',
+  },
+  blockedSurface: {
+    width: '80%',
+    maxWidth: 500,
+    borderRadius: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
+  blockedHeader: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  blockedTitle: {
+    flexGrow: 1,
+    fontSize: 20,
+    paddingLeft: 8,
+  },
+  blockedClose: {
+    backgroundColor: 'transparent',
+  },
+  blockedDone: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingTop: 16,
+    paddingBottom: 16,
+  },
+  blockedButton: {
+    borderRadius: 8,
+  },
+  blockedError: {
+    color: Colors.offsync,
+    flexGrow: 1,
+    paddingLeft: 8,
+  },
+  blockedEmpty: {
+    width: '100%',
+    height: 128,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  blockedLabel: {
+    fontSize: 20,
+    color: Colors.placeholder,
+  },
+  blockedItems: {
+    width: '100%',
+  },
+  blockedItem: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+  },
+  blockedAction: {
+    backgroundColor: 'transparent',
+  },
+  blockedValue: {
+    fontSize: 16,
+    flexGrow: 1,
+    paddingLeft: 16,
   },
 });
