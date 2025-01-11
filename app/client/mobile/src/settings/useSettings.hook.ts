@@ -280,7 +280,7 @@ export function useSettings() {
     unblockContact: async (cardId: string) => {
       const contact = app.state.session.getContact();
       await contact.setBlockedCard(cardId, false);
-      const blockedContactss = state.blockedContacts.filter(blocked => blocked.cardId != cardId);
+      const blockedContacts = state.blockedContacts.filter(blocked => blocked.cardId != cardId);
       updateState({ blockedContacts });
     },
     getTimestamp: (created: number) => {
