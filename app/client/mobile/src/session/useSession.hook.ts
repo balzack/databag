@@ -7,12 +7,13 @@ import {ContextType} from '../context/ContextType';
 export function useSession() {
   const display = useContext(DisplayContext) as ContextType;
   const app = useContext(AppContext) as ContextType;
-  const disconnecting = useRef(null);
 
   const [state, setState] = useState({
     layout: null,
     strings: {},
-    disconnected: false,
+    disconnected,
+    appState: true,
+    sdkState: true,
   });
 
   const updateState = (value: any) => {
@@ -20,22 +21,15 @@ export function useSession() {
   };
 
   useEffect(() => {
-    const setStatus = (status: string) => {
-      if (state.appState === 'active' && status === 'disconnected') {
-        disconnecting.current = setTimeout(() => {
-          updateState({ disconnected: true });
-        }, 4000);
-      } if (status === 'connected') {
-        clearTimeout(disconnecting.current);
-        updateState({ disconnected: false });
-      }
+    const setSdkState = (state: string) => {
+      updateState({ sdkState: state === 'connected' });
     }
-    const setAppState = (appState: string) => {
-      updateState({ appState });
+    const setAppState = (state: string) => {
+      updateState({ appState: state === 'active' });
     }
     const session = app.state.session;
     if (session) {
-      session.addStatusListener(setStatus);
+      session.addStatusListener(setSdkState);
       const sub = AppState.addEventListener('change', setAppState);
       return () => {
         session.removeStatusListener();

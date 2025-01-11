@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {SafeAreaView, Pressable, View, useColorScheme} from 'react-native';
 import {styles} from './Session.styled';
 import {IconButton, Surface, Text, Icon} from 'react-native-paper';
@@ -33,6 +33,7 @@ export function Session() {
   const [tab, setTab] = useState('content');
   const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
   const [dismissed, setDismissed] = useState(false);
+  const [disconnected, setDisconnected] = useState(false);
 
   const sessionNav = {strings: state.strings};
   const showContent = {display: tab === 'content' ? 'flex' : 'none'};
@@ -53,6 +54,14 @@ export function Session() {
   const contentTab = () => {
     setTab('content');
   }
+
+  useEffect(() => {
+    if (state.appState && !sdkState) {
+      setDisconnected(true);
+    } else {
+      setDisconnected(false);
+    }
+  }, [state.appState, state.sdkState]);
 
   return (
     <View style={styles.session}>
