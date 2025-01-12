@@ -1031,6 +1031,7 @@ export class ContactModule implements Contact {
     const channelData = detail.sealed ? item.unsealedDetail : detail.data || '{}';
     const topicData = summary.sealed ? item.unsealedSummary : summary.data || '{}';
     const parsed = this.parse(topicData);
+    const data = summary.sealed ? parsed?.message : parsed;
 
     return {
       channelId,
@@ -1039,7 +1040,7 @@ export class ContactModule implements Contact {
         guid: summary.guid,
         sealed: summary.sealed,
         dataType: summary.dataType,
-        data: getLegacyData(parsed).data,
+        data: getLegacyData(data).data,
         created: summary.created,
         updated: summary.updated,
         status: summary.status,

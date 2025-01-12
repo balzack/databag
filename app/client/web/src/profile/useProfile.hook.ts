@@ -11,7 +11,7 @@ export function useProfile(params: ProfileParams) {
   const [state, setState] = useState({
     strings: display.state.strings,
     cards: [] as Card[],
-    profile: {} as {} | Profile,
+    profile: {guid:''} as {guid:string} | Profile,
     guid: '',
     name: '',
     handle: '',

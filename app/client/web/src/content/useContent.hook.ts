@@ -125,8 +125,8 @@ export function useContent() {
           }
         } else if (lastTopic.dataType === 'sealedtopic') {
           if (lastTopic.data) {
-            if (lastTopic.data.message?.text) {
-              return lastTopic.data.message.text
+            if (lastTopic.data?.text) {
+              return lastTopic.data.text
             } else {
               return ''
             }
