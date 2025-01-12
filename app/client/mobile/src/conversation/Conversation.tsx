@@ -184,9 +184,12 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
     }
   });
 
+  const containerStyle = state.layout === 'large' ? { ...styles.conversation, ...styles.largeConversation } : styles.conversation;
+  const headerStyle = state.layout === 'large' ? { ...styles.header, ...styles.largeHeader } : styles.header;
+
   return (
-    <View style={styles.conversation}>
-      <SafeAreaView style={{ ...styles.header, flexDirection: wide ? 'row-reverse' : 'row' }}>
+    <View style={containerStyle}>
+      <SafeAreaView style={{ ...headerStyle, flexDirection: state.layout === 'large' ? 'row-reverse' : 'row' }}>
         <IconButton style={styles.icon} mode="contained" icon={wide ? 'close' : 'arrow-left'} size={28} onPress={onClose} />
         <View style={styles.status}>
         </View>
@@ -204,7 +207,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
             <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.unknown}>{ `, ${state.strings.unknownContact} (${state.unknownContacts})` }</Text>
           )}
         </View>
-        <View style={{ ...styles.status, flexDirection: wide ? 'row-reverse' : 'row' }}>
+        <View style={{ ...styles.status, flexDirection: state.layout === 'large' ? 'row-reverse' : 'row' }}>
           { state.detailSet && !state.access && (
             <Icon source="alert-circle-outline" size={20} color={Colors.offsync} />
           )}

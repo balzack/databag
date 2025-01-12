@@ -5,6 +5,9 @@ export const styles = StyleSheet.create({
   conversation: {
     flex: 1
   },
+  largeConversation: {
+    padding: 16,
+  },
   avoid: {
     width: '100%',
     height: '30%',
@@ -25,6 +28,7 @@ export const styles = StyleSheet.create({
     width: 40,
     height: 32,
     display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
     gap: 4,
@@ -115,9 +119,14 @@ export const styles = StyleSheet.create({
   },
   header: {
     display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
     width: '100%',
     minWidth: 0,
     alignItems: 'center',
+  },
+  largeHeader: {
+    height: 64,
   },
   title: {
     display: 'flex',
