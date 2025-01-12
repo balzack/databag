@@ -657,7 +657,7 @@ export class StreamModule {
   }
 
   private async unsealChannelSummary(channelId: string, item: ChannelItem): Promise<boolean> {
-    if (item.unsealedSummary == null && item.summary.dataType === 'sealedtopic' && this.seal && this.crypto) {
+    if (item.unsealedSummary == null && item.summary.status === 'confirmed' && item.summary.dataType === 'sealedtopic' && this.seal && this.crypto) {
       try {
         if (!item.channelKey) {
           const { seals } = JSON.parse(item.detail.data);

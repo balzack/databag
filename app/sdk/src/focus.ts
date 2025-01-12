@@ -414,14 +414,12 @@ export class FocusModule implements Focus {
           for (const asset of files) {
             for (const transform of asset.transforms) {
               if (transform.type === TransformType.Thumb && transform.thumb) {
-console.log("GET THUMB??");
                 const assetItem = {
                   assetId: `${assetItems.length}`,
                   encrytped: true,
                   hosting: HostingMode.Inline,
                   inline: await transform.thumb(),
                 }
-console.log("GOT THUMB!!");
                 appAsset.push({appId: transform.appId, assetId: assetItem.assetId});
                 assetItems.push(assetItem);
               } else if (transform.type === TransformType.Copy) {
@@ -591,7 +589,6 @@ console.log("GOT THUMB!!");
           await this.setRemoteChannelTopicSubject(topicId, type, updated);
         }
       } catch (err) {
-console.log("THROWING!");
         this.log.error(err);
         await this.removeRemoteChannelTopic(topicId);
         throw new Error('failed to add topic');
@@ -866,7 +863,7 @@ console.log("THROWING!");
   }   
       
   private async unsealTopicDetail(item: TopicItem): Promise<boolean> {
-    if (item.detail.sealed && !item.unsealedDetail && this.sealEnabled && this.channelKey && this.crypto) {
+    if (item.detail.status === 'confirmed' && item.detail.sealed && !item.unsealedDetail && this.sealEnabled && this.channelKey && this.crypto) {
       try {
         const { messageEncrypted, messageIv } = item.detail.data;
         if (!messageEncrypted || !messageIv) {
