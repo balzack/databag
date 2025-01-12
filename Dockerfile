@@ -22,8 +22,16 @@ COPY ./net/server /app/databag/net/server
 COPY ./net/transform /opt/databag/transform
 
 WORKDIR /app/databag/net/server
-RUN go mod download
-RUN CGO_ENABLED=1 go build -o databag .
+RUN if [ -n "${DATABAG_GOARCH}" ]; then GOARCH=${DATABAG_GOARCH}; fi; \
+  if [ -n "${DATABAG_GOOS}" ]; then GOOS=${DATABAG_GOOS}; fi; \
+  go mod download
+
+ARG DATABAG_GOARCH
+ARG DATABAG_GOOS
+
+RUN if [ -n "${DATABAG_GOARCH}" ]; then GOARCH=${DATABAG_GOARCH}; fi; \
+  if [ -n "${DATABAG_GOOS}" ]; then GOOS=${DATABAG_GOOS}; fi; \
+  CGO_ENABLED=1 go build -o databag .
 
 COPY --from=node /app/build /app/databag/net/web/build
 
