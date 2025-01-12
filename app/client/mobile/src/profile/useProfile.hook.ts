@@ -2,7 +2,7 @@ import {useState, useContext, useEffect} from 'react';
 import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {ContextType} from '../context/ContextType';
-import {Card} from 'databag-client-sdk';
+import {Card, Profile} from 'databag-client-sdk';
 import {ContactParams} from './Profile';
 
 export function useProfile(params: ContactParams) {
@@ -11,6 +11,7 @@ export function useProfile(params: ContactParams) {
   const [state, setState] = useState({
     strings: display.state.strings,
     cards: [] as Card[],
+    profile: {} as {} | Profile,
     guid: '',
     name: '',
     handle: '',
@@ -102,12 +103,18 @@ export function useProfile(params: ContactParams) {
 
   useEffect(() => {
     const contact = app.state.session?.getContact();
+    const identity = app.state.session?.getIdentity();
     const setCards = (cards: Card[]) => {
       updateState({cards});
     };
+    const setProfile = (profile: Profile) => {
+      updateState({ profile });
+    };
     contact.addCardListener(setCards);
+    identity.addProfileListener(setProfile);
     return () => {
       contact.removeCardListener(setCards);
+      identity.removeProfileListener(setProfile);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

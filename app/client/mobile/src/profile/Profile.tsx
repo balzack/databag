@@ -131,11 +131,13 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
               </View>
             </View>
             <Divider style={styles.line} bold={true} />
-            <View style={styles.status}>
-              <Text style={styles[state.statusLabel]}>{state.strings[state.statusLabel]}</Text>
-            </View>
+            { state.guid !== state.profile.guid && (
+              <View style={styles.status}>
+                <Text style={styles[state.statusLabel]}>{state.strings[state.statusLabel]}</Text>
+              </View>
+            )}
 
-            {state.statusLabel === 'unknownStatus' && (
+            {state.statusLabel === 'unknownStatus' && state.guid !== state.profile.guid && (
               <View style={styles.actions}>
                 <View style={styles.action}>
                   <IconButton
@@ -182,7 +184,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
               </View>
             )}
 
-            {state.statusLabel === 'savedStatus' && (
+            {state.statusLabel === 'savedStatus' && state.guid !== state.profile.guid && (
               <View style={styles.actions}>
                 <View style={styles.action}>
                   <IconButton
@@ -243,7 +245,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
               </View>
             )}
 
-            {state.statusLabel === 'pendingStatus' && (
+            {state.statusLabel === 'pendingStatus' && state.guid !== state.profile.guid && (
               <View style={styles.actions}>
                 <View style={styles.action}>
                   <IconButton
@@ -346,7 +348,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
               </View>
             )}
 
-            {state.statusLabel === 'requestedStatus' && (
+            {state.statusLabel === 'requestedStatus' && state.guid !== state.profile.guid && (
               <View style={styles.actions}>
                 <View style={styles.action}>
                   <IconButton
@@ -435,7 +437,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
               </View>
             )}
 
-            {state.statusLabel === 'connectingStatus' && (
+            {state.statusLabel === 'connectingStatus' && state.guid !== state.profile.guid && (
               <View style={styles.actions}>
                 <View style={styles.action}>
                   <IconButton
@@ -496,7 +498,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
               </View>
             )}
 
-            {state.statusLabel === 'connectedStatus' && (
+            {state.statusLabel === 'connectedStatus' && state.guid !== state.profile.guid && (
               <View style={styles.actions}>
                 <View style={styles.action}>
                   <IconButton
@@ -557,7 +559,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
               </View>
             )}
 
-            {state.statusLabel === 'offsyncStatus' && (
+            {state.statusLabel === 'offsyncStatus' && state.guid !== state.profile.guid && (
               <View style={styles.actions}>
                 <View style={styles.action}>
                   <IconButton
