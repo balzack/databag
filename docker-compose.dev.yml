@@ -8,6 +8,9 @@ services:
     working_dir: /app
     volumes:
       - ./net/web:/app
+      - cache_yarn:/root/.yarn
+    environment:
+      - YARN_CACHE_FOLDER=/root/.yarn
     command: sh -c "yarn && chokidar '**/*.js' '**/*.ts' -c 'yarn run build' --debounce 18000 --initial --ignore node_modules --ignore build"
   net-server:
     build:
@@ -20,6 +23,7 @@ services:
       - ./dev_database:/var/lib/databag
       - ./net/transform:/opt/databag/transform
       - ./net/web/build:/app/databag/net/web/build
+      - cache_go:/go/pkg/mod
     working_dir: /app
     environment:
       - ADMIN=password
@@ -32,6 +36,11 @@ services:
     working_dir: /app
     volumes:
       - ./net/repeater:/app
+      - cache_go:/go/pkg/mod
     ports:
       - 127.0.0.1:7878:7878
     command: go run main.go
+
+volumes:
+  cache_go:
+  cache_yarn:

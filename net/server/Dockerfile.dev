@@ -1,6 +1,6 @@
 FROM golang:alpine
 
-RUN apk add build-base imagemagick sqlite ffmpeg curl
+RUN apk add --no-cache build-base imagemagick sqlite ffmpeg curl
 
 RUN mkdir -p /opt/databag
 RUN mkdir -p /var/lib/databag
@@ -9,7 +9,8 @@ RUN mkdir -p /app/databag/net
 RUN mkdir -p /tmp/databag-go-cache
 WORKDIR /tmp/databag-go-cache
 COPY go.mod go.sum ./
-RUN go mod download
+RUN --mount=type=cache,target=/go/pkg/mod \
+  go mod download
 
 WORKDIR /
 RUN rm -rf /tmp/databag-go-cache
