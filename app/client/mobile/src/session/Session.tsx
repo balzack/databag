@@ -211,7 +211,9 @@ function ContentTab({scheme, textCard, contentTab}: {scheme: string, textCard: {
             ...TransitionPresets.ScaleFromCenterAndroid,
           }}>
           {props => (
-            <Conversation openDetails={()=>props.navigation.navigate('details')} close={()=>props.navigation.goBack()} wide={false} />
+            <SafeAreaView>
+              <Conversation openDetails={()=>props.navigation.navigate('details')} close={()=>props.navigation.goBack()} wide={false} />
+            </SafeAreaView>
           )}
         </ContentStack.Screen>
         <ContentStack.Screen name="details"
@@ -405,7 +407,9 @@ function SettingsScreen({nav}) {
   const SettingsComponent = useCallback(
     () => (
       <Surface elevation={1}>
-        <Settings />
+        <SafeAreaView>
+          <Settings />
+        </SafeAreaView>
       </Surface>
     ),
     [],
@@ -439,10 +443,10 @@ function HomeScreen({nav}) {
           <Content textCard={nav.textCard} openConversation={()=>nav.setFocus(true)} />
         </Surface>
       </View>
-      <View style={styles.right}>
+      <SafeAreaView style={styles.right}>
         {nav.focus && <Conversation openDetails={nav.details.openDrawer} close={()=>nav.setFocus(false)} wide={true} />}
         {!nav.focus && <Text>FOCUS NOT SET</Text>}
-      </View>
+      </SafeAreaView>
     </View>
   );
 }

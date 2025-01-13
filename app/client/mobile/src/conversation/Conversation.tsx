@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {Animated, useAnimatedValue, KeyboardAvoidingView, Modal, Platform, ScrollView, SafeAreaView, Pressable, View, FlatList, TouchableOpacity} from 'react-native';
+import {Animated, useAnimatedValue, KeyboardAvoidingView, Modal, Platform, ScrollView, Pressable, View, FlatList, TouchableOpacity} from 'react-native';
 import {styles} from './Conversation.styled';
 import {useConversation} from './useConversation.hook';
 import {Message} from '../message/Message';
@@ -190,7 +190,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
 
   return (
     <View style={containerStyle}>
-      <SafeAreaView style={{ ...headerStyle, flexDirection: state.layout === 'large' ? 'row-reverse' : 'row' }}>
+      <View style={{ ...headerStyle, flexDirection: state.layout === 'large' ? 'row-reverse' : 'row' }}>
         <IconButton style={styles.icon} mode="contained" icon={wide ? 'close' : 'arrow-left'} size={28} onPress={onClose} />
         <View style={styles.status}>
         </View>
@@ -223,8 +223,10 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
           )}
         </View>
         <IconButton style={styles.icon} mode="contained" icon="cog-outline" size={28} onPress={openDetails} />
-      </SafeAreaView>
-      <Divider style={styles.border} bold={true} />
+      </View>
+      <View style={styles.pad}>
+        <Divider style={styles.border} bold={true} />
+      </View>
       <View style={styles.thread}>
         <FlatList
           style={styles.messageList}
@@ -269,11 +271,13 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
           </View>
         )}
       </View>
-      <Divider style={styles.border} bold={true}>
-        { sending && (
-          <View style={{ ...styles.progress, width: `${state.progress}%` }} />
-        )}
-      </Divider>
+      <View style={styles.pad}>
+        <Divider style={styles.border} bold={true}>
+          { sending && (
+            <View style={{ ...styles.progress, width: `${state.progress}%` }} />
+          )}
+        </Divider>
+      </View>
       <Confirm show={alert} params={alertParams} />
       <View style={styles.add}>
         <Animated.View style={[{},{height: scale}]}>
@@ -281,54 +285,56 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
             { media }
           </ScrollView>
         </Animated.View>
-        <TextInput multiline={true} mode="outlined" style={{ ...styles.message, fontSize: state.textSize }}
-            blurOnSubmit={true} onSubmitEditing={sendMessage} returnKeyType="send"
-            onFocus={()=>setAvoid(true)} onBlur={()=>setAvoid(false)} editable={!sending}
-            textColor={state.textColorSet ? state.textColor : undefined} outlineColor="transparent" activeOutlineColor="transparent"spellcheck={false}
-            autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage} placeholderTextColor={state.textColorSet ? state.textColor : undefined}
-            cursorColor={state.textColorSet ? state.textColor : undefined} value={state.message} onChangeText={value => actions.setMessage(value)} />
+        <View style={styles.pad}>
+          <TextInput multiline={true} mode="outlined" style={{ ...styles.message, fontSize: state.textSize }}
+              blurOnSubmit={true} onSubmitEditing={sendMessage} returnKeyType="send"
+              onFocus={()=>setAvoid(true)} onBlur={()=>setAvoid(false)} editable={!sending}
+              textColor={state.textColorSet ? state.textColor : undefined} outlineColor="transparent" activeOutlineColor="transparent"spellcheck={false}
+              autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage} placeholderTextColor={state.textColorSet ? state.textColor : undefined}
+              cursorColor={state.textColorSet ? state.textColor : undefined} value={state.message} onChangeText={value => actions.setMessage(value)} />
 
-        { Platform.OS === 'ios' && avoid && (<View style={{ ...styles.avoid, height: state.avoid - 64}} />) }
+          { Platform.OS === 'ios' && avoid && (<View style={{ ...styles.avoid, height: state.avoid - 64}} />) }
 
-        <View style={styles.controls}>
-          <Pressable style={styles.control} onPress={addImage}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="camera" size={24} color={Colors.primary} /></Surface></Pressable>
-          <Pressable style={styles.control} onPress={addVideo}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} /></Surface></Pressable>
-          <Pressable style={styles.control} onPress={addAudio}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="volume-high" size={24} color={Colors.primary} /></Surface></Pressable>
-          <Pressable style={styles.control} onPress={addBinary}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="file-outline" size={24} color={Colors.primary} /></Surface></Pressable>
-          <Divider style={styles.separator} />
-          <Pressable style={styles.control} onPress={()=>setColorMenu(true)}>
-            <Surface style={styles.surface} elevation={2}>
-              <Icon style={styles.button} source="format-color-text" size={24} color={Colors.primary} />
-            </Surface>
-          </Pressable>
+          <View style={styles.controls}>
+            <Pressable style={styles.control} onPress={addImage}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="camera" size={24} color={Colors.primary} /></Surface></Pressable>
+            <Pressable style={styles.control} onPress={addVideo}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} /></Surface></Pressable>
+            <Pressable style={styles.control} onPress={addAudio}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="volume-high" size={24} color={Colors.primary} /></Surface></Pressable>
+            <Pressable style={styles.control} onPress={addBinary}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="file-outline" size={24} color={Colors.primary} /></Surface></Pressable>
+            <Divider style={styles.separator} />
+            <Pressable style={styles.control} onPress={()=>setColorMenu(true)}>
+              <Surface style={styles.surface} elevation={2}>
+                <Icon style={styles.button} source="format-color-text" size={24} color={Colors.primary} />
+              </Surface>
+            </Pressable>
 
-          <Menu
-            visible={sizeMenu}
-            onDismiss={()=>setSizeMenu(false)}
-            anchor={(
-              <Pressable style={styles.control} onPress={()=>setSizeMenu(true)}>
-                <Surface style={styles.surface} elevation={2}>
-                  <Icon style={styles.button} source="format-size" size={24} color={Colors.primary} />
-                </Surface>
-              </Pressable>
-            )}>
-            <Menu.Item onPress={() => { actions.setTextSize(12); setSizeMenu(false) }} title={state.strings.textSmall} />
-            <Menu.Item onPress={() => { actions.setTextSize(16); setSizeMenu(false) }} title={state.strings.textMedium} />
-            <Menu.Item onPress={() => { actions.setTextSize(20); setSizeMenu(false) }} title={state.strings.textLarge} />
-          </Menu>
+            <Menu
+              visible={sizeMenu}
+              onDismiss={()=>setSizeMenu(false)}
+              anchor={(
+                <Pressable style={styles.control} onPress={()=>setSizeMenu(true)}>
+                  <Surface style={styles.surface} elevation={2}>
+                    <Icon style={styles.button} source="format-size" size={24} color={Colors.primary} />
+                  </Surface>
+                </Pressable>
+              )}>
+              <Menu.Item onPress={() => { actions.setTextSize(12); setSizeMenu(false) }} title={state.strings.textSmall} />
+              <Menu.Item onPress={() => { actions.setTextSize(16); setSizeMenu(false) }} title={state.strings.textMedium} />
+              <Menu.Item onPress={() => { actions.setTextSize(20); setSizeMenu(false) }} title={state.strings.textLarge} />
+            </Menu>
 
-          <View style={styles.end}>
-            <Pressable style={styles.control} onPress={sendMessage}><Surface style={styles.surface} elevation={2}>
-              { sending && (
-                <ActivityIndicator size="small" />
-              )}
-              { !sending && (state.message || state.assets.length != 0) && (
-                <Icon style={styles.button} source="send" size={24} color={Colors.primary} />
-              )}
-              { !sending && !state.message && state.assets.length == 0 && (
-                <Icon style={styles.button} source="send" size={24} color={Colors.placeholder} />
-              )}
-            </Surface></Pressable>
+            <View style={styles.end}>
+              <Pressable style={styles.control} onPress={sendMessage}><Surface style={styles.surface} elevation={2}>
+                { sending && (
+                  <ActivityIndicator size="small" />
+                )}
+                { !sending && (state.message || state.assets.length != 0) && (
+                  <Icon style={styles.button} source="send" size={24} color={Colors.primary} />
+                )}
+                { !sending && !state.message && state.assets.length == 0 && (
+                  <Icon style={styles.button} source="send" size={24} color={Colors.placeholder} />
+                )}
+              </Surface></Pressable>
+            </View>
           </View>
         </View>
       </View>

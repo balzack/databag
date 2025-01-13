@@ -57,6 +57,8 @@ export const styles = StyleSheet.create({
     height: '100%',
     display: 'flex',
     flexGrow: 1,
+    flexShrink: 1,
+    minWidth: 0,
   },
   identity: {
     flexShrink: 0,

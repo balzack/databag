@@ -165,8 +165,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   memberSurface: {
+    position: 'relative',
     width: '80%',
-    maxWidth: 400,
   },
   modalHeader: {
     display: 'flex',

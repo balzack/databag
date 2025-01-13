@@ -3,10 +3,9 @@ import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
   conversation: {
-    flex: 1
-  },
-  largeConversation: {
-    padding: 16,
+    flex: 1,
+    width: '100%',
+    flexShrink: 1,
   },
   avoid: {
     width: '100%',
@@ -22,6 +21,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingBottom: 8,
     height: 80,
+    minWidth: 0,
   },
   status: {
     width: 40,
@@ -63,6 +63,7 @@ export const styles = StyleSheet.create({
   },
   messageList: {
     width: '100%',
+    minWidth: 0,
   },
   messages: {
     paddingBottom: 64,
@@ -72,6 +73,7 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     minHeight: 0,
+    minWidth: 0,
     height: '50%',
     width: '100%',
     alignItems: 'center',
@@ -106,6 +108,10 @@ export const styles = StyleSheet.create({
     marginBottom: 0,
     backgroundColor: 'transparent',
   },
+  pad: {
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
   border: {
     width: '100%',
     height: 2,
@@ -123,9 +129,8 @@ export const styles = StyleSheet.create({
     width: '100%',
     minWidth: 0,
     alignItems: 'center',
-  },
-  largeHeader: {
-    height: 64,
+    paddingLeft: 8,
+    paddingRight: 8,
   },
   title: {
     display: 'flex',

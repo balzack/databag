@@ -5,6 +5,7 @@ export const styles = StyleSheet.create({
   message: {
     paddingTop: 8,
     width: '100%',
+    minWidth: 0,
   },
   topic: {
     paddingTop: 8,
@@ -12,6 +13,10 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     paddingBottom: 8,
+  },
+  pad: {
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   longbone: {
     width: '100%',
@@ -45,6 +50,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flexStart',
     width: '100%',
+    paddingLeft: 8,
+    paddingRight: 8,
   },
   logo: {
     width: 32,
@@ -55,7 +62,9 @@ export const styles = StyleSheet.create({
   body: {
     display: 'flex',
     flexGrow: 1,
+    flexShrink: 1,
     flexDirection: 'column',
+    minWidth: 0,
   },
   header: {
     display: 'flex',
@@ -85,6 +94,7 @@ export const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
+    minWidth: 0,
   },
   timestamp: {
     fontSize: 12,
@@ -108,8 +118,8 @@ export const styles = StyleSheet.create({
     paddingTop: 4,
   },
   carousel: {
-    paddingLeft: 8,
-    paddingBottom: 8,
+    paddingLeft: 16,
+    paddingBottom: 16,
   },
   assets: {
     display: 'flex',

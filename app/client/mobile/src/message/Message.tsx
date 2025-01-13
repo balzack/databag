@@ -270,7 +270,9 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
           )}
         </Surface>
       )}
-      <Divider style={styles.border} />
+      <View style={styles.pad}>
+        <Divider style={styles.border} />
+      </View>
       <Confirm show={confirmShow} busy={removing || reporting || blocking} params={confirmParams} />
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={editing} onRequestClose={()=>setEditing(false)}>
         <View style={styles.modal}>
