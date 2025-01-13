@@ -10,7 +10,6 @@ export const styles = StyleSheet.create({
   },
   avoid: {
     width: '100%',
-    height: '30%',
     flexShrink: 0,
   },
   closeIcon: {

@@ -75,6 +75,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
       busy.current = true;
       setSending(true);
       try {
+        setAvoid(false);
         await actions.send();
       } catch (err) {
         console.log(err);
@@ -282,12 +283,12 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
         </Animated.View>
         <TextInput multiline={true} mode="outlined" style={{ ...styles.message, fontSize: state.textSize }}
             blurOnSubmit={true} onSubmitEditing={sendMessage} returnKeyType="send"
-            onFocus={()=>setAvoid(true)} onBlur={()=>setAvoid(false)}
+            onFocus={()=>setAvoid(true)} onBlur={()=>setAvoid(false)} editable={!sending}
             textColor={state.textColorSet ? state.textColor : undefined} outlineColor="transparent" activeOutlineColor="transparent"spellcheck={false}
             autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage} placeholderTextColor={state.textColorSet ? state.textColor : undefined}
             cursorColor={state.textColorSet ? state.textColor : undefined} value={state.message} onChangeText={value => actions.setMessage(value)} />
 
-        { Platform.OS === 'ios' && avoid && (<View style={styles.avoid} />) }
+        { Platform.OS === 'ios' && avoid && (<View style={{ ...styles.avoid, height: state.avoid - 64}} />) }
 
         <View style={styles.controls}>
           <Pressable style={styles.control} onPress={addImage}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="camera" size={24} color={Colors.primary} /></Surface></Pressable>

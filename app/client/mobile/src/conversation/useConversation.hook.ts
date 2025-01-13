@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect, useRef } from 'react'
+import { Keyboard } from 'react-native'
 import { AppContext } from '../context/AppContext'
 import { DisplayContext } from '../context/DisplayContext'
 import { Focus, FocusDetail, Topic, Profile, Card, AssetType, AssetSource, HostingMode, TransformType } from 'databag-client-sdk'
@@ -25,7 +26,6 @@ async function getImageThumb(path: string, type: string, size: number) {
 }
 
 async function getVideoThumb(path: string, position?: number) {
-console.log("GET FULL VID THUMB: ", path);
   const timeStamp = position ? position * 1000 : 0;
   const shot = await createThumbnail({ url: path, timeStamp })
   const thumb = await ImageResizer.createResizedImage('file://' + shot.path, 192, 192, "JPEG", 50, 0, null);
@@ -34,6 +34,7 @@ console.log("GET FULL VID THUMB: ", path);
 }
 
 export function useConversation() {
+  const mute = useRef(false);
   const app = useContext(AppContext) as ContextType
   const display = useContext(DisplayContext) as ContextType
   const [state, setState] = useState({
@@ -52,15 +53,16 @@ export function useConversation() {
     sealed: false,
     access: false,
     subject: '',
+    message: null,
     subjectNames: [],
     unknownContacts: 0,
-    message: '',
     assets: [] as {type: string, path: string, mime?: string, position?: number, label?: string, size?: number}[],
     textColor: '#444444',
     textColorSet: false,
     textSize: 16,
     textSizeSet: false,
     progress: 0,
+    avoid: 0,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -130,16 +132,21 @@ export function useConversation() {
         const cardId = focused.cardId;
         updateState({ detail, cardId });
       }
-      updateState({ assets: [], message: '', topics: [], loaded: false });
+      const setKeyboard = (event: KeyboardEvent) => {
+        updateState({ avoid: event.endCoordinates.height });
+      }
+      updateState({ assets: [], message: null, topics: [], loaded: false });
       focus.addTopicListener(setTopics);
       focus.addDetailListener(setDetail);
       contact.addCardListener(setCards);
       identity.addProfileListener(setProfile);
+      const keyboard = Keyboard.addListener('keyboardDidShow', setKeyboard);
       return () => {
         focus.removeTopicListener(setTopics);
         focus.removeDetailListener(setDetail);
         contact.removeCardListener(setCards);
         identity.removeProfileListener(setProfile);
+        keyboard.remove();
       }
     }
   }, [app.state.focus]);
@@ -149,7 +156,11 @@ export function useConversation() {
       app.actions.clearFocus();
     },
     setMessage: (message: string) => {
-      updateState({ message });
+      if (mute.current) {
+        updateState({ message: '' });
+      } else {
+        updateState({ message });
+      }
     },
     setTextSize: (textSize: number) => {
       const textSizeSet = true;
@@ -281,7 +292,12 @@ export function useConversation() {
         }
         const upload = (progress: number) => { updateState({ progress }) };
         await focus.addTopic(sealed, sealed ? 'sealedtopic' : 'superbasictopic', subject, sources, upload);
-        updateState({ message: '', assets: [], progress: 0 });
+
+        mute.current = true;
+        setTimeout(() => {
+          mute.current = false;
+        }, 1000);
+        updateState({ message: null, assets: [], progress: 0 });
       }
     }, 
     addImage: (path: string, mime: string, size: number) => {
