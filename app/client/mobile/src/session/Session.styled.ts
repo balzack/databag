@@ -62,6 +62,7 @@ export const styles = StyleSheet.create({
   },
   identity: {
     flexShrink: 0,
+    paddingBottom: 4,
   },
   channels: {
     flexGrow: 1,

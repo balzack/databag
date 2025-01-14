@@ -187,6 +187,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
 
   const containerStyle = state.layout === 'large' ? { ...styles.conversation, ...styles.largeConversation } : styles.conversation;
   const headerStyle = state.layout === 'large' ? { ...styles.header, ...styles.largeHeader } : styles.header;
+  const padStyle = state.layout === 'large' ? styles.pad : styles.nopad;
 
   return (
     <View style={containerStyle}>
@@ -222,9 +223,9 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
             <Icon source="shield-outline" size={18} />
           )}
         </View>
-        <IconButton style={styles.icon} mode="contained" icon="cog-outline" size={28} onPress={openDetails} />
+        <IconButton style={styles.icon} mode="contained" icon="cog-transfer-outline" size={28} onPress={openDetails} />
       </View>
-      <View style={styles.pad}>
+      <View style={padStyle}>
         <Divider style={styles.border} bold={true} />
       </View>
       <View style={styles.thread}>
@@ -271,7 +272,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
           </View>
         )}
       </View>
-      <View style={styles.pad}>
+      <View style={padStyle}>
         <Divider style={styles.border} bold={true}>
           { sending && (
             <View style={{ ...styles.progress, width: `${state.progress}%` }} />
@@ -285,7 +286,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
             { media }
           </ScrollView>
         </Animated.View>
-        <View style={styles.pad}>
+        <View style={padStyle}>
           <TextInput multiline={true} mode="outlined" style={{ ...styles.message, fontSize: state.textSize }}
               blurOnSubmit={true} onSubmitEditing={sendMessage} returnKeyType="send"
               onFocus={()=>setAvoid(true)} onBlur={()=>setAvoid(false)} editable={!sending}

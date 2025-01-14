@@ -211,7 +211,7 @@ function ContentTab({scheme, textCard, contentTab}: {scheme: string, textCard: {
             ...TransitionPresets.ScaleFromCenterAndroid,
           }}>
           {props => (
-            <SafeAreaView>
+            <SafeAreaView style={styles.screen}>
               <Conversation openDetails={()=>props.navigation.navigate('details')} close={()=>props.navigation.goBack()} wide={false} />
             </SafeAreaView>
           )}
@@ -439,14 +439,16 @@ function HomeScreen({nav}) {
         <Surface style={styles.identity} elevation={2} mode="flat">
           <Identity openSettings={nav.settings.openDrawer} openContacts={nav.contacts.openDrawer} />
         </Surface>
-        <Surface style={styles.channels} elevation={1} mode="flat">
+        <Surface style={styles.channels} elevation={2} mode="flat">
           <Content textCard={nav.textCard} openConversation={()=>nav.setFocus(true)} />
         </Surface>
       </View>
-      <SafeAreaView style={styles.right}>
-        {nav.focus && <Conversation openDetails={nav.details.openDrawer} close={()=>nav.setFocus(false)} wide={true} />}
-        {!nav.focus && <Text>FOCUS NOT SET</Text>}
-      </SafeAreaView>
+      <Surface elevation={1} style={styles.right}>
+        <SafeAreaView style={styles.right}>
+          {nav.focus && <Conversation openDetails={nav.details.openDrawer} close={()=>nav.setFocus(false)} wide={true} />}
+          {!nav.focus && <Text>FOCUS NOT SET</Text>}
+        </SafeAreaView>
+      </Surface>
     </View>
   );
 }

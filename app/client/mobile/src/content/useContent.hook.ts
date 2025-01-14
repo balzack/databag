@@ -8,6 +8,7 @@ import {notes, unknown, iii_group, iiii_group, iiiii_group, group} from '../cons
 type ChannelParams = {
   cardId: string;
   channelId: string;
+  focused: boolean;
   sealed: boolean;
   hosted: boolean;
   unread: boolean;
@@ -32,6 +33,7 @@ export function useContent() {
     filter: '',
     topic: '',
     sealSet: false,
+    focused: null as null|{cardId: null|string, channelId: string},
   });
 
   const compare = (a: Card, b: Card) => {
@@ -133,12 +135,13 @@ export function useContent() {
         }
       };
 
+      const focused = (state.focused?.cardId === cardId && state.focused?.channelId === channelId);
       const hosted = cardId == null;
       const subject = data?.subject ? [data.subject] : buildSubject();
       const message = getMessage();
       const imageUrl = selectImage();
 
-      return {cardId, channelId, sealed, hosted, unread, imageUrl, subject, message};
+      return {cardId, channelId, focused, sealed, hosted, unread, imageUrl, subject, message};
     });
 
     const search = state.filter?.toLowerCase();
@@ -156,7 +159,16 @@ export function useContent() {
     });
 
     updateState({filtered});
-  }, [state.sorted, state.cards, state.guid, state.filter]);
+  }, [state.sorted, state.cards, state.guid, state.filter, state.focused]);
+
+  useEffect(() => {
+    if (app.state.focus) {
+      const focused = app.state.focus.getFocused();
+      updateState({ focused });
+    } else {
+      updateState({ focused: null });
+    }
+  }, [app.state.focus]);
 
   useEffect(() => {
     const setConfig = (config: Config) => {

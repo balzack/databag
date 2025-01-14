@@ -72,7 +72,7 @@ export function Content({openConversation, textCard}: {openConversation: ()=>voi
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.header}>
-        <Surface mode="flat" style={styles.inputSurface}>
+        <Surface mode="flat" elevation={3} style={styles.inputSurface}>
           <TextInput
             dense={true}
             style={styles.input}
@@ -103,28 +103,31 @@ export function Content({openConversation, textCard}: {openConversation: ()=>voi
             initialNumToRender={32}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
-              const {sealed, hosted, unread, imageUrl, subject, message} = item;
+              const {sealed, focused, hosted, unread, imageUrl, subject, message} = item;
               const open = () => {
                 actions.setFocus(item.cardId, item.channelId);
                 openConversation();
               };
+              const Wrap = focused ? Surface : View;
               return (
-                <Channel
-                  containerStyle={{
-                    ...styles.channel,
-                    borderColor: theme.colors.outlineVariant,
-                  }}
-                  select={open}
-                  unread={unread}
-                  sealed={sealed}
-                  hosted={hosted}
-                  imageUrl={imageUrl}
-                  notesPlaceholder={state.strings.notes}
-                  subjectPlaceholder={state.strings.unknown}
-                  subject={subject}
-                  messagePlaceholder={`[${state.strings.sealed}]`}
-                  message={message}
-                />
+                <Wrap elevation={1}>
+                  <Channel
+                    containerStyle={{
+                      ...styles.channel,
+                      borderColor: theme.colors.outlineVariant,
+                    }}
+                    select={open}
+                    unread={unread}
+                    sealed={sealed}
+                    hosted={hosted}
+                    imageUrl={imageUrl}
+                    notesPlaceholder={state.strings.notes}
+                    subjectPlaceholder={state.strings.unknown}
+                    subject={subject}
+                    messagePlaceholder={`[${state.strings.sealed}]`}
+                    message={message}
+                  />
+                </Wrap>
               );
             }}
             keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}

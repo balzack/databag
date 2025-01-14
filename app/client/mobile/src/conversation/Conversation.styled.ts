@@ -112,6 +112,8 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
   },
+  nopad: {
+  },
   border: {
     width: '100%',
     height: 2,
@@ -129,8 +131,10 @@ export const styles = StyleSheet.create({
     width: '100%',
     minWidth: 0,
     alignItems: 'center',
-    paddingLeft: 8,
-    paddingRight: 8,
+  },
+  largeHeader: {
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   title: {
     display: 'flex',

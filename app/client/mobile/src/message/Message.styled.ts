@@ -125,6 +125,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     gap: 16,
+    paddingRight: 32,
   },
   item: {
     width: 64,
