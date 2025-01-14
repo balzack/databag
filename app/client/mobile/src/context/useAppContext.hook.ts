@@ -1,5 +1,6 @@
 import {useState, useEffect, useRef} from 'react';
 import {DatabagSDK, Session, Focus} from 'databag-client-sdk';
+import {Platform, PermissionsAndroid} from 'react-native';
 import {SessionStore} from '../SessionStore';
 import {NativeCrypto} from '../NativeCrypto';
 import {LocalStore} from '../LocalStore';
@@ -9,13 +10,10 @@ const DATABAG_DB = 'db_v239.db';
 const SETTINGS_DB = 'ls_v001.db';
 
 async function requestUserPermission() {
-  const authStatus = await messaging().requestPermission();
-  const enabled =
-    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-  if (enabled) {
-    console.log('**** FIREBASE Authorization status:', authStatus);
+  if (Platform.OS === 'ios') {
+    await messaging().requestPermission();
+  } else {
+    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
   }
 }
 
@@ -65,6 +63,8 @@ export function useAppContext() {
     if (session) {
       updateState({session, fullDayTime, monthFirstDate});
     }
+
+    await requestUserPermission();
   };
 
   useEffect(() => {
@@ -82,7 +82,6 @@ export function useAppContext() {
       await local.current.set('time_format', fullDayTime ? '24h' : '12h');
     },
     accountLogin: async (username: string, password: string, node: string, secure: boolean, code: string) => {
-      await requestUserPermission();
       const deviceToken = await messaging().getToken();
 
       const params = {
@@ -113,7 +112,6 @@ export function useAppContext() {
       }
     },
     accountCreate: async (handle: string, password: string, node: string, secure: boolean, token: string) => {
-      await requestUserPermission();
       const deviceToken = await messaging().getToken();
 
       const params = {
@@ -131,7 +129,6 @@ export function useAppContext() {
       updateState({session});
     },
     accountAccess: async (node: string, secure: boolean, token: string) => {
-      await requestUserPermission();
       const deviceToken = await messaging().getToken();
 
       const params = {
