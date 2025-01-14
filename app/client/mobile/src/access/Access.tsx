@@ -288,7 +288,7 @@ export function Access() {
       {(alert || otp) && <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />}
       <Modal visible={alert} onDismiss={() => setAlert(false)} contentContainerStyle={styles.modal}>
         <Surface elevation={5} mode="flat" style={styles.content}>
-          <Text variant="titleLarge">{state.strings.error}</Text>
+          <Text variant="titleLarge">{state.strings.operationFailed}</Text>
           <Text variant="titleSmall">{state.strings.tryAgain}</Text>
           <Button mode="text" style={styles.close} onPress={() => setAlert(false)}>
             {state.strings.close}

@@ -188,6 +188,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
   const containerStyle = state.layout === 'large' ? { ...styles.conversation, ...styles.largeConversation } : styles.conversation;
   const headerStyle = state.layout === 'large' ? { ...styles.header, ...styles.largeHeader } : styles.header;
   const padStyle = state.layout === 'large' ? styles.pad : styles.nopad;
+  const offset = state.layout === 'large' ? state.avoid - 64 : state.avoid - 128;
 
   return (
     <View style={containerStyle}>
@@ -294,7 +295,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
               autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage} placeholderTextColor={state.textColorSet ? state.textColor : undefined}
               cursorColor={state.textColorSet ? state.textColor : undefined} value={state.message} onChangeText={value => actions.setMessage(value)} />
 
-          { Platform.OS === 'ios' && avoid && (<View style={{ ...styles.avoid, height: state.avoid - 64}} />) }
+          { Platform.OS === 'ios' && avoid && (<View style={{ ...styles.avoid, height: offset }} />) }
 
           <View style={styles.controls}>
             <Pressable style={styles.control} onPress={addImage}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="camera" size={24} color={Colors.primary} /></Surface></Pressable>

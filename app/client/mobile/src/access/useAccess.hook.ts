@@ -106,8 +106,6 @@ export function useAccess() {
     },
     accountLogin: async () => {
       const {username, password, node, secure, code} = state;
-      console.log('LOGIN:', username, password, node, secure, code);
-
       await app.actions.accountLogin(username, password, node, secure, code);
     },
     accountCreate: async () => {

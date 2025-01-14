@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "627079362503",
+    "project_id": "databag-b46e0",
+    "storage_bucket": "databag-b46e0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:627079362503:android:6f3dfcb2c255787b4a8be2",
+        "android_client_info": {
+          "package_name": "com.databag"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "627079362503-8bk8o4hcv5rgdgrhik6nu9cjp3poisv7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAb92cvtSnaoQzhbDizg0dFskOtZFp_58M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "627079362503-8bk8o4hcv5rgdgrhik6nu9cjp3poisv7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
+

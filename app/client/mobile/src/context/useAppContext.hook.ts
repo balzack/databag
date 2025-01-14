@@ -4,8 +4,20 @@ import {SessionStore} from '../SessionStore';
 import {NativeCrypto} from '../NativeCrypto';
 import {LocalStore} from '../LocalStore';
 import { StagingFiles } from '../StagingFiles'
+import messaging from '@react-native-firebase/messaging';
 const DATABAG_DB = 'db_v239.db';
 const SETTINGS_DB = 'ls_v001.db';
+
+async function requestUserPermission() {
+  const authStatus = await messaging().requestPermission();
+  const enabled =
+    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+  if (enabled) {
+    console.log('**** FIREBASE Authorization status:', authStatus);
+  }
+}
 
 const databag = new DatabagSDK(
   {
@@ -17,6 +29,16 @@ const databag = new DatabagSDK(
   new NativeCrypto(),
   new StagingFiles(),
 );
+
+const notifications = [
+    { event: 'contact.addCard', messageTitle: 'New Contact Request' },
+    { event: 'contact.updateCard', messageTitle: 'Contact Update' },
+    { event: 'content.addChannel.superbasic', messageTitle: 'New Topic' },
+    { event: 'content.addChannel.sealed', messageTitle: 'New Topic' },
+    { event: 'content.addChannelTopic.superbasic', messageTitle: 'New Topic Message' },
+    { event: 'content.addChannelTopic.sealed', messageTitle: 'New Topic Message' },
+    { event: 'ring', messageTitle: 'Incoming Call' },
+  ];
 
 export function useAppContext() {
   const local = useRef(new LocalStore());
@@ -60,19 +82,20 @@ export function useAppContext() {
       await local.current.set('time_format', fullDayTime ? '24h' : '12h');
     },
     accountLogin: async (username: string, password: string, node: string, secure: boolean, code: string) => {
+      await requestUserPermission();
+      const deviceToken = await messaging().getToken();
+
       const params = {
         topicBatch: 16,
         tagBatch: 16,
         channelTypes: ['test'],
         pushType: 'fcm',
-        deviceToken: 'aabbcc',
-        notifications: [{event: 'msg', messageTitle: 'msgd'}],
+        deviceToken: deviceToken,
+        notifications: notifications,
         deviceId: '0011',
         version: '0.0.1',
         appName: 'databag',
       };
-
-      console.log('SDK LOGIN:', username, password, node, secure);
 
       const login = await sdk.current.login(username, password, node, secure, code, params);
       updateState({session: login});
@@ -90,13 +113,16 @@ export function useAppContext() {
       }
     },
     accountCreate: async (handle: string, password: string, node: string, secure: boolean, token: string) => {
+      await requestUserPermission();
+      const deviceToken = await messaging().getToken();
+
       const params = {
         topicBatch: 16,
         tagBatch: 16,
         channelTypes: ['test'],
         pushType: 'fcm',
-        deviceToken: 'aabbcc',
-        notifications: [{event: 'msg', messageTitle: 'msgd'}],
+        deviceToken: deviceToken,
+        notifications: notifications,
         deviceId: '0011',
         version: '0.0.1',
         appName: 'databag',
@@ -105,13 +131,16 @@ export function useAppContext() {
       updateState({session});
     },
     accountAccess: async (node: string, secure: boolean, token: string) => {
+      await requestUserPermission();
+      const deviceToken = await messaging().getToken();
+
       const params = {
         topicBatch: 16,
         tagBatch: 16,
         channelTypes: ['test'],
         pushType: 'fcm',
-        deviceToken: 'aabbcc',
-        notifications: [{event: 'msg', messageTitle: 'msgd'}],
+        deviceToken: deviceToken,
+        notifications: notifications,
         deviceId: '0011',
         version: '0.0.1',
         appName: 'databag',
