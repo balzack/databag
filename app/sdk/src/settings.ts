@@ -1,6 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
 import type { Settings } from './api';
-import type { Config } from './types';
+import type { Config, PushParams } from './types';
 import { Store } from './store';
 import { Crypto } from './crypto';
 import { Logging } from './logging';
@@ -152,9 +152,9 @@ export class SettingsModule implements Settings {
     await this.sync();
   }
 
-  public async enableNotifications(): Promise<void> {
+  public async enableNotifications(params?: PushParams): Promise<void> {
     const { node, secure, token } = this;
-    await setAccountNotifications(node, secure, token, true);
+    await setAccountNotifications(node, secure, token, true, params);
   }
 
   public async disableNotifications(): Promise<void> {

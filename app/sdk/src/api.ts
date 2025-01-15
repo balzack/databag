@@ -1,4 +1,4 @@
-import type { Channel, Topic, AssetSource, Asset, Tag, Article, Group, Card, Profile, Call, FocusDetail, Config, NodeConfig, NodeAccount, Participant } from './types';
+import type { Channel, Topic, AssetSource, Asset, Tag, Article, Group, Card, Profile, Call, FocusDetail, Config, NodeConfig, NodeAccount, Participant, PushParams } from './types';
 
 export interface Session {
   getSettings(): Settings;
@@ -31,7 +31,7 @@ export interface Ring {
 export interface Settings {
   getUsernameStatus(username: string): Promise<boolean>;
   setLogin(username: string, password: string): Promise<void>;
-  enableNotifications(): Promise<void>;
+  enableNotifications(params?: PushParams): Promise<void>;
   disableNotifications(): Promise<void>;
   enableRegistry(): Promise<void>;
   disableRegistry(): Promise<void>;

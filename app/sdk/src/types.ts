@@ -258,3 +258,17 @@ export type SessionParams = {
   version: string;
   appName: string;
 };
+
+export enum PushType {
+  UPN = 'upn', // unified push notifications
+  Web = 'web', // browser push notifications
+  FCM = 'fcm', // firebase cloud messaging
+}
+
+export type PushParams = {
+  endpoint: string;
+  publicKey: string;
+  auth: string;
+  type: PushType;
+}
+

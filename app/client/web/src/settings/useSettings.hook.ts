@@ -2,11 +2,26 @@ import { useEffect, useState, useContext, useRef } from 'react'
 import { AppContext } from '../context/AppContext'
 import { DisplayContext } from '../context/DisplayContext'
 import { ContextType } from '../context/ContextType'
-import { type Profile, type Config } from 'databag-client-sdk'
+import { type Profile, type Config, type PushParams, PushType } from 'databag-client-sdk'
 import { Point, Area } from 'react-easy-crop/types'
 
 const IMAGE_DIM = 192
 const DEBOUNCE_MS = 1000
+
+function urlB64ToUint8Array(b64: string) {
+  const padding = '='.repeat((4 - b64.length % 4) % 4);
+  const base64 = (b64 + padding)
+      .replace(/-/g, '+')
+      .replace(/_/g, '/');
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (var i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
 
 export function useSettings() {
   const display = useContext(DisplayContext) as ContextType
@@ -46,6 +61,7 @@ export function useSettings() {
     secretImage: '',
     code: '',
     editImage: '',
+    webPushKey: null,
     sealPassword: '',
     sealConfirm: '',
     sealDelete: '',
@@ -127,10 +143,8 @@ export function useSettings() {
       updateState({ blockedMessages });
     },
     loadBlockedChannels: async () => {
-console.log("LOAD BLOCKED");
       const settings = app.state.session.getSettings(); 
       const blockedChannels = await settings.getBlockedChannels();
-console.log("LOADED: ", blockedChannels);
       updateState({ blockedChannels });
     },
     unblockChannel: async (cardId: string | null, channelId: string) => {
@@ -159,8 +173,38 @@ console.log("LOADED: ", blockedChannels);
       await settings.setLogin(state.handle, state.password)
     },
     enableNotifications: async () => {
-      const { settings } = getSession()
-      await settings.enableNotifications()
+      const webPushKey = state.config?.webPushKey;
+      if (!webPushKey) {
+        throw new Error('web push key not set');
+      }
+      const status = await Notification.requestPermission();
+      if (status === 'granted') {
+        const registration = await navigator.serviceWorker.register('push.js');
+        await navigator.serviceWorker.ready;
+        const params = { userVisibleOnly: true, applicationServerKey: urlB64ToUint8Array(webPushKey) };
+        const subscription = await registration.pushManager.subscribe(params);
+
+        const endpoint = subscription.endpoint;
+        const binPublicKey = subscription.getKey('p256dh');
+        const binAuth = subscription.getKey('auth');
+
+        if (endpoint && binPublicKey && binAuth) {
+          const numPublicKey: number[] = [];
+          (new Uint8Array(binPublicKey)).forEach(val => {
+            numPublicKey.push(val);
+          });
+          const numAuth: number[] = [];
+          (new Uint8Array(binAuth)).forEach(val => {
+            numAuth.push(val);
+          });
+          const publicKey = btoa(String.fromCharCode.apply(null, numPublicKey));
+          const auth = btoa(String.fromCharCode.apply(null, numAuth));
+
+          const pushParams = { endpoint, publicKey, auth, type: PushType.Web };
+          const { settings } = getSession()
+          await settings.enableNotifications(pushParams)
+        }
+      }
     },
     disableNotifications: async () => {
       const { settings } = getSession()
