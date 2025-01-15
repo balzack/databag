@@ -6,6 +6,16 @@ import { StagingFiles } from '../StagingFiles'
 
 const databag = new DatabagSDK({ tagBatch: 32, topicBatch: 32, articleTypes: [], channelTypes: ['sealed', 'superbasic'] }, new WebCrypto(), new StagingFiles())
 
+const notifications = [
+    { event: 'contact.addCard', messageTitle: 'New Contact Request' },
+    { event: 'contact.updateCard', messageTitle: 'Contact Update' },
+    { event: 'content.addChannel.superbasic', messageTitle: 'New Topic' },
+    { event: 'content.addChannel.sealed', messageTitle: 'New Topic' },
+    { event: 'content.addChannelTopic.superbasic', messageTitle: 'New Topic Message' },
+    { event: 'content.addChannelTopic.sealed', messageTitle: 'New Topic Message' },
+    { event: 'ring', messageTitle: 'Incoming Call' },
+  ];
+
 export function useAppContext() {
   const sdk = useRef(databag)
   const [state, setState] = useState({
@@ -36,9 +46,9 @@ export function useAppContext() {
         topicBatch: 16,
         tagBatch: 16,
         channelTypes: ['test'],
-        pushType: 'fcm',
-        deviceToken: 'aabbcc',
-        notifications: [{ event: 'msg', messageTitle: 'msgd' }],
+        pushType: '',
+        deviceToken: '',
+        notifications: notifications,
         deviceId: '0011',
         version: '0.0.1',
         appName: 'databag',
@@ -57,9 +67,9 @@ export function useAppContext() {
         topicBatch: 16,
         tagBatch: 16,
         channelTypes: ['test'],
-        pushType: 'fcm',
-        deviceToken: 'aabbcc',
-        notifications: [{ event: 'msg', messageTitle: 'msgd' }],
+        pushType: '',
+        deviceToken: '',
+        notifications: notifications,
         deviceId: '0011',
         version: '0.0.1',
         appName: 'databag',
@@ -72,9 +82,9 @@ export function useAppContext() {
         topicBatch: 16,
         tagBatch: 16,
         channelTypes: ['test'],
-        pushType: 'fcm',
-        deviceToken: 'aabbcc',
-        notifications: [{ event: 'msg', messageTitle: 'msgd' }],
+        pushType: '',
+        deviceToken: '',
+        notifications: notifications,
         deviceId: '0011',
         version: '0.0.1',
         appName: 'databag',
