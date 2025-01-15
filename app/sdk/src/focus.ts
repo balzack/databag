@@ -49,6 +49,7 @@ export class FocusModule implements Focus {
   private loadMore: boolean;
   private closeStaging: (()=>Promise<void>)[];
   private unsealAll: boolean;
+  private justAdded: boolean;
   private markRead: ()=>Promise<void>;
   private flagChannelTopic: (id: string)=>Promise<void>;
   private focusDetail: FocusDetail | null;
@@ -74,6 +75,7 @@ export class FocusModule implements Focus {
     this.markRead = markRead;
     this.flagChannelTopic = flagChannelTopic;
     this.loaded = false;
+    this.justAdded = false;
 
     this.topicEntries = new Map<string, { item: TopicItem; topic: Topic }>();
     this.blocked = new Set<string>();
@@ -112,7 +114,7 @@ export class FocusModule implements Focus {
   private async sync(): Promise<void> {
     if (!this.syncing) {
       this.syncing = true;
-      while ((this.loadMore || this.unsealAll || this.nextRevision) && !this.closing && this.connection) {
+      while ((this.loadMore || this.unsealAll || this.nextRevision || this.justAdded) && !this.closing && this.connection) {
         if (this.loadMore) {
           try {
             if (!this.localComplete) {
@@ -157,6 +159,7 @@ export class FocusModule implements Focus {
               if (delta.topics.length === 0) {
                 this.remoteComplete = true;
               }
+
               const rev = this.storeView.revision ? this.storeView.revision : delta.revision;
               const mark = delta.topics.length ? delta.marker : null;
               this.storeView = { revision: rev, marker: mark };
@@ -173,7 +176,8 @@ export class FocusModule implements Focus {
           } 
         }
 
-        if (this.nextRevision && this.storeView.revision !== this.nextRevision) {
+        if (this.justAdded || (this.nextRevision && this.storeView.revision !== this.nextRevision)) {
+          this.justAdded = false;
           const nextRev = this.nextRevision;
           try {
             const delta = await this.getRemoteChannelTopics(this.storeView.revision, this.storeView.marker, null);
@@ -202,7 +206,7 @@ export class FocusModule implements Focus {
                 await this.removeLocalChannelTopic(id);
               }
             }
-            this.storeView = { revision: nextRev, marker: this.storeView.marker };
+            this.storeView = { revision: delta.revision, marker: this.storeView.marker };
             await this.setChannelTopicRevision(this.storeView);
 
             if (this.nextRevision === nextRev) {
@@ -396,9 +400,16 @@ export class FocusModule implements Focus {
         const { ivHex } = await crypto.aesIv();
         const { encryptedDataB64 } = await crypto.aesEncrypt(subjectString, ivHex, channelKey);
         const dataEncrypted = { messageEncrypted: encryptedDataB64, messageIv: ivHex };
-        return await this.addRemoteChannelTopic(type, dataEncrypted, true);
+        const topicId = await this.addRemoteChannelTopic(type, dataEncrypted, true);
+        this.justAdded = true;
+        await this.sync();
+        return topicId;
+
       } else {
-        return await this.addRemoteChannelTopic(type, data, true);
+        const topicId = await this.addRemoteChannelTopic(type, data, true);
+        this.justAdded = true;
+        await this.sync();
+        return topicId;
       }
     } else {
 
@@ -594,6 +605,8 @@ export class FocusModule implements Focus {
         throw new Error('failed to add topic');
       }
 
+      this.justAdded = true;
+      await this.sync();
       return topicId;
     }
   }
