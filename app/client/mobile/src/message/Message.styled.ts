@@ -48,7 +48,7 @@ export const styles = StyleSheet.create({
   content: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'flexStart',
+    alignItems: 'flex-start',
     width: '100%',
     paddingLeft: 8,
     paddingRight: 8,
@@ -69,7 +69,7 @@ export const styles = StyleSheet.create({
   header: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'flexStart',
+    alignItems: 'flex-start',
     width: '100%',
     lineHeight: 16,
     gap: 16,

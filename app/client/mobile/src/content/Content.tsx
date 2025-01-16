@@ -108,7 +108,7 @@ export function Content({openConversation, textCard}: {openConversation: ()=>voi
                 actions.setFocus(item.cardId, item.channelId);
                 openConversation();
               };
-              const Wrap = focused ? Surface : View;
+              const Wrap = (state.layout === 'large' && focused) ? Surface : View;
               return (
                 <Wrap elevation={1}>
                   <Channel

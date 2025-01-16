@@ -4,7 +4,7 @@ export const styles = StyleSheet.create({
   identity: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'flex-begin',
+    alignItems: 'flex-start',
   },
   identityData: {
     flexGrow: 1,

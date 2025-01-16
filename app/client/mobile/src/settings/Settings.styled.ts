@@ -216,7 +216,7 @@ export const styles = StyleSheet.create({
     flexShrink: 0,
     width: 32,
     display: 'flex',
-    justifyContent: 'flex-begin',
+    justifyContent: 'flex-start',
     height: '100%',
     backgroundColor: 'transparent',
   },
