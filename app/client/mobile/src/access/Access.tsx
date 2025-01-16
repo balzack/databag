@@ -45,7 +45,7 @@ export function Access() {
   return (
     <Surface style={styles.split}>
       {state.layout === 'large' && <Image style={styles.left} source={left} resizeMode="contain" />}
-      <KeyboardAwareScrollView style={styles.frame} contentContainerStyle={styles.scroll}>
+      <KeyboardAwareScrollView style={styles.frame} contentContainerStyle={styles.scroll} enableOnAndroid={true}>
         <SafeAreaView style={styles.right} edges={['top', 'bottom']}>
           <View style={styles.header}>
             <View style={styles.admin} />

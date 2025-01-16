@@ -656,7 +656,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       <Modal animationType="fade" transparent={true} visible={sealing} supportedOrientations={['portrait', 'landscape']} onRequestClose={() => setSealing(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
+          <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={5} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.manageTopics}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setSealing(false)} />
@@ -874,7 +874,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={details} onRequestClose={() => setDetails(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
+          <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={1} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.profileDetails}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setDetails(false)} />
@@ -927,7 +927,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={auth} onRequestClose={() => setAuth(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
+          <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={5} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setAuth(false)} />
@@ -964,7 +964,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={clear} onRequestClose={() => setClear(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
+          <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={5} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setClear(false)} />
@@ -985,7 +985,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={change} onRequestClose={() => setChange(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
+          <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={5} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.changeLogin}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setChange(false)} />
@@ -1063,7 +1063,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={logout} onRequestClose={() => setLogout(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
+          <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={5} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.loggingOut}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setLogout(false)} />
@@ -1088,7 +1088,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={remove} onRequestClose={() => setRemove(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
+          <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={5} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.deleteAccount}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setRemove(false)} />
