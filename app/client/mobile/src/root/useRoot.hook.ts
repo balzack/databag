@@ -21,7 +21,9 @@ export function useRoot() {
   }, [location]);
 
   useEffect(() => {
-    if (state.pathname === '/session' && !app.state.session) {
+    if (!app.state.initialized) {
+      navigate('/');
+    } else if (state.pathname === '/session' && !app.state.session) {
       navigate('/');
     } else if (state.pathname === '/node' && !app.state.node) {
       navigate('/');
@@ -32,7 +34,7 @@ export function useRoot() {
     } else if (state.pathname !== '/session' && app.state.session) {
       navigate('/session');
     }
-  }, [state.pathname, app.state.session, app.state.node, navigate]);
+  }, [state.pathname, app.state.session, app.state.node, app.state.initialized, navigate]);
 
   const actions = {};
 

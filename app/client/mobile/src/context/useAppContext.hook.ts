@@ -6,7 +6,7 @@ import {NativeCrypto} from '../NativeCrypto';
 import {LocalStore} from '../LocalStore';
 import { StagingFiles } from '../StagingFiles'
 import messaging from '@react-native-firebase/messaging';
-const DATABAG_DB = 'db_v239.db';
+const DATABAG_DB = 'db_v240.db';
 const SETTINGS_DB = 'ls_v001.db';
 
 async function requestUserPermission() {
@@ -46,6 +46,7 @@ export function useAppContext() {
     focus: null as null | Focus,
     fullDayTime: false,
     monthFirstDate: true,
+    initialized: false,
   });
 
   const updateState = (value: any) => {
@@ -61,7 +62,9 @@ export function useAppContext() {
     await store.open(DATABAG_DB);
     const session: Session | null = await sdk.current.initOfflineStore(store);
     if (session) {
-      updateState({session, fullDayTime, monthFirstDate});
+      updateState({session, fullDayTime, monthFirstDate, initialized: true});
+    } else {
+      updateState({ initialized: true });
     }
 
     await requestUserPermission();
@@ -71,6 +74,16 @@ export function useAppContext() {
     setup();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const getToken = async () => {
+    try {
+      const token = await messaging().getToken();
+      return { token, type: 'fcm' };
+    } catch (err) {
+      console.log(err);
+      return { token: '', type: '' };
+    }
+  }
 
   const actions = {
     setMonthFirstDate: async (monthFirstDate: boolean) => {
@@ -82,14 +95,14 @@ export function useAppContext() {
       await local.current.set('time_format', fullDayTime ? '24h' : '12h');
     },
     accountLogin: async (username: string, password: string, node: string, secure: boolean, code: string) => {
-      const deviceToken = await messaging().getToken();
+      const deviceToken = await getToken();
 
       const params = {
         topicBatch: 16,
         tagBatch: 16,
         channelTypes: ['test'],
-        pushType: 'fcm',
-        deviceToken: deviceToken,
+        pushType: deviceToken.type,
+        deviceToken: deviceToken.token,
         notifications: notifications,
         deviceId: '0011',
         version: '0.0.1',
@@ -112,14 +125,14 @@ export function useAppContext() {
       }
     },
     accountCreate: async (handle: string, password: string, node: string, secure: boolean, token: string) => {
-      const deviceToken = await messaging().getToken();
+      const deviceToken = await getToken();
 
       const params = {
         topicBatch: 16,
         tagBatch: 16,
         channelTypes: ['test'],
-        pushType: 'fcm',
-        deviceToken: deviceToken,
+        pushType: deviceToken.type,
+        deviceToken: deviceToken.token,
         notifications: notifications,
         deviceId: '0011',
         version: '0.0.1',
@@ -129,14 +142,14 @@ export function useAppContext() {
       updateState({session});
     },
     accountAccess: async (node: string, secure: boolean, token: string) => {
-      const deviceToken = await messaging().getToken();
+      const deviceToken = await getToken();
 
       const params = {
         topicBatch: 16,
         tagBatch: 16,
         channelTypes: ['test'],
-        pushType: 'fcm',
-        deviceToken: deviceToken,
+        pushType: deviceToken.type,
+        deviceToken: deviceToken.token,
         notifications: notifications,
         deviceId: '0011',
         version: '0.0.1',
