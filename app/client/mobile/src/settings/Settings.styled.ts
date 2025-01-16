@@ -41,6 +41,7 @@ export const styles = StyleSheet.create({
   },
   surface: {
     padding: 16,
+    borderRadius: 8,
   },
   close: {
     paddingTop: 8,

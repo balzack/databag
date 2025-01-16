@@ -91,7 +91,7 @@ const databagColors = {
       level2: 'rgb(16, 16, 16)',
       level3: 'rgb(24, 24, 24)',
       level4: 'rgb(64, 64, 64)',
-      level5: 'rgb(80, 00, 80)',
+      level5: 'rgb(80, 80, 80)',
     },
     surfaceDisabled: 'rgba(225, 227, 223, 0.12)',
     onSurfaceDisabled: 'rgba(225, 227, 223, 0.38)',
