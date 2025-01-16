@@ -15,7 +15,7 @@ import {TransitionPresets} from '@react-navigation/stack';
 import {Focus} from 'databag-client-sdk';
 import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Colors} from '../constants/Colors';
 
 const SettingsDrawer = createDrawerNavigator();
@@ -24,8 +24,8 @@ const RegistryDrawer = createDrawerNavigator();
 const ProfileDrawer = createDrawerNavigator();
 const DetailsDrawer = createDrawerNavigator();
 
-const ContactStack = createStackNavigator();
-const ContentStack = createStackNavigator();
+const ContactStack = createNativeStackNavigator();
+const ContentStack = createNativeStackNavigator();
 
 export function Session() {
   const {state} = useSession();
