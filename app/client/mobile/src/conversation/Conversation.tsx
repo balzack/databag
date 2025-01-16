@@ -71,7 +71,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
   }, [state.assets]);
 
   const sendMessage = async () => {
-    if (!busy.current && (state.message || state.assets.length > 0)) {
+    if (!busy.current && state.access && (state.message || state.assets.length > 0)) {
       busy.current = true;
       setSending(true);
       try {
@@ -329,10 +329,10 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
                 { sending && (
                   <ActivityIndicator size="small" />
                 )}
-                { !sending && (state.message || state.assets.length != 0) && (
+                { !sending && state.access && (state.message || state.assets.length != 0) && (
                   <Icon style={styles.button} source="send" size={24} color={Colors.primary} />
                 )}
-                { !sending && !state.message && state.assets.length == 0 && (
+                { !sending && (!state.access || (!state.message && state.assets.length == 0)) && (
                   <Icon style={styles.button} source="send" size={24} color={Colors.placeholder} />
                 )}
               </Surface></Pressable>
