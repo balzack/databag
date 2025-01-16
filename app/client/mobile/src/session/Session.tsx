@@ -53,7 +53,9 @@ export function Session() {
   }
 
   const contentTab = () => {
-    setTab('content');
+    if (tab !== 'content') {
+      setTab('content');
+    }
   }
 
   useEffect(() => {
