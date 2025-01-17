@@ -309,7 +309,11 @@ function ProfileScreen({nav}) {
     open();
   };
 
-  const ProfileComponent = useCallback(() => <Profile params={contactParams} />, [contactParams]);
+  const ProfileComponent = useCallback(() => (
+    <Surface elevation={3}>
+      <Profile params={contactParams} />
+    </Surface>
+  ), [contactParams]);
 
   return (
     <ProfileDrawer.Navigator

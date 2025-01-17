@@ -3,7 +3,7 @@ export const Colors = {
   danger: '#ff8888',
   placeholder: '#888888',
   unsaved: '#555555',
-  confirmed: '#cccccc',
+  confirmed: '#aaaaaa',
   pending: '#aaaa44',
   requested: '#aa44aa',
   connecting: '#22aacc',

@@ -89,7 +89,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
 
   return (
     <View style={styles.profile}>
-      <SafeAreaView style={styles.header}>
+      <View style={styles.header}>
         {close && (
           <View style={styles.spaceHolder}>
             <IconButton style={styles.back} compact="true" mode="contained" icon="arrow-left" size={28} onPress={close} />
@@ -97,7 +97,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
         )}
         <Text style={styles.headerLabel} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.handle}${state.node ? '/' + state.node : ''}`}</Text>
         {close && <View style={styles.spaceHolder} />}
-      </SafeAreaView>
+      </View>
       <Divider style={styles.border} bold={true} />
 
       <View style={styles.scrollWrapper}>

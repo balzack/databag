@@ -72,7 +72,7 @@ export function Content({openConversation, textCard}: {openConversation: ()=>voi
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.header}>
-        <Surface mode="flat" elevation={3} style={styles.inputSurface}>
+        <Surface mode="flat" elevation={5} style={styles.inputSurface}>
           <TextInput
             dense={true}
             style={styles.input}

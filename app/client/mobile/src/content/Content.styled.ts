@@ -62,6 +62,8 @@ export const styles = StyleSheet.create({
     marginLeft: 4,
     display: 'flex',
     borderRadius: 8,
+    marginBottom: 4,
+    marginTop: 4,
   },
   input: {
     flexGrow: 1,

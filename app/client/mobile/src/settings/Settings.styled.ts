@@ -91,7 +91,8 @@ export const styles = StyleSheet.create({
   },
   title: {
     width: '100%',
-    height: 48,
+    paddingTop: 8,
+    paddingBottom: 8,
   },
   header: {
     fontSize: 22,
@@ -100,7 +101,6 @@ export const styles = StyleSheet.create({
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     padding: 8,
-    height: 48,
   },
   image: {
     position: 'relative',
@@ -116,7 +116,6 @@ export const styles = StyleSheet.create({
     width: null,
     height: null,
     borderWidth: 1,
-    borderColor: Colors.primary,
   },
   logoUnset: {
     aspectRatio: 1,
@@ -333,6 +332,7 @@ export const styles = StyleSheet.create({
     minHeight: 128,
     maxHeight: 256,
     width: '100%',
+    borderRadius: 4,
   },
   blockedSurface: {
     width: '80%',

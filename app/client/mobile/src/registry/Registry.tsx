@@ -14,7 +14,7 @@ export function Registry({close, openContact}: {close?: () => void; openContact:
     <View style={styles.registry}>
       <SafeAreaView style={styles.header}>
         {close && <IconButton style={styles.close} compact="true" mode="contained" icon="arrow-left" size={28} onPress={close} />}
-        <Surface mode="flat" style={styles.inputUsername}>
+        <Surface mode="flat" style={styles.inputUsername} elevation={5}>
           <TextInput
             dense={true}
             style={styles.input}
@@ -29,7 +29,7 @@ export function Registry({close, openContact}: {close?: () => void; openContact:
             onChangeText={value => actions.setUsername(value)}
           />
         </Surface>
-        <Surface mode="flat" style={styles.inputServer}>
+        <Surface mode="flat" style={styles.inputServer} elevation={5}>
           <TextInput
             dense={true}
             style={styles.input}

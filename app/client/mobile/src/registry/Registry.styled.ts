@@ -39,6 +39,9 @@ export const styles = StyleSheet.create({
     marginRight: 8,
     marginLeft: 4,
     display: 'flex',
+    borderRadius: 4,
+    marginBottom: 6,
+    marginTop: 4,
   },
   inputUsername: {
     flexGrow: 2,
@@ -47,6 +50,9 @@ export const styles = StyleSheet.create({
     marginRight: 8,
     marginLeft: 4,
     display: 'flex',
+    borderRadius: 4,
+    marginBottom: 6,
+    marginTop: 4,
   },
   input: {
     flexGrow: 1,
