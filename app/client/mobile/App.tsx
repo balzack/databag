@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {Text, StatusBar} from 'react-native';
 import {AppContextProvider} from './src/context/AppContext';
 import {DisplayContextProvider} from './src/context/DisplayContext';
 import {NativeRouter} from 'react-router-native';
@@ -107,11 +107,15 @@ function App(): React.JSX.Element {
       ? {...MD3DarkTheme, colors: databagColors.dark}
       : {...MD3LightTheme, colors: databagColors.light};
 
+  barStyle = colorScheme === 'dark' ? 'light-content' : 'dark-content';
+  backgroundColor = colorScheme === 'dark' ? databagColors.dark.elevation.level3 : databagColors.light.elevation.level3;
+
   return (
     <AppContextProvider>
       <DisplayContextProvider>
         <PaperProvider theme={theme}>
           <NativeRouter>
+            <StatusBar />
             <Root />
             <Routes>
               <Route path="/" element={<Text>EMPTY</Text>} />
