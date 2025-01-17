@@ -207,22 +207,14 @@ function ContentTab({scheme, textCard, contentTab}: {scheme: string, textCard: {
             <Content textCard={textCard} openConversation={()=>openConversation(props)} />
           )}
         </ContentStack.Screen>
-        <ContentStack.Screen name="conversation" 
-          options={{
-            headerBackTitleVisible: false,
-            ...TransitionPresets.ScaleFromCenterAndroid,
-          }}>
+        <ContentStack.Screen name="conversation" options={styles.noHeader}>
           {props => (
             <SafeAreaView style={styles.screen}>
               <Conversation openDetails={()=>props.navigation.navigate('details')} close={()=>props.navigation.goBack()} wide={false} />
             </SafeAreaView>
           )}
         </ContentStack.Screen>
-        <ContentStack.Screen name="details"
-          options={{
-            headerBackTitleVisible: false,
-            ...TransitionPresets.ScaleFromCenterAndroid,
-          }}>
+        <ContentStack.Screen name="details" options={styles.noHeader}>
           {props => (
             <Details close={()=>props.navigation.goBack()} closeAll={()=>props.navigation.popToTop()} />
           )}
@@ -255,12 +247,7 @@ function ContactTab({scheme, textContact}: {scheme: string, textContact: (cardId
             />
           )}
         </ContactStack.Screen>
-        <ContactStack.Screen
-          name="registry"
-          options={{
-            headerBackTitleVisible: false,
-            ...TransitionPresets.ScaleFromCenterAndroid,
-          }}>
+        <ContactStack.Screen name="registry" options={styles.noHeader}>
           {props => (
             <Registry
               close={props.navigation.goBack}
@@ -271,12 +258,7 @@ function ContactTab({scheme, textContact}: {scheme: string, textContact: (cardId
             />
           )}
         </ContactStack.Screen>
-        <ContactStack.Screen
-          name="profile"
-          options={{
-            headerBackTitleVisible: false,
-            ...TransitionPresets.ScaleFromCenterAndroid,
-          }}>
+        <ContactStack.Screen name="profile" options={styles.noHeader}>
           {props => <Profile close={props.navigation.goBack} params={contactParams} />}
         </ContactStack.Screen>
       </ContactStack.Navigator>

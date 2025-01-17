@@ -188,6 +188,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
   const containerStyle = state.layout === 'large' ? { ...styles.conversation, ...styles.largeConversation } : styles.conversation;
   const headerStyle = state.layout === 'large' ? { ...styles.header, ...styles.largeHeader } : styles.header;
   const padStyle = state.layout === 'large' ? styles.pad : styles.nopad;
+  const inputPadStyle = state.layout === 'large' ? styles.pad : styles.indent;
   const offset = state.layout === 'large' ? state.avoid - 64 : state.avoid - 120;
 
   return (
@@ -287,7 +288,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
             { media }
           </ScrollView>
         </Animated.View>
-        <View style={padStyle}>
+        <View style={inputPadStyle}>
           <TextInput multiline={true} mode="outlined" style={{ ...styles.message, fontSize: state.textSize }}
               blurOnSubmit={true} onSubmitEditing={sendMessage} returnKeyType="send"
               onFocus={()=>setAvoid(true)} onBlur={()=>setAvoid(false)} editable={!sending}
@@ -298,13 +299,13 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
           { avoid && (<View style={{ ...styles.avoid, height: offset }} />) }
 
           <View style={styles.controls}>
-            <Pressable style={styles.control} onPress={addImage}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="camera" size={24} color={Colors.primary} /></Surface></Pressable>
-            <Pressable style={styles.control} onPress={addVideo}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} /></Surface></Pressable>
-            <Pressable style={styles.control} onPress={addAudio}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="volume-high" size={24} color={Colors.primary} /></Surface></Pressable>
-            <Pressable style={styles.control} onPress={addBinary}><Surface style={styles.surface} elevation={2}><Icon style={styles.button} source="file-outline" size={24} color={Colors.primary} /></Surface></Pressable>
+            <Pressable style={styles.control} onPress={addImage}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="camera" size={24} color={Colors.primary} /></Surface></Pressable>
+            <Pressable style={styles.control} onPress={addVideo}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} /></Surface></Pressable>
+            <Pressable style={styles.control} onPress={addAudio}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="volume-high" size={24} color={Colors.primary} /></Surface></Pressable>
+            <Pressable style={styles.control} onPress={addBinary}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="file-outline" size={24} color={Colors.primary} /></Surface></Pressable>
             <Divider style={styles.separator} />
             <Pressable style={styles.control} onPress={()=>setColorMenu(true)}>
-              <Surface style={styles.surface} elevation={2}>
+              <Surface style={styles.surface} elevation={2} mode="flat">
                 <Icon style={styles.button} source="format-color-text" size={24} color={Colors.primary} />
               </Surface>
             </Pressable>
@@ -314,7 +315,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
               onDismiss={()=>setSizeMenu(false)}
               anchor={(
                 <Pressable style={styles.control} onPress={()=>setSizeMenu(true)}>
-                  <Surface style={styles.surface} elevation={2}>
+                  <Surface style={styles.surface} elevation={2} mode="flat">
                     <Icon style={styles.button} source="format-size" size={24} color={Colors.primary} />
                   </Surface>
                 </Pressable>
@@ -325,17 +326,19 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
             </Menu>
 
             <View style={styles.end}>
-              <Pressable style={styles.control} onPress={sendMessage}><Surface style={styles.surface} elevation={2}>
-                { sending && (
-                  <ActivityIndicator size="small" />
-                )}
-                { !sending && state.access && (state.message || state.assets.length != 0) && (
-                  <Icon style={styles.button} source="send" size={24} color={Colors.primary} />
-                )}
-                { !sending && (!state.access || (!state.message && state.assets.length == 0)) && (
-                  <Icon style={styles.button} source="send" size={24} color={Colors.placeholder} />
-                )}
-              </Surface></Pressable>
+              <Pressable style={styles.control} onPress={sendMessage}>
+                <Surface style={styles.surface} elevation={2} mode="flat">
+                  { sending && (
+                    <ActivityIndicator size="small" />
+                  )}
+                  { !sending && state.access && (state.message || state.assets.length != 0) && (
+                    <Icon style={styles.button} source="send" size={24} color={Colors.primary} />
+                  )}
+                  { !sending && (!state.access || (!state.message && state.assets.length == 0)) && (
+                    <Icon style={styles.button} source="send" size={24} color={Colors.placeholder} />
+                  )}
+                </Surface>
+              </Pressable>
             </View>
           </View>
         </View>

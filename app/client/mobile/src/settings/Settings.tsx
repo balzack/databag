@@ -456,7 +456,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 {state.profile.description && <Text style={styles.labelSet}>{state.profile.description}</Text>}
               </View>
               <TouchableOpacity style={styles.editDetails} onPress={() => setDetails(true)}>
-                <Surface elevation={4} mode="flat">
+                <Surface elevation={2} mode="flat">
                   <Text style={styles.editDetailsLabel}>{state.strings.edit}</Text>
                 </Surface>
               </TouchableOpacity>

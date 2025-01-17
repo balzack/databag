@@ -112,6 +112,10 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
   },
+  indent: {
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
   nopad: {
   },
   border: {
