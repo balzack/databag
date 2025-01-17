@@ -7952,6 +7952,11 @@ react-native-elevation@^1.0.0:
   resolved "https://registry.yarnpkg.com/react-native-elevation/-/react-native-elevation-1.0.0.tgz#2a091c688290ac9b08b5842d1a8e8a00fc84233e"
   integrity sha512-BWIKcEYtzjRV6GpkX0Km5/w2E7fgIcywiQOT7JZTc5NSbv/YI9kpFinB9lRFsOoRVGmiqq/O3VfP/oH2clIiBA==
 
+react-native-fast-image@^8.6.3:
+  version "8.6.3"
+  resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.6.3.tgz#6edc3f9190092a909d636d93eecbcc54a8822255"
+  integrity sha512-Sdw4ESidXCXOmQ9EcYguNY2swyoWmx53kym2zRsvi+VeFCHEdkO+WG1DK+6W81juot40bbfLNhkc63QnWtesNg==
+
 react-native-file-type@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-file-type/-/react-native-file-type-1.0.0.tgz#08c4749a96e2def6fb4e749f2fe19b6bbeeb1710"
