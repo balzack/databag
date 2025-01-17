@@ -191,7 +191,8 @@ export const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   members: {
-    height: 200,
+    height: 256,
+    borderRadius: 4,
   },
   membersContainer: {},
   subjectInput: {
@@ -208,6 +209,7 @@ export const styles = StyleSheet.create({
   },
   subjectContainer: {
     marginBottom: 8,
+    borderRadius: 4,
   },
   cards: {
     display: 'flex',

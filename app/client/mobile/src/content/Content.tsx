@@ -152,7 +152,7 @@ export function Content({openConversation, textCard}: {openConversation: ()=>voi
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <View style={styles.addContainer}>
-            <Surface elevation={5} mode="flat" style={styles.addSurface}>
+            <Surface elevation={4} mode="flat" style={styles.addSurface}>
               <Text style={styles.addLabel}>{state.strings.newTopic}</Text>
               <IconButton style={styles.addClose} icon="close" size={24} onPress={() => setAdd(false)} />
               <Surface elevation={0} style={styles.subjectContainer}>
@@ -219,10 +219,10 @@ export function Content({openConversation, textCard}: {openConversation: ()=>voi
                     </View>
                   )}
                 </View>
-                <Button mode="outlined" compact={true} style={styles.cancel} labelStyle={styles.cancelLabel} onPress={() => setAdd(false)}>
+                <Button mode="outlined" onPress={() => setAdd(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button mode="contained" compact={true} style={styles.create} labelStyle={styles.createLabel} loading={adding} onPress={addTopic}>
+                <Button mode="contained" loading={adding} onPress={addTopic}>
                   {state.strings.create}
                 </Button>
               </View>

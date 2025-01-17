@@ -657,7 +657,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={3} mode="flat" style={styles.surface}>
+            <Surface elevation={4} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.manageTopics}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setSealing(false)} />
               {!sealDelete && !sealReset && state.config.sealSet && state.config.sealUnlocked && (
@@ -875,7 +875,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={3} mode="flat" style={styles.surface}>
+            <Surface elevation={4} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.profileDetails}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setDetails(false)} />
               <TextInput
@@ -928,7 +928,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={3} mode="flat" style={styles.surface}>
+            <Surface elevation={4} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setAuth(false)} />
               <Text style={styles.modalDescription}>{state.strings.mfaSteps}</Text>
@@ -965,7 +965,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={3} mode="flat" style={styles.surface}>
+            <Surface elevation={4} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setClear(false)} />
               <Text style={styles.modalDescription}>{state.strings.disablePrompt}</Text>
@@ -986,7 +986,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={3} mode="flat" style={styles.surface}>
+            <Surface elevation={4} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.changeLogin}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setChange(false)} />
               <TextInput
@@ -1064,7 +1064,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={3} mode="flat" style={styles.surface}>
+            <Surface elevation={4} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.loggingOut}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setLogout(false)} />
 
@@ -1089,7 +1089,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={3} mode="flat" style={styles.surface}>
+            <Surface elevation={4} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.deleteAccount}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setRemove(false)} />
 
@@ -1120,7 +1120,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedMessage} onRequestClose={() => setBlockedMessage(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <Surface elevation={3} mode="flat" style={styles.blockedSurface}>
+          <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
             <View style={styles.blockedHeader}>
               <Text style={styles.blockedTitle}>{ state.strings.blockedMessages }</Text>
               <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedMessage(false)} />
@@ -1151,7 +1151,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedChannel} onRequestClose={() => setBlockedChannel(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <Surface elevation={3} mode="flat" style={styles.blockedSurface}>
+          <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
             <View style={styles.blockedHeader}>
               <Text style={styles.blockedTitle}>{ state.strings.blockedTopics }</Text>
               <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedChannel(false)} />
@@ -1182,7 +1182,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedContact} onRequestClose={() => setBlockedContact(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <Surface elevation={3} mode="flat" style={styles.blockedSurface}>
+          <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
             <View style={styles.blockedHeader}>
               <Text style={styles.blockedTitle}>{ state.strings.blockedContacts }</Text>
               <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedContact(false)} />
