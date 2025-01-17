@@ -385,6 +385,7 @@ export class StreamModule {
   }
 
   public async clearBlockedChannelTopic(channelId: string, topicId: string) {
+    const { guid } = this;
     const id = `'':${channelId}:${topicId}`
     await this.store.clearMarker(guid, 'blocked_topic', id);
     if (this.focus) {
