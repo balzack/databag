@@ -110,7 +110,7 @@ export function Content({openConversation, textCard}: {openConversation: ()=>voi
               };
               const Wrap = (state.layout === 'large' && focused) ? Surface : View;
               return (
-                <Wrap elevation={1}>
+                <Wrap elevation={1} mode="flat">
                   <Channel
                     containerStyle={{
                       ...styles.channel,

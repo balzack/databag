@@ -19,7 +19,6 @@ export const styles = StyleSheet.create({
     paddingLeft: 8,
     width: '100%',
     zIndex: 1,
-    height: 48,
   },
   close: {
     flexShrink: 0,

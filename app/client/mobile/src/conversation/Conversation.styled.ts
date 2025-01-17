@@ -118,9 +118,13 @@ export const styles = StyleSheet.create({
   },
   nopad: {
   },
-  border: {
+  topBorder: {
     width: '100%',
     height: 2,
+  },
+  border: {
+    width: '100%',
+    height: 1,
   },
   progress: {
     height: 1,

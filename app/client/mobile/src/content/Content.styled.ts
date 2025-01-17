@@ -60,6 +60,7 @@ export const styles = StyleSheet.create({
     height: 40,
     marginRight: 8,
     marginLeft: 4,
+    marginBottom: 4,
     display: 'flex',
     borderRadius: 8,
   },

@@ -276,7 +276,7 @@ function DetailsScreen({nav}) {
 
   const DetailsComponent = useCallback(
     (props) => (
-      <Surface elevation={1}>
+      <Surface elevation={3}>
         <Details
           closeAll={()=>closeAll(props)}
         />
@@ -293,6 +293,7 @@ function DetailsScreen({nav}) {
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
+        overlayColor: 'rgba(8,8,8,.9)',
       }}>
       <DetailsDrawer.Screen name="details">{({navigation}) => <ProfileScreen nav={{...nav, focus, setFocus, details: navigation}} />}</DetailsDrawer.Screen>
     </DetailsDrawer.Navigator>
@@ -319,6 +320,7 @@ function ProfileScreen({nav}) {
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
+        overlayColor: 'rgba(8,8,8,.9)',
       }}>
       <ProfileDrawer.Screen name="registry">{({navigation}) => <RegistryScreen nav={{...nav, profile: navigation, openContact}} />}</ProfileDrawer.Screen>
     </ProfileDrawer.Navigator>
@@ -328,7 +330,7 @@ function ProfileScreen({nav}) {
 function RegistryScreen({nav}) {
   const RegistryComponent = useCallback(
     () => (
-      <Surface elevation={1}>
+      <Surface elevation={3}>
         <Registry
           openContact={(params: ContactParams) => {
             nav.openContact(params, nav.profile.openDrawer);
@@ -348,6 +350,7 @@ function RegistryScreen({nav}) {
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
+        overlayColor: 'rgba(8,8,8,.9)',
       }}>
       <RegistryDrawer.Screen name="contacts">{({navigation}) => <ContactsScreen nav={{...nav, registry: navigation}} />}</RegistryDrawer.Screen>
     </RegistryDrawer.Navigator>
@@ -358,7 +361,7 @@ function ContactsScreen({nav}) {
   const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
   const ContactsComponent = useCallback(
     () => (
-      <Surface elevation={1}>
+      <Surface elevation={3}>
         <Contacts
           openRegistry={nav.registry.openDrawer}
           openContact={(params: ContactParams) => {
@@ -381,8 +384,11 @@ function ContactsScreen({nav}) {
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
+        overlayColor: 'rgba(8,8,8,.9)',
       }}>
-      <ContactsDrawer.Screen name="settings">{({navigation}) => <SettingsScreen nav={{...nav, textCard, contacts: navigation}} />}</ContactsDrawer.Screen>
+      <ContactsDrawer.Screen name="settings">{({navigation}) => (
+          <SettingsScreen nav={{...nav, textCard, contacts: navigation}} />
+      )}</ContactsDrawer.Screen>
     </ContactsDrawer.Navigator>
   );
 }
@@ -390,7 +396,7 @@ function ContactsScreen({nav}) {
 function SettingsScreen({nav}) {
   const SettingsComponent = useCallback(
     () => (
-      <Surface elevation={1}>
+      <Surface elevation={3}>
         <SafeAreaView>
           <Settings />
         </SafeAreaView>
@@ -408,6 +414,7 @@ function SettingsScreen({nav}) {
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
+        overlayColor: 'rgba(8,8,8,.9)',
       }}>
       <SettingsDrawer.Screen name="home">{({navigation}) => <HomeScreen nav={{...nav, settings: navigation}} />}</SettingsDrawer.Screen>
     </SettingsDrawer.Navigator>
@@ -427,7 +434,7 @@ function HomeScreen({nav}) {
           <Content textCard={nav.textCard} openConversation={()=>nav.setFocus(true)} />
         </Surface>
       </View>
-      <Surface elevation={1} style={styles.right}>
+      <Surface elevation={1} style={styles.right} mode="flat">
         <SafeAreaView style={styles.right}>
           {nav.focus && <Conversation openDetails={nav.details.openDrawer} close={()=>nav.setFocus(false)} wide={true} />}
           {!nav.focus && <Text>FOCUS NOT SET</Text>}

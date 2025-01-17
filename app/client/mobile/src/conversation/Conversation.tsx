@@ -228,7 +228,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
         <IconButton style={styles.icon} mode="contained" icon="cog-transfer-outline" size={28} onPress={openDetails} />
       </View>
       <View style={padStyle}>
-        <Divider style={styles.border} bold={true} />
+        <Divider style={styles.topBorder} bold={true} />
       </View>
       <View style={styles.thread}>
         <FlatList
