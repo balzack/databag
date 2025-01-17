@@ -157,7 +157,6 @@ export const styles = StyleSheet.create({
     color: Colors.primary,
   },
   editBorder: {
-    overflow: 'hidden',
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
     borderLeftWidth: 1,

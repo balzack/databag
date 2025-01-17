@@ -423,7 +423,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
               {state.profile.imageSet && <Image style={styles.logoSet} resizeMode={'contain'} source={{uri: state.imageUrl}} />}
               <View style={styles.editBar}>
                 <TouchableOpacity onPress={selectImage}>
-                  <Surface style={styles.editBorder} elevation={2}>
+                  <Surface style={styles.editBorder} elevation={0} mode="flat">
                     <Text style={styles.editLogo}>{state.strings.edit}</Text>
                   </Surface>
                 </TouchableOpacity>
@@ -456,7 +456,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 {state.profile.description && <Text style={styles.labelSet}>{state.profile.description}</Text>}
               </View>
               <TouchableOpacity style={styles.editDetails} onPress={() => setDetails(true)}>
-                <Surface elevation={2} mode="flat">
+                <Surface elevation={0} mode="flat">
                   <Text style={styles.editDetailsLabel}>{state.strings.edit}</Text>
                 </Surface>
               </TouchableOpacity>
