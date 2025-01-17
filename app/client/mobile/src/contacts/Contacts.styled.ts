@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 8,
+    marginRight: 4,
   },
   indicator: {
     borderRightWidth: 2,
@@ -39,6 +40,7 @@ export const styles = StyleSheet.create({
     marginRight: 8,
     marginLeft: 4,
     display: 'flex',
+    borderRadius: 8,
   },
   input: {
     flexGrow: 1,

@@ -36,7 +36,7 @@ export function Contacts({openRegistry, openContact, callContact, textContact}: 
       <SafeAreaView style={styles.header}>
         <IconButton style={styles.sort} mode="contained" icon={state.sortAsc ? 'sort-descending' : 'sort-ascending'} size={24} onPress={actions.toggleSort} />
 
-        <Surface mode="flat" style={styles.inputSurface}>
+        <Surface mode="flat" elevation={3} style={styles.inputSurface}>
           <TextInput
             dense={true}
             style={styles.input}

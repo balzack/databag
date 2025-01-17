@@ -657,7 +657,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={5} mode="flat" style={styles.surface}>
+            <Surface elevation={3} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.manageTopics}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setSealing(false)} />
               {!sealDelete && !sealReset && state.config.sealSet && state.config.sealUnlocked && (
@@ -875,7 +875,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={1} mode="flat" style={styles.surface}>
+            <Surface elevation={3} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.profileDetails}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setDetails(false)} />
               <TextInput
@@ -928,7 +928,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={5} mode="flat" style={styles.surface}>
+            <Surface elevation={3} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setAuth(false)} />
               <Text style={styles.modalDescription}>{state.strings.mfaSteps}</Text>
@@ -965,7 +965,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={5} mode="flat" style={styles.surface}>
+            <Surface elevation={3} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setClear(false)} />
               <Text style={styles.modalDescription}>{state.strings.disablePrompt}</Text>
@@ -986,7 +986,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={5} mode="flat" style={styles.surface}>
+            <Surface elevation={3} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.changeLogin}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setChange(false)} />
               <TextInput
@@ -1053,7 +1053,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                   {state.strings.cancel}
                 </Button>
                 <Button mode="contained" loading={savingChange} disabled={state.password === '' || state.password !== state.confirm || state.taken || !state.checked} onPress={saveChange}>
-                  {state.strings.update}
+                  {state.strings.save}
                 </Button>
               </View>
             </Surface>
@@ -1064,7 +1064,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={5} mode="flat" style={styles.surface}>
+            <Surface elevation={3} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.loggingOut}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setLogout(false)} />
 
@@ -1089,7 +1089,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={5} mode="flat" style={styles.surface}>
+            <Surface elevation={3} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.deleteAccount}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setRemove(false)} />
 
@@ -1100,7 +1100,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoComplete="off"
                 autoCorrect={false}
                 value={state.remove}
-                label={state.strings.typeDelete}
+                label={state.strings.deleteKey}
                 left={<TextInput.Icon style={styles.icon} icon="delete-outline" />}
                 onChangeText={value => actions.setRemove(value)}
               />
@@ -1109,8 +1109,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 <Button mode="outlined" onPress={() => setRemove(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button mode="contained" loading={applyingRemove} disabled={state.remove !== state.strings.deleteKey} style={styles.remove} onPress={applyRemove}>
-                  {state.strings.delete}
+                <Button mode="contained" loading={applyingRemove} disabled={state.remove !== state.strings.delete} style={styles.remove} onPress={applyRemove}>
+                  {state.strings.remove}
                 </Button>
               </View>
             </Surface>

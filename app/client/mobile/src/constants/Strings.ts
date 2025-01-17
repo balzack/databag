@@ -104,7 +104,7 @@ export const en = {
   password: 'Password',
   newPassword: 'New Password',
   confirmPassword: 'Confirm Password',
-  deleteKey: "Type 'delete' to remove key",
+  deleteKey: 'Enter \'delete\' to remove key',
   delete: 'delete',
   remove: 'Delete',
   username: 'Username',

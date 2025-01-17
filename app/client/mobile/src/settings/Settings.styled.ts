@@ -345,6 +345,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    paddingTop: 8,
   },
   blockedTitle: {
     flexGrow: 1,
@@ -353,6 +354,8 @@ export const styles = StyleSheet.create({
   },
   blockedClose: {
     backgroundColor: 'transparent',
+    padding: 0,
+    margin: 0,
   },
   blockedDone: {
     width: '100%',

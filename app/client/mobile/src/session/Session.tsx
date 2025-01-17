@@ -73,7 +73,7 @@ export function Session() {
   return (
     <View style={styles.session}>
       {state.layout !== 'large' && (
-        <Surface elevation={2}>
+        <Surface elevation={3}>
           <SafeAreaView style={styles.full}>
             <View style={styles.screen}>
               <View
