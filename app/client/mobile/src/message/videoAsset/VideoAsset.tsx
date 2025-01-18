@@ -16,6 +16,7 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
   const [status, setStatus] = useState('loading');
   const [showControl, setShowControl] = useState(false);
   const clear = useRef();
+  const [downloading, setDownloading] = useState(false);
  
   useEffect(() => {
     if (state.loaded && show) {
@@ -68,6 +69,18 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
     }
   }
 
+  const download = async () => {
+    if (!downloading) {
+      setDownloading(true);
+      try {
+        await actions.download();
+      } catch (err) {
+        console.log(err);
+      }
+      setDownloading(false);
+    }
+  }
+
   return (
     <View style={styles.video}>
       { state.thumbUrl && (
@@ -112,7 +125,7 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
           )}
           <SafeAreaView style={styles.close}>
             { state.dataUrl && (
-              <IconButton style={styles.closeIcon} icon="download" compact="true" mode="contained" size={28} onPress={actions.download} />
+              <IconButton style={styles.closeIcon} icon="download" loading={downloading} compact="true" mode="contained" size={28} onPress={download} />
             )}
             <View style={styles.spacer} />
             <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={28} onPress={hideVideo} />

@@ -80,7 +80,6 @@ export const styles = StyleSheet.create({
   },
   closeIcon: {
     flexShrink: 0,
-    backgroundColor: 'transparent',
   },
   progress: {
     position: 'absolute',

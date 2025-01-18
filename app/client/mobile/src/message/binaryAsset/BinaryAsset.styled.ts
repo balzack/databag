@@ -85,7 +85,6 @@ export const styles = StyleSheet.create({
     color: Colors.offsync,
   },
   closeIcon: {
-    backgroundColor: 'transparent',
   },
   progress: {
     position: 'absolute',

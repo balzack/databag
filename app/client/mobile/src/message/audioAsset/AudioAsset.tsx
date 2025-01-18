@@ -15,6 +15,7 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
   const opacity = useAnimatedValue(0);
   const videoRef = useRef<VideoRef>(null as null | VideoRef);
   const [status, setStatus] = useState('loading');
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     if (show) { 
@@ -53,6 +54,18 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
       setStatus('paused');
     } else {
       setStatus('playing');
+    }
+  }
+
+  const download = async () => {
+    if (!downloading) {
+      setDownloading(true);
+      try {
+        await actions.download();
+      } catch (err) {
+        console.log(err);
+      }
+      setDownloading(false);
     }
   }
 
@@ -100,7 +113,7 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
           )}
           <SafeAreaView style={styles.close}>
             { state.dataUrl && (
-              <IconButton style={styles.closeIcon} icon="download" compact="true" mode="contained" size={28} onPress={actions.download} />
+              <IconButton style={styles.closeIcon} icon="download" loading={downloading} compact="true" mode="contained" size={28} onPress={download} />
             )}
             <Text style={styles.label} adjustsFontSizeToFit={true} numberOfLines={1}>{ asset.audio?.label || asset.encrypted?.label }</Text>
             <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={28} onPress={hideAudio} />

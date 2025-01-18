@@ -53,7 +53,6 @@ export const styles = StyleSheet.create({
     right: 0,
   },
   closeIcon: {
-    backgroundColor: 'transparent',
   },
   progress: {
     position: 'absolute',

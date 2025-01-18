@@ -13,6 +13,7 @@ export function BinaryAsset({ topicId, asset, loaded, show }: { topicId: string,
   const [modal, setModal] = useState(false);
   const opacity = useAnimatedValue(0);
   const [alert, setAlert] = useState('');
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     if (show) {
@@ -45,8 +46,20 @@ export function BinaryAsset({ topicId, asset, loaded, show }: { topicId: string,
     actions.cancelLoad();
   }
 
+  const download = async () => {
+    if (!downloading) {
+      setDownloading(true);
+      try {
+        await actions.download();
+      } catch (err) {
+        console.log(err);
+      }
+      setDownloading(false);
+    }
+  }
+
   return (
-    <View style={styles.audio}>
+    <View style={styles.binary}>
       <Pressable onPress={showBinary}>
         <Animated.View style={[styles.container,{opacity},]}>
           <Image
@@ -74,7 +87,7 @@ export function BinaryAsset({ topicId, asset, loaded, show }: { topicId: string,
             />
             { state.dataUrl && (
               <View style={styles.button}>
-                <IconButton style={styles.control} size={64} icon="download-outline" onPress={share} />
+                <IconButton style={styles.control} size={64} icon="download-outline" loading={downloading} onPress={download} />
               </View>
             )}
           </View>

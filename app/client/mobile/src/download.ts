@@ -11,8 +11,6 @@ export async function Download(uri: string, name: string, extension?: string) {
 
   const type = extension ? extension : (await fileType(downloadPath))?.ext;
 
-console.log(type, extension);
-
   const dir = Platform.OS === 'ios' ? RNFS.DocumentDirectoryPath : RNFS.DownloadDirectoryPath;
   const sharePath = `${dir}/${name}.${type}`;
   if (await RNFS.exists(sharePath)) {
@@ -20,6 +18,12 @@ console.log(type, extension);
   }
 
   await RNFS.moveFile(downloadPath, sharePath);
-  await Share.share({ url: sharePath });
+
+  if (Platform.OS === 'ios') {
+    await Share.share({ url: sharePath });
+  } else {
+    await RNFS.scanFile(sharePath);
+  }
+
   await RNFS.unlink(sharePath);
 }

@@ -13,6 +13,7 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
   const [modal, setModal] = useState(false);
   const opacity = useAnimatedValue(0);
   const [cleared, setCleared] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     if (state.loaded && show) {
@@ -36,6 +37,18 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
   const hideImage = () => {
     setModal(false);
     actions.cancelLoad();
+  }
+
+  const download = async () => {
+    if (!downloading) {
+      setDownloading(true);
+      try {
+        await actions.download();
+      } catch (err) {
+        console.log(err);
+      }
+      setDownloading(false);
+    }
   }
 
   return (
@@ -81,7 +94,7 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
           )}
           <SafeAreaView style={styles.close}>
             { state.dataUrl && (
-              <IconButton style={styles.closeIcon} icon="download" compact="true" mode="contained" size={28} onPress={actions.download} />
+              <IconButton style={styles.closeIcon} icon="download" loading={downloading} compact="true" mode="contained" size={28} onPress={download} />
             )}
             <View style={styles.spacer} />
             <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={28} onPress={hideImage} />
