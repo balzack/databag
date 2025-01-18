@@ -4,6 +4,7 @@ import { DisplayContext } from '../../context/DisplayContext';
 import { Focus } from 'databag-client-sdk'
 import { ContextType } from '../../context/ContextType'
 import { MediaAsset } from '../../conversation/Conversation';
+import { Download } from '../../download';
 
 export function useVideoAsset(topicId: string, asset: MediaAsset) {
   const app = useContext(AppContext) as ContextType
@@ -56,7 +57,7 @@ export function useVideoAsset(topicId: string, asset: MediaAsset) {
     download: async () => {
       try {
         updateState({ failed: false });
-        await Share.share({ url: state.dataUrl });
+        await Download(state.dataUrl, topicId);
       } catch (err) {
         console.log(err);
         updateState({ faled: true });

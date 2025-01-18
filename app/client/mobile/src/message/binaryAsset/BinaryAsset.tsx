@@ -7,7 +7,6 @@ import { styles } from './BinaryAsset.styled'
 import {BlurView} from '@react-native-community/blur';
 import Video from 'react-native-video'
 import thumb from '../../images/binary.png';
-import RNFetchBlob from 'rn-fetch-blob';
 
 export function BinaryAsset({ topicId, asset, loaded, show }: { topicId: string, asset: MediaAsset, loaded: ()=>void, show: boolean }) {
   const { state, actions } = useBinaryAsset(topicId, asset);
@@ -28,10 +27,7 @@ export function BinaryAsset({ topicId, asset, loaded, show }: { topicId: string,
   const share = async () => {
     try {
       setAlert('');
-      const extension = asset.binary?.extension || asset.encrypted?.extension;
-      const options = { fileCache: true, appendExt: extension.toLowerCase() };
-      const download = await RNFetchBlob.config(options).fetch("GET", state.dataUrl);
-      await Share.share({ url: download.path() });
+      await actions.download();
     } catch (err) {
       console.log(err);
       setAlert(state.strings.operationFailed)

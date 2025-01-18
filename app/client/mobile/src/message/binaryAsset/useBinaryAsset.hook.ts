@@ -4,6 +4,7 @@ import { DisplayContext } from '../../context/DisplayContext';
 import { Focus } from 'databag-client-sdk'
 import { ContextType } from '../../context/ContextType'
 import { MediaAsset } from '../../conversation/Conversation';
+import { Download } from '../../download';
 
 export function useBinaryAsset(topicId: string, asset: MediaAsset) {
   const app = useContext(AppContext) as ContextType
@@ -30,7 +31,9 @@ export function useBinaryAsset(topicId: string, asset: MediaAsset) {
     download: async () => {
       try {
         updateState({ failed: false });
-        await Share.share({ url: state.dataUrl });
+        const extension = asset.binary?.extension || asset.encrypted?.extension;
+        const name = asset.binary?.label || asset.encrypted?.label;
+        await Download(state.dataUrl, name, extension);
       } catch (err) {
         console.log(err);
         updateState({ faled: true });

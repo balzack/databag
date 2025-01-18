@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { SafeAreaView, Share, Modal, Pressable, Animated, View, Image, useAnimatedValue } from 'react-native'
+import { SafeAreaView, Modal, Pressable, Animated, View, Image, useAnimatedValue } from 'react-native'
 import { Text, ProgressBar, IconButton } from 'react-native-paper'
 import { useImageAsset } from './useImageAsset.hook';
 import { MediaAsset } from '../../conversation/Conversation';

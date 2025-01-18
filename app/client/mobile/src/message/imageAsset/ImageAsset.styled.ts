@@ -40,7 +40,6 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
   },
   closeIcon: {
-    backgroundColor: 'transparent',
   },
   progress: {
     position: 'absolute',
