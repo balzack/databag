@@ -91,8 +91,6 @@ export const styles = StyleSheet.create({
   },
   title: {
     width: '100%',
-    paddingTop: 8,
-    paddingBottom: 8,
   },
   header: {
     fontSize: 22,
@@ -100,7 +98,8 @@ export const styles = StyleSheet.create({
     textWrap: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
-    padding: 8,
+    height: 52,
+    paddingTop: 16,
   },
   image: {
     position: 'relative',
