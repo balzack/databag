@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Image} from 'react-native';
+import {Platform, View, Image} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useAccess} from './useAccess.hook';
 import {styles} from './Access.styled';
@@ -66,7 +66,8 @@ export function Access() {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={state.strings.server}
+                label={Platform.OS==='ios'?state.strings.server:undefined}
+                placeholder={Platform.OS!=='ios'?state.strings.server:undefined}
                 value={state.node}
                 left={<TextInput.Icon style={styles.icon} icon="server" />}
                 onChangeText={value => actions.setNode(value)}
@@ -77,7 +78,8 @@ export function Access() {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={state.strings.username}
+                label={Platform.OS==='ios'?state.strings.username:undefined}
+                placeholder={Platform.OS!=='ios'?state.strings.username:undefined}
                 value={state.username}
                 left={<TextInput.Icon style={styles.icon} icon="account" />}
                 onChangeText={value => actions.setUsername(value)}
@@ -89,7 +91,8 @@ export function Access() {
                 autoComplete="off"
                 autoCorrect={false}
                 value={state.password}
-                label={state.strings.password}
+                label={Platform.OS==='ios'?state.strings.password:undefined}
+                placeholder={Platform.OS!=='ios'?state.strings.password:undefined}
                 secureTextEntry={!showPassword}
                 left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
@@ -128,7 +131,8 @@ export function Access() {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={state.strings.token}
+                label={Platform.OS==='ios'?state.strings.token:undefined}
+                placeholder={Platform.OS!=='ios'?state.strings.token:undefined}
                 left={<TextInput.Icon style={styles.icon} icon="ticket-account" />}
                 onChangeText={value => actions.setToken(value)}
               />
@@ -138,7 +142,8 @@ export function Access() {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={state.strings.server}
+                label={Platform.OS==='ios'?state.strings.server:undefined}
+                placeholder={Platform.OS!=='ios'?state.strings.server:undefined}
                 value={state.node}
                 left={<TextInput.Icon style={styles.icon} icon="server" />}
                 onChangeText={value => actions.setNode(value)}
@@ -165,7 +170,8 @@ export function Access() {
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
-                    label={state.strings.token}
+                    label={Platform.OS==='ios'?state.strings.token:undefined}
+                    placeholder={Platform.OS!=='ios'?state.strings.token:undefined}
                     left={<TextInput.Icon style={styles.icon} icon="ticket-account" />}
                     onChangeText={value => actions.setToken(value)}
                   />
@@ -177,7 +183,8 @@ export function Access() {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={state.strings.server}
+                label={Platform.OS==='ios'?state.strings.server:undefined}
+                placeholder={Platform.OS!=='ios'?state.strings.server:undefined}
                 value={state.node}
                 left={<TextInput.Icon style={styles.icon} icon="server" />}
                 onChangeText={value => actions.setNode(value)}
@@ -189,7 +196,8 @@ export function Access() {
                 autoComplete="off"
                 autoCorrect={false}
                 error={state.taken}
-                label={state.strings.username}
+                label={Platform.OS==='ios'?state.strings.username:undefined}
+                placeholder={Platform.OS!=='ios'?state.strings.username:undefined}
                 value={state.username}
                 left={<TextInput.Icon style={styles.icon} icon="account" />}
                 onChangeText={value => actions.setUsername(value)}
@@ -202,7 +210,8 @@ export function Access() {
                 autoCorrect={false}
                 textContentType={'oneTimeCode'}
                 value={state.password}
-                label={state.strings.password}
+                label={Platform.OS==='ios'?state.strings.password:undefined}
+                placeholder={Platform.OS!=='ios'?state.strings.password:undefined}
                 secureTextEntry={!showPassword}
                 left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
@@ -222,7 +231,8 @@ export function Access() {
                 autoCorrect={false}
                 textContentType={'oneTimeCode'}
                 value={state.confirm}
-                label={state.strings.confirmPassword}
+                label={Platform.OS==='ios'?state.strings.confirmPassword:undefined}
+                placeholder={Platform.OS!=='ios'?state.strings.confirmPassword:undefined}
                 secureTextEntry={!showConfirm}
                 left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
@@ -254,7 +264,8 @@ export function Access() {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={state.strings.server}
+                label={Platform.OS==='ios'?state.strings.server:undefined}
+                placeholder={Platform.OS!=='ios'?state.strings.server:undefined}
                 value={state.node}
                 left={<TextInput.Icon style={styles.icon} icon="server" />}
                 onChangeText={value => actions.setNode(value)}
@@ -265,7 +276,8 @@ export function Access() {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label="Password"
+                label={Platform.OS==='ios'?state.strings.password:undefined}
+                placeholder={Platform.OS!=='ios'?state.strings.password:undefined}
                 value={state.password}
                 secureTextEntry={!showPassword}
                 left={<TextInput.Icon style={styles.icon} icon="lock" />}

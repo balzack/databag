@@ -713,7 +713,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     autoComplete="off"
                     autoCorrect={false}
                     value={state.sealPassword}
-                    label={state.strings.password}
+                    label={Platofrm.OS==='ios'?state.strings.password:undefined}
+                    placeholder={Platform.OS!=='ios'?state.strings.password:undefined}
                     secureTextEntry={!showPassword}
                     left={<TextInput.Icon style={styles.icon} icon="lock" />}
                     right={
@@ -732,7 +733,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     autoComplete="off"
                     autoCorrect={false}
                     value={state.sealConfirm}
-                    label={state.strings.confirmPassword}
+                    label={Platform.OS==='ios'?state.strings.confirmPassword:undefined}
+                    placeholder={Platform.OS!=='ios'?state.strings.confirmPassword:undefined}
                     secureTextEntry={!showConfirm}
                     left={<TextInput.Icon style={styles.icon} icon="lock" />}
                     right={
@@ -764,7 +766,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     autoComplete="off"
                     autoCorrect={false}
                     value={state.sealPassword}
-                    label={state.strings.password}
+                    label={Platform.OS==='ios'?state.strings.password:undefined}
+                    placeholder={Platform.OS!=='ios'?state.strings.password:undefined}
                     secureTextEntry={!showPassword}
                     left={<TextInput.Icon style={styles.icon} icon="lock" />}
                     right={
@@ -823,7 +826,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     autoComplete="off"
                     autoCorrect={false}
                     value={state.sealDelete}
-                    label={state.strings.deleteKey}
+                    label={Platform.OS==='ios'?state.strings.deleteKey:undefined}
+                    placeholder={Platform.OS!=='ios'?state.strings.deleteKey:undefined}
                     left={<TextInput.Icon style={styles.icon} icon="lock" />}
                     onChangeText={value => actions.setSealDelete(value)}
                   />
@@ -845,7 +849,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     autoComplete="off"
                     autoCorrect={false}
                     value={state.sealPassword}
-                    label={state.strings.password}
+                    label={Platform.OS==='ios'?state.strings.password:undefined}
+                    placeholder={Platform.OS!=='ios'?state.strings.password:undefined}
                     secureTextEntry={!showPassword}
                     left={<TextInput.Icon style={styles.icon} icon="lock" />}
                     right={
@@ -884,7 +889,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={state.strings.name}
+                label={Platform.OS==='ios'?state.strings.name:undefined}
+                placeholder={Platform.OS!=='ios'?state.strings.name:undefined}
                 value={state.name}
                 left={<TextInput.Icon style={styles.inputIcon} icon="account" />}
                 onChangeText={value => actions.setName(value)}
@@ -895,7 +901,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={state.strings.location}
+                label={Platform.OS==='ios'?state.strings.location:undefined}
+                placeholder={Platform.OS!=='ios'?state.strings.location:undefined}
                 value={state.location}
                 left={<TextInput.Icon style={styles.inputIcon} icon="map-marker-outline" />}
                 onChangeText={value => actions.setLocation(value)}
@@ -906,7 +913,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={state.strings.description}
+                label={Platform.OS==='ios'?state.strings.description:undefined}
+                placeholdfer={Platform.OS!=='ios'?state.strings.description:undefined}
                 value={state.description}
                 left={<TextInput.Icon style={styles.inputIcon} icon="book-open-outline" />}
                 onChangeText={value => actions.setDescription(value)}
@@ -1103,7 +1111,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoComplete="off"
                 autoCorrect={false}
                 value={state.remove}
-                label={state.strings.deleteKey}
+                label={Platform.OS==='ios'?state.strings.deleteKey:undefined}
+                placeholder={Platform.OS!=='ios'?state.strings.deleteKey:undefined}
                 left={<TextInput.Icon style={styles.icon} icon="delete-outline" />}
                 onChangeText={value => actions.setRemove(value)}
               />

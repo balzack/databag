@@ -239,6 +239,7 @@ export const styles = StyleSheet.create({
   labelSet: {
     fontSize: 16,
     flexGrow: 1,
+    width: '10%',
   },
   allControl: {
     flexShrink: 1,
