@@ -995,7 +995,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={state.strings.username}
+                label={Platform.OS==='ios' ? state.strings.username : undefined}
+                placeholder={Platform.OS!=='ios' ? state.strings.username : undefined}
                 value={state.handle}
                 left={<TextInput.Icon style={styles.inputIcon} icon="account" />}
                 right={
@@ -1016,7 +1017,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoComplete="off"
                 autoCorrect={false}
                 value={state.password}
-                label={state.strings.password}
+                label={Platform.OS==='ios' ? state.strings.password : undefined}
+                placeholder={Platform.OS!=='ios' ? state.strings.password : undefined}
                 secureTextEntry={!showPassword}
                 left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
@@ -1035,7 +1037,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoComplete="off"
                 autoCorrect={false}
                 value={state.confirm}
-                label={state.strings.confirmPassword}
+                label={Platform.OS==='ios' ? state.strings.confirmPassword : undefined}
+                placeholder={Platform.OS!=='ios' ? state.strings.confirmPassword : undefined}
                 secureTextEntry={!showConfirm}
                 left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
