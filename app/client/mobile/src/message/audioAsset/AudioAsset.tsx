@@ -8,6 +8,7 @@ import {BlurView} from '@react-native-community/blur';
 import Video, { VideoRef } from 'react-native-video'
 import thumb from '../../images/audio.png';
 import {Colors} from '../../constants/Colors';
+import { activateKeepAwake, deactivateKeepAwake} from "@sayem314/react-native-keep-awake";
 
 export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, asset: MediaAsset, loaded: ()=>void, show: boolean }) {
   const { state, actions } = useAudioAsset(topicId, asset);
@@ -30,11 +31,13 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
   const showAudio = () => {
     setModal(true);
     actions.loadAudio();
+    activateKeepAwake()
   };
 
   const hideAudio = () => {
     setModal(false);
     actions.cancelLoad();
+    deactivateKeepAwake();
   }
 
   const play = () => {

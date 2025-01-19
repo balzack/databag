@@ -7,6 +7,7 @@ import { styles } from './VideoAsset.styled'
 import {BlurView} from '@react-native-community/blur';
 import Video, { VideoRef } from 'react-native-video'
 import { Colors } from '../../constants/Colors';
+import { activateKeepAwake, deactivateKeepAwake} from "@sayem314/react-native-keep-awake";
 
 export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, asset: MediaAsset, loaded: ()=>void, show: boolean }) {
   const { state, actions } = useVideoAsset(topicId, asset);
@@ -34,11 +35,13 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
   const showVideo = () => {
     setModal(true);
     actions.loadVideo();
+    activateKeepAwake();
   };
 
   const hideVideo = () => {
     setModal(false);
     actions.cancelLoad();
+    deactivateKeepAwake();
   }
 
   const controls = () => {
