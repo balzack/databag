@@ -15,11 +15,11 @@ export const styles = StyleSheet.create({
   control: {
     position: 'absolute',
     backgroundColor: 'transparent',
+    opacity: 0.6
   },
   button: {
     position: 'absolute',
-    borderRadius: 13,
-    backgroundColor: '#444444',
+    borderRadius: 16,
   },
   blur: {
     position: 'absolute',

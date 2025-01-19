@@ -15,7 +15,7 @@ export function useSettings() {
     profile: {} as Profile,
     profileSet: false,
     imageUrl: null,
-    strings: display.state.strings,
+    strings: {},
     all: false,
     password: '',
     confirm: '',

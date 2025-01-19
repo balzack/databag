@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SafeAreaView, Share, Modal, Pressable, Animated, View, Image, useAnimatedValue } from 'react-native'
-import { Text, Icon, ProgressBar, IconButton } from 'react-native-paper'
+import { Text, Surface, Icon, ProgressBar, IconButton } from 'react-native-paper'
 import { useVideoAsset } from './useVideoAsset.hook';
 import { MediaAsset } from '../../conversation/Conversation';
 import { styles } from './VideoAsset.styled'
@@ -93,9 +93,9 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
               source={{ uri: state.thumbUrl }}
               onLoad={actions.loaded}
             />
-            <View style={styles.button}>
+            <Surface elevation={2} style={styles.button}>
               <Icon size={32} source="play-circle-outline" />
-            </View>
+            </Surface>
           </Animated.View>
         </Pressable>
       )}
@@ -113,10 +113,14 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
               controls={false} resizeMode="contain" />
           )}
           { status === 'playing' && showControl && (
-            <IconButton style={styles.control} size={64} icon="pause" onPress={pause} />
+            <Surface elevation={2} style={styles.control}>
+              <IconButton size={64} icon="pause" onPress={pause} />
+            </Surface>
           )}
           { status === 'paused' && showControl && (
-            <IconButton style={styles.control} size={64} icon="play" onPress={play} />
+            <Surface elevation={2} style={styles.control}>
+              <IconButton size={64} icon="play" onPress={play} />
+            </Surface>
           )}
           { state.loading && (
             <View style={styles.progress}>
