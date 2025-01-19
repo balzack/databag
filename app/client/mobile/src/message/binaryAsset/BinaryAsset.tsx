@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SafeAreaView, Modal, Share, Pressable, View, Image, Animated, useAnimatedValue } from 'react-native'
-import { Text, Icon, ProgressBar, IconButton } from 'react-native-paper'
+import { Text, Surface, Icon, ProgressBar, IconButton } from 'react-native-paper'
 import { useBinaryAsset } from './useBinaryAsset.hook';
 import { MediaAsset } from '../../conversation/Conversation';
 import { styles } from './BinaryAsset.styled'
@@ -70,9 +70,9 @@ export function BinaryAsset({ topicId, asset, loaded, show }: { topicId: string,
             source={thumb}
             onLoad={loaded}
           />
-          <View style={styles.button}>
+          <Surface elevation={2} style={styles.button}>
             <Icon size={28} source="download-outline" />
-          </View>
+          </Surface>
           <Text style={styles.info} numberOfLines={1}>{ asset.binary?.label || asset.encrypted?.label }</Text>
         </Animated.View>
       </Pressable>
@@ -86,9 +86,9 @@ export function BinaryAsset({ topicId, asset, loaded, show }: { topicId: string,
               source={thumb}
             />
             { state.dataUrl && (
-              <View style={styles.button}>
+              <Surface elevation={2} style={styles.button}>
                 <IconButton style={styles.control} size={64} icon="download-outline" loading={downloading} onPress={download} />
-              </View>
+              </Surface>
             )}
           </View>
           { state.loading && (

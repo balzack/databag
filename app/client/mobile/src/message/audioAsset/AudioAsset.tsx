@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SafeAreaView, Modal, Share, Pressable, View, Image, Animated, useAnimatedValue } from 'react-native'
-import { Icon, Text, ProgressBar, IconButton } from 'react-native-paper'
+import { Surface, Icon, Text, ProgressBar, IconButton } from 'react-native-paper'
 import { useAudioAsset } from './useAudioAsset.hook';
 import { MediaAsset } from '../../conversation/Conversation';
 import { styles } from './AudioAsset.styled'
@@ -81,9 +81,9 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
             source={thumb}
             onLoad={loaded}
           />
-          <View style={styles.button}>
+          <Surface elevation={2} style={styles.button}>
             <Icon size={28} source="play-box-outline" />
-          </View>
+          </Surface>
           <Text style={styles.info} numberOfLines={1}>{ asset.audio?.label || asset.encrypted?.label }</Text>
         </Animated.View>
       </Pressable>
@@ -101,10 +101,14 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
               controls={false} resizeMode="contain" />
           )}
           { status === 'playing' && (
-            <IconButton style={styles.control} size={64} icon="pause" onPress={pause} />
+            <Surface elevation={2} style={styles.control}>
+              <IconButton size={64} icon="pause" onPress={pause} />
+            </Surface>
           )}
           { status === 'paused' && (
-            <IconButton style={styles.control} size={64} icon="play" onPress={play} />
+            <Surface elevation={2} style={styles.control}>
+              <IconButton size={64} icon="play" onPress={play} />
+            </Surface>
           )}
           { state.loading && (
             <View style={styles.progress}>

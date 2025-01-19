@@ -222,7 +222,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
             <Icon source="server" size={20} />
           )}
           { state.detailSet && state.sealed && (
-            <Icon source="shield-outline" size={18} />
+            <Icon source="shield-outline" size={20} />
           )}
         </View>
         <IconButton style={styles.icon} mode="contained" icon="cog-transfer-outline" size={28} onPress={openDetails} />

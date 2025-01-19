@@ -19,7 +19,6 @@ export const styles = StyleSheet.create({
   button: {
     position: 'absolute',
     borderRadius: 4,
-    backgroundColor: '#444444',
   },
   container: {
     position: 'relative',
