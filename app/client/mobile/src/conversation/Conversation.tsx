@@ -268,7 +268,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
             <ActivityIndicator size="large" />
           </View>
         )}
-        { more && (
+        { state.loaded && more && (
           <View style={styles.more}>
             <ActivityIndicator />
           </View>
