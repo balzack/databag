@@ -117,12 +117,12 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
           )}
           { status === 'playing' && showControl && (
             <Surface elevation={2} style={styles.control}>
-              <IconButton size={64} icon="pause" onPress={pause} />
+              <IconButton style={styles.iconButton} size={64} icon="pause" onPress={pause} />
             </Surface>
           )}
           { status === 'paused' && showControl && (
             <Surface elevation={2} style={styles.control}>
-              <IconButton size={64} icon="play" onPress={play} />
+              <IconButton style={styles.iconButton} size={64} icon="play" onPress={play} />
             </Surface>
           )}
           { state.loading && (

@@ -14,7 +14,11 @@ export const styles = StyleSheet.create({
   },
   control: {
     position: 'absolute',
+    borderRadius: 8,
+  },
+  iconButton: {
     backgroundColor: 'transparent',
+    borderRadius: 8,
   },
   button: {
     position: 'absolute',
