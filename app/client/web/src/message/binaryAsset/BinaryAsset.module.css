@@ -14,6 +14,9 @@
       width: 100%;
       text-align: center;
       font-size: 12px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     .extension {
@@ -21,6 +24,7 @@
       text-align: center;
       font-size: 12px;
       font-weight: bold;
+      overflow: hidden;
     }
   }
 
@@ -63,6 +67,9 @@
       width: 100%;
       text-align: center;
       font-size: 16px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
     .extension {

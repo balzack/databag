@@ -71,6 +71,7 @@ export const styles = StyleSheet.create({
     minWidth: 0,
     textOverflow: 'ellipsis',
     flexShrink: 1,
+    height: 32,
   },
   close: {
     display: 'flex',
@@ -83,6 +84,8 @@ export const styles = StyleSheet.create({
   },
   closeIcon: {
     flexShrink: 0,
+    borderRadius: 8,
+    opacity: 0.7,
   },
   progress: {
     position: 'absolute',

@@ -11,6 +11,8 @@
     width: 100%;
     text-align: center;
     font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .play {
@@ -46,6 +48,10 @@
   .label {
     position: absolute;
     top: 0px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 8px;
   }
 
   .close {

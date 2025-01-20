@@ -40,6 +40,8 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
   },
   closeIcon: {
+    borderRadius: 8,
+    opacity: 0.7,
   },
   progress: {
     position: 'absolute',

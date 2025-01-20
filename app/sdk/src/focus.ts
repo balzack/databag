@@ -499,7 +499,7 @@ export class FocusModule implements Focus {
                 transforms.push('acopy;audio');
                 transformMap.set('acopy;audio', transform.appId);
               } else if (transform.type === TransformType.Copy && asset.type === AssetType.Binary) {
-                const assetId = await this.mirrorFile(asset.source, topicId, assetProgress);
+                const { assetId } = await this.mirrorFile(asset.source, topicId, assetProgress);
                 uploadCount += 1;
                 const assetItem = {
                   assetId: `${assetItems.length}`,
@@ -566,7 +566,7 @@ export class FocusModule implements Focus {
               return { encrypted: { type, thumb: getAsset(thumb), parts: getAsset(parts) } };
             } else if (type === 'audio') {
               return { encrypted: { type, label, parts: getAsset(parts) } };
-            }else {
+            } else {
               return { encrypted: { type, label, extension, parts: getAsset(parts) } };
             }
           } else if (asset.image) {

@@ -4,6 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 
   .thumb {
     width: auto;
@@ -15,6 +16,10 @@
     padding-right: 2px;
     position: absolute;
     font-size: 12px;
+    text-overflow: ellipsis;
+    min-width: 0;
+    width: 100%;
+    overflow: hidden;
   }
 
   .close {

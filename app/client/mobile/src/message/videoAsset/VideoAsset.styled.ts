@@ -57,6 +57,8 @@ export const styles = StyleSheet.create({
     right: 0,
   },
   closeIcon: {
+    borderRadius: 8,
+    opacity: 0.7,
   },
   progress: {
     position: 'absolute',

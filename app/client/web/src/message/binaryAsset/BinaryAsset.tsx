@@ -21,7 +21,6 @@ export function BinaryAsset({ topicId, asset }: { topicId: string, asset: MediaA
   }
 
   const download = () => {
-    console.log("DOWNLOAD");
     const link = document.createElement("a");
     link.download = `${label}.${extension.toLowerCase()}`
     link.href = state.dataUrl;

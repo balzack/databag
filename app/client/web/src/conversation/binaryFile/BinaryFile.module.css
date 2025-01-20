@@ -18,6 +18,9 @@
     text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
+    height: 100%;
+    font-size: 12px;
+    white-space: nowrap;
   }
 
   .extension {

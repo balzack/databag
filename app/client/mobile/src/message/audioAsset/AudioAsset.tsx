@@ -101,7 +101,7 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
           { state.dataUrl && (
             <Video source={{ uri: state.dataUrl }} style={styles.player} paused={false} ref={videoRef}
               onPlaybackRateChange={playbackRateChange} onEnd={end} onError={actions.failed}
-              controls={false} resizeMode="contain" />
+              audioOnly={true} controls={false} resizeMode="contain" />
           )}
           { status === 'playing' && (
             <Surface elevation={2} style={styles.control}>

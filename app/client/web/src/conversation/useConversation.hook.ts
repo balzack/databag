@@ -271,7 +271,7 @@ export function useConversation() {
               ]});
               return { encrypted: { type: 'audio', label: asset.label, parts: `ac${sources.length-1}` } };
             } else {
-              sources.push({ type: AssetType.Video, source: asset.file, transforms: [
+              sources.push({ type: AssetType.Audio, source: asset.file, transforms: [
                 { type: TransformType.Copy, appId: `ac${sources.length}` }
               ]});
               return { audio: { label: asset.label, full: `ac${sources.length-1}` } };
