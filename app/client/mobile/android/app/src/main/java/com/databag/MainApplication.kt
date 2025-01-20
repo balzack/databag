@@ -11,6 +11,10 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.soloader.SoLoader
 
+import com.oney.WebRTCModule.WebRTCModuleOptions;
+import android.media.AudioAttributes
+import org.webrtc.audio.JavaAudioDeviceModule;
+
 class MainApplication : Application(), ReactApplication {
 
   override val reactNativeHost: ReactNativeHost =
@@ -33,6 +37,17 @@ class MainApplication : Application(), ReactApplication {
     get() = getDefaultReactHost(applicationContext, reactNativeHost)
 
   override fun onCreate() {
+
+		// append this before WebRTCModule initializes
+		val options = WebRTCModuleOptions.getInstance()
+		val audioAttributes = AudioAttributes.Builder()
+			.setUsage(AudioAttributes.USAGE_MEDIA)
+			.setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+			.build()
+		options.audioDeviceModule = JavaAudioDeviceModule.builder(this)
+			.setAudioAttributes(audioAttributes)
+			.createAudioDeviceModule()
+
     super.onCreate()
     SoLoader.init(this, false)
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {

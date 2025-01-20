@@ -20,6 +20,10 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+  <key>NSCameraUsageDescription</key>
+  <string>Camera permission description</string>
+  <key>NSMicrophoneUsageDescription</key>
+  <string>Microphone permission description</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
