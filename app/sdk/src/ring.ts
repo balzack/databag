@@ -1,39 +1,101 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Ring, Logging } from './api';
+import { LinkModule } from './link';
+import type { Ring, Link, Logging } from './api';
 import type { Call } from './types';
+
+const EXPIRES = 6000;
 
 export class RingModule implements Ring {
   private log: Logging;
   private emitter: EventEmitter;
+  private token: string;
+  private node: string;
+  private secure: boolean;
+  private calls: Map<string, { call: Call, expires: number, status: string }>
+  private closed: boolean;
 
   constructor(log: Logging) {
     this.log = log;
     this.emitter = new EventEmitter();
+    this.calls = new Map<string, { call: Call, expires: number }>();
+    this.ringing = [];
+    this.expire = null;
+    this.closed = false;
   }
 
-  public addCallingListener(ev: (calls: Call[]) => void): void {
-    this.emitter.on('calling', ev);
+  public addRingingListener(ev: (calls: { cardId: string, callId: string }[]) => void): void {
+    this.emitter.on('ringing', ev);
   }
 
-  public removeCallingListener(ev: (calls: Call[]) => void): void {
-    this.emitter.off('calling', ev);
+  public removeRingingListener(ev: (calls: { cardId: string, callId: string }[]) => void): void {
+    this.emitter.off('ringing', ev);
   }
 
-  public addCallListener(ev: (call: Call | null) => void): void {
-    this.emitter.on('call', ev);
+  public ring(call: Call): void {
+    const now = (new Date()).getTime();
+    const { cardId, callId } = call;
+    const expires = now + EXPIRES;
+    const id = `${cardId}:${callId}`;
+    const ringing = this.calls.get(id);
+    if (ringing) {
+      ringing.expires = expires;
+    } else {
+      this.calls.set(id, { expires, call, status: 'ringing' });
+    }
+    this.emitRinging();
+    setTimeout(() => { this.emitRinging() }, EXPIRES + 1);
   }
 
-  public removeCallListener(ev: (call: Call | null) => void): void {
-    this.emitter.off('call', ev);
+  private emitRinging(): void {
+    if (!this.closed) {
+      const now = (new Date()).getTime();
+      const ringing = Array.from(this.calls.values());
+      this.emitter.emit('ringing', ringing.filter(item => item.expires > now && item.status === 'ringing').map(item => ({ cardId: item.call.cardId, callId: item.call.callId })));
+    }
   }
 
-  public ring(call: Call): void {}
+  public async accept(cardId: string, callId: string, contactNode: string): Promise<Link> {
+    const now = (new Date()).getTime();
+    const id = `${cardId}:${callId}`;
+    const entry = this.ringing.get(id);
+    if (!entry || entry.expires < now || entry.status !== 'ringing') {
+      throw new Error('invalid ringing entry');
+    }
+    entry.status = 'accepted';
+    this.emitRinging();
+    const link = new LinkModule(this.log);
+    await link.join(contactNode, entry.call.calleeToken, ice);
+    return link;
+  }
 
-  public accept(callId: string): void {}
+  public async ignore(cardId: stirng, callId: string): Promise<void> {
+    const id = `${cardId}:${callId}`;
+    const entry = this.ringing.get(id);
+    if (!entry || entry.expires < now || entry.status !== 'ringing') {
+      throw new Error('invalid ringing entry');
+    }
+    entry.status = 'ignored';
+    this.emitRinging();
+  }
 
-  public ignore(callId: string): void {}
+  public async decline(cardId: string, callId: string, contactNode: string): Promise<void> {
+    const id = `${cardId}:${callId}`;
+    const entry = this.ringing.get(id);
+    if (!entry || entry.expires < now || entry.status !== 'ringing') {
+      throw new Error('invalid ringing entry');
+    }
+    try {
+      await removeContactCall(contactNode, entry.call.calleeToken, entry.call.callId);
+    }
+    catch (err) {
+      console.log(err);
+    }
+    entry.status = 'declined';
+    this.emitRinging();
+  }
 
-  public decline(callId: string): void {}
-
-  public close(): void {}
+  public close(): void {
+    this.closed = true;
+    this.emitter.emit('ringing', []);
+  }
 }

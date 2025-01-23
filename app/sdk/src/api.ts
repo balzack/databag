@@ -16,16 +16,25 @@ export interface Session {
   removeStatusListener(ev: (status: string) => void): void;
 }
 
+export interface Link {
+  setStatusListener(ev: (status: string) => void): void;
+  clearStatusListener(): void;
+  setMessageListener(ev: (message: any) => void): void;
+  clearMessageListener(): void;
+
+  getIce(): { urls: string; username: string; credential: string }[];
+  sendMessage(message: any): Promise<void>;
+
+  close(): Promise<void>;
+}
+
 export interface Ring {
-  addCallingListener(ev: (calls: Call[]) => void): void;
-  removeCallingListener(ev: (calls: Call[]) => void): void;
+  addRingingListener(ev: (calls: Call[]) => void): void;
+  removeRingingListener(ev: (calls: Call[]) => void): void;
 
-  addCallListener(ev: (call: Call | null) => void): void;
-  removeCallListener(ev: (call: Call | null) => void): void;
-
-  accept(callId: string): void;
-  ignore(callId: string): void;
-  decline(callId: string): void;
+  accept(cardId: string, callId: string, contactNode: string): Promise<Link>;
+  decline(cardId: string, callId: string, contactNode: string): Promise<void>;
+  ignore(cardId: string, callId: string): Promise<void>;
 }
 
 export interface Settings {
@@ -74,6 +83,8 @@ export interface Contact {
   flagCard(cardId: string): Promise<void>;
   setBlockedCard(cardId: string, blocked: boolean): Promise<void>;
   getRegistry(handle: string | null, server: string | null): Promise<Profile[]>;
+
+  callCard(cardId: string, ringInterval: number): Promise<Link>;
 
   addCardListener(ev: (cards: Card[]) => void): void;
   removeCardListener(ev: (cards: Card[]) => void): void;

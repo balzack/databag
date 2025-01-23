@@ -2,6 +2,7 @@ import { EventEmitter } from 'eventemitter3';
 import type { Contact, Focus } from './api';
 import { Logging } from './logging';
 import { FocusModule } from './focus';
+import { LinkModule } from './link';
 import type { Card, Channel, Article, Topic, Asset, Tag, FocusDetail, Profile, Participant } from './types';
 import { type CardEntity, avatar } from './entities';
 import type { ArticleDetail, ChannelSummary, ChannelDetail, CardProfile, CardDetail, CardItem, ChannelItem, ArticleItem } from './items';
@@ -843,6 +844,18 @@ export class ContactModule implements Contact {
       const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
       await removeContactChannel(server, !insecure, entry.item.profile.guid, entry.item.detail.token, channelId);
     }
+  }
+
+  public async callCard(cardId: string): Promise<Link> {
+    const { node, secure, token } = this;
+    const entry = this.cardEntries.get(cardId);
+    if (!entry || entry.item.detail.status !== 'connected') {
+      throw new Error('invalid card for call');
+    }
+    const { profile, detail } = entry.item;
+    const link = new LinkModule(this.log);
+    await link.call(node, secure, token, cardId, profile.node, detail.token);
+    return link;
   }
 
   public async setBlockedCard(cardId: string, blocked: boolean): Promise<void> {
