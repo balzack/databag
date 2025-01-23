@@ -17,6 +17,7 @@ import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/na
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Colors} from '../constants/Colors';
+import {Calling} from '../calling/Calling';
 
 const SettingsDrawer = createDrawerNavigator();
 const ContactsDrawer = createDrawerNavigator();
@@ -189,6 +190,7 @@ export function Session() {
           </Surface>
         </View>
       )}
+      <Calling />
     </View>
   );
 }

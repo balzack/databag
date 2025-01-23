@@ -68,8 +68,8 @@ export class SessionModule implements Session {
     this.attribute = new AttributeModule(log, this.settings, this.store, guid, token, node, secure);
     this.stream = new StreamModule(log, this.store, this.crypto, this.staging, guid, token, node, secure, channelTypes);
     this.content = new ContentModule(log, this.crypto, this.contact, this.stream);
-    this.ring = new RingModule(log, token, node, secure);
     this.connection = new Connection(log, token, node, secure);
+    this.ring = new RingModule(log);
 
     const onStatus = (ev: string) => {
       this.status = ev;
