@@ -249,6 +249,15 @@ export const defaultProfileEntity = {
   node: '',
 };
 
+export type Calling = {
+  id: string;
+  cardId: string;
+  callerToken: string;
+  calleeToken: string;
+  keepAlive: number;
+  ice: { urls: string; username: string; credential: string }[];
+}
+
 export type Ringing = {
   cardId: string;
   callId: string;

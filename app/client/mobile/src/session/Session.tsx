@@ -33,18 +33,23 @@ export function Session() {
   const scheme = useColorScheme();
   const [tab, setTab] = useState('content');
   const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
+  const [callCard, setCallCard] = useState({ cardId: null} as {cardId: null|string});
   const [dismissed, setDismissed] = useState(false);
   const [disconnected, setDisconnected] = useState(false);
   const [showDisconnected, setShowDisconnected] = useState(false);
 
-  const sessionNav = {strings: state.strings};
-  const showContent = {display: tab === 'content' ? 'flex' : 'none'};
-  const showContact = {display: tab === 'contacts' ? 'flex' : 'none'};
-  const showSettings = {display: tab === 'settings' ? 'flex' : 'none'};
-
   const textContact = (cardId: null|string) => {
     setTextCard({ cardId });
   }
+
+  const callContact = (cardId: null|string) => {
+    setCallCard({ cardId });
+  }
+
+  const sessionNav = {strings: state.strings, callContact, callCard, textContact, textCard};
+  const showContent = {display: tab === 'content' ? 'flex' : 'none'};
+  const showContact = {display: tab === 'contacts' ? 'flex' : 'none'};
+  const showSettings = {display: tab === 'settings' ? 'flex' : 'none'};
 
   const dismiss = () => {
     setDismissed(true);
@@ -89,7 +94,7 @@ export function Session() {
                   ...styles.body,
                   ...showContact,
                 }}>
-                <ContactTab textContact={textContact} scheme={scheme} />
+                <ContactTab textContact={textContact} callContact={callContact} scheme={scheme} />
               </View>
               <View
                 style={{
@@ -190,7 +195,7 @@ export function Session() {
           </Surface>
         </View>
       )}
-      <Calling />
+      <Calling callCard={callCard} />
     </View>
   );
 }
@@ -226,7 +231,7 @@ function ContentTab({scheme, textCard, contentTab}: {scheme: string, textCard: {
   );
 }
 
-function ContactTab({scheme, textContact}: {scheme: string, textContact: (cardId: null|string)=>void}) {
+function ContactTab({scheme, textContact, callContact}: {scheme: string, textContact: (cardId: string)=>void, callContact: (cardId: string)=>void}) {
   const [contactParams, setContactParams] = useState({
     guid: '',
   } as ContactParams);
@@ -244,7 +249,7 @@ function ContactTab({scheme, textContact}: {scheme: string, textContact: (cardId
                 setContactParams(params);
                 props.navigation.navigate('profile');
               }}
-              callContact={(cardId: string)=>console.log("CALL: ", cardId)}
+              callContact={callContact}
               textContact={textContact}
             />
           )}
@@ -364,7 +369,6 @@ function RegistryScreen({nav}) {
 }
 
 function ContactsScreen({nav}) {
-  const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
   const ContactsComponent = useCallback(
     () => (
       <Surface elevation={3}>
@@ -373,8 +377,8 @@ function ContactsScreen({nav}) {
           openContact={(params: ContactParams) => {
             nav.openContact(params, nav.profile.openDrawer);
           }}
-          callContact={(cardId: string)=>console.log('CALL: ', cardId)}
-          textContact={(cardId: null|string)=>setTextCard({ cardId })}
+          callContact={nav.callContact}
+          textContact={nav.textContact}
         />
       </Surface>
     ),
@@ -393,7 +397,7 @@ function ContactsScreen({nav}) {
         overlayColor: 'rgba(8,8,8,.9)',
       }}>
       <ContactsDrawer.Screen name="settings">{({navigation}) => (
-          <SettingsScreen nav={{...nav, textCard, contacts: navigation}} />
+          <SettingsScreen nav={{...nav, textCard, callCard, contacts: navigation}} />
       )}</ContactsDrawer.Screen>
     </ContactsDrawer.Navigator>
   );
@@ -428,8 +432,6 @@ function SettingsScreen({nav}) {
 }
 
 function HomeScreen({nav}) {
-  const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
-
   return (
     <View style={styles.frame}>
       <View style={styles.left}>

@@ -16,8 +16,6 @@ export function useCalling() {
   useEffect(() => {
     if (app.state.session) {
       const setRinging = (ringing: { cardId: string, callId: string }[]) => {
-console.log(">>>> ", ringing);
-
         updateState({ ringing });
       }
       const ring = app.state.session.getRing();
@@ -29,6 +27,9 @@ console.log(">>>> ", ringing);
   }, [app.state.session]);
 
   const actions = {
+    call: (cardId: string) => {
+      console.log('calling: ', cardId);
+    },
   }
 
   return { state, actions }

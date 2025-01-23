@@ -84,14 +84,15 @@ export class RingModule implements Ring {
     if (!entry || entry.expires < now || entry.status !== 'ringing') {
       throw new Error('invalid ringing entry');
     }
+    entry.status = 'declined';
+    this.emitRinging();
     try {
-      await removeContactCall(contactNode, entry.call.calleeToken, entry.call.callId);
+      const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(contactNode);
+      await removeContactCall(contactNode, !insecure, entry.call.calleeToken, entry.call.callId);
     }
     catch (err) {
       console.log(err);
     }
-    entry.status = 'declined';
-    this.emitRinging();
   }
 
   public close(): void {

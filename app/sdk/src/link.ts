@@ -21,6 +21,7 @@ export class LinkModule implements Link {
   private secure: boolean;
   private token: string;
   private ice: { urls: string; username: string; credential: string }[];
+  private cleanup: null | (()=>void);
 
   constructor(log: Logging) {
     this.log = log;
@@ -36,6 +37,7 @@ export class LinkModule implements Link {
     this.aliveInterval = null;
     this.ringInterval = null;
     this.ice = [];
+    this.cleanup = null;
   }
 
   public getIce(): { urls: string; username: string; credential: string }[] {
@@ -44,6 +46,7 @@ export class LinkModule implements Link {
 
   public async call(node: string, secure: boolean, token: string, cardId: string, contactNode: string, contactToken: string) {
     const call = await addCall(node, secure, token, cardId);
+    this.cleanup = () => { removeCall(node, secure, token, call.id };
 
     const { id, keepAlive, calleeToken, callerToken, ice } = call;
     const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(contactNode);
@@ -74,6 +77,7 @@ export class LinkModule implements Link {
   public async join(server: string, access: string, ice: { urls: string; username: string; credential: string }[]) {
     this.ice = ice;
     const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+    this.cleanup = () => { removeContactCall(server, !insecure, access); }
     connect(access, server, !insecure);
   }
 
@@ -102,6 +106,13 @@ export class LinkModule implements Link {
     }
     if (this.websocket) {
       this.websocket.close();
+    }
+    if (this.cleanup) {
+      try {
+        this.cleanup();
+      } catch (err) {
+        this.log.error(err);
+      }
     }
   }
 
