@@ -22,7 +22,7 @@ export function Carousel({ pad, items, itemRenderer, itemRemove }) {
         <ReactResizeDetector handleWidth={true} handleHeight={false}>
           {({ width, height }) => {
             return (
-              <div class="item noselect">
+              <div class="item">
                 <div class="asset">{ itemRenderer(items[i], i) }</div>
                 <RemoveItem index={i} />
               </div>
