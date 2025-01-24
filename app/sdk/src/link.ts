@@ -1,4 +1,9 @@
 import type { Link, Logging } from './api';
+import { addCall } from './net/addCall';
+import { removeCall } from './net/removeCall';
+import { removeContactCall } from './net/removeContactCall';
+import { addContactRing } from './net/addContactRing';
+import { keepCall } from './net/keepCall';
 
 const RETRY_INTERVAL = 1000;
 const PING_INTERVAL = 5000;
@@ -45,14 +50,17 @@ export class LinkModule implements Link {
   }
 
   public async call(node: string, secure: boolean, token: string, cardId: string, contactNode: string, contactToken: string) {
+console.log('add call');
     const call = await addCall(node, secure, token, cardId);
-    this.cleanup = () => { removeCall(node, secure, token, call.id };
+    this.cleanup = () => { removeCall(node, secure, token, call.id) };
 
+console.log('add ring', contactNode);
     const { id, keepAlive, calleeToken, callerToken, ice } = call;
     const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(contactNode);
     const ring = { index: 0, callId: id, calleeToken, ice };
     await addContactRing(contactNode, !insecure, contactToken, ring);
 
+console.log('go');
     this.aliveInterval = setInterval(async () => {
       try {
         await keepCall(node, secure, token, id);

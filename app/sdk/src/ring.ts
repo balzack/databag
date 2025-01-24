@@ -2,6 +2,7 @@ import { EventEmitter } from 'eventemitter3';
 import { LinkModule } from './link';
 import type { Ring, Link, Logging } from './api';
 import type { Call } from './types';
+import { removeContactCall } from './net/removeContactCall';
 
 const EXPIRES = 6000;
 
