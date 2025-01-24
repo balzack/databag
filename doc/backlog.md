@@ -2,6 +2,8 @@
 
 # Backlog
 
+**Notification:** add content of message to push notification
+
 **Call UI:** pop-up window does not appear outside the app, nor does it activate the lock screen for interaction.
 
 **Call UI:** The notification for an incoming call sends two alerts using the message notification sound and then stops ringing.
