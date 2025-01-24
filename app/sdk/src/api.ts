@@ -17,9 +17,9 @@ export interface Session {
 }
 
 export interface Link {
-  setStatusListener(ev: (status: string) => void): void;
+  setStatusListener(ev: (status: string) => Promise<void>): void;
   clearStatusListener(): void;
-  setMessageListener(ev: (message: any) => void): void;
+  setMessageListener(ev: (message: any) => Promise<void>): void;
   clearMessageListener(): void;
 
   getIce(): { urls: string; username: string; credential: string }[];

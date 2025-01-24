@@ -397,7 +397,7 @@ function ContactsScreen({nav}) {
         overlayColor: 'rgba(8,8,8,.9)',
       }}>
       <ContactsDrawer.Screen name="settings">{({navigation}) => (
-          <SettingsScreen nav={{...nav, textCard, callCard, contacts: navigation}} />
+        <SettingsScreen nav={{...nav, contacts: navigation}} />
       )}</ContactsDrawer.Screen>
     </ContactsDrawer.Navigator>
   );

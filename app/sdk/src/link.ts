@@ -36,6 +36,7 @@ export class LinkModule implements Link {
     this.status = 'idle';
     this.error = false;
     this.closed = false;
+    this.connected = false;
     this.notifying = false;
     this.websocket = null;
     this.staleInterval = null;
@@ -49,18 +50,15 @@ export class LinkModule implements Link {
     return this.ice;
   }
 
-  public async call(node: string, secure: boolean, token: string, cardId: string, contactNode: string, contactToken: string) {
-console.log('add call');
+  public async call(node: string, secure: boolean, token: string, cardId: string, contactNode: string, contactGuid: string, contactToken: string) {
     const call = await addCall(node, secure, token, cardId);
     this.cleanup = () => { removeCall(node, secure, token, call.id) };
 
-console.log('add ring', contactNode);
     const { id, keepAlive, calleeToken, callerToken, ice } = call;
     const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(contactNode);
-    const ring = { index: 0, callId: id, calleeToken, ice };
-    await addContactRing(contactNode, !insecure, contactToken, ring);
+    const ring = { index: 0, callId: id, calleeToken, ice: JSON.parse(JSON.stringify(ice))};
+    await addContactRing(contactNode, !insecure, contactGuid, contactToken, ring);
 
-console.log('go');
     this.aliveInterval = setInterval(async () => {
       try {
         await keepCall(node, secure, token, id);
@@ -72,25 +70,25 @@ console.log('go');
     this.ringInterval = setInterval(async () => {
       try {
         ring.index += 1;
-        await addContactRing(contactNode, !insecure, contactToken, ring);
+        await addContactRing(contactNode, !insecure, contactGuid, contactToken, ring);
       } catch (err) {
         this.log.error(err);
       }
     }, RING_INTERVAL);
 
     this.ice = ice;
-    connect(callerToken, node, secure);
+    this.connect(callerToken, node, secure);
   }
 
   public async join(server: string, access: string, ice: { urls: string; username: string; credential: string }[]) {
     this.ice = ice;
     const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
     this.cleanup = () => { removeContactCall(server, !insecure, access); }
-    connect(access, server, !insecure);
+    this.connect(access, server, !insecure);
   }
 
   private connect(token: string, node: string, secure: boolean) {
-    this.websocket = this.setWebSocket(token, node, secure, ice);
+    this.websocket = this.setWebSocket(token, node, secure);
     this.staleInterval = setInterval(() => {
       if (this.websocket?.readyState == 1) {
         this.websocket.ping?.(); // not defined in browser
@@ -124,7 +122,7 @@ console.log('go');
     }
   }
 
-  public setStatusListener(listener: (status: string) => void) {
+  public setStatusListener(listener: (status: string) => Promise<void>) {
     this.statusListener = listener;
     this.notifyStatus(this.status);
   }
@@ -132,7 +130,7 @@ console.log('go');
     this.statusListener = null;
   }
 
-  public setMessageListener(ev: (message: any) => void) {
+  public setMessageListener(listener: (message: any) => Promise<void>) {
     this.messageListener = listener;
   }
   public clearMessageListener() {
@@ -153,14 +151,14 @@ console.log('go');
       while(this.messages.length > 0 && !this.error && !this.closed) {
         const data = this.messages.shift();
         try {
-          const message = JSON.parse(daata);
+          const message = JSON.parse(data);
           if (message.status) {
             await this.notifyStatus(message.status);
           } else {
             await this.notifyMessage(message);
           }
         } catch (err) {
-          this.log('failed to process signal message');
+          this.log.error('failed to process signal message');
           this.notifyStatus('error');
         }
       }
@@ -169,18 +167,21 @@ console.log('go');
   }
 
   private async notifyStatus(status: string) {
-    if (status === 'connected' && this.ringInterval) {
-      clearInterval(this.ringInterval);
-      this.ringInterval = null;
-    }
-
     try {
       this.status = status;
       if (this.statusListener) {
-        await this.statusListner(status);
+        await this.statusListener(this.connected && status === 'connected' ? 'reconnected' : status);
       }
     } catch (err) {
-      this.log('status notification failed');
+      this.log.error('status notification failed');
+    }
+
+    if (status === 'connected') {
+      this.connected = true;
+      if (this.ringInterval) {
+        clearInterval(this.ringInterval);
+        this.ringInterval = null;
+      }
     }
   }
 

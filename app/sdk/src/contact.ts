@@ -854,8 +854,7 @@ export class ContactModule implements Contact {
     }
     const { profile, detail } = entry.item;
     const link = new LinkModule(this.log);
-console.log("LINK CALL");
-    await link.call(node, secure, token, cardId, profile.node, detail.token);
+    await link.call(node, secure, token, cardId, profile.node, profile.guid, detail.token);
     return link;
   }
 

@@ -255,14 +255,17 @@ export type Calling = {
   callerToken: string;
   calleeToken: string;
   keepAlive: number;
-  ice: { urls: string; username: string; credential: string }[];
+  ice: { urls: string[]; username: string; credential: string }[];
 }
 
 export type Ringing = {
   cardId: string;
   callId: string;
   calleeToken: string;
-  ice: { urls: string; username: string; credential: string }[];
+  ice: { urls: string[]; username: string; credential: string }[];
+  iceUrl: string;
+  iceUsername: string;
+  icePassword: string;
 };
 
 export type Revision = {
