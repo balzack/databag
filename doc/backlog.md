@@ -2,7 +2,7 @@
 
 # Backlog
 
-**Notification:** add content of message to push notification
+**Notification:** add content of message to push notification as optional admin config
 
 **Call UI:** pop-up window does not appear outside the app, nor does it activate the lock screen for interaction.
 
