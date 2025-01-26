@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, Modal, ScrollView, View } from 'react-native';
+import { Image, SafeAreaView, Modal, ScrollView, View } from 'react-native';
 import { Surface, Icon, Divider, Button, IconButton, Text, TextInput} from 'react-native-paper';
 import {styles} from './Calling.styled';
 import {useCalling} from './useCalling.hook';
 import {BlurView} from '@react-native-community/blur';
 import { Confirm } from '../confirm/Confirm';
+import { ActivityIndicator } from 'react-native-paper';
+import FastImage from 'react-native-fast-image'
 
 export function Calling({ callCard }: { callCard: string }) {
   const { state, actions } = useCalling();
   const [alert, setAlert] = useState(false);
+  const [connecting, setConnecting] = useState(false);
 
   const call = async (cardId: string) => {
-    try {
-      await actions.call(cardId);
-    } catch (err) {
-      console.log(err);
-      setAlert(true);
+    if (!connecting) {
+      setConnecting(true);
+      try {
+        await actions.call(cardId);
+      } catch (err) {
+        console.log(err);
+        setAlert(true);
+      }
+      setConnecting(false);
     }
   }
 
@@ -38,8 +45,20 @@ export function Calling({ callCard }: { callCard: string }) {
   }, [callCard]);
 
   return (
-    <View style={(state.link || state.ringing.length > 0 || alert) ? styles.active : styles.inactive}>
-      <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+    <View style={(connecting || state.calling || state.ringing.length > 0 || alert) ? styles.active : styles.inactive}>
+      <BlurView style={styles.blur} blurType="dark" blurAmount={9} reducedTransparencyFallbackColor="dark" />
+      { connecting && !state.calling && (
+        <ActivityIndicator size={72} />
+      )}
+      { state.calling && (
+        <View style={styles.frame}>
+          <Image
+            style={styles.image}
+            resizeMode="contain"
+            source={{ uri: state.calling.imageUrl }}
+          />
+        </View>
+      )}
       <Confirm show={alert} params={alertParams} />
     </View>
   );

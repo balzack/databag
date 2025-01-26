@@ -14,11 +14,26 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   inactive: {
     display: 'none',
     width: '100%',
     height: '100%',
     position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 8,
+  },
+  frame: {
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    padding: 16,
   },
 });

@@ -2,7 +2,7 @@ import { useState, useContext, useEffect, useRef } from 'react'
 import { DisplayContext } from '../context/DisplayContext';
 import { AppContext } from '../context/AppContext'
 import { ContextType } from '../context/ContextType'
-import { Link } from 'databag-client-sdk';
+import { Link, type Card } from 'databag-client-sdk';
 
 import {
   ScreenCapturePickerView,
@@ -19,13 +19,14 @@ import {
 export function useCalling() {
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
-  const call = useRef(null as { peerConnection: RTCPeerConnection, signalLink: Link } | null);
+  const call = useRef(null as { policy: string, peer: RTCPeerConnection, link: Link, candidates: RTCIceCandidate[] } | null);
   const [state, setState] = useState({
     strings: {}, 
     ringing: [],
     calls: [],
     cards: [],
-    calling: false,
+    calling: null as null | Card,
+    failed: false,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,6 +45,144 @@ export function useCalling() {
     const { strings } = display.state;
     updateState({ strings });
   }, [display.state]);
+
+  const constraints = {
+    mandatory: {
+      OfferToReceiveAudio: true,
+      OfferToReceiveVideo: false,
+      VoiceActivityDetection: true
+    }     
+  };        
+
+  const linkStatus = async (status: string) => {
+console.log("LINK STATUS: ", status);
+
+    if (call.current) {
+      const { policy, peer, link } = call.current;
+      if (status === 'connected') {
+        try {
+          const stream = await mediaDevices.getUserMedia({
+            audio: true,
+            video: {
+              frameRate: 30,
+              facingMode: 'user'
+            }
+          });
+          for (const track of stream.getTracks()) {
+            if (track.kind === 'audio') {
+              peer.addTrack(track, stream);
+            }
+            if (track.kind === 'video') {
+              track.enabled = false;
+            }
+          }
+        } catch (err) {
+          console.log(err);
+          updateState({ failed: true });
+        }
+      } else if (status === 'closed') {
+        try {
+          peer.close();
+          link.close();
+          link.clearStatusListener();
+          link.clearMessageListener();
+        } catch (err) {
+          console.log(err);
+        } 
+        call.current = null;
+        updateState({ calling: null, failed: false });
+      }
+    }
+  }
+
+  const linkMessage = async (message: any) => {
+console.log("LINK MSG: ", message);
+
+    if (call.current) {
+      const { peer, link, candidates, policy } = call.current;
+      try {
+        if (message.description) {
+          if (message.description.type === 'offer' && peer.signalingState !== 'stable') {
+            if (policy === 'polite') {
+              const rollback = new RTCSessionDescription({ type: 'rollback' });
+              await peer.setLocalDescription(rollback);
+            } else {
+              return;
+            }
+          }
+          const offer = new RTCSessionDescription(message.description);
+          await peer.setRemoteDescription(offer);
+          if (message.description.type === 'offer') {
+            const description = await peer.createAnswer();
+            await peer.setLocalDescription(description);
+            link.sendMessage({ description });
+          }
+
+          for (const candidate of candidates) {
+            await peer.addIceCandidate(candidate);
+          };
+          candidates.length = 0;
+        } else if (message.candidate) {
+          const candidate = new RTCIceCandidate(message.candidate);
+          if (peer.remoteDescription == null) {
+            candidates.push(candidate);
+          } else {
+            await peer.addIceCandidate(candidate);
+          }
+        }
+      } catch (err) {
+        console.log(err);
+        updateState({ failed: true });
+      }
+    }
+
+console.log("LINK MSG: done");
+
+  }
+
+  const peerCandidate = async (candidate) => {
+console.log("PEER CANDIDATE");
+    if (call.current && candidate) {
+      const { link } = call.current;
+      await link.sendMessage({ candidate });
+    }
+  }
+
+  const peerNegotiate = async () => {
+console.log("PEER NEGOTIATE");
+    if (call.current) {
+      const { peer, link } = call.current;
+      const description = await peer.createOffer(constraints);
+      await peer.setLocalDescription(description);
+      await link.sendMessage({ description });
+    }
+  }
+
+  const transmit = (ice: { urls: string; username: string; credential: string }[]) => {
+    const peerConnection = new RTCPeerConnection({ iceServers: ice });
+    peerConnection.addEventListener( 'connectionstatechange', event => {
+      console.log("CONNECTION STATE", event);
+    });
+    peerConnection.addEventListener( 'icecandidate', event => {
+      peerCandidate(event.candidate);
+    });
+    peerConnection.addEventListener( 'icecandidateerror', event => {
+      console.log("ICE ERROR");
+    });
+    peerConnection.addEventListener( 'iceconnectionstatechange', event => {
+      console.log("ICE STATE CHANGE", event);
+    });
+    peerConnection.addEventListener( 'negotiationneeded', event => {
+      peerNegotiate();
+    });
+    peerConnection.addEventListener( 'signalingstatechange', event => {
+      console.log("ICE SIGNALING", event);
+    });
+    peerConnection.addEventListener( 'track', event => {
+      console.log("TRACK EVENT");
+    });
+    return peerConnection;
+  }
 
   useEffect(() => {
     if (app.state.session) {
@@ -65,65 +204,40 @@ export function useCalling() {
   }, [app.state.session]);
 
   const actions = {
+    accept: async (callId: string, call: Call) => {
+      if (call.current) {
+        throw new Error('active call in progress');
+      }
+      const { cardId, node } = call;
+      const ring = app.state.session.getRing();
+      const link = await ring.accept(cardId, callId, node);
+      const ice = link.getIce();
+      const peer = transmit(ice);
+      const policy = 'impolite';
+      const candidates = [];
+      call.current = { policy, peer, link, candidates }; 
+      link.setStatusListener(linkStatus);
+      link.setMessageListener(linkMessage);
+      updateState({ calling: call.card }); 
+    },
     call: async (cardId: string) => {
       if (call.current) {
         throw new Error('active call in proegress');
       }
-
+      const card = state.cards.find(contact => contact.cardId === cardId);
+      if (!card) {
+        throw new Error('calling contact not found');
+      }
       const contact = app.state.session.getContact();
       const link = await contact.callCard(cardId);
       const ice = link.getIce();
-
-      const peerConnection = new RTCPeerConnection({ iceServers: ice });
-      peerConnection.addEventListener( 'connectionstatechange', event => {
-        console.log("CONNECTION STATE", event);
-      } );
-      peerConnection.addEventListener( 'icecandidate', event => {
-        console.log("ICE CANDIDATE", event);
-      } );
-      peerConnection.addEventListener( 'icecandidateerror', event => {
-        console.log("ICE ERROR");
-      } );
-      peerConnection.addEventListener( 'iceconnectionstatechange', event => {
-        console.log("ICE STATE CHANGE", event);
-      } );
-      peerConnection.addEventListener( 'negotiationneeded', async (ev) => {
-        console.log("ICE NEGOTIATION NEEDEED");
-      } );
-      peerConnection.addEventListener( 'signalingstatechange', event => {
-        console.log("ICE SIGNALING", event);
-      } );
-      peerConnection.addEventListener( 'track', event => {
-        console.log("TRACK EVENT");
-      } );
-
-      link.setStatusListener(async (status: string) => {
-        if (status === 'connected') {
-          try {
-            const stream = await mediaDevices.getUserMedia({
-              audio: true,
-              video: {
-                frameRate: 30,
-                facingMode: 'user'
-              }
-            });
-            for (const track of stream.getTracks()) {
-              if (track.kind === 'audio') {
-                peerConnection.addTrack(track, stream);
-              }
-              if (track.kind === 'video') {
-                track.enabled = false;
-              }
-            }
-          } catch (err) {
-            console.log(err);
-          }
-        }
-      });
-      link.setMessageListener(async (message: any) => {
-        // relay ice config
-      });
-      console.log(link);
+      const peer = transmit(ice);
+      const policy = 'polite';
+      const candidates = [];
+      call.current = { policy, peer, link, candidates };
+      link.setStatusListener(linkStatus);
+      link.setMessageListener(linkMessage);
+      updateState({ calling: card });
     },
   }
 

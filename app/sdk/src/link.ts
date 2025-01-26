@@ -5,6 +5,7 @@ import { removeContactCall } from './net/removeContactCall';
 import { addContactRing } from './net/addContactRing';
 import { keepCall } from './net/keepCall';
 
+const CLOSE_POLL_MS = 1000;
 const RETRY_INTERVAL = 1000;
 const PING_INTERVAL = 5000;
 const RING_INTERVAL = 2000;
@@ -120,11 +121,15 @@ export class LinkModule implements Link {
         this.log.error(err);
       }
     }
+    while (this.notifying) {
+      await new Promise((r) => setTimeout(r, CLOSE_POLL_MS));
+    }
   }
 
   public setStatusListener(listener: (status: string) => Promise<void>) {
     this.statusListener = listener;
-    this.notifyStatus(this.status);
+    this.messages.push(JSON.stringify({ status: this.status }));
+    this.notify();
   }
   public clearStatusListener() {
     this.statusListener = null;
@@ -139,16 +144,16 @@ export class LinkModule implements Link {
 
   public async sendMessage(message: any) {
     if (this.status !== 'connected') {
-      log.error('dropping message while not connected')
+      this.log.error('dropping message while not connected')
     } else {
       this.websocket.send(JSON.stringify(message));
     }
   }
 
   private async notify() {
-    if (!this.notifying) {
+    if (!this.notifying && !this.closed) {
       this.notifying = true;
-      while(this.messages.length > 0 && !this.error && !this.closed) {
+      while(this.messages.length > 0 && !this.error) {
         const data = this.messages.shift();
         try {
           const message = JSON.parse(data);
@@ -158,6 +163,8 @@ export class LinkModule implements Link {
             await this.notifyMessage(message);
           }
         } catch (err) {
+console.log("HERE!");
+this.log.error(err, data);
           this.log.error('failed to process signal message');
           this.notifyStatus('error');
         }
@@ -207,7 +214,8 @@ export class LinkModule implements Link {
       this.notify();
     };
     ws.onclose = (e) => {
-      this.notifyStatus('connecting');
+      this.messages.push(JSON.stringify({ status: 'connecting' }));
+      this.notify();
       setTimeout(() => {
         if (ws != null) {
           ws.onmessage = () => {};
@@ -222,7 +230,7 @@ export class LinkModule implements Link {
       ws.send(JSON.stringify({ AppToken: token }));
     };
     ws.onerror = (e) => {
-      log.error(e);
+      this.log.error(e);
       ws.close();
     };
     return ws;
