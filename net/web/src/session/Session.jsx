@@ -128,7 +128,7 @@ export function Session() {
     <ThemeProvider theme={settings.state.colors}>
       <SessionWrapper>
         { (state.display === 'xlarge') && (
-          <div class="desktop-layout noselect">
+          <div class="desktop-layout">
             <div class="left">
               <Identity openAccount={openAccount} openCards={openCards} cardUpdated={state.cardUpdated} />
               <div class="bottom">
@@ -192,7 +192,7 @@ export function Session() {
           </div>
         )}
         { (state.display === 'large' || state.display === 'medium') && (
-          <div class="tablet-layout noselect">
+          <div class="tablet-layout">
             <div class="left">
               <Identity openAccount={actions.openProfile} openCards={actions.openCards} cardUpdated={state.cardUpdated} />
               <div class="bottom">
@@ -250,7 +250,7 @@ export function Session() {
           </div>
         )}
         { (state.display === 'small') && (
-          <div class="mobile-layout noselect">
+          <div class="mobile-layout">
             <div class="top">
               <div class="reframe">
                 <Channels open={actions.openConversation} active={{ 
