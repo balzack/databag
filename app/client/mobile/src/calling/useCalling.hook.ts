@@ -27,6 +27,8 @@ export function useCalling() {
     cards: [],
     calling: null as null | Card,
     failed: false,
+    loaded: false,
+    panelOffset: 0,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -55,8 +57,6 @@ export function useCalling() {
   };        
 
   const linkStatus = async (status: string) => {
-console.log("LINK STATUS: ", status);
-
     if (call.current) {
       const { policy, peer, link } = call.current;
       if (status === 'connected') {
@@ -84,8 +84,6 @@ console.log("LINK STATUS: ", status);
         try {
           peer.close();
           link.close();
-          link.clearStatusListener();
-          link.clearMessageListener();
         } catch (err) {
           console.log(err);
         } 
@@ -96,8 +94,6 @@ console.log("LINK STATUS: ", status);
   }
 
   const linkMessage = async (message: any) => {
-console.log("LINK MSG: ", message);
-
     if (call.current) {
       const { peer, link, candidates, policy } = call.current;
       try {
@@ -135,13 +131,9 @@ console.log("LINK MSG: ", message);
         updateState({ failed: true });
       }
     }
-
-console.log("LINK MSG: done");
-
   }
 
   const peerCandidate = async (candidate) => {
-console.log("PEER CANDIDATE");
     if (call.current && candidate) {
       const { link } = call.current;
       await link.sendMessage({ candidate });
@@ -149,7 +141,6 @@ console.log("PEER CANDIDATE");
   }
 
   const peerNegotiate = async () => {
-console.log("PEER NEGOTIATE");
     if (call.current) {
       const { peer, link } = call.current;
       const description = await peer.createOffer(constraints);
@@ -204,6 +195,20 @@ console.log("PEER NEGOTIATE");
   }, [app.state.session]);
 
   const actions = {
+    end: async () => {
+      if (!call.current) {
+        throw new Error('no active call');
+      }
+      const { link, peer } = call.current;
+      try {
+        peer.close();
+        link.close();
+      } catch (err) {
+        console.log(err);
+      } 
+      call.current = null;
+      updateState({ calling: null });
+    },
     accept: async (callId: string, call: Call) => {
       if (call.current) {
         throw new Error('active call in progress');
@@ -239,6 +244,14 @@ console.log("PEER NEGOTIATE");
       link.setMessageListener(linkMessage);
       updateState({ calling: card });
     },
+    loaded: (e) => {
+      const { width, height } = e.nativeEvent.layout;
+      if (width > (height + 80)) {
+        updateState({ panelOffset: 0, loaded: true });
+      } else {
+        updateState({ panelOffset: ((height - width) - 80) / 2, loaded: true });
+      }
+    }
   }
 
   return { state, actions }

@@ -25,6 +25,11 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  call: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+  },
   image: {
     width: '100%',
     height: '100%',
@@ -32,8 +37,32 @@ export const styles = StyleSheet.create({
   },
   frame: {
     display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    overflow: 'hidden',
+    padding: 2,
+    position: 'relative',
+  },
+  closeIcon: {
+    borderRadius: 8,
+  },
+  name: {
+    fontSize: 28,
+    minWidth: '50%',
+    color: '#aaaaaa',
+    paddingLeft: 16,
     width: '100%',
-    height: '100%',
-    padding: 16,
+  },
+  overlap: {
+    display: 'flex',
+    flexDirection: 'row',
+    position: 'absolute',
+    alignItems: 'center',
+    width: '100%',
+    justifyContent: 'center',
+    paddingBottom: 8,
+    paddingTop: 8,
+    gap: 32,
   },
 });
