@@ -29,6 +29,12 @@ export function useCalling() {
     failed: false,
     loaded: false,
     panelOffset: 0,
+    stream: null,
+    audio: null,
+    audioEnabled: false,
+    video: null,
+    videoEnabled: false,
+    videoAdded: false,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -68,14 +74,16 @@ export function useCalling() {
               facingMode: 'user'
             }
           });
-          for (const track of stream.getTracks()) {
-            if (track.kind === 'audio') {
-              peer.addTrack(track, stream);
-            }
-            if (track.kind === 'video') {
-              track.enabled = false;
-            }
+          const audio = stream.getTracks().find(track => track.kind === 'audio');
+          const video = stream.getTracks().find(track => track.kind === 'video');
+          if (audio) {
+            audio.enabled = true;
+            peer.addTrack(audio, stream);
           }
+          if (video) {
+            video.enabled = false;
+          }
+          updateState({ audio, video, stream, audioAdded: true, audioEnabled: true, videoAdded: false, videoEnabled: false });
         } catch (err) {
           console.log(err);
           updateState({ failed: true });
@@ -88,7 +96,7 @@ export function useCalling() {
           console.log(err);
         } 
         call.current = null;
-        updateState({ calling: null, failed: false });
+        updateState({ calling: null, failed: false, audio: null, video: null });
       }
     }
   }
@@ -207,7 +215,7 @@ export function useCalling() {
         console.log(err);
       } 
       call.current = null;
-      updateState({ calling: null });
+      updateState({ calling: null, audio: null, video: null });
     },
     accept: async (callId: string, call: Call) => {
       if (call.current) {
@@ -251,7 +259,38 @@ export function useCalling() {
       } else {
         updateState({ panelOffset: ((height - width) - 80) / 2, loaded: true });
       }
-    }
+    },
+    enableAudio: async () => {
+      if (!call.current || !state.audio || !state.audioAdded) {
+        throw new Error('cannot unmute audio');
+      }
+      state.audio.enabled = true;
+      updateState({ audioEnabled: true });
+    },
+    disableAudio: () => {
+      if (!call.current || !state.audio || !state.audioAdded) {
+        throw new Error('cannot mute audio');
+      }
+      state.audio.enabled = false;
+      updateState({ audioEnabled: false });
+    },
+    enableVideo: () => {
+      if (!call.current || !state.video) {
+        throw new Error('cannot start video');
+      }
+      if (!state.videoAdded) {
+        call.current.peer.addTrack(state.video, state.stream);
+      }
+      state.video.enabled = true;
+      updateState({ videoAdded: true, videoEnabled: true });
+    },
+    disableVideo: () => {
+      if (!call.current || !state.video) {
+        throw new Error('cannot stop video');
+      }
+      state.video.enabled = false;
+      updateState({ videoEnabled: false });
+    },
   }
 
   return { state, actions }

@@ -16,6 +16,42 @@ export function Calling({ callCard }: { callCard: string }) {
   const [connecting, setConnecting] = useState(false);
   const [ending, setEnding] = useState(false);
   const {height, width} = useWindowDimensions();
+  const [applyingVideo, setApplyingVideo] = useState(false);
+  const [applyingAudio, setApplyingAudio] = useState(false);
+
+  const toggleVideo = async () => {
+    if (!applyingVideo) {
+      setApplyingVideo(true);
+      try {
+        if (state.video && state.videoEnabled) {
+          await actions.disableVideo();
+        } else if (state.video && !state.videoEnabled) {
+          await actions.enableVideo();
+        }
+      } catch (err) {
+        console.log(err);
+        setAlert(true);
+      }
+      setApplyingVideo(false);
+    }
+  }
+
+  const toggleAudio = async () => {
+    if (!applyingAudio) {
+      setApplyingAudio(true);
+      try {
+        if (state.audio && state.audioEnabled) {
+          await actions.disableAudio();
+        } else if (state.audio && !state.audioEnabled) {
+          await actions.enableAudio();
+        }
+      } catch (err) {
+        console.log(err);
+        setAlert(true);
+      }
+      setApplyingAudio(false);
+    }
+  }
 
   const end = async () => {
     if (!ending) {
@@ -112,8 +148,8 @@ export function Calling({ callCard }: { callCard: string }) {
         { state.calling && state.loaded && (
           <View style={{ ...styles.overlap, bottom: frameOffset }}>
             <View style={{ paddingTop: 8, paddingBottom: 8, paddingLeft: 16, paddingRight: 16, gap: 16, display: 'flex', flexDirection: 'row', borderRadius: 16, backgroundColor: 'rgba(128,128,128,0.5)' }}>
-            <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon="microphone" compact="true" mode="contained" size={32} onPress={end} />
-            <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon="video-outline"  compact="true" mode="contained" size={32} onPress={end} />
+            <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon={state.audioEnabled ? 'microphone-off' : 'microphone'} loading={applyingAudio} disabled={!state.audio} compact="true" mode="contained" size={32} onPress={toggleAudio} />
+            <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon={state.videoEnabled ? 'video-off-outline' : 'video-outline'} loading={applyingVideo} disabled={!state.video} compact="true" mode="contained" size={32} onPress={toggleVideo} />
             <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.danger} icon="phone-hangup-outline" compact="true" mode="contained" size={32} onPress={end} />
             </View>
           </View>
