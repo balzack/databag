@@ -64,54 +64,63 @@ export function Calling({ callCard }: { callCard: string }) {
   const overlap = (width + 128) > height;
   const frameWidth = width > height ? height : width - 16;
   const frameHeight = frameWidth;
-  //const frameHeight = overlap ? frameWidth : frameWidth + 128;
+  const frameOffset = (height - frameHeight) / 8;
   return (
-    <View style={(connecting || state.calling || state.ringing.length > 0 || alert) ? styles.active : styles.inactive}>
-      <BlurView style={styles.blur} blurType="dark" blurAmount={9} reducedTransparencyFallbackColor="dark" />
-      { connecting && !state.calling && (
-        <ActivityIndicator size={72} />
-      )}
-      { state.calling && (
-        <Surface style={{ ...styles.frame, width: frameWidth, height: frameHeight }}>
-          <Image
-            style={styles.image}
-            resizeMode="contain"
-            source={{ uri: state.calling.imageUrl }}
-            onLayout={actions.loaded}
-          />
-          { state.loaded && (
-            <LinearGradient style={{...styles.overlap, height: frameHeight / 2, top: 2, borderRadius: 8}} start={{x: 0, y: 0}} end={{x: 0, y: 0.5}} colors={['rgba(64,64,64,1)', 'rgba(64,64,64, 0)']}>
-            <LinearGradient style={{...styles.overlap, height: frameHeight / 2, top: 2, borderRadius: 8}} start={{x: 0, y: 0}} end={{x: 0, y: 0.5}} colors={['rgba(64,64,64,1)', 'rgba(64,64,64, 0)']}>
-            </LinearGradient>
-            </LinearGradient>
-          )}
-          { state.loaded && (
-            <LinearGradient style={{...styles.overlap, height: frameHeight / 2, bottom: 2, borderRadius: 8}} start={{x: 0, y: 0.5}} end={{x: 0, y: 1}} colors={['rgba(64,64,64,0)', 'rgba(64,64,64, 1)']}>
-            <LinearGradient style={{...styles.overlap, height: frameHeight / 2, bottom: 2, borderRadius: 8}} start={{x: 0, y: 0.5}} end={{x: 0, y: 1}} colors={['rgba(64,64,64,0)', 'rgba(64,64,64, 1)']}>
-            </LinearGradient>
-            </LinearGradient>
-          )}
-          { state.loaded && (
-            <View style={{ ...styles.overlap, top: 0 }}> 
-              { state.calling.name && (
-                <Text style={styles.name} adjustsFontSizeToFit={true} numberOfLines={1}>{ state.calling.name }</Text>
-              )}
-              { !state.calling.name && (
-                <Text style={styles.name} adjustsFontSizeToFit={true} numberOfLines={1}>{ `${state.calling.handle}/${state.calling.node}` }</Text>
-              )}
+    <SafeAreaView style={(connecting || state.calling || state.ringing.length > 0 || alert) ? styles.active : styles.inactive}>
+      <View style={styles.container}>
+        { connecting && !state.calling && (
+          <ActivityIndicator size={72} />
+        )}
+        { state.calling && (
+          <View style={{ ...styles.frame, top: frameOffset, width: frameWidth, height: frameHeight }}>
+            <Image
+              style={styles.image}
+              resizeMode="contain"
+              source={{ uri: state.calling.imageUrl }}
+              onLayout={actions.loaded}
+            />
+            { state.loaded && (
+              <LinearGradient style={{...styles.overlap, width: '100%', height: frameHeight / 2, top: 2, borderRadius: 8}} start={{x: 0, y: 0}} end={{x: 0, y: 0.5}} colors={['rgba(64,64,64,1)', 'rgba(64,64,64, 0)']}>
+              <LinearGradient style={{...styles.overlap, width: '100%', height: frameHeight / 2, top: 2, borderRadius: 8}} start={{x: 0, y: 0}} end={{x: 0, y: 0.5}} colors={['rgba(64,64,64,1)', 'rgba(64,64,64, 0)']}>
+              </LinearGradient>
+              </LinearGradient>
+            )}
+            { state.loaded && (
+              <LinearGradient style={{...styles.overlap, width: '100%', height: frameHeight / 2, bottom: 2, borderRadius: 8}} start={{x: 0, y: 0.5}} end={{x: 0, y: 1}} colors={['rgba(64,64,64,0)', 'rgba(64,64,64, 1)']}>
+              <LinearGradient style={{...styles.overlap, width: '100%', height: frameHeight / 2, bottom: 2, borderRadius: 8}} start={{x: 0, y: 0.5}} end={{x: 0, y: 1}} colors={['rgba(64,64,64,0)', 'rgba(64,64,64, 1)']}>
+              </LinearGradient>
+              </LinearGradient>
+            )}
+            { state.loaded && (
+              <LinearGradient style={{...styles.overlap, height: '100%', width: 16, right: 0}} start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['rgba(64,64,64,0)', 'rgba(64,64,64, 1)']} />
+            )}
+            { state.loaded && (
+              <LinearGradient style={{...styles.overlap, height: '100%', width: 16, left: 0}} start={{x: 1, y: 0}} end={{x: 0, y: 0}} colors={['rgba(64,64,64,0)', 'rgba(64,64,64, 1)']} />
+            )}
+          </View>
+        )}
+        { state.calling && state.loaded && (
+          <View style={{ ...styles.overlap, top: 0 }}> 
+            { state.calling.name && (
+              <Text style={styles.name} adjustsFontSizeToFit={true} numberOfLines={1}>{ state.calling.name }</Text>
+            )}
+            { !state.calling.name && (
+              <Text style={styles.name} adjustsFontSizeToFit={true} numberOfLines={1}>{ `${state.calling.handle}/${state.calling.node}` }</Text>
+            )}
+          </View>
+        )}
+        { state.calling && state.loaded && (
+          <View style={{ ...styles.overlap, bottom: frameOffset }}>
+            <View style={{ paddingTop: 8, paddingBottom: 8, paddingLeft: 16, paddingRight: 16, gap: 16, display: 'flex', flexDirection: 'row', borderRadius: 16, backgroundColor: 'rgba(128,128,128,0.5)' }}>
+            <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon="microphone" compact="true" mode="contained" size={32} onPress={end} />
+            <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon="video-outline"  compact="true" mode="contained" size={32} onPress={end} />
+            <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.danger} icon="phone-hangup-outline" compact="true" mode="contained" size={32} onPress={end} />
             </View>
-          )}
-          { state.loaded && (
-            <View style={{ ...styles.overlap, bottom: 0 }}>
-              <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon="microphone" compact="true" mode="contained" size={32} onPress={end} />
-              <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon="video-outline"  compact="true" mode="contained" size={32} onPress={end} />
-              <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.danger} icon="phone-hangup-outline" compact="true" mode="contained" size={32} onPress={end} />
-            </View>
-          )}
-        </Surface>
-      )}
+          </View>
+        )}
+      </View>
       <Confirm show={alert} params={alertParams} />
-    </View>
+    </SafeAreaView>
   );
 }
 
