@@ -9,6 +9,7 @@ import { ActivityIndicator } from 'react-native-paper';
 import FastImage from 'react-native-fast-image'
 import LinearGradient from 'react-native-linear-gradient';
 import { Colors } from '../constants/Colors';
+import { RTCView } from 'react-native-webrtc';
 
 export function Calling({ callCard }: { callCard: string }) {
   const { state, actions } = useCalling();
@@ -117,14 +118,12 @@ export function Calling({ callCard }: { callCard: string }) {
             />
             { state.loaded && (
               <LinearGradient style={{...styles.overlap, width: '100%', height: frameHeight / 2, top: 2, borderRadius: 8}} start={{x: 0, y: 0}} end={{x: 0, y: 0.5}} colors={['rgba(64,64,64,1)', 'rgba(64,64,64, 0)']}>
-              <LinearGradient style={{...styles.overlap, width: '100%', height: frameHeight / 2, top: 2, borderRadius: 8}} start={{x: 0, y: 0}} end={{x: 0, y: 0.5}} colors={['rgba(64,64,64,1)', 'rgba(64,64,64, 0)']}>
-              </LinearGradient>
+              <LinearGradient style={{...styles.overlap, width: '100%', height: frameHeight / 2, top: 2, borderRadius: 8}} start={{x: 0, y: 0}} end={{x: 0, y: 0.5}} colors={['rgba(64,64,64,1)', 'rgba(64,64,64, 0)']} />
               </LinearGradient>
             )}
             { state.loaded && (
               <LinearGradient style={{...styles.overlap, width: '100%', height: frameHeight / 2, bottom: 2, borderRadius: 8}} start={{x: 0, y: 0.5}} end={{x: 0, y: 1}} colors={['rgba(64,64,64,0)', 'rgba(64,64,64, 1)']}>
-              <LinearGradient style={{...styles.overlap, width: '100%', height: frameHeight / 2, bottom: 2, borderRadius: 8}} start={{x: 0, y: 0.5}} end={{x: 0, y: 1}} colors={['rgba(64,64,64,0)', 'rgba(64,64,64, 1)']}>
-              </LinearGradient>
+              <LinearGradient style={{...styles.overlap, width: '100%', height: frameHeight / 2, bottom: 2, borderRadius: 8}} start={{x: 0, y: 0.5}} end={{x: 0, y: 1}} colors={['rgba(64,64,64,0)', 'rgba(64,64,64, 1)']} />
               </LinearGradient>
             )}
             { state.loaded && (
@@ -144,6 +143,33 @@ export function Calling({ callCard }: { callCard: string }) {
               <Text style={styles.name} adjustsFontSizeToFit={true} numberOfLines={1}>{ `${state.calling.handle}/${state.calling.node}` }</Text>
             )}
           </View>
+        )}
+        { state.calling && state.loaded && state.remote && (
+          <RTCView
+            style={styles.full}
+            mirror={true}
+            objectFit={'contain'}
+            streamURL={state.remote.toURL()}
+            zOrder={2}
+          />
+        )}
+        { state.calling && state.loaded && state.local && !state.remote && (
+          <RTCView
+            style={styles.full}
+            mirror={true}
+            objectFit={'contain'}
+            streamURL={state.local.toURL()}
+            zOrder={2}
+          />
+        )}
+        { state.calling && state.loaded && state.local && state.remote && (
+          <RTCView
+            style={styles.box}
+            mirror={true}
+            objectFit={'contain'}
+            streamURL={state.local.toURL()}
+            zOrder={2}
+          />
         )}
         { state.calling && state.loaded && (
           <View style={{ ...styles.overlap, bottom: frameOffset }}>

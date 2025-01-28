@@ -74,4 +74,17 @@ export const styles = StyleSheet.create({
     paddingTop: 8,
     gap: 32,
   },
+  box: {
+    position: 'absolute',
+    top: 0,
+    right: 16,
+    width: '20%',
+    height: '20%',
+  },
+  full: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgb(64,64,64)',
+  },
 });

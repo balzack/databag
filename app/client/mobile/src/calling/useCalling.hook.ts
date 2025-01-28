@@ -11,7 +11,7 @@ import {
   RTCSessionDescription,
   RTCView,
   MediaStream,
-  MediaStreamTrack,
+  MediaiStreamTrack,
   mediaDevices,
   registerGlobals
 } from 'react-native-webrtc';
@@ -20,6 +20,8 @@ export function useCalling() {
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const call = useRef(null as { policy: string, peer: RTCPeerConnection, link: Link, candidates: RTCIceCandidate[] } | null);
+  const localStream = useRef(null);
+  const remoteStream = useRef(null);
   const [state, setState] = useState({
     strings: {}, 
     ringing: [],
@@ -29,7 +31,8 @@ export function useCalling() {
     failed: false,
     loaded: false,
     panelOffset: 0,
-    stream: null,
+    local: null,
+    remote: null,
     audio: null,
     audioEnabled: false,
     video: null,
@@ -67,23 +70,24 @@ export function useCalling() {
       const { policy, peer, link } = call.current;
       if (status === 'connected') {
         try {
-          const stream = await mediaDevices.getUserMedia({
+          remoteStream.current = new MediaStream();
+          localStream.current = await mediaDevices.getUserMedia({
             audio: true,
             video: {
               frameRate: 30,
               facingMode: 'user'
             }
           });
-          const audio = stream.getTracks().find(track => track.kind === 'audio');
-          const video = stream.getTracks().find(track => track.kind === 'video');
+          const audio = localStream.current.getTracks().find(track => track.kind === 'audio');
+          const video = localStream.current.getTracks().find(track => track.kind === 'video');
           if (audio) {
             audio.enabled = true;
-            peer.addTrack(audio, stream);
+            peer.addTrack(audio, localStream.current);
           }
           if (video) {
             video.enabled = false;
           }
-          updateState({ audio, video, stream, audioAdded: true, audioEnabled: true, videoAdded: false, videoEnabled: false });
+          updateState({ audio, video, audioAdded: true, audioEnabled: true, videoAdded: false, videoEnabled: false });
         } catch (err) {
           console.log(err);
           updateState({ failed: true });
@@ -96,32 +100,30 @@ export function useCalling() {
           console.log(err);
         } 
         call.current = null;
-        updateState({ calling: null, failed: false, audio: null, video: null });
+        localStream.current = null;
+        remoteStream.current = null,
+        updateState({ calling: null, failed: false, audio: null, video: null, local: null, remote: null });
       }
     }
   }
 
   const linkMessage = async (message: any) => {
+    console.log("LINK MSG", message);
     if (call.current) {
       const { peer, link, candidates, policy } = call.current;
       try {
         if (message.description) {
-          if (message.description.type === 'offer' && peer.signalingState !== 'stable') {
-            if (policy === 'polite') {
-              const rollback = new RTCSessionDescription({ type: 'rollback' });
-              await peer.setLocalDescription(rollback);
-            } else {
-              return;
-            }
-          }
           const offer = new RTCSessionDescription(message.description);
           await peer.setRemoteDescription(offer);
+console.log("SET REMOTE!!!");
           if (message.description.type === 'offer') {
+console.log("RESPOND OFFER");
             const description = await peer.createAnswer();
             await peer.setLocalDescription(description);
             link.sendMessage({ description });
           }
 
+          call.current.candidates = [];
           for (const candidate of candidates) {
             await peer.addIceCandidate(candidate);
           };
@@ -142,6 +144,7 @@ export function useCalling() {
   }
 
   const peerCandidate = async (candidate) => {
+    console.log("PEER CANDIDATE");
     if (call.current && candidate) {
       const { link } = call.current;
       await link.sendMessage({ candidate });
@@ -149,11 +152,16 @@ export function useCalling() {
   }
 
   const peerNegotiate = async () => {
+    console.log("PEER NEGOTIATE");
     if (call.current) {
-      const { peer, link } = call.current;
-      const description = await peer.createOffer(constraints);
-      await peer.setLocalDescription(description);
-      await link.sendMessage({ description });
+      try {
+        const { peer, link } = call.current;
+        const description = await peer.createOffer(constraints);
+        await peer.setLocalDescription(description);
+        await link.sendMessage({ description });
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 
@@ -178,7 +186,10 @@ export function useCalling() {
       console.log("ICE SIGNALING", event);
     });
     peerConnection.addEventListener( 'track', event => {
-      console.log("TRACK EVENT");
+      remoteStream.current.addTrack(event.track, remoteStream.current);
+      if (event.track.kind === 'video') {
+        updateState({ remote: remoteStream.current });
+      }
     });
     return peerConnection;
   }
@@ -215,7 +226,9 @@ export function useCalling() {
         console.log(err);
       } 
       call.current = null;
-      updateState({ calling: null, audio: null, video: null });
+      localStream.current = null;
+      remoteStream.current = null;
+      updateState({ calling: null, audio: null, video: null, local: null, remote: null });
     },
     accept: async (callId: string, call: Call) => {
       if (call.current) {
@@ -279,7 +292,10 @@ export function useCalling() {
         throw new Error('cannot start video');
       }
       if (!state.videoAdded) {
-        call.current.peer.addTrack(state.video, state.stream);
+        call.current.peer.addTrack(state.video, localStream.current);
+        const local = new MediaStream();
+        local.addTrack(state.video, local);
+        updateState({ local });
       }
       state.video.enabled = true;
       updateState({ videoAdded: true, videoEnabled: true });
