@@ -22,6 +22,9 @@ export function useCalling() {
   const call = useRef(null as { policy: string, peer: RTCPeerConnection, link: Link, candidates: RTCIceCandidate[] } | null);
   const localStream = useRef(null);
   const remoteStream = useRef(null);
+  const updatingPeer = useRef(false);
+  const peerUpdate = useRef([]);
+
   const [state, setState] = useState({
     strings: {}, 
     ringing: [],
@@ -82,7 +85,7 @@ export function useCalling() {
           const video = localStream.current.getTracks().find(track => track.kind === 'video');
           if (audio) {
             audio.enabled = true;
-            peer.addTrack(audio, localStream.current);
+            await updatePeer('local_track', audio);
           }
           if (video) {
             video.enabled = false;
@@ -93,13 +96,13 @@ export function useCalling() {
           updateState({ failed: true });
         }
       } else if (status === 'closed') {
+        call.current = null;
         try {
           peer.close();
           link.close();
         } catch (err) {
           console.log(err);
         } 
-        call.current = null;
         localStream.current = null;
         remoteStream.current = null,
         updateState({ calling: null, failed: false, audio: null, video: null, local: null, remote: null });
@@ -108,16 +111,13 @@ export function useCalling() {
   }
 
   const linkMessage = async (message: any) => {
-    console.log("LINK MSG", message);
     if (call.current) {
       const { peer, link, candidates, policy } = call.current;
       try {
         if (message.description) {
           const offer = new RTCSessionDescription(message.description);
           await peer.setRemoteDescription(offer);
-console.log("SET REMOTE!!!");
           if (message.description.type === 'offer') {
-console.log("RESPOND OFFER");
             const description = await peer.createAnswer();
             await peer.setLocalDescription(description);
             link.sendMessage({ description });
@@ -144,7 +144,6 @@ console.log("RESPOND OFFER");
   }
 
   const peerCandidate = async (candidate) => {
-    console.log("PEER CANDIDATE");
     if (call.current && candidate) {
       const { link } = call.current;
       await link.sendMessage({ candidate });
@@ -152,7 +151,6 @@ console.log("RESPOND OFFER");
   }
 
   const peerNegotiate = async () => {
-    console.log("PEER NEGOTIATE");
     if (call.current) {
       try {
         const { peer, link } = call.current;
@@ -165,13 +163,47 @@ console.log("RESPOND OFFER");
     }
   }
 
+  const peerTrack = async (track) => {
+    if (call.current) {
+      try {
+        const { peer } = call.current;
+        await peer.addTrack(track, localStream.current);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
+  const updatePeer = async (type: string, data: any) => {
+    peerUpdate.current.push({ type, data });
+
+    if (!updatingPeer.current) {
+      updatingPeer.current = true;
+      while (peerUpdate.current.length > 0) {
+        const { type, data } = peerUpdate.current.shift();
+        if (type === 'negotiate') {
+          await peerNegotiate();
+        } else if (type === 'candidate') {
+          await peerCandidate(data);
+        } else if (type === 'message') {
+          await linkMessage(data);
+        } else if (type === 'remote_track') {
+          await remoteStream.current.addTrack(data, remoteStream.current);
+        } else if (type === 'local_track') {
+          await peerTrack(data);
+        }
+      }
+      updatingPeer.current = false;
+    }
+  }
+
   const transmit = (ice: { urls: string; username: string; credential: string }[]) => {
     const peerConnection = new RTCPeerConnection({ iceServers: ice });
     peerConnection.addEventListener( 'connectionstatechange', event => {
       console.log("CONNECTION STATE", event);
     });
     peerConnection.addEventListener( 'icecandidate', event => {
-      peerCandidate(event.candidate);
+      updatePeer('candidate', event.candidate);
     });
     peerConnection.addEventListener( 'icecandidateerror', event => {
       console.log("ICE ERROR");
@@ -180,13 +212,14 @@ console.log("RESPOND OFFER");
       console.log("ICE STATE CHANGE", event);
     });
     peerConnection.addEventListener( 'negotiationneeded', event => {
-      peerNegotiate();
+      updatePeer('negotiate');
     });
     peerConnection.addEventListener( 'signalingstatechange', event => {
       console.log("ICE SIGNALING", event);
     });
     peerConnection.addEventListener( 'track', event => {
-      remoteStream.current.addTrack(event.track, remoteStream.current);
+      updatePeer('remote_track', event.track);
+
       if (event.track.kind === 'video') {
         updateState({ remote: remoteStream.current });
       }
@@ -243,7 +276,7 @@ console.log("RESPOND OFFER");
       const candidates = [];
       call.current = { policy, peer, link, candidates }; 
       link.setStatusListener(linkStatus);
-      link.setMessageListener(linkMessage);
+      link.setMessageListener((msg) => updatePeer('message', msg));
       updateState({ calling: call.card }); 
     },
     call: async (cardId: string) => {

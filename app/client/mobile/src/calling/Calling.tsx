@@ -174,8 +174,8 @@ export function Calling({ callCard }: { callCard: string }) {
         { state.calling && state.loaded && (
           <View style={{ ...styles.overlap, bottom: frameOffset }}>
             <View style={{ paddingTop: 8, paddingBottom: 8, paddingLeft: 16, paddingRight: 16, gap: 16, display: 'flex', flexDirection: 'row', borderRadius: 16, backgroundColor: 'rgba(128,128,128,0.5)' }}>
-            <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon={state.audioEnabled ? 'microphone-off' : 'microphone'} loading={applyingAudio} disabled={!state.audio} compact="true" mode="contained" size={32} onPress={toggleAudio} />
-            <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon={state.videoEnabled ? 'video-off-outline' : 'video-outline'} loading={applyingVideo} disabled={!state.video} compact="true" mode="contained" size={32} onPress={toggleVideo} />
+            <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon={state.audioEnabled ? 'microphone' : 'microphone-off'} loading={applyingAudio} disabled={!state.audio} compact="true" mode="contained" size={32} onPress={toggleAudio} />
+            <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon={state.videoEnabled ? 'video-outline' : 'video-off-outline'} loading={applyingVideo} disabled={!state.video} compact="true" mode="contained" size={32} onPress={toggleVideo} />
             <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.danger} icon="phone-hangup-outline" compact="true" mode="contained" size={32} onPress={end} />
             </View>
           </View>
