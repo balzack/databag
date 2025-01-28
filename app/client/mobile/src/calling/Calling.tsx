@@ -111,20 +111,16 @@ export function Calling({ callCard }: { callCard: string }) {
         { state.calling && (
           <View style={{ ...styles.frame, top: frameOffset, width: frameWidth, height: frameHeight }}>
             <Image
-              style={styles.image}
+              style={{ ...styles.image, opacity: state.loaded ? 1 : 0 }}
               resizeMode="contain"
               source={{ uri: state.calling.imageUrl }}
               onLayout={actions.loaded}
             />
             { state.loaded && (
-              <LinearGradient style={{...styles.overlap, width: '100%', height: frameHeight / 2, top: 2, borderRadius: 8}} start={{x: 0, y: 0}} end={{x: 0, y: 0.5}} colors={['rgba(64,64,64,1)', 'rgba(64,64,64, 0)']}>
-              <LinearGradient style={{...styles.overlap, width: '100%', height: frameHeight / 2, top: 2, borderRadius: 8}} start={{x: 0, y: 0}} end={{x: 0, y: 0.5}} colors={['rgba(64,64,64,1)', 'rgba(64,64,64, 0)']} />
-              </LinearGradient>
+              <LinearGradient style={{...styles.overlap, width: '100%', height: 16, top: 0, borderRadius: 8}} start={{x: 0, y: 0}} end={{x: 0, y: 1}} colors={['rgba(64,64,64,1)', 'rgba(64,64,64, 0)']} />
             )}
             { state.loaded && (
-              <LinearGradient style={{...styles.overlap, width: '100%', height: frameHeight / 2, bottom: 2, borderRadius: 8}} start={{x: 0, y: 0.5}} end={{x: 0, y: 1}} colors={['rgba(64,64,64,0)', 'rgba(64,64,64, 1)']}>
-              <LinearGradient style={{...styles.overlap, width: '100%', height: frameHeight / 2, bottom: 2, borderRadius: 8}} start={{x: 0, y: 0.5}} end={{x: 0, y: 1}} colors={['rgba(64,64,64,0)', 'rgba(64,64,64, 1)']} />
-              </LinearGradient>
+              <LinearGradient style={{...styles.overlap, width: '100%', height: 16, bottom: 0, borderRadius: 8}} start={{x: 0, y: 0.2}} end={{x: 0, y: 1}} colors={['rgba(64,64,64,0)', 'rgba(64,64,64, 1)']} />
             )}
             { state.loaded && (
               <LinearGradient style={{...styles.overlap, height: '100%', width: 16, right: 0}} start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['rgba(64,64,64,0)', 'rgba(64,64,64, 1)']} />
@@ -135,13 +131,15 @@ export function Calling({ callCard }: { callCard: string }) {
           </View>
         )}
         { state.calling && state.loaded && (
-          <View style={{ ...styles.overlap, top: 0 }}> 
+          <View style={{ ...styles.overlap, top: 16 }}>
+            <View style={{backgroundColor: 'rgba(32,32,32,0.8', borderRadius: 4 }}> 
             { state.calling.name && (
               <Text style={styles.name} adjustsFontSizeToFit={true} numberOfLines={1}>{ state.calling.name }</Text>
             )}
             { !state.calling.name && (
               <Text style={styles.name} adjustsFontSizeToFit={true} numberOfLines={1}>{ `${state.calling.handle}/${state.calling.node}` }</Text>
             )}
+            </View>
           </View>
         )}
         { state.calling && state.loaded && state.remote && (
@@ -173,7 +171,7 @@ export function Calling({ callCard }: { callCard: string }) {
         )}
         { state.calling && state.loaded && (
           <View style={{ ...styles.overlap, bottom: frameOffset }}>
-            <View style={{ paddingTop: 8, paddingBottom: 8, paddingLeft: 16, paddingRight: 16, gap: 16, display: 'flex', flexDirection: 'row', borderRadius: 16, backgroundColor: 'rgba(128,128,128,0.5)' }}>
+            <View style={{ paddingTop: 8, paddingBottom: 8, paddingLeft: 16, paddingRight: 16, gap: 16, display: 'flex', flexDirection: 'row', borderRadius: 16, backgroundColor: 'rgba(128,128,128,0.6)' }}>
             <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon={state.audioEnabled ? 'microphone' : 'microphone-off'} loading={applyingAudio} disabled={!state.audio} compact="true" mode="contained" size={32} onPress={toggleAudio} />
             <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon={state.videoEnabled ? 'video-outline' : 'video-off-outline'} loading={applyingVideo} disabled={!state.video} compact="true" mode="contained" size={32} onPress={toggleVideo} />
             <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.danger} icon="phone-hangup-outline" compact="true" mode="contained" size={32} onPress={end} />

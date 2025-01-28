@@ -58,9 +58,9 @@ export const styles = StyleSheet.create({
   },
   name: {
     fontSize: 28,
-    minWidth: '50%',
     color: '#aaaaaa',
     paddingLeft: 16,
+    paddingRight: 16,
     width: '100%',
     textAlign: 'center',
   },
