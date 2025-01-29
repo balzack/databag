@@ -169,7 +169,7 @@ export function useCalling() {
     if (call.current) {
       try {
         const { peer } = call.current;
-        await peer.addTrack(track, localStream.current);
+        peer.addTrack(track, localStream.current);
       } catch (err) {
         console.log(err);
       }
@@ -190,7 +190,7 @@ export function useCalling() {
         } else if (type === 'message') {
           await linkMessage(data);
         } else if (type === 'remote_track') {
-          await remoteStream.current.addTrack(data, remoteStream.current);
+          remoteStream.current.addTrack(data, remoteStream.current);
           if (data.kind === 'video') {
             updateState({ remote: remoteStream.current });
           }
@@ -270,9 +270,7 @@ export function useCalling() {
       }
       const { cardId, node } = card;
       const ring = app.state.session.getRing();
-console.log("ACCEPTING");
       const link = await ring.accept(cardId, callId, node);
-console.log("ACCEPTED");
       const ice = link.getIce();
       const peer = transmit(ice);
       const policy = 'impolite';
@@ -281,7 +279,6 @@ console.log("ACCEPTED");
       link.setStatusListener(linkStatus);
       link.setMessageListener((msg) => updatePeer('message', msg));
       updateState({ calling: card });
-console.log("DONE");
     },
     call: async (cardId: string) => {
       if (call.current) {
@@ -328,13 +325,13 @@ console.log("DONE");
       if (!call.current || !state.video) {
         throw new Error('cannot start video');
       }
+      state.video.enabled = true;
       if (!state.videoAdded) {
-        call.current.peer.addTrack(state.video, localStream.current);
         const local = new MediaStream();
         local.addTrack(state.video, local);
         updateState({ local });
+        updatePeer('local_track', state.video);
       }
-      state.video.enabled = true;
       updateState({ videoAdded: true, videoEnabled: true });
     },
     disableVideo: () => {

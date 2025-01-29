@@ -96,16 +96,7 @@ export class LinkModule implements Link {
         this.log.error(err);
       }
     }
-    this.connect(token, server, !insecure);
-  }
-
-  private connect(token: string, node: string, secure: boolean) {
     this.websocket = this.setWebSocket(token, node, secure);
-    this.staleInterval = setInterval(() => {
-      if (this.websocket?.readyState == 1) {
-        this.websocket.ping?.(); // not defined in browser
-      }
-    }, PING_INTERVAL);
   }
 
   public async close() {

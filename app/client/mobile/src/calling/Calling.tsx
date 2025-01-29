@@ -195,7 +195,6 @@ export function Calling({ callCard }: { callCard: string }) {
           mirror={true}
           objectFit={'contain'}
           streamURL={state.local.toURL()}
-          zOrder={2}
         />
       )}
       { state.calling && state.loaded && state.local && state.remote && (
@@ -204,7 +203,6 @@ export function Calling({ callCard }: { callCard: string }) {
           mirror={true}
           objectFit={'contain'}
           streamURL={state.local.toURL()}
-          zOrder={2}
         />
       )}
       { state.calling && state.loaded && (
