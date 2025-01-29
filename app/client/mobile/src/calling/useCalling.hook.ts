@@ -112,7 +112,7 @@ export function useCalling() {
 
   const linkMessage = async (message: any) => {
     if (call.current) {
-      const { peer, link, candidates, policy } = call.current;
+      const { peer, link, policy } = call.current;
       try {
         if (message.description) {
           const offer = new RTCSessionDescription(message.description);
@@ -123,11 +123,13 @@ export function useCalling() {
             link.sendMessage({ description });
           }
 
-          call.current.candidates = [];
-          for (const candidate of candidates) {
-            await peer.addIceCandidate(candidate);
-          };
-          candidates.length = 0;
+          if (call.current) {
+            const { candidates } = call.current;
+            call.current.candidates = [];
+            for (const candidate of candidates) {
+              await peer.addIceCandidate(candidate);
+            };
+          }
         } else if (message.candidate) {
           const candidate = new RTCIceCandidate(message.candidate);
           if (peer.remoteDescription == null) {
@@ -189,6 +191,9 @@ export function useCalling() {
           await linkMessage(data);
         } else if (type === 'remote_track') {
           await remoteStream.current.addTrack(data, remoteStream.current);
+          if (data.kind === 'video') {
+            updateState({ remote: remoteStream.current });
+          }
         } else if (type === 'local_track') {
           await peerTrack(data);
         }
@@ -219,10 +224,6 @@ export function useCalling() {
     });
     peerConnection.addEventListener( 'track', event => {
       updatePeer('remote_track', event.track);
-
-      if (event.track.kind === 'video') {
-        updateState({ remote: remoteStream.current });
-      }
     });
     return peerConnection;
   }
@@ -263,13 +264,15 @@ export function useCalling() {
       remoteStream.current = null;
       updateState({ calling: null, audio: null, video: null, local: null, remote: null });
     },
-    accept: async (callId: string, call: Call) => {
+    accept: async (callId: string, card: Card) => {
       if (call.current) {
         throw new Error('active call in progress');
       }
-      const { cardId, node } = call;
+      const { cardId, node } = card;
       const ring = app.state.session.getRing();
+console.log("ACCEPTING");
       const link = await ring.accept(cardId, callId, node);
+console.log("ACCEPTED");
       const ice = link.getIce();
       const peer = transmit(ice);
       const policy = 'impolite';
@@ -277,7 +280,8 @@ export function useCalling() {
       call.current = { policy, peer, link, candidates }; 
       link.setStatusListener(linkStatus);
       link.setMessageListener((msg) => updatePeer('message', msg));
-      updateState({ calling: call.card }); 
+      updateState({ calling: card });
+console.log("DONE");
     },
     call: async (cardId: string) => {
       if (call.current) {
@@ -295,7 +299,7 @@ export function useCalling() {
       const candidates = [];
       call.current = { policy, peer, link, candidates };
       link.setStatusListener(linkStatus);
-      link.setMessageListener(linkMessage);
+      link.setMessageListener((msg) => updatePeer('message', msg));
       updateState({ calling: card });
     },
     loaded: (e) => {

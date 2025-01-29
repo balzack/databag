@@ -10,6 +10,7 @@ import FastImage from 'react-native-fast-image'
 import LinearGradient from 'react-native-linear-gradient';
 import { Colors } from '../constants/Colors';
 import { RTCView } from 'react-native-webrtc';
+import { Card } from '../card/Card';
 
 export function Calling({ callCard }: { callCard: string }) {
   const { state, actions } = useCalling();
@@ -80,6 +81,19 @@ export function Calling({ callCard }: { callCard: string }) {
     }
   }
 
+  const accept = async (callId, card) => {
+    if (!connecting) {
+      setConnecting(true);
+      try {
+        await actions.accept(callId, card);
+      } catch (err) {
+        console.log(err);
+        setAlert(true);
+      }
+      setConnecting(false);
+    }
+  }
+
   const alertParams = {
     title: state.strings.operationFailed,
     prompt: state.strings.tryAgain,
@@ -98,17 +112,40 @@ export function Calling({ callCard }: { callCard: string }) {
     }
   }, [callCard]);
 
+  const calls = state.calls.map((contact, index) => {
+    const { callId, card } = contact;
+    const { name, handle, node, imageUrl } = card;
+    const ignore = <IconButton key="ignore" style={styles.circleIcon} iconColor="white" containerColor={Colors.pending} icon="eye-off-outline" compact="true" mode="contained" size={24} onPress={()=>{}} />
+    const decline = <IconButton key="decline" style={styles.flipIcon} iconColor="white" containerColor={Colors.offsync} icon="phone-outline" compact="true" mode="contained" size={24} onPress={()=>{}} />
+    const accept = <IconButton key="accept" style={styles.circleIcon} iconColor="white" containerColor={Colors.primary} icon="phone-outline" compact="true" mode="contained" size={24} onPress={()=>actions.accept(callId, card)} />
+    return (
+      <Surface mode="flat" key={index}>
+        <Card containerStyle={styles.card} placeholder={''} imageUrl={imageUrl} name={name} node={node} handle={handle} actions={[ignore, decline, accept]} />
+      </Surface>
+    )
+  });
+
   const overlap = (width + 128) > height;
   const frameWidth = width > height ? height : width - 16;
   const frameHeight = frameWidth;
-  const frameOffset = (height - frameHeight) / 8;
+  const frameOffset = (height - frameHeight) / 4;
   return (
-    <SafeAreaView style={(connecting || state.calling || state.ringing.length > 0 || alert) ? styles.active : styles.inactive}>
-      <View style={styles.container}>
-        { connecting && !state.calling && (
+    <View style={(connecting || state.calling || state.calls.length > 0 || alert) ? styles.active : styles.inactive}>
+      { state.calls.length > 0 && !connecting && !state.calling && (
+        <View style={styles.base}>
+          <BlurView style={styles.blur} />
+          <View style={styles.calls}>
+            { calls }
+          </View>
+        </View>
+      )}
+      { connecting && !state.calling && (
+        <View style={styles.container}>
           <ActivityIndicator size={72} />
-        )}
-        { state.calling && (
+        </View>
+      )}
+      { state.calling && (
+        <View style={styles.container}>
           <View style={{ ...styles.frame, top: frameOffset, width: frameWidth, height: frameHeight }}>
             <Image
               style={{ ...styles.image, opacity: state.loaded ? 1 : 0 }}
@@ -129,58 +166,58 @@ export function Calling({ callCard }: { callCard: string }) {
               <LinearGradient style={{...styles.overlap, height: '100%', width: 16, left: 0}} start={{x: 1, y: 0}} end={{x: 0, y: 0}} colors={['rgba(64,64,64,0)', 'rgba(64,64,64, 1)']} />
             )}
           </View>
-        )}
-        { state.calling && state.loaded && (
-          <View style={{ ...styles.overlap, top: 16 }}>
-            <View style={{backgroundColor: 'rgba(32,32,32,0.8', borderRadius: 4 }}> 
-            { state.calling.name && (
-              <Text style={styles.name} adjustsFontSizeToFit={true} numberOfLines={1}>{ state.calling.name }</Text>
-            )}
-            { !state.calling.name && (
-              <Text style={styles.name} adjustsFontSizeToFit={true} numberOfLines={1}>{ `${state.calling.handle}/${state.calling.node}` }</Text>
-            )}
-            </View>
+        </View>
+      )}
+      { state.calling && state.loaded && (
+        <View style={{ ...styles.overlap, top: 64 }}>
+          <View style={{backgroundColor: 'rgba(32,32,32,0.8', borderRadius: 4 }}> 
+          { state.calling.name && (
+            <Text style={styles.name} adjustsFontSizeToFit={true} numberOfLines={1}>{ state.calling.name }</Text>
+          )}
+          { !state.calling.name && (
+            <Text style={styles.name} adjustsFontSizeToFit={true} numberOfLines={1}>{ `${state.calling.handle}/${state.calling.node}` }</Text>
+          )}
           </View>
-        )}
-        { state.calling && state.loaded && state.remote && (
-          <RTCView
-            style={styles.full}
-            mirror={true}
-            objectFit={'contain'}
-            streamURL={state.remote.toURL()}
-            zOrder={2}
-          />
-        )}
-        { state.calling && state.loaded && state.local && !state.remote && (
-          <RTCView
-            style={styles.full}
-            mirror={true}
-            objectFit={'contain'}
-            streamURL={state.local.toURL()}
-            zOrder={2}
-          />
-        )}
-        { state.calling && state.loaded && state.local && state.remote && (
-          <RTCView
-            style={styles.box}
-            mirror={true}
-            objectFit={'contain'}
-            streamURL={state.local.toURL()}
-            zOrder={2}
-          />
-        )}
-        { state.calling && state.loaded && (
-          <View style={{ ...styles.overlap, bottom: frameOffset }}>
-            <View style={{ paddingTop: 8, paddingBottom: 8, paddingLeft: 16, paddingRight: 16, gap: 16, display: 'flex', flexDirection: 'row', borderRadius: 16, backgroundColor: 'rgba(128,128,128,0.6)' }}>
-            <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon={state.audioEnabled ? 'microphone' : 'microphone-off'} loading={applyingAudio} disabled={!state.audio} compact="true" mode="contained" size={32} onPress={toggleAudio} />
-            <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon={state.videoEnabled ? 'video-outline' : 'video-off-outline'} loading={applyingVideo} disabled={!state.video} compact="true" mode="contained" size={32} onPress={toggleVideo} />
-            <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.danger} icon="phone-hangup-outline" compact="true" mode="contained" size={32} onPress={end} />
-            </View>
+        </View>
+      )}
+      { state.calling && state.loaded && state.remote && (
+        <RTCView
+          style={styles.full}
+          mirror={true}
+          objectFit={'contain'}
+          streamURL={state.remote.toURL()}
+          zOrder={2}
+        />
+      )}
+      { state.calling && state.loaded && state.local && !state.remote && (
+        <RTCView
+          style={styles.full}
+          mirror={true}
+          objectFit={'contain'}
+          streamURL={state.local.toURL()}
+          zOrder={2}
+        />
+      )}
+      { state.calling && state.loaded && state.local && state.remote && (
+        <RTCView
+          style={styles.box}
+          mirror={true}
+          objectFit={'contain'}
+          streamURL={state.local.toURL()}
+          zOrder={2}
+        />
+      )}
+      { state.calling && state.loaded && (
+        <View style={{ ...styles.overlap, bottom: frameOffset }}>
+          <View style={{ paddingTop: 8, paddingBottom: 8, paddingLeft: 16, paddingRight: 16, gap: 16, display: 'flex', flexDirection: 'row', borderRadius: 16, backgroundColor: 'rgba(128,128,128,0.6)' }}>
+          <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon={state.audioEnabled ? 'microphone' : 'microphone-off'} loading={applyingAudio} disabled={!state.audio} compact="true" mode="contained" size={32} onPress={toggleAudio} />
+          <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon={state.videoEnabled ? 'video-outline' : 'video-off-outline'} loading={applyingVideo} disabled={!state.video} compact="true" mode="contained" size={32} onPress={toggleVideo} />
+          <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.danger} icon="phone-hangup-outline" compact="true" mode="contained" size={32} onPress={end} />
           </View>
-        )}
-      </View>
+        </View>
+      )}
       <Confirm show={alert} params={alertParams} />
-    </SafeAreaView>
+    </View>
   );
 }
 

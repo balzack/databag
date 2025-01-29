@@ -53,7 +53,13 @@ export class LinkModule implements Link {
 
   public async call(node: string, secure: boolean, token: string, cardId: string, contactNode: string, contactGuid: string, contactToken: string) {
     const call = await addCall(node, secure, token, cardId);
-    this.cleanup = () => { removeCall(node, secure, token, call.id) };
+    this.cleanup = async () => {
+      try {
+        await removeCall(node, secure, token, call.id)
+      } catch (err) {
+        this.log.error(err);
+      }
+    }
 
     const { id, keepAlive, calleeToken, callerToken, ice } = call;
     const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(contactNode);
@@ -84,7 +90,13 @@ export class LinkModule implements Link {
   public async join(server: string, access: string, ice: { urls: string; username: string; credential: string }[]) {
     this.ice = ice;
     const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
-    this.cleanup = () => { removeContactCall(server, !insecure, access); }
+    this.cleanup = async () => { 
+      try { 
+        await removeContactCall(server, !insecure, access);
+      } catch (err) {
+        this.log.error(err);
+      }
+    }
     this.connect(access, server, !insecure);
   }
 
@@ -163,8 +175,6 @@ export class LinkModule implements Link {
             await this.notifyMessage(message);
           }
         } catch (err) {
-console.log("HERE!");
-this.log.error(err, data);
           this.log.error('failed to process signal message');
           this.notifyStatus('error');
         }

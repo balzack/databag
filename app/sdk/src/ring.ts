@@ -19,7 +19,6 @@ export class RingModule implements Ring {
     this.log = log;
     this.emitter = new EventEmitter();
     this.calls = new Map<string, { call: Call, expires: number }>();
-    this.ringing = [];
     this.expire = null;
     this.closed = false;
   }
@@ -58,20 +57,20 @@ export class RingModule implements Ring {
   public async accept(cardId: string, callId: string, contactNode: string): Promise<Link> {
     const now = (new Date()).getTime();
     const id = `${cardId}:${callId}`;
-    const entry = this.ringing.get(id);
+    const entry = this.calls.get(id);
     if (!entry || entry.expires < now || entry.status !== 'ringing') {
       throw new Error('invalid ringing entry');
     }
     entry.status = 'accepted';
     this.emitRinging();
     const link = new LinkModule(this.log);
-    await link.join(contactNode, entry.call.calleeToken, ice);
+    await link.join(contactNode, entry.call.calleeToken, entry.call.ice);
     return link;
   }
 
   public async ignore(cardId: stirng, callId: string): Promise<void> {
     const id = `${cardId}:${callId}`;
-    const entry = this.ringing.get(id);
+    const entry = this.calls.get(id);
     if (!entry || entry.expires < now || entry.status !== 'ringing') {
       throw new Error('invalid ringing entry');
     }
@@ -81,7 +80,7 @@ export class RingModule implements Ring {
 
   public async decline(cardId: string, callId: string, contactNode: string): Promise<void> {
     const id = `${cardId}:${callId}`;
-    const entry = this.ringing.get(id);
+    const entry = this.calls.get(id);
     if (!entry || entry.expires < now || entry.status !== 'ringing') {
       throw new Error('invalid ringing entry');
     }

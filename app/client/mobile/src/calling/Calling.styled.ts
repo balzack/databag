@@ -16,7 +16,6 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgb(64,64,64)',
   },
   inactive: {
     display: 'none',
@@ -25,7 +24,13 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgb(64,64,64)',
+  },
+  base: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   container: {
     width: '100%',
@@ -33,6 +38,11 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'rgb(64,64,64)',
+  },
+  calls: {
+    borderRadius: 8,
+    overflow: 'hidden',
   },
   call: {
     width: '100%',
@@ -55,6 +65,11 @@ export const styles = StyleSheet.create({
   },
   closeIcon: {
     borderRadius: 8,
+  },
+  circleIcon: {
+  },
+  flipIcon: {
+    transform: [{ rotate: '135deg' }],
   },
   name: {
     fontSize: 28,
@@ -87,4 +102,12 @@ export const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: 'rgb(64,64,64)',
   },
+  card: {
+    width: '100%',
+    height: 48,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 16,
+    borderBottomWidth: 1,
+  }
 });
