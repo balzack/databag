@@ -71,7 +71,8 @@ export class RingModule implements Ring {
     return link;
   }
 
-  public async ignore(cardId: stirng, callId: string): Promise<void> {
+  public async ignore(cardId: string, callId: string): Promise<void> {
+    const now = (new Date()).getTime();
     const id = `${cardId}:${callId}`;
     const entry = this.calls.get(id);
     if (!entry || entry.expires < now || entry.status !== 'ringing') {
@@ -82,6 +83,7 @@ export class RingModule implements Ring {
   }
 
   public async decline(cardId: string, callId: string): Promise<void> {
+    const now = (new Date()).getTime();
     const id = `${cardId}:${callId}`;
     const entry = this.calls.get(id);
     if (!entry || entry.expires < now || entry.status !== 'ringing') {

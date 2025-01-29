@@ -83,7 +83,7 @@ export class LinkModule implements Link {
     }, RING_INTERVAL);
 
     this.ice = ice;
-    this.connect(callerToken, node, secure);
+    this.websocket = this.setWebSocket(callerToken, node, secure);
   }
 
   public async join(server: string, secure: boolean, token: string, ice: { urls: string; username: string; credential: string }[], endCall: ()=>Promise<void>) {
@@ -96,7 +96,7 @@ export class LinkModule implements Link {
         this.log.error(err);
       }
     }
-    this.websocket = this.setWebSocket(token, node, secure);
+    this.websocket = this.setWebSocket(token, server, secure);
   }
 
   public async close() {

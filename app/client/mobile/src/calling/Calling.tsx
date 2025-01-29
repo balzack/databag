@@ -11,6 +11,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Colors } from '../constants/Colors';
 import { RTCView } from 'react-native-webrtc';
 import { Card } from '../card/Card';
+import { activateKeepAwake, deactivateKeepAwake} from "@sayem314/react-native-keep-awake";
 
 export function Calling({ callCard }: { callCard: string }) {
   const { state, actions } = useCalling();
@@ -20,6 +21,9 @@ export function Calling({ callCard }: { callCard: string }) {
   const {height, width} = useWindowDimensions();
   const [applyingVideo, setApplyingVideo] = useState(false);
   const [applyingAudio, setApplyingAudio] = useState(false);
+  const [accepting, setAccepting] = useState(null as null|string);
+  const [ignoring, setIgnoring] = useState(null as null|string);
+  const [declining, setDeclining] = useState(null as null|string);
 
   const toggleVideo = async () => {
     if (!applyingVideo) {
@@ -82,15 +86,41 @@ export function Calling({ callCard }: { callCard: string }) {
   }
 
   const accept = async (callId, card) => {
-    if (!connecting) {
-      setConnecting(true);
+    if (!accepting) {
+      setAccepting(callId);
       try {
         await actions.accept(callId, card);
       } catch (err) {
         console.log(err);
         setAlert(true);
       }
-      setConnecting(false);
+      setAccepting(null);
+    }
+  }
+
+  const ignore = async (callId, card) => {
+    if (!ignoring) {
+      setIgnoring(callId);
+      try {
+        await actions.ignore(callId, card);
+      } catch (err) {
+        console.log(err);
+        setAlert(true);
+      }
+      setIgnoring(null);
+    }
+  }
+
+  const decline = async (callId, card) => {
+    if (!declining) {
+      setDeclining(callId);
+      try {
+        await actions.decline(callId, card);
+      } catch (err) {
+        console.log(err);
+        setAlert(true);
+      }
+      setDeclining(null);
     }
   }
 
@@ -112,15 +142,23 @@ export function Calling({ callCard }: { callCard: string }) {
     }
   }, [callCard]);
 
+  useEffect(() => {
+    if (state.calling) {
+      activateKeepAwake();
+    } else {
+      deactivateKeepAwake();
+    }
+  }, [state.calling]);
+
   const calls = state.calls.map((contact, index) => {
     const { callId, card } = contact;
     const { name, handle, node, imageUrl } = card;
-    const ignore = <IconButton key="ignore" style={styles.circleIcon} iconColor="white" containerColor={Colors.pending} icon="eye-off-outline" compact="true" mode="contained" size={24} onPress={()=>{}} />
-    const decline = <IconButton key="decline" style={styles.flipIcon} iconColor="white" containerColor={Colors.offsync} icon="phone-outline" compact="true" mode="contained" size={24} onPress={()=>{}} />
-    const accept = <IconButton key="accept" style={styles.circleIcon} iconColor="white" containerColor={Colors.primary} icon="phone-outline" compact="true" mode="contained" size={24} onPress={()=>actions.accept(callId, card)} />
+    const ignoreButton = <IconButton key="ignore" style={styles.circleIcon} iconColor="white" containerColor={Colors.pending} icon="eye-off-outline" compact="true" mode="contained" size={24} loading={ignoring===callId} onPress={()=>ignore(callId, card)} />
+    const declineButton = <IconButton key="decline" style={styles.flipIcon} iconColor="white" containerColor={Colors.offsync} icon="phone-outline" compact="true" mode="contained" size={24} loading={declining===callId} onPress={()=>decline(callId, card)} />
+    const acceptButton = <IconButton key="accept" style={styles.circleIcon} iconColor="white" containerColor={Colors.primary} icon="phone-outline" compact="true" mode="contained" size={24} loading={accepting===callId} onPress={()=>accept(callId, card)} />
     return (
       <Surface mode="flat" key={index}>
-        <Card containerStyle={styles.card} placeholder={''} imageUrl={imageUrl} name={name} node={node} handle={handle} actions={[ignore, decline, accept]} />
+        <Card containerStyle={styles.card} placeholder={''} imageUrl={imageUrl} name={name} node={node} handle={handle} actions={[ignoreButton, declineButton, acceptButton]} />
       </Surface>
     )
   });

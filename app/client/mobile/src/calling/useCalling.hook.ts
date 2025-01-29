@@ -96,16 +96,7 @@ export function useCalling() {
           updateState({ failed: true });
         }
       } else if (status === 'closed') {
-        call.current = null;
-        try {
-          peer.close();
-          link.close();
-        } catch (err) {
-          console.log(err);
-        } 
-        localStream.current = null;
-        remoteStream.current = null,
-        updateState({ calling: null, failed: false, audio: null, video: null, local: null, remote: null });
+        updatePeer('close');
       }
     }
   }
@@ -196,6 +187,19 @@ export function useCalling() {
           }
         } else if (type === 'local_track') {
           await peerTrack(data);
+        } else if (type === 'close' && call.current) {
+          peerUpdate.current = [];
+          const { peer, link } = call.current;
+          call.current = null;
+          try {
+            peer.close();
+            link.close();
+          } catch (err) {
+            console.log(err);
+          } 
+          localStream.current = null;
+          remoteStream.current = null,
+          updateState({ calling: null, failed: false, audio: null, video: null, local: null, remote: null });
         }
       }
       updatingPeer.current = false;
@@ -248,6 +252,14 @@ export function useCalling() {
   }, [app.state.session]);
 
   const actions = {
+    ignore: async (callId: string, card: Card) => {
+      const ring = app.state.session.getRing();
+      await ring.ignore(card.cardId, callId);
+    },
+    decline: async (callId: string, card: Card) => {
+      const ring = app.state.session.getRing();
+      await ring.decline(card.cardId, callId);
+    },
     end: async () => {
       if (!call.current) {
         throw new Error('no active call');
