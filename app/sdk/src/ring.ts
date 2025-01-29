@@ -14,9 +14,11 @@ export class RingModule implements Ring {
   private secure: boolean;
   private calls: Map<string, { call: Call, expires: number, status: string }>
   private closed: boolean;
+  private endContactCall: (cardId: string, callId: string) => Promise<void>;
 
-  constructor(log: Logging) {
+  constructor(log: Logging, endContactCall: (cardId: string, callId: string) => Promise<void>) {
     this.log = log;
+    this.endContactCall = endContactCall;
     this.emitter = new EventEmitter();
     this.calls = new Map<string, { call: Call, expires: number }>();
     this.expire = null;
@@ -64,7 +66,8 @@ export class RingModule implements Ring {
     entry.status = 'accepted';
     this.emitRinging();
     const link = new LinkModule(this.log);
-    await link.join(contactNode, entry.call.calleeToken, entry.call.ice);
+    const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(contactNode);
+    await link.join(contactNode, !insecure, entry.call.calleeToken, entry.call.ice, async ()=>{ await this.endContactCall(cardId, callId) });
     return link;
   }
 
@@ -78,7 +81,7 @@ export class RingModule implements Ring {
     this.emitRinging();
   }
 
-  public async decline(cardId: string, callId: string, contactNode: string): Promise<void> {
+  public async decline(cardId: string, callId: string): Promise<void> {
     const id = `${cardId}:${callId}`;
     const entry = this.calls.get(id);
     if (!entry || entry.expires < now || entry.status !== 'ringing') {
@@ -87,8 +90,7 @@ export class RingModule implements Ring {
     entry.status = 'declined';
     this.emitRinging();
     try {
-      const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(contactNode);
-      await removeContactCall(contactNode, !insecure, entry.call.calleeToken, entry.call.callId);
+      await this.endContactCall(cardId, callId);
     }
     catch (err) {
       console.log(err);

@@ -128,7 +128,7 @@ export function Calling({ callCard }: { callCard: string }) {
   const overlap = (width + 128) > height;
   const frameWidth = width > height ? height : width - 16;
   const frameHeight = frameWidth;
-  const frameOffset = (height - frameHeight) / 4;
+  const frameOffset = (height - frameHeight) / 3;
   return (
     <View style={(connecting || state.calling || state.calls.length > 0 || alert) ? styles.active : styles.inactive}>
       { state.calls.length > 0 && !connecting && !state.calling && (
@@ -200,7 +200,7 @@ export function Calling({ callCard }: { callCard: string }) {
       )}
       { state.calling && state.loaded && state.local && state.remote && (
         <RTCView
-          style={styles.box}
+          style={{ ...styles.box, top: frameOffset }}
           mirror={true}
           objectFit={'contain'}
           streamURL={state.local.toURL()}

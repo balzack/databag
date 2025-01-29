@@ -51,7 +51,7 @@ export class LinkModule implements Link {
     return this.ice;
   }
 
-  public async call(node: string, secure: boolean, token: string, cardId: string, contactNode: string, contactGuid: string, contactToken: string) {
+  public async call(node: string, secure: boolean, token: string, cardId: string, contactNode: string, contactSecure: boolean, contactGuid: string, contactToken: string) {
     const call = await addCall(node, secure, token, cardId);
     this.cleanup = async () => {
       try {
@@ -62,9 +62,8 @@ export class LinkModule implements Link {
     }
 
     const { id, keepAlive, calleeToken, callerToken, ice } = call;
-    const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(contactNode);
     const ring = { index: 0, callId: id, calleeToken, ice: JSON.parse(JSON.stringify(ice))};
-    await addContactRing(contactNode, !insecure, contactGuid, contactToken, ring);
+    await addContactRing(contactNode, contactSecure, contactGuid, contactToken, ring);
 
     this.aliveInterval = setInterval(async () => {
       try {
@@ -77,7 +76,7 @@ export class LinkModule implements Link {
     this.ringInterval = setInterval(async () => {
       try {
         ring.index += 1;
-        await addContactRing(contactNode, !insecure, contactGuid, contactToken, ring);
+        await addContactRing(contactNode, contactSecure, contactGuid, contactToken, ring);
       } catch (err) {
         this.log.error(err);
       }
@@ -87,17 +86,17 @@ export class LinkModule implements Link {
     this.connect(callerToken, node, secure);
   }
 
-  public async join(server: string, access: string, ice: { urls: string; username: string; credential: string }[]) {
+  public async join(server: string, secure: boolean, token: string, ice: { urls: string; username: string; credential: string }[], endCall: ()=>Promise<void>) {
     this.ice = ice;
     const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
     this.cleanup = async () => { 
       try { 
-        await removeContactCall(server, !insecure, access);
+        await endCall();
       } catch (err) {
         this.log.error(err);
       }
     }
-    this.connect(access, server, !insecure);
+    this.connect(token, server, !insecure);
   }
 
   private connect(token: string, node: string, secure: boolean) {

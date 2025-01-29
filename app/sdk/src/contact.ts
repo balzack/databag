@@ -36,6 +36,7 @@ import { setCardOpenMessage } from './net/setCardOpenMessage';
 import { getCardCloseMessage } from './net/getCardCloseMessage';
 import { setCardCloseMessage } from './net/setCardCloseMessage';
 import { getLegacyData } from './legacy';
+import { removeContactCall } from './net/removeContactCall';
 
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
@@ -854,8 +855,32 @@ export class ContactModule implements Contact {
     }
     const { profile, detail } = entry.item;
     const link = new LinkModule(this.log);
-    await link.call(node, secure, token, cardId, profile.node, profile.guid, detail.token);
+    const server = profile.node ? profile.node : this.node;
+    const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+    await link.call(node, secure, token, cardId, server, !insecure, profile.guid, detail.token);
     return link;
+  }
+
+  // added to allow ring to end call (deprecate)
+  public async endCall(cardId: string, callId: string): Promise<void> {
+    const { node, secure, token } = this;
+    const entry = this.cardEntries.get(cardId);
+    if (!entry || entry.item.detail.status !== 'connected') {
+      throw new Error('invalid card for call');
+    }
+    const { profile, detail } = entry.item;
+    const server = profile.node ? profile.node : this.node;
+    const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+    await removeContactCall(server, !insecure, profile.guid, detail.token, callId);
+  }
+
+  public getCardToken(cardId: string): string {
+    const entry = this.cardEntries.get(cardId);
+    if (!entry || entry.item.detail.status !== 'connected') {
+      throw new Error('invalid card for call');
+    }
+    const { profile, detail } = entry.item;
+    return detail.token;
   }
 
   public async setBlockedCard(cardId: string, blocked: boolean): Promise<void> {
