@@ -38,7 +38,6 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgb(64,64,64)',
   },
   calls: {
     borderRadius: 8,
@@ -73,7 +72,6 @@ export const styles = StyleSheet.create({
   },
   name: {
     fontSize: 28,
-    color: '#aaaaaa',
     paddingLeft: 16,
     paddingRight: 16,
     width: '100%',
@@ -100,14 +98,14 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgb(64,64,64)',
   },
   card: {
     width: '100%',
-    height: 48,
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingLeft: 16,
+    height: 64,
+    paddingTop: 16,
+    paddingBottom: 16,
+    paddingLeft: 32,
+    paddingRight: 32,
     borderBottomWidth: 1,
   }
 });
