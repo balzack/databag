@@ -197,7 +197,7 @@ export function Calling({ callCard }: { callCard: string }) {
       )}
       { state.calling && (
         <View style={{ ...styles.container, backgroundColor: surface.base }}>
-          <View style={{ ...styles.frame, top: frameOffset, width: frameWidth, height: frameHeight }}>
+          <View style={{ ...styles.frame, top: frameOffset, width: frameWidth > 400 ? 400 : frameWidth, height: frameHeight > 400 ? 400 : frameHeight }}>
             <Image
               style={{ ...styles.image, opacity: state.loaded ? 1 : 0 }}
               resizeMode="contain"
@@ -232,20 +232,24 @@ export function Calling({ callCard }: { callCard: string }) {
         </View>
       )}
       { state.calling && state.loaded && state.remote && (
+        <View style={{ ...styles.canvas, backgroundColor: surface.base }}>
         <RTCView
           style={styles.full}
           mirror={true}
           objectFit={'contain'}
           streamURL={state.remote.toURL()}
         />
+        </View>
       )}
       { state.calling && state.loaded && state.local && !state.remote && (
+        <View style={{ ...styles.canvas, backgroundColor: surface.base }}>
         <RTCView
           style={styles.full}
           mirror={true}
           objectFit={'contain'}
           streamURL={state.local.toURL()}
         />
+        </View>
       )}
       { state.calling && state.loaded && state.local && state.remote && (
         <RTCView

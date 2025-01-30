@@ -53,6 +53,13 @@ export const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 8,
   },
+  canvas: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
   frame: {
     display: 'flex',
     alignItems: 'center',
@@ -95,7 +102,6 @@ export const styles = StyleSheet.create({
     height: '20%',
   },
   full: {
-    position: 'absolute',
     width: '100%',
     height: '100%',
   },
