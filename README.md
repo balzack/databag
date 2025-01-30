@@ -50,7 +50,9 @@ Databag is designed for efficiency, consuming minimal hosting resources. Notable
   </a>
 </p>
 
-The app is available on fdroid as well as the google and apple stores. You can test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
+The app is available on fdroid as well as the google and apple stores. You can test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped.
+### Design 
+Read the [Design Guidelines](https://github.com/balzack/databag/blob/main/.design/DESIGN.md). Link to [Figma File](https://www.figma.com/design/eVFi8bYlybn5KeyEePEaey/Databag---Github?node-id=1-6&t=Is2AiTfwktFO5aY0-1). Feel free to duplicate the Figma file to edit. Feedback on the UI/UX, bugs or features is greatly appreciated.
 
 ## Installation
 
