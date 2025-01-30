@@ -1672,6 +1672,8 @@ PODS:
     - React-logger (= 0.75.4)
     - React-perflogger (= 0.75.4)
     - React-utils (= 0.75.4)
+  - ReactNativeIncallManager (4.2.0):
+    - React-Core
   - rn-fetch-blob (0.12.0):
     - React-Core
   - RNCClipboard (1.16.1):
@@ -1937,6 +1939,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativeIncallManager (from `../node_modules/react-native-incall-manager`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
@@ -2116,6 +2119,8 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeIncallManager:
+    :path: "../node_modules/react-native-incall-manager"
   rn-fetch-blob:
     :path: "../node_modules/rn-fetch-blob"
   RNCClipboard:
@@ -2228,6 +2233,7 @@ SPEC CHECKSUMS:
   React-utils: d1bae5ac6a5fb94a772ebfc7a7e1aba3a6706a3a
   ReactCodegen: 99b435b58bd874bb0626b3fb16437d2e8735d370
   ReactCommon: 1007c09a406a451ddbd874e51511aa541d6034f6
+  ReactNativeIncallManager: bfc9c67358cd524882a7c4116dcb311ac2293d4b
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCClipboard: d7a8903d32692b0a1e71738c3825465a9acae10e
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
@@ -2244,7 +2250,7 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
-  Yoga: a9ef4f5c2cd79ad812110525ef61048be6a582a4
+  Yoga: b05994d1933f507b0a28ceaa4fdb968dc18da178
 
 PODFILE CHECKSUM: 9cf7373afef7b881c911fda82ff1f94eacee3e98
 

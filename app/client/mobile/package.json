@@ -38,6 +38,7 @@
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.19.0",
     "react-native-image-crop-picker": "^0.41.2",
+    "react-native-incall-manager": "^4.2.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-paper": "^5.12.5",

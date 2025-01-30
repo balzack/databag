@@ -3,6 +3,7 @@ import { DisplayContext } from '../context/DisplayContext';
 import { AppContext } from '../context/AppContext'
 import { ContextType } from '../context/ContextType'
 import { Link, type Card } from 'databag-client-sdk';
+import InCallManager from 'react-native-incall-manager';
 
 import {
   ScreenCapturePickerView,
@@ -90,6 +91,7 @@ export function useCalling() {
           if (video) {
             video.enabled = false;
           }
+          InCallManager.start({media: 'audio'});
           updateState({ audio, video, audioAdded: true, audioEnabled: true, videoAdded: false, videoEnabled: false });
         } catch (err) {
           console.log(err);
@@ -183,15 +185,20 @@ export function useCalling() {
         } else if (type === 'remote_track') {
           remoteStream.current.addTrack(data, remoteStream.current);
           if (data.kind === 'video') {
+            InCallManager.setForceSpeakerphoneOn(true);
             updateState({ remote: remoteStream.current });
           }
         } else if (type === 'local_track') {
           await peerTrack(data);
+          if (data.kind === 'video') {
+            InCallManager.setForceSpeakerphoneOn(true);
+          }
         } else if (type === 'close' && call.current) {
           peerUpdate.current = [];
           const { peer, link } = call.current;
           call.current = null;
           try {
+            InCallManager.stop();
             peer.close();
             link.close();
           } catch (err) {
