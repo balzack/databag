@@ -16,6 +16,7 @@ import { Conversation } from '../conversation/Conversation'
 import { Focus } from 'databag-client-sdk'
 import { useDisclosure } from '@mantine/hooks'
 import { IconAlertCircle } from '@tabler/icons-react'
+import { Calling } from '../calling/Calling';
 
 export function Session() {
   const { state } = useSession();
@@ -27,6 +28,7 @@ export function Session() {
   const [details, { open: openDetails, close: closeDetails }] = useDisclosure(false)
   const [profile, { open: openProfile, close: closeProfile }] = useDisclosure(false)
   const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
+  const [callCard, setCallCard] = useState({ cardId: null} as {cardId: null|string});
 
   const textContact = (cardId: string) => {
     console.log("MESSAGE: ", cardId);
@@ -37,6 +39,7 @@ export function Session() {
 
   const callContact = (cardId: string) => {
     console.log("CALL: ", cardId);
+    setCallCard({ cardId });
   }
 
   return (
@@ -185,6 +188,7 @@ export function Session() {
           </div>
         </div>
       )}
+      <Calling />
     </div>
   )
 }
