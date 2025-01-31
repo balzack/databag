@@ -221,7 +221,7 @@ export function Calling({ callCard }: { callCard: string }) {
       )}
       { state.calling && state.loaded && (
         <View style={{ ...styles.overlap, top: 64 }}>
-          <View style={{backgroundColor: surface.title, borderRadius: 4 }}> 
+          <View style={{backgroundColor: surface.title, borderRadius: 16 }}> 
           { state.calling.name && (
             <Text style={styles.name} adjustsFontSizeToFit={true} numberOfLines={1}>{ state.calling.name }</Text>
           )}
@@ -261,11 +261,18 @@ export function Calling({ callCard }: { callCard: string }) {
         />
       )}
       { state.calling && state.loaded && (
-        <View style={{ ...styles.overlap, bottom: frameOffset }}>
+        <View style={{ ...styles.overlap, bottom: 64 }}>
           <View style={{ paddingTop: 8, paddingBottom: 8, paddingLeft: 16, paddingRight: 16, gap: 16, display: 'flex', flexDirection: 'row', borderRadius: 16, backgroundColor: surface.control }}>
           <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon={state.audioEnabled ? 'microphone' : 'microphone-off'} loading={applyingAudio} disabled={!state.audio} compact="true" mode="contained" size={32} onPress={toggleAudio} />
           <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.primary} icon={state.videoEnabled ? 'video-outline' : 'video-off-outline'} loading={applyingVideo} disabled={!state.video} compact="true" mode="contained" size={32} onPress={toggleVideo} />
           <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.danger} icon="phone-hangup-outline" compact="true" mode="contained" size={32} onPress={end} />
+          </View>
+        </View>
+      )}
+      { state.calling && state.loaded && !state.connected && (
+        <View style={{ ...styles.overlap, bottom: 24 }}>
+          <View style={{backgroundColor: surface.title, borderRadius: 16 }}> 
+            <Text style={styles.connecting}>{ state.strings.connecting }</Text>
           </View>
         </View>
       )}

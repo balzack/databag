@@ -225,7 +225,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
             <Icon source="shield-outline" size={20} />
           )}
         </View>
-        <IconButton style={styles.icon} mode="contained" icon="cog-transfer-outline" size={28} onPress={openDetails} />
+        <IconButton style={styles.icon} mode="contained" icon={state.layout==='large' ? 'cog-transfer-outline' : 'dots-vertical'} size={28} onPress={openDetails} />
       </View>
       <View style={padStyle}>
         <Divider style={styles.topBorder} bold={true} />

@@ -42,6 +42,7 @@ export function useCalling() {
     video: null,
     videoEnabled: false,
     videoAdded: false,
+    connected: false,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -92,7 +93,7 @@ export function useCalling() {
             video.enabled = false;
           }
           InCallManager.start({media: 'audio'});
-          updateState({ audio, video, audioAdded: true, audioEnabled: true, videoAdded: false, videoEnabled: false });
+          updateState({ audio, video, audioAdded: true, audioEnabled: true, videoAdded: false, videoEnabled: false, connected: true });
         } catch (err) {
           console.log(err);
           updateState({ failed: true });
@@ -297,7 +298,7 @@ export function useCalling() {
       call.current = { policy, peer, link, candidates }; 
       link.setStatusListener(linkStatus);
       link.setMessageListener((msg) => updatePeer('message', msg));
-      updateState({ calling: card });
+      updateState({ calling: card, connected: false });
     },
     call: async (cardId: string) => {
       if (call.current) {
@@ -316,7 +317,7 @@ export function useCalling() {
       call.current = { policy, peer, link, candidates };
       link.setStatusListener(linkStatus);
       link.setMessageListener((msg) => updatePeer('message', msg));
-      updateState({ calling: card });
+      updateState({ calling: card, connected: false });
     },
     loaded: (e) => {
       const { width, height } = e.nativeEvent.layout;

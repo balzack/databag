@@ -84,6 +84,13 @@ export const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
   },
+  connecting: {
+    fontSize: 12,
+    paddingLeft: 16,
+    paddingRight: 16,
+    paddingTop: 4,
+    paddingBottom: 4,
+  },
   overlap: {
     display: 'flex',
     flexDirection: 'row',
