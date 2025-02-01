@@ -38,7 +38,6 @@ export function Session() {
   }
 
   const callContact = (cardId: string) => {
-    console.log("CALL: ", cardId);
     setCallCard({ cardId });
   }
 
@@ -188,7 +187,7 @@ export function Session() {
           </div>
         </div>
       )}
-      <Calling />
+      <Calling callCard={callCard} />
     </div>
   )
 }

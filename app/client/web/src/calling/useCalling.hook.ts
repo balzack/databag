@@ -8,26 +8,27 @@ export function useCalling() {
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const call = useRef(null as { policy: string, peer: RTCPeerConnection, link: Link, candidates: RTCIceCandidate[] } | null);
-  const localStream = useRef(null);
-  const remoteStream = useRef(null);
+  const localStream = useRef(null as null|MediaStream);
+  const localAudio = useRef(null as null|MediaStreamTrack);
+  const localVideo = useRef(null as null|MediaStreamTrack);
+  const remoteStream = useRef(null as null|MediaStream);
   const updatingPeer = useRef(false);
-  const peerUpdate = useRef([]);
+  const peerUpdate = useRef([] as {type: string, data?: any}[]);
 
   const [state, setState] = useState({
     strings: {}, 
-    ringing: [],
+    ringing: [] as { cardId: string, callId: string }[],
     calls: [],
-    cards: [],
+    cards: [] as Card[],
     calling: null as null | Card,
     failed: false,
     loaded: false,
-    local: null,
-    remote: null,
-    audio: null,
+    localStream: null as null|MediaStream,
+    remoteStream: null as null|MediaStream,
+    localVideo: false,
+    remoteVideo: false,
     audioEnabled: false,
-    video: null,
     videoEnabled: false,
-    videoAdded: false,
     connected: false,
   })
 
@@ -48,7 +49,7 @@ export function useCalling() {
     updateState({ strings });
   }, [display.state]);
 
-  const getAudioStream = async (audioId) => {
+  const getAudioStream = async (audioId: null|string) => {
     try {
       if (audioId) {
         return await navigator.mediaDevices.getUserMedia({ video: false, audio: { deviceId: audioId } });
@@ -60,7 +61,7 @@ export function useCalling() {
     return await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
   }           
             
-  const getVideoStream = async (videoId) => {
+  const getVideoStream = async (videoId: null|string) => {
     try { 
       if (videoId) {
         return await navigator.mediaDevices.getUserMedia({ video: { deviceId: videoId }, audio: false });
@@ -77,22 +78,21 @@ export function useCalling() {
       const { policy, peer, link } = call.current;
       if (status === 'connected') {
         try {
-          remoteStream.current = new MediaStream();
-          localStream.current = await mediaDevices.getUserMedia({
-            audio: true,
-            video: {
-              frameRate: 30,
-              facingMode: 'user'
-            }
-          });
-          const audioStream = getAudioStream(null);
-          const audio = audioStream.getTracks(track => track.kind === 'audio');
-
-          if (audio) {
-            audio.enabled = true;
-            await updatePeer('local_track', audio);
+          const audioStream = await getAudioStream(null);
+          const audioTrack = audioStream.getTracks().find((track: MediaStreamTrack) => track.kind === 'audio');
+          if (audioTrack) {
+            localAudio.current = null;
           }
-          updateState({ audio, video, audioAdded: true, audioEnabled: true, videoAdded: false, videoEnabled: false, connected: true });
+          localVideo.current = null;
+          localStream.current = new MediaStream();
+          remoteStream.current = new MediaStream();
+
+          if (localAudio.current) {
+            localAudio.current.enabled = true;
+            await updatePeer('local_track', localAudio.current);
+          }
+          updateState({ localStream: localStream.current, remoteStream: remoteStream.current,
+            audioEnabled: true, videoEnabled: false, localVideo: false, remoteVideo: false, connected: true });
         } catch (err) {
           console.log(err);
           updateState({ failed: true });
@@ -105,7 +105,7 @@ export function useCalling() {
 
   const linkMessage = async (message: any) => {
     if (call.current) {
-      const { peer, link, policy } = call.current;
+      const { peer, link, policy, candidates } = call.current;
       try {
         if (message.description) {
           const offer = new RTCSessionDescription(message.description);
@@ -117,11 +117,10 @@ export function useCalling() {
           }
 
           if (call.current) {
-            const { candidates } = call.current;
-            call.current.candidates = [];
             for (const candidate of candidates) {
               await peer.addIceCandidate(candidate);
             };
+            call.current.candidates = [];
           }
         } else if (message.candidate) {
           const candidate = new RTCIceCandidate(message.candidate);
@@ -138,7 +137,7 @@ export function useCalling() {
     }
   }
 
-  const peerCandidate = async (candidate) => {
+  const peerCandidate = async (candidate: RTCIceCandidate) => {
     if (call.current && candidate) {
       const { link } = call.current;
       await link.sendMessage({ candidate });
@@ -149,7 +148,7 @@ export function useCalling() {
     if (call.current) {
       try {
         const { peer, link } = call.current;
-        const description = await peer.createOffer(constraints);
+        const description = await peer.createOffer();
         await peer.setLocalDescription(description);
         await link.sendMessage({ description });
       } catch (err) {
@@ -158,8 +157,8 @@ export function useCalling() {
     }
   }
 
-  const peerTrack = async (track) => {
-    if (call.current) {
+  const peerTrack = async (track: MediaStreamTrack) => {
+    if (call.current && localStream.current) {
       try {
         const { peer } = call.current;
         peer.addTrack(track, localStream.current);
@@ -169,13 +168,13 @@ export function useCalling() {
     }
   }
 
-  const updatePeer = async (type: string, data: any) => {
+  const updatePeer = async (type: string, data?: any) => {
     peerUpdate.current.push({ type, data });
 
     if (!updatingPeer.current) {
       updatingPeer.current = true;
       while (peerUpdate.current.length > 0) {
-        const { type, data } = peerUpdate.current.shift();
+        const { type, data } = peerUpdate.current.shift() || { type: '' };
         if (type === 'negotiate') {
           await peerNegotiate();
         } else if (type === 'candidate') {
@@ -183,9 +182,11 @@ export function useCalling() {
         } else if (type === 'message') {
           await linkMessage(data);
         } else if (type === 'remote_track') {
-          remoteStream.current.addTrack(data, remoteStream.current);
-          if (data.kind === 'video') {
-            updateState({ remote: remoteStream.current });
+          if (remoteStream.current) {
+            remoteStream.current.addTrack(data);
+            if (data.kind === 'video') {
+              updateState({ remoteVideo: true });
+            }
           }
         } else if (type === 'local_track') {
           await peerTrack(data);
@@ -200,8 +201,10 @@ export function useCalling() {
             console.log(err);
           } 
           localStream.current = null;
+          localVideo.current = null;
+          localAudio.current = null;
           remoteStream.current = null,
-          updateState({ calling: null, failed: false, audio: null, video: null, local: null, remote: null });
+          updateState({ calling: null, failed: false, localStream: null, remoteStream: null, localVideo: false, remoteVideo: false });
         }
       }
       updatingPeer.current = false;
@@ -266,17 +269,7 @@ export function useCalling() {
       if (!call.current) {
         throw new Error('no active call');
       }
-      const { link, peer } = call.current;
-      try {
-        peer.close();
-        link.close();
-      } catch (err) {
-        console.log(err);
-      } 
-      call.current = null;
-      localStream.current = null;
-      remoteStream.current = null;
-      updateState({ calling: null, audio: null, video: null, local: null, remote: null });
+      await updatePeer('close');
     },
     accept: async (callId: string, card: Card) => {
       if (call.current) {
@@ -288,10 +281,10 @@ export function useCalling() {
       const ice = link.getIce();
       const peer = transmit(ice);
       const policy = 'impolite';
-      const candidates = [];
+      const candidates = [] as RTCIceCandidate[];
       call.current = { policy, peer, link, candidates }; 
       link.setStatusListener(linkStatus);
-      link.setMessageListener((msg) => updatePeer('message', msg));
+      link.setMessageListener((msg: any) => updatePeer('message', msg));
       updateState({ calling: card, connected: false });
     },
     call: async (cardId: string) => {
@@ -307,53 +300,56 @@ export function useCalling() {
       const ice = link.getIce();
       const peer = transmit(ice);
       const policy = 'polite';
-      const candidates = [];
+      const candidates = [] as RTCIceCandidate[];
       call.current = { policy, peer, link, candidates };
       link.setStatusListener(linkStatus);
-      link.setMessageListener((msg) => updatePeer('message', msg));
+      link.setMessageListener((msg: any) => updatePeer('message', msg));
       updateState({ calling: card, connected: false });
     },
-    loaded: (e) => {
-      const { width, height } = e.nativeEvent.layout;
-      if (width > (height + 80)) {
-        updateState({ panelOffset: 0, loaded: true });
-      } else {
-        updateState({ panelOffset: ((height - width) - 80) / 2, loaded: true });
-      }
-    },
     enableAudio: async () => {
-      if (!call.current || !state.audio || !state.audioAdded) {
+      if (!call.current) {
         throw new Error('cannot unmute audio');
       }
-      state.audio.enabled = true;
-      updateState({ audioEnabled: true });
+      if (localAudio.current) {
+        localAudio.current.enabled = true;
+        updateState({ audioEnabled: true });
+      }
     },
-    disableAudio: () => {
-      if (!call.current || !state.audio || !state.audioAdded) {
+    disableAudio: async () => {
+      if (!call.current) {
         throw new Error('cannot mute audio');
       }
-      state.audio.enabled = false;
-      updateState({ audioEnabled: false });
+      if (localAudio.current) {
+        localAudio.current.enabled = false;
+        updateState({ audioEnabled: false });
+      }
     },
-    enableVideo: () => {
-      if (!call.current || !state.video) {
+    enableVideo: async () => {
+      if (!call.current) {
         throw new Error('cannot start video');
       }
-      state.video.enabled = true;
-      if (!state.videoAdded) {
+      if (!localVideo.current) {
         const videoStream = await getVideoStream(null);
-        const video = videoStream.getTracks(track => track.kind === 'video');
-        updateState({ local: videoStream });
-        updatePeer('local_track', video);
+        const videoTrack = videoStream.getTracks().find((track: MediaStreamTrack) => track.kind === 'video');
+        if (videoTrack) {
+          localVideo.current = videoTrack;
+          updatePeer('local_track', videoTrack);
+          updateState({ localVideo: true });
+        }
       }
-      updateState({ videoAdded: true, videoEnabled: true });
+      if (localVideo.current) {
+        localVideo.current.enabled = true;
+        updateState({ videoEnabled: true });
+      }
     },
-    disableVideo: () => {
-      if (!call.current || !state.video) {
+    disableVideo: async () => {
+      if (!call.current) {
         throw new Error('cannot stop video');
       }
-      state.video.enabled = false;
-      updateState({ videoEnabled: false });
+      if (localVideo.current) {
+        localVideo.current.enabled = false;
+        updateState({ videoEnabled: false });
+      }
     },
   }
 
