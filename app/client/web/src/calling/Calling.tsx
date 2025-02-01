@@ -2,12 +2,33 @@ import React, { useEffect, useState } from 'react';
 import classes from './Calling.module.css'
 import { useCalling } from './useCalling.hook';
 import { Card } from '../card/Card';
-import { Modal, ActionIcon } from '@mantine/core'
-import { IconCancel } from '@tabler/icons-react'
+import { Modal, Text, ActionIcon } from '@mantine/core'
+import { IconEyeX, IconPhone, IconPhoneOff } from '@tabler/icons-react'
+import { modals } from '@mantine/modals'
+import { Colors } from '../constants/Colors'
 
 export function Calling({ callCard }: { callCard: string }) {
   const [connecting, setConnecting] = useState(false);
+  const [applyingVideo, setApplyingVideo] = useState(false);
+  const [applyingAudio, setApplyingAudio] = useState(false);
+  const [ignoring, setIgnoring] = useState(false);
+  const [declining, setDeclining] = useState(false);
+  const [accepting, setAccepting] = useState(false);
   const { state, actions } = useCalling();
+
+  const showError = () => {
+    modals.openConfirmModal({
+      title: state.strings.operationFailed,
+      withCloseButton: true,
+      overlayProps: {
+        backgroundOpacity: 0.55,
+        blur: 3,
+      },
+      children: <Text>{state.strings.tryAgain}</Text>,
+      cancelProps: { display: 'none' },
+      confirmProps: { display: 'none' },
+    })
+  }
 
   const toggleVideo = async () => {
     if (!applyingVideo) {
@@ -20,7 +41,7 @@ export function Calling({ callCard }: { callCard: string }) {
         }
       } catch (err) {
         console.log(err);
-        setAlert(true);
+        showError();
       }
       setApplyingVideo(false);
     }
@@ -37,7 +58,7 @@ export function Calling({ callCard }: { callCard: string }) {
         }
       } catch (err) {
         console.log(err);
-        setAlert(true);
+        showError();
       }
       setApplyingAudio(false);
     }
@@ -50,7 +71,7 @@ export function Calling({ callCard }: { callCard: string }) {
         await actions.end();
       } catch (err) {
         console.log(err);
-        setAlert(true);
+        showError();
       }
       setEnding(false);
     }
@@ -63,7 +84,7 @@ export function Calling({ callCard }: { callCard: string }) {
         await actions.call(cardId);
       } catch (err) {
         console.log(err);
-        setAlert(true);
+        showError();
       }
       setConnecting(false);
     }
@@ -76,7 +97,7 @@ export function Calling({ callCard }: { callCard: string }) {
         await actions.accept(callId, card);
       } catch (err) {
         console.log(err);
-        setAlert(true);
+        showError();
       }
       setAccepting(null);
     }
@@ -89,7 +110,7 @@ export function Calling({ callCard }: { callCard: string }) {
         await actions.ignore(callId, card);
       } catch (err) {
         console.log(err);
-        setAlert(true);
+        showError();
       }
       setIgnoring(null);
     }
@@ -102,7 +123,7 @@ export function Calling({ callCard }: { callCard: string }) {
         await actions.decline(callId, card);
       } catch (err) {
         console.log(err);
-        setAlert(true);
+        showError();
       }
       setDeclining(null);
     }
@@ -129,9 +150,9 @@ export function Calling({ callCard }: { callCard: string }) {
   const calls = state.calls.map((contact, index) => {
     const { callId, card } = contact;
     const { name, handle, node, imageUrl } = card;
-    const ignoreButton = <ActionIcon variant="subtle" onClick={()=>{}}><IconCancel /></ActionIcon>
-    const declineButton = <ActionIcon variant="subtle" onClick={()=>{}}><IconCancel /></ActionIcon>
-    const acceptButton = <ActionIcon variant="subtle" onClick={()=>{}}><IconCancel /></ActionIcon>
+    const ignoreButton = <ActionIcon variant="subtle" loading={ignoring===callId} onClick={()=>ignore(callId, card)} color={Colors.pending}><IconEyeX /></ActionIcon>
+    const declineButton = <div className={classes.space}><ActionIcon variant="subtle" loading={declining===callId} onClick={()=>decline(callId, card)} color={Colors.offsync}><IconPhone className={classes.off} /></ActionIcon></div>
+    const acceptButton = <ActionIcon variant="subtle" loading={accepting===callId} onClick={()=>accept(callId, card)} color={Colors.primary}><IconPhone /></ActionIcon>
 
     return (
       <div key={index} className={classes.caller}>
