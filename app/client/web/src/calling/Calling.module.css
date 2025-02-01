@@ -33,3 +33,51 @@
   top: 4px;
   padding: 8px;
 }
+
+.calling {
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .name {
+      font-size: 32px;
+    }
+  }
+
+  .logo {
+    flex: 4;
+  }
+
+  .control {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    padding: 16px;
+    gap: 24px;
+    background-color: var(--mantine-color-surface-4);
+    border-radius: 8px;
+  }
+
+  .status {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+

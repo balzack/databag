@@ -199,10 +199,16 @@ export function useCalling() {
             link.close();
           } catch (err) {
             console.log(err);
-          } 
+          }
+          if (localVideo.current) {
+            localVideo.current.stop();
+            localVideo.current = null;
+          }
+          if (localAudio.current) {
+            localAudio.current.stop();
+            localAudio.current = null;
+          }
           localStream.current = null;
-          localVideo.current = null;
-          localAudio.current = null;
           remoteStream.current = null,
           updateState({ calling: null, failed: false, localStream: null, remoteStream: null, localVideo: false, remoteVideo: false });
         }

@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import classes from './Calling.module.css'
 import { useCalling } from './useCalling.hook';
 import { Card } from '../card/Card';
-import { Modal, Text, ActionIcon } from '@mantine/core'
-import { IconEyeX, IconPhone, IconPhoneOff } from '@tabler/icons-react'
+import { Loader, Image, Text, ActionIcon } from '@mantine/core'
+import { IconEyeX, IconPhone, IconPhoneOff, IconMicrophone, IconMicrophoneOff, IconVideo, IconVideoOff } from '@tabler/icons-react'
 import { modals } from '@mantine/modals'
 import { Colors } from '../constants/Colors'
 
 export function Calling({ callCard }: { callCard: string }) {
   const [connecting, setConnecting] = useState(false);
+  const [ending, setEnding] = useState(false);
   const [applyingVideo, setApplyingVideo] = useState(false);
   const [applyingAudio, setApplyingAudio] = useState(false);
   const [ignoring, setIgnoring] = useState(false);
@@ -34,9 +35,9 @@ export function Calling({ callCard }: { callCard: string }) {
     if (!applyingVideo) {
       setApplyingVideo(true);
       try {
-        if (state.video && state.videoEnabled) {
+        if (state.videoEnabled) {
           await actions.disableVideo();
-        } else if (state.video && !state.videoEnabled) {
+        } else if (!state.videoEnabled) {
           await actions.enableVideo();
         }
       } catch (err) {
@@ -51,9 +52,9 @@ export function Calling({ callCard }: { callCard: string }) {
     if (!applyingAudio) {
       setApplyingAudio(true);
       try {
-        if (state.audio && state.audioEnabled) {
+        if (state.audioEnabled) {
           await actions.disableAudio();
-        } else if (state.audio && !state.audioEnabled) {
+        } else if (!state.audioEnabled) {
           await actions.enableAudio();
         }
       } catch (err) {
@@ -150,9 +151,9 @@ export function Calling({ callCard }: { callCard: string }) {
   const calls = state.calls.map((contact, index) => {
     const { callId, card } = contact;
     const { name, handle, node, imageUrl } = card;
-    const ignoreButton = <ActionIcon variant="subtle" loading={ignoring===callId} onClick={()=>ignore(callId, card)} color={Colors.pending}><IconEyeX /></ActionIcon>
-    const declineButton = <div className={classes.space}><ActionIcon variant="subtle" loading={declining===callId} onClick={()=>decline(callId, card)} color={Colors.offsync}><IconPhone className={classes.off} /></ActionIcon></div>
-    const acceptButton = <ActionIcon variant="subtle" loading={accepting===callId} onClick={()=>accept(callId, card)} color={Colors.primary}><IconPhone /></ActionIcon>
+    const ignoreButton = <ActionIcon key="ignore" variant="subtle" loading={ignoring===callId} onClick={()=>ignore(callId, card)} color={Colors.pending}><IconEyeX /></ActionIcon>
+    const declineButton = <div key="decline" className={classes.space}><ActionIcon variant="subtle" loading={declining===callId} onClick={()=>decline(callId, card)} color={Colors.offsync}><IconPhone className={classes.off} /></ActionIcon></div>
+    const acceptButton = <ActionIcon key="accept" variant="subtle" loading={accepting===callId} onClick={()=>accept(callId, card)} color={Colors.primary}><IconPhone /></ActionIcon>
 
     return (
       <div key={index} className={classes.caller}>
@@ -162,19 +163,57 @@ export function Calling({ callCard }: { callCard: string }) {
   });
 
   return (
-    <Modal opened={state.calls.length > 0 || connecting || state.calling} onClose={()=>{}} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered withCloseButton={false}>
+    <div className={state.calls.length > 0 || connecting || state.calling ? classes.active : classes.inactive}>
       { !state.calling && !connecting && state.calls.length > 0 && (
         <div>
-        { calls }
+          { calls }
         </div>
       )}
       { !state.calling && connecting && (
-        <div style={{ width: 100, height: 100, backgroundColor: 'green' }} />
+        <Loader size={48} />
       )}
       { state.calling && (
-        <div style={{ width: 100, height: 100, backgroundColor: 'red' }} />
+        <div className={classes.calling}>
+          <div className={classes.title}>
+            { state.calling.name && (
+              <Text className={classes.name}>{ state.calling.name }</Text>
+            )}
+            { !state.calling.name && (
+              <Text className={classes.name}>{ `${state.calling.handle}/${state.calling.node}` }</Text>
+            )}
+          </div>
+          <div className={classes.logo}>
+            <Image radius="sm" height="100%" width="auto" fit="container" src={state.calling.imageUrl} />
+          </div>
+          <div className={classes.control}>
+            <div className={classes.buttons}>
+              <ActionIcon onClick={toggleAudio} disabled={!state.connected} loading={applyingAudio} color={Colors.primary} size="xl">
+                { state.audioEnabled && (
+                  <IconMicrophone />
+                )}
+                { !state.audioEnabled && (
+                  <IconMicrophoneOff />
+                )}
+              </ActionIcon>
+              <ActionIcon onClick={toggleVideo} disabled={!state.connected} loading={applyingVideo} color={Colors.primary} size="xl">
+                { state.videoEnabled && (
+                  <IconVideo />
+                )}
+                { !state.videoEnabled && (
+                  <IconVideoOff />
+                )}
+              </ActionIcon>
+              <ActionIcon onClick={end} color={Colors.offsync} size="xl"><IconPhone className={classes.off} /></ActionIcon>
+            </div>
+          </div>
+          <div className={classes.status}>
+            { !state.connected && (
+              <Text className={classes.label}>{ state.strings.connecting }</Text>
+            )}
+          </div>
+        </div>
       )}
-    </Modal>
+    </div>
   )
 }
 

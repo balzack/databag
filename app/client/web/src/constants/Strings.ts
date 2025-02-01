@@ -13,6 +13,7 @@ export const en = {
   token: 'Token',
   delayMessage: 'Key generation can take several minutes.',
   noAccess: 'No Access', 
+  connecting: 'Connecting',
 
   membership: 'Membership',
   channelGuest: 'Topic Guest',
@@ -102,7 +103,7 @@ export const en = {
   password: 'Password',
   newPassword: 'New Password',
   confirmPassword: 'Confirm Password',
-  deleteKey: "Type 'delete' to remove key",
+  deleteKey: 'Enter \'delete\' to remove key',
   delete: 'delete',
   remove: 'Delete',
   username: 'Username',
@@ -295,6 +296,7 @@ export const fr = {
   reportTopic: 'Signaler le sujet',
   reportTopicPrompt: 'Êtes-vous sûr de vouloir signaler ce sujet pour examen par un administrateur ?',
   noAccess: 'Pas d\'Accès',
+  connecting: 'Démarrage de la Connexion',
 
   membership: 'Adhésion',
   channelHost: 'Hôte du Sujet',
@@ -572,6 +574,7 @@ export const sp = {
   blockTopicPrompt: '¿Estás seguro de que deseas bloquear este tema?',
   reportTopic: 'Reportar tema',
   reportTopicPrompt: '¿Estás seguro de que deseas reportar este tema para revisión del administrador?',
+  connecting: 'Conexión Inicial',
 
   noAccess: 'Sin Acceso', 
   membership: 'Afiliación',
@@ -849,6 +852,7 @@ export const pt = {
   blockTopicPrompt: 'Tem certeza de que deseja bloquear este tópico?',
   reportTopic: 'Denunciar tópico',
   reportTopicPrompt: 'Tem certeza de que deseja denunciar este tópico para revisão do administrador?',
+  connecting: 'Iniciando Conexão',
 
   noAccess: 'Sem Acesso',
   membership: 'Associação',
@@ -1127,6 +1131,7 @@ export const de = {
   blockTopicPrompt: 'Sind Sie sicher, dass Sie dieses Thema blockieren möchten?',
   reportTopic: 'Thema melden',
   reportTopicPrompt: 'Sind Sie sicher, dass Sie dieses Thema zur Überprüfung durch den Administrator melden möchten?',
+  connecting: 'Startverbindung',
 
   noAccess: 'Kein Zugriff',
   channelHost: 'Themenhost',
@@ -1404,6 +1409,7 @@ export const ru = {
   blockTopicPrompt: 'Вы уверены, что хотите заблокировать эту тему?',
   reportTopic: 'Пожаловаться на тему',
   reportTopicPrompt: 'Вы уверены, что хотите отправить эту тему на рассмотрение администратору?',
+  connecting: 'начало соединения',
 
   noAccess: 'Нет доступа',
   membership: 'Членство',
