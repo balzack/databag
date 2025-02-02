@@ -81,15 +81,15 @@ export function useCalling() {
           const audioStream = await getAudioStream(null);
           const audioTrack = audioStream.getTracks().find((track: MediaStreamTrack) => track.kind === 'audio');
           if (audioTrack) {
-            localAudio.current = null;
+            localAudio.current = audioTrack;
           }
           localVideo.current = null;
-          localStream.current = new MediaStream();
+          localStream.current = null;
           remoteStream.current = new MediaStream();
 
           if (localAudio.current) {
             localAudio.current.enabled = true;
-            await updatePeer('local_track', localAudio.current);
+            await updatePeer('local_track', { track: audioTrack, stream: audioStream });
           }
           updateState({ localStream: localStream.current, remoteStream: remoteStream.current,
             audioEnabled: true, videoEnabled: false, localVideo: false, remoteVideo: false, connected: true });
@@ -157,11 +157,11 @@ export function useCalling() {
     }
   }
 
-  const peerTrack = async (track: MediaStreamTrack) => {
+  const peerTrack = async (track: MediaStreamTrack, stream: MediaStream) => {
     if (call.current && localStream.current) {
       try {
         const { peer } = call.current;
-        peer.addTrack(track, localStream.current);
+        peer.addTrack(track, stream);
       } catch (err) {
         console.log(err);
       }
@@ -189,7 +189,7 @@ export function useCalling() {
             }
           }
         } else if (type === 'local_track') {
-          await peerTrack(data);
+          await peerTrack(data.track, data.stream);
         } else if (type === 'close' && call.current) {
           peerUpdate.current = [];
           const { peer, link } = call.current;
@@ -339,8 +339,9 @@ export function useCalling() {
         const videoTrack = videoStream.getTracks().find((track: MediaStreamTrack) => track.kind === 'video');
         if (videoTrack) {
           localVideo.current = videoTrack;
-          updatePeer('local_track', videoTrack);
-          updateState({ localVideo: true });
+          localStream.current = videoStream;
+          updatePeer('local_track', { track: videoTrack, stream: videoStream });
+          updateState({ localVideo: true, localStream: videoStream });
         }
       }
       if (localVideo.current) {

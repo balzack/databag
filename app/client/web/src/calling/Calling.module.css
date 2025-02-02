@@ -37,13 +37,13 @@
 .calling {
   height: 100%;
   width: 100%;
+  display: flex;
   align-items: center;
   justify-content: center;
-  display: flex;
-  flex-direction: column;
 
   .title {
-    flex: 1;
+    position: absolute;
+    top: 32px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -54,17 +54,17 @@
   }
 
   .logo {
-    flex: 4;
-  }
-
-  .control {
-    flex: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: absolute;
+    max-width: 50%;
+    height: 50%;
+    aspect-ratio: 1;
+    top: 92px;
+    border-radius: 16px;
   }
 
   .buttons {
+    position: absolute;
+    bottom: 64px;
     display: flex;
     flex-direction: row;
     padding: 16px;
@@ -74,7 +74,8 @@
   }
 
   .status {
-    flex: 1;
+    position: absolute;
+    bottom: 32px;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import classes from './Calling.module.css'
 import { useCalling } from './useCalling.hook';
 import { Card } from '../card/Card';
@@ -15,6 +15,8 @@ export function Calling({ callCard }: { callCard: string }) {
   const [ignoring, setIgnoring] = useState(false);
   const [declining, setDeclining] = useState(false);
   const [accepting, setAccepting] = useState(false);
+  const remote = useRef();
+  const local = useRef();
   const { state, actions } = useCalling();
 
   const showError = () => {
@@ -148,6 +150,22 @@ export function Calling({ callCard }: { callCard: string }) {
     }
   }, [callCard]);
 
+  useEffect(() => { 
+    if (local.current) {
+      local.current.srcObject = state.localStream;
+      local.current.load();
+      local.current.play();
+    }           
+  }, [state.localStream]);
+
+  useEffect(() => { 
+    if (remote.current) {
+      remote.current.srcObject = state.remoteStream;
+      remote.current.load();
+      remote.current.play();
+    }           
+  }, [state.remoteStream]);
+
   const calls = state.calls.map((contact, index) => {
     const { callId, card } = contact;
     const { name, handle, node, imageUrl } = card;
@@ -164,28 +182,39 @@ export function Calling({ callCard }: { callCard: string }) {
 
   return (
     <div className={state.calls.length > 0 || connecting || state.calling ? classes.active : classes.inactive}>
-      { !state.calling && !connecting && state.calls.length > 0 && (
-        <div>
-          { calls }
-        </div>
-      )}
-      { !state.calling && connecting && (
-        <Loader size={48} />
-      )}
-      { state.calling && (
-        <div className={classes.calling}>
-          <div className={classes.title}>
-            { state.calling.name && (
-              <Text className={classes.name}>{ state.calling.name }</Text>
-            )}
-            { !state.calling.name && (
-              <Text className={classes.name}>{ `${state.calling.handle}/${state.calling.node}` }</Text>
-            )}
+      <div>
+        { !state.calling && !connecting && state.calls.length > 0 && (
+          <div>
+            { calls }
           </div>
-          <div className={classes.logo}>
-            <Image radius="sm" height="100%" width="auto" fit="container" src={state.calling.imageUrl} />
-          </div>
-          <div className={classes.control}>
+        )}
+        { !state.calling && connecting && (
+          <Loader size={48} />
+        )}
+        { state.calling && (
+          <div className={classes.calling}>
+            <div className={classes.title}>
+              { state.calling.name && (
+                <Text className={classes.name}>{ state.calling.name }</Text>
+              )}
+              { !state.calling.name && (
+                <Text className={classes.name}>{ `${state.calling.handle}/${state.calling.node}` }</Text>
+              )}
+            </div>
+            <div className={classes.logo}>
+              <Image radius="lg" height="100%" width="auto" fit="contain" src={state.calling.imageUrl} />
+            </div>
+            <div className={classes.status}>
+              { !state.connected && (
+                <Text className={classes.label}>{ state.strings.connecting }</Text>
+              )}
+            </div>
+            <div style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0, backgroundColor: '#888888', display: state.remoteVideo ? 'block' : 'none' }}>
+              <video ref={remote} disablePictureInPicture playsInline autoPlay style={{ width: '100%', height: '100%' }} />
+            </div>
+            <div style={{ position: 'absolute', width: state.remoteVideo ? '20%' : '100%', height: state.remoteVideo ? '20%' : '100%', top: 0, left: 0, backgroundColor: '#888888', display: state.localVideo ? 'block' : 'none' }}>
+              <video ref={local} disablePictureInPicture playsInline autoPlay style={{ width: '100%', height: '100%' }} />
+            </div>
             <div className={classes.buttons}>
               <ActionIcon onClick={toggleAudio} disabled={!state.connected} loading={applyingAudio} color={Colors.primary} size="xl">
                 { state.audioEnabled && (
@@ -206,13 +235,8 @@ export function Calling({ callCard }: { callCard: string }) {
               <ActionIcon onClick={end} color={Colors.offsync} size="xl"><IconPhone className={classes.off} /></ActionIcon>
             </div>
           </div>
-          <div className={classes.status}>
-            { !state.connected && (
-              <Text className={classes.label}>{ state.strings.connecting }</Text>
-            )}
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }
