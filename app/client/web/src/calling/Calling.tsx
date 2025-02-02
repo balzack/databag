@@ -209,11 +209,11 @@ export function Calling({ callCard }: { callCard: string }) {
                 <Text className={classes.label}>{ state.strings.connecting }</Text>
               )}
             </div>
-            <div style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0, backgroundColor: '#888888', display: state.remoteVideo ? 'block' : 'none' }}>
-              <video ref={remote} disablePictureInPicture playsInline autoPlay style={{ width: '100%', height: '100%' }} />
+            <div className={classes.video} style={{ width: '100%', height: '100%', display: state.remoteVideo ? 'block' : 'none' }}>
+              <video ref={remote} disablePictureInPicture playsInline autoPlay className={classes.full} />
             </div>
-            <div style={{ position: 'absolute', width: state.remoteVideo ? '20%' : '100%', height: state.remoteVideo ? '20%' : '100%', top: 0, left: 0, backgroundColor: '#888888', display: state.localVideo ? 'block' : 'none' }}>
-              <video ref={local} disablePictureInPicture playsInline autoPlay style={{ width: '100%', height: '100%' }} />
+            <div className={classes.video} style={{ width: state.remoteVideo ? '20%' : '100%', height: state.remoteVideo ? '20%' : '100%', display: state.localVideo ? 'block' : 'none' }}>
+              <video ref={local} disablePictureInPicture playsInline autoPlay className={classes.full} />
             </div>
             <div className={classes.buttons}>
               <ActionIcon onClick={toggleAudio} disabled={!state.connected} loading={applyingAudio} color={Colors.primary} size="xl">

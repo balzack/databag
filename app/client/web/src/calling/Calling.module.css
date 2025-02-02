@@ -80,5 +80,20 @@
     align-items: center;
     justify-content: center;
   }
+
+  .video {
+    top: 0;
+    left: 0;
+    position: absolute;
+    background-color: var(--mantine-color-surface-4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .full {
+    width: 100%;
+    height: 100%;
+  }
 }
 
