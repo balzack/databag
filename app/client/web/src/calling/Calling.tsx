@@ -1,22 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import classes from './Calling.module.css'
-import { useCalling } from './useCalling.hook';
+import { useCalling, type Ring } from './useCalling.hook';
 import { Card } from '../card/Card';
 import { Loader, Image, Text, ActionIcon } from '@mantine/core'
 import { IconEyeX, IconPhone, IconPhoneOff, IconMicrophone, IconMicrophoneOff, IconVideo, IconVideoOff } from '@tabler/icons-react'
 import { modals } from '@mantine/modals'
 import { Colors } from '../constants/Colors'
 
-export function Calling({ callCard }: { callCard: string }) {
+export function Calling({ callCard }: { callCard: { cardId: null|string }}) {
   const [connecting, setConnecting] = useState(false);
   const [ending, setEnding] = useState(false);
   const [applyingVideo, setApplyingVideo] = useState(false);
   const [applyingAudio, setApplyingAudio] = useState(false);
-  const [ignoring, setIgnoring] = useState(false);
-  const [declining, setDeclining] = useState(false);
-  const [accepting, setAccepting] = useState(false);
-  const remote = useRef();
-  const local = useRef();
+  const [ignoring, setIgnoring] = useState(null as null|string);
+  const [declining, setDeclining] = useState(null as null|string);
+  const [accepting, setAccepting] = useState(null as null|string);
+  const remote = useRef(null as null|HTMLVideoElement);
+  const local = useRef(null as null|HTMLVideoElement);
   const { state, actions } = useCalling();
 
   const showError = () => {
@@ -93,11 +93,11 @@ export function Calling({ callCard }: { callCard: string }) {
     }
   }
 
-  const accept = async (callId, card) => {
+  const accept = async (ring: Ring) => {
     if (!accepting) {
-      setAccepting(callId);
+      setAccepting(ring.callId);
       try {
-        await actions.accept(callId, card);
+        await actions.accept(ring.callId, ring.card);
       } catch (err) {
         console.log(err);
         showError();
@@ -106,11 +106,11 @@ export function Calling({ callCard }: { callCard: string }) {
     }
   }
 
-  const ignore = async (callId, card) => {
+  const ignore = async (ring: Ring) => {
     if (!ignoring) {
-      setIgnoring(callId);
+      setIgnoring(ring.callId);
       try {
-        await actions.ignore(callId, card);
+        await actions.ignore(ring.callId, ring.card);
       } catch (err) {
         console.log(err);
         showError();
@@ -119,11 +119,11 @@ export function Calling({ callCard }: { callCard: string }) {
     }
   }
 
-  const decline = async (callId, card) => {
+  const decline = async (ring: Ring) => {
     if (!declining) {
-      setDeclining(callId);
+      setDeclining(ring.callId);
       try {
-        await actions.decline(callId, card);
+        await actions.decline(ring.callId, ring.card);
       } catch (err) {
         console.log(err);
         showError();
@@ -132,21 +132,9 @@ export function Calling({ callCard }: { callCard: string }) {
     }
   }
 
-  const alertParams = {
-    title: state.strings.operationFailed,
-    prompt: state.strings.tryAgain,
-    cancel: {
-      label: state.strings.close,
-      action: () => {
-        setAlert(false);
-      },
-    },
-  };
-
   useEffect(() => {
-    const { cardId } = callCard;
-    if (cardId) {
-      call(cardId);
+    if (callCard?.cardId) {
+      call(callCard.cardId);
     }
   }, [callCard]);
 
@@ -166,12 +154,11 @@ export function Calling({ callCard }: { callCard: string }) {
     }           
   }, [state.remoteStream]);
 
-  const calls = state.calls.map((contact, index) => {
-    const { callId, card } = contact;
-    const { name, handle, node, imageUrl } = card;
-    const ignoreButton = <ActionIcon key="ignore" variant="subtle" loading={ignoring===callId} onClick={()=>ignore(callId, card)} color={Colors.pending}><IconEyeX /></ActionIcon>
-    const declineButton = <div key="decline" className={classes.space}><ActionIcon variant="subtle" loading={declining===callId} onClick={()=>decline(callId, card)} color={Colors.offsync}><IconPhone className={classes.off} /></ActionIcon></div>
-    const acceptButton = <ActionIcon key="accept" variant="subtle" loading={accepting===callId} onClick={()=>accept(callId, card)} color={Colors.primary}><IconPhone /></ActionIcon>
+  const calls = state.calls.map((ring, index) => {
+    const { name, handle, node, imageUrl } = ring.card;
+    const ignoreButton = <ActionIcon key="ignore" variant="subtle" loading={ignoring===ring.callId} onClick={()=>ignore(ring)} color={Colors.pending}><IconEyeX /></ActionIcon>
+    const declineButton = <div key="decline" className={classes.space}><ActionIcon variant="subtle" loading={declining===ring.callId} onClick={()=>decline(ring)} color={Colors.offsync}><IconPhone className={classes.off} /></ActionIcon></div>
+    const acceptButton = <ActionIcon key="accept" variant="subtle" loading={accepting===ring.callId} onClick={()=>accept(ring)} color={Colors.primary}><IconPhone /></ActionIcon>
 
     return (
       <div key={index} className={classes.caller}>

@@ -4,6 +4,11 @@ import { AppContext } from '../context/AppContext'
 import { ContextType } from '../context/ContextType'
 import { Link, type Card } from 'databag-client-sdk';
 
+export type Ring = {
+  callId: string,
+  card: Card,
+}
+
 export function useCalling() {
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
@@ -16,9 +21,9 @@ export function useCalling() {
   const peerUpdate = useRef([] as {type: string, data?: any}[]);
 
   const [state, setState] = useState({
-    strings: {}, 
+    strings: display.state.strings, 
     ringing: [] as { cardId: string, callId: string }[],
-    calls: [],
+    calls: [] as Ring[],
     cards: [] as Card[],
     calling: null as null | Card,
     failed: false,
@@ -77,25 +82,25 @@ export function useCalling() {
     if (call.current) {
       const { policy, peer, link } = call.current;
       if (status === 'connected') {
+        localVideo.current = null;
+        localStream.current = null;
+        remoteStream.current = new MediaStream();
+        updateState({ localStream: localStream.current, remoteStream: remoteStream.current,
+          audioEnabled: false, videoEnabled: false, localVideo: false, remoteVideo: false, connected: true });
+
         try {
           const audioStream = await getAudioStream(null);
           const audioTrack = audioStream.getTracks().find((track: MediaStreamTrack) => track.kind === 'audio');
           if (audioTrack) {
             localAudio.current = audioTrack;
           }
-          localVideo.current = null;
-          localStream.current = null;
-          remoteStream.current = new MediaStream();
-
           if (localAudio.current) {
             localAudio.current.enabled = true;
             await updatePeer('local_track', { track: audioTrack, stream: audioStream });
+            updateState({ audioEnabled: true }); 
           }
-          updateState({ localStream: localStream.current, remoteStream: remoteStream.current,
-            audioEnabled: true, videoEnabled: false, localVideo: false, remoteVideo: false, connected: true });
         } catch (err) {
           console.log(err);
-          updateState({ failed: true });
         }
       } else if (status === 'closed') {
         updatePeer('close');
@@ -316,7 +321,17 @@ export function useCalling() {
       if (!call.current) {
         throw new Error('cannot unmute audio');
       }
-      if (localAudio.current) {
+      if (!localAudio.current) {
+        const audioStream = await getAudioStream(null);
+        const audioTrack = audioStream.getTracks().find((track: MediaStreamTrack) => track.kind === 'audio');
+        if (!audioTrack) {
+          throw new Error('no available audio track');
+        } 
+        localAudio.current = audioTrack;
+        localStream.current = audioStream;
+        updatePeer('local_track', { track: audioTrack, stream: audioStream });
+        updateState({ localAudio: true, localStream: audioStream, audioEnabled: true });
+      } else {
         localAudio.current.enabled = true;
         updateState({ audioEnabled: true });
       }
