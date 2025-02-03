@@ -9,17 +9,17 @@ const CLOSE_POLL_MS = 100;
 export function useRingContext() {
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
-  const call = useRef(null as { policy: string, peer: RTCPeerConnection, link: Link, candidates: RTCIceCandidate[] } | null);
+  const call = useRef(null as { peer: RTCPeerConnection, link: Link, candidates: RTCIceCandidate[] } | null);
   const localStream = useRef(null as null|MediaStream);
   const localAudio = useRef(null as null|MediaStreamTrack);
   const localVideo = useRef(null as null|MediaStreamTrack);
   const remoteStream = useRef(null as null|MediaStream);
   const updatingPeer = useRef(false);
   const peerUpdate = useRef([] as {type: string, data?: any}[]);
+  const connecting = useRef(false);
   const closing = useRef(false);
 
   const [state, setState] = useState({
-    strings: display.state.strings, 
     ringing: [] as { cardId: string, callId: string }[],
     calls: [] as { callId: string, cardId: string}[],
     cards: [] as Card[],
@@ -74,93 +74,10 @@ export function useRingContext() {
     if (call.current) {
       const { policy, peer, link } = call.current;
       if (status === 'connected') {
-        localVideo.current = null;
-        localStream.current = null;
-        remoteStream.current = new MediaStream();
-        updateState({ localStream: localStream.current, remoteStream: remoteStream.current,
-          audioEnabled: false, videoEnabled: false, localVideo: false, remoteVideo: false, connected: true });
-
-        try {
-          const audioStream = await getAudioStream(null);
-          const audioTrack = audioStream.getTracks().find((track: MediaStreamTrack) => track.kind === 'audio');
-          if (audioTrack) {
-            localAudio.current = audioTrack;
-          }
-          if (localAudio.current) {
-            localAudio.current.enabled = true;
-            await updatePeer('local_track', { track: audioTrack, stream: audioStream });
-            updateState({ audioEnabled: true }); 
-          }
-        } catch (err) {
-          console.log(err);
-        }
+        await updatePeer('open');
+        await actions.enableAudio();
       } else if (status === 'closed') {
-        updatePeer('close');
-      }
-    }
-  }
-
-  const linkMessage = async (message: any) => {
-    if (call.current) {
-      const { peer, link, policy, candidates } = call.current;
-      try {
-        if (message.description) {
-          const offer = new RTCSessionDescription(message.description);
-          await peer.setRemoteDescription(offer);
-          if (message.description.type === 'offer') {
-            const description = await peer.createAnswer();
-            await peer.setLocalDescription(description);
-            link.sendMessage({ description });
-          }
-
-          if (call.current) {
-            for (const candidate of candidates) {
-              await peer.addIceCandidate(candidate);
-            };
-            call.current.candidates = [];
-          }
-        } else if (message.candidate) {
-          const candidate = new RTCIceCandidate(message.candidate);
-          if (peer.remoteDescription == null) {
-            candidates.push(candidate);
-          } else {
-            await peer.addIceCandidate(candidate);
-          }
-        }
-      } catch (err) {
-        console.log(err);
-        updateState({ failed: true });
-      }
-    }
-  }
-
-  const peerCandidate = async (candidate: RTCIceCandidate) => {
-    if (call.current && candidate) {
-      const { link } = call.current;
-      await link.sendMessage({ candidate });
-    }
-  }
-
-  const peerNegotiate = async () => {
-    if (call.current) {
-      try {
-        const { peer, link } = call.current;
-        const description = await peer.createOffer();
-        await peer.setLocalDescription(description);
-        await link.sendMessage({ description });
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  }
-
-  const peerTrack = async (track: MediaStreamTrack, stream: MediaStream) => {
-    if (call.current && localStream.current) {
-      try {
-        const { peer } = call.current;
-        peer.addTrack(track, stream);
-      } catch (err) {
-        console.log(err);
+        await updatePeer('close');
       }
     }
   }
@@ -170,29 +87,92 @@ export function useRingContext() {
 
     if (!updatingPeer.current) {
       updatingPeer.current = true;
-      while (!closing.current && peerUpdate.current.length > 0) {
+      while (!closing.current && call.current && peerUpdate.current.length > 0) {
+        const { peer, link, candidates } = call.current;
         const { type, data } = peerUpdate.current.shift() || { type: '' };
-        if (type === 'negotiate') {
-          await peerNegotiate();
-        } else if (type === 'candidate') {
-          await peerCandidate(data);
-        } else if (type === 'message') {
-          await linkMessage(data);
-        } else if (type === 'remote_track') {
-          if (remoteStream.current) {
-            remoteStream.current.addTrack(data);
-            if (data.kind === 'video') {
-              updateState({ remoteVideo: true });
-            }
+        try {
+          switch (type) {
+            case 'negotiate':
+              const description = await peer.createOffer();
+              await peer.setLocalDescription(description);
+              await link.sendMessage({ description });
+              break;
+            case 'candidate':
+              await link.sendMessage({ data });
+              break;
+            case 'message':
+              if (data.description) {
+                const offer = new RTCSessionDescription(data.description);
+                await peer.setRemoteDescription(offer);
+                if (data.description.type === 'offer') {
+                  const description = await peer.createAnswer();
+                  await peer.setLocalDescription(description);
+                  link.sendMessage({ description });
+                }
+                for (const candidate of candidates) {
+                  await peer.addIceCandidate(candidate);
+                };
+                call.current.candidates = [];
+              } else if (data.candidate) {
+                const candidate = new RTCIceCandidate(data.candidate);
+                if (peer.remoteDescription == null) {
+                  candidates.push(candidate);
+                } else {
+                  await peer.addIceCandidate(candidate);
+                }
+              }
+              break;
+            case 'remote_track':
+              if (remoteStream.current) {
+                remoteStream.current.addTrack(data);
+                if (data.kind === 'video') {
+                  updateState({ remoteVideo: true });
+                }
+              }
+              break;
+            case 'local_track':
+              peer.addTrack(data.track, data.stream);
+              if (data.track.kind === 'audio') {
+                localAudio.current = data.track;
+              }
+              if (data.track.kind === 'video') {
+                localVideo.currrent = data.track;
+                localStream.current = data.stream;
+                updateState({ localVideo: true, localStream: localStream.current })
+              }
+              break;
+            case 'open':
+              updateState({ connected: true });
+            case 'close':
+              await cleanup();
+              break;
+            default:
+              console.log('unknown event');
+              break;
           }
-        } else if (type === 'local_track') {
-          await peerTrack(data.track, data.stream);
-        } else if (type === 'close' && call.current) {
-          cleanup();
+        } catch (err) {
+          console.log(err);
+          updateState({ failed: true });
         }
       }
       updatingPeer.current = false;
     }
+  }
+
+  const async setup = (link: Link) => {
+    localAudio.current = null;
+    localVideo.current = null;
+    localStream.current = null;
+    remoteStream.current = new MediaStream();
+    const ice = link.getIce();
+    const peer = transmit(ice);
+    const candidates = [] as RTCIceCandidate[];
+    call.current = { peer, link, candidates };
+    link.setStatusListener(linkStatus);
+    link.setMessageListener((msg: any) => updatePeer('message', msg));
+    updateState({ calling: card, failed: false, connected: false,
+      audioEnabled: false, videoEnabled: false, localVideo: false, remoteVideo: false,
+      localStream: localStream.current, remoteStream: remoteStream.current });
   }
 
   const async cleanup = () => {
@@ -280,39 +260,39 @@ export function useRingContext() {
       await cleanup();
     },
     accept: async (callId: string, card: Card) => {
-      if (closing.current || call.current) {
-        throw new Error('active call in progress');
+      if (connecting.current || closing.current || call.current) {
+        throw new Error('not ready to accept calls');
       }
-      const { cardId, node } = card;
-      const ring = app.state.session.getRing();
-      const link = await ring.accept(cardId, callId, node);
-      const ice = link.getIce();
-      const peer = transmit(ice);
-      const policy = 'impolite';
-      const candidates = [] as RTCIceCandidate[];
-      call.current = { policy, peer, link, candidates }; 
-      link.setStatusListener(linkStatus);
-      link.setMessageListener((msg: any) => updatePeer('message', msg));
-      updateState({ calling: card, failed: false, connected: false });
+      try {
+        connecting.current = true;
+        const { cardId, node } = card;
+        const ring = app.state.session.getRing();
+        const link = await ring.accept(cardId, callId, node);
+        await setup(link);
+        connecting.current = false;
+      } catch (err) {
+        connecting.current = false;
+        throw err;
+      }
     },
     call: async (cardId: string) => {
-      if (closing.current || call.current) {
-        throw new Error('active call in proegress');
+      if (connecting.current || closing.current || call.current) {
+        throw new Error('not ready make calls');
       }
-      const card = state.cards.find(contact => contact.cardId === cardId);
-      if (!card) {
-        throw new Error('calling contact not found');
+      try {
+        connecting.current = true;
+        const card = state.cards.find(contact => contact.cardId === cardId);
+        if (!card) {
+          throw new Error('calling contact not found');
+        }
+        const contact = app.state.session.getContact();
+        const link = await contact.callCard(cardId);
+        await setup(link);
+        connecting.current = false;
+      } catch (err) {
+        connecting.current = false;
+        throw err;
       }
-      const contact = app.state.session.getContact();
-      const link = await contact.callCard(cardId);
-      const ice = link.getIce();
-      const peer = transmit(ice);
-      const policy = 'polite';
-      const candidates = [] as RTCIceCandidate[];
-      call.current = { policy, peer, link, candidates };
-      link.setStatusListener(linkStatus);
-      link.setMessageListener((msg: any) => updatePeer('message', msg));
-      updateState({ calling: card, failed: false, connected: false });
     },
     enableAudio: async () => {
       if (!call.current) {
@@ -323,15 +303,12 @@ export function useRingContext() {
         const audioTrack = audioStream.getTracks().find((track: MediaStreamTrack) => track.kind === 'audio');
         if (!audioTrack) {
           throw new Error('no available audio track');
-        } 
-        localAudio.current = audioTrack;
-        localStream.current = audioStream;
+        }
         updatePeer('local_track', { track: audioTrack, stream: audioStream });
-        updateState({ localAudio: true, localStream: audioStream, audioEnabled: true });
       } else {
         localAudio.current.enabled = true;
-        updateState({ audioEnabled: true });
       }
+      updateState({ audioEnabled: true });
     },
     disableAudio: async () => {
       if (!call.current) {
@@ -339,8 +316,8 @@ export function useRingContext() {
       }
       if (localAudio.current) {
         localAudio.current.enabled = false;
-        updateState({ audioEnabled: false });
       }
+      updateState({ audioEnabled: false });
     },
     enableVideo: async () => {
       if (!call.current) {
@@ -350,16 +327,12 @@ export function useRingContext() {
         const videoStream = await getVideoStream(null);
         const videoTrack = videoStream.getTracks().find((track: MediaStreamTrack) => track.kind === 'video');
         if (videoTrack) {
-          localVideo.current = videoTrack;
-          localStream.current = videoStream;
           updatePeer('local_track', { track: videoTrack, stream: videoStream });
-          updateState({ localVideo: true, localStream: videoStream });
         }
-      }
-      if (localVideo.current) {
+      } else {
         localVideo.current.enabled = true;
-        updateState({ videoEnabled: true });
       }
+      updateState({ videoEnabled: true });
     },
     disableVideo: async () => {
       if (!call.current) {
@@ -367,8 +340,8 @@ export function useRingContext() {
       }
       if (localVideo.current) {
         localVideo.current.enabled = false;
-        updateState({ videoEnabled: false });
       }
+      updateState({ videoEnabled: false });
     },
   }
 
