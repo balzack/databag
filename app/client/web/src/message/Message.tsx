@@ -11,8 +11,8 @@ import type { MediaAsset } from '../conversation/Conversation';
 import { useMessage } from './useMessage.hook';
 import { IconForbid, IconTrash, IconEdit, IconFlag, IconChevronLeft, IconChevronRight, IconFileAlert } from '@tabler/icons-react';
 import { useResizeDetector } from 'react-resize-detector';
-import DOMPurify from 'dompurify';
 import { modals } from '@mantine/modals'
+import { sanitizeUrl } from '@braintree/sanitize-url';
 
 export function Message({ topic, card, profile, host }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean }) {
   const { state, actions } = useMessage();
@@ -127,7 +127,7 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
 
     let plain = '';
     let clickable = [];
-    const parsed = !text ? '' : DOMPurify.sanitize(text).split(' ');
+    const parsed = !text ? [] : text.split(' ');
 
     if (parsed?.length > 0) {
       const words = parsed as string[];
@@ -136,7 +136,7 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
           clickable.push(<span key={index}>{ plain }</span>);
           plain = '';
           const url = !!hostPattern.test(word) ? word : `https://${word}`;
-          clickable.push(<a key={'link-'+index} target="_blank" rel="noopener noreferrer" href={url}>{ `${word} ` }</a>);
+          clickable.push(<a key={'link-'+index} target="_blank" rel="noopener noreferrer" href={sanitizeUrl(url)}>{ `${word} ` }</a>);
         }
         else {
           plain += `${word} `;
