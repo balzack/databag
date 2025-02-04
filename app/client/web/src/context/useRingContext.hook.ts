@@ -18,11 +18,11 @@ export function useRingContext() {
   const peerUpdate = useRef([] as {type: string, data?: any}[]);
   const connecting = useRef(false);
   const closing = useRef(false);
+  const [ringing, setRinging] = useState([] as { cardId: string, callId: string }[]);
+  const [cards, setCards] = useState([] as Card[]);
 
   const [state, setState] = useState({
-    ringing: [] as { cardId: string, callId: string }[],
     calls: [] as { callId: string, cardId: string}[],
-    cards: [] as Card[],
     calling: null as null | Card,
     localStream: null as null|MediaStream,
     remoteStream: null as null|MediaStream,
@@ -40,11 +40,10 @@ export function useRingContext() {
   }
 
   useEffect(() => {
-    const calls = state.ringing
-      .map(ring => ({ callId: ring.callId, card: state.cards.find(card => ring.cardId === card.cardId) }) )
+    const calls = ringing.map(ring => ({ callId: ring.callId, card: cards.find(card => ring.cardId === card.cardId) }))
       .filter(ring => (ring.card && !ring.card.blocked));
     updateState({ calls });
-  }, [state.ringing, state.cards]);
+  }, [ringing, cards]);
 
   const getAudioStream = async (audioId: null|string) => {
     try {
@@ -74,10 +73,10 @@ export function useRingContext() {
     if (call.current) {
       const { peer, link } = call.current;
       if (status === 'connected') {
-        await updatePeer('open');
+        updateState({ connected: true });
         await actions.enableAudio();
       } else if (status === 'closed') {
-        await updatePeer('close');
+        await cleanup;
       }
     }
   }
@@ -140,11 +139,6 @@ export function useRingContext() {
                 localStream.current = data.stream;
                 updateState({ localVideo: true, localStream: localStream.current })
               }
-              break;
-            case 'open':
-              updateState({ connected: true });
-            case 'close':
-              await cleanup();
               break;
             default:
               console.log('unknown event');
@@ -229,18 +223,18 @@ export function useRingContext() {
 
   useEffect(() => {
     if (app.state.session) {
-      const setRinging = (ringing: { cardId: string, callId: string }[]) => {
-        updateState({ ringing });
+      const setRing = (ringing: { cardId: string, callId: string }[]) => {
+        setRinging(ringing);
       }
       const setContacts = (cards: Card[]) => {
-        updateState({ cards });
+        setCards(cards);
       }
       const ring = app.state.session.getRing();
       ring.addRingingListener(setRinging);
       const contact = app.state.session.getContact();
       contact.addCardListener(setContacts);
       return () => {
-        ring.removeRingingListener(setRinging);
+        ring.removeRingingListener(setRing);
         contact.removeCardListener(setContacts);
         cleanup();
       }
@@ -275,18 +269,14 @@ export function useRingContext() {
         throw err;
       }
     },
-    call: async (cardId: string) => {
+    call: async (card: Card) => {
       if (connecting.current || closing.current || call.current) {
         throw new Error('not ready make calls');
       }
       try {
         connecting.current = true;
-        const card = state.cards.find(contact => contact.cardId === cardId);
-        if (!card) {
-          throw new Error('calling contact not found');
-        }
         const contact = app.state.session.getContact();
-        const link = await contact.callCard(cardId);
+        const link = await contact.callCard(card.cardId);
         await setup(link, card);
         connecting.current = false;
       } catch (err) {

@@ -3,7 +3,8 @@ import { useContacts } from './useContacts.hook'
 import { Text, ActionIcon, TextInput, Button } from '@mantine/core'
 import { IconUserCheck, IconCancel, IconRefresh, IconSearch, IconUserPlus, IconSortAscending, IconSortDescending, IconMessage2, IconPhone } from '@tabler/icons-react'
 import classes from './Contacts.module.css'
-import { Card } from '../card/Card'
+import { type Card } from 'databag-client-sdk';
+import { Card as Contact } from '../card/Card'
 import { ProfileParams } from '../profile/Profile'
 import { Colors } from '../constants/Colors'
 import { modals } from '@mantine/modals'
@@ -37,7 +38,7 @@ function Action({ icon, color, strings, select }: { icon: ReactNode; color: stri
   )
 }
 
-export function Contacts({ openRegistry, openContact, textContact, callContact }: { openRegistry: ()=>void; openContact: (params: ProfileParams)=>void, textContact: (cardId: string)=>void, callContact: (cardId: string)=>void }) {
+export function Contacts({ openRegistry, openContact, textContact, callContact }: { openRegistry: ()=>void; openContact: (params: ProfileParams)=>void, textContact: (cardId: string)=>void, callContact: (card: Card)=>void }) {
   const { state, actions } = useContacts()
 
   const cards = state.filtered.map((card, idx) => {
@@ -47,7 +48,7 @@ export function Contacts({ openRegistry, openContact, textContact, callContact }
         const phone = <IconPhone size={24} />
         const text = <IconMessage2 size={24} />
         return [
-          <Action key="phone" icon={phone} color={Colors.connected} select={async () => callContact(card.cardId)} strings={state.strings} />,
+          <Action key="phone" icon={phone} color={Colors.connected} select={async () => callContact(card)} strings={state.strings} />,
           <Action key="text" icon={text} color={Colors.connected} select={async () => textContact(card.cardId)} strings={state.strings} />,
         ]
       } else if (status === 'offsync') {
@@ -75,7 +76,7 @@ export function Contacts({ openRegistry, openContact, textContact, callContact }
     }
 
     return (
-      <Card key={idx} className={classes.card} imageUrl={card.imageUrl} name={card.name} handle={card.handle} node={card.node} placeholder={state.strings.name} select={select} actions={options} />
+      <Contact key={idx} className={classes.card} imageUrl={card.imageUrl} name={card.name} handle={card.handle} node={card.node} placeholder={state.strings.name} select={select} actions={options} />
     )
   })
 

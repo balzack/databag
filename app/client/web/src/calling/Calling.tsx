@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import classes from './Calling.module.css'
-import { useCalling, type Ring } from './useCalling.hook';
-import { Card } from '../card/Card';
+import { type Card } from 'databag-client-sdk'
+import { useCalling } from './useCalling.hook';
+import { Card as Contact } from '../card/Card';
 import { Loader, Image, Text, ActionIcon } from '@mantine/core'
 import { IconEyeX, IconPhone, IconPhoneOff, IconMicrophone, IconMicrophoneOff, IconVideo, IconVideoOff } from '@tabler/icons-react'
 import { modals } from '@mantine/modals'
 import { Colors } from '../constants/Colors'
 
-export function Calling({ callCard }: { callCard: { cardId: null|string }}) {
+export function Calling({ callCard }: { callCard: { card: null|Card }}) {
   const [connecting, setConnecting] = useState(false);
   const [ending, setEnding] = useState(false);
   const [applyingVideo, setApplyingVideo] = useState(false);
@@ -80,11 +81,11 @@ export function Calling({ callCard }: { callCard: { cardId: null|string }}) {
     }
   }
 
-  const call = async (cardId: string) => {
+  const call = async (card: Card) => {
     if (!connecting) {
       setConnecting(true);
       try {
-        await actions.call(cardId);
+        await actions.call(card);
       } catch (err) {
         console.log(err);
         showError();
@@ -93,7 +94,7 @@ export function Calling({ callCard }: { callCard: { cardId: null|string }}) {
     }
   }
 
-  const accept = async (ring: Ring) => {
+  const accept = async (ring: { callId: string, card: Card }) => {
     if (!accepting) {
       setAccepting(ring.callId);
       try {
@@ -106,7 +107,7 @@ export function Calling({ callCard }: { callCard: { cardId: null|string }}) {
     }
   }
 
-  const ignore = async (ring: Ring) => {
+  const ignore = async (ring: { callId: string, card: Card }) => {
     if (!ignoring) {
       setIgnoring(ring.callId);
       try {
@@ -119,7 +120,7 @@ export function Calling({ callCard }: { callCard: { cardId: null|string }}) {
     }
   }
 
-  const decline = async (ring: Ring) => {
+  const decline = async (ring: { callId: string, card: Card }) => {
     if (!declining) {
       setDeclining(ring.callId);
       try {
@@ -133,8 +134,8 @@ export function Calling({ callCard }: { callCard: { cardId: null|string }}) {
   }
 
   useEffect(() => {
-    if (callCard?.cardId) {
-      call(callCard.cardId);
+    if (callCard?.card) {
+      call(callCard.card);
     }
   }, [callCard]);
 
@@ -162,7 +163,7 @@ export function Calling({ callCard }: { callCard: { cardId: null|string }}) {
 
     return (
       <div key={index} className={classes.caller}>
-        <Card className={classes.card} placeholder={''} imageUrl={imageUrl} name={name} node={node} handle={handle} actions={[ignoreButton, declineButton, acceptButton]} />
+        <Contact className={classes.card} placeholder={''} imageUrl={imageUrl} name={name} node={node} handle={handle} actions={[ignoreButton, declineButton, acceptButton]} />
       </div>
     )
   });
