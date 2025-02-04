@@ -1133,6 +1133,11 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@braintree/sanitize-url@^7.1.1":
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-7.1.1.tgz#15e19737d946559289b915e5dad3b4c28407735e"
+  integrity sha512-i1L7noDNxtFyL5DmZafWy1wRVhGehQmzZaz1HiN5e7iylJMSZR7ekOV7NsIqa5qBldlLrsKv4HbgFUVlQrz8Mw==
+
 "@charliewilco/gluejar@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@charliewilco/gluejar/-/gluejar-1.0.0.tgz#f228e8130d4e23401c119f32e27e5353c544c58e"

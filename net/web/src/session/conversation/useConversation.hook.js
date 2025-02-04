@@ -9,7 +9,7 @@ import { ProfileContext } from 'context/ProfileContext';
 import { isUnsealed, getChannelSeals, getContentKey, encryptTopicSubject } from 'context/sealUtil';
 import { decryptTopicSubject } from 'context/sealUtil';
 import { getProfileByGuid } from 'context/cardUtil';
-import * as DOMPurify from 'dompurify';
+import { sanitizeUrl } from '@braintree/sanitize-url';
 
 export function useConversation(cardId, channelId) {
 
@@ -145,14 +145,14 @@ export function useConversation(cardId, channelId) {
       let group = '';
       let clickable = [];
 
-      const words = text === [] ? '' : DOMPurify.sanitize(text).split(' ');
+      const words = !text ? [] : text.split(' ');
 
       words.forEach((word, index) => {
         if (!!urlPattern.test(word)) {
           clickable.push(<span key={index}>{ group }</span>);
           group = '';
           const url = !!hostPattern.test(word) ? word : `https://${word}`;
-          clickable.push(<a key={'link-'+index} target="_blank" rel="noopener noreferrer" href={url}>{ `${word} ` }</a>);
+          clickable.push(<a key={`link-${index}`} target="_blank" rel="noopener noreferrer" href={sanitizeUrl(url)}>{ word }</a>);
         }
         else {
           group += `${word} `;
