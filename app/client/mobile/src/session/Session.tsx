@@ -1,5 +1,6 @@
 import React, {useState, useCallback, useEffect} from 'react';
 import {SafeAreaView, Pressable, View, useColorScheme} from 'react-native';
+import {RingContextProvider} from '../context/RingContext';
 import {styles} from './Session.styled';
 import {IconButton, Surface, Text, Icon} from 'react-native-paper';
 import {Settings} from '../settings/Settings';
@@ -12,7 +13,7 @@ import {Identity} from '../identity/Identity';
 import {Conversation} from '../conversation/Conversation';
 import {useSession} from './useSession.hook';
 import {TransitionPresets} from '@react-navigation/stack';
-import {Focus} from 'databag-client-sdk';
+import {Focus, Card} from 'databag-client-sdk';
 import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -33,7 +34,7 @@ export function Session() {
   const scheme = useColorScheme();
   const [tab, setTab] = useState('content');
   const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
-  const [callCard, setCallCard] = useState({ cardId: null} as {cardId: null|string});
+  const [callCard, setCallCard] = useState({ card: null} as {card: null|Card});
   const [dismissed, setDismissed] = useState(false);
   const [disconnected, setDisconnected] = useState(false);
   const [showDisconnected, setShowDisconnected] = useState(false);
@@ -42,8 +43,8 @@ export function Session() {
     setTextCard({ cardId });
   }
 
-  const callContact = (cardId: null|string) => {
-    setCallCard({ cardId });
+  const callContact = (card: null|Card) => {
+    setCallCard({ card });
   }
 
   const sessionNav = {strings: state.strings, callContact, callCard, textContact, textCard};
@@ -77,126 +78,128 @@ export function Session() {
   }, [state.appState, state.sdkState]);
 
   return (
-    <View style={styles.session}>
-      {state.layout !== 'large' && (
-        <Surface elevation={3}>
-          <SafeAreaView style={styles.full}>
-            <View style={styles.screen}>
-              <View
-                style={{
-                  ...styles.body,
-                  ...showContent,
-                }}>
-                <ContentTab textCard={textCard} scheme={scheme} contentTab={contentTab} />
+    <RingContextProvider>
+      <View style={styles.session}>
+        {state.layout !== 'large' && (
+          <Surface elevation={3}>
+            <SafeAreaView style={styles.full}>
+              <View style={styles.screen}>
+                <View
+                  style={{
+                    ...styles.body,
+                    ...showContent,
+                  }}>
+                  <ContentTab textCard={textCard} scheme={scheme} contentTab={contentTab} />
+                </View>
+                <View
+                  style={{
+                    ...styles.body,
+                    ...showContact,
+                  }}>
+                  <ContactTab textContact={textContact} callContact={callContact} scheme={scheme} />
+                </View>
+                <View
+                  style={{
+                    ...styles.body,
+                    ...showSettings,
+                  }}>
+                  <Surface elevation={0}>
+                    <Settings showLogout={true} />
+                  </Surface>
+                </View>
+                <View style={styles.tabs}>
+                  {tab === 'content' && (
+                    <IconButton
+                      style={styles.activeTab}
+                      mode="contained"
+                      icon={'comment-multiple'}
+                      size={28}
+                      onPress={() => {
+                        setTab('content');
+                      }}
+                    />
+                  )}
+                  {tab !== 'content' && (
+                    <IconButton
+                      style={styles.idleTab}
+                      mode="contained"
+                      icon={'comment-multiple-outline'}
+                      size={28}
+                      onPress={() => {
+                        setTab('content');
+                      }}
+                    />
+                  )}
+                  {tab === 'contacts' && (
+                    <IconButton
+                      style={styles.activeTab}
+                      mode="contained"
+                      icon={'contacts'}
+                      size={28}
+                      onPress={() => {
+                        setTab('contacts');
+                      }}
+                    />
+                  )}
+                  {tab !== 'contacts' && (
+                    <IconButton
+                      style={styles.idleTab}
+                      mode="contained"
+                      icon={'contacts-outline'}
+                      size={28}
+                      onPress={() => {
+                        setTab('contacts');
+                      }}
+                    />
+                  )}
+                  {tab === 'settings' && (
+                    <IconButton
+                      style={styles.activeTab}
+                      mode="contained"
+                      icon={'cog'}
+                      size={28}
+                      onPress={() => {
+                        setTab('settings');
+                      }}
+                    />
+                  )}
+                  {tab !== 'settings' && (
+                    <IconButton
+                      style={styles.idleTab}
+                      mode="contained"
+                      icon={'cog-outline'}
+                      size={28}
+                      onPress={() => {
+                        setTab('settings');
+                      }}
+                    />
+                  )}
+                </View>
               </View>
-              <View
-                style={{
-                  ...styles.body,
-                  ...showContact,
-                }}>
-                <ContactTab textContact={textContact} callContact={callContact} scheme={scheme} />
-              </View>
-              <View
-                style={{
-                  ...styles.body,
-                  ...showSettings,
-                }}>
-                <Surface elevation={0}>
-                  <Settings showLogout={true} />
-                </Surface>
-              </View>
-              <View style={styles.tabs}>
-                {tab === 'content' && (
-                  <IconButton
-                    style={styles.activeTab}
-                    mode="contained"
-                    icon={'comment-multiple'}
-                    size={28}
-                    onPress={() => {
-                      setTab('content');
-                    }}
-                  />
-                )}
-                {tab !== 'content' && (
-                  <IconButton
-                    style={styles.idleTab}
-                    mode="contained"
-                    icon={'comment-multiple-outline'}
-                    size={28}
-                    onPress={() => {
-                      setTab('content');
-                    }}
-                  />
-                )}
-                {tab === 'contacts' && (
-                  <IconButton
-                    style={styles.activeTab}
-                    mode="contained"
-                    icon={'contacts'}
-                    size={28}
-                    onPress={() => {
-                      setTab('contacts');
-                    }}
-                  />
-                )}
-                {tab !== 'contacts' && (
-                  <IconButton
-                    style={styles.idleTab}
-                    mode="contained"
-                    icon={'contacts-outline'}
-                    size={28}
-                    onPress={() => {
-                      setTab('contacts');
-                    }}
-                  />
-                )}
-                {tab === 'settings' && (
-                  <IconButton
-                    style={styles.activeTab}
-                    mode="contained"
-                    icon={'cog'}
-                    size={28}
-                    onPress={() => {
-                      setTab('settings');
-                    }}
-                  />
-                )}
-                {tab !== 'settings' && (
-                  <IconButton
-                    style={styles.idleTab}
-                    mode="contained"
-                    icon={'cog-outline'}
-                    size={28}
-                    onPress={() => {
-                      setTab('settings');
-                    }}
-                  />
-                )}
-              </View>
-            </View>
-          </SafeAreaView>
-        </Surface>
-      )}
-      {state.layout === 'large' && (
-        <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <View style={styles.container}>
-            <DetailsScreen nav={sessionNav} />
-          </View>
-        </NavigationContainer>
-      )}
-      { disconnected && showDisconnected && !dismissed && (
-        <View style={styles.alert}>
-          <Surface elevation={5} style={styles.alertArea}>
-            <Icon color={Colors.offsync} size={20} source="alert-circle-outline" />
-            <Text style={styles.alertLabel}>{ state.strings.disconnected }</Text>
-            <Pressable onPress={dismiss}>
-              <Icon color={Colors.offsync} size={20} source="close" />
-            </Pressable>
+            </SafeAreaView>
           </Surface>
-        </View>
-      )}
-      <Calling callCard={callCard} />
-    </View>
+        )}
+        {state.layout === 'large' && (
+          <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <View style={styles.container}>
+              <DetailsScreen nav={sessionNav} />
+            </View>
+          </NavigationContainer>
+        )}
+        { disconnected && showDisconnected && !dismissed && (
+          <View style={styles.alert}>
+            <Surface elevation={5} style={styles.alertArea}>
+              <Icon color={Colors.offsync} size={20} source="alert-circle-outline" />
+              <Text style={styles.alertLabel}>{ state.strings.disconnected }</Text>
+              <Pressable onPress={dismiss}>
+                <Icon color={Colors.offsync} size={20} source="close" />
+              </Pressable>
+            </Surface>
+          </View>
+        )}
+        <Calling callCard={callCard} />
+      </View>
+    </RingContextProvider>
   );
 }
 
@@ -231,7 +234,7 @@ function ContentTab({scheme, textCard, contentTab}: {scheme: string, textCard: {
   );
 }
 
-function ContactTab({scheme, textContact, callContact}: {scheme: string, textContact: (cardId: string)=>void, callContact: (cardId: string)=>void}) {
+function ContactTab({scheme, textContact, callContact}: {scheme: string, textContact: (cardId: string)=>void, callContact: (card: Card)=>void}) {
   const [contactParams, setContactParams] = useState({
     guid: '',
   } as ContactParams);

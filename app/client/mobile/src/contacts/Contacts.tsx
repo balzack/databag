@@ -18,7 +18,7 @@ function Action({icon, color, select}: {icon: string; color: string; select: () 
   return <IconButton style={styles.icon} loading={loading} iconColor={color} mode="contained" icon={icon} onPress={onPress} />;
 }
 
-export function Contacts({openRegistry, openContact, callContact, textContact}: {openRegistry: () => void; openContact: (params: ContactParams) => void, callContact: (cardId: null|string)=>void, textContact: (cardId: null|string)=>void}) {
+export function Contacts({openRegistry, openContact, callContact, textContact}: {openRegistry: () => void; openContact: (params: ContactParams) => void, callContact: (card: null|Card)=>void, textContact: (cardId: null|string)=>void}) {
   const theme = useTheme();
   const {state, actions} = useContacts();
   const [alert, setAlert] = useState(false);
@@ -74,7 +74,7 @@ export function Contacts({openRegistry, openContact, callContact, textContact}: 
                     key="call"
                     icon="phone-outline"
                     color={Colors.connected}
-                    select={()=>callContact(item.cardId)}
+                    select={()=>callContact(item)}
                   />,
                   <Action
                     key="text"
