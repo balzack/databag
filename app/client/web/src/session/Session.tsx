@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Text, Drawer } from '@mantine/core'
 import { DisplayContext } from '../context/DisplayContext'
+import { RingContextProvider } from '../context/RingContext'
 import { ContextType } from '../context/ContextType'
 import classes from './Session.module.css'
 import { useSession } from './useSession.hook'
@@ -42,152 +43,154 @@ export function Session() {
   }
 
   return (
-    <div className={classes.session}>
-      {state.layout === 'small' && (
-        <>
-          <div className={tab === 'content' ? classes.show : classes.hide}>
-            <div className={classes.screen}>
-              <Content textCard={textCard} />
-            </div>
-            {state.focus && (
+    <RingContextProvider>
+      <div className={classes.session}>
+        {state.layout === 'small' && (
+          <>
+            <div className={tab === 'content' ? classes.show : classes.hide}>
               <div className={classes.screen}>
-                <Conversation openDetails={openDetails} />
+                <Content textCard={textCard} />
               </div>
-            )}
-            {details && (
+              {state.focus && (
+                <div className={classes.screen}>
+                  <Conversation openDetails={openDetails} />
+                </div>
+              )}
+              {details && (
+                <div className={classes.screen}>
+                  <Details showClose={true} close={closeDetails} />
+                </div>
+              )}
+            </div>
+            <div className={tab === 'settings' ? classes.show : classes.hide}>
               <div className={classes.screen}>
-                <Details showClose={true} close={closeDetails} />
+                <Settings showLogout={true} />
               </div>
-            )}
-          </div>
-          <div className={tab === 'settings' ? classes.show : classes.hide}>
-            <div className={classes.screen}>
-              <Settings showLogout={true} />
             </div>
-          </div>
-          <div className={tab === 'contacts' ? classes.show : classes.hide}>
-            <div className={classes.screen}>
-              <Contacts
-                callContact={callContact}
-                textContact={textContact}
-                openRegistry={openRegistry}
-                openContact={(params) => {
-                  setProfileParams(params)
-                  openProfile()
-                }}
-              />
-            </div>
-            {registry && (
+            <div className={tab === 'contacts' ? classes.show : classes.hide}>
               <div className={classes.screen}>
-                <Registry
-                  close={closeRegistry}
+                <Contacts
+                  callContact={callContact}
+                  textContact={textContact}
+                  openRegistry={openRegistry}
                   openContact={(params) => {
                     setProfileParams(params)
                     openProfile()
                   }}
                 />
               </div>
-            )}
-            {profile && (
-              <div className={classes.screen}>
-                <Profile params={profileParams} showClose={true} close={closeProfile} />
+              {registry && (
+                <div className={classes.screen}>
+                  <Registry
+                    close={closeRegistry}
+                    openContact={(params) => {
+                      setProfileParams(params)
+                      openProfile()
+                    }}
+                  />
+                </div>
+              )}
+              {profile && (
+                <div className={classes.screen}>
+                  <Profile params={profileParams} showClose={true} close={closeProfile} />
+                </div>
+              )}
+            </div>
+            <div className={classes.tabs}>
+              {tab === 'content' && (
+                <div className={classes.activeTabItem}>
+                  <IconMessages className={classes.tabIcon} />
+                </div>
+              )}
+              {tab !== 'content' && (
+                <div className={classes.idleTabItem} onClick={() => setTab('content')}>
+                  <IconMessages className={classes.tabIcon} />
+                </div>
+              )}
+              <div className={classes.tabDivider} />
+              {tab === 'contacts' && (
+                <div className={classes.activeTabItem}>
+                  <IconAddressBook className={classes.tabIcon} />
+                </div>
+              )}
+              {tab !== 'contacts' && (
+                <div className={classes.idleTabItem} onClick={() => setTab('contacts')}>
+                  <IconAddressBook className={classes.tabIcon} />
+                </div>
+              )}
+              <div className={classes.tabDivider} />
+              {tab === 'settings' && (
+                <div className={classes.activeTabItem}>
+                  <IconSettings className={classes.tabIcon} />
+                </div>
+              )}
+              {tab !== 'settings' && (
+                <div className={classes.idleTabItem} onClick={() => setTab('settings')}>
+                  <IconSettings className={classes.tabIcon} />
+                </div>
+              )}
+            </div>
+          </>
+        )}
+        {state.layout === 'large' && (
+          <div className={classes.display}>
+            <div className={classes.left}>
+              <Identity settings={openSettings} contacts={openContacts} />
+              <div className={classes.content}>
+                <Content textCard={textCard} />
               </div>
-            )}
+            </div>
+            <div className={classes.right}>{state.focus && <Conversation openDetails={openDetails} />}</div>
+            <Drawer opened={contacts} onClose={closeContacts} withCloseButton={false} size="md" padding="0" position="right">
+              <div style={{ height: '100vh' }}>
+                <Contacts
+                  callContact={callContact}
+                  textContact={textContact}
+                  openRegistry={openRegistry}
+                  openContact={(params) => {
+                    setProfileParams(params)
+                    openProfile()
+                  }}
+                />
+              </div>
+            </Drawer>
+            <Drawer opened={registry} onClose={closeRegistry} withCloseButton={false} size="sm" padding="0" position="right">
+              <div style={{ height: '100vh' }}>
+                <Registry
+                  openContact={(params) => {
+                    setProfileParams(params)
+                    openProfile()
+                  }}
+                />
+              </div>
+            </Drawer>
+            <Drawer opened={profile} onClose={closeProfile} withCloseButton={false} size="xs" padding="0" position="right">
+              <div style={{ height: '100vh' }}>
+                <Profile params={profileParams} showClose={false} close={closeProfile} />
+              </div>
+            </Drawer>
+            <Drawer opened={details} onClose={closeDetails} withCloseButton={false} size="xs" padding="0" position="right" trapFocus={false}>
+              <div style={{ height: '100vh' }}>
+                <Details showClose={false} close={closeDetails} />
+              </div>
+            </Drawer>
+            <Drawer opened={settings} onClose={closeSettings} withCloseButton={false} size="sm" padding="0" position="right">
+              <div style={{ height: '100vh' }}>
+                <Settings showLogout={false} />
+              </div>
+            </Drawer>
           </div>
-          <div className={classes.tabs}>
-            {tab === 'content' && (
-              <div className={classes.activeTabItem}>
-                <IconMessages className={classes.tabIcon} />
-              </div>
-            )}
-            {tab !== 'content' && (
-              <div className={classes.idleTabItem} onClick={() => setTab('content')}>
-                <IconMessages className={classes.tabIcon} />
-              </div>
-            )}
-            <div className={classes.tabDivider} />
-            {tab === 'contacts' && (
-              <div className={classes.activeTabItem}>
-                <IconAddressBook className={classes.tabIcon} />
-              </div>
-            )}
-            {tab !== 'contacts' && (
-              <div className={classes.idleTabItem} onClick={() => setTab('contacts')}>
-                <IconAddressBook className={classes.tabIcon} />
-              </div>
-            )}
-            <div className={classes.tabDivider} />
-            {tab === 'settings' && (
-              <div className={classes.activeTabItem}>
-                <IconSettings className={classes.tabIcon} />
-              </div>
-            )}
-            {tab !== 'settings' && (
-              <div className={classes.idleTabItem} onClick={() => setTab('settings')}>
-                <IconSettings className={classes.tabIcon} />
-              </div>
-            )}
-          </div>
-        </>
-      )}
-      {state.layout === 'large' && (
-        <div className={classes.display}>
-          <div className={classes.left}>
-            <Identity settings={openSettings} contacts={openContacts} />
-            <div className={classes.content}>
-              <Content textCard={textCard} />
+        )}
+        { state.disconnected && (
+          <div className={classes.alert}>
+            <div className={classes.alertArea}>
+              <IconAlertCircle className={classes.alertLabel} />
+              <Text className={classes.alertLabel}>{ state.strings.disconnected }</Text>
             </div>
           </div>
-          <div className={classes.right}>{state.focus && <Conversation openDetails={openDetails} />}</div>
-          <Drawer opened={contacts} onClose={closeContacts} withCloseButton={false} size="md" padding="0" position="right">
-            <div style={{ height: '100vh' }}>
-              <Contacts
-                callContact={callContact}
-                textContact={textContact}
-                openRegistry={openRegistry}
-                openContact={(params) => {
-                  setProfileParams(params)
-                  openProfile()
-                }}
-              />
-            </div>
-          </Drawer>
-          <Drawer opened={registry} onClose={closeRegistry} withCloseButton={false} size="sm" padding="0" position="right">
-            <div style={{ height: '100vh' }}>
-              <Registry
-                openContact={(params) => {
-                  setProfileParams(params)
-                  openProfile()
-                }}
-              />
-            </div>
-          </Drawer>
-          <Drawer opened={profile} onClose={closeProfile} withCloseButton={false} size="xs" padding="0" position="right">
-            <div style={{ height: '100vh' }}>
-              <Profile params={profileParams} showClose={false} close={closeProfile} />
-            </div>
-          </Drawer>
-          <Drawer opened={details} onClose={closeDetails} withCloseButton={false} size="xs" padding="0" position="right" trapFocus={false}>
-            <div style={{ height: '100vh' }}>
-              <Details showClose={false} close={closeDetails} />
-            </div>
-          </Drawer>
-          <Drawer opened={settings} onClose={closeSettings} withCloseButton={false} size="sm" padding="0" position="right">
-            <div style={{ height: '100vh' }}>
-              <Settings showLogout={false} />
-            </div>
-          </Drawer>
-        </div>
-      )}
-      { state.disconnected && (
-        <div className={classes.alert}>
-          <div className={classes.alertArea}>
-            <IconAlertCircle className={classes.alertLabel} />
-            <Text className={classes.alertLabel}>{ state.strings.disconnected }</Text>
-          </div>
-        </div>
-      )}
-      <Calling callCard={callCard} />
-    </div>
+        )}
+        <Calling callCard={callCard} />
+      </div>
+    </RingContextProvider>
   )
 }
