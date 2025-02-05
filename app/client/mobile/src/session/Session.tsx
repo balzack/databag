@@ -19,6 +19,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Colors} from '../constants/Colors';
 import {Ring} from '../ring/Ring';
+import {Call} from '../call/Call';
 
 const SettingsDrawer = createDrawerNavigator();
 const ContactsDrawer = createDrawerNavigator();
@@ -198,6 +199,7 @@ export function Session() {
             </Surface>
           </View>
         )}
+        <Call />
       </View>
     </RingContextProvider>
   );

@@ -121,11 +121,11 @@ export function Ring() {
       )}
       { state.calling && (
         <Surface elevation={4} mode="flat" style={styles.ring}>
-          <IconButton style={styles.circleIcon} iconColor="white" containerColor={Colors.primary} icon={state.audioEnabled ? 'microphone' : 'microphone-off'} compact="true" mode="contained" size={24} onPress={toggleAudio} />
-          <IconButton style={styles.circleIcon} iconColor="white" containerColor={Colors.confirmed} icon="arrow-expand-all" compact="true" mode="contained" size={24} onPress={toggleAudio} />
+          <IconButton style={styles.circleIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.primary} icon={state.audioEnabled ? 'microphone' : 'microphone-off'} compact="true" mode="contained" size={24} onPress={toggleAudio} />
+          <IconButton style={styles.circleIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.confirmed} icon={(state.remoteVideo || state.localVideo) ? 'video-switch-outline' : 'arrow-expand-all'} compact="true" mode="contained" size={24} onPress={()=>actions.setFullscreen(true)} />
           <View style={styles.name}>
             { state.calling.name && (
-              <Text style={styles.nameSet} numberOfLines={1}>asuperlongnamehere asuperlongnamehere</Text>
+              <Text style={styles.nameSet} numberOfLines={1}>{ state.calling.name }</Text>
             )}
             { !state.calling.name && (
               <Text style={styles.nameUnset} adjustsFontSizeToFit={true} numberOfLines={1}>{ state.strings.name }</Text>

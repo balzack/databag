@@ -49,6 +49,7 @@ export function useRingContext() {
     connected: false,
     connectedTime: 0,
     failed: false,
+    fullscreen: false,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -4,7 +4,7 @@ import { DisplayContext } from '../context/DisplayContext'
 import { ContextType } from '../context/ContextType'
 import { Card } from 'databag-client-sdk';
 
-export function useRing() {
+export function useCall() {
   const ring = useContext(RingContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const offsetTime = useRef(0);
@@ -17,6 +17,7 @@ export function useRing() {
     remoteVideo: false,
     localVideo: false,
     audioEnabled: false,
+    videoEnabled: false,
     connected: false,
     duration: 0,
     failed: false,
@@ -41,11 +42,11 @@ export function useRing() {
   }, []); 
 
   useEffect(() => {
-    const { calls, calling, localVideo, remoteVideo, audioEnabled, connected, connectedTime, failed } = ring.state;
+    const { calls, calling, fullscreen, remoteVideo, localVideo, audioEnabled, videoEnabled, connected, connectedTime, failed } = ring.state;
     offsetTime.current = connectedTime;
     offset.current = connected;
     const duration = connected ? Math.floor(((new Date()).getTime() / 1000) - connectedTime) : 0;
-    updateState({ calls, calling, duration, localVideo, remoteVideo, audioEnabled, connected, failed });
+    updateState({ calls, calling, fullscreen, duration, remoteVideo, localVideo, audioEnabled, videoEnabled, connected, failed });
   }, [ring.state]);
 
   const actions = ring.actions;
