@@ -74,7 +74,15 @@ export function Contacts({openRegistry, openContact, callContact, textContact}: 
                     key="call"
                     icon="phone-outline"
                     color={Colors.connected}
-                    select={()=>callContact(item)}
+                    select={async () => {
+                      try {
+console.log(item);
+                        await actions.call(item);
+                      } catch (err) {
+                        console.log(err);
+                        setAlert(true);
+                      }
+                    }}
                   />,
                   <Action
                     key="text"

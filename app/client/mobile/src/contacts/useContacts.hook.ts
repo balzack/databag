@@ -1,11 +1,13 @@
 import {useState, useContext, useEffect} from 'react';
 import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
+import {RingContext} from '../context/RingContext';
 import {ContextType} from '../context/ContextType';
 import {Card} from 'databag-client-sdk';
 
 export function useContacts() {
   const app = useContext(AppContext) as ContextType;
+  const ring = useContext(RingContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
     layout: '',
@@ -75,8 +77,8 @@ export function useContacts() {
     setFilter: (filter: string) => {
       updateState({filter});
     },
-    call: async (cardId: string) => {
-      console.log('call', cardId);
+    call: async (card: Card) => {
+      await ring.actions.call(card);
     },
     text: async (cardId: string) => {
       console.log('text', cardId);

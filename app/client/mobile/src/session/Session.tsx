@@ -18,7 +18,7 @@ import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/na
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Colors} from '../constants/Colors';
-import {Calling} from '../calling/Calling';
+import {Ring} from '../ring/Ring';
 
 const SettingsDrawer = createDrawerNavigator();
 const ContactsDrawer = createDrawerNavigator();
@@ -84,6 +84,7 @@ export function Session() {
           <Surface elevation={3}>
             <SafeAreaView style={styles.full}>
               <View style={styles.screen}>
+                <Ring />
                 <View
                   style={{
                     ...styles.body,
@@ -197,7 +198,6 @@ export function Session() {
             </Surface>
           </View>
         )}
-        <Calling callCard={callCard} />
       </View>
     </RingContextProvider>
   );
@@ -445,10 +445,15 @@ function HomeScreen({nav}) {
           <Content textCard={nav.textCard} openConversation={()=>nav.setFocus(true)} />
         </Surface>
       </View>
-      <Surface elevation={1} style={styles.right} mode="flat">
-        <SafeAreaView style={styles.right}>
-          {nav.focus && <Conversation openDetails={nav.details.openDrawer} close={()=>nav.setFocus(false)} wide={true} />}
-          {!nav.focus && <Text>FOCUS NOT SET</Text>}
+      <Surface style={styles.right} mode="flat">
+        <SafeAreaView style={styles.right} edges={['top']}>
+          <View style={styles.ring}>
+            <Ring />
+          </View>
+          <View style={styles.workarea}>
+            {nav.focus && <Conversation openDetails={nav.details.openDrawer} close={()=>nav.setFocus(false)} wide={true} />}
+            {!nav.focus && <Text>FOCUS NOT SET</Text>}
+          </View>
         </SafeAreaView>
       </Surface>
     </View>

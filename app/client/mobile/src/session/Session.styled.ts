@@ -63,6 +63,13 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
     minWidth: 0,
   },
+  workarea: {
+    height: '100%',
+    display: 'flex',
+    flexGrow: 1,
+    flexShrink: 1,
+    minWidth: 0,
+  },
   identity: {
     flexShrink: 0,
     paddingBottom: 4,

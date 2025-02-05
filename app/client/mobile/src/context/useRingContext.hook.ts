@@ -47,6 +47,7 @@ export function useRingContext() {
     audioEnabled: false,
     videoEnabled: false,
     connected: false,
+    connectedTime: 0,
     failed: false,
   })
 
@@ -73,7 +74,12 @@ export function useRingContext() {
     if (call.current) {
       const { peer, link } = call.current;
       if (status === 'connected') {
-        updateState({ connected: true });
+        const now = new Date();
+        const connectedTime = Math.floor(now.getTime() / 1000);
+
+console.log("CONTEXT CONNECTED: ", connectedTime);
+
+        updateState({ connected: true, connectedTime });
         await actions.enableAudio();
       } else if (status === 'closed') {
         await cleanup();
@@ -177,7 +183,7 @@ export function useRingContext() {
     call.current = { peer, link, candidates };
     link.setStatusListener(linkStatus);
     link.setMessageListener((msg: any) => updatePeer('message', msg));
-    updateState({ calling: card, failed: false, connected: false,
+    updateState({ calling: card, failed: false, connected: false, connectedTime: 0,
       audioEnabled: false, videoEnabled: false, localVideo: false, remoteVideo: false,
       localStream: localStream.current, remoteStream: remoteStream.current });
   }
@@ -208,7 +214,8 @@ export function useRingContext() {
     sourceStream.current = null;
     peerUpdate.current = [];
     InCallManager.stop();
-    updateState({ calling: null, failed: false, localStream: null, remoteStream: null, localVideo: false, remoteVideo: false });
+    updateState({ calling: null, connected: false, connectedTime: 0, fullscreen: false, failed: false,
+      localStream: null, remoteStream: null, localVideo: false, remoteVideo: false });
     closing.current = false;
   }
 
@@ -259,6 +266,9 @@ export function useRingContext() {
   }, [app.state.session]);
 
   const actions = {
+    setFullscreen: (fullscreen: boolean) => {
+      updateState({ fullscreen });
+    },
     ignore: async (callId: string, card: Card) => {
       const ring = app.state.session.getRing();
       await ring.ignore(card.cardId, callId);
