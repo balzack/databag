@@ -1,0 +1,22 @@
+name: databag
+
+services:
+  app:
+    build: .
+
+    # # For building cross environment containers
+    # build:
+    #   context: .
+    #   args:
+    #     DATABAG_GOARCH: arm64
+    #     DATABAG_GOOS: linux
+    # platform: "linux/arm64"
+    ports:
+      - 127.0.0.1:7000:7000
+    volumes:
+      - database:/var/lib/databag
+    environment:
+      - ADMIN=password
+
+volumes:
+  database:

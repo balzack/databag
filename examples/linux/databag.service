@@ -1,0 +1,17 @@
+[Unit]
+Description=databag server
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=databag
+ExecStart=/app/databag/net/server/entrypoint.sh
+
+# [Service]
+# Environment="ADMIN=password"
+
+[Install]
+WantedBy=multi-user.target
