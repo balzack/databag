@@ -18,6 +18,8 @@ export function useRingContext() {
   const peerUpdate = useRef([] as {type: string, data?: any}[]);
   const connecting = useRef(false);
   const closing = useRef(false);
+  const passive = useRef(false);
+  const passiveTracks = useRef([] as { track: MediaStreamTrack, stream: MediaStream }[]);
   const [ringing, setRinging] = useState([] as { cardId: string, callId: string }[]);
   const [cards, setCards] = useState([] as Card[]);
 
@@ -32,6 +34,7 @@ export function useRingContext() {
     videoEnabled: false,
     connected: false,
     failed: false,
+    fullscreen: false,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -124,13 +127,22 @@ export function useRingContext() {
             case 'remote_track':
               if (remoteStream.current) {
                 remoteStream.current.addTrack(data);
+                passive.current = false;
+                passiveTracks.current.forEach(data => {
+                  peer.addTrack(data.track, data.stream);
+                });
+                passiveTracks.current = []; 
                 if (data.kind === 'video') {
                   updateState({ remoteVideo: true });
                 }
               }
               break;
             case 'local_track':
-              peer.addTrack(data.track, data.stream);
+              if (passive.current) {
+                passiveTracks.current.push(data);
+              } else {
+                peer.addTrack(data.track, data.stream);
+              }
               if (data.track.kind === 'audio') {
                 localAudio.current = data.track;
               }
@@ -153,7 +165,8 @@ export function useRingContext() {
     }
   }
 
-  const setup = async (link: Link, card: Card) => {
+  const setup = async (link: Link, card: Card, polite: boolean) => {
+    passive.current = polite;
     localAudio.current = null;
     localVideo.current = null;
     localStream.current = null;
@@ -242,6 +255,9 @@ export function useRingContext() {
   }, [app.state.session]);
 
   const actions = {
+    setFullscreen: (fullscreen: boolean) => {
+      updateState({ fullscreen });
+    },
     ignore: async (callId: string, card: Card) => {
       const ring = app.state.session.getRing();
       await ring.ignore(card.cardId, callId);
@@ -262,7 +278,7 @@ export function useRingContext() {
         const { cardId, node } = card;
         const ring = app.state.session.getRing();
         const link = await ring.accept(cardId, callId, node);
-        await setup(link, card);
+        await setup(link, card, true);
         connecting.current = false;
       } catch (err) {
         connecting.current = false;
@@ -277,7 +293,7 @@ export function useRingContext() {
         connecting.current = true;
         const contact = app.state.session.getContact();
         const link = await contact.callCard(card.cardId);
-        await setup(link, card);
+        await setup(link, card, false);
         connecting.current = false;
       } catch (err) {
         connecting.current = false;

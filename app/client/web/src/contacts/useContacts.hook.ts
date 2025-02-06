@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import { AppContext } from '../context/AppContext'
+import { RingContext } from '../context/RingContext'
 import { DisplayContext } from '../context/DisplayContext'
 import { ContextType } from '../context/ContextType'
 import { Card } from 'databag-client-sdk'
@@ -7,6 +8,7 @@ import { Card } from 'databag-client-sdk'
 export function useContacts() {
   const app = useContext(AppContext) as ContextType
   const display = useContext(DisplayContext) as ContextType
+  const ring = useContext(RingContext) as ContextType
   const [state, setState] = useState({
     strings: display.state.strings,
     cards: [] as Card[],
@@ -64,6 +66,9 @@ export function useContacts() {
   }, [state.sortAsc, state.filter, state.cards])
 
   const actions = {
+    call: async (card: Card) => {
+      await ring.actions.call(card);
+    },
     toggleSort: () => {
       const sortAsc = !state.sortAsc
       updateState({ sortAsc })

@@ -34,7 +34,7 @@ export function useRingContext() {
   const peerUpdate = useRef([] as {type: string, data?: any}[]);
   const connecting = useRef(false);
   const passive = useRef(false);
-  const passiveTrack = useRef([] as MediaStreamTrack);
+  const passiveTracks = useRef([] as MediaStreamTrack[]);
   const closing = useRef(false);
   const [ringing, setRinging] = useState([] as { cardId: string, callId: string }[]);
   const [cards, setCards] = useState([] as Card[]);
@@ -131,9 +131,10 @@ export function useRingContext() {
               if (remoteStream.current) {
                 remoteStream.current.addTrack(data);
                 passive.current = false;
-                passiveTrack.current.forEach(track => {
+                passiveTracks.current.forEach(track => {
                   peer.addTrack(track, sourceStream.current);
                 });
+                passiveTracks.current = [];
                 if (data.kind === 'video') {
                   InCallManager.setForceSpeakerphoneOn(true);
                   updateState({ remoteVideo: true });
@@ -142,7 +143,7 @@ export function useRingContext() {
               break;
             case 'local_track':
               if (passive.current) {
-                passiveTrack.push(data);
+                passiveTracks.push(data);
               } else {
                 peer.addTrack(data, sourceStream.current);
               }
@@ -167,7 +168,7 @@ export function useRingContext() {
   const setup = async (link: Link, card: Card, polite: boolean) => {
 
     passive.current = polite;
-    passiveTrack.current = [];
+    passiveTracks.current = [];
     remoteStream.current = new MediaStream();
     localStream.current = new MediaStream();
     sourceStream.current = await mediaDevices.getUserMedia({

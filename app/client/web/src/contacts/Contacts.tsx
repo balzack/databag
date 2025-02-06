@@ -38,7 +38,7 @@ function Action({ icon, color, strings, select }: { icon: ReactNode; color: stri
   )
 }
 
-export function Contacts({ openRegistry, openContact, textContact, callContact }: { openRegistry: ()=>void; openContact: (params: ProfileParams)=>void, textContact: (cardId: string)=>void, callContact: (card: Card)=>void }) {
+export function Contacts({ openRegistry, openContact, textContact }: { openRegistry: ()=>void; openContact: (params: ProfileParams)=>void, textContact: (cardId: string)=>void }) {
   const { state, actions } = useContacts()
 
   const cards = state.filtered.map((card, idx) => {
@@ -48,7 +48,7 @@ export function Contacts({ openRegistry, openContact, textContact, callContact }
         const phone = <IconPhone size={24} />
         const text = <IconMessage2 size={24} />
         return [
-          <Action key="phone" icon={phone} color={Colors.connected} select={async () => callContact(card)} strings={state.strings} />,
+          <Action key="phone" icon={phone} color={Colors.connected} select={async () => actions.call(card)} strings={state.strings} />,
           <Action key="text" icon={text} color={Colors.connected} select={async () => textContact(card.cardId)} strings={state.strings} />,
         ]
       } else if (status === 'offsync') {

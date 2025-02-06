@@ -17,7 +17,8 @@ import { Conversation } from '../conversation/Conversation'
 import { Focus, Card } from 'databag-client-sdk'
 import { useDisclosure } from '@mantine/hooks'
 import { IconAlertCircle } from '@tabler/icons-react'
-import { Calling } from '../calling/Calling';
+import { Ring } from '../ring/Ring';
+import { Call } from '../call/Call';
 
 export function Session() {
   const { state } = useSession();
@@ -29,7 +30,6 @@ export function Session() {
   const [details, { open: openDetails, close: closeDetails }] = useDisclosure(false)
   const [profile, { open: openProfile, close: closeProfile }] = useDisclosure(false)
   const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
-  const [callCard, setCallCard] = useState({ card: null} as {card: null|Card});
 
   const textContact = (cardId: string) => {
     console.log("MESSAGE: ", cardId);
@@ -38,63 +38,61 @@ export function Session() {
     setTab('content');
   }
 
-  const callContact = (card: Card) => {
-    setCallCard({ card });
-  }
-
   return (
     <RingContextProvider>
       <div className={classes.session}>
         {state.layout === 'small' && (
           <>
-            <div className={tab === 'content' ? classes.show : classes.hide}>
-              <div className={classes.screen}>
-                <Content textCard={textCard} />
-              </div>
-              {state.focus && (
+            <div className={classes.body}>
+              <Ring />
+              <div className={tab === 'content' ? classes.show : classes.hide}>
                 <div className={classes.screen}>
-                  <Conversation openDetails={openDetails} />
+                  <Content textCard={textCard} />
                 </div>
-              )}
-              {details && (
+                {state.focus && (
+                  <div className={classes.screen}>
+                    <Conversation openDetails={openDetails} />
+                  </div>
+                )}
+                {details && (
+                  <div className={classes.screen}>
+                    <Details showClose={true} close={closeDetails} />
+                  </div>
+                )}
+              </div>
+              <div className={tab === 'settings' ? classes.show : classes.hide}>
                 <div className={classes.screen}>
-                  <Details showClose={true} close={closeDetails} />
+                  <Settings showLogout={true} />
                 </div>
-              )}
-            </div>
-            <div className={tab === 'settings' ? classes.show : classes.hide}>
-              <div className={classes.screen}>
-                <Settings showLogout={true} />
               </div>
-            </div>
-            <div className={tab === 'contacts' ? classes.show : classes.hide}>
-              <div className={classes.screen}>
-                <Contacts
-                  callContact={callContact}
-                  textContact={textContact}
-                  openRegistry={openRegistry}
-                  openContact={(params) => {
-                    setProfileParams(params)
-                    openProfile()
-                  }}
-                />
-              </div>
-              {registry && (
+              <div className={tab === 'contacts' ? classes.show : classes.hide}>
                 <div className={classes.screen}>
-                  <Registry
-                    close={closeRegistry}
+                  <Contacts
+                    textContact={textContact}
+                    openRegistry={openRegistry}
                     openContact={(params) => {
                       setProfileParams(params)
                       openProfile()
                     }}
                   />
                 </div>
-              )}
-              {profile && (
-                <div className={classes.screen}>
-                  <Profile params={profileParams} showClose={true} close={closeProfile} />
-                </div>
-              )}
+                {registry && (
+                  <div className={classes.screen}>
+                    <Registry
+                      close={closeRegistry}
+                      openContact={(params) => {
+                        setProfileParams(params)
+                        openProfile()
+                      }}
+                    />
+                  </div>
+                )}
+                {profile && (
+                  <div className={classes.screen}>
+                    <Profile params={profileParams} showClose={true} close={closeProfile} />
+                  </div>
+                )}
+              </div>
             </div>
             <div className={classes.tabs}>
               {tab === 'content' && (
@@ -140,11 +138,15 @@ export function Session() {
                 <Content textCard={textCard} />
               </div>
             </div>
-            <div className={classes.right}>{state.focus && <Conversation openDetails={openDetails} />}</div>
+            <div className={classes.right}>
+              <Ring />
+              <div className={classes.conversation}>
+                {state.focus && <Conversation openDetails={openDetails} />}
+              </div>
+            </div>
             <Drawer opened={contacts} onClose={closeContacts} withCloseButton={false} size="md" padding="0" position="right">
               <div style={{ height: '100vh' }}>
                 <Contacts
-                  callContact={callContact}
                   textContact={textContact}
                   openRegistry={openRegistry}
                   openContact={(params) => {
@@ -189,7 +191,7 @@ export function Session() {
             </div>
           </div>
         )}
-        <Calling callCard={callCard} />
+        <Call />
       </div>
     </RingContextProvider>
   )
