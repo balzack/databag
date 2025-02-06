@@ -35,6 +35,7 @@ export function useRingContext() {
     connected: false,
     failed: false,
     fullscreen: false,
+    connectedTime: 0,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -76,8 +77,14 @@ export function useRingContext() {
     if (call.current) {
       const { peer, link } = call.current;
       if (status === 'connected') {
-        updateState({ connected: true });
-        await actions.enableAudio();
+        const connectedTime = Math.floor((new Date()).getTime() / 1000);
+        updateState({ connected: true, connectedTime });
+        try {
+          await actions.enableAudio();
+        } catch (err) {
+          console.log('failed to enable audio on connection');
+          console.log(err);
+        }
       } else if (status === 'closed') {
         await cleanup;
       }
@@ -177,7 +184,7 @@ export function useRingContext() {
     call.current = { peer, link, candidates };
     link.setStatusListener(linkStatus);
     link.setMessageListener((msg: any) => updatePeer('message', msg));
-    updateState({ calling: card, failed: false, connected: false,
+    updateState({ calling: card, failed: false, connected: false, connectedTime: 0,
       audioEnabled: false, videoEnabled: false, localVideo: false, remoteVideo: false,
       localStream: localStream.current, remoteStream: remoteStream.current });
   }
@@ -204,7 +211,7 @@ export function useRingContext() {
     localStream.current = null;
     remoteStream.current = null,
     peerUpdate.current = [];
-    updateState({ calling: null, failed: false, localStream: null, remoteStream: null, localVideo: false, remoteVideo: false });
+    updateState({ calling: null, connected: false, connectedTime: 0, failed: false, localStream: null, remoteStream: null, localVideo: false, remoteVideo: false });
     closing.current = false;
   }
 
