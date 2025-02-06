@@ -14,6 +14,8 @@ export function useCall() {
     strings: display.state.strings, 
     calls: [] as { callId: string, card: Card }[],
     calling: null as null | Card,
+    localStream: null as null|MediaStream,
+    remoteStream: null as null|MediaStream,
     remoteVideo: false,
     localVideo: false,
     audioEnabled: false,
@@ -42,11 +44,11 @@ export function useCall() {
   }, []); 
 
   useEffect(() => {
-    const { calls, calling, fullscreen, remoteVideo, localVideo, audioEnabled, videoEnabled, connected, connectedTime, failed } = ring.state;
+    const { calls, calling, fullscreen, localStream, remoteStream, remoteVideo, localVideo, audioEnabled, videoEnabled, connected, connectedTime, failed } = ring.state;
     offsetTime.current = connectedTime;
     offset.current = connected;
     const duration = connected ? Math.floor(((new Date()).getTime() / 1000) - connectedTime) : 0;
-    updateState({ calls, calling, fullscreen, duration, remoteVideo, localVideo, audioEnabled, videoEnabled, connected, failed });
+    updateState({ calls, calling, fullscreen, duration, localStream, remoteStream, remoteVideo, localVideo, audioEnabled, videoEnabled, connected, failed });
   }, [ring.state]);
 
   const actions = ring.actions;

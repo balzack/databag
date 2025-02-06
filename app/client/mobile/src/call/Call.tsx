@@ -6,12 +6,14 @@ import { Card as Contact } from '../card/Card';
 import { Text, Surface, IconButton, ActivityIndicator } from 'react-native-paper';
 import { Confirm } from '../confirm/Confirm';
 import { Colors } from '../constants/Colors';
+import { RTCView } from 'react-native-webrtc';
 
 export function Call() {
   const { state, actions } = useCall();
   const [alert, setAlert] = useState(false);
   const [ending, setEnding] = useState(false);
   const [applyingAudio, setApplyingAudio] = useState(false);
+  const [applyingVideo, setApplyingVideo] = useState(false);
   const [accepting, setAccepting] = useState(null as null|string);
   const [ignoring, setIgnoring] = useState(null as null|string);
   const [declining, setDeclining] = useState(null as null|string);
@@ -77,6 +79,32 @@ export function Call() {
   return (
     <View style={(state.calling && state.fullscreen) ? styles.active : styles.inactive}>
       <Surface elevation={4} mode="flat" style={styles.call}>
+
+      { state.remoteVideo && (
+        <RTCView
+          style={styles.full}
+          mirror={true}
+          objectFit={'contain'}
+          streamURL={state.remoteStream.toURL()}
+        />
+      )}
+
+      { state.localVideo && (
+        <RTCView
+          style={state.remoteVideo ? styles.box : styles.full}
+          mirror={true}
+          objectFit={'contain'}
+          streamURL={state.localStream.toURL()}
+          zOrder={2}
+        />
+      )}
+
+      <Surface elevation={3} mode="flat" style={styles.controls}>
+          <IconButton style={styles.closeIcon} iconColor="white" disabled={!state.connected} icon="arrow-collapse-all" loading={applyingAudio} compact="true" mode="contained" size={32} onPress={()=>actions.setFullscreen(false)} />
+          <IconButton style={styles.closeIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.primary} icon={state.audioEnabled ? 'microphone' : 'microphone-off'} loading={applyingAudio} compact="true" mode="contained" size={32} onPress={toggleAudio} />
+          <IconButton style={styles.closeIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.primary} icon={state.videoEnabled ? 'video-outline' : 'video-off-outline'} loading={applyingVideo} compact="true" mode="contained" size={32} onPress={toggleVideo} />
+          <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.danger} icon="phone-hangup-outline" compact="true" mode="contained" size={32} onPress={end} />
+        </Surface>
       </Surface>
       <Confirm show={alert} params={alertParams} />
     </View>

@@ -121,4 +121,8 @@ export const styles = StyleSheet.create({
     paddingRight: 32,
     borderBottomWidth: 1,
   }
+  full: {
+    width: '100%',
+    height: '100%',
+  }
 });
