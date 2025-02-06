@@ -129,7 +129,7 @@ export function Call() {
           )}
 
           <Surface elevation={3} mode="flat" style={styles.controls}>
-            <IconButton style={styles.closeIcon} iconColor="white" disabled={!state.connected} icon="arrow-collapse-all" loading={applyingAudio} compact="true" mode="contained" size={32} onPress={()=>actions.setFullscreen(false)} />
+            <IconButton style={styles.closeIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.confirmed} icon="arrow-collapse-all" compact="true" mode="contained" size={32} onPress={()=>actions.setFullscreen(false)} />
             <IconButton style={styles.closeIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.primary} icon={state.audioEnabled ? 'microphone' : 'microphone-off'} loading={applyingAudio} compact="true" mode="contained" size={32} onPress={toggleAudio} />
             <IconButton style={styles.closeIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.primary} icon={state.videoEnabled ? 'video-outline' : 'video-off-outline'} loading={applyingVideo} compact="true" mode="contained" size={32} onPress={toggleVideo} />
             <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.danger} icon="phone-hangup-outline" compact="true" mode="contained" size={32} onPress={end} />

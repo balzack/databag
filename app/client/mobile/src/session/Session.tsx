@@ -288,7 +288,7 @@ function DetailsScreen({nav}) {
 
   const DetailsComponent = useCallback(
     (props) => (
-      <Surface elevation={3}>
+      <Surface elevation={3} mode="flat">
         <Details
           closeAll={()=>closeAll(props)}
         />
@@ -322,7 +322,7 @@ function ProfileScreen({nav}) {
   };
 
   const ProfileComponent = useCallback(() => (
-    <Surface elevation={3}>
+    <Surface elevation={3} mode="flat">
       <Profile params={contactParams} />
     </Surface>
   ), [contactParams]);
@@ -346,7 +346,7 @@ function ProfileScreen({nav}) {
 function RegistryScreen({nav}) {
   const RegistryComponent = useCallback(
     () => (
-      <Surface elevation={3}>
+      <Surface elevation={3} mode="flat">
         <Registry
           openContact={(params: ContactParams) => {
             nav.openContact(params, nav.profile.openDrawer);
@@ -376,7 +376,7 @@ function RegistryScreen({nav}) {
 function ContactsScreen({nav}) {
   const ContactsComponent = useCallback(
     () => (
-      <Surface elevation={3}>
+      <Surface elevation={3} mode="flat">
         <Contacts
           openRegistry={nav.registry.openDrawer}
           openContact={(params: ContactParams) => {
@@ -411,7 +411,7 @@ function ContactsScreen({nav}) {
 function SettingsScreen({nav}) {
   const SettingsComponent = useCallback(
     () => (
-      <Surface elevation={3}>
+      <Surface elevation={3} mode="flat">
         <SafeAreaView>
           <Settings />
         </SafeAreaView>
