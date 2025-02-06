@@ -7,6 +7,8 @@ export function useDisplayContext() {
   const [state, setState] = useState({
     strings: getLanguageStrings(),
     layout: null,
+    width: 0,
+    height: 0,
   });
 
   const SMALL_LARGE = 650;
@@ -17,7 +19,7 @@ export function useDisplayContext() {
 
   useEffect(() => {
     const layout = dim.width < SMALL_LARGE ? 'small' : 'large';
-    updateState({layout});
+    updateState({layout, width: dim.width, height: dim.height});
   }, [dim.width]);
 
   const actions = {};

@@ -11,7 +11,7 @@ export function useCall() {
   const offset = useRef(false);
 
   const [state, setState] = useState({
-    strings: display.state.strings, 
+    strings: display.state.strings,
     calls: [] as { callId: string, card: Card }[],
     calling: null as null | Card,
     localStream: null as null|MediaStream,
@@ -23,12 +23,19 @@ export function useCall() {
     connected: false,
     duration: 0,
     failed: false,
+    width: 0,
+    height: 0,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState((s) => ({ ...s, ...value }))
   }
+
+  useEffect(() => {
+    const { width, height, strings } = display.state;
+    updateState({ width, height, strings });
+  }, [display.state]);
 
   useEffect(() => {
     const interval = setInterval(() => {
