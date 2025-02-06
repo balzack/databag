@@ -33,6 +33,8 @@ export function useRingContext() {
   const updatingPeer = useRef(false);
   const peerUpdate = useRef([] as {type: string, data?: any}[]);
   const connecting = useRef(false);
+  const passive = useRef(false);
+  const passiveTrack = useRef([] as MediaStreamTrack);
   const closing = useRef(false);
   const [ringing, setRinging] = useState([] as { cardId: string, callId: string }[]);
   const [cards, setCards] = useState([] as Card[]);
@@ -77,9 +79,6 @@ export function useRingContext() {
       if (status === 'connected') {
         const now = new Date();
         const connectedTime = Math.floor(now.getTime() / 1000);
-
-console.log("CONTEXT CONNECTED: ", connectedTime);
-
         updateState({ connected: true, connectedTime });
         await actions.enableAudio();
       } else if (status === 'closed') {
@@ -131,6 +130,10 @@ console.log("CONTEXT CONNECTED: ", connectedTime);
             case 'remote_track':
               if (remoteStream.current) {
                 remoteStream.current.addTrack(data);
+                passive.current = false;
+                passiveTrack.current.forEach(track => {
+                  peer.addTrack(track, sourceStream.current);
+                });
                 if (data.kind === 'video') {
                   InCallManager.setForceSpeakerphoneOn(true);
                   updateState({ remoteVideo: true });
@@ -138,7 +141,11 @@ console.log("CONTEXT CONNECTED: ", connectedTime);
               }
               break;
             case 'local_track':
-              peer.addTrack(data, sourceStream.current);
+              if (passive.current) {
+                passiveTrack.push(data);
+              } else {
+                peer.addTrack(data, sourceStream.current);
+              }
               if (data.kind === 'video') {
                 InCallManager.setForceSpeakerphoneOn(true);
                 updateState({ localVideo: true })
@@ -157,8 +164,10 @@ console.log("CONTEXT CONNECTED: ", connectedTime);
     }
   }
 
-  const setup = async (link: Link, card: Card) => {
+  const setup = async (link: Link, card: Card, polite: boolean) => {
 
+    passive.current = polite;
+    passiveTrack.current = [];
     remoteStream.current = new MediaStream();
     localStream.current = new MediaStream();
     sourceStream.current = await mediaDevices.getUserMedia({
@@ -290,7 +299,7 @@ console.log("CONTEXT CONNECTED: ", connectedTime);
         const { cardId, node } = card;
         const ring = app.state.session.getRing();
         const link = await ring.accept(cardId, callId, node);
-        await setup(link, card);
+        await setup(link, card, true);
         connecting.current = false;
       } catch (err) {
         connecting.current = false;
@@ -305,7 +314,7 @@ console.log("CONTEXT CONNECTED: ", connectedTime);
         connecting.current = true;
         const contact = app.state.session.getContact();
         const link = await contact.callCard(card.cardId);
-        await setup(link, card);
+        await setup(link, card, false);
         connecting.current = false;
       } catch (err) {
         connecting.current = false;
