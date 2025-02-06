@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 TMPFILE=$(mktemp /tmp/databag-XXXXX)
 ffmpeg -ss $3 -i $1 -y -vframes 1 -q:v 2 $TMPFILE.jpg 
