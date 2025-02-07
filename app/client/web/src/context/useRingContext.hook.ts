@@ -219,7 +219,8 @@ export function useRingContext() {
   const transmit = (ice: { urls: string; username: string; credential: string }[]) => {
     const peerConnection = new RTCPeerConnection({ iceServers: ice });
     peerConnection.addEventListener( 'connectionstatechange', event => {
-      console.log("CONNECTION STATE", event);
+      console.log("????CONNECTION STATE", event);
+      console.log(peerConnection);
     });
     peerConnection.addEventListener( 'icecandidate', event => {
       updatePeer('candidate', event.candidate);
