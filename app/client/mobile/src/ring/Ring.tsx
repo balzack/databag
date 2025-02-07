@@ -7,6 +7,8 @@ import { Text, Surface, IconButton, ActivityIndicator } from 'react-native-paper
 import { Confirm } from '../confirm/Confirm';
 import { Colors } from '../constants/Colors';
 
+const ACCEPT_DELAY_MS = 100;
+
 export function Ring() {
   const { state, actions } = useRing();
   const [alert, setAlert] = useState(false);
@@ -51,6 +53,7 @@ export function Ring() {
       setAccepting(callId);
       try {
         await actions.accept(callId, card);
+        await new Promise((r) => setTimeout(r, ACCEPT_DELAY_MS));
       } catch (err) {
         console.log(err);
         setAlert(true);
