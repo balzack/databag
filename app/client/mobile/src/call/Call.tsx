@@ -124,7 +124,7 @@ export function Call() {
               mirror={true}
               objectFit={'contain'}
               streamURL={state.localStream.toURL()}
-              zOrder={2}
+              zOrder={state.remoteVideo ? 2 : undefined}
             />
           )}
 
