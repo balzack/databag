@@ -413,7 +413,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
     <View>
       <View style={styles.settings}>
         <View style={styles.title}>
-          <Text style={styles.header} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.profile.handle}${state.profile.node ? '/' + state.profile.node : ''}`}</Text>
+          <Text style={styles.header} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.profile.handle}${state.profile.node ? '@' + state.profile.node : ''}`}</Text>
           <Divider style={styles.border} bold={true} />
         </View>
         <View style={styles.scrollWrapper}>
@@ -914,7 +914,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoComplete="off"
                 autoCorrect={false}
                 label={Platform.OS==='ios'?state.strings.description:undefined}
-                placeholdfer={Platform.OS!=='ios'?state.strings.description:undefined}
+                placeholder={Platform.OS!=='ios'?state.strings.description:undefined}
                 value={state.description}
                 left={<TextInput.Icon style={styles.inputIcon} icon="book-open-outline" />}
                 onChangeText={value => actions.setDescription(value)}

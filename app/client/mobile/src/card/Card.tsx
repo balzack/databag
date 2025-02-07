@@ -38,7 +38,7 @@ export function Card({
             </Text>
           )}
           <Text numberOfLines={1} style={styles.handle}>
-            {node ? `${handle}/${node}` : handle}
+            {node ? `${handle}@${node}` : handle}
           </Text>
         </View>
         <View style={styles.actions}>{actions}</View>

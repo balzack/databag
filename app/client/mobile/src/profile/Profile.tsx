@@ -96,7 +96,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
           </View>
         )}
         { state.node && (
-          <Text style={styles.headerLabel} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.handle}/${state.node}`}</Text>
+          <Text style={styles.headerLabel} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.handle}@${state.node}`}</Text>
         )}
         { !state.node && (
           <Text style={styles.headerLabel} adjustsFontSizeToFit={true} numberOfLines={1}>{state.handle}</Text>

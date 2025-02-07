@@ -218,7 +218,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
                   <Text style={styles.handle}>{ name }</Text>
                 )}
                 { !name && handle && (
-                  <Text style={styles.handle}>{ `${handle}${node ? '/' + node : ''}` }</Text>
+                  <Text style={styles.handle}>{ `${handle}${node ? '@' + node : ''}` }</Text>
                 )}
                 { !name && !handle && (
                   <Text style={styles.unknown}>{ state.strings.unknownContact }</Text>
