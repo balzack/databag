@@ -16,6 +16,7 @@ export function useRegistry() {
     username: '',
     server: '',
     profiles: [] as Profile[],
+    contacts: [] as Profile[],
   });
 
   const updateState = (value: any) => {
@@ -43,6 +44,25 @@ export function useRegistry() {
       }
     }
   };
+
+  useEffect(() => {
+    updateState({ contacts: state.profiles.filter((profile: Profile) => profile.guid !== state.guid) });
+  }, [state.profiles, state.guid]);
+
+  useEffect(() => {
+    const identity = app.state?.session?.getIdentity();
+    const setProfile = (profile: Profile) => {
+      const {guid} = profile;
+      updateState({ guid });
+    };
+    if (identity) {
+      identity.addProfileListener(setProfile);
+      return () => {
+        identity.removeProfileListener(setProfile);
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const {layout} = display.state;

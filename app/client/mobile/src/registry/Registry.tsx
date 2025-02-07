@@ -47,10 +47,10 @@ export function Registry({close, openContact}: {close?: () => void; openContact:
       </SafeAreaView>
       <Divider style={styles.divider} />
 
-      {state.profiles.length !== 0 && (
+      {state.contacts.length !== 0 && (
         <FlatList
           style={styles.cards}
-          data={state.profiles}
+          data={state.contacts}
           initialNumToRender={32}
           contentContainerStyle={state.layout === 'large' ? styles.cardsContainer : {}}
           showsVerticalScrollIndicator={false}
@@ -87,7 +87,7 @@ export function Registry({close, openContact}: {close?: () => void; openContact:
           keyExtractor={profile => profile.guid}
         />
       )}
-      {state.profiles.length === 0 && (
+      {state.contacts.length === 0 && (
         <View style={styles.none}>
           <Text style={styles.noneLabel}>{state.strings.noContacts}</Text>
         </View>
