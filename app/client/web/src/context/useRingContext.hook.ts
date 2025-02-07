@@ -86,7 +86,7 @@ export function useRingContext() {
           console.log(err);
         }
       } else if (status === 'closed') {
-        await cleanup;
+        await cleanup();
       }
     }
   }
@@ -190,6 +190,7 @@ export function useRingContext() {
   }
 
   const cleanup = async () => {
+console.log("CLEANUP!");
     closing.current = true;
     while (updatingPeer.current || connecting.current) {
       await new Promise((r) => setTimeout(r, CLOSE_POLL_MS));
@@ -213,6 +214,7 @@ export function useRingContext() {
     peerUpdate.current = [];
     updateState({ calling: null, connected: false, connectedTime: 0, failed: false, localStream: null, remoteStream: null, localVideo: false, remoteVideo: false });
     closing.current = false;
+console.log("!!");
   }
 
   const transmit = (ice: { urls: string; username: string; credential: string }[]) => {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRing } from './useRing.hook';
 import classes from './Ring.module.css';
 import { Card as Contact } from '../card/Card';
+import { Card } from 'databag-client-sdk';
 import { Colors } from '../constants/Colors';
 import { modals } from '@mantine/modals'
 import { Loader, Image, Text, ActionIcon } from '@mantine/core'
@@ -59,7 +60,7 @@ export function Ring() {
     }
   }
 
-  const accept = async (callId, card) => {
+  const accept = async (callId: string, card: Card) => {
     if (!accepting) {
       setAccepting(callId);
       try {
@@ -72,7 +73,7 @@ export function Ring() {
     }
   }
 
-  const ignore = async (callId, card) => {
+  const ignore = async (callId: string, card: Card) => {
     if (!ignoring) {
       setIgnoring(callId);
       try {
@@ -85,7 +86,7 @@ export function Ring() {
     }
   }
 
-  const decline = async (callId, card) => {
+  const decline = async (callId: string, card: Card) => {
     if (!declining) {
       setDeclining(callId);
       try {
@@ -124,7 +125,7 @@ export function Ring() {
       )}
       { state.calling && (
         <div className={classes.ring}>
-          <ActionIcon variant="subtle" loading={applyingAudio} disabled={!state.connected} className={classes.circleIcon} color={Colors.primary}>
+          <ActionIcon variant="subtle" loading={applyingAudio} disabled={!state.connected} className={classes.circleIcon} color={Colors.primary} onClick={toggleAudio}>
             { state.audioEnabled && (
               <IconMicrophone />
             )}
@@ -132,7 +133,7 @@ export function Ring() {
               <IconMicrophoneOff />
             )}
           </ActionIcon>
-          <ActionIcon variant="subtle" disabled={!state.connected} className={classes.circleIcon} color={Colors.confirmed}>
+          <ActionIcon variant="subtle" disabled={!state.connected} className={classes.circleIcon} color={Colors.confirmed} onClick={()=>actions.setFullscreen(true)}>
             <IconArrowsMaximize />
           </ActionIcon>
           <div className={classes.name}>
@@ -140,7 +141,7 @@ export function Ring() {
               <Text className={classes.nameSet}>{ state.calling.name }</Text>
             )}
             { !state.calling.name && (
-              <Text className={classs.nameUnset}>{ state.strings.name }</Text>
+              <Text className={classes.nameUnset}>{ state.strings.name }</Text>
             )}
           </div>
           <div className={classes.status}>

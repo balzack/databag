@@ -4,6 +4,8 @@ import classes from './Call.module.css'
 import { Card as Contact } from '../card/Card';
 import { Colors } from '../constants/Colors';
 import { modals } from '@mantine/modals'
+import { Image, Text, ActionIcon } from '@mantine/core'
+import { IconPhone, IconMicrophone, IconMicrophoneOff, IconVideo, IconVideoOff } from '@tabler/icons-react'
 
 export function Call() {
   const { state, actions } = useCall();
@@ -76,7 +78,47 @@ export function Call() {
   }
 
   return (
-    <div />
+    <div className={(state.calling && state.fullscreen) ? classes.active : classes.inactive}>
+      { state.calling && (
+        <div className={classes.call}>
+
+          <div className={classes.titleView}>
+            { state.calling.name && (
+              <Text className={classes.titleName}>{ state.calling.name }</Text>
+            )}
+            { !state.calling.name && (
+              <Text className={classes.titleName}>{ `${state.calling.handle}/${state.calling.node}` }</Text>
+            )}
+            <div className={classes.image}>
+              <div className={classes.frame}>
+                <Image radius="lg" fit="contain" className={classes.logo} src={state.calling.imageUrl} />
+              </div>
+            </div>
+            <Text className={classes.titleStatus}>{ `${Math.floor(state.duration/60)}:${(state.duration % 60).toString().padStart(2, '0')}` }</Text>
+          </div> 
+
+          <div className={classes.buttons}>
+            <ActionIcon onClick={toggleAudio} disabled={!state.connected} loading={applyingAudio} color={Colors.primary} size="xl">
+              { state.audioEnabled && (
+                <IconMicrophone />
+              )}
+              { !state.audioEnabled && (
+                <IconMicrophoneOff />
+              )}
+            </ActionIcon>
+            <ActionIcon onClick={toggleVideo} disabled={!state.connected} loading={applyingVideo} color={Colors.primary} size="xl">
+              { state.videoEnabled && (
+                <IconVideo />
+              )}
+              { !state.videoEnabled && (
+                <IconVideoOff />
+              )}
+            </ActionIcon>
+            <ActionIcon onClick={end} color={Colors.offsync} size="xl"><IconPhone className={classes.off} /></ActionIcon>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
