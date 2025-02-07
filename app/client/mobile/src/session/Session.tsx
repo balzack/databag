@@ -437,6 +437,10 @@ function SettingsScreen({nav}) {
 }
 
 function HomeScreen({nav}) {
+  useEffect(() => {
+    nav.contacts.closeDrawer();
+  }, [nav.callCard]);
+
   return (
     <View style={styles.frame}>
       <View style={styles.left}>

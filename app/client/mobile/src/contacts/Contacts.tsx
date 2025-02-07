@@ -76,8 +76,8 @@ export function Contacts({openRegistry, openContact, callContact, textContact}: 
                     color={Colors.connected}
                     select={async () => {
                       try {
-console.log(item);
                         await actions.call(item);
+                        callContact(item);
                       } catch (err) {
                         console.log(err);
                         setAlert(true);

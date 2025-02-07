@@ -106,14 +106,14 @@ export function Ring() {
     const declineButton = <IconButton key="decline" style={styles.flipIcon} iconColor="white" containerColor={Colors.offsync} icon="phone-outline" compact="true" mode="contained" size={24} loading={declining===callId} onPress={()=>decline(callId, card)} />
     const acceptButton = <IconButton key="accept" style={styles.circleIcon} iconColor="white" containerColor={Colors.primary} icon="phone-outline" compact="true" mode="contained" size={24} loading={accepting===callId} onPress={()=>accept(callId, card)} />
     return (
-      <Contact containerStyle={styles.card} placeholder={''} imageUrl={imageUrl} name={name} node={node} handle={handle} actions={[ignoreButton, declineButton, acceptButton]} />
+      <Contact containerStyle={styles.card} placeholder={state.strings.name} imageUrl={imageUrl} name={name} node={node} handle={handle} actions={[ignoreButton, declineButton, acceptButton]} />
     )
   });
 
   return (
     <View style={(accepting || state.calling || state.calls.length > 0) ? styles.active : styles.inactive}>
       { state.calls.length > 0 && !accepting && !state.calling && (
-        <Surface elevation={4} mode="flat" style={styles.ring}>
+        <Surface elevation={4} mode="flat" style={{ ...styles.ring, borderRadius: display.layout === 'large' ? 16 : 0 }}>
           { calls[0] }
         </Surface>
       )}

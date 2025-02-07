@@ -20,7 +20,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     height: '100%',
-    borderRadius: 16,
     paddingLeft: 16,
     paddingRight: 8,
   },

@@ -11,7 +11,8 @@ export function useRing() {
   const offset = useRef(false);
 
   const [state, setState] = useState({
-    strings: display.state.strings, 
+    strings: display.state.strings,
+    layout: display.state.layout,
     calls: [] as { callId: string, card: Card }[],
     calling: null as null | Card,
     remoteVideo: false,
@@ -26,6 +27,11 @@ export function useRing() {
   const updateState = (value: any) => {
     setState((s) => ({ ...s, ...value }))
   }
+
+  useEffect(() => {
+    const { layout, strings } = display.state;
+    updateState({ layout, strings });
+  }, [display.state]);
 
   useEffect(() => {
     const interval = setInterval(() => {
