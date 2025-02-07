@@ -24,8 +24,8 @@ export const styles = StyleSheet.create({
     flexShrink: 0,
     marginRight: 0,
     marginLeft: 0,
-    marginTop: 0,
-    marginBottom: 0,
+    marginTop: 4,
+    marginBottom: 4,
     backgroundColor: 'transparent',
   },
   divider: {
