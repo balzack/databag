@@ -186,7 +186,7 @@ export function useRingContext() {
     link.setMessageListener((msg: any) => updatePeer('message', msg));
     updateState({ calling: card, failed: false, connected: false, connectedTime: 0,
       audioEnabled: false, videoEnabled: false, localVideo: false, remoteVideo: false,
-      localStream: localStream.current, remoteStream: remoteStream.current });
+      localStream: localStream.current, remoteStream: remoteStream.current, fullscreen: false });
   }
 
   const cleanup = async () => {
@@ -211,7 +211,8 @@ export function useRingContext() {
     localStream.current = null;
     remoteStream.current = null,
     peerUpdate.current = [];
-    updateState({ calling: null, connected: false, connectedTime: 0, failed: false, localStream: null, remoteStream: null, localVideo: false, remoteVideo: false });
+    updateState({ calling: null, connected: false, connectedTime: 0, fullscreen: false,
+      failed: false, localStream: null, remoteStream: null, localVideo: false, remoteVideo: false });
     closing.current = false;
   }
 

@@ -75,14 +75,18 @@ export function useRingContext() {
 
   const linkStatus = async (status: string) => {
     if (call.current) {
-      const { peer, link } = call.current;
-      if (status === 'connected') {
-        const now = new Date();
-        const connectedTime = Math.floor(now.getTime() / 1000);
-        updateState({ connected: true, connectedTime });
-        await actions.enableAudio();
-      } else if (status === 'closed') {
-        await cleanup();
+      try {
+        const { peer, link } = call.current;
+        if (status === 'connected') {
+          const now = new Date();
+          const connectedTime = Math.floor(now.getTime() / 1000);
+          updateState({ connected: true, connectedTime });
+          await actions.enableAudio();
+        } else if (status === 'closed') {
+          await cleanup();
+        }
+      } catch (err) {
+        console.log(err);
       }
     }
   }
@@ -143,7 +147,7 @@ export function useRingContext() {
               break;
             case 'local_track':
               if (passive.current) {
-                passiveTracks.push(data);
+                passiveTracks.current.push(data);
               } else {
                 peer.addTrack(data, sourceStream.current);
               }
@@ -192,11 +196,11 @@ export function useRingContext() {
     const peer = transmit(ice);
     const candidates = [] as RTCIceCandidate[];
     call.current = { peer, link, candidates };
-    link.setStatusListener(linkStatus);
-    link.setMessageListener((msg: any) => updatePeer('message', msg));
     updateState({ calling: card, failed: false, connected: false, connectedTime: 0,
       audioEnabled: false, videoEnabled: false, localVideo: false, remoteVideo: false,
       localStream: localStream.current, remoteStream: remoteStream.current });
+    link.setStatusListener(linkStatus);
+    link.setMessageListener((msg: any) => updatePeer('message', msg));
   }
 
   const cleanup = async () => {
@@ -323,8 +327,8 @@ export function useRingContext() {
       }
     },
     enableAudio: async () => {
-      if (connecting.current || closing.current || !call.current) {
-        throw new Error('cannot unmute audio');
+      if (closing.current || !call.current) {
+        throw new Error('cannot unmute audio')
       }
       if (!localAudio.current) {
         throw new Error('audio not available');
@@ -347,7 +351,7 @@ export function useRingContext() {
       updateState({ audioEnabled: false });
     },
     enableVideo: async () => {
-      if (connecting.current || closing.current || !call.current) {
+      if (closing.current || !call.current) {
         throw new Error('cannot start video');
       }
       if (!localVideo.current) {

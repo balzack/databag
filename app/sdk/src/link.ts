@@ -177,14 +177,22 @@ export class LinkModule implements Link {
     try {
       this.status = status;
       if (this.statusListener) {
-        await this.statusListener(this.connected && status === 'connected' ? 'reconnected' : status);
+        if (status === 'connected') {
+          if (this.connected) {
+            await this.statusListener('reconnected');
+          } else {
+            await this.statusListener('connected');
+            this.connected = true;
+          }
+        } else {
+          await this.statusListener(status);
+        }
       }
     } catch (err) {
       this.log.error('status notification failed');
     }
 
     if (status === 'connected') {
-      this.connected = true;
       if (this.ringInterval) {
         clearInterval(this.ringInterval);
         this.ringInterval = null;
