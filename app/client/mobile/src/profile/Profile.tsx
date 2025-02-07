@@ -95,7 +95,12 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
             <IconButton style={styles.back} compact="true" mode="contained" icon="arrow-left" size={28} onPress={close} />
           </View>
         )}
-        <Text style={styles.headerLabel} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.handle}${state.node ? '/' + state.node : ''}`}</Text>
+        { state.node && (
+          <Text style={styles.headerLabel} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.handle}/${state.node}`}</Text>
+        )}
+        { !state.node && (
+          <Text style={styles.headerLabel} adjustsFontSizeToFit={true} numberOfLines={1}>{state.handle}</Text>
+        )}
         {close && <View style={styles.spaceHolder} />}
       </View>
       <Divider style={styles.border} bold={true} />
