@@ -6,7 +6,7 @@ import { Card } from 'databag-client-sdk';
 import { Colors } from '../constants/Colors';
 import { modals } from '@mantine/modals'
 import { Loader, Image, Text, ActionIcon } from '@mantine/core'
-import { IconEyeX, IconPhone, IconPhoneOff, IconArrowsMaximize, IconMicrophone, IconMicrophoneOff } from '@tabler/icons-react'
+import { IconVideoPlus, IconEyeX, IconPhone, IconPhoneOff, IconArrowsMaximize, IconMicrophone, IconMicrophoneOff } from '@tabler/icons-react'
 
 export function Ring() {
   const { state, actions } = useRing();
@@ -134,7 +134,12 @@ export function Ring() {
             )}
           </ActionIcon>
           <ActionIcon variant="subtle" disabled={!state.connected} className={classes.circleIcon} color={Colors.confirmed} onClick={()=>actions.setFullscreen(true)}>
-            <IconArrowsMaximize />
+            { (state.localVideo || state.remoteVideo) && (
+              <IconVideoPlus />
+            )}
+            { !state.localVideo && !state.remoteVideo && (
+              <IconArrowsMaximize />
+            )}
           </ActionIcon>
           <div className={classes.name}>
             { state.calling.name && (

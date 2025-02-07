@@ -32,7 +32,6 @@ export function Session() {
   const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
 
   const textContact = (cardId: string) => {
-    console.log("MESSAGE: ", cardId);
     setTextCard({ cardId });
     closeContacts();
     setTab('content');
@@ -70,6 +69,7 @@ export function Session() {
                   <Contacts
                     textContact={textContact}
                     openRegistry={openRegistry}
+                    closeContacts={()=>{}}
                     openContact={(params) => {
                       setProfileParams(params)
                       openProfile()
@@ -149,6 +149,7 @@ export function Session() {
                 <Contacts
                   textContact={textContact}
                   openRegistry={openRegistry}
+                  closeContacts={closeContacts}
                   openContact={(params) => {
                     setProfileParams(params)
                     openProfile()
