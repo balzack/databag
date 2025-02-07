@@ -113,7 +113,7 @@ export function Ring() {
   return (
     <View style={(accepting || state.calling || state.calls.length > 0) ? styles.active : styles.inactive}>
       { state.calls.length > 0 && !accepting && !state.calling && (
-        <Surface elevation={4} mode="flat" style={{ ...styles.ring, borderRadius: display.layout === 'large' ? 16 : 0 }}>
+        <Surface elevation={4} mode="flat" style={{ ...styles.ring, borderRadius: state.layout === 'large' ? 16 : 0 }}>
           { calls[0] }
         </Surface>
       )}
