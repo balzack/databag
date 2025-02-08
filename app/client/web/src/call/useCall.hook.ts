@@ -25,6 +25,7 @@ export function useCall() {
     failed: false,
     width: 0,
     height: 0,
+    fullscreen: false,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
