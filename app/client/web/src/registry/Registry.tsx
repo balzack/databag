@@ -9,7 +9,7 @@ import { ProfileParams } from '../profile/Profile'
 export function Registry({ close, openContact }: { close?: () => void; openContact: (params: ProfileParams) => void }) {
   const { state, actions } = useRegistry()
 
-  const profiles = state.profiles.map((profile, idx) => {
+  const contacts = state.contacts.map((profile, idx) => {
     const select = () => {
       const { guid, handle, node, name, location, description, imageUrl } = profile
       const params = { guid, handle, node, name, location, description, imageUrl }
@@ -53,8 +53,8 @@ export function Registry({ close, openContact }: { close?: () => void; openConta
         />
         {close && <IconX size={28} className={classes.close} onClick={close} />}
       </div>
-      {profiles.length !== 0 && <div className={classes.cards}>{profiles}</div>}
-      {profiles.length === 0 && <div className={classes.none}>{state.strings.noContacts}</div>}
+      {contacts.length !== 0 && <div className={classes.cards}>{contacts}</div>}
+      {contacts.length === 0 && <div className={classes.none}>{state.strings.noContacts}</div>}
     </div>
   )
 }

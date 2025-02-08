@@ -17,6 +17,7 @@ export function useRegistry() {
     server: '',
     profiles: [] as Profile[],
     contacts: [] as Profile[],
+    guid: '',
   });
 
   const updateState = (value: any) => {
