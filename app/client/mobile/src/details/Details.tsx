@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Modal, ScrollView, View } from 'react-native';
+import { SafeAreaView, Platform, Modal, ScrollView, View } from 'react-native';
 import {useTheme, Switch, Surface, Icon, Divider, Button, IconButton, Text, TextInput} from 'react-native-paper';
 import {styles} from './Details.styled';
 import {useDetails} from './useDetails.hook';
@@ -201,7 +201,8 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
                 autoComplete="off"
                 autoCorrect={false}
                 value={state.editSubject}
-                label={state.strings.subject}
+                label={Platofrm.OS==='ios'?state.strings.subject:undefined}
+                placeholder={Platform.OS!=='ios'?state.strings.subject:undefined}
                 disabled={state.locked}
                 left={<TextInput.Icon style={styles.icon} icon="label-outline" />}
                 onChangeText={value => actions.setEditSubject(value)}
