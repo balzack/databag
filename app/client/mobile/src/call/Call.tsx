@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useWindowDimensions, Dimensions, Image, View } from 'react-native';
+import { Animated, useAnimatedValue, useWindowDimensions, Dimensions, Image, View } from 'react-native';
 import { useCall } from './useCall.hook';
 import { styles } from './Call.styled'
 import { Card as Contact } from '../card/Card';
@@ -18,6 +18,7 @@ export function Call() {
   const [ignoring, setIgnoring] = useState(null as null|string);
   const [declining, setDeclining] = useState(null as null|string);
   const {height, width} = useWindowDimensions();
+  const opacity = useAnimatedValue(0)
 
   const toggleAudio = async () => {
     if (!applyingAudio) {
@@ -77,10 +78,26 @@ export function Call() {
     },
   };
 
-  const showName = (state.height - (8 * state.width / 10)) > 256;
+  useEffect(() => {
+    if (state.calling && state.fullscreen) {
+      Animated.timing(opacity, {
+        toValue: 1.0,
+        duration: 100,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.timing(opacity, {
+        toValue: 0.0,
+        duration: 100,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [state.calling, state.fullscreen]);
 
+  const viewStyle = state.calling && state.fullscreen ? styles.active : styles.inactive;
+  const showName = (state.height - (8 * state.width / 10)) > 256;
   return (
-    <View style={(state.calling && state.fullscreen) ? styles.active : styles.inactive}>
+    <Animated.View style={{ ...viewStyle, opacity }}>
       { state.calling && (
         <Surface elevation={4} mode="flat" style={styles.call}>
 
@@ -137,7 +154,7 @@ export function Call() {
         </Surface>
       )}
       <Confirm show={alert} params={alertParams} />
-    </View>
+    </Animated.View>
   );
 }
 
