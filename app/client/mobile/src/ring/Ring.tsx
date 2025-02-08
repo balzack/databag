@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Animated, useAnimatedValue, View } from 'react-native';
 import { useRing } from './useRing.hook';
 import { styles } from './Ring.styled'
 import { Card as Contact } from '../card/Card';
@@ -17,6 +17,23 @@ export function Ring() {
   const [accepting, setAccepting] = useState(null as null|string);
   const [ignoring, setIgnoring] = useState(null as null|string);
   const [declining, setDeclining] = useState(null as null|string);
+  const scale = useAnimatedValue(0)
+
+  useEffect(() => {
+    if (accepting || state.calling || state.calls.length > 0) {
+      Animated.timing(scale, {
+        toValue: 64,
+        duration: 100,
+        useNativeDriver: false,
+      }).start();
+    } else {
+      Animated.timing(scale, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: false,
+      }).start();
+    }
+  }, [accepting, state.calling, state.calls]);
 
   const toggleAudio = async () => {
     if (!applyingAudio) {
@@ -111,44 +128,46 @@ export function Ring() {
   });
 
   return (
-    <View style={(accepting || state.calling || state.calls.length > 0) ? styles.active : styles.inactive}>
-      { state.calls.length > 0 && !accepting && !state.calling && (
-        <Surface elevation={4} mode="flat" style={{ ...styles.ring, borderRadius: state.layout === 'large' ? 16 : 0 }}>
-          { calls[0] }
-        </Surface>
-      )}
-      { accepting && !state.calling && (
-        <Surface elevation={4} mode="flat" style={styles.ring}>
-          <ActivityIndicator size={32} />
-        </Surface>
-      )}
-      { state.calling && (
-        <Surface elevation={4} mode="flat" style={styles.ring}>
-          <IconButton style={styles.circleIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.primary} icon={state.audioEnabled ? 'microphone' : 'microphone-off'} compact="true" mode="contained" size={24} onPress={toggleAudio} />
-          <IconButton style={styles.circleIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.confirmed} icon={(state.remoteVideo || state.localVideo) ? 'video-switch-outline' : 'arrow-expand-all'} compact="true" mode="contained" size={24} onPress={()=>actions.setFullscreen(true)} />
-          <View style={styles.name}>
-            { state.calling.name && (
-              <Text style={styles.nameSet} numberOfLines={1}>{ state.calling.name }</Text>
-            )}
-            { !state.calling.name && (
-              <Text style={styles.nameUnset} adjustsFontSizeToFit={true} numberOfLines={1}>{ state.strings.name }</Text>
-            )}
-          </View>
-          <View style={styles.status}>
-            { state.connected && (
-              <Text style={styles.duration}>{ `${Math.floor(state.duration/60)}:${(state.duration % 60).toString().padStart(2, '0')}` }</Text>
-            )}
-            { !state.connected && (
-              <ActivityIndicator size={18} />
-            )}
-          </View>
-          <View style={styles.end}>
-            <IconButton style={styles.flipIcon} iconColor="white" containerColor={Colors.offsync} icon="phone-outline" compact="true" mode="contained" size={24} onPress={end} />
-          </View>
-        </Surface>
-      )}
-      <Confirm show={alert} params={alertParams} />
-    </View>
+    <Animated.View style={{ width: '100%', height: scale }}>
+      <View style={(accepting || state.calling || state.calls.length > 0) ? styles.active : styles.inactive}>
+        { state.calls.length > 0 && !accepting && !state.calling && (
+          <Surface elevation={4} mode="flat" style={{ ...styles.ring, borderRadius: state.layout === 'large' ? 16 : 0 }}>
+            { calls[0] }
+          </Surface>
+        )}
+        { accepting && !state.calling && (
+          <Surface elevation={4} mode="flat" style={styles.ring}>
+            <ActivityIndicator size={32} />
+          </Surface>
+        )}
+        { state.calling && (
+          <Surface elevation={4} mode="flat" style={styles.ring}>
+            <IconButton style={styles.circleIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.primary} icon={state.audioEnabled ? 'microphone' : 'microphone-off'} compact="true" mode="contained" size={24} onPress={toggleAudio} />
+            <IconButton style={styles.circleIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.confirmed} icon={(state.remoteVideo || state.localVideo) ? 'video-switch-outline' : 'arrow-expand-all'} compact="true" mode="contained" size={24} onPress={()=>actions.setFullscreen(true)} />
+            <View style={styles.name}>
+              { state.calling.name && (
+                <Text style={styles.nameSet} numberOfLines={1}>{ state.calling.name }</Text>
+              )}
+              { !state.calling.name && (
+                <Text style={styles.nameUnset} adjustsFontSizeToFit={true} numberOfLines={1}>{ state.strings.name }</Text>
+              )}
+            </View>
+            <View style={styles.status}>
+              { state.connected && (
+                <Text style={styles.duration}>{ `${Math.floor(state.duration/60)}:${(state.duration % 60).toString().padStart(2, '0')}` }</Text>
+              )}
+              { !state.connected && (
+                <ActivityIndicator size={18} />
+              )}
+            </View>
+            <View style={styles.end}>
+              <IconButton style={styles.flipIcon} iconColor="white" containerColor={Colors.offsync} icon="phone-outline" compact="true" mode="contained" size={24} onPress={end} />
+            </View>
+          </Surface>
+        )}
+        <Confirm show={alert} params={alertParams} />
+      </View>
+    </Animated.View>
   );
 }
 
