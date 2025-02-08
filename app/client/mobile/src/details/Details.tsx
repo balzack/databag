@@ -201,7 +201,7 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
                 autoComplete="off"
                 autoCorrect={false}
                 value={state.editSubject}
-                label={Platofrm.OS==='ios'?state.strings.subject:undefined}
+                label={Platform.OS==='ios'?state.strings.subject:undefined}
                 placeholder={Platform.OS!=='ios'?state.strings.subject:undefined}
                 disabled={state.locked}
                 left={<TextInput.Icon style={styles.icon} icon="label-outline" />}
