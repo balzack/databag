@@ -62,8 +62,7 @@ export type Channel = {
   enableAudio: boolean;
   enableVideo: boolean;
   enableBinary: boolean;
-  //membership: Member;
-  members: Member[];
+  members: Membership[];
 };
 
 export type FocusDetail = {
@@ -76,10 +75,10 @@ export type FocusDetail = {
   enableVideo: boolean;
   enableBinary: boolean;
   created: number;
-  members: Member[];
+  members: Membership[];
 }
 
-export type Member = {
+export type Membership = {
   guid: string;
   //pushEnabled: boolean;
   //canAddTopic: boolean,
@@ -211,7 +210,7 @@ export type Profile = {
   node: string;
 };
 
-export type NodeAccount = {
+export type Member = {
   accountId: number;
   guid: string;
   handle: string;
@@ -222,7 +221,7 @@ export type NodeAccount = {
   disabled: boolean;
 };
 
-export type NodeConfig = {
+export type Setup = {
   domain: string;
   accountStorage: string;
   enableImage: boolean;

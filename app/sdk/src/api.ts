@@ -1,4 +1,4 @@
-import type { Channel, Topic, AssetSource, Asset, Tag, Article, Group, Card, Profile, Call, FocusDetail, Config, NodeConfig, NodeAccount, Participant, PushParams } from './types';
+import type { Channel, Topic, AssetSource, Asset, Tag, Article, Group, Card, Profile, Call, FocusDetail, Config, Setup, Member, Participant, PushParams } from './types';
 
 export interface Session {
   getSettings(): Settings;
@@ -158,14 +158,14 @@ export interface Focus {
   removeDetailListener(ev: (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => void): void;
 }
 
-export interface Node {
-  getAccounts(): Promise<NodeAccount[]>;
-  createAccountAccess(): Promise<string>;
-  resetAccountAccess(): Promise<string>;
-  blockAccount(flag: boolean): Promise<void>;
-  removeAccount(accountId: number): Promise<void>;
-  getConfig(): Promise<NodeConfig>;
-  setConfig(config: NodeConfig): Promise<void>;
+export interface Service {
+  getMembers(): Promise<Member[]>;
+  createMemberAccess(): Promise<string>;
+  resetMemberAccess(): Promise<string>;
+  blockMember(flag: boolean): Promise<void>;
+  removeMember(accountId: number): Promise<void>;
+  getSetup(): Promise<Setup>;
+  setSetup(setup: Setup): Promise<void>;
 }
 
 export interface Contributor {

@@ -1,8 +1,8 @@
-import type { Node } from './api';
-import type { NodeAccount, NodeConfig } from './types';
+import type { Service } from './api';
+import type { Member, Setup } from './types';
 import type { Logging } from './logging';
 
-export class NodeModule implements Node {
+export class ServiceModule implements Service {
   private log: Logging;
   private token: string;
   private node: string;
@@ -15,23 +15,23 @@ export class NodeModule implements Node {
     this.log = log;
   }
 
-  public async createAccountAccess(): Promise<string> {
+  public async createMemberAccess(): Promise<string> {
     return '';
   }
 
-  public async resetAccountAccess(): Promise<string> {
+  public async resetMemberAccess(): Promise<string> {
     return '';
   }
 
-  public async blockAccount(flag: boolean): Promise<void> {}
+  public async blockMember(flag: boolean): Promise<void> {}
 
-  public async removeAccount(accountId: number): Promise<void> {}
+  public async removeMember(accountId: number): Promise<void> {}
 
-  public async getAccounts(): Promise<NodeAccount[]> {
+  public async getMembers(): Promise<Member[]> {
     return [];
   }
 
-  public async getConfig(): Promise<NodeConfig> {
+  public async getSetup(): Promise<Setup> {
     return {
       domain: '',
       accountStorage: '',
@@ -53,5 +53,5 @@ export class NodeModule implements Node {
     };
   }
 
-  public async setConfig(config: NodeConfig): Promise<void> {}
+  public async setSetup(config: Setup): Promise<void> {}
 }

@@ -1,5 +1,5 @@
 import { SessionModule } from './session';
-import { NodeModule } from './node';
+import { ServiceModule } from './service';
 import { ContributorModule } from './contributor';
 import { type Logging, ConsoleLogging } from './logging';
 import { type Store, OfflineStore, OnlineStore, NoStore } from './store';
@@ -11,7 +11,7 @@ import { addAccount } from './net/addAccount';
 import { setAdmin } from './net/setAdmin';
 import { getAvailable } from './net/getAvailable';
 import { getUsername } from './net/getUsername';
-import type { Session, Node, Contributor } from './api';
+import type { Session, Service, Contributor } from './api';
 import type { Params, SessionParams } from './types';
 import type { Login } from './entities';
 import type { Crypto } from './crypto';
@@ -140,9 +140,9 @@ export class DatabagSDK {
       });
   }
 
-  public async configure(node: string, secure: boolean, token: string, mfaCode: string | null): Promise<Node> {
+  public async configure(node: string, secure: boolean, token: string, mfaCode: string | null): Promise<Service> {
     const access = await setAdmin(node, secure, token, mfaCode);
-    return new NodeModule(this.log, node, secure, token);
+    return new ServiceModule(this.log, node, secure, token);
   }
 
   public async automate(node: string, secure: boolean, token: string): Promise<Contributor> {
