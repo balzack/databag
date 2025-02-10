@@ -42,4 +42,4 @@ COPY --from=node /app/build /app/databag/net/web/build
 ENV DEV=0
 ENV ADMIN=password
 
-ENTRYPOINT /app/databag/net/server/entrypoint.sh
+ENTRYPOINT ["/app/databag/net/server/entrypoint.sh"]
