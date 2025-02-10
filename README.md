@@ -61,7 +61,7 @@ To use databag, you will need a DNS name pointing to your node with a certificat
 ### Docker Compose 
 
 #### Example Compose File
-```
+```shell
 services:
   databag:
     container_name: databag
@@ -74,7 +74,7 @@ services:
 ```
 
 #### Example Docker Run Command
-```
+```shell
 docker run -d \
   -v "$(pwd)/data:/var/lib/databag" \
   -p "7000:7000" \
