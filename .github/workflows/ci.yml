@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "publish-container-image" ]
   pull_request:
     branches: [ "main" ]
 
