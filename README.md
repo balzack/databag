@@ -60,7 +60,27 @@ To use databag, you will need a DNS name pointing to your node with a certificat
 
 ### Docker Compose 
 
-Launch with dockerhub container using docker compose:
+#### Example Compose File
+```
+services:
+  databag:
+    container_name: databag
+    image: ghcr.io/balzack/databag:main
+    ports:
+      - "7000:7000"
+    volumes:
+      - ./data:/var/lib/databag
+    restart: unless-stopped
+```
+
+#### Example Docker Run Command
+```
+docker run -d \
+  -v "$(pwd)/data:/var/lib/databag" \
+  -p "7000:7000" \
+  ghcr.io/balzack/databag:main
+```
+
 
 #### Standard launch
 ```shell
