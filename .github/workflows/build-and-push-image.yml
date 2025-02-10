@@ -1,10 +1,12 @@
 # Build and publish the databag container image to ghcr
-name: Build and publish the databage container image to ghcr
+name: Build container image
 
 # Configures this workflow to run every time a change is pushed to the main branch
 on:
   push:
     branches: [ "main", "publish-container-image" ]
+    tags:
+      - 'v*'
   pull_request:
     branches: [ "main" ]
 
@@ -36,6 +38,8 @@ jobs:
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
 
       # Build and push container image with associated labels and tags.
       - name: Build and push Docker image
