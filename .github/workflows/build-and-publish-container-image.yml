@@ -1,5 +1,5 @@
-# Build and publish the database docker image to ghcr
-name: Build and publish a Docker image
+# Build and publish the databag container image to ghcr
+name: Build and publish the databage container image to ghcr
 
 # Configures this workflow to run every time a change is pushed to the main branch
 on:
