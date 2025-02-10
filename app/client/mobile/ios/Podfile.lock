@@ -1364,6 +1364,8 @@ PODS:
     - React
   - react-native-safe-area-context (4.14.1):
     - React-Core
+  - react-native-splash-screen (3.3.0):
+    - React-Core
   - react-native-sqlite-storage (6.0.1):
     - React-Core
   - react-native-video (6.10.0):
@@ -1910,6 +1912,7 @@ DEPENDENCIES:
   - "react-native-keep-awake (from `../node_modules/@sayem314/react-native-keep-awake`)"
   - react-native-rsa-native (from `../node_modules/react-native-rsa-native`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webrtc (from `../node_modules/react-native-webrtc`)
@@ -2061,6 +2064,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-rsa-native"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-splash-screen:
+    :path: "../node_modules/react-native-splash-screen"
   react-native-sqlite-storage:
     :path: "../node_modules/react-native-sqlite-storage"
   react-native-video:
@@ -2204,6 +2209,7 @@ SPEC CHECKSUMS:
   react-native-keep-awake: 294e077916c643d38883731ea1b2fe5e4903b255
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
   react-native-safe-area-context: 141eca0fd4e4191288dfc8b96a7c7e1c2983447a
+  react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-video: 5ea06ea0e26fbe924734af76de16db586914e309
   react-native-webrtc: 0f1c94069ff1eb9d8fb1618c2dc71f73542c8cfa
@@ -2250,7 +2256,7 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
-  Yoga: a9ef4f5c2cd79ad812110525ef61048be6a582a4
+  Yoga: b05994d1933f507b0a28ceaa4fdb968dc18da178
 
 PODFILE CHECKSUM: 9cf7373afef7b881c911fda82ff1f94eacee3e98
 

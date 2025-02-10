@@ -2,6 +2,7 @@ import {useState, useContext, useEffect} from 'react';
 import {AppContext} from '../context/AppContext';
 import {ContextType} from '../context/ContextType';
 import {useLocation, useNavigate} from 'react-router-dom';
+import SplashScreen from 'react-native-splash-screen';
 
 export function useRoot() {
   const app = useContext(AppContext) as ContextType;
@@ -14,6 +15,12 @@ export function useRoot() {
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 1000);
+  }, []);
 
   useEffect(() => {
     const {pathname} = location;
