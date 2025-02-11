@@ -3,6 +3,7 @@ name: Build container image
 
 # Configures this workflow to run every time a change is pushed to the main branch
 on:
+  workflow_dispatch:
   push:
     branches: ["main"]
     tags: ["v*"]
@@ -25,7 +26,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Log in to the Container registry
-        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -34,17 +35,25 @@ jobs:
       # Extract container image tags and labels for use in the build step.
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      # Set up QEMU for cross-compiling
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # Set up docker-buildx for cross-compiling
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       # Build and push container image with associated labels and tags.
       - name: Build and push Docker image
         id: push
-        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        uses: docker/build-push-action@@v6
         with:
           context: .
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
