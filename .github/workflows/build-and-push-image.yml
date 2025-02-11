@@ -5,7 +5,7 @@ name: Build container image
 on:
   workflow_dispatch:
   push:
-    branches: ["main"]
+    branches: ["main","publish-container-image"]
     tags: ["v*"]
   pull_request:
     branches: ["main"]
