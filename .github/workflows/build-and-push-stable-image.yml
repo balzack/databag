@@ -3,7 +3,6 @@ name: Build and Push Release Image
 # Configures this workflow to run for every new version tag
 on:
   push:
-    branches: ["main","publish-container-image"]
     tags: ["v*.*.*"]
 
 env:
