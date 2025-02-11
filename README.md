@@ -56,7 +56,7 @@ Read the [Design Guidelines](https://github.com/balzack/databag/blob/main/.desig
 
 ## Installation
 
-To use databag, you will need a DNS name pointing to your node with a certificate. You can deploy a node manually, but you will have a much easier time using a container service. Containers for arm64 and amd64 are available [here](https://hub.docker.com/r/balzack/databag/tags). 
+To use databag, you will need a DNS name pointing to your node with a certificate. You can deploy a node manually, but you will have a much easier time using a container service. Containers for arm64 and amd64 are available [here](https://github.com/balzack/databag/pkgs/container/databag). 
 
 ### Docker Compose 
 
