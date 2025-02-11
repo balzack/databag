@@ -20,6 +20,10 @@ export function useSession() {
   };
 
   useEffect(() => {
+    const setContentState = (loaded: boolean) => {
+      console.log('content loaded: ', loaded);
+      updateState({ loaded });
+    }
     const setSdkState = (state: string) => {
       updateState({ sdkState: state === 'connected' });
     }
@@ -28,10 +32,13 @@ export function useSession() {
     }
     const session = app.state.session;
     if (session) {
+      const content = session.getContent();
+      content.addLoadedListener(setContentState);
       session.addStatusListener(setSdkState);
       const sub = AppState.addEventListener('change', setAppState);
       return () => {
-        session.removeStatusListener();
+        session.removeStatusListener(setSdkState);
+        content.removeLoadedListener(setContentState);
         sub.remove();
       }
     }

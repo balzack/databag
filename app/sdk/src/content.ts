@@ -1,3 +1,4 @@
+import { EventEmitter } from 'eventemitter3';
 import type { Content } from './api';
 import type { Channel } from './types';
 import { ContactModule } from './contact';
@@ -8,14 +9,30 @@ import { Crypto } from './crypto';
 export class ContentModule implements Content {
   private crypto: Crypto | null;
   private log: Logging;
+  private emitter: EventEmitter;
   private contact: ContactModule;
   private stream: StreamModule;
+  private streamLoaded: boolean;
+  private contactLoaded: boolean;
 
   constructor(log: Logging, crypto: Crypto | null, contact: ContactModule, stream: StreamModule) {
     this.contact = contact;
     this.stream = stream;
     this.log = log;
     this.crypto = crypto;
+    this.emitter = new EventEmitter();
+    this.streamLoaded = false;
+    this.contactLoaded = false;
+
+    this.stream.addLoadedListener((loaded: boolean) => {
+      this.streamLoaded = loaded;
+      this.emitLoaded();
+    });
+
+    this.contact.addLoadedListener((loaded: boolean) => {
+      this.contactLoaded = loaded;
+      this.emitLoaded();
+    });
   }
 
   public async addChannel(sealed: boolean, type: string, subject: any, cardIds: string[]): Promise<string> {
@@ -115,4 +132,17 @@ export class ContentModule implements Content {
     this.stream.removeChannelListener(ev);
     this.contact.removeChannelListener(ev);
   }
+
+  public addLoadedListener(ev: (loaded: boolean) => void): void {
+    this.emitter.on('loaded', ev);
+    ev(this.streamLoaded && this.contactLoaded); 
+  }   
+      
+  public removeLoadedListener(ev: (loaded: boolean) => void): void {
+    this.emitter.off('loaded', ev);
+  }     
+        
+  private emitLoaded() {
+    this.emitter.emit('loaded', this.streamLoaded && this.contactLoaded);
+  }    
 }

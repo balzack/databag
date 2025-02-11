@@ -41,6 +41,7 @@ export class StreamModule {
   private nextRevision: number | null;
   private seal: { privateKey: string; publicKey: string } | null;
   private unsealAll: boolean;
+  private loaded: boolean;
   private blocked: Set<string>;
   private read: Map<string, number>
   private channelTypes: string[];
@@ -61,6 +62,7 @@ export class StreamModule {
     this.focus = null;
     this.seal = null;
     this.unsealAll = false;
+    this.loaded = false;
     this.channelTypes = channelTypes;
     this.emitter = new EventEmitter();
 
@@ -102,6 +104,9 @@ export class StreamModule {
     this.unsealAll = true;
     this.syncing = false;
     await this.sync();
+
+    this.loaded = true;
+    this.emitLoaded();
   }
 
   private parse(data: string | null): any {
@@ -267,6 +272,19 @@ export class StreamModule {
   private emitChannels() {
     const channels = Array.from(this.channelEntries, ([channelId, entry]) => entry.channel);
     this.emitter.emit('channel', { channels, cardId: null });
+  }
+
+  public addLoadedListener(ev: (loaded: boolean) => void): void {
+    this.emitter.on('loaded', ev);
+    ev(this.loaded);
+  }
+
+  public removeLoadedListener(ev: (loaded: boolean) => void): void {
+    this.emitter.off('loaded', ev);
+  }
+
+  private emitLoaded() {
+    this.emitter.emit('loaded', this.loaded);
   }
 
   public async close(): Promise<void> {

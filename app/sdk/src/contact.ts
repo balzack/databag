@@ -47,6 +47,7 @@ export class ContactModule implements Contact {
   private token: string;
   private node: string;
   private secure: boolean;
+  private loaded: boolean;
   private emitter: EventEmitter;
   private articleTypes: string[];
   private channelTypes: string[];
@@ -93,6 +94,7 @@ export class ContactModule implements Contact {
     this.articleTypes = articleTypes;
     this.channelTypes = channelTypes;
     this.unsealAll = false;
+    this.loaded = false;
     this.focus = null;
     this.seal = null;
 
@@ -172,6 +174,9 @@ export class ContactModule implements Contact {
     this.unsealAll = true;
     this.syncing = false;
     await this.sync();
+
+    this.loaded = true;
+    this.emitLoaded();
   }
 
   public async setRevision(rev: number): Promise<void> {
@@ -682,6 +687,19 @@ export class ContactModule implements Contact {
     const entries = this.channelEntries.get(cardId);
     const channels = entries ? Array.from(entries, ([channelId, entry]) => entry.channel) : [];
     this.emitter.emit('channel', { cardId, channels });
+  }
+
+  public addLoadedListener(ev: (loaded: boolean) => void): void {
+    this.emitter.on('loaded', ev);
+    ev(this.loaded);
+  }
+
+  public removeLoadedListener(ev: (loaded: boolean) => void): void {
+    this.emitter.off('loaded', ev);
+  }
+
+  private emitLoaded() {
+    this.emitter.emit('loaded', this.loaded);
   }
 
   public async setFocus(cardId: string, channelId: string): Promise<Focus> {

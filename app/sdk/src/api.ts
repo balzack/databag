@@ -109,6 +109,9 @@ export interface Content {
 
   addChannelListener(ev: (arg: { channels: Channel[]; cardId: string | null }) => void): void;
   removeChannelListener(ev: (arg: { channels: Channel[]; cardId: string | null }) => void): void;
+
+  addLoadedListener(ev: (loaded: boolean) => void): void;
+  removeLoadedListener(ev: (loaded: boolean) => void): void;
 }
 
 export interface Alias {
