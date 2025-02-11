@@ -2,15 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [ "main", "publish-container-image" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-
 jobs:
+
   CI:
     runs-on: ubuntu-latest
     steps:
