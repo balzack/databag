@@ -3,6 +3,7 @@ import { AppState } from 'react-native';
 import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {ContextType} from '../context/ContextType';
+import SplashScreen from 'react-native-splash-screen';
 
 export function useSession() {
   const display = useContext(DisplayContext) as ContextType;
@@ -21,8 +22,9 @@ export function useSession() {
 
   useEffect(() => {
     const setContentState = (loaded: boolean) => {
-      console.log('content loaded: ', loaded);
-      updateState({ loaded });
+      if (loaded) {
+        SplashScreen.hide();
+      }
     }
     const setSdkState = (state: string) => {
       updateState({ sdkState: state === 'connected' });

@@ -2,6 +2,7 @@ import {useRef, useState, useContext, useEffect} from 'react';
 import {DisplayContext} from '../context/DisplayContext';
 import {AppContext} from '../context/AppContext';
 import {ContextType} from '../context/ContextType';
+import SplashScreen from 'react-native-splash-screen';
 
 export function useAccess() {
   const debounceAvailable = useRef(setTimeout(() => {}, 0));
@@ -28,6 +29,10 @@ export function useAccess() {
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
+
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);    
 
   useEffect(() => {
     const {username, token, node, secure, mode} = state;
