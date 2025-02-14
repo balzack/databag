@@ -6,7 +6,7 @@ import {NativeRouter} from 'react-router-native';
 import {Routes, Route} from 'react-router-dom';
 import {Root} from './src/root/Root';
 import {Access} from './src/access/Access';
-import {Node} from './src/node/Node';
+import {Service} from './src/service/Service';
 import {Session} from './src/session/Session';
 
 import {useColorScheme} from 'react-native';
@@ -120,7 +120,7 @@ function App(): React.JSX.Element {
             <Routes>
               <Route path="/" element={<Text>EMPTY</Text>} />
               <Route path="/access" element={<Access />} />
-              <Route path="/node" element={<Node />} />
+              <Route path="/service" element={<Service />} />
               <Route path="/session" element={<Session />} />
             </Routes>
           </NativeRouter>

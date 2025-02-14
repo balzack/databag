@@ -257,7 +257,7 @@ export function Access() {
           )}
           {state.mode === 'admin' && (
             <View style={styles.body}>
-              <Text variant="headlineSmall">{state.strings.adminAccess}</Text>
+              <Text variant="headlineSmall">{state.strings.admin}</Text>
               <TextInput
                 style={styles.input}
                 mode="flat"

@@ -142,7 +142,7 @@ export class DatabagSDK {
 
   public async configure(node: string, secure: boolean, token: string, mfaCode: string | null): Promise<Service> {
     const access = await setAdmin(node, secure, token, mfaCode);
-    return new ServiceModule(this.log, node, secure, token);
+    return new ServiceModule(this.log, node, secure, access);
   }
 
   public async automate(node: string, secure: boolean, token: string): Promise<Contributor> {

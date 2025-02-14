@@ -1,5 +1,5 @@
 import {useState, useEffect, useRef} from 'react';
-import {DatabagSDK, Session, Focus} from 'databag-client-sdk';
+import {DatabagSDK, Service, Session, Focus} from 'databag-client-sdk';
 import {Platform, PermissionsAndroid} from 'react-native';
 import {SessionStore} from '../SessionStore';
 import {NativeCrypto} from '../NativeCrypto';
@@ -44,6 +44,7 @@ export function useAppContext() {
   const local = useRef(new LocalStore());
   const sdk = useRef(databag);
   const [state, setState] = useState({
+    service: null as null | Service,
     session: null as null | Session,
     focus: null as null | Focus,
     fullDayTime: false,
@@ -179,11 +180,11 @@ export function useAppContext() {
       return await sdk.current.username(username, token, node, secure);
     },
     adminLogin: async (token: string, node: string, secure: boolean, code: string) => {
-      const login = await sdk.current.configure(node, secure, token, code);
-      updateState({node: login});
+      const service = await sdk.current.configure(node, secure, token, code);
+      updateState({ service });
     },
     adminLogout: async () => {
-      updateState({node: null});
+      updateState({service: null});
     },
   };
 

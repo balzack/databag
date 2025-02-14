@@ -34,16 +34,16 @@ export function useRoot() {
       navigate('/');
     } else if (state.pathname === '/session' && !app.state.session) {
       navigate('/');
-    } else if (state.pathname === '/node' && !app.state.node) {
+    } else if (state.pathname === '/service' && !app.state.service) {
       navigate('/');
-    } else if (state.pathname === '/' && !app.state.session && !app.state.node) {
+    } else if (state.pathname === '/' && !app.state.session && !app.state.service) {
       navigate('/access');
-    } else if (state.pathname !== '/node' && app.state.node) {
-      navigate('/node');
+    } else if (state.pathname !== '/service' && app.state.service) {
+      navigate('/service');
     } else if (state.pathname !== '/session' && app.state.session) {
       navigate('/session');
     }
-  }, [state.pathname, app.state.session, app.state.node, app.state.initialized, navigate]);
+  }, [state.pathname, app.state.session, app.state.service, app.state.initialized, navigate]);
 
   const actions = {};
 

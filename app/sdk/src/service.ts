@@ -1,6 +1,10 @@
 import type { Service } from './api';
 import type { Member, Setup } from './types';
 import type { Logging } from './logging';
+import { getAdminMFAuth } from './net/getAdminMFAuth';
+import { setAdminMFAuth } from './net/setAdminMFAuth';
+import { addAdminMFAuth } from './net/addAdminMFAuth';
+import { removeAdminMFAuth } from './net/removeAdminMFAuth';
 
 export class ServiceModule implements Service {
   private log: Logging;
@@ -54,4 +58,20 @@ export class ServiceModule implements Service {
   }
 
   public async setSetup(config: Setup): Promise<void> {}
+
+  public async enableMFA(): Promise<{ secretImage: string, secretText: string}> {
+    const { node, secure, token } = this;
+    const { secretImage, secretText } = await addAdminMFAuth(node, secure, token);
+    return { secretImage, secretText };
+  }
+
+  public async disableMFA(): Promise<void> {
+    const { node, secure, token } = this;
+    await removeAdminMFAuth(node, secure, token);
+  }
+
+  public async confirmMFA(code: string): Promise<void> {
+    const { node, secure, token } = this;
+    await setAdminMFAuth(node, secure, token, code);
+  }
 }
