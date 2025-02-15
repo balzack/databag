@@ -169,6 +169,9 @@ export interface Service {
   removeMember(accountId: number): Promise<void>;
   getSetup(): Promise<Setup>;
   setSetup(setup: Setup): Promise<void>;
+  enableMFAuth(): Promise<{ image: string, text: string }>;
+  confirmMFAuth(code: string): Promise<void>;
+  disableMFAuth(): Promise<void>;
 }
 
 export interface Contributor {

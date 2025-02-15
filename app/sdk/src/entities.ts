@@ -225,6 +225,7 @@ export type ProfileEntity = {
 };
 
 export type AccountEntity = {
+  acconutId: number;
   guid: string;
   handle: string;
   name: string;
@@ -235,6 +236,7 @@ export type AccountEntity = {
   seal?: string;
   version: string;
   node: string;
+  storageUsed: string;
 };
 
 export const defaultProfileEntity = {

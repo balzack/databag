@@ -88,6 +88,10 @@ export const styles = StyleSheet.create({
     width: '100%',
     flexGrow: 1,
     flexShrink: 1,
+    minHeight: 0,
+    height: '1%',
+    overflow: 'hidden',
+    position: 'relative',
   },
   tabs: {
     flexShrink: 0,

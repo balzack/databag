@@ -1,6 +1,9 @@
 import type { Service } from './api';
 import type { Member, Setup } from './types';
+import { type AccountEntity, avatar } from './entities';
 import type { Logging } from './logging';
+import { getMembers } from './net/getMembers';
+import { getMemberImageUrl } from './net/getMemberImageUrl';
 import { getAdminMFAuth } from './net/getAdminMFAuth';
 import { setAdminMFAuth } from './net/setAdminMFAuth';
 import { addAdminMFAuth } from './net/addAdminMFAuth';
@@ -32,7 +35,13 @@ export class ServiceModule implements Service {
   public async removeMember(accountId: number): Promise<void> {}
 
   public async getMembers(): Promise<Member[]> {
-    return [];
+    const { node, secure, token } = this;
+    const accounts = await getMembers(node, secure, token);
+    return accounts.map(account => {
+      const { accountId, guid, handle, name, imageSet, revision, disabled, storageUsed } = account;
+      const imageUrl = imageSet ? getMemberImageUrl(node, secure, token, accountId, revision) : avatar;
+      return { accountId, guid, handle, name, imageUrl, storageUsed };
+    });
   }
 
   public async getSetup(): Promise<Setup> {
@@ -59,18 +68,18 @@ export class ServiceModule implements Service {
 
   public async setSetup(config: Setup): Promise<void> {}
 
-  public async enableMFA(): Promise<{ secretImage: string, secretText: string}> {
+  public async enableMFAuth(): Promise<{ image: string, text: string}> {
     const { node, secure, token } = this;
     const { secretImage, secretText } = await addAdminMFAuth(node, secure, token);
     return { secretImage, secretText };
   }
 
-  public async disableMFA(): Promise<void> {
+  public async disableMFAuth(): Promise<void> {
     const { node, secure, token } = this;
     await removeAdminMFAuth(node, secure, token);
   }
 
-  public async confirmMFA(code: string): Promise<void> {
+  public async confirmMFAuth(code: string): Promise<void> {
     const { node, secure, token } = this;
     await setAdminMFAuth(node, secure, token, code);
   }

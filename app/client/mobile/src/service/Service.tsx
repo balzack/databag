@@ -19,10 +19,10 @@ export function Service() {
   const showSetup = {display: tab === 'setup' ? 'flex' : 'none'};
 
   return (
-    <View style={styles.service}>
+    <SafeAreaView style={styles.service}>
       {state.layout !== 'large' && (
-        <Surface elevation={3}>
-          <SafeAreaView style={styles.full}>
+        <View>
+          <View style={styles.full}>
             <View style={styles.screen}>
               <View
                 style={{
@@ -85,8 +85,8 @@ export function Service() {
                 )}
               </View>
             </View>
-          </SafeAreaView>
-        </Surface>
+          </View>
+        </View>
       )}
       {state.layout === 'large' && (
         <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
@@ -95,7 +95,7 @@ export function Service() {
           </View>
         </NavigationContainer>
       )}
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -130,13 +130,7 @@ function SetupScreen() {
 function AccountScreen({setup}) {
   return (
     <View style={styles.frame}>
-      <Accounts />
-      <IconButton
-        mode="contained"
-        icon={'cog'}
-        size={28}
-        onPress={setup.openDrawer}
-      />
+      <Accounts setup={setup.openDrawer} />
     </View>
   );
 }

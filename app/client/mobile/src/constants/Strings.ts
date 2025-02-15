@@ -17,6 +17,9 @@ export const en = {
   noAccess: 'No Access', 
   connecting: 'Connecting',
 
+  accounts: 'Accounts',
+  noAccounts: 'No Accounts',
+
   membership: 'Membership',
   channelGuest: 'Topic Guest',
   channelHost: 'Topic Host',
@@ -300,6 +303,9 @@ export const fr = {
   noAccess: 'Pas d\'Accès',
   connecting: 'Démarrage de la Connexion',
 
+  accounts: 'Comptes',
+  noAccounts: 'Aucun Compte',
+
   membership: 'Adhésion',
   channelHost: 'Hôte du Sujet',
   channelGuest: 'Invité du Sujet',
@@ -578,6 +584,9 @@ export const sp = {
   reportTopicPrompt: '¿Estás seguro de que deseas reportar este tema para revisión del administrador?',
   connecting: 'Conexión Inicial',
 
+  accounts: 'Cuentas',
+  noAccounts: 'No hay cuentas',
+
   noAccess: 'Sin Acceso', 
   membership: 'Afiliación',
   channelHost: 'Anfitrión del Tema',
@@ -855,6 +864,9 @@ export const pt = {
   reportTopic: 'Denunciar tópico',
   reportTopicPrompt: 'Tem certeza de que deseja denunciar este tópico para revisão do administrador?',
   connecting: 'Iniciando Conexão',
+
+  accounts: 'Contas',
+  noAccounts: 'Sem Contas',
 
   noAccess: 'Sem Acesso',
   membership: 'Associação',
@@ -1135,6 +1147,9 @@ export const de = {
   reportTopicPrompt: 'Sind Sie sicher, dass Sie dieses Thema zur Überprüfung durch den Administrator melden möchten?',
   connecting: 'Startverbindung',
 
+  accounts: 'Konten',
+  noAccounts: 'Keine Konten',
+
   noAccess: 'Kein Zugriff',
   channelHost: 'Themenhost',
   channelGuest: 'Thema Gast',
@@ -1412,6 +1427,9 @@ export const ru = {
   reportTopic: 'Пожаловаться на тему',
   reportTopicPrompt: 'Вы уверены, что хотите отправить эту тему на рассмотрение администратору?',
   connecting: 'начало соединения',
+
+  accounts: 'Учетные записи',
+  noAccounts: 'Нет учетных записей',
 
   noAccess: 'Нет доступа',
   membership: 'Членство',

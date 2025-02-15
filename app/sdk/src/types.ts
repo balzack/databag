@@ -217,8 +217,9 @@ export type Member = {
   name: string;
   description: string;
   location: string;
-  imageSet: boolean;
+  imageUrl: string;
   disabled: boolean;
+  storageUsed: number,
 };
 
 export type Setup = {
