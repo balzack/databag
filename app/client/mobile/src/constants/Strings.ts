@@ -17,6 +17,7 @@ export const en = {
   noAccess: 'No Access', 
   connecting: 'Connecting',
 
+  setup: 'Setup',
   accounts: 'Accounts',
   noAccounts: 'No Accounts',
 
@@ -172,7 +173,6 @@ export const en = {
   mb: 'MB',
   gb: 'GB',
   copied: 'Copied',
-  accounts: 'Accounts',
   accessAccount: 'Access Account',
   browserLink: 'Browser Link',
   mobileToken: 'Mobile Token',
@@ -303,6 +303,7 @@ export const fr = {
   noAccess: 'Pas d\'Accès',
   connecting: 'Démarrage de la Connexion',
 
+  setup: 'Installation',
   accounts: 'Comptes',
   noAccounts: 'Aucun Compte',
 
@@ -475,7 +476,6 @@ export const fr = {
   mb: 'Mo',
   gb: 'Go',
   copied: 'Copié',
-  accounts: 'Comptes',
   accessAccount: 'Accéder au Compte',
   browserLink: 'Lien du Navigateur',
   mobileToken: 'Code Mobile',
@@ -584,6 +584,7 @@ export const sp = {
   reportTopicPrompt: '¿Estás seguro de que deseas reportar este tema para revisión del administrador?',
   connecting: 'Conexión Inicial',
 
+  setup: 'Configuración',
   accounts: 'Cuentas',
   noAccounts: 'No hay cuentas',
 
@@ -757,7 +758,6 @@ export const sp = {
   mb: 'MB',
   gb: 'GB',
   copied: 'Copiado',
-  accounts: 'Cuentas',
   accessAccount: 'Acceder a la Cuenta',
   browserLink: 'Enlace del Navegador',
   mobileToken: 'Código Móvil',
@@ -865,6 +865,7 @@ export const pt = {
   reportTopicPrompt: 'Tem certeza de que deseja denunciar este tópico para revisão do administrador?',
   connecting: 'Iniciando Conexão',
 
+  setup: 'configurar',
   accounts: 'Contas',
   noAccounts: 'Sem Contas',
 
@@ -1038,7 +1039,6 @@ export const pt = {
   mb: 'MB',
   gb: 'GB',
   copied: 'Copiado',
-  accounts: 'Contas',
   accessAccount: 'Acessar conta',
   browserLink: 'Link do navegador',
   mobileToken: 'Token móvel',
@@ -1147,6 +1147,7 @@ export const de = {
   reportTopicPrompt: 'Sind Sie sicher, dass Sie dieses Thema zur Überprüfung durch den Administrator melden möchten?',
   connecting: 'Startverbindung',
 
+  setup: 'Aufstellen',
   accounts: 'Konten',
   noAccounts: 'Keine Konten',
 
@@ -1319,7 +1320,6 @@ export const de = {
   mb: 'MB',
   gb: 'GB',
   copied: 'Kopiert',
-  accounts: 'Konten',
   accessAccount: 'Kontozugriff',
   browserLink: 'Browser-Link',
   mobileToken: 'Mobilcode',
@@ -1428,6 +1428,7 @@ export const ru = {
   reportTopicPrompt: 'Вы уверены, что хотите отправить эту тему на рассмотрение администратору?',
   connecting: 'начало соединения',
 
+  setup: 'настраивать',
   accounts: 'Учетные записи',
   noAccounts: 'Нет учетных записей',
 
@@ -1600,7 +1601,6 @@ export const ru = {
   mb: 'МБ',
   gb: 'ГБ',
   copied: 'Скопировано',
-  accounts: 'Аккаунты',
   accessAccount: 'Доступ к аккаунту',
   browserLink: 'Ссылка на браузер',
   mobileToken: 'Мобильный токен',
