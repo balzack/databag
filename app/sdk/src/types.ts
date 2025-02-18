@@ -222,19 +222,29 @@ export type Member = {
   storageUsed: number,
 };
 
+export enum KeyType {
+  RSA_4096 = 'RSA4096',
+  RSA_2048 = 'RSA2048',
+}
+
+export enum ICEService {
+  Cloudflare = 'cloudflage',
+  Default = 'default',
+}
+
 export type Setup = {
   domain: string;
-  accountStorage: string;
+  accountStorage: number;
   enableImage: boolean;
   enableAudio: boolean;
   enableVideo: boolean;
   enableBinary: boolean;
-  keyType: string;
+  keyType: KeyType;
   pushSupported: boolean;
   allowUnsealed: boolean;
   transformSupported: boolean;
   enableIce: boolean;
-  iceService: string;
+  iceService: ICEService;
   iceUrl: string;
   iceUsername: string;
   icePassword: string;

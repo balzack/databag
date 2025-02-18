@@ -8,6 +8,8 @@ import { getAdminMFAuth } from './net/getAdminMFAuth';
 import { setAdminMFAuth } from './net/setAdminMFAuth';
 import { addAdminMFAuth } from './net/addAdminMFAuth';
 import { removeAdminMFAuth } from './net/removeAdminMFAuth';
+import { getNodeConfig } from './net/getNodeConfig';
+import { setNodeConfig } from './net/setNodeConfig';
 
 export class ServiceModule implements Service {
   private log: Logging;
@@ -45,28 +47,29 @@ export class ServiceModule implements Service {
   }
 
   public async getSetup(): Promise<Setup> {
-    return {
-      domain: '',
-      accountStorage: '',
-      enableImage: true,
-      enableAudio: true,
-      enableVideo: true,
-      enableBinary: true,
-      keyType: '',
-      pushSupported: true,
-      allowUnsealed: true,
-      transformSupported: true,
-      enableIce: true,
-      iceService: '',
-      iceUrl: '',
-      iceUsername: '',
-      icePassword: '',
-      enableOpenAccess: true,
-      openAccessLimit: 0,
-    };
-  }
+    const { node, secure, token } = this;
+    const entity = await getNodeConfig(node, secure, token);
+    const { domain, accountStorage, enableImage, enableAudio, enableVideo, enableBinary,
+      keyType, pushSupported, allowUnsealed, transformSupported, enableIce, iceService,
+      iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = entity;
+    const service = iceService ? iceService : 'default';
+    const setup = { domain, accountStorage, enableImage, enableAudio, enableVideo, enableBinary,
+      keyType, pushSupported, allowUnsealed, transformSupported, enableIce, iceService: service,
+      iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit };
+    return setup;
+  } 
 
-  public async setSetup(config: Setup): Promise<void> {}
+  public async setSetup(setup: Setup): Promise<void> {
+    const { node, secure, token } = this;
+    const { domain, accountStorage, enableImage, enableAudio, enableVideo, enableBinary,
+      keyType, pushSupported, allowUnsealed, transformSupported, enableIce, iceService,
+      iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = setup;
+    const service = iceService === 'default' ? null : iceService;
+    const entity = { domain, accountStorage, enableImage, enableAudio, enableVideo, enableBinary,
+      keyType, pushSupported, allowUnsealed, transformSupported, enableIce, iceService: service,
+      iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit };
+    await setNodeConfig(node, secure, token, entity);
+  }
 
   public async enableMFAuth(): Promise<{ image: string, text: string}> {
     const { node, secure, token } = this;

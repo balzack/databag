@@ -39,4 +39,42 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
   },
+  busy: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 32,
+    height: '100%',
+  },
+  option: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 8,
+    paddingBottom: 8,
+  },
+  label: {
+    fontSize: 16,
+  },
+  inputSurface: {
+    flexGrow: 1,
+    marginRight: 8,
+    marginLeft: 16,
+    display: 'flex',
+    borderRadius: 8,
+  },
+  input: {
+    flexGrow: 1,
+    backgroundColor: 'transparent',
+    paddingTop: 0,
+    paddingBottom: 0,
+    display: 'flex',
+    height: 40,
+    maxHeight: 40,
+    borderRadius: 8,
+  },
+  inputUnderline: {
+    display: 'none',
+  },
 });

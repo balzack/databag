@@ -225,7 +225,7 @@ export type ProfileEntity = {
 };
 
 export type AccountEntity = {
-  acconutId: number;
+  accountId: number;
   guid: string;
   handle: string;
   name: string;
@@ -249,6 +249,26 @@ export const defaultProfileEntity = {
   revision: 0,
   version: '',
   node: '',
+};
+
+export type SetupEntity = {
+  domain: string;
+  accountStorage: number;
+  enableImage: boolean;
+  enableAudio: boolean;
+  enableVideo: boolean;
+  enableBinary: boolean;
+  keyType: string;
+  pushSupported: boolean;
+  allowUnsealed: boolean;
+  transformSupported: boolean;
+  enableIce: boolean;
+  iceService: string;
+  iceUrl: string;
+  iceUsername: string;
+  icePassword: string;
+  enableOpenAccess: boolean;
+  openAccessLimit: number;
 };
 
 export type Calling = {
