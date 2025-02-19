@@ -124,6 +124,11 @@ export const styles = StyleSheet.create({
   controlSwitch: {
     transform: [{scaleX: 0.7}, {scaleY: 0.7}],
   },
+  ice: {
+    width: '100%',
+    display: 'flex',
+    minHeight: 256,
+  },
   modal: {
     display: 'flex',
     width: '100%',

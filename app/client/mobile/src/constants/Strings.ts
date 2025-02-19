@@ -170,6 +170,13 @@ export const en = {
   confirmDelete: 'Deleting Account',
   areSure: 'Are you sure you want to delete the account?',
 
+  addingTitle: 'Adding Account',
+  addingLink: 'Use the following link can be used to create an account',
+  addingToken: 'Use the following token can be used to create an account from the login screen',
+  accessingTitle: 'Accessing Account',
+  accessingLink: 'Use the following link to access the specified account',
+  accessingToken: 'Use the following token to access the specified account from the login screen',
+
   mb: 'MB',
   gb: 'GB',
   copied: 'Copied',
@@ -306,6 +313,13 @@ export const fr = {
   setup: 'Installation',
   accounts: 'Comptes',
   noAccounts: 'Aucun Compte',
+
+  addingTitle: 'Ajout d\'un Compte',
+  addingLink: 'Utilisez le lien suivant pour créer un compte',
+  addingToken: 'Utilisez le jeton suivant pour créer un compte depuis l\'écran de connexion',
+  accessingTitle: 'Accéder au Compte',
+  accessingLink: 'Utilisez le lien suivant pour accéder au compte spécifié',
+  accessingToken: 'Utilisez le jeton suivant pour accéder au compte spécifié depuis l\'écran de connexion',
 
   membership: 'Adhésion',
   channelHost: 'Hôte du Sujet',
@@ -588,6 +602,13 @@ export const sp = {
   accounts: 'Cuentas',
   noAccounts: 'No hay cuentas',
 
+  addingTitle: 'Añadiendo cuenta',
+  addingLink: 'Utilice el siguiente enlace para crear una cuenta',
+  addingToken: 'Utilice el siguiente token para crear una cuenta desde la pantalla de inicio de sesión',
+  accessingTitle: 'Accediendo a la cuenta',
+  accessingLink: 'Utilice el siguiente enlace para acceder a la cuenta especificada',
+  accessingToken: 'Utilice el siguiente token para acceder a la cuenta especificada desde la pantalla de inicio de sesión',
+
   noAccess: 'Sin Acceso', 
   membership: 'Afiliación',
   channelHost: 'Anfitrión del Tema',
@@ -868,6 +889,13 @@ export const pt = {
   setup: 'configurar',
   accounts: 'Contas',
   noAccounts: 'Sem Contas',
+
+  addingTitle: 'Adicionando conta',
+  addingLink: 'Use o seguinte link para criar uma conta',
+  addingToken: 'Use o seguinte token para criar uma conta a partir da tela de login',
+  accessingTitle: 'Acessando conta',
+  accessingLink: 'Use o seguinte link para acessar a conta especificada',
+  accessingToken: 'Use o seguinte token para acessar a conta especificada a partir da tela de login',
 
   noAccess: 'Sem Acesso',
   membership: 'Associação',
@@ -1150,6 +1178,13 @@ export const de = {
   setup: 'Aufstellen',
   accounts: 'Konten',
   noAccounts: 'Keine Konten',
+  
+  addingTitle: 'Konto hinzufügen',
+  addingLink: 'Verwenden Sie den folgenden Link, um ein Konto zu erstellen',
+  addingToken: 'Verwenden Sie das folgende Token, um ein Konto vom Anmeldebildschirm aus zu erstellen',
+  accessingTitle: 'Kontozugriff',
+  accessingLink: 'Verwenden Sie den folgenden Link, um auf das angegebene Konto zuzugreifen',
+  accessingToken: 'Verwenden Sie das folgende Token, um vom Anmeldebildschirm aus auf das angegebene Konto zuzugreifen',
 
   noAccess: 'Kein Zugriff',
   channelHost: 'Themenhost',
@@ -1431,6 +1466,13 @@ export const ru = {
   setup: 'настраивать',
   accounts: 'Учетные записи',
   noAccounts: 'Нет учетных записей',
+
+  addingTitle: 'Добавление аккаунта',
+  addingLink: 'Используйте следующую ссылку для создания аккаунта',
+  addingToken: 'Используйте следующий токен для создания аккаунта с экрана входа',
+  accessingTitle: 'Доступ к аккаунту',
+  accessingLink: 'Используйте следующую ссылку для доступа к указанному аккаунту',
+  accessingToken: 'Используйте следующий токен для доступа к указанному аккаунту с экрана входа',
 
   noAccess: 'Нет доступа',
   membership: 'Членство',

@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, SafeAreaView, Image, View, Pressable} from 'react-native';
-import {Text, IconButton, Divider, Surface, useTheme} from 'react-native-paper';
+import {FlatList, SafeAreaView, Image, View, Pressable, TouchableOpacity, Modal} from 'react-native';
+import {Text, Button, IconButton, Divider, Surface, Icon, useTheme} from 'react-native-paper';
 import {useAccounts} from './useAccounts.hook';
 import {styles} from './Accounts.styled';
 import { Card } from '../card/Card';
 import { Colors } from '../constants/Colors';
 import { Confirm } from '../confirm/Confirm';
+import {BlurView} from '@react-native-community/blur';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 export function Accounts({ setup }: { setup: ()=>void }) {
   const { state, actions } = useAccounts();
@@ -16,6 +18,12 @@ export function Accounts({ setup }: { setup: ()=>void }) {
   const [removing, setRemoving] = useState(null);
   const [blocking, setBlocking] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [accessing, setAccessing] = useState(null);
+  const [adding, setAdding] = useState(false);
+  const [showAccessModal, setShowAccessModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [token, setToken] = useState('');
+  const [tokenCopy, setTokenCopy] = useState(false);
 
   useEffect(() => {
     loadAccounts();
@@ -30,6 +38,36 @@ export function Accounts({ setup }: { setup: ()=>void }) {
         console.log(err);
       }
       setLoading(false);
+    }
+  }
+
+  const accessAccount = async (accountId: number) => {
+    if (!accessing) {
+      setAccessing(accountId);
+      try {
+        const access = await actions.accessAccount(accountId);
+        setToken(access);
+        setShowAccessModal(true);
+      } catch (err) {
+        console.log(err);
+        setFailed(true);
+      }
+      setAccessing(null);
+    }
+  }
+
+  const addAccount = async () => {
+    if (!adding) {
+      setAdding(true);
+      try {
+        const access = await actions.addAccount();
+        setToken(access);
+        setShowAddModal(true);
+      } catch (err) {
+        console.log(err);
+        setFailed(true);
+      }
+      setAdding(false);
     }
   }
 
@@ -85,13 +123,23 @@ export function Accounts({ setup }: { setup: ()=>void }) {
     }
   }
 
+  const copyToken = async () => {
+    if (!tokenCopy) {
+      setTokenCopy(true);
+      Clipboard.setString(token);
+      setTimeout(() => {
+        setTokenCopy(false);
+      }, 2000);
+    }
+  };
+
   return (
     <View style={styles.accounts}>
       { state.layout === 'large' && (
         <View style={styles.header}>
           <Text style={styles.largeTitle}>{ state.strings.accounts }</Text>
           <IconButton style={styles.icon} loading={loading} iconColor={Colors.primary} mode="contained" icon="refresh" onPress={loadAccounts} />
-          <IconButton style={styles.icon} loading={false} iconColor={Colors.primary} mode="contained" icon="account-plus-outline" onPress={()=>{}} />
+          <IconButton style={styles.icon} loading={adding} iconColor={Colors.primary} mode="contained" icon="account-plus-outline" onPress={addAccount} />
           <IconButton style={styles.icon} loading={false} iconColor={Colors.primary} mode="contained" icon="cog-outline" onPress={setup} />
         </View>
       )}
@@ -99,7 +147,7 @@ export function Accounts({ setup }: { setup: ()=>void }) {
         <View style={styles.header}>
           <IconButton style={styles.icon} loading={loading} iconColor={Colors.primary} mode="contained" icon="refresh" onPress={loadAccounts} />
           <Text style={styles.smallTitle}>{ state.strings.accounts }</Text>
-          <IconButton style={styles.icon} loading={false} iconColor={Colors.primary} mode="contained" icon="account-plus-outline" onPress={()=>{}} />
+          <IconButton style={styles.icon} loading={adding} iconColor={Colors.primary} mode="contained" icon="account-plus-outline" onPress={addAccount} />
         </View>
       )}
       <Divider style={styles.line} bold={true} />
@@ -111,7 +159,7 @@ export function Accounts({ setup }: { setup: ()=>void }) {
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => {
             const options = [
-              <IconButton key="disable" style={styles.icon} loading={false} iconColor={Colors.primary} mode="contained" icon="lock-open-variant-outline" onPress={()=>{}} />,
+              <IconButton key="disable" style={styles.icon} loading={accessing === item.accountId} iconColor={Colors.primary} mode="contained" icon="lock-open-variant-outline" onPress={() => {accessAccount(item.accountId)}} />,
               <IconButton key="reset" style={styles.icon} loading={blocking === item.accountId} iconColor={Colors.pending} mode="contained" icon={item.disabled ? 'account-check-outline' : 'account-cancel-outline'} onPress={()=>{blockAccount(item.accountId, !item.disabled)}} />,
               <IconButton key="remove" style={styles.icon} loading={removing === item.accountId} iconColor={Colors.offsync} mode="contained" icon="trash-can-outline" onPress={()=>{removeAccount(item.accountId)}} />
             ];
@@ -140,6 +188,48 @@ export function Accounts({ setup }: { setup: ()=>void }) {
       <Divider style={styles.line} bold={true} />
       <Confirm show={failed} params={failedParams} />
       <Confirm show={remove} busy={removing} params={removeParams} />
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={showAccessModal} onRequestClose={() => setShowAccessModal(false)}>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <Surface elevation={4} mode="flat" style={styles.modalSurface}>
+            <Text style={styles.modalLabel}>{state.strings.accessingTitle}</Text>
+            <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setShowAccessModal(false)} />
+            <Text style={styles.modalDescription}>{state.strings.accessingToken}</Text>
+            <View style={styles.secretText}>
+              <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>{ token }</Text>
+              <TouchableOpacity onPress={copyToken}>
+                <Icon style={styles.secretIcon} size={18} source={tokenCopy ? 'check' : 'content-copy'} color={Colors.primary} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.modalControls}>
+              <Button mode="outlined" onPress={() => setShowAccessModal(false)}>
+                {state.strings.close}
+              </Button>
+            </View>
+          </Surface>
+        </View>
+      </Modal>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={showAddModal} onRequestClose={() => setShowAddModal(false)}>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <Surface elevation={4} mode="flat" style={styles.modalSurface}>
+            <Text style={styles.modalLabel}>{state.strings.addingTitle}</Text>
+            <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setShowAddModal(false)} />
+            <Text style={styles.modalDescription}>{state.strings.addingToken}</Text>
+            <View style={styles.secretText}>
+              <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>{ token }</Text>
+              <TouchableOpacity onPress={copyToken}>
+                <Icon style={styles.secretIcon} size={18} source={tokenCopy ? 'check' : 'content-copy'} color={Colors.primary} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.modalControls}>
+              <Button mode="outlined" onPress={() => setShowAddModal(false)}>
+                {state.strings.close}
+              </Button>
+            </View>
+          </Surface>
+        </View>
+      </Modal>
     </View>
   );
 }

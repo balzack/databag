@@ -43,7 +43,7 @@ export function useAccounts() {
       return await app.state.service.createMemberAccess();
     },
     accessAccount: async (accountId: number) => {
-      return await app.state.service.resetMemberAccess(accoutId);
+      return await app.state.service.resetMemberAccess(accountId);
     },
     blockAccount: async (accountId: number, flag: boolean) => {
       await app.state.service.blockMember(accountId, flag);
