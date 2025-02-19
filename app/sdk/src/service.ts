@@ -10,6 +10,10 @@ import { addAdminMFAuth } from './net/addAdminMFAuth';
 import { removeAdminMFAuth } from './net/removeAdminMFAuth';
 import { getNodeConfig } from './net/getNodeConfig';
 import { setNodeConfig } from './net/setNodeConfig';
+import { addNodeAccount } from './net/addNodeAccount';
+import { addNodeAccountAccess } from './net/addNodeAccountAccess';
+import { removeNodeAccount } from './net/removeNodeAccount';
+import { setNodeAccount } from './net/setNodeAccount';
 
 export class ServiceModule implements Service {
   private log: Logging;
@@ -25,16 +29,24 @@ export class ServiceModule implements Service {
   }
 
   public async createMemberAccess(): Promise<string> {
-    return '';
+    const { node, secure, token } = this;
+    return await addNodeAccount(node, secure, token);
   }
 
-  public async resetMemberAccess(): Promise<string> {
-    return '';
+  public async resetMemberAccess(accountId: number): Promise<string> {
+    const { node, secure, token } = this;
+    return await addNodeAccountAccess(node, secure, token, accountId);
   }
 
-  public async blockMember(flag: boolean): Promise<void> {}
+  public async blockMember(accountId: number, flag: boolean): Promise<void> {
+    const { node, secure, token } = this;
+    await setNodeAccount(node, secure, token, accountId, flag);
+  }
 
-  public async removeMember(accountId: number): Promise<void> {}
+  public async removeMember(accountId: number): Promise<void> {
+    const { node, secure, token } = this;
+    await removeNodeAccount(node, secure, token, accountId);
+  }
 
   public async getMembers(): Promise<Member[]> {
     const { node, secure, token } = this;
@@ -42,7 +54,7 @@ export class ServiceModule implements Service {
     return accounts.map(account => {
       const { accountId, guid, handle, name, imageSet, revision, disabled, storageUsed } = account;
       const imageUrl = imageSet ? getMemberImageUrl(node, secure, token, accountId, revision) : avatar;
-      return { accountId, guid, handle, name, imageUrl, storageUsed };
+      return { accountId, guid, handle, name, imageUrl, disabled, storageUsed };
     });
   }
 

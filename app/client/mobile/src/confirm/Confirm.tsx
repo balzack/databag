@@ -22,7 +22,7 @@ export function Confirm({show, busy, params}) {
             {params.prompt && <Text style={styles.prompt}>{params.prompt}</Text>}
             <View style={styles.controls}>
               {params.cancel && (
-                <Button mode="outlined" onPress={params.cancel.action}>
+                <Button mode="outlined" disabled={busy} onPress={params.cancel.action}>
                   {params.cancel.label}
                 </Button>
               )}

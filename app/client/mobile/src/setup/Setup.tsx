@@ -18,8 +18,6 @@ export function Setup() {
     },      
   };
 
-console.log(state.setup);
-
   return (
     <View style={styles.setup}>
       <View style={styles.header}>

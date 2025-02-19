@@ -164,8 +164,8 @@ export interface Focus {
 export interface Service {
   getMembers(): Promise<Member[]>;
   createMemberAccess(): Promise<string>;
-  resetMemberAccess(): Promise<string>;
-  blockMember(flag: boolean): Promise<void>;
+  resetMemberAccess(accontId: number): Promise<string>;
+  blockMember(accountId: number, flag: boolean): Promise<void>;
   removeMember(accountId: number): Promise<void>;
   getSetup(): Promise<Setup>;
   setSetup(setup: Setup): Promise<void>;
