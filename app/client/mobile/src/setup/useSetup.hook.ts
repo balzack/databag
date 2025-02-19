@@ -90,11 +90,50 @@ export function useSetup() {
         save();
       }
     },
-    setAccountStorage: (accountStorage: number) => {
+    setAccountStorage: (accountStorage: string) => {
       if (setup.current) {
         const storage = parseInt(accountStorage) * 1073741824;
-        setup.current.accountStorage = storage;
-        updateState({ setup: setup.current, accountStorage });
+        if (storage >= 0) {
+          setup.current.accountStorage = storage;
+          updateState({ setup: setup.current, accountStorage });
+        } else {
+          setup.current.accountStorage = 0;
+          updateState({ setup: setup.current, accountStorage: 0 });
+        }
+        save();
+      }
+    },
+    setKeyType: (keyType: string) => {
+      if (setup.current) {
+        setup.current.keyType = keyType;
+        updateState({ setup: setup.current });
+        save();
+      }
+    },
+    setEnableOpenAccess: (enableOpenAccess: boolean) => {
+      if (setup.current) {
+        setup.current.enableOpenAccess = enableOpenAccess;
+        updateState({ setup: setup.current });
+        save();
+      }
+    },
+    setOpenAccessLimit: (openAccessLimit: string) => {
+      if (setup.current) {
+        const limit = parseInt(openAccessLimit);
+        if (limit >= 0) {
+          setup.current.openAccessLimit = limit;
+          updateState({ setup: setup.current, openAccessLimit });
+        } else {
+          setup.current.openAccessLimit = 0;
+          updateState({ setup: setup.current, openAccessLimit: 0 });
+        }
+        save();
+      }
+    },
+    setPushSupported: (pushSupported: boolean) => {
+      if (setup.current) {
+        setup.current.pushSupported = pushSupported;
+        updateState({ setup: setup.current });
         save();
       }
     },

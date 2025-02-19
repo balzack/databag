@@ -1684,17 +1684,17 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNFBApp (21.7.1):
+  - RNFBApp (21.8.0):
     - Firebase/CoreOnly (= 11.7.0)
     - React-Core
-  - RNFBMessaging (21.7.1):
+  - RNFBMessaging (21.8.0):
     - Firebase/Messaging (= 11.7.0)
     - FirebaseCoreExtension
     - React-Core
     - RNFBApp
   - RNFS (2.20.0):
     - React-Core
-  - RNGestureHandler (2.22.1):
+  - RNGestureHandler (2.23.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2243,10 +2243,10 @@ SPEC CHECKSUMS:
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCClipboard: d7a8903d32692b0a1e71738c3825465a9acae10e
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
-  RNFBApp: e0a2811ca35292b19d390e327612ada2bd115d0a
-  RNFBMessaging: 3b4b92c33a2ad87105c5b6e2e7a3bb5d33a34320
+  RNFBApp: 86b7ecb1325c76ceb9da5d44000728276144c7a5
+  RNFBMessaging: b5a40363b54da45f228f291d1f5b6956d5aa14f0
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
-  RNGestureHandler: 5c734ddd9b406a5cd792add1fc01f0894ed8ec28
+  RNGestureHandler: 25f5da2bd31aaa1abc70bdf737eb2529b0546a2e
   RNImageCropPicker: 8e39c01f205e00d739c31e682f068aac315587bf
   RNReanimated: b7cac31ac5410cb266bab45e1e7c52a164e71d17
   RNScreens: 16b782596e80e475b7f3ec769c9a97d789d9b0ed
@@ -2256,7 +2256,7 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
-  Yoga: b05994d1933f507b0a28ceaa4fdb968dc18da178
+  Yoga: a9ef4f5c2cd79ad812110525ef61048be6a582a4
 
 PODFILE CHECKSUM: 9cf7373afef7b881c911fda82ff1f94eacee3e98
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import {SafeAreaView, Image, View, Pressable} from 'react-native';
-import {ActivityIndicator, Surface, Divider, TextInput, Text} from 'react-native-paper';
+import {ActivityIndicator, RadioButton, Switch, Surface, Divider, TextInput, Text} from 'react-native-paper';
 import {styles} from './Setup.styled';
 import {useSetup} from './useSetup.hook';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -17,6 +17,8 @@ export function Setup() {
       action: actions.clearError,
     },      
   };
+
+console.log(state.setup);
 
   return (
     <View style={styles.setup}>
@@ -36,7 +38,36 @@ export function Setup() {
       <Divider style={styles.line} bold={true} />
       <KeyboardAwareScrollView enableOnAndroid={true} style={styles.form} contentContainerStyle={styles.content}>
         <View style={styles.option}>
-          <Text style={styles.label}>{ state.strings.federatedHost }</Text>
+          <Text style={styles.label}>{state.strings.keyType}:</Text>
+          <View style={styles.radioSelect}>
+            <View style={styles.radio}>
+              <Text style={styles.radioLabel}>RSA2048</Text>
+              <RadioButton.Item 
+                disabled={state.loading}
+                rippleColor="transparent"
+                style={styles.radioButton}
+                label=""
+                mode="android"
+                status={state.setup?.keyType === 'RSA_2048' ? 'checked' : 'unchecked'}
+                onPress={() => { actions.setKeyType('RSA_2048') }}
+              />
+            </View>
+            <View style={styles.radio}>
+              <Text style={styles.radioLabel}>RSA4096</Text>
+              <RadioButton.Item
+                disabled={state.loading}
+                rippleColor="transparent"
+                style={styles.radioButton}
+                label=""
+                mode="android"
+                status={state.setup?.keyType === 'RSA_4096' ? 'checked' : 'unchecked'}
+                onPress={() => { actions.setKeyType('RSA_4096') }}
+              />
+            </View>
+          </View>
+        </View>
+        <View style={styles.option}>
+          <Text style={styles.label}>{ state.strings.federatedHost }:</Text>
           <Surface mode="flat" elevation={5} style={styles.inputSurface}>
             <TextInput
               dense={true}
@@ -54,7 +85,7 @@ export function Setup() {
           </Surface>
         </View>
         <View style={styles.option}>
-          <Text style={styles.label}>{ state.strings.storageLimit }</Text>
+          <Text style={styles.label}>{ state.strings.storageLimit }:</Text>
           <Surface mode="flat" elevation={5} style={styles.inputSurface}>
             <TextInput
               type="number"
@@ -73,6 +104,38 @@ export function Setup() {
             />
           </Surface>
         </View>
+        <View style={styles.option}>
+          <Text style={styles.label}>{state.strings.accountCreation}:</Text>
+          <Switch style={styles.controlSwitch} value={state.setup?.enableOpenAccess} disabled={state.loading} onValueChange={()=>actions.setEnableOpenAccess(!state.setup?.enableOpenAccess)} />
+          { state.setup?.enableOpenAccess && (
+            <Surface mode="flat" elevation={5} style={styles.inputSurface}>
+              <TextInput
+                type="number"
+                dense={true}
+                style={styles.input}
+                keyboardType="numeric"
+                outlineColor="transparent"
+                activeOutlineColor="transparent"
+                autoCapitalize={false}
+                underlineStyle={styles.inputUnderline}
+                mode="outlined"
+                disabled={state.loading}
+                placeholder={state.strings.storageHint}
+                value={state.openAccessLimit}
+                onChangeText={value => actions.setOpenAccessLimit(value)}
+              />
+            </Surface>
+          )}
+        </View>
+        <View style={styles.option}>
+          <Text style={styles.label}>{state.strings.enableNotifications}:</Text>
+          <Switch style={styles.controlSwitch} value={state.setup?.pushSupported} disabled={state.loading} onValueChange={()=>actions.setPushSupported(!state.setup?.pushSupported)} />
+        </View>
+        <View style={styles.option}>
+          <Text style={styles.label}>{state.strings.allowUnsealed}:</Text>
+          <Switch style={styles.controlSwitch} value={state.setup?.allowUnsealed} disabled={state.loading} onValueChange={()=>actions.setAllowUnsealed(!state.setup?.allowUnsealed)} />
+        </View>
+        <Divider style={styles.divider} bold={false} />
       </KeyboardAwareScrollView>
       <Divider style={styles.line} bold={true} />
       <Confirm show={state.error} params={errorParams} />
