@@ -36,7 +36,7 @@ console.log(state.setup);
         </View>
       </View>
       <Divider style={styles.line} bold={true} />
-      <KeyboardAwareScrollView enableOnAndroid={true} style={styles.form} contentContainerStyle={styles.content}>
+      <KeyboardAwareScrollView enableOnAndroid={true} style={styles.form} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.option}>
           <Text style={styles.label}>{state.strings.keyType}:</Text>
           <View style={styles.radioSelect}>
@@ -136,6 +136,133 @@ console.log(state.setup);
           <Switch style={styles.controlSwitch} value={state.setup?.allowUnsealed} disabled={state.loading} onValueChange={()=>actions.setAllowUnsealed(!state.setup?.allowUnsealed)} />
         </View>
         <Divider style={styles.divider} bold={false} />
+        <View style={styles.option}>
+          <Text style={styles.label}>{state.strings.enableImage}:</Text>
+          <Switch style={styles.controlSwitch} value={state.setup?.enableImage} disabled={state.loading} onValueChange={()=>actions.setEnableImage(!state.setup?.enableImage)} />
+        </View>
+        <View style={styles.option}>
+          <Text style={styles.label}>{state.strings.enableAudio}:</Text>
+          <Switch style={styles.controlSwitch} value={state.setup?.enableAudio} disabled={state.loading} onValueChange={()=>actions.setEnableAudio(!state.setup?.enableAudio)} />
+        </View>
+        <View style={styles.option}>
+          <Text style={styles.label}>{state.strings.enableVideo}:</Text>
+          <Switch style={styles.controlSwitch} value={state.setup?.enableVideo} disabled={state.loading} onValueChange={()=>actions.setEnableVideo(!state.setup?.enableVideo)} />
+        </View>
+        <View style={styles.option}>
+          <Text style={styles.label}>{state.strings.enableBinary}:</Text>
+          <Switch style={styles.controlSwitch} value={state.setup?.enableBinary} disabled={state.loading} onValueChange={()=>actions.setEnableBinary(!state.setup?.enableBinary)} />
+        </View>
+        <Divider style={styles.divider} bold={false} />
+        <View style={styles.option}>
+          <Text style={styles.label}>{state.strings.enableWeb}:</Text>
+          <Switch style={styles.controlSwitch} value={state.setup?.enableIce} disabled={state.loading} onValueChange={()=>actions.setEnableIce(!state.setup?.enableIce)} />
+        </View>
+        { state.setup?.enableIce && (
+          <View style={styles.option}>
+            <Text style={styles.label}>{state.strings.enableService}:</Text>
+            <Switch style={styles.controlSwitch} value={state.setup?.enableService} disabled={state.loading} onValueChange={()=>actions.setEnableService(!state.setup?.enableService)} />
+          </View>
+        )}
+        { state.setup?.enableIce && state.setup?.enableService && (
+          <View style={styles.option}>
+            <Text style={styles.label}>TURN_KEY_ID:</Text>
+            <Surface mode="flat" elevation={5} style={styles.inputSurface}>
+              <TextInput
+                dense={true}
+                style={styles.input}
+                outlineColor="transparent"
+                activeOutlineColor="transparent"
+                autoCapitalize={false}
+                underlineStyle={styles.inputUnderline}
+                mode="outlined"
+                disabled={state.loading}
+                placeholder="ID"
+                value={state.setup?.iceUsername}
+                onChangeText={value => actions.setIceUsername(value)}
+              />
+            </Surface>
+          </View>
+        )}
+        { state.setup?.enableIce && state.setup?.enableService && (
+          <View style={styles.option}>
+            <Text style={styles.label}>TURN_KEY_API_TOKEN:</Text>
+            <Surface mode="flat" elevation={5} style={styles.inputSurface}>
+              <TextInput
+                dense={true}
+                style={styles.input}
+                outlineColor="transparent"
+                activeOutlineColor="transparent"
+                autoCapitalize={false}
+                underlineStyle={styles.inputUnderline}
+                mode="outlined"
+                disabled={state.loading}
+                placeholder="TOKEN"
+                value={state.setup?.icePassword}
+                onChangeText={value => actions.setIcePassword(value)}
+              />
+            </Surface>
+          </View>
+        )}
+        { state.setup?.enableIce && !state.setup?.enableService && (
+          <View style={styles.option}>
+            <Text style={styles.label}>{ state.strings.serverUrl }:</Text>
+            <Surface mode="flat" elevation={5} style={styles.inputSurface}>
+              <TextInput
+                dense={true}
+                style={styles.input}
+                outlineColor="transparent"
+                activeOutlineColor="transparent"
+                autoCapitalize={false}
+                underlineStyle={styles.inputUnderline}
+                mode="outlined"
+                disabled={state.loading}
+                placeholder={state.strings.urlHint}
+                value={state.setup?.iceUrl}
+                onChangeText={value => actions.setIceUrl(value)}
+              />
+            </Surface>
+          </View>
+        )}
+        { state.setup?.enableIce && !state.setup?.enableService && (
+          <View style={styles.option}>
+            <Text style={styles.label}>{ state.strings.webUsername }:</Text>
+            <Surface mode="flat" elevation={5} style={styles.inputSurface}>
+              <TextInput
+                dense={true}
+                style={styles.input}
+                outlineColor="transparent"
+                activeOutlineColor="transparent"
+                autoCapitalize={false}
+                underlineStyle={styles.inputUnderline}
+                mode="outlined"
+                disabled={state.loading}
+                placeholder={state.strings.username}
+                value={state.setup?.iceUsername}
+                onChangeText={value => actions.setIceUsername(value)}
+              />
+            </Surface>
+          </View>
+        )}
+        { state.setup?.enableIce && !state.setup?.enableService && (
+          <View style={styles.option}>
+            <Text style={styles.label}>{ state.strings.webPassword }:</Text>
+            <Surface mode="flat" elevation={5} style={styles.inputSurface}>
+              <TextInput
+                dense={true}
+                style={styles.input}
+                outlineColor="transparent"
+                activeOutlineColor="transparent"
+                autoCapitalize={false}
+                underlineStyle={styles.inputUnderline}
+                mode="outlined"
+                disabled={state.loading}
+                placeholder={state.strings.password}
+                value={state.setup?.icePassword}
+                onChangeText={value => actions.setIcePassword(value)}
+              />
+            </Surface>
+          </View>
+        )}
       </KeyboardAwareScrollView>
       <Divider style={styles.line} bold={true} />
       <Confirm show={state.error} params={errorParams} />

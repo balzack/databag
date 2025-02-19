@@ -137,6 +137,76 @@ export function useSetup() {
         save();
       }
     },
+    setAllowUnsealed: (allowUnsealed: boolean) => {
+      if (setup.current) {
+        setup.current.allowUnsealed = allowUnsealed;
+        updateState({ setup: setup.current });
+        save();
+      }
+    },
+    setEnableImage: (enableImage: boolean) => {
+      if (setup.current) {
+        setup.current.enableImage = enableImage;
+        updateState({ setup: setup.current });
+        save();
+      }
+    },
+    setEnableAudio: (enableAudio: boolean) => {
+      if (setup.current) {
+        setup.current.enableAudio = enableAudio;
+        updateState({ setup: setup.current });
+        save();
+      }
+    },
+    setEnableVideo: (enableVideo: boolean) => {
+      if (setup.current) {
+        setup.current.enableVideo = enableVideo;
+        updateState({ setup: setup.current });
+        save();
+      }
+    },
+    setEnableBinary: (enableBinary: boolean) => {
+      if (setup.current) {
+        setup.current.enableBinary = enableBinary;
+        updateState({ setup: setup.current });
+        save();
+      }
+    },
+    setEnableIce: (enableIce: boolean) => {
+      if (setup.current) {
+        setup.current.enableIce = enableIce;
+        updateState({ setup: setup.current });
+        save();
+      }
+    },
+    setEnableService: (enableService: boolean) => {
+      if (setup.current) {
+        setup.current.enableService = enableService;
+        updateState({ setup: setup.current });
+        save();
+      }
+    },
+    setIceUrl: (iceUrl: string) => {
+      if (setup.current) {
+        setup.current.iceUrl = iceUrl;
+        updateState({ setup: setup.current });
+        save();
+      }
+    },
+    setIceUsername: (iceUsername: string) => {
+      if (setup.current) {
+        setup.current.iceUsername = iceUsername;
+        updateState({ setup: setup.current });
+        save();
+      }
+    },
+    setIcePassword: (icePassword: string) => {
+      if (setup.current) {
+        setup.current.icePassword = icePassword;
+        updateState({ setup: setup.current });
+        save();
+      }
+    },
   };
 
   return {state, actions};

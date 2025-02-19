@@ -24,8 +24,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     height: 48,
-    paddingLeft: 8,
-    paddingRight: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   line: {
     width: '100%',
@@ -49,6 +49,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     paddingTop: 16,
+    paddingBottom: 64,
     minWidth: 0,
   },
   busy: {
@@ -72,7 +73,6 @@ export const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    flexShrink: 1,
     minWidth: 0,
   },
   inputSurface: {

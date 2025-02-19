@@ -19,26 +19,26 @@ export function Service() {
   const showSetup = {display: tab === 'setup' ? 'flex' : 'none'};
 
   return (
-    <SafeAreaView style={styles.service}>
+    <View style={styles.service}>
       {state.layout !== 'large' && (
         <View>
           <View style={styles.full}>
             <View style={styles.screen}>
-              <View
+              <SafeAreaView
                 style={{
                   ...styles.body,
                   ...showAccounts,
                 }}>
                 <Accounts />
-              </View>
-              <View
+              </SafeAreaView>
+              <SafeAreaView
                 style={{
                   ...styles.body,
                   ...showSetup,
                 }}>
                 <Setup />
-              </View>
-              <View style={styles.tabs}>
+              </SafeAreaView>
+              <SafeAreaView style={styles.tabs}>
                 {tab === 'accounts' && (
                   <IconButton
                     style={styles.activeTab}
@@ -83,7 +83,7 @@ export function Service() {
                     }}
                   />
                 )}
-              </View>
+              </SafeAreaView>
             </View>
           </View>
         </View>
@@ -95,7 +95,7 @@ export function Service() {
           </View>
         </NavigationContainer>
       )}
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -103,9 +103,7 @@ function SetupScreen() {
   const SetupComponent = useCallback(
     () => (
       <Surface elevation={3} mode="flat">
-        <SafeAreaView>
-          <Setup />
-        </SafeAreaView>
+        <Setup />
       </Surface>
     ),
     [],
@@ -120,7 +118,7 @@ function SetupScreen() {
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
-        overlayColor: 'rgba(8,8,8,.9)',
+        overlayColor: 'rgba(0,0,0,.7)',
       }}>
       <SetupDrawer.Screen name="home">{({navigation}) => <AccountScreen setup={navigation} />}</SetupDrawer.Screen>
     </SetupDrawer.Navigator>
@@ -129,9 +127,9 @@ function SetupScreen() {
 
 function AccountScreen({setup}) {
   return (
-    <View style={styles.frame}>
+    <SafeAreaView style={styles.frame}>
       <Accounts setup={setup.openDrawer} />
-    </View>
+    </SafeAreaView>
   );
 }
 

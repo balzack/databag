@@ -95,7 +95,7 @@ export const styles = StyleSheet.create({
   },
   tabs: {
     flexShrink: 0,
-    height: 64,
+    height: 72,
     width: '100%',
     displlay: 'flex',
     flexDirection: 'row',
