@@ -83,10 +83,16 @@ export class ServiceModule implements Service {
     await setNodeConfig(node, secure, token, entity);
   }
 
+  public async checkMFAuth(): Promise<boolean> {
+    const { node, secure, token } = this;
+    const enabled = await getAdminMFAuth(node, secure, token);
+    return enabled;
+  }
+
   public async enableMFAuth(): Promise<{ image: string, text: string}> {
     const { node, secure, token } = this;
     const { secretImage, secretText } = await addAdminMFAuth(node, secure, token);
-    return { secretImage, secretText };
+    return { image: secretImage, text: secretText };
   }
 
   public async disableMFAuth(): Promise<void> {

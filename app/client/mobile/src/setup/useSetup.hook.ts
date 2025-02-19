@@ -22,6 +22,12 @@ export function useSetup() {
     error: false,
     accountStorage: '',
     setup: null as null | Setup,
+    mfaEnabled: false,
+    mfaCode: '',
+    mfaMessage: '',
+    confirmingMFAuth: false,
+    confirmMFAuthText: '',
+    confirmMFAuthImage: '',
   });
 
   const updateState = (value: any) => {
@@ -32,10 +38,11 @@ export function useSetup() {
     while (loading.current) {
       try {
         const service = app.state.service;
+        const mfaEnabled = await service.checkMFAuth();
         setup.current = await service.getSetup();
         loading.current = false;
         const storage = Math.floor(setup.current.accountStorage / 1073741824); 
-        updateState({ setup: setup.current, accountStorage: storage.toString(), loading: false });    
+        updateState({ setup: setup.current, mfaEnabled, accountStorage: storage.toString(), loading: false });    
       } catch (err) {
         console.log(err);
         await new Promise((r) => setTimeout(r, DELAY_MS));
@@ -82,6 +89,47 @@ export function useSetup() {
   const actions = {
     clearError: () => {
       updateState({ error: false });
+    },
+    enableMFAuth: async () => {
+      try {
+        const service = app.state.service;
+        const { text, image } = await service.enableMFAuth();
+        updateState({ confirmingMFAuth: true, mfaCode: '', mfaMessage: '', confirmMFAuthText: text, confirmMFAuthImage: image });
+      } catch (err) {
+        console.log(err);
+        updateState({ error: true });
+      }
+    },
+    disableMFAuth: async () => {
+      try {
+        const service = app.state.service;
+        await service.disableMFAuth();
+        updateState({ mfaEnabled: false });
+      } catch (err) {
+        console.log(err);
+        updateState({ error: true });
+      }
+    },
+    confirmMFAuth: async () => {
+      try {
+        const service = app.state.service;
+        await service.confirmMFAuth(state.mfaCode);
+        updateState({ confirmingMFAuth: false, mfaEnabled: true });
+      } catch (err) {
+        if (err.message === '401') {
+          updateState({ mfaMessage: state.strings.mfaError });
+        } else if (err.message === '429') {
+          updateState({ mfaMessage: state.strings.mfaDisabled });
+        } else {
+          updateState({ mfaMessage: state.strings.error });
+        }
+      }
+    },
+    cancelMFAuth: () => {
+      updateState({ confirmingMFAuth: false });
+    },
+    setMFAuthCode: (mfaCode: string) => {
+      updateState({ mfaCode });
     },
     setDomain: (domain: string) => {
       if (setup.current) {

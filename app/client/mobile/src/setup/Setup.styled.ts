@@ -124,4 +124,87 @@ export const styles = StyleSheet.create({
   controlSwitch: {
     transform: [{scaleX: 0.7}, {scaleY: 0.7}],
   },
+  modal: {
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  blur: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  modalHeader: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  modalLabel: {
+    fontSize: 20,
+  },
+  modalClose: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    backgroundColor: 'transparent',
+  },
+  modalControls: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 16,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  modalDescription: {
+    paddingTop: 16,
+  },
+  authMessage: {
+    height: 24,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 8,
+  },
+  authMessageText: {
+    fontSize: 16,
+    color: Colors.danger,
+  },
+  modalContent: {
+    display: 'flex',
+    justifyContent: 'center',
+    height: '100%',
+    gap: 8,
+  },
+  modalSurface: {
+    padding: 16,
+    borderRadius: 8,
+  },
+  secretImage: {
+    width: 192,
+    height: 192,
+    alignSelf: 'center',
+    borderRadius: 8,
+    margin: 16,
+  },
+  secretText: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 16,
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
+  secret: {
+    paddingRight: 16,
+  },
+  secretIcon: {
+    marginLeft: 8,
+  },
 });

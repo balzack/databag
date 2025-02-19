@@ -1,13 +1,21 @@
-import React from 'react';
-import {SafeAreaView, Image, View, Pressable} from 'react-native';
-import {ActivityIndicator, RadioButton, Switch, Surface, Divider, TextInput, Text} from 'react-native-paper';
+import React, { useState } from 'react';
+import {SafeAreaView, TouchableOpacity, Modal, Image, View, Pressable} from 'react-native';
+import {ActivityIndicator, Icon, Button, IconButton, RadioButton, Switch, Surface, Divider, TextInput, Text} from 'react-native-paper';
 import {styles} from './Setup.styled';
 import {useSetup} from './useSetup.hook';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import { Confirm } from '../confirm/Confirm';
+import { Colors } from '../constants/Colors';
+import { InputCode } from '../utils/InputCode';
+import {BlurView} from '@react-native-community/blur';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 export function Setup() {
   const { state, actions } = useSetup();
+  const [mfaCode, setMfaCode] = useState('');
+  const [updating, setUpdating] = useState(false);
+  const [secretCopy, setSecretCopy] = useState(false);
+  const [confirmingAuth, setConfirmingAuth] = useState(false);
 
   const errorParams = {
     title: state.strings.operationFailed, 
@@ -17,6 +25,36 @@ export function Setup() {
       action: actions.clearError,
     },      
   };
+
+  const confirmAuth = async () => {
+    if (!confirmingAuth) {
+      setConfirmingAuth(true);
+      await actions.confirmMFAuth();
+      setConfirmingAuth(false);
+    }
+  }
+
+  const copySecret = async () => {
+    if (!secretCopy) {
+      setSecretCopy(true);
+      Clipboard.setString(state.secretText);
+      setTimeout(() => {
+        setSecretCopy(false);
+      }, 2000);
+    }
+  };
+
+  const toggleMFAuth = async () => {
+    if (!updating) {
+      setUpdating(true);
+      if (state.mfaEnabled) {
+        await actions.disableMFAuth();
+      } else {
+        await actions.enableMFAuth();
+      }
+      setUpdating(false);
+    }
+  }
 
   return (
     <View style={styles.setup}>
@@ -132,6 +170,10 @@ export function Setup() {
         <View style={styles.option}>
           <Text style={styles.label}>{state.strings.allowUnsealed}:</Text>
           <Switch style={styles.controlSwitch} value={state.setup?.allowUnsealed} disabled={state.loading} onValueChange={()=>actions.setAllowUnsealed(!state.setup?.allowUnsealed)} />
+        </View>
+        <View style={styles.option}>
+          <Text style={styles.label}>{state.strings.mfaTitle}:</Text>
+          <Switch style={styles.controlSwitch} value={state.mfaEnabled} disabled={state.loading} onValueChange={toggleMFAuth} />
         </View>
         <Divider style={styles.divider} bold={false} />
         <View style={styles.option}>
@@ -264,6 +306,43 @@ export function Setup() {
       </KeyboardAwareScrollView>
       <Divider style={styles.line} bold={true} />
       <Confirm show={state.error} params={errorParams} />
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={state.confirmingMFAuth} onRequestClose={actions.cancelMFAuth}>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.modalContent}>
+            <Surface elevation={4} mode="flat" style={styles.modalSurface}>
+              <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={actions.cancelMFAuth} />
+              <Text style={styles.modalDescription}>{state.strings.mfaSteps}</Text>
+              <Image style={styles.secretImage} resizeMode={'contain'} source={{uri: state.confirmMFAuthImage}} />
+
+              <View style={styles.secretText}>
+                <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>
+                  {state.confirmMFAuthText}
+                </Text>
+                <TouchableOpacity onPress={copySecret}>
+                  <Icon style={styles.secretIcon} size={18} source={secretCopy ? 'check' : 'content-copy'} color={Colors.primary} />
+                </TouchableOpacity>
+              </View>
+
+              <InputCode onChangeText={actions.setMFAuthCode} />
+
+              <View style={styles.authMessage}>
+                <Text style={styles.authMessageText}>{ state.mfaMessage }</Text>
+              </View>
+
+              <View style={styles.modalControls}>
+                <Button mode="outlined" onPress={actions.cancelMFAuth}>
+                  {state.strings.cancel}
+                </Button>
+                <Button mode="contained" loading={confirmingAuth} disabled={state.mfaCode.length !== 6} onPress={confirmAuth}>
+                  {state.strings.mfaConfirm}
+                </Button>
+              </View>
+            </Surface>
+          </KeyboardAwareScrollView>
+        </View>
+      </Modal>
     </View>
   );
 }
