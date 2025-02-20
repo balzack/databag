@@ -15,6 +15,10 @@ export const en = {
   noAccess: 'No Access', 
   connecting: 'Connecting',
 
+  setup: 'Setup',
+  accounts: 'Accounts',
+  noAccounts: 'No Accounts',
+
   membership: 'Membership',
   channelGuest: 'Topic Guest',
   channelHost: 'Topic Host',
@@ -164,10 +168,16 @@ export const en = {
   confirmDelete: 'Deleting Account',
   areSure: 'Are you sure you want to delete the account?',
 
+  addingTitle: 'Adding Account',
+  addingLink: 'Use the following link can be used to create an account',
+  addingToken: 'Use the following token can be used to create an account from the login screen',
+  accessingTitle: 'Accessing Account',
+  accessingLink: 'Use the following link to access the specified account',
+  accessingToken: 'Use the following token to access the specified account from the login screen',
+
   mb: 'MB',
   gb: 'GB',
   copied: 'Copied',
-  accounts: 'Accounts',
   accessAccount: 'Access Account',
   browserLink: 'Browser Link',
   mobileToken: 'Mobile Token',
@@ -297,6 +307,17 @@ export const fr = {
   reportTopicPrompt: 'Êtes-vous sûr de vouloir signaler ce sujet pour examen par un administrateur ?',
   noAccess: 'Pas d\'Accès',
   connecting: 'Démarrage de la Connexion',
+
+  setup: 'Installation',
+  accounts: 'Comptes',
+  noAccounts: 'Aucun Compte',
+
+  addingTitle: 'Ajout d\'un Compte',
+  addingLink: 'Utilisez le lien suivant pour créer un compte',
+  addingToken: 'Utilisez le jeton suivant pour créer un compte depuis l\'écran de connexion',
+  accessingTitle: 'Accéder au Compte',
+  accessingLink: 'Utilisez le lien suivant pour accéder au compte spécifié',
+  accessingToken: 'Utilisez le jeton suivant pour accéder au compte spécifié depuis l\'écran de connexion',
 
   membership: 'Adhésion',
   channelHost: 'Hôte du Sujet',
@@ -467,7 +488,6 @@ export const fr = {
   mb: 'Mo',
   gb: 'Go',
   copied: 'Copié',
-  accounts: 'Comptes',
   accessAccount: 'Accéder au Compte',
   browserLink: 'Lien du Navigateur',
   mobileToken: 'Code Mobile',
@@ -575,6 +595,17 @@ export const sp = {
   reportTopic: 'Reportar tema',
   reportTopicPrompt: '¿Estás seguro de que deseas reportar este tema para revisión del administrador?',
   connecting: 'Conexión Inicial',
+
+  setup: 'Configuración',
+  accounts: 'Cuentas',
+  noAccounts: 'No hay cuentas',
+
+  addingTitle: 'Añadiendo cuenta',
+  addingLink: 'Utilice el siguiente enlace para crear una cuenta',
+  addingToken: 'Utilice el siguiente token para crear una cuenta desde la pantalla de inicio de sesión',
+  accessingTitle: 'Accediendo a la cuenta',
+  accessingLink: 'Utilice el siguiente enlace para acceder a la cuenta especificada',
+  accessingToken: 'Utilice el siguiente token para acceder a la cuenta especificada desde la pantalla de inicio de sesión',
 
   noAccess: 'Sin Acceso', 
   membership: 'Afiliación',
@@ -746,7 +777,6 @@ export const sp = {
   mb: 'MB',
   gb: 'GB',
   copied: 'Copiado',
-  accounts: 'Cuentas',
   accessAccount: 'Acceder a la Cuenta',
   browserLink: 'Enlace del Navegador',
   mobileToken: 'Código Móvil',
@@ -853,6 +883,17 @@ export const pt = {
   reportTopic: 'Denunciar tópico',
   reportTopicPrompt: 'Tem certeza de que deseja denunciar este tópico para revisão do administrador?',
   connecting: 'Iniciando Conexão',
+
+  setup: 'configurar',
+  accounts: 'Contas',
+  noAccounts: 'Sem Contas',
+
+  addingTitle: 'Adicionando conta',
+  addingLink: 'Use o seguinte link para criar uma conta',
+  addingToken: 'Use o seguinte token para criar uma conta a partir da tela de login',
+  accessingTitle: 'Acessando conta',
+  accessingLink: 'Use o seguinte link para acessar a conta especificada',
+  accessingToken: 'Use o seguinte token para acessar a conta especificada a partir da tela de login',
 
   noAccess: 'Sem Acesso',
   membership: 'Associação',
@@ -1024,7 +1065,6 @@ export const pt = {
   mb: 'MB',
   gb: 'GB',
   copied: 'Copiado',
-  accounts: 'Contas',
   accessAccount: 'Acessar conta',
   browserLink: 'Link do navegador',
   mobileToken: 'Token móvel',
@@ -1132,6 +1172,17 @@ export const de = {
   reportTopic: 'Thema melden',
   reportTopicPrompt: 'Sind Sie sicher, dass Sie dieses Thema zur Überprüfung durch den Administrator melden möchten?',
   connecting: 'Startverbindung',
+
+  setup: 'Aufstellen',
+  accounts: 'Konten',
+  noAccounts: 'Keine Konten',
+  
+  addingTitle: 'Konto hinzufügen',
+  addingLink: 'Verwenden Sie den folgenden Link, um ein Konto zu erstellen',
+  addingToken: 'Verwenden Sie das folgende Token, um ein Konto vom Anmeldebildschirm aus zu erstellen',
+  accessingTitle: 'Kontozugriff',
+  accessingLink: 'Verwenden Sie den folgenden Link, um auf das angegebene Konto zuzugreifen',
+  accessingToken: 'Verwenden Sie das folgende Token, um vom Anmeldebildschirm aus auf das angegebene Konto zuzugreifen',
 
   noAccess: 'Kein Zugriff',
   channelHost: 'Themenhost',
@@ -1302,7 +1353,6 @@ export const de = {
   mb: 'MB',
   gb: 'GB',
   copied: 'Kopiert',
-  accounts: 'Konten',
   accessAccount: 'Kontozugriff',
   browserLink: 'Browser-Link',
   mobileToken: 'Mobilcode',
@@ -1410,6 +1460,17 @@ export const ru = {
   reportTopic: 'Пожаловаться на тему',
   reportTopicPrompt: 'Вы уверены, что хотите отправить эту тему на рассмотрение администратору?',
   connecting: 'начало соединения',
+
+  setup: 'настраивать',
+  accounts: 'Учетные записи',
+  noAccounts: 'Нет учетных записей',
+
+  addingTitle: 'Добавление аккаунта',
+  addingLink: 'Используйте следующую ссылку для создания аккаунта',
+  addingToken: 'Используйте следующий токен для создания аккаунта с экрана входа',
+  accessingTitle: 'Доступ к аккаунту',
+  accessingLink: 'Используйте следующую ссылку для доступа к указанному аккаунту',
+  accessingToken: 'Используйте следующий токен для доступа к указанному аккаунту с экрана входа',
 
   noAccess: 'Нет доступа',
   membership: 'Членство',
@@ -1580,7 +1641,6 @@ export const ru = {
   mb: 'МБ',
   gb: 'ГБ',
   copied: 'Скопировано',
-  accounts: 'Аккаунты',
   accessAccount: 'Доступ к аккаунту',
   browserLink: 'Ссылка на браузер',
   mobileToken: 'Мобильный токен',

@@ -1,2 +1,91 @@
 .service {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  .body {
+    display: flex;
+    width: 100%;
+    height: calc(100% - 48px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+  }
+
+  .show {
+    display: flex;
+    flex-grow: 1;
+    height: 10%;
+    position: relative;
+  }
+
+  .hide {
+    display: none;
+  }
+
+  .display {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+  }
+
+  .screen {
+    width: 100%;
+    height: 100%;
+    background-color: var(--mantine-color-surface-1);
+    overflow: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+
+  .tabs {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    .activeTabItem {
+      flex: 1;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--mantine-color-tab-2);
+      color: var(--mantine-color-dbgreen-1);
+      padding-bottom: 8px;
+      padding-top: 8px;
+      cursor: pointer;
+    }
+
+    .idleTabItem {
+      flex: 1;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--mantine-color-tab-1);
+      color: var(--mantine-color-dbgreen-0);
+      padding-bottom: 8px;
+      padding-top: 8px;
+      cursor: pointer;
+
+      &:hover {
+        background: var(--mantine-color-tab-3);
+      }
+    }
+
+    .tabDivider {
+      width: 2px;
+    }
+
+    .tabIcon {
+      width: 32px;
+      height: 32px;
+    }
+  }
 }

@@ -15,7 +15,7 @@ export function Service() {
   const [setup, { open: openSetup, close: closeSetup }] = useDisclosure(false)
 
   return (
-    <div className={classes.session}>
+    <div className={classes.service}>
       {state.layout === 'small' && (
         <>
           <div className={classes.body}>
@@ -57,9 +57,7 @@ export function Service() {
       )}
       {state.layout === 'large' && (
         <div className={classes.display}>
-          <div style={classes.accounts}>
-            <Accounts openSetup={openSetup} />
-          </div>
+          <Accounts openSetup={openSetup} />
           <Drawer opened={setup} onClose={closeSetup} withCloseButton={false} size="sm" padding="0" position="right">
             <div style={{ height: '100vh' }}>
               <Setup />
