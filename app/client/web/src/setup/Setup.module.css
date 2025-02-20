@@ -15,6 +15,8 @@
       flex-direction: row;
       justify-content: center;
       align-items: center;
+      padding-left: 16px;
+      padding-right: 16px;
 
       .centerTitle {
         flex-grow: 1;

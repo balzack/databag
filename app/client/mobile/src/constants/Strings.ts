@@ -171,8 +171,8 @@ export const en = {
   areSure: 'Are you sure you want to delete the account?',
 
   addingTitle: 'Adding Account',
-  addingLink: 'Use the following link can be used to create an account',
-  addingToken: 'Use the following token can be used to create an account from the login screen',
+  addingLink: 'Use the following link to create an account',
+  addingToken: 'Use the following token to create an account from the login screen',
   accessingTitle: 'Accessing Account',
   accessingLink: 'Use the following link to access the specified account',
   accessingToken: 'Use the following token to access the specified account from the login screen',
