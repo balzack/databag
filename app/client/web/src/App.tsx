@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Root } from './root/Root'
 import { Access } from './access/Access'
-import { Node } from './node/Node'
+import { Service } from './service/Service'
 import { Session } from './session/Session'
 import { createTheme, MantineProvider, virtualColor } from '@mantine/core'
 import { ModalsProvider } from '@mantine/modals'
@@ -62,7 +62,7 @@ const router = createHashRouter([
       { path: '/', element: <></> },
       { path: 'access', element: <Access /> },
       { path: 'session', element: <Session /> },
-      { path: 'node', element: <Node /> },
+      { path: 'service', element: <Service /> },
     ],
   },
 ])

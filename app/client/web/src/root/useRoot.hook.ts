@@ -10,7 +10,7 @@ export function useRoot() {
   const [state, setState] = useState({
     pathname: '',
     session: null,
-    node: null,
+    service: null,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,22 +24,22 @@ export function useRoot() {
   }, [location.pathname])
 
   useEffect(() => {
-    const { pathname, node, session } = app.state || {}
-    const path = pathname === '/session' || pathname === '/node' || pathname === '/access' ? pathname : '/'
+    const { pathname, service, session } = app.state || {}
+    const path = pathname === '/session' || pathname === '/service' || pathname === '/access' ? pathname : '/'
     if (path === '/session' && !session) {
       navigate('/')
-    } else if (path === '/node' && !node) {
+    } else if (path === '/service' && !service) {
       navigate('/')
-    } else if (path === '/' && !session && !node) {
+    } else if (path === '/' && !session && !service) {
       navigate('/access')
-    } else if (path !== '/node' && node) {
-      navigate('/node')
+    } else if (path !== '/service' && service) {
+      navigate('/service')
     } else if (path !== '/session' && session) {
       navigate('/session')
     } else {
       navigate('/')
     }
-  }, [state?.pathname, app.state?.session, app.state?.node])
+  }, [state?.pathname, app.state?.session, app.state?.service])
 
   const actions = {}
 

@@ -111,11 +111,11 @@ export function useAppContext() {
       return await sdk.current.username(username, token, node, secure)
     },
     adminLogin: async (token: string, node: string, secure: boolean, code: string) => {
-      const login = await sdk.current.configure(node, secure, token, code)
-      updateState({ node: login })
+      const service = await sdk.current.configure(node, secure, token, code)
+      updateState({ service })
     },
     adminLogout: async () => {
-      updateState({ node: null })
+      updateState({ service: null })
     },
   }
 
