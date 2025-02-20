@@ -2,7 +2,7 @@ import {useEffect, useState, useContext, useRef} from 'react';
 import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {ContextType} from '../context/ContextType';
-import type { Setup } from 'databag-client-sdk';
+import { type Setup, KeyType, ICEService } from 'databag-client-sdk';
 
 const DEBOUNCE_MS = 2000;
 const DELAY_MS = 1000;
@@ -10,13 +10,13 @@ const DELAY_MS = 1000;
 export function useSetup() {
   const updated = useRef(false);
   const loading = useRef(false);
-  const debounce = useRef(null);
+  const debounce = useRef(setTimeout(()=>{},0));
   const setup = useRef(null as null | Setup);
-  const app = useContext(AppContext);
-  const display = useContext(DisplayContext);
+  const app = useContext(AppContext) as ContextType;
+  const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
     layout: '',
-    strings: {},
+    strings: display.state.strings,
     loading: true,
     updating: false,
     error: false,
@@ -41,7 +41,7 @@ export function useSetup() {
         const mfaEnabled = await service.checkMFAuth();
         setup.current = await service.getSetup();
         loading.current = false;
-        const storage = Math.floor(setup.current.accountStorage / 1073741824); 
+        const storage = Math.floor(setup.current?.accountStorage || 0 / 1073741824); 
         updateState({ setup: setup.current, mfaEnabled, accountStorage: storage.toString(), loading: false });    
       } catch (err) {
         console.log(err);
@@ -116,9 +116,10 @@ export function useSetup() {
         await service.confirmMFAuth(state.mfaCode);
         updateState({ confirmingMFAuth: false, mfaEnabled: true });
       } catch (err) {
-        if (err.message === '401') {
+        const { message } = err as { message: string }
+        if (message === '401') {
           updateState({ mfaMessage: state.strings.mfaError });
-        } else if (err.message === '429') {
+        } else if (message === '429') {
           updateState({ mfaMessage: state.strings.mfaDisabled });
         } else {
           updateState({ mfaMessage: state.strings.error });
@@ -151,7 +152,7 @@ export function useSetup() {
         save();
       }
     },
-    setKeyType: (keyType: string) => {
+    setKeyType: (keyType: KeyType) => {
       if (setup.current) {
         setup.current.keyType = keyType;
         updateState({ setup: setup.current });
@@ -227,9 +228,9 @@ export function useSetup() {
         save();
       }
     },
-    setEnableService: (enableService: boolean) => {
+    setEnableService: (iceService: boolean) => {
       if (setup.current) {
-        setup.current.enableService = enableService;
+        setup.current.iceService = iceService ? ICEService.Cloudflare : ICEService.Default;
         updateState({ setup: setup.current });
         save();
       }

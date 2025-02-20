@@ -59,6 +59,7 @@ export const styles = StyleSheet.create({
   modalSurface: {
     padding: 16,
     borderRadius: 8,
+    maxWidth: 400,
   },
   modal: {
     display: 'flex',

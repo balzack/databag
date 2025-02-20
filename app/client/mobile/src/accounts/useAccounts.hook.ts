@@ -5,11 +5,11 @@ import {ContextType} from '../context/ContextType';
 import type { Member } from 'databag-client-sdk';
 
 export function useAccounts() {
-  const app = useContext(AppContext);
-  const display = useContext(DisplayContext);
+  const app = useContext(AppContext) as ContextType;
+  const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
     layout: '',
-    strings: {},
+    strings: display.state.strings,
     members: [] as Member[],
     loading: false,
   });

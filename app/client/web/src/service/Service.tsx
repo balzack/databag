@@ -26,7 +26,7 @@ export function Service() {
             </div>
             <div className={tab === 'accounts' ? classes.show : classes.hide}>
               <div className={classes.screen}>
-                <Accounts />
+                <Accounts openSetup={()=>{}} />
               </div>
             </div>
           </div>

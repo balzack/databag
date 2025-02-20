@@ -184,6 +184,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     height: '100%',
+    maxWidth: 300,
     gap: 8,
   },
   modalSurface: {
