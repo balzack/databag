@@ -49,7 +49,7 @@ export function Setup() {
             className={classes.value}
             size="sm"
             disabled={state.loading}
-            value={state.accountStorage}
+            value={state.setup?.accountStorage}
             placeholder={state.strings.storageHint}
             onChange={(event) => actions.setAccountStorage(event.currentTarget.value)}
           />  
@@ -103,6 +103,71 @@ export function Setup() {
             <div className={classes.option}>
               <Text className={classes.label}>{state.strings.enableService}:</Text>
               <Switch className={classes.switch} disabled={state.loading} checked={state.setup?.enableService} onChange={(ev) => actions.setEnableService(ev.currentTarget.checked)} />
+            </div>
+          )}
+          { state.setup?.enableIce && state.setup?.enableService && (
+            <div className={classes.option}>
+              <Text className={classes.label}>{state.strings.storageLimit}:</Text>
+              <TextInput
+                className={classes.value}
+                size="sm"
+                disabled={state.loading}
+                value={state.accountStorage}
+                placeholder={state.strings.storageHint}
+                onChange={(event) => actions.setAccountStorage(event.currentTarget.value)}
+              />  
+            </div>
+          )}
+          { state.setup?.enableIce && state.setup?.enableService && (
+            <div className={classes.option}>
+              <Text className={classes.label}>{state.strings.storageLimit}:</Text>
+              <TextInput
+                className={classes.value}
+                size="sm"
+                disabled={state.loading}
+                value={state.accountStorage}
+                placeholder={state.strings.storageHint}
+                onChange={(event) => actions.setAccountStorage(event.currentTarget.value)}
+              />  
+            </div>
+          )}
+          { state.setup?.enableIce && !state.setup?.enableService && (
+            <div className={classes.option}>
+              <Text className={classes.label}>{state.strings.storageLimit}:</Text>
+              <TextInput
+                className={classes.value}
+                size="sm"
+                disabled={state.loading}
+                value={state.accountStorage}
+                placeholder={state.strings.storageHint}
+                onChange={(event) => actions.setAccountStorage(event.currentTarget.value)}
+              />  
+            </div>
+          )}
+          { state.setup?.enableIce && !state.setup?.enableService && (
+            <div className={classes.option}>
+              <Text className={classes.label}>{state.strings.webUsername}:</Text>
+              <TextInput
+                className={classes.value}
+                size="sm"
+                disabled={state.loading}
+                value={state.setup?.iceUsername}
+                placeholder={state.strings.username}
+                onChange={(event) => actions.setIceUsername(event.currentTarget.value)}
+              />  
+            </div>
+          )}
+          { state.setup?.enableIce && !state.setup?.enableService && (
+            <div className={classes.option}>
+              <Text className={classes.label}>{state.strings.webPassword}:</Text>
+              <TextInput
+                className={classes.value}
+                size="sm"
+                disabled={state.loading}
+                value={state.setup?.icePassword || ''}
+                placeholder={state.strings.password}
+                onChange={(event) => actions.setIcePassword(event.currentTarget.value)}
+              />  
             </div>
           )}
         </div>
