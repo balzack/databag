@@ -71,8 +71,8 @@ export function Setup() {
           <Text className={classes.label}>{state.strings.keyType}:</Text>
           <Radio.Group name="keyType" className={classes.radio} value={state.setup?.keyType} onChange={actions.setKeyType}>
             <Group mt="xs">
-              <Radio disabled={state.loading} value="RSA_2048" label="RSA2048" />
-              <Radio disabled={state.loading} value="RSA_4096" label="RSA4096" />
+              <Radio disabled={state.loading} value="RSA2048" label="RSA2048" />
+              <Radio disabled={state.loading} value="RSA4096" label="RSA4096" />
             </Group>
           </Radio.Group>
         </div>

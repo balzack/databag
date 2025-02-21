@@ -79,3 +79,34 @@
     }
   }
 }
+
+.modal {
+  .prompt {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .copy {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 16px;
+  }
+
+  .value {
+    font-size: 12px;
+    padding: 16px;
+  }
+
+  .icon {
+    cursor: pointer;
+    color: var(--mantine-color-green-2);
+  }
+
+  .control {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
