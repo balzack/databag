@@ -25,7 +25,7 @@ export function Setup() {
   const copySecret = async () => {
     if (!secretCopy) {
       try {
-        navigator.clipboard.writeText(state.secretText)
+        navigator.clipboard.writeText(state.confirmMFAuthText)
         setSecretCopy(true);
         setTimeout(() => {
           setSecretCopy(false);
@@ -230,7 +230,7 @@ export function Setup() {
               {secretCopy && <IconCheck />}
               {!secretCopy && <IconCopy className={classes.copyIcon} onClick={copySecret} />}
             </div>
-            <PinInput value={state.mfAuthCode} length={6} className={classes.mfaPin} onChange={(event) => actions.setMFAuthCode(event)} />
+            <PinInput value={state.mfaCode} length={6} className={classes.mfaPin} onChange={(event) => actions.setMFAuthCode(event)} />
             <Text className={classes.authMessage}>{state.mfaMessage}</Text>
           </div>
           <div className={classes.control}>

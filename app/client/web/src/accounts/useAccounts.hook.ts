@@ -12,6 +12,7 @@ export function useAccounts() {
     strings: display.state.strings,
     members: [] as Member[],
     loading: false,
+    secretText: '',
   });
 
   const updateState = (value: any) => {
