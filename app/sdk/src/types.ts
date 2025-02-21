@@ -228,7 +228,7 @@ export enum KeyType {
 }
 
 export enum ICEService {
-  Cloudflare = 'cloudflage',
+  Cloudflare = 'cloudflare',
   Default = 'default',
 }
 

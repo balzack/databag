@@ -204,7 +204,7 @@ export function Setup() {
               <Switch style={styles.controlSwitch} value={state.setup?.enableService} disabled={state.loading} onValueChange={()=>actions.setEnableService(!state.setup?.enableService)} />
             </View>
           )}
-          { state.setup?.enableIce && state.setup?.enableService && (
+          { state.setup?.enableIce && state.setup?.iceService === 'cloudflare' && (
             <View style={styles.option}>
               <Text style={styles.label}>TURN_KEY_ID:</Text>
               <Surface mode="flat" elevation={5} style={styles.inputSurface}>
@@ -224,7 +224,7 @@ export function Setup() {
               </Surface>
             </View>
           )}
-          { state.setup?.enableIce && state.setup?.enableService && (
+          { state.setup?.enableIce && state.setup?.iceService === 'cloudflare' && (
             <View style={styles.option}>
               <Text style={styles.label}>TURN_KEY_API_TOKEN:</Text>
               <Surface mode="flat" elevation={5} style={styles.inputSurface}>
@@ -244,7 +244,7 @@ export function Setup() {
               </Surface>
             </View>
           )}
-          { state.setup?.enableIce && !state.setup?.enableService && (
+          { state.setup?.enableIce && state.setup?.iceService === 'default' && (
             <View style={styles.option}>
               <Text style={styles.label}>{ state.strings.serverUrl }:</Text>
               <Surface mode="flat" elevation={5} style={styles.inputSurface}>
@@ -264,7 +264,7 @@ export function Setup() {
               </Surface>
             </View>
           )}
-          { state.setup?.enableIce && !state.setup?.enableService && (
+          { state.setup?.enableIce && state.setup?.iceService === 'default' && (
             <View style={styles.option}>
               <Text style={styles.label}>{ state.strings.webUsername }:</Text>
               <Surface mode="flat" elevation={5} style={styles.inputSurface}>
@@ -284,7 +284,7 @@ export function Setup() {
               </Surface>
             </View>
           )}
-          { state.setup?.enableIce && !state.setup?.enableService && (
+          { state.setup?.enableIce && state.setup?.iceService === 'default' && (
             <View style={styles.option}>
               <Text style={styles.label}>{ state.strings.webPassword }:</Text>
               <Surface mode="flat" elevation={5} style={styles.inputSurface}>

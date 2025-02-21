@@ -25,10 +25,10 @@ export function Setup() {
       <div className={classes.content}>
         <div className={classes.option}>
           <Text className={classes.label}>{state.strings.keyType}:</Text>
-          <Radio.Group name="keyType" className={classes.radio} disabled={state.loading} value={state.setup?.keyType} onChange={actions.setKeyType}>
+          <Radio.Group name="keyType" className={classes.radio} value={state.setup?.keyType} onChange={actions.setKeyType}>
             <Group mt="xs">
-              <Radio value="RSA_2048" label="RSA2048" />
-              <Radio value="RSA_4096" label="RSA4096" />
+              <Radio disabled={state.loading} value="RSA_2048" label="RSA2048" />
+              <Radio disabled={state.loading} value="RSA_4096" label="RSA4096" />
             </Group>
           </Radio.Group>
         </div>
@@ -49,7 +49,7 @@ export function Setup() {
             className={classes.value}
             size="sm"
             disabled={state.loading}
-            value={state.setup?.accountStorage}
+            value={state.accountStorage}
             placeholder={state.strings.storageHint}
             onChange={(event) => actions.setAccountStorage(event.currentTarget.value)}
           />  
@@ -102,62 +102,62 @@ export function Setup() {
           { state.setup?.enableIce && (
             <div className={classes.option}>
               <Text className={classes.label}>{state.strings.enableService}:</Text>
-              <Switch className={classes.switch} disabled={state.loading} checked={state.setup?.enableService} onChange={(ev) => actions.setEnableService(ev.currentTarget.checked)} />
+              <Switch className={classes.switch} disabled={state.loading} checked={state.setup?.iceService === 'cloudflare'} onChange={(ev) => actions.setEnableService(ev.currentTarget.checked)} />
             </div>
           )}
-          { state.setup?.enableIce && state.setup?.enableService && (
+          { state.setup?.enableIce && state.setup?.iceService === 'cloudflare' && (
             <div className={classes.option}>
-              <Text className={classes.label}>{state.strings.storageLimit}:</Text>
+              <Text className={classes.label}>TURN_KEY_ID:</Text>
               <TextInput
                 className={classes.value}
                 size="sm"
                 disabled={state.loading}
-                value={state.accountStorage}
-                placeholder={state.strings.storageHint}
-                onChange={(event) => actions.setAccountStorage(event.currentTarget.value)}
+                value={state.setup?.iceUsername || ''}
+                placeholder="KEY_ID"
+                onChange={(event) => actions.setIceUsername(event.currentTarget.value)}
               />  
             </div>
           )}
-          { state.setup?.enableIce && state.setup?.enableService && (
+          { state.setup?.enableIce && state.setup?.iceService === 'cloudflare' && (
             <div className={classes.option}>
-              <Text className={classes.label}>{state.strings.storageLimit}:</Text>
+              <Text className={classes.label}>TURN_KEY_API_TOKEN:</Text>
               <TextInput
                 className={classes.value}
                 size="sm"
                 disabled={state.loading}
-                value={state.accountStorage}
-                placeholder={state.strings.storageHint}
-                onChange={(event) => actions.setAccountStorage(event.currentTarget.value)}
+                value={state.setup?.icePassword || ''}
+                placeholder="API_TOKEN"
+                onChange={(event) => actions.setIcePassword(event.currentTarget.value)}
               />  
             </div>
           )}
-          { state.setup?.enableIce && !state.setup?.enableService && (
+          { state.setup?.enableIce && state.setup?.iceService === 'default' && (
             <div className={classes.option}>
-              <Text className={classes.label}>{state.strings.storageLimit}:</Text>
+              <Text className={classes.label}>{state.strings.serverUrl}:</Text>
               <TextInput
                 className={classes.value}
                 size="sm"
                 disabled={state.loading}
-                value={state.accountStorage}
-                placeholder={state.strings.storageHint}
-                onChange={(event) => actions.setAccountStorage(event.currentTarget.value)}
+                value={state.setup?.iceUrl || ''}
+                placeholder={state.strings.urlHint}
+                onChange={(event) => actions.setIceUrl(event.currentTarget.value)}
               />  
             </div>
           )}
-          { state.setup?.enableIce && !state.setup?.enableService && (
+          { state.setup?.enableIce && state.setup?.iceService === 'default' && (
             <div className={classes.option}>
               <Text className={classes.label}>{state.strings.webUsername}:</Text>
               <TextInput
                 className={classes.value}
                 size="sm"
                 disabled={state.loading}
-                value={state.setup?.iceUsername}
+                value={state.setup?.iceUsername || ''}
                 placeholder={state.strings.username}
                 onChange={(event) => actions.setIceUsername(event.currentTarget.value)}
               />  
             </div>
           )}
-          { state.setup?.enableIce && !state.setup?.enableService && (
+          { state.setup?.enableIce && state.setup?.iceService === 'default' && (
             <div className={classes.option}>
               <Text className={classes.label}>{state.strings.webPassword}:</Text>
               <TextInput

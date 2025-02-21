@@ -41,7 +41,7 @@ export function useSetup() {
         const mfaEnabled = await service.checkMFAuth();
         setup.current = await service.getSetup();
         loading.current = false;
-        const storage = Math.floor(setup.current?.accountStorage || 0 / 1073741824); 
+        const storage = Math.floor((setup.current?.accountStorage || 0) / 1073741824); 
         updateState({ setup: setup.current, mfaEnabled, accountStorage: storage.toString(), loading: false });    
       } catch (err) {
         console.log(err);
@@ -152,7 +152,8 @@ export function useSetup() {
         save();
       }
     },
-    setKeyType: (keyType: KeyType) => {
+    setKeyType: (type: string) => {
+      const keyType = type === 'RSA_2048' ? KeyType.RSA_2048 : KeyType.RSA_4096;
       if (setup.current) {
         setup.current.keyType = keyType;
         updateState({ setup: setup.current });

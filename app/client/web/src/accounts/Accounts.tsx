@@ -21,7 +21,7 @@ export function Accounts({ openSetup }: { openSetup: ()=>void }) {
     ];
 
     return (
-      <Card key={idx} className={classes.member} imageUrl={member.imageUrl} name={member.handle} handle={member.guid}  select={()=>{}} actions={options} />
+      <Card key={idx} className={classes.member} imageUrl={member.imageUrl} name={member.handle} handle={member.guid}  select={()=>{}} actions={options} placeholder="" node="" />
     )
   });
 
