@@ -79,3 +79,39 @@
     }
   }
 }
+
+.mfa {
+  .secret {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .secretImage { 
+    width: 192px;
+    height: 192px;
+  }
+  
+  .secretText {
+    display: flex;
+    gap: 16px;
+  } 
+    
+  .authMessage {
+    height: 24px;
+    color: var(--mantine-color-red-3);
+  }
+    
+  .copyIcon {
+    cursor: pointer;
+  }
+
+  .control {
+    display: flex;
+    gap: 16px;
+    padding-top: 8px;
+    justify-content: flex-end;
+    flex-grow: 1;
+  } 
+}

@@ -1,9 +1,53 @@
+import { useState } from 'react'
 import classes from './Setup.module.css'
 import { useSetup } from './useSetup.hook'
-import { Radio, Group, Loader, Modal, Divider, Text, TextInput, Switch, ActionIcon } from '@mantine/core'
+import { PinInput, Image, Button, Radio, Group, Loader, Modal, Divider, Text, TextInput, Switch, ActionIcon } from '@mantine/core'
+import { modals } from '@mantine/modals'
+import { useDisclosure } from '@mantine/hooks'
+import { IconCheck, IconCopy } from '@tabler/icons-react'
 
 export function Setup() {
   const { state, actions } = useSetup();
+  const [confirmingAuth, setConfirmingAuth] = useState(false);
+  const [secretCopy, setSecretCopy] = useState(false);
+  const [updating, setUpdating] = useState(false);
+  const [mfaOpened, { open: mfaOpen, close: mfaClose }] = useDisclosure(false)
+
+  const confirmAuth = async () => {
+    if (!confirmingAuth) {
+      setConfirmingAuth(true);
+      await actions.confirmMFAuth();
+      mfaClose();
+      setConfirmingAuth(false);
+    }
+  }
+
+  const copySecret = async () => {
+    if (!secretCopy) {
+      try {
+        navigator.clipboard.writeText(state.secretText)
+        setSecretCopy(true);
+        setTimeout(() => {
+          setSecretCopy(false);
+        }, 2000);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  const toggleAuth = async () => {
+    if (!updating) {
+      setUpdating(true);
+      if (state.mfaEnabled) {
+        await actions.disableMFAuth();
+      } else {
+        await actions.enableMFAuth();
+        mfaOpen();
+      }
+      setUpdating(false);
+    }
+  }
 
   return (
     <div className={classes.setup}>
@@ -75,6 +119,10 @@ export function Setup() {
         <div className={classes.option}>
           <Text className={classes.label}>{state.strings.allowUnsealed}:</Text>
           <Switch className={classes.switch} disabled={state.loading} checked={state.setup?.allowUnsealed} onChange={(ev) => actions.setAllowUnsealed(ev.currentTarget.checked)} />
+        </div>
+        <div className={classes.option}>
+          <Text className={classes.label}>{state.strings.mfaTitle}:</Text>
+          <Switch className={classes.switch} disabled={state.loading} checked={state.mfaEnabled} onChange={toggleAuth} />
         </div>
         <Divider />
         <div className={classes.option}>
@@ -172,6 +220,29 @@ export function Setup() {
           )}
         </div>
       </div>
+      <Modal title={state.strings.mfaTitle} opened={mfaOpened} onClose={mfaClose} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered>
+        <div className={classes.mfa}>
+          <div className={classes.secret}>
+            <Text>{state.strings.mfaSteps}</Text>
+            <Image radius="md" className={classes.secretImage} src={state.confirmMFAuthImage} />
+            <div className={classes.secretText}>
+              <Text>{state.confirmMFAuthText}</Text>
+              {secretCopy && <IconCheck />}
+              {!secretCopy && <IconCopy className={classes.copyIcon} onClick={copySecret} />}
+            </div>
+            <PinInput value={state.mfAuthCode} length={6} className={classes.mfaPin} onChange={(event) => actions.setMFAuthCode(event)} />
+            <Text className={classes.authMessage}>{state.mfaMessage}</Text>
+          </div>
+          <div className={classes.control}>
+            <Button variant="default" onClick={mfaClose}> 
+              {state.strings.cancel}
+            </Button>
+            <Button variant="filled" onClick={confirmAuth} disabled={state.mfaCode.length != 6} loading={confirmingAuth}>
+              {state.strings.save}
+            </Button> 
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
