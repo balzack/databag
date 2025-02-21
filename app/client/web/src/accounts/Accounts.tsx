@@ -182,7 +182,7 @@ export function Accounts({ openSetup }: { openSetup: ()=>void }) {
             <Text className={classes.title}>{ state.strings.accounts }</Text>
           </div>
           { state.layout === 'large' && (
-            <ActionIcon className={classes.action} variant="light" onClick={actions.reload} loading={state.loading}> 
+            <ActionIcon className={classes.action} variant="light" onClick={actions.reload} loading={loading}> 
               <IconReload />
             </ActionIcon>
           )}
