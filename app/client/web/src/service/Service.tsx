@@ -58,7 +58,7 @@ export function Service() {
       {state.layout === 'large' && (
         <div className={classes.display}>
           <Accounts openSetup={openSetup} />
-          <Drawer opened={setup} onClose={closeSetup} withCloseButton={false} size="sm" padding="0" position="right">
+          <Drawer opened={setup} onClose={closeSetup} withCloseButton={false} size="550px" padding="0" position="right">
             <div style={{ height: '100vh' }}>
               <Setup />
             </div>

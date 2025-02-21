@@ -17,6 +17,7 @@
       align-items: center;
       padding-left: 16px;
       padding-right: 16px;
+      border-bottom: 2px solid var(--mantine-color-text-8);
 
       .centerTitle {
         flex-grow: 1;
@@ -32,10 +33,38 @@
       .area {
         flex-grow: 1;
       }
+      .loader {
+        width: 32px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      }
+    }
+  }
+
+  .option {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 16px;
+    padding-right: 16px;
+    height: 48px;
+
+    .label {
+      font-size: 16px;
+    }
+    
+    .value {
+      padding-left: 24px; 
+      flex-grow: 1;
     }
 
-    .line {
-      width: 100%;
+    .radio {
+      padding-left: 24px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 8px;
     }
   }
 }

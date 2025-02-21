@@ -13,6 +13,10 @@
     padding-right: 16px;
     border-bottom: 1px solid var(--mantine-color-text-8);
     font-size: 14px;
+
+    &:hover {
+      background-color: var(--mantine-color-surface-2);
+    }
   }
 
   .action {
@@ -31,6 +35,7 @@
 
     .header {
       height: 48px;
+      flex-shrink: 0;
       width: 100%;
       display: flex;
       flex-direction: row;

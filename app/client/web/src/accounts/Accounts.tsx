@@ -1,17 +1,23 @@
+import { useEffect } from 'react';
 import classes from './Accounts.module.css'
 import { useAccounts } from './useAccounts.hook'
 import { Modal, Divider, Text, ActionIcon } from '@mantine/core'
 import { IconUserPlus, IconReload, IconSettings, IconLockOpen2, IconUserCancel, IconTrash } from '@tabler/icons-react'
 import { Card } from '../card/Card'
+import { Colors } from '../constants/Colors';
 
 export function Accounts({ openSetup }: { openSetup: ()=>void }) {
   const { state, actions } = useAccounts();
 
+  useEffect(() => {
+    actions.reload();
+  }, []);
+
   const members = state.members.map((member, idx) => {
     const options = [
       <ActionIcon key="acess" className={classes.action} variant="light" onClick={actions.reload} loading={state.loading}><IconLockOpen2 /></ActionIcon>,
-      <ActionIcon key="block" className={classes.action} variant="light" onClick={actions.reload} loading={state.loading}><IconUserCancel /></ActionIcon>,
-      <ActionIcon key="remove" className={classes.action} variant="light" onClick={actions.reload} loading={state.loading}><IconTrash /></ActionIcon>,
+      <ActionIcon key="block" className={classes.action} variant="light" onClick={actions.reload} loading={state.loading} color={Colors.pending}><IconUserCancel /></ActionIcon>,
+      <ActionIcon key="remove" className={classes.action} variant="light" onClick={actions.reload} loading={state.loading} color={Colors.offsync}><IconTrash /></ActionIcon>,
     ];
 
     return (
