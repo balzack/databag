@@ -60,15 +60,13 @@ export function Setup() {
     <View style={styles.setup}>
       <View style={styles.header}>
         <View style={styles.busy}>
-          { state.loading && (
+          { (state.loading || state.updating) && (
             <ActivityIndicator size={18} />
           )}
         </View>
         <Text style={styles.title}>{ state.strings.setup }</Text>
         <View style={styles.busy}>
-          { state.updating && (
-            <ActivityIndicator size={18} />
-          )}
+          <IconButton style={styles.icon} iconColor={Colors.primary} mode="contained" icon="logout" onPress={actions.logout} />
         </View>
       </View>
       <Divider style={styles.line} bold={true} />
@@ -84,8 +82,8 @@ export function Setup() {
                 style={styles.radioButton}
                 label=""
                 mode="android"
-                status={state.setup?.keyType === 'RSA_2048' ? 'checked' : 'unchecked'}
-                onPress={() => { actions.setKeyType('RSA_2048') }}
+                status={state.setup?.keyType === 'RSA2048' ? 'checked' : 'unchecked'}
+                onPress={() => { actions.setKeyType('RSA2048') }}
               />
             </View>
             <View style={styles.radio}>
@@ -96,8 +94,8 @@ export function Setup() {
                 style={styles.radioButton}
                 label=""
                 mode="android"
-                status={state.setup?.keyType === 'RSA_4096' ? 'checked' : 'unchecked'}
-                onPress={() => { actions.setKeyType('RSA_4096') }}
+                status={state.setup?.keyType === 'RSA4096' ? 'checked' : 'unchecked'}
+                onPress={() => { actions.setKeyType('RSA4096') }}
               />
             </View>
           </View>

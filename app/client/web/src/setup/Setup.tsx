@@ -4,7 +4,7 @@ import { useSetup } from './useSetup.hook'
 import { PinInput, Image, Button, Radio, Group, Loader, Modal, Divider, Text, TextInput, Switch, ActionIcon } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { useDisclosure } from '@mantine/hooks'
-import { IconCheck, IconCopy } from '@tabler/icons-react'
+import { IconCheck, IconLogout, IconCopy } from '@tabler/icons-react'
 
 export function Setup() {
   const { state, actions } = useSetup();
@@ -53,7 +53,7 @@ export function Setup() {
     <div className={classes.setup}>
       <div className={classes.header}>
         <div className={classes.loader}>
-          { state.loading && (
+          { (state.loading || state.updating) && (
             <Loader size={18} />
           )}
         </div>
@@ -61,9 +61,9 @@ export function Setup() {
           <Text className={classes.title}>{ state.strings.setup }</Text>
         </div>
         <div className={classes.loader}>
-          { state.updating && (
-            <Loader size={18} />
-          )}
+          <ActionIcon className={classes.action} variant="light" onClick={actions.logout}>
+            <IconLogout />
+          </ActionIcon>
         </div>
       </div>
       <div className={classes.content}>

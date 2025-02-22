@@ -83,7 +83,7 @@
 .modal {
   .prompt {
     padding: 8px;
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .copy {
@@ -95,7 +95,7 @@
   }
 
   .value {
-    font-size: 12px;
+    font-size: 15px;
     padding: 16px;
   }
 

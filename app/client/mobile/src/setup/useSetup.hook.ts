@@ -41,7 +41,7 @@ export function useSetup() {
         const mfaEnabled = await service.checkMFAuth();
         setup.current = await service.getSetup();
         loading.current = false;
-        const storage = Math.floor(setup.current?.accountStorage || 0 / 1073741824); 
+        const storage = Math.floor((setup.current?.accountStorage || 0) / 1073741824); 
         updateState({ setup: setup.current, mfaEnabled, accountStorage: storage.toString(), loading: false });    
       } catch (err) {
         console.log(err);
@@ -87,6 +87,7 @@ export function useSetup() {
   }, []);
 
   const actions = {
+    logout: app.actions.adminLogout,
     clearError: () => {
       updateState({ error: false });
     },
@@ -152,7 +153,8 @@ export function useSetup() {
         save();
       }
     },
-    setKeyType: (keyType: KeyType) => {
+    setKeyType: (type: string) => {
+      const keyType = type === 'RSA2048' ? KeyType.RSA_2048 : KeyType.RSA_4096;
       if (setup.current) {
         setup.current.keyType = keyType;
         updateState({ setup: setup.current });
@@ -230,6 +232,8 @@ export function useSetup() {
     },
     setEnableService: (iceService: boolean) => {
       if (setup.current) {
+        const iceUrl = iceService ? 'https://rtc.live.cloudflare.com/v1/turn/keys/%%TURN_KEY_ID%%/credentials/generate' : '';
+        setup.current.iceUrl = iceUrl;
         setup.current.iceService = iceService ? ICEService.Cloudflare : ICEService.Default;
         updateState({ setup: setup.current });
         save();

@@ -213,4 +213,7 @@ export const styles = StyleSheet.create({
   secretIcon: {
     marginLeft: 8,
   },
+  icon: {
+    backgroundColor: 'transparent',
+  },
 });

@@ -87,6 +87,7 @@ export function useSetup() {
   }, []);
 
   const actions = {
+    logout: app.actions.adminLogout,
     clearError: () => {
       updateState({ error: false });
     },
