@@ -165,7 +165,9 @@ export function Accounts({ openSetup }: { openSetup: ()=>void }) {
     ];
 
     return (
-      <Card key={idx} className={classes.member} imageUrl={member.imageUrl} name={member.handle} handle={member.guid}  select={()=>{}} actions={options} placeholder="" node="" />
+      <Card key={idx} className={classes.member} imageUrl={member.imageUrl}  handle={member.guid}  select={()=>{}}
+        name={member.storageUsed > 1048576 ? `${member.handle} [${Math.floor(member.storageUsed / 1048576)}MB]` : member.handle} 
+        actions={options} placeholder="" node="" />
     )
   });
 
