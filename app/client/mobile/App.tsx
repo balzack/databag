@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {Text, StatusBar} from 'react-native';
 import {AppContextProvider} from './src/context/AppContext';
 import {DisplayContextProvider} from './src/context/DisplayContext';
@@ -8,6 +8,7 @@ import {Root} from './src/root/Root';
 import {Access} from './src/access/Access';
 import {Service} from './src/service/Service';
 import {Session} from './src/session/Session';
+import ReceiveSharingIntent from 'react-native-receive-sharing-intent';
 
 import {useColorScheme} from 'react-native';
 import {MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
@@ -101,6 +102,18 @@ const databagColors = {
 
 function App(): React.JSX.Element {
   const colorScheme = useColorScheme();
+
+  useEffect(() => {
+    ReceiveSharingIntent.getReceivedFiles(files => {
+      console.log("GOT FILES!!!", files);
+    }, 
+    (error) =>{
+      console.log(error);
+    }, 
+    'databag'
+    );
+    return () => {ReceiveSharingIntent.clearReceivedFiles() }
+  }, []);
 
   const theme =
     colorScheme === 'dark'

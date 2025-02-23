@@ -3966,6 +3966,7 @@ __metadata:
     react-native-linear-gradient: ^2.8.3
     react-native-paper: ^5.12.5
     react-native-reanimated: ^3.15.2
+    react-native-receive-sharing-intent: ^2.0.0
     react-native-rsa-native: ^2.0.5
     react-native-safe-area-context: ^4.10.8
     react-native-screens: ^3.34.0
@@ -9754,6 +9755,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 108095709cd7a3effc5b5d276d94e161b399bd2d06e32140834168a0051545401bb09228071447e5925571da3f86f335d2a82c76751cdae07f66faf50b25c97f
+  languageName: node
+  linkType: hard
+
+"react-native-receive-sharing-intent@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "react-native-receive-sharing-intent@npm:2.0.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 52dd1e4ccf95b77bf86707c2a28a69a2a253dabd6ab9d65986936e2f6d15963aa7dd31af64a2cd374278ba361485a0a482dc5202c6ddc3f901af99d0a1bf83e0
   languageName: node
   linkType: hard
 

@@ -1360,6 +1360,8 @@ PODS:
     - React-Core
   - react-native-keep-awake (1.3.0):
     - React-Core
+  - react-native-receive-sharing-intent (2.0.0):
+    - React-Core
   - react-native-rsa-native (2.0.5):
     - React
   - react-native-safe-area-context (4.14.1):
@@ -1910,6 +1912,7 @@ DEPENDENCIES:
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - "react-native-image-resizer (from `../node_modules/@bam.tech/react-native-image-resizer`)"
   - "react-native-keep-awake (from `../node_modules/@sayem314/react-native-keep-awake`)"
+  - react-native-receive-sharing-intent (from `../node_modules/react-native-receive-sharing-intent`)
   - react-native-rsa-native (from `../node_modules/react-native-rsa-native`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
@@ -2060,6 +2063,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@bam.tech/react-native-image-resizer"
   react-native-keep-awake:
     :path: "../node_modules/@sayem314/react-native-keep-awake"
+  react-native-receive-sharing-intent:
+    :path: "../node_modules/react-native-receive-sharing-intent"
   react-native-rsa-native:
     :path: "../node_modules/react-native-rsa-native"
   react-native-safe-area-context:
@@ -2207,6 +2212,7 @@ SPEC CHECKSUMS:
   react-native-document-picker: 1928548d8b19bbc9f2219b01f1d350aa8ff76508
   react-native-image-resizer: 6260ba497fb8d1a593c1c92ccd593f570df6f5b7
   react-native-keep-awake: 294e077916c643d38883731ea1b2fe5e4903b255
+  react-native-receive-sharing-intent: 62ab28c50e6ae56d32b9e841d7452091312a0bc7
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
   react-native-safe-area-context: 141eca0fd4e4191288dfc8b96a7c7e1c2983447a
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
