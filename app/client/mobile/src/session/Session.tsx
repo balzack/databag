@@ -1,5 +1,5 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import {SafeAreaView, Pressable, View, useColorScheme} from 'react-native';
+import {SafeAreaView, Modal, Pressable, View, useColorScheme} from 'react-native';
 import {RingContextProvider} from '../context/RingContext';
 import {styles} from './Session.styled';
 import {IconButton, Surface, Text, Icon} from 'react-native-paper';
@@ -30,7 +30,7 @@ const DetailsDrawer = createDrawerNavigator();
 const ContactStack = createNativeStackNavigator();
 const ContentStack = createNativeStackNavigator();
 
-export function Session() {
+export function Session({ share }: { share: { filePath: string, mimeType: string }}) {
   const {state} = useSession();
   const scheme = useColorScheme();
   const [tab, setTab] = useState('content');
@@ -39,6 +39,7 @@ export function Session() {
   const [dismissed, setDismissed] = useState(false);
   const [disconnected, setDisconnected] = useState(false);
   const [showDisconnected, setShowDisconnected] = useState(false);
+  const [focus, setFocus] = useState(false);
 
   const textContact = (cardId: null|string) => {
     setTextCard({ cardId });
@@ -48,7 +49,7 @@ export function Session() {
     setCallCard({ card });
   }
 
-  const sessionNav = {strings: state.strings, callContact, callCard, textContact, textCard};
+  const sessionNav = {strings: state.strings, callContact, callCard, textContact, textCard, focus, setFocus, share};
   const showContent = {display: tab === 'content' ? 'flex' : 'none'};
   const showContact = {display: tab === 'contacts' ? 'flex' : 'none'};
   const showSettings = {display: tab === 'settings' ? 'flex' : 'none'};
@@ -65,6 +66,12 @@ export function Session() {
       setTab('content');
     }
   }
+
+  useEffect(() => {
+    if (share) {
+      contentTab();
+    }
+  }, [share]);
 
   useEffect(() => {
     if (state.appState && !state.sdkState) {
@@ -91,7 +98,7 @@ export function Session() {
                     ...styles.body,
                     ...showContent,
                   }}>
-                  <ContentTab textCard={textCard} scheme={scheme} contentTab={contentTab} />
+                  <ContentTab share={share} textCard={textCard} scheme={scheme} contentTab={contentTab} />
                 </View>
                 <View
                   style={{
@@ -205,7 +212,7 @@ export function Session() {
   );
 }
 
-function ContentTab({scheme, textCard, contentTab}: {scheme: string, textCard: {cardId: null|string}, contentTab: ()=>void}) {
+function ContentTab({scheme, textCard, contentTab, share}: {scheme: string, textCard: {cardId: null|string}, contentTab: ()=>void, share: {filePath: string, mimeType: string}}) {
   const openConversation = (props) => {
     props.navigation.navigate('conversation');
     contentTab();
@@ -216,7 +223,7 @@ function ContentTab({scheme, textCard, contentTab}: {scheme: string, textCard: {
       <ContentStack.Navigator initialRouteName="contacts" screenOptions={{headerShown: false}}>
         <ContentStack.Screen name="content" options={{headerBackTitleVisible: false}}>
           {props => (
-            <Content textCard={textCard} openConversation={()=>openConversation(props)} />
+            <Content share={share} textCard={textCard} closeAll={()=>props.navigation.popToTop()} openConversation={()=>openConversation(props)} />
           )}
         </ContentStack.Screen>
         <ContentStack.Screen name="conversation" options={styles.noHeader}>
@@ -279,11 +286,10 @@ function ContactTab({scheme, textContact, callContact}: {scheme: string, textCon
 }
 
 function DetailsScreen({nav}) {
-  const [focus, setFocus] = useState(false);
 
   const closeAll = (props) => {
     props.navigation.closeDrawer();
-    setFocus(false);
+    nav.setFocus(false);
   }
 
   const DetailsComponent = useCallback(
@@ -307,7 +313,7 @@ function DetailsScreen({nav}) {
         headerShown: false,
         overlayColor: 'rgba(8,8,8,.9)',
       }}>
-      <DetailsDrawer.Screen name="details">{({navigation}) => <ProfileScreen nav={{...nav, focus, setFocus, details: navigation}} />}</DetailsDrawer.Screen>
+      <DetailsDrawer.Screen name="details">{({navigation}) => <ProfileScreen nav={{...nav, details: navigation}} />}</DetailsDrawer.Screen>
     </DetailsDrawer.Navigator>
   );
 }
@@ -448,7 +454,7 @@ function HomeScreen({nav}) {
           <Identity openSettings={nav.settings.openDrawer} openContacts={nav.contacts.openDrawer} />
         </Surface>
         <Surface style={styles.channels} elevation={2} mode="flat">
-          <Content textCard={nav.textCard} openConversation={()=>nav.setFocus(true)} />
+          <Content share={nav.share} textCard={nav.textCard} closeAll={()=>{}} openConversation={()=>nav.setFocus(true)} />
         </Surface>
       </View>
       <Surface style={styles.right} mode="flat">

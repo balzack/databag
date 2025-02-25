@@ -29,6 +29,7 @@ export function useContent() {
     connected: [] as Card[],
     sealable: [] as Card[],
     sorted: [] as Channel[],
+    channels: [] as ChannelParams[],
     filtered: [] as ChannelParams[],
     filter: '',
     topic: '',
@@ -158,7 +159,7 @@ export function useContent() {
       return true;
     });
 
-    updateState({filtered});
+    updateState({channels, filtered});
   }, [state.sorted, state.cards, state.guid, state.filter, state.focused]);
 
   useEffect(() => {

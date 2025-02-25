@@ -8,8 +8,9 @@ import {Focus} from 'databag-client-sdk';
 import {BlurView} from '@react-native-community/blur';
 import {Card} from '../card/Card';
 import {Confirm} from '../confirm/Confirm';
+import {Selector} from '../selector/Selector';
 
-export function Content({openConversation, textCard}: {openConversation: ()=>void, textCard: {cardId: null|string}}) {
+export function Content({share, closeAll, openConversation, textCard}: { share: { filePath: string, mimeType: string}, closeAll: ()=>void, openConversation: ()=>void, textCard: {cardId: null|string}}) {
   const [add, setAdd] = useState(false);
   const [adding, setAdding] = useState(false);
   const [sealedTopic, setSealedTopic] = useState(false);
@@ -27,6 +28,17 @@ export function Content({openConversation, textCard}: {openConversation: ()=>voi
     },
   });
   const cards = state.sealSet && sealedTopic ? state.sealable : state.connected;
+
+  const select = (cardId: string, channelId: string) => {
+    actions.setFocus(cardId, channelId);
+    openConversation();
+  }
+
+  useEffect(() => {
+    if (share) {
+      closeAll();
+    }
+  }, [share]);
 
   useEffect(() => {
     if (textCard.cardId) {
@@ -105,8 +117,7 @@ export function Content({openConversation, textCard}: {openConversation: ()=>voi
             renderItem={({item}) => {
               const {sealed, focused, hosted, unread, imageUrl, subject, message} = item;
               const open = () => {
-                actions.setFocus(item.cardId, item.channelId);
-                openConversation();
+                select(item.cardId, item.channelId);
               };
               const Wrap = (state.layout === 'large' && focused) ? Surface : View;
               return (
@@ -231,6 +242,7 @@ export function Content({openConversation, textCard}: {openConversation: ()=>voi
         </View>
       </Modal>
       <Confirm show={alert} params={alertParams} />
+      <Selector share={share} selected={select} channels={state.channels} />
     </View>
   );
 }

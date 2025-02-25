@@ -20,6 +20,7 @@ export const en = {
   setup: 'Setup',
   accounts: 'Accounts',
   noAccounts: 'No Accounts',
+  selectShare: 'Select Sharing Topic',
 
   membership: 'Membership',
   channelGuest: 'Topic Guest',
@@ -313,6 +314,7 @@ export const fr = {
   setup: 'Installation',
   accounts: 'Comptes',
   noAccounts: 'Aucun Compte',
+  selectShare: 'Sélectionnez le Sujet de Partage',
 
   addingTitle: 'Ajout d\'un Compte',
   addingLink: 'Utilisez le lien suivant pour créer un compte',
@@ -601,6 +603,7 @@ export const sp = {
   setup: 'Configuración',
   accounts: 'Cuentas',
   noAccounts: 'No hay cuentas',
+  selectShare: 'Seleccionar Tema Para Compartir',
 
   addingTitle: 'Añadiendo cuenta',
   addingLink: 'Utilice el siguiente enlace para crear una cuenta',
@@ -889,6 +892,7 @@ export const pt = {
   setup: 'configurar',
   accounts: 'Contas',
   noAccounts: 'Sem Contas',
+  selectShare: 'Selecione o Tópico de Compartilhamento',
 
   addingTitle: 'Adicionando conta',
   addingLink: 'Use o seguinte link para criar uma conta',
@@ -1178,7 +1182,8 @@ export const de = {
   setup: 'Aufstellen',
   accounts: 'Konten',
   noAccounts: 'Keine Konten',
-  
+  selectShare: 'Wählen Sie Das Thema Zum Teilen Aus',
+ 
   addingTitle: 'Konto hinzufügen',
   addingLink: 'Verwenden Sie den folgenden Link, um ein Konto zu erstellen',
   addingToken: 'Verwenden Sie das folgende Token, um ein Konto vom Anmeldebildschirm aus zu erstellen',
@@ -1466,6 +1471,7 @@ export const ru = {
   setup: 'настраивать',
   accounts: 'Учетные записи',
   noAccounts: 'Нет учетных записей',
+  selectShare: 'Выберите тему для обмена',
 
   addingTitle: 'Добавление аккаунта',
   addingLink: 'Используйте следующую ссылку для создания аккаунта',

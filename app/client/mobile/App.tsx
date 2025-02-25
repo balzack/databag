@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import {Text, StatusBar} from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import {Alert, Text, StatusBar} from 'react-native';
 import {AppContextProvider} from './src/context/AppContext';
 import {DisplayContextProvider} from './src/context/DisplayContext';
 import {NativeRouter} from 'react-router-native';
@@ -102,10 +102,14 @@ const databagColors = {
 
 function App(): React.JSX.Element {
   const colorScheme = useColorScheme();
+  const [share, setShare] = useState(null as null | { filePath: string, mimeType: string });
 
   useEffect(() => {
     ReceiveSharingIntent.getReceivedFiles(files => {
-      console.log("GOT FILES!!!", files);
+      if (files && files.length) {
+        const { filePath, mimeType } = files[0];
+        setShare({ filePath, mimeType });
+      }
     }, 
     (error) =>{
       console.log(error);
@@ -134,7 +138,7 @@ function App(): React.JSX.Element {
               <Route path="/" element={<Text>EMPTY</Text>} />
               <Route path="/access" element={<Access />} />
               <Route path="/service" element={<Service />} />
-              <Route path="/session" element={<Session />} />
+              <Route path="/session" element={<Session share={share} />} />
             </Routes>
           </NativeRouter>
         </PaperProvider>
