@@ -234,6 +234,7 @@ export function useContent() {
   }, []);
 
   const actions = {
+    setSharing: app.actions.setSharing,
     setFilter: (filter: string) => {
       updateState({filter});
     },

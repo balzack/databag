@@ -30,6 +30,10 @@ export function Content({share, closeAll, openConversation, textCard}: { share: 
   const cards = state.sealSet && sealedTopic ? state.sealable : state.connected;
 
   const select = (cardId: string, channelId: string) => {
+    if (share) {
+      const { filePath, mimeType } = share;
+      actions.setSharing({ cardId, channelId, filePath, mimeType });
+    }
     actions.setFocus(cardId, channelId);
     openConversation();
   }

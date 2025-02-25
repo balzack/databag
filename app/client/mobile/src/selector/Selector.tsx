@@ -15,6 +15,7 @@ export function Selector({ share, selected, channels }: { share: { filePath: str
 
   useEffect(() => {
     if (share) {
+      setTopic(null);
       setShow(true);
     }
   }, [share]);

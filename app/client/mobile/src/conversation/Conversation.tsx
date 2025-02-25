@@ -190,6 +190,10 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
   const padStyle = state.layout === 'large' ? styles.pad : styles.nopad;
   const inputPadStyle = state.layout === 'large' ? styles.pad : styles.indent;
   const offset = state.layout === 'large' ? state.avoid - 64 : state.avoid - 120;
+  const disableImage = !state.detailSet || !state.detail.enableImage;
+  const disableVideo = !state.detailSet || !state.detail.enableVideo;
+  const disableAudio = !state.detailSet || !state.detail.enableAudio;
+  const disableBinary = !state.detailSet || !state.detail.enableBinary;
 
   return (
     <View style={containerStyle}>
@@ -299,10 +303,10 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
           { avoid && (<View style={{ ...styles.avoid, height: offset }} />) }
 
           <View style={styles.controls}>
-            <Pressable style={styles.control} onPress={addImage}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="camera" size={24} color={Colors.primary} /></Surface></Pressable>
-            <Pressable style={styles.control} onPress={addVideo}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} /></Surface></Pressable>
-            <Pressable style={styles.control} onPress={addAudio}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="volume-high" size={24} color={Colors.primary} /></Surface></Pressable>
-            <Pressable style={styles.control} onPress={addBinary}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="file-outline" size={24} color={Colors.primary} /></Surface></Pressable>
+            <Pressable style={styles.control} disabled={disableImage} onPress={addImage}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="camera" size={24} color={disableImage ? Colors.placeholder : Colors.primary} /></Surface></Pressable>
+            <Pressable style={styles.control} disabled={disableVideo} onPress={addVideo}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="video-outline" size={24} color={disableVideo ? Colors.placeholder : Colors.primary} /></Surface></Pressable>
+            <Pressable style={styles.control} disabled={disableAudio} onPress={addAudio}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="volume-high" size={24} color={disableAudio ? Colors.placeholder : Colors.primary} /></Surface></Pressable>
+            <Pressable style={styles.control} disabled={disableBinary} onPress={addBinary}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="file-outline" size={24} color={disableBinary ? Colors.placeholder : Colors.primary} /></Surface></Pressable>
             <Divider style={styles.separator} />
             <Pressable style={styles.control} onPress={()=>setColorMenu(true)}>
               <Surface style={styles.surface} elevation={2} mode="flat">
@@ -331,10 +335,10 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
                   { sending && (
                     <ActivityIndicator size="small" />
                   )}
-                  { !sending && state.access && (state.message || state.assets.length != 0) && (
+                  { !sending && state.access && state.validShare && (state.message || state.assets.length != 0) && (
                     <Icon style={styles.button} source="send" size={24} color={Colors.primary} />
                   )}
-                  { !sending && (!state.access || (!state.message && state.assets.length == 0)) && (
+                  { !sending && (!state.access || !state.validShare || (!state.message && state.assets.length == 0)) && (
                     <Icon style={styles.button} source="send" size={24} color={Colors.placeholder} />
                   )}
                 </Surface>

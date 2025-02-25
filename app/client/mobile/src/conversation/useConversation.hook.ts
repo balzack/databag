@@ -63,6 +63,7 @@ export function useConversation() {
     textSizeSet: false,
     progress: 0,
     avoid: 0,
+    validShare: true,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -76,6 +77,48 @@ export function useConversation() {
       return { ...s };
     });
   } 
+
+  useEffect(() => {
+    let validShare = true;
+    state.assets.forEach(asset => {
+      if (!state.detailSet) {
+        validShare = false;
+      } else {
+        if (asset.type === 'image' && !state.detail.enableImage) {
+          validShare = false;
+        } else if (asset.type === 'audio' && !state.detail.enableAudio) {
+          validShare = false;
+        } else if (asset.type === 'video' && !state.detail.enableVideo) {
+          validShare = false;
+        } else if (!state.detail.enableBinary) {
+          validShare = false;
+        }
+      }
+    });
+    updateState({ validShare });
+  }, [state.detail, state.detailSet, state.assets]);
+
+  useEffect(() => {
+    const { sharing, focus } = app.state;
+    if (sharing && focus && state.loaded) {
+      const focused = focus.getFocused();
+      if (focused.cardId == sharing.cardId && focused.channelId == sharing.channelId) {
+        console.log("APPLY SHARING OF: ", sharing);
+        const { mimeType, filePath } = sharing;
+        const ext = mimeType.toLowerCase();
+        if (ext == '.jpg' || ext == '.png' || ext == '.webp' || ext == '.bmp') {
+          actions.addImage(filePath, mimeType, IMAGE_SCALE_SIZE); 
+        } else if (ext == '.mp4' || ext == '.mov') {
+          actions.addVideo(filePath, mimeType);
+        } else if (ext == '.mp3' || ext == '.aac') {
+          actions.addAudio(filePath, mimeType);
+        } else {
+          actions.addBinary(filePath, filePath.split('/').pop());
+        }
+        app.actions.clearSharing();
+      }
+    }
+  }, [app.state, state.loaded]);
 
   useEffect(() => {
     const { layout, strings } = display.state
@@ -301,6 +344,7 @@ export function useConversation() {
       }
     }, 
     addImage: (path: string, mime: string, size: number) => {
+console.log("ADD IMAGE");
       const type = 'image';
       updateState({ assets: [ ...state.assets, { type, path, mime, size } ]});
     },

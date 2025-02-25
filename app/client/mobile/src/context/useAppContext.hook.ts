@@ -50,6 +50,7 @@ export function useAppContext() {
     fullDayTime: false,
     monthFirstDate: true,
     initialized: false,
+    sharing: null as null | { cardId: string, channelId: string, filePath: string, mimeType: string },
   });
 
   const updateState = (value: any) => {
@@ -185,6 +186,12 @@ export function useAppContext() {
     },
     adminLogout: async () => {
       updateState({service: null});
+    },
+    setSharing: (sharing: { cardId: string, channelId: string, filePath: string, mimeType: string }) => {
+      updateState({ sharing });
+    },
+    clearSharing: () => {
+      updateState({ sharing: null });
     },
   };
 
