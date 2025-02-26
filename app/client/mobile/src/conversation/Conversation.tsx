@@ -190,10 +190,10 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
   const padStyle = state.layout === 'large' ? styles.pad : styles.nopad;
   const inputPadStyle = state.layout === 'large' ? styles.pad : styles.indent;
   const offset = state.layout === 'large' ? state.avoid - 64 : state.avoid - 120;
-  const disableImage = !state.detailSet || !state.detail.enableImage;
-  const disableVideo = !state.detailSet || !state.detail.enableVideo;
-  const disableAudio = !state.detailSet || !state.detail.enableAudio;
-  const disableBinary = !state.detailSet || !state.detail.enableBinary;
+  const disableImage = !state.detailSet || !state.detail?.enableImage;
+  const disableVideo = !state.detailSet || !state.detail?.enableVideo;
+  const disableAudio = !state.detailSet || !state.detail?.enableAudio;
+  const disableBinary = !state.detailSet || !state.detail?.enableBinary;
 
   return (
     <View style={containerStyle}>
