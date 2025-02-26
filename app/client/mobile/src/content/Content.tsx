@@ -29,11 +29,15 @@ export function Content({share, closeAll, openConversation, textCard}: { share: 
   });
   const cards = state.sealSet && sealedTopic ? state.sealable : state.connected;
 
-  const select = (cardId: string, channelId: string) => {
+  const select = (cardId: string | null, channelId: string) => {
     if (share) {
       const { filePath, mimeType } = share;
       actions.setSharing({ cardId, channelId, filePath, mimeType });
     }
+    open(cardId, channelId);
+  }
+
+  const open = (cardId: string | null, channelId: string) => {
     actions.setFocus(cardId, channelId);
     openConversation();
   }
@@ -120,8 +124,8 @@ export function Content({share, closeAll, openConversation, textCard}: { share: 
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
               const {sealed, focused, hosted, unread, imageUrl, subject, message} = item;
-              const open = () => {
-                select(item.cardId, item.channelId);
+              const choose = () => {
+                open(item.cardId, item.channelId);
               };
               const Wrap = (state.layout === 'large' && focused) ? Surface : View;
               return (
@@ -131,7 +135,7 @@ export function Content({share, closeAll, openConversation, textCard}: { share: 
                       ...styles.channel,
                       borderColor: theme.colors.outlineVariant,
                     }}
-                    select={open}
+                    select={choose}
                     unread={unread}
                     sealed={sealed}
                     hosted={hosted}

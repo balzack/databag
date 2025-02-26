@@ -7,7 +7,7 @@ import { useSelector } from './useSelector.hook';
 import { ChannelParams } from '../content/Content';
 import { Channel } from '../channel/Channel';
 
-export function Selector({ share, selected, channels }: { share: { filePath: string, mimeType: string }, selected: (cardId: string, channelId: string)=>void, channels: ChannelParams[] }) {
+export function Selector({ share, selected, channels }: { share: { filePath: string, mimeType: string }, selected: (cardId: string | null, channelId: string)=>void, channels: ChannelParams[] }) {
   const { state, actions } = useSelector();
   const [show, setShow] = useState(false);
   const theme = useTheme();
@@ -21,9 +21,12 @@ export function Selector({ share, selected, channels }: { share: { filePath: str
   }, [share]);
 
   const select = () => {
-    const { cardId, channelId } = topic;
-    setShow(false);
-    selected(cardId, channelId);
+    if (topic) {
+      const { cardId, channelId } = topic;
+      setShow(false);
+      setTopic(null);
+      selected(cardId, channelId);
+    }
   }
 
   return (
