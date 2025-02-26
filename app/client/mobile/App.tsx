@@ -108,7 +108,7 @@ function App(): React.JSX.Element {
     ReceiveSharingIntent.getReceivedFiles(files => {
       if (files && files.length) {
         const { filePath, mimeType } = files[0];
-        setShare({ filePath, mimeType });
+        setShare({ filePath: filePath.startsWith('file') ? filePath : `file://${filePath}`, mimeType });
       }
     }, 
     (error) =>{

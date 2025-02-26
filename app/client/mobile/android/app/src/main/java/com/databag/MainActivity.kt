@@ -8,6 +8,8 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate
 import android.os.Bundle;
 import org.devio.rn.splashscreen.SplashScreen;
 
+import android.content.Intent;
+
 class MainActivity : ReactActivity() {
 
   /**
@@ -15,6 +17,11 @@ class MainActivity : ReactActivity() {
    * rendering of the component.
    */
   override fun getMainComponentName(): String = "Databag"
+
+  override fun onNewIntent(intent: Intent) {
+    super.onNewIntent(intent);
+    setIntent(intent);
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     SplashScreen.show(this)

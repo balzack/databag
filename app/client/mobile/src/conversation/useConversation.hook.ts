@@ -103,14 +103,13 @@ export function useConversation() {
     if (sharing && focus && state.loaded) {
       const focused = focus.getFocused();
       if (focused.cardId == sharing.cardId && focused.channelId == sharing.channelId) {
-        console.log("APPLY SHARING OF: ", sharing);
         const { mimeType, filePath } = sharing;
         const ext = mimeType.toLowerCase();
-        if (ext == '.jpg' || ext == '.png' || ext == '.webp' || ext == '.bmp') {
+        if (ext == '.jpg' || ext == 'image/jpeg' || ext == '.png' || ext == 'image/png' || ext == '.webp' || ext == 'image/webp' || ext == '.bmp' || ext == 'image/bmp') {
           actions.addImage(filePath, mimeType, IMAGE_SCALE_SIZE); 
-        } else if (ext == '.mp4' || ext == '.mov') {
+        } else if (ext == '.mp4' || ext == 'videp/mp4' || ext == '.mov' || ext == 'video/mov') {
           actions.addVideo(filePath, mimeType);
-        } else if (ext == '.mp3' || ext == '.aac') {
+        } else if (ext == '.mp3' || ext == 'audio/mp3' || ext == '.aac' || 'audio/aac') {
           actions.addAudio(filePath, mimeType);
         } else {
           actions.addBinary(filePath, filePath.split('/').pop());
@@ -344,7 +343,6 @@ export function useConversation() {
       }
     }, 
     addImage: (path: string, mime: string, size: number) => {
-console.log("ADD IMAGE");
       const type = 'image';
       updateState({ assets: [ ...state.assets, { type, path, mime, size } ]});
     },
