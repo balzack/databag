@@ -17,6 +17,7 @@ import { Conversation } from '../conversation/Conversation'
 import { Focus, Card } from 'databag-client-sdk'
 import { useDisclosure } from '@mantine/hooks'
 import { IconAlertCircle } from '@tabler/icons-react'
+import { Base } from '../base/Base';
 import { Ring } from '../ring/Ring';
 import { Call } from '../call/Call';
 
@@ -141,6 +142,7 @@ export function Session() {
             <div className={classes.right}>
               <Ring />
               <div className={classes.conversation}>
+                {!state.focus && <Base />}
                 {state.focus && <Conversation openDetails={openDetails} />}
               </div>
             </div>

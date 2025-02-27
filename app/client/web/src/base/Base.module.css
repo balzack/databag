@@ -1,0 +1,50 @@
+.base {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: var(--mantine-color-tab-9);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15vh;
+  padding-bottom: 15vh;
+
+  .image {
+    width: 60%;
+    max-height: 60%;
+    opacity: 0.4;
+  }
+
+  .icon {
+    color: var(--mantine-color-text-8);
+    margin: 8px;
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .title {
+    font-size: 20px;
+    color: var(--mantine-color-text-6);
+  }
+
+  .label {
+    font-size: 16px;
+    color: var(--mantine-color-text-6);
+  }
+
+  .steps {
+    display: flex;
+    align-items: center;
+  
+    .step {
+      font-size: 16px;
+      color: var(--mantine-color-text-6);
+    }
+  }
+} 
