@@ -19,6 +19,7 @@
 		7BA1FE852D5A980A00E0BA61 /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 7BA1FE842D5A980900E0BA61 /* splash.png */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		D1C6D9BEEAC47E1C73323937 /* Pods_Databag_DatabagTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 090757CEAF7E8ADAF5BD2FA0 /* Pods_Databag_DatabagTests.framework */; };
+		F010EC9C2D6FD0AB004D69A6 /* blended.png in Resources */ = {isa = PBXBuildFile; fileRef = F010EC9B2D6FD0AB004D69A6 /* blended.png */; };
 		F072E6EA2D3701D9007511E6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F072E6E92D3701D9007511E6 /* GoogleService-Info.plist */; };
 		F0C4E50B2D3B1A95009FC1C9 /* login.png in Resources */ = {isa = PBXBuildFile; fileRef = F0C4E50A2D3B1A95009FC1C9 /* login.png */; };
 /* End PBXBuildFile section */
@@ -81,6 +82,7 @@
 		89C6BE57DB24E9ADA2F236DE /* Pods-Databag-DatabagTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Databag-DatabagTests.release.xcconfig"; path = "Target Support Files/Pods-Databag-DatabagTests/Pods-Databag-DatabagTests.release.xcconfig"; sourceTree = "<group>"; };
 		EA9B975EA9789519AEC0AE47 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Databag/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F010EC9B2D6FD0AB004D69A6 /* blended.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blended.png; sourceTree = "<group>"; };
 		F072E6E92D3701D9007511E6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F072E6EB2D370868007511E6 /* Databag.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Databag.entitlements; path = Databag/Databag.entitlements; sourceTree = "<group>"; };
 		F0C4E50A2D3B1A95009FC1C9 /* login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = login.png; path = ../src/images/login.png; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				F010EC9B2D6FD0AB004D69A6 /* blended.png */,
 				F072E6E92D3701D9007511E6 /* GoogleService-Info.plist */,
 				7B413FF92C6CFD4F0032D17C /* MaterialCommunityIcons.ttf */,
 				13B07FAE1A68108700A75B9A /* Databag */,
@@ -340,6 +343,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				7BA1FE852D5A980A00E0BA61 /* splash.png in Resources */,
 				054418A1394B8F74B2D5F56A /* PrivacyInfo.xcprivacy in Resources */,
+				F010EC9C2D6FD0AB004D69A6 /* blended.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -838,7 +842,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -922,7 +929,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
