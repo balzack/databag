@@ -10,6 +10,7 @@ import {Registry} from '../registry/Registry';
 import {Profile, ContactParams} from '../profile/Profile';
 import {Details} from '../details/Details';
 import {Identity} from '../identity/Identity';
+import {Base} from '../base/Base';
 import {Conversation} from '../conversation/Conversation';
 import {useSession} from './useSession.hook';
 import {TransitionPresets} from '@react-navigation/stack';
@@ -457,14 +458,16 @@ function HomeScreen({nav}) {
           <Content share={nav.share} textCard={nav.textCard} closeAll={()=>{}} openConversation={()=>nav.setFocus(true)} />
         </Surface>
       </View>
-      <Surface style={styles.right} mode="flat">
+      <Surface style={styles.right} mode="flat">  
+        { !nav.focus && (
+          <Base />
+        )}
         <SafeAreaView style={styles.right} edges={['top']}>
           <View style={styles.ring}>
             <Ring />
           </View>
           <View style={styles.workarea}>
             {nav.focus && <Conversation openDetails={nav.details.openDrawer} close={()=>nav.setFocus(false)} wide={true} />}
-            {!nav.focus && <Text>FOCUS NOT SET</Text>}
           </View>
         </SafeAreaView>
       </Surface>

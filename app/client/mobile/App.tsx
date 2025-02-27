@@ -15,6 +15,7 @@ import {MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
 
 const databagColors = {
   light: {
+    name: 'light',
     primary: 'rgb(0, 108, 71)',
     onPrimary: 'rgb(255, 255, 255)',
     primaryContainer: 'rgb(142, 247, 193)',
@@ -55,8 +56,10 @@ const databagColors = {
     surfaceDisabled: 'rgba(25, 28, 26, 0.12)',
     onSurfaceDisabled: 'rgba(25, 28, 26, 0.38)',
     backdrop: 'rgba(42, 50, 45, 0.4)',
+    base: '#8fbea7',
   },
   dark: {
+    name: 'dark',
     primary: 'rgb(9, 178, 99)',
     onPrimary: 'rgb(0, 56, 35)',
     primaryContainer: 'rgb(0, 82, 52)',
@@ -97,6 +100,7 @@ const databagColors = {
     surfaceDisabled: 'rgba(225, 227, 223, 0.12)',
     onSurfaceDisabled: 'rgba(225, 227, 223, 0.38)',
     backdrop: 'rgba(42, 50, 45, 0.4)',
+    base: 'rgb(0,0,0)',
   },
 };
 

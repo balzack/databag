@@ -193,7 +193,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   members: {
-    height: 256,
+    height: 200,
     borderRadius: 4,
   },
   membersContainer: {},

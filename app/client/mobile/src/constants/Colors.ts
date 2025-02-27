@@ -1,7 +1,9 @@
 export const Colors = {
   primary: '#408060',
+  secondary: '#8fbea7',
   danger: '#ff6666',
   placeholder: '#888888',
+  label: '#555555',
   unsaved: '#555555',
   confirmed: '#aaaaaa',
   pending: '#aaaa44',

@@ -108,4 +108,9 @@ export const styles = StyleSheet.create({
   ring: {
     paddingLeft: 16,
   },
+  base: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+  },
 });
