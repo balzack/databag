@@ -78,13 +78,14 @@ func main() {
 
   router := app.NewRouter(webApp)
   origins := handlers.AllowedOrigins([]string{"*"})
+  headers := handlers.AllowedHeaders([]string{"content-type", "authorization", "credentials"})
   methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"})
 
   if cert != "" && key != "" {
     log.Printf("using args:" + " -s " + storePath + " -w " + webApp + " -p " + port[1:] + " -c " + cert + " -k " + key + " -t " + transformPath)
-    log.Fatal(http.ListenAndServeTLS(port, cert, key, handlers.CORS(origins, methods)(router)))
+    log.Fatal(http.ListenAndServeTLS(port, cert, key, handlers.CORS(origins, headers, methods)(router)))
   } else {
     log.Printf("using args:" + " -s " + storePath + " -w " + webApp + " -p " + port[1:] + " -t " + transformPath)
-    log.Fatal(http.ListenAndServe(port, handlers.CORS(origins, methods)(router)))
+    log.Fatal(http.ListenAndServe(port, handlers.CORS(origins, headers, methods)(router)))
   }
 }
