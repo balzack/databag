@@ -630,7 +630,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
           <TextInput
             className={classes.input}
             size="md"
-            value={state.name}
+            value={state.name || ''}
             leftSectionPointerEvents="none"
             leftSection={<IconIdBadge />}
             placeholder={state.strings.name}
@@ -639,7 +639,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
           <TextInput
             className={classes.input}
             size="md"
-            value={state.location}
+            value={state.location || ''}
             leftSectionPointerEvents="none"
             leftSection={<IconMapPin />}
             placeholder={state.strings.location}
@@ -651,7 +651,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             minRows={1}
             maxRows={4}
             autosize={true}
-            value={state.description}
+            value={state.description || ''}
             leftSectionPointerEvents="none"
             leftSection={<IconBook />}
             placeholder={state.strings.description}
