@@ -303,7 +303,7 @@ export class ContactModule implements Contact {
   }
 
   private async clearCardProfileOffsync(cardId: string) {
-    if (!this.offsyncProfileCard.has(cardId)) {
+    if (this.offsyncProfileCard.has(cardId)) {
       this.offsyncProfileCard.delete(cardId);
       await this.store.clearMarker(this.guid, 'offsync_profile_card', cardId);
     }
@@ -324,7 +324,7 @@ export class ContactModule implements Contact {
   }
 
   private async clearCardChannelOffsync(cardId: string) {
-    if (!this.offsyncChannelCard.has(cardId)) {
+    if (this.offsyncChannelCard.has(cardId)) {
       this.offsyncChannelCard.delete(cardId);
       await this.store.clearMarker(this.guid, 'offsync_channel_card', cardId);
     }
@@ -345,7 +345,7 @@ export class ContactModule implements Contact {
   }
 
   private async clearCardArticleOffsync(cardId: string) {
-    if (!this.offsyncArticleCard.has(cardId)) {
+    if (this.offsyncArticleCard.has(cardId)) {
       this.offsyncArticleCard.delete(cardId);
       await this.store.clearMarker(this.guid, 'offsync_article_card', cardId);
     }
