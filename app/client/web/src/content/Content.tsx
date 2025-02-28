@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useContent } from './useContent.hook'
-import { Modal, Text, Switch, TextInput, Button } from '@mantine/core'
+import { Modal, Box, LoadingOverlay, Text, Switch, TextInput, Button } from '@mantine/core'
 import { IconSearch, IconMessagePlus, IconLabel } from '@tabler/icons-react'
 import classes from './Content.module.css'
 import { Channel } from '../channel/Channel'
 import { Card } from '../card/Card'
 import { modals } from '@mantine/modals'
+import { Colors } from '../constants/Colors';
 
 export function Content({ textCard }: { textCard: { cardId: null|string }}) {
   const { state, actions } = useContent()
@@ -122,8 +123,11 @@ export function Content({ textCard }: { textCard: { cardId: null|string }}) {
           </Button>
         )}
       </div>
-      {channels.length === 0 && <div className={classes.none}>{state.strings.noTopics}</div>}
-      {channels.length !== 0 && <div className={classes.channels}>{channels}</div>}
+      <Box className={classes.channels} pos="relative" onClick={actions.setLoaded}>
+        {channels.length === 0 && <div className={classes.none}>{state.strings.noTopics}</div>}
+        {channels.length !== 0 && <div className={classes.channels}>{channels}</div>}
+        <LoadingOverlay visible={!state.loaded} zIndex={1000} overlayProps={{ radius: 'sm', blur: 1 }} loaderProps={{ color: Colors.primary, type: 'dots' }}/>
+      </Box>
       {state.layout === 'large' && (
         <div className={classes.bar}>
           <Button className={classes.add} leftSection={<IconMessagePlus size={20} />} onClick={() => setAdd(true)}>

@@ -34,6 +34,7 @@ export function useContent() {
     topic: '',
     sealSet: false,
     focused: null as null|{cardId: null|string, channelId: string},
+    loaded: null as null | boolean,
   })
 
   const compare = (a: Card, b: Card) => {
@@ -180,6 +181,9 @@ export function useContent() {
       const { sealSet, sealUnlocked } = config
       updateState({ sealSet: sealSet && sealUnlocked })
     }
+    const setLoaded = (loaded: boolean) => {
+      updateState({ loaded });
+    }
     const setProfile = (profile: Profile) => {
       const { guid } = profile
       updateState({ guid })
@@ -228,12 +232,14 @@ export function useContent() {
     identity.addProfileListener(setProfile)
     contact.addCardListener(setCards)
     content.addChannelListener(setChannels)
+    content.addLoadedListener(setLoaded)
     settings.addConfigListener(setConfig)
 
     return () => {
       identity.removeProfileListener(setProfile)
       contact.removeCardListener(setCards)
       content.removeChannelListener(setChannels)
+      content.removeLoadedListener(setLoaded)
       settings.removeConfigListener(setConfig)
     }
   }, [])
@@ -247,6 +253,9 @@ export function useContent() {
     },
     setFocus: async (cardId: string | null, channelId: string) => {
       await app.actions.setFocus(cardId, channelId)
+    },
+    setLoaded: () => {
+      updateState({ loaded: true });
     },
     openTopic: async (cardId: string) => {
       const content = app.state.session.getContent()

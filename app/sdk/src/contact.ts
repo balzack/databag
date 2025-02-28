@@ -192,8 +192,6 @@ export class ContactModule implements Contact {
     this.unsealAll = true;
     this.syncing = false;
     await this.sync();
-
-    this.loaded = true;
     this.emitLoaded();
   }
 
@@ -554,6 +552,7 @@ export class ContactModule implements Contact {
             this.emitCards();
             await this.store.setContactRevision(guid, nextRev);
             this.revision = nextRev;
+            this.emitLoaded();
             if (this.nextRevision === nextRev) {
               this.nextRevision = null;
             }
@@ -777,7 +776,10 @@ export class ContactModule implements Contact {
   }
 
   private emitLoaded() {
-    this.emitter.emit('loaded', this.loaded);
+    if (!this.loaded) {
+      this.loaded = Boolean(this.revision);
+      this.emitter.emit('loaded', this.loaded);
+    }
   }
 
   public async setFocus(cardId: string, channelId: string): Promise<Focus> {

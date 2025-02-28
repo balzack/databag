@@ -104,8 +104,6 @@ export class StreamModule {
     this.unsealAll = true;
     this.syncing = false;
     await this.sync();
-
-    this.loaded = true;
     this.emitLoaded();
   }
 
@@ -217,6 +215,7 @@ export class StreamModule {
             this.emitChannels();
             await this.store.setContentRevision(guid, nextRev);
             this.revision = nextRev;
+            this.emitLoaded();
             if (this.nextRevision === nextRev) {
               this.nextRevision = null;
             }
@@ -284,7 +283,10 @@ export class StreamModule {
   }
 
   private emitLoaded() {
-    this.emitter.emit('loaded', this.loaded);
+    if (!this.loaded) {
+      this.loaded = Boolean(this.revision);
+      this.emitter.emit('loaded', this.loaded);
+    }
   }
 
   public async close(): Promise<void> {
@@ -301,6 +303,7 @@ export class StreamModule {
   public async setRevision(rev: number): Promise<void> {
     this.nextRevision = rev;
     await this.sync();
+    this.emitLoaded();
   }
 
   public async addSealedChannel(type: string, subject: any, cardIds: string[], aesKeyHex: string, seals: { publicKey: string; sealedKey: string }[]): Promise<string> {

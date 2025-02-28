@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useRing } from './useRing.hook';
 import classes from './Ring.module.css';
 import { Card as Contact } from '../card/Card';
@@ -6,7 +6,7 @@ import { Card } from 'databag-client-sdk';
 import { Colors } from '../constants/Colors';
 import { modals } from '@mantine/modals'
 import { Loader, Image, Text, ActionIcon } from '@mantine/core'
-import { IconVideoPlus, IconEyeX, IconPhone, IconPhoneOff, IconArrowsMaximize, IconMicrophone, IconMicrophoneOff } from '@tabler/icons-react'
+import { IconBell, IconVideoPlus, IconEyeX, IconPhone, IconPhoneOff, IconArrowsMaximize, IconMicrophone, IconMicrophoneOff } from '@tabler/icons-react'
 
 export function Ring() {
   const { state, actions } = useRing();
@@ -15,6 +15,16 @@ export function Ring() {
   const [accepting, setAccepting] = useState(null as null|string);
   const [ignoring, setIgnoring] = useState(null as null|string);
   const [declining, setDeclining] = useState(null as null|string);
+  const [ringing, setRinging] = useState(0);
+  const counter = useRef(0);
+
+  useEffect(() => {
+    const count = setInterval(() => {
+      counter.current += 1;
+      setRinging(counter.current);
+    }, 500);
+    return () => clearInterval(count);
+  }, []);
 
   const showError = () => {
     modals.openConfirmModal({
@@ -154,7 +164,7 @@ export function Ring() {
               <Text className={classes.duration}>{ `${Math.floor(state.duration/60)}:${(state.duration % 60).toString().padStart(2, '0')}` }</Text>
             )}
             { !state.connected && (
-              <Loader size={18} />
+              <IconBell size={18} color={Colors.primary} style={{ rotate: ringing % 2 == 0 ? '15deg' : '-15deg' }} />
             )}
           </div>
           <div className={classes.end}>

@@ -143,7 +143,7 @@ export class ContentModule implements Content {
   }     
         
   private emitLoaded() {
-    if (this.streamLoaded && this.contentLoaded) {
+    if (this.streamLoaded && this.contactLoaded) {
       this.emitter.emit('loaded', true);
     }
   }    
