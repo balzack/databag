@@ -36,13 +36,6 @@ export interface Store {
   setContactCardProfile(guid: string, cardId: string, profile: CardProfile): Promise<void>;
   setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void>;
 
-  setContactCardOffsyncProfile(guid: string, cardId: string, revision: number): Promise<void>;
-  clearContactCardOffsyncProfile(guid: string, cardId: string): Promise<void>;
-  setContactCardOffsyncArticle(guid: string, cardId: string, revision: number): Promise<void>;
-  clearContactCardOffsyncArticle(guid: string, cardId: string): Promise<void>;
-  setContactCardOffsyncChannel(guid: string, cardId: string, revision: number): Promise<void>;
-  clearContactCardOffsyncChannel(guid: string, cardId: string): Promise<void>;
-
   setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void>;
   setContactCardArticleRevision(guid: string, cardId: string, revision: number): Promise<void>;
   setContactCardChannelRevision(guid: string, cardId: string, revision: number): Promise<void>;
@@ -210,7 +203,7 @@ export class OfflineStore implements Store {
       `CREATE TABLE IF NOT EXISTS channel_topic_${guid} (channel_id text, topic_id text, position real, detail text, unsealed_detail text, unique(channel_id, topic_id))`,
     );
     await this.sql.set(
-      `CREATE TABLE IF NOT EXISTS card_${guid} (card_id text, revision integer, detail text, profile text, offsync_profile integer, offsync_article integer, offsync_channel integer, profile_revision, article_revision, channel_revision, unique(card_id))`,
+      `CREATE TABLE IF NOT EXISTS card_${guid} (card_id text, revision integer, detail text, profile text, profile_revision, article_revision, channel_revision, unique(card_id))`,
     );
     await this.sql.set(
       `CREATE TABLE IF NOT EXISTS card_channel_${guid} (card_id text, channel_id text, detail text, unsealed_detail text, summary text, unsealed_summary text, sync text, unique(card_id, channel_id))`,
@@ -313,9 +306,6 @@ export class OfflineStore implements Store {
 
   public async getContacts(guid: string): Promise<{ cardId: string; item: CardItem }[]> {
     const cards = await this.getValues(guid, 'card', [
-      'offsync_profile',
-      'offsync_article',
-      'offsync_channel',
       'revision',
       'card_id',
       'profile',
@@ -327,9 +317,6 @@ export class OfflineStore implements Store {
     return cards.map((card) => ({
       cardId: card.card_id,
       item: {
-        offsyncProfile: card.offsync_profile,
-        offsyncArticle: card.offsync_article,
-        offsyncChannel: card.offsync_channel,
         revision: card.revision,
         profile: this.parse(card.profile),
         detail: this.parse(card.detail),
@@ -341,9 +328,9 @@ export class OfflineStore implements Store {
   }
 
   public async addContactCard(guid: string, cardId: string, item: CardItem): Promise<void> {
-    const fields = ['card_id', 'offsync_profile', 'offsync_article', 'offsync_channel', 'revision', 'profile', 'detail', 'profile_revision', 'article_revision', 'channel_revision'];
-    const { offsyncProfile, offsyncArticle, offsyncChannel, revision, profile, detail, profileRevision, articleRevision, channelRevision } = item;
-    const value = [cardId, offsyncProfile, offsyncArticle, offsyncChannel, revision, JSON.stringify(profile), JSON.stringify(detail), profileRevision, articleRevision, channelRevision];
+    const fields = ['card_id', 'revision', 'profile', 'detail', 'profile_revision', 'article_revision', 'channel_revision'];
+    const { revision, profile, detail, profileRevision, articleRevision, channelRevision } = item;
+    const value = [cardId, revision, JSON.stringify(profile), JSON.stringify(detail), profileRevision, articleRevision, channelRevision];
     await this.addValue(guid, 'card', fields, value);
   }
 
@@ -363,30 +350,6 @@ export class OfflineStore implements Store {
 
   public async setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void> {
     await this.setValue(guid, 'card', ['card_id'], ['detail'], [cardId], [JSON.stringify(detail)]);
-  }
-
-  public async setContactCardOffsyncProfile(guid: string, cardId: string, revision: number): Promise<void> {
-    await this.setValue(guid, 'card', ['card_id'], ['offsync_profile'], [cardId], [revision]);
-  }
-
-  public async clearContactCardOffsyncProfile(guid: string, cardId: string): Promise<void> {
-    await this.setValue(guid, 'card', ['card_id'], ['offsync_profile'], [cardId], [null]);
-  }
-
-  public async setContactCardOffsyncArticle(guid: string, cardId: string, revision: number): Promise<void> {
-    await this.setValue(guid, 'card', ['card_id'], ['offsync_article'], [cardId], [revision]);
-  }
-
-  public async clearContactCardOffsyncArticle(guid: string, cardId: string): Promise<void> {
-    await this.setValue(guid, 'card', ['card_id'], ['offsync_article'], [cardId], [null]);
-  }
-
-  public async setContactCardOffsyncChannel(guid: string, cardId: string, revision: number): Promise<void> {
-    await this.setValue(guid, 'card', ['card_id'], ['offsync_channel'], [cardId], [revision]);
-  }
-
-  public async clearContactCardOffsyncChannel(guid: string, cardId: string): Promise<void> {
-    await this.setValue(guid, 'card', ['card_id'], ['offsync_channel'], [cardId], [null]);
   }
 
   public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {
@@ -705,18 +668,6 @@ export class OnlineStore implements Store {
 
   public async setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void> {}
 
-  public async setContactCardOffsyncProfile(guid: string, cardId: string, revision: number): Promise<void> {}
-
-  public async clearContactCardOffsyncProfile(guid: string, cardId: string): Promise<void> {}
-
-  public async setContactCardOffsyncArticle(guid: string, cardId: string, revision: number): Promise<void> {}
-
-  public async clearContactCardOffsyncArticle(guid: string, cardId: string): Promise<void> {}
-
-  public async setContactCardOffsyncChannel(guid: string, cardId: string, revision: number): Promise<void> {}
-
-  public async clearContactCardOffsyncChannel(guid: string, cardId: string): Promise<void> {}
-
   public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
   public async setContactCardArticleRevision(guid: string, cardId: string, revision: number): Promise<void> {}
@@ -864,18 +815,6 @@ export class NoStore implements Store {
   public async setContactCardProfile(guid: string, cardId: string, profile: CardProfile): Promise<void> {}
 
   public async setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void> {}
-
-  public async setContactCardOffsyncProfile(guid: string, cardId: string, revision: number): Promise<void> {}
-
-  public async clearContactCardOffsyncProfile(guid: string, cardId: string): Promise<void> {}
-
-  public async setContactCardOffsyncArticle(guid: string, cardId: string, revision: number): Promise<void> {}
-
-  public async clearContactCardOffsyncArticle(guid: string, cardId: string): Promise<void> {}
-
-  public async setContactCardOffsyncChannel(guid: string, cardId: string, revision: number): Promise<void> {}
-
-  public async clearContactCardOffsyncChannel(guid: string, cardId: string): Promise<void> {}
 
   public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 

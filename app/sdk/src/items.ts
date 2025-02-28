@@ -65,9 +65,6 @@ export type ArticleDetail = {
 };
 
 export type CardItem = {
-  offsyncProfile: number | null;
-  offsyncArticle: number | null;
-  offsyncChannel: number | null;
   revision: number;
   profile: CardProfile;
   detail: CardDetail;
@@ -77,9 +74,6 @@ export type CardItem = {
 };
 
 export const defaultCardItem = {
-  offsyncProfile: null,
-  offsyncArticle: null,
-  offsyncChannel: null,
   revision: 0,
   profile: {
     revision: 0,
