@@ -16,13 +16,19 @@ export function Base() {
       <Text style={styles.title}>Databag</Text>
       <Text style={styles.description}>{ state.strings.communication }</Text>
       <Image style={styles.image} source={theme.colors.name == 'light' ? light : dark} resizeMode="contain" />
-      <View style={styles.steps}>
-        <Text style={styles.step}>{ state.strings.setupProfile }</Text>
-        <Icon size={14} source="chevron-right" color={Colors.placeholder} />
-        <Text style={styles.step}>{ state.strings.connectPeople }</Text>
-        <Icon size={14} source="chevron-right" color={Colors.placeholder} />
-        <Text style={styles.step}>{ state.strings.startConversation }</Text>
-      </View>
+      { (state.profileSet === false || state.cardSet === false || state.channelSet === false) && (
+        <View style={styles.steps}>
+          { state.profileSet === false && (
+            <Text style={styles.step}>{ state.strings.setupProfile }</Text>
+          )}
+          <Icon size={14} source="chevron-right" color={Colors.placeholder} />
+          { (state.profileSet === false || state.cardSet === false) && (
+            <Text style={styles.step}>{ state.strings.connectPeople }</Text>
+          )}
+          <Icon size={14} source="chevron-right" color={Colors.placeholder} />
+          <Text style={styles.step}>{ state.strings.startConversation }</Text>
+        </View>
+      )}
     </View>
   );
 }
