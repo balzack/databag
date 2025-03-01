@@ -8,6 +8,7 @@ import {IconButton, Divider, Surface, Text, TextInput, Button, Checkbox} from 'r
 import {BlurView} from '@react-native-community/blur';
 import {InputCode} from '../utils/InputCode';
 import {tos} from '../constants/terms';
+import { Confirm } from '../confirm/Confirm';
 
 export function Access() {
   const {state, actions} = useAccess();
@@ -17,6 +18,17 @@ export function Access() {
   const [alert, setAlert] = useState(false);
   const [otp, setOtp] = useState(false);
   const [terms, setTerms] = useState(false);
+
+  const alertParams = {
+    title: state.strings.operationFailed,
+    prompt: state.strings.tryAgain,
+    cancel: {
+      label: state.strings.close,
+      action: () => {
+        setAlert(false);
+      },
+    },
+  };
 
   const login = async () => {
     if (!state.loading) {
@@ -327,30 +339,23 @@ export function Access() {
           )}
         </SafeAreaView>
       </KeyboardAwareScrollView>
-      {(alert || otp) && <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />}
-      <Modal visible={alert} onDismiss={() => setAlert(false)} contentContainerStyle={styles.modal}>
-        <Surface elevation={5} mode="flat" style={styles.content}>
-          <Text variant="titleLarge">{state.strings.operationFailed}</Text>
-          <Text variant="titleSmall">{state.strings.tryAgain}</Text>
-          <Button mode="text" style={styles.close} onPress={() => setAlert(false)}>
-            {state.strings.close}
-          </Button>
-        </Surface>
-      </Modal>
-      <Modal visible={otp} onDismiss={() => setOtp(false)} contentContainerStyle={styles.modal}>
-        <Surface elevation={5} mode="flat" style={styles.content}>
-          <Text variant="titleLarge">{state.strings.mfaTitle}</Text>
-          <Text variant="titleSmall">{state.strings.mfaEnter}</Text>
-          <InputCode onChangeText={actions.setCode} />
-          <View style={styles.controls}>
-            <Button mode="outlined" style={styles.submit} onPress={() => setOtp(false)}>
-              {state.strings.cancel}
-            </Button>
-            <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading} disabled={state.code.length !== 6}>
-              {state.strings.login}
-            </Button>
-          </View>
-        </Surface>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={otp} onRequestClose={() => setOtp(false)}>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <Surface elevation={5} mode="flat" style={styles.content}>
+            <Text variant="titleLarge">{state.strings.mfaTitle}</Text>
+            <Text variant="titleSmall">{state.strings.mfaEnter}</Text>
+            <InputCode onChangeText={actions.setCode} />
+            <View style={styles.controls}>
+              <Button mode="outlined" style={styles.submit} onPress={() => setOtp(false)}>
+                {state.strings.cancel}
+              </Button>
+              <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading} disabled={state.code.length !== 6}>
+                {state.strings.login}
+              </Button>
+            </View>
+          </Surface>
+        </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={terms} onRequestClose={() => setTerms(false)}>
         <View style={styles.modal}>
@@ -369,6 +374,7 @@ export function Access() {
           </Surface>
         </View>
       </Modal>
+      <Confirm show={alert} params={alertParams} />
     </Surface>
   );
 }
