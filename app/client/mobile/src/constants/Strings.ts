@@ -1737,7 +1737,6 @@ export const ru = {
 }
 
 export const el = {
-{
   textSmall: 'Μικρό',
   textMedium: 'Μέσον',
   textLarge: 'Μεγάλο',
