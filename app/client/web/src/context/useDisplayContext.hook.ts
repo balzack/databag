@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { LightTheme, DarkTheme } from '../constants/Colors'
-import { en, fr, sp, pt, de, ru } from '../constants/Strings'
+import { en, fr, sp, pt, de, ru, el } from '../constants/Strings'
 
 export function useDisplayContext() {
   const [state, setState] = useState({
@@ -217,6 +217,15 @@ export function useDisplayContext() {
           { value: 'light', label: ru.light },
         ],
       })
+    } else if (language && language.startsWith('el')) {
+      updateState({
+        language: 'el',
+        strings: el,
+        themes: [
+          { value: 'dark', label: el.dark },
+          { value: 'light', label: el.light },
+        ],
+      })
     } else {
       const browser = navigator.language
       if (browser && browser.startsWith('fr')) {
@@ -262,6 +271,15 @@ export function useDisplayContext() {
           themes: [
             { value: 'dark', label: ru.dark },
             { value: 'light', label: ru.light },
+          ],
+        })
+      } else if (browser && browser.startsWith('el')) {
+        updateState({
+          language: 'el',
+          strings: el,
+          themes: [
+            { value: 'dark', label: el.dark },
+            { value: 'light', label: el.light },
           ],
         })
       } else {
@@ -396,6 +414,16 @@ export function useDisplayContext() {
             { value: 'light', label: ru.light },
           ],
         })
+      } else if (code && code.startsWith('el')) {
+        localStorage.setItem('language', 'el')
+        updateState({
+          language: 'el',
+          strings: el,
+          themes: [
+            { value: 'dark', label: el.dark },
+            { value: 'light', label: el.light },
+          ],
+        })
       } else {
         localStorage.removeItem('language')
         const browser = navigator.language
@@ -442,6 +470,15 @@ export function useDisplayContext() {
             themes: [
               { value: 'dark', label: ru.dark },
               { value: 'light', label: ru.light },
+            ],
+          })
+        } else if (browser && browser.startsWith('el')) {
+          updateState({
+            language: 'el',
+            strings: el,
+            themes: [
+              { value: 'dark', label: el.dark },
+              { value: 'light', label: el.light },
             ],
           })
         } else {
