@@ -21,6 +21,7 @@
   padding-right: 32px;
   gap: 8px;
   background-color: var(--mantine-color-surface-4);
+  z-index: 1;
 }
 .card {
   padding: 8px;

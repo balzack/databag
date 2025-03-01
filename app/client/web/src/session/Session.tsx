@@ -140,9 +140,13 @@ export function Session() {
               </div>
             </div>
             <div className={classes.right}>
+              {!state.focus && (
+                <div className={classes.base}>
+                  <Base />
+                </div>
+              )}
               <Ring />
               <div className={classes.conversation}>
-                {!state.focus && <Base />}
                 {state.focus && <Conversation openDetails={openDetails} />}
               </div>
             </div>

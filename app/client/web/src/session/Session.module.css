@@ -70,12 +70,20 @@
     }
 
     .right {
+      position: relative;
       height: 100%;
       flex-grow: 1;
       min-width: 0;
       background: var(--mantine-color-surface-3);
       display: flex;
       flex-direction: column;
+
+      .base {
+        display: flex;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
 
       .conversation {
         display: flex;
