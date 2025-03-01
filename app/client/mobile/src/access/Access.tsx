@@ -1,20 +1,22 @@
 import React, {useState} from 'react';
-import {Platform, View, Image} from 'react-native';
+import {Modal, Platform, ScrollView, View, Image, SafeAreaView} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useAccess} from './useAccess.hook';
 import {styles} from './Access.styled';
 import left from '../images/login.png';
-import {IconButton, Modal, Surface, Text, TextInput, Button} from 'react-native-paper';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {IconButton, Divider, Surface, Text, TextInput, Button, Checkbox} from 'react-native-paper';
 import {BlurView} from '@react-native-community/blur';
 import {InputCode} from '../utils/InputCode';
+import {tos} from '../constants/terms';
 
 export function Access() {
   const {state, actions} = useAccess();
   const [showConfirm, setShowConfirm] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [accept, setAccept] = useState(false);
   const [alert, setAlert] = useState(false);
   const [otp, setOtp] = useState(false);
+  const [terms, setTerms] = useState(false);
 
   const login = async () => {
     if (!state.loading) {
@@ -104,12 +106,19 @@ export function Access() {
                 }
                 onChangeText={value => actions.setPassword(value)}
               />
-              { (!state.username || !state.password || !state.node) && (
+              <Button style={styles.terms} mode="text" onPress={() => setTerms(true)}>
+                {state.strings.viewTerms}
+              </Button>
+              <View style={styles.accept}>
+                <Checkbox.Android status={accept ? 'checked' : 'unchecked'} onPress={() => { setAccept(!accept); }} />
+                <Text>{ state.strings.acceptTerms }</Text>
+              </View>
+              { (!state.username || !state.password || !state.node || !accept) && (
                 <Button mode="contained" style={styles.submit} disabled={true}>
                   {state.strings.login}
                 </Button>
               )}
-              { state.username && state.password && state.node && (
+              { state.username && state.password && state.node && accept && (
                 <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading}>
                   {state.strings.login}
                 </Button>
@@ -148,7 +157,14 @@ export function Access() {
                 left={<TextInput.Icon style={styles.icon} icon="server" />}
                 onChangeText={value => actions.setNode(value)}
               />
-              <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading} disabled={!state.token || !state.node}>
+              <Button style={styles.terms} mode="text" onPress={() => setTerms(true)}>
+                {state.strings.viewTerms}
+              </Button>
+              <View style={styles.accept}>
+                <Checkbox.Android status={accept ? 'checked' : 'unchecked'} onPress={() => { setAccept(!accept); }} />
+                <Text>{ state.strings.acceptTerms }</Text>
+              </View>
+              <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading} disabled={!state.token || !state.node || !accept}>
                 {state.strings.access}
               </Button>
               <Button mode="text" onPress={() => actions.setMode('create')}>
@@ -244,7 +260,14 @@ export function Access() {
                 }
                 onChangeText={value => actions.setConfirm(value)}
               />
-              <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading} disabled={!state.username || !state.password || state.password !== state.confirm || !state.node}>
+              <Button style={styles.terms} mode="text" onPress={() => setTerms(true)}>
+                {state.strings.viewTerms}
+              </Button>
+              <View style={styles.accept}>
+                <Checkbox.Android status={accept ? 'checked' : 'unchecked'} onPress={() => { setAccept(!accept); }} />
+                <Text>{ state.strings.acceptTerms }</Text>
+              </View>
+              <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading} disabled={!state.username || !state.password || state.password !== state.confirm || !state.node || !accept}>
                 {state.strings.create}
               </Button>
               <Button mode="text" onPress={() => actions.setMode('account')}>
@@ -290,7 +313,14 @@ export function Access() {
                 }
                 onChangeText={value => actions.setPassword(value)}
               />
-              <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading} disabled={!state.password || !state.node}>
+              <Button style={styles.terms} mode="text" onPress={() => setTerms(true)}>
+                {state.strings.viewTerms}
+              </Button>
+              <View style={styles.accept}>
+                <Checkbox.Android status={accept ? 'checked' : 'unchecked'} onPress={() => { setAccept(!accept); }} />
+                <Text>{ state.strings.acceptTerms }</Text>
+              </View>
+              <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading} disabled={!state.password || !state.node || !accept}>
                 {state.strings.login}
               </Button>
             </View>
@@ -321,6 +351,23 @@ export function Access() {
             </Button>
           </View>
         </Surface>
+      </Modal>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={terms} onRequestClose={() => setTerms(false)}>
+        <View style={styles.modal}>
+          <Surface elevation={1} mode="flat" style={styles.modalSurface}>
+            <SafeAreaView>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>{ state.strings.terms }</Text>
+                <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setTerms(false)} />
+              </View>
+              <Divider style={styles.line} />
+              <ScrollView style={styles.frame}>
+                <Text numberOfLines={0} style={styles.legal}>{ tos[state.strings.code] }</Text>
+              </ScrollView>
+              <Divider style={styles.line} />
+            </SafeAreaView>
+          </Surface>
+        </View>
       </Modal>
     </Surface>
   );
