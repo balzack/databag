@@ -1,4 +1,9 @@
 export const en = {
+  viewTerms: 'View Terms of Service',
+  acceptTerms: 'Accept Terms of Service',
+  terms: 'Terms of Service',
+  access: 'Access',
+
   textSmall: 'Small',
   textMedium: 'Medium',
   textLarge: 'Large',
@@ -289,6 +294,11 @@ export const en = {
 }
 
 export const fr = {
+  viewTerms: 'Voir les conditions d\'utilisation',
+  acceptTerms: 'Accepter les conditions d\'utilisation',
+  terms: 'Conditions d\'utilisation',
+  access: 'Accès',
+
   textSmall: 'Petit',
   textMedium: 'Moyen',
   textLarge: 'Grand',
@@ -579,6 +589,11 @@ export const fr = {
 }
 
 export const sp = {
+  viewTerms: 'Ver los términos de servicio',
+  acceptTerms: 'Aceptar los términos de servicio',
+  terms: 'Términos de servicio',
+  access: 'Acceso',
+
   textSmall: 'Pequeño',
   textMedium: 'Mediano',
   textLarge: 'Grande',
@@ -868,6 +883,11 @@ export const sp = {
 }
 
 export const pt = {
+  viewTerms: 'Ver os termos de serviço',
+  acceptTerms: 'Aceitar os termos de serviço',
+  terms: 'Termos de serviço',
+  access: 'Acesso',
+
   textSmall: 'Pequeno',
   textMedium: 'Médio',
   textLarge: 'Grande',
@@ -1157,6 +1177,11 @@ export const pt = {
 }
 
 export const de = {
+  viewTerms: 'Nutzungsbedingungen anzeigen',
+  acceptTerms: 'Nutzungsbedingungen akzeptieren',
+  terms: 'Nutzungsbedingungen',
+  access: 'Zugang',
+
   textSmall: 'Klein',
   textMedium: 'Mittel',
   textLarge: 'Groß',
@@ -1446,6 +1471,11 @@ export const de = {
 }
 
 export const ru = {
+  viewTerms: 'Просмотреть условия обслуживания',
+  acceptTerms: 'Принять условия обслуживания',
+  terms: 'Условия обслуживания',
+  access: 'Доступ',
+
   textSmall: 'Маленький',
   textMedium: 'Средний',
   textLarge: 'Большой',
@@ -1735,6 +1765,11 @@ export const ru = {
 }
 
 export const el = {
+  viewTerms: 'Δείτε τους όρους υπηρεσίας',
+  acceptTerms: 'Αποδεχτείτε τους όρους υπηρεσίας',
+  terms: 'Όροι υπηρεσίας',
+  access: 'Πρόσβαση',
+
   textSmall: 'Μικρό',
   textMedium: 'Μέσον',
   textLarge: 'Μεγάλο',
@@ -1758,7 +1793,7 @@ export const el = {
   channelGuest: 'Θεματικός επισκέπτης',
   channelHost: 'Θεματικός οικοδεσπότης',
   created: 'Δημιουργηθείσα',
-  code: 'en',
+  code: 'el',
   settings: 'Ρυθμίσεις',
   contacts: 'Επαφές',
   logout: 'Αποσύνδεση',

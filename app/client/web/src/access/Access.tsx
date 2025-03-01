@@ -127,7 +127,7 @@ export function Access() {
                 />
                 <Space h="md" />
                 <Button variant="filled" className={classes.submit} disabled={!state.token} onClick={login} loading={state.loading}>
-                  {state.strings.login}
+                  {state.strings.access}
                 </Button>
                 <Button size="compact-sm" variant="subtle" onClick={() => actions.setMode('account')}>
                   {state.strings.accountLogin}
