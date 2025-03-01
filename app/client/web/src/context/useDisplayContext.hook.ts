@@ -20,6 +20,7 @@ export function useDisplayContext() {
       { value: 'pt', label: 'Português' },
       { value: 'de', label: 'Deutsch' },
       { value: 'ru', label: 'Русский' },
+      { value: 'el', label: 'ελληνικά' },
     ],
     language: null,
     strings: en,
