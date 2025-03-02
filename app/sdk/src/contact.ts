@@ -1,5 +1,5 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Contact, Focus } from './api';
+import type { Contact, Focus, Link } from './api';
 import { Logging } from './logging';
 import { FocusModule } from './focus';
 import { LinkModule } from './link';
@@ -109,7 +109,7 @@ export class ContactModule implements Contact {
     this.blockedCardChannel = new Set<string>();
     this.read = new Map<string, number>();
     this.offsyncProfileCard = new Map<string, number>();
-    this.offsyncArticleCard = new Map<string, nubmer>();
+    this.offsyncArticleCard = new Map<string, number>();
     this.offsyncChannelCard = new Map<string, number>();
 
     this.revision = 0;
@@ -656,7 +656,8 @@ export class ContactModule implements Contact {
               enableVideo,
               enableBinary,
               created,
-              members: members.map(guid => ({ guid })),
+              members: members.map(({ member }) => ({ guid: member }))
+              //members: []
             }
             this.focus.setDetail(cardId, id, focusDetail); 
           }
@@ -1008,6 +1009,18 @@ export class ContactModule implements Contact {
         this.emitChannels(cardId);
       }
     }
+  }
+
+  public async getBlockedChannels(): Promise<Channel[]> {
+    const channels = [] as Channel[];
+    this.channelEntries.forEach((card, cardId) => {
+      card.forEach((entry, channelId) => {
+        if (this.isChannelBlocked(cardId, channelId)) {
+          channels.push(entry.channel);
+        }
+      });
+    });
+    return channels;
   }
 
   public async clearBlockedChannelTopic(cardId: string, channelId: string, topicId: string) {

@@ -215,8 +215,6 @@ export type Member = {
   guid: string;
   handle: string;
   name: string;
-  description: string;
-  location: string;
   imageUrl: string;
   disabled: boolean;
   storageUsed: number,

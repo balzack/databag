@@ -1,5 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Contact } from '../src/api';
+import type { Contact, Link } from '../src/api';
+import { MockLinkModule } from './link';
 import type { Card, Channel, Article, Topic, Asset, Tag, Profile, Participant} from '../src/types';
 
 export class MockContactModule implements Contact {
@@ -18,6 +19,14 @@ export class MockContactModule implements Contact {
 
   public removeCardListener(ev: (cards: Card[]) => void): void {
     this.emitter.off('card', ev);
+  }
+
+  public addLoadedListener(ev: (loaded: boolean) => void): void {
+    this.emitter.on('loaded', ev);
+  }
+
+  public removeLoadedListener(ev: (loaded: boolean) => void): void {
+    this.emitter.off('loaded', ev);
   }
 
   public close(): void {
@@ -215,6 +224,10 @@ export class MockContactModule implements Contact {
   }
 
   public removeChannelListener(ev: (arg: { cardId: string | null; channels: Channel[] }) => void): void {
+  }
+
+  public async callCard(cardId: string): Promise<Link> {
+    return new MockLinkModule();    
   }
 }
 

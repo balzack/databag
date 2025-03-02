@@ -29,8 +29,8 @@ export interface Link {
 }
 
 export interface Ring {
-  addRingingListener(ev: (calls: Call[]) => void): void;
-  removeRingingListener(ev: (calls: Call[]) => void): void;
+  addRingingListener(ev: (calls: { cardId: string, callId: string }[]) => void): void
+  removeRingingListener(ev: (calls: { cardId: string, callId: string }[]) => void): void
 
   accept(cardId: string, callId: string, contactNode: string): Promise<Link>;
   decline(cardId: string, callId: string, contactNode: string): Promise<void>;
@@ -55,7 +55,7 @@ export interface Settings {
 
   getBlockedCards(): Promise<{cardId: string, timestamp: number}[]>;
   getBlockedChannels(): Promise<{cardId: string | null, channelId: string, timestamp: number}[]>;
-  getBlockedTopicis(): Promise<{cardId: string | null, channelId: string, topicId: string, timestamp: number}[]>;
+  getBlockedTopics(): Promise<{cardId: string | null, channelId: string, topicId: string, timestamp: number}[]>;
 
   addConfigListener(ev: (config: Config) => void): void;
   removeConfigListener(ev: (config: Config) => void): void;

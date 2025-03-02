@@ -1,5 +1,6 @@
 import type { AssetItem } from './items';
 import { HostingMode } from './types';
+import { BasicAsset } from './entities';
 
 export function getLegacyData(data: any): { data: any, assets: AssetItem[] } {
   if (data == null) {
@@ -86,7 +87,7 @@ export function getLegacyData(data: any): { data: any, assets: AssetItem[] } {
         assetItems.add(fullAsset);
         index += 1;
         return { audio: { label, full: `${index-1}` }};
-      } else {
+      } else if (binary) {
         const { label, extension, data } = binary;
         const dataAsset = {
           assetId: `${index}`,
@@ -96,9 +97,11 @@ export function getLegacyData(data: any): { data: any, assets: AssetItem[] } {
         assetItems.add(dataAsset);
         index += 1;
         return { binary: { label, extension, data: `${index-1}` }};
+      } else {
+        return {};
       }
     }
-  })
+  });
   return { data: { text, textColor, textSize, assets: dataAssets }, assets: Array.from(assetItems.values()) }; 
 }
 

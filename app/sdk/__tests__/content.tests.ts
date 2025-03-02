@@ -52,7 +52,7 @@ const getChannel = (subject: string, message: string, revision: number) => {
         lastTopic: {
           guid: 'guid1',
           dataType: 'test',
-          data: JSON.stringify({ message: message }),
+          data: JSON.stringify({ text: message }),
           created: 2,
           updated: 2,
           status: 'ready',
@@ -107,7 +107,7 @@ const getChannelSummary = (message: string) => {
     lastTopic: {
       guid: 'guid1',
       dataType: 'test',
-      data: JSON.stringify({ message: message }),
+      data: JSON.stringify({ text: message }),
       created: 2,
       updated: 2,
       status: 'ready',
@@ -172,11 +172,11 @@ test('received contact updates', async () => {
   await waitFor(() => cardChannels.get('C000A')?.length === 1);
 
   await waitFor(() => cardChannels.get('C000A')?.[0].data.subject === 'test_subject_0');
-  await waitFor(() => cardChannels.get('C000A')?.[0].lastTopic.data.message === 'test_message_0');
+  await waitFor(() => cardChannels.get('C000A')?.[0].lastTopic.data.text === 'test_message_0');
 
   await contact.setRevision(2);
   await waitFor(() => cardChannels.get('C000A')?.[0].data.subject === 'test_subject_1');
-  await waitFor(() => cardChannels.get('C000A')?.[0].lastTopic.data.message === 'test_message_1');
+  await waitFor(() => cardChannels.get('C000A')?.[0].lastTopic.data.text === 'test_message_1');
 
   await contact.setRevision(3);
   await waitFor(() => cardChannels.get('C000A')?.length === 0);
@@ -199,11 +199,11 @@ test('received stream updates', async () => {
   await stream.setRevision(1);
   await waitFor(() => streamChannels.get(null)?.length === 1);
   await waitFor(() => streamChannels.get(null)?.[0].data.subject === 'test_subject_0');
-  await waitFor(() => streamChannels.get(null)?.[0].lastTopic.data.message === 'test_message_0');
+  await waitFor(() => streamChannels.get(null)?.[0].lastTopic.data.text === 'test_message_0');
 
   await stream.setRevision(2);
   await waitFor(() => streamChannels.get(null)?.[0].data.subject === 'test_subject_1');
-  await waitFor(() => streamChannels.get(null)?.[0].lastTopic.data.message === 'test_message_1');
+  await waitFor(() => streamChannels.get(null)?.[0].lastTopic.data.text === 'test_message_1');
 
   await stream.setRevision(3);
   await waitFor(() => streamChannels.get(null)?.length === 0);

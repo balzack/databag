@@ -1,6 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
 import { type Settings } from '../src/api';
-import type { Config } from '../src/types';
+import { type Config } from '../src/types';
 
 export class MockSettingsModule implements Settings {
 
@@ -77,6 +77,18 @@ export class MockSettingsModule implements Settings {
   }
 
   public async setLogin(username: string, password: string): Promise<void> {
+  }
+
+  public async getBlockedCards(): Promise<{ cardId: string, timestamp: number}[]> {
+    return [];
+  }
+
+  public async getBlockedChannels(): Promise<{ cardId: string|null, channelId: string, timestamp: number }[]> {
+    return [];
+  }
+
+  public async getBlockedTopics(): Promise<{ cardId: string|null, channelId: string, topicId: string, timestamp: number }[]> {
+    return [];
   }
 }
 

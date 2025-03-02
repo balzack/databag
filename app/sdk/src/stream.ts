@@ -169,7 +169,7 @@ export class StreamModule {
                       enableVideo, 
                       enableBinary,
                       created,
-                      members: members.map(guid => ({ guid })),
+                      members: members.map(guid => ({ guid: guid.member })),
                     }
                     this.focus.setDetail(null, id, focusDetail);
                   }
@@ -390,6 +390,16 @@ export class StreamModule {
       throw new Error('channel not found');
     }
     await clearChannelCard(node, secure, token, channelId, cardId);
+  }
+
+  public async getBlockedChannels(): Promise<Channel[]> {
+    const channels = [] as Channel[];
+    this.channelEntries.forEach((entry, channelId) => {
+      if (this.isChannelBlocked(channelId)) {
+        channels.push(entry.channel);
+      }
+    });
+    return channels;
   }
 
   public async setBlockedChannel(channelId: string, blocked: boolean): Promise<void> {

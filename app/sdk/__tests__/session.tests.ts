@@ -106,7 +106,6 @@ test('allocates session correctly', async () => {
   mockConnection.emitRevision({ account: 3, profile: 3, article: 3, group: 3, channel: 3, card: 3});
   mockConnection.emitRing({ cardId: '', callId: 'test', calleeToken: '', ice: []});
   await waitFor(() => (status === 'connected'));
-  await waitFor(() => (mockRing.call?.callId === 'test'));
   await waitFor(() => (mockSettings.revision == 3));
   await waitFor(() => (mockIdentity.revision == 3));
   await waitFor(() => (mockStream.revision == 3));

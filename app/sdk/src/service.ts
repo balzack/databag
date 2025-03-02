@@ -1,5 +1,6 @@
 import type { Service } from './api';
 import type { Member, Setup } from './types';
+import { KeyType, ICEService } from './types';
 import { type AccountEntity, avatar } from './entities';
 import type { Logging } from './logging';
 import { getMembers } from './net/getMembers';
@@ -64,9 +65,10 @@ export class ServiceModule implements Service {
     const { domain, accountStorage, enableImage, enableAudio, enableVideo, enableBinary,
       keyType, pushSupported, allowUnsealed, transformSupported, enableIce, iceService,
       iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = entity;
-    const service = iceService ? iceService : 'default';
+    const service = iceService === 'cloudflare' ? ICEService.Cloudflare : ICEService.Default;
+    const type = keyType === 'RSA4096' ? KeyType.RSA_4096 : KeyType.RSA_2048;
     const setup = { domain, accountStorage, enableImage, enableAudio, enableVideo, enableBinary,
-      keyType, pushSupported, allowUnsealed, transformSupported, enableIce, iceService: service,
+      keyType: type, pushSupported, allowUnsealed, transformSupported, enableIce, iceService: service,
       iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit };
     return setup;
   } 
@@ -76,9 +78,10 @@ export class ServiceModule implements Service {
     const { domain, accountStorage, enableImage, enableAudio, enableVideo, enableBinary,
       keyType, pushSupported, allowUnsealed, transformSupported, enableIce, iceService,
       iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = setup;
-    const service = iceService === 'default' ? null : iceService;
+    const service = iceService === ICEService.Cloudflare ? 'cloudflare' : ''
+    const type = keyType === KeyType.RSA_4096 ? 'RSA4096' : 'RSA2048';
     const entity = { domain, accountStorage, enableImage, enableAudio, enableVideo, enableBinary,
-      keyType, pushSupported, allowUnsealed, transformSupported, enableIce, iceService: service,
+      keyType: type, pushSupported, allowUnsealed, transformSupported, enableIce, iceService: service,
       iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit };
     await setNodeConfig(node, secure, token, entity);
   }

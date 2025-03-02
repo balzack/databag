@@ -1,4 +1,5 @@
-import type { Link, Logging } from './api';
+import type { Link } from './api';
+import { Logging } from './logging';
 import { addCall } from './net/addCall';
 import { removeCall } from './net/removeCall';
 import { removeContactCall } from './net/removeContactCall';
@@ -13,19 +14,17 @@ const RING_INTERVAL = 2000;
 export class LinkModule implements Link {
   private log: Logging;
   private status: string;
-  private statusListener: (status: string)=>Promise<void> | null;
-  private messageListener: (message: any)=>Promise<void> | null;
+  private statusListener: ((status: string)=>Promise<void>) | null;
+  private messageListener: ((message: any)=>Promise<void>) | null;
   private messages: string[];
   private error: boolean;
   private closed: boolean;
+  private connected: boolean;
   private notifying: boolean;
-  private websocket: Websocket | null;
-  private staleInterval: number | null;
-  private aliveInterval: number | null;
-  private ringInterval: number | null;
-  private node: string;
-  private secure: boolean;
-  private token: string;
+  private websocket: WebSocket | null;
+  private staleInterval: ReturnType<typeof setTimeout> | null;
+  private aliveInterval: ReturnType<typeof setTimeout> | null;
+  private ringInterval: ReturnType<typeof setTimeout> | null;
   private ice: { urls: string; username: string; credential: string }[];
   private cleanup: null | (()=>void);
 
@@ -145,7 +144,7 @@ export class LinkModule implements Link {
   }
 
   public async sendMessage(message: any) {
-    if (this.status !== 'connected') {
+    if (this.status !== 'connected' || !this.websocket) {
       this.log.error('dropping message while not connected')
     } else {
       this.websocket.send(JSON.stringify(message));
@@ -157,16 +156,18 @@ export class LinkModule implements Link {
       this.notifying = true;
       while(this.messages.length > 0 && !this.error) {
         const data = this.messages.shift();
-        try {
-          const message = JSON.parse(data);
-          if (message.status) {
-            await this.notifyStatus(message.status);
-          } else {
-            await this.notifyMessage(message);
+        if (data) {
+          try {
+            const message = JSON.parse(data);
+            if (message.status) {
+              await this.notifyStatus(message.status);
+            } else {
+              await this.notifyMessage(message);
+            }
+          } catch (err) {
+            this.log.error('failed to process signal message');
+            this.notifyStatus('error');
           }
-        } catch (err) {
-          this.log.error('failed to process signal message');
-          this.notifyStatus('error');
         }
       }
       this.notifying = false;
@@ -206,15 +207,11 @@ export class LinkModule implements Link {
         await this.messageListener(message);
       }
     } catch (err) {
-      this.log('message notification failed');
+      this.log.warn('message notification failed');
     }
   }
 
   private setWebSocket(token: string, node: string, secure: boolean): WebSocket {
-    if (this.closed) {
-      return this.websocket;
-    }
-
     const wsUrl = `ws${secure ? 's' : ''}://${node}/signal`;
     const ws = new WebSocket(wsUrl);
     ws.onmessage = (e) => {
@@ -230,7 +227,9 @@ export class LinkModule implements Link {
           ws.onclose = () => {};
           ws.onopen = () => {};
           ws.onerror = () => {};
-          this.websocket = this.setWebSocket(token, node);
+          if (!this.closed) {
+            this.websocket = this.setWebSocket(token, node, secure);
+          }
         }
       }, RETRY_INTERVAL);
     };

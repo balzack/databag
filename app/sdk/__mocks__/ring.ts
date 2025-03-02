@@ -1,46 +1,31 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Ring } from '../src/api';
+import type { Ring, Link } from '../src/api';
 import type { Call } from '../src/types';
-
+import { MockLinkModule } from './link';
 export class MockRingModule implements Ring {
 
-  public call: Call | null;
   private emitter: EventEmitter;
 
   constructor() {
-    this.call = null;
     this.emitter = new EventEmitter();
   }
 
-  public addCallingListener(ev: (calls: Call[]) => void): void {
-    this.emitter.on('calling', ev);
+  public addRingingListener(ev: (calls: { cardId: string, callId: string }[]) => void): void {
   }
 
-  public removeCallingListener(ev: (calls: Call[]) => void): void {
-    this.emitter.off('calling', ev);
-  }
-
-  public addCallListener(ev: (call: Call | null) => void): void {
-    this.emitter.on('call', ev);
-  }
-
-  public removeCallListener(ev: (call: Call | null) => void): void {
-    this.emitter.off('call', ev);
+  public removeRingingListener(ev: (calls: { cardId: string, callId: string }[]) => void): void {
   }
 
   public ring(call: Call): void {
-    this.call = call;
   }
 
-  public accept(callId: string): void {
+  public async accept(cardId: string, callId: string, contactNode: string): Promise<Link> {
+    return new MockLinkModule();
   }
 
-  public ignore(callId: string): void {
+  public async decline(cardId: string, callId: string, contactNode: string): Promise<void> {
   }
 
-  public decline(callId: string): void {
-  }
-
-  public close(): void {
+  public async ignore(cardId: string, callId: string): Promise<void> {
   }
 }

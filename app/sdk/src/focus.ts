@@ -259,7 +259,13 @@ export class FocusModule implements Focus {
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
       xhr.open('GET', url, true);
-      xhr.onprogress = (ev: ProgressEvent<EventTarget>)=>{ progress((ev.loaded * 100) / ev.total) };
+      xhr.onprogress = (ev: ProgressEvent<EventTarget>)=>{
+        try {
+          progress((ev.loaded * 100) / ev.total)
+        } catch (err) {
+          xhr.abort();
+        }  
+      };
       xhr.setRequestHeader('Content-Type', 'text/plain');
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
@@ -275,7 +281,7 @@ export class FocusModule implements Focus {
     });
   }
 
-  private uploadBlock(block: string, topicId: string, progress: (percent: number)=>boolean): Promise<string> {
+  private uploadBlock(block: string, topicId: string, progress: (percent: number)=>boolean|void): Promise<string> {
     const { cardId, channelId, connection } = this;
     if (!connection) {
       throw new Error('disconnected from channel');
@@ -307,7 +313,7 @@ export class FocusModule implements Focus {
     });
   }
 
-  private mirrorFile(source: File|string, topicId: string, progress: (percent: number)=>boolean): Promise<string> {
+  private mirrorFile(source: File|string, topicId: string, progress: (percent: number)=>boolean|void): Promise<{ assetId: string }> {
     const { cardId, channelId, connection } = this;
     if (!connection) {
       throw new Error('disconnected from channel');
@@ -317,7 +323,7 @@ export class FocusModule implements Focus {
     const url = `http${secure ? 's' : ''}://${node}/content/channels/${channelId}/topics/${topicId}/blocks?${params}`
     const formData = new FormData();
     if (typeof source === 'string') { // file path used in mobile
-      formData.append("asset", {uri: source, name: 'asset', type: 'application/octent-stream'});
+      formData.append("asset", {uri: source, name: 'asset', type: 'application/octent-stream'} as any);
     } else { // file object used in browser
       formData.append('asset', source);
     }
@@ -344,7 +350,7 @@ export class FocusModule implements Focus {
     });
   }
 
-  private transformFile(source: File|string, topicId: string, transforms: string[], progress: (percent: number)=>boolean): Promise<{assetId: string, transform: string}[]> {
+  private transformFile(source: File|string, topicId: string, transforms: string[], progress: (percent: number)=>boolean|void): Promise<{assetId: string, transform: string}[]> {
     const { cardId, channelId, connection } = this;
     if (!connection) {
       throw new Error('disconnected from channel');
@@ -355,7 +361,7 @@ export class FocusModule implements Focus {
     const formData = new FormData();
 
     if (typeof source === 'string') { // file path used in mobile
-      formData.append("asset", {uri: source, name: 'asset', type: 'application/octent-stream'});
+      formData.append("asset", {uri: source, name: 'asset', type: 'application/octent-stream'} as any);
     } else { // file object used in browser
       formData.append('asset', source);
     }
@@ -450,7 +456,7 @@ export class FocusModule implements Focus {
                   const { encryptedDataB64 } = await crypto.aesEncrypt(base64Data, ivHex, channelKey);
                   const partId = await this.uploadBlock(encryptedDataB64, topicId, (percent: number) => {
                     const count = Math.ceil(stagingFile.size / ENCRYPT_BLOCK_SIZE);
-                    assetProgress(Math.floor((i * 100 + percent) / count));
+                    return assetProgress(Math.floor((i * 100 + percent) / count));
                   });
                   split.push({ partId, blockIv: ivHex });
                 }
@@ -691,7 +697,7 @@ export class FocusModule implements Focus {
             transforms.push('acopy;audio');
             transformMap.set('acopy;audio', transform.appId);
           } else if (transform.type === TransformType.Copy && asset.type === AssetType.Binary) {
-            const assetId = await this.mirrorFile(asset.source, topicId, progress);
+            const { assetId } = await this.mirrorFile(asset.source, topicId, progress);
             const assetItem = {
               assetId: `${assetItems.length}`,
               hosting: HostingMode.Basic,
@@ -798,6 +804,7 @@ export class FocusModule implements Focus {
     if (!asset) {
       throw new Error('asset entry not found');
     }
+
     if (asset.hosting === HostingMode.Inline && asset.inline) {
       return `${asset.inline}`;
     } else if (asset.hosting === HostingMode.Basic && asset.basic) {
@@ -809,22 +816,22 @@ export class FocusModule implements Focus {
       }
       const write = await staging.write();
       this.closeStaging.push(write.close);
-      for (let i = 0; i < asset.split.length; i++) {
-        let download = true;
+      const assetCount = asset.split.length;
+      for (let i = 0; i < assetCount; i++) {
         if (progress) {
-          download =  progress(Math.floor((i * 100) / asset.split.length));
-        }
-        if (download === false) {
-          throw new Error('aborted asset load');
+          const download = progress(Math.floor((i * 100) / assetCount));
+          if (download === false) {
+            throw new Error('aborted asset load');
+          }
         }
         const block = await this.downloadBlock(topicId, asset.split[i].partId, (percent: number)=>{
-          if (progress && download !== false) {
-            download = progress(Math.floor((i * 100 + percent) / asset.split.length));
+          if (progress) {
+            const download = progress(Math.floor((i * 100 + percent) / assetCount));
+            if (download === false) {
+              throw new Error('aborting asset load');
+            }
           }
         });
-        if (download === false) {
-          throw new Error('aborted asset load');
-        }
         const { data } = await crypto.aesDecrypt(block, asset.split[i].blockIv, channelKey);
         await write.setData(data);
       }

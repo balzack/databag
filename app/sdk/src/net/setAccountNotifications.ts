@@ -1,7 +1,7 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
 import { PushParams } from '../types';
 
-export async function setAccountNotifications(node: string, secure: boolean, token: string, flag: boolean, pushParams: PushParams) {
+export async function setAccountNotifications(node: string, secure: boolean, token: string, flag: boolean, pushParams?: PushParams) {
   const pushEndpoint = pushParams ? encodeURIComponent(pushParams.endpoint) : '';
   const publicKey = pushParams ? encodeURIComponent(pushParams.publicKey) : '';
   const auth = pushParams ? encodeURIComponent(pushParams.auth) : '';

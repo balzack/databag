@@ -26,6 +26,14 @@ export class MockStreamModule {
     this.emitter.off('channel', ev);
   }
 
+  public addLoadedListener(ev: (loaded: boolean) => void): void {
+    this.emitter.on('loaded', ev);
+  }
+
+  public removeLoadedListener(ev: (loaded: boolean) => void): void {
+    this.emitter.off('loaded', ev);
+  }
+
   public async setBlockedChannel(channelId: string, blocked: boolean): Promise<void> {
   }
 
