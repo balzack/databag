@@ -26,8 +26,16 @@ function getTopic(id: number) {
 
 function initialTopics() {
   const topics = [];
-  for(let i = 0; i < 32; i++) {
+  for (let i = 0; i < 32; i++) {
     topics.push(getTopic(i));
+  }
+  return topics;
+}
+
+function nextTopics() {
+  const topics = [];
+  for (let i = 0; i < 4; i++) {
+    topics.push(getTopic(i + 32));
   }
   return topics;
 }
@@ -35,10 +43,12 @@ function initialTopics() {
 jest.mock('../src/net/fetchUtil', () => {
   const fn = jest.fn().mockImplementation((url: string, options: { method: string, body: string }) => {
     if (url === 'http://test_node/content/channels/test_channel_id/topics?agent=test_token&count=32') {
-      return Promise.resolve({ status: 200, json: () => (initialTopics()), headers: { get: (key: string) => key === 'topic-marker' ? 3 : 4 }});
+      return Promise.resolve({ status: 200, json: () => (initialTopics()), headers: { get: (key: string) => key === 'topic-marker' ? 300 : 400 }});
+    } else if (url === 'http://test_node/content/channels/test_channel_id/topics?agent=test_token&count=32&end=300') {
+      return Promise.resolve({ status: 200, json: () => (nextTopics()), headers: { get: (key: string) => key === 'topic-marker' ? 200 : 400 }});
     } else {
       console.log(url, options);
-      return Promise.resolve({ status: 200, json: () => [], headers: { get: (key: string) => key === 'topic-marker' ? 3 : 4 }});
+      return Promise.resolve({ status: 200, json: () => [], headers: { get: (key: string) => key === 'topic-marker' ? 300 : 400 }});
     }
   });
 
@@ -64,5 +74,7 @@ test('focus module works', async () => {
   const focus = new FocusModule(log, store, null, null, null, 'test_channel_id', 'my_guid', connection, null, false, 1, markRead, flagTopic);
   focus.addTopicListener(setTopics);
   await waitFor(() => focusTopics?.length == 32);
+  focus.viewMoreTopics();
+  await waitFor(() => focusTopics?.length == 36);
   await focus.close();
 });
