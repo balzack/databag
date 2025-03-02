@@ -598,6 +598,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                   <View style={styles.radioButtons}>
                     <RadioButton.Item
                       style={styles.radio}
+                      rippleColor="transparent"
                       label={state.strings.timeHalf}
                       labelStyle={styles.option}
                       mode="android"
@@ -608,6 +609,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     />
                     <RadioButton.Item
                       style={styles.radio}
+                      rippleColor="transparent"
                       label={state.strings.timeFull}
                       labelStyle={styles.option}
                       mode="android"
@@ -628,6 +630,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                   <View style={styles.radioButtons}>
                     <RadioButton.Item
                       style={styles.radio}
+                      rippleColor="transparent"
                       label={state.strings.monthStart}
                       labelStyle={styles.option}
                       mode="android"
@@ -638,6 +641,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     />
                     <RadioButton.Item
                       style={styles.radio}
+                      rippleColor="transparent"
                       label={state.strings.monthEnd}
                       labelStyle={styles.option}
                       mode="android"
