@@ -168,7 +168,6 @@ export class FocusModule implements Focus {
             } else {
               this.loadMore = false;
             }
-            await this.markRead();
             this.emitTopics();
           } catch (err) {
             this.log.warn(err);
@@ -213,7 +212,6 @@ export class FocusModule implements Focus {
               this.nextRevision = null;
             }
 
-            await this.markRead();
             this.emitTopics();
             this.log.info(`topic revision: ${nextRev}`);
           } catch (err) {
@@ -244,6 +242,7 @@ export class FocusModule implements Focus {
         }
       }
       this.syncing = false;
+      await this.markRead();
     }
   }
 
