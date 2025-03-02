@@ -17,6 +17,7 @@ export function Selector({ share, selected, channels }: { share: { filePath: str
     if (share) {
       setTopic(null);
       setShow(true);
+      actions.clearFocus();
     }
   }, [share]);
 

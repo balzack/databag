@@ -18,6 +18,7 @@ export function useSelector() {
   }
 
   const actions = {
+    clearFocus: app.actions.clearFocus,
   }
 
   return { state, actions }
