@@ -1,4 +1,6 @@
-DatabagClientSDK provides a typescript interface for communication over the decentralized databag network. The API is provided through a set of interfaces; each interface groups methods by their functionality and only need to be allocated as needed. The platform specific implementations of storage and cryptography are defined externally and are also provided to the SDK through interfaces.
+DatabagClientSDK provides a typescript interface for communication over the decentralized Databag network. 
+
+The API is provided through a set of interfaces; each interface groups methods by their functionality and only need to be allocated as needed. The platform specific implementations of storage and cryptography are defined externally and are also provided to the SDK through interfaces.
 
 ## Initialization
 
@@ -9,7 +11,7 @@ DatabagClientSDK provides a typescript interface for communication over the dece
     
 The [Params](https://github.com/balzack/databag/blob/sdk/app/sdk/src/types.ts) argument specifies the data to syncrhonize. The crypto, staging and log arguments are provided by implementing the [Crypto](https://github.com/balzack/databag/blob/sdk/app/sdk/src/crypto.ts), [Staging](https://github.com/balzack/databag/blob/sdk/app/sdk/src/staging.ts) and [Logging](https://github.com/balzack/databag/blob/sdk/app/sdk/src/logging.ts) interface respectively.
   
-```DatabagClientSDK(params: Params, crypto?: Crypto, staging?: Staging, log?: Logging)```
+```new DatabagClientSDK(params: Params, crypto?: Crypto, staging?: Staging, log?: Logging)```
   </ul>
 <br>
 
