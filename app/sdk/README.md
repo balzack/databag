@@ -69,13 +69,13 @@ Browser apps typically use the online store where minimal session data is saved.
 </details>
 
 <details>
-  <summary>Admin communcation is provided through the Node interface</summary><br>
+  <summary>Admin communcation is provided through the Service interface</summary><br>
 
   <ul>
     
-Configure allocates the Node interface for the server
+Configure allocates the Service interface for the server
 
-```DatabacgClientSDK::configure(node: string, secure: boolean, token: string, mfaCode: string | null): Promise<Node>```
+```DatabacgClientSDK::configure(node: string, secure: boolean, token: string, mfaCode: string | null): Promise<Service>```
 
 </ul>
 <br>
