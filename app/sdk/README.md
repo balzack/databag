@@ -399,7 +399,7 @@ Configure allocates the Service interface for the server
 
 
 <details>
-  <summary>Link interface module provides a proxied peer to peer link</summary><br>
+  <summary>Link interface module provides a proxied link between contacts</summary><br>
 
   <ul>
 
