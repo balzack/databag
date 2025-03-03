@@ -41,18 +41,18 @@ export class DatabagSDK {
   }
 
   public async initOfflineStore(sql: SqlStore): Promise<Session | null> {
-    const { articleTypes, channelTypes } = this.params;
+    const { channelTypes } = this.params;
     this.store = new OfflineStore(this.log, sql);
     await this.staging?.clear();
     const login = await this.store.init();
-    return login ? new SessionModule(this.store, this.crypto, this.log, this.staging, login.guid, login.token, login.node, login.secure, login.timestamp, articleTypes, channelTypes) : null;
+    return login ? new SessionModule(this.store, this.crypto, this.log, this.staging, login.guid, login.token, login.node, login.secure, login.timestamp, channelTypes) : null;
   }
 
   public async initOnlineStore(web: WebStore): Promise<Session | null> {
-    const { articleTypes, channelTypes } = this.params;
+    const { channelTypes } = this.params;
     this.store = new OnlineStore(this.log, web);
     const login = await this.store.init();
-    return login ? new SessionModule(this.store, this.crypto, this.log, this.staging, login.guid, login.token, login.node, login.secure, login.timestamp, articleTypes, channelTypes) : null;
+    return login ? new SessionModule(this.store, this.crypto, this.log, this.staging, login.guid, login.token, login.node, login.secure, login.timestamp, channelTypes) : null;
   }
 
   public async available(node: string, secure: boolean): Promise<number> {
@@ -64,7 +64,7 @@ export class DatabagSDK {
   }
 
   public async login(handle: string, password: string, node: string, secure: boolean, mfaCode: string | null, params: SessionParams): Promise<Session> {
-    const { articleTypes, channelTypes } = this.params;
+    const { channelTypes } = this.params;
     const { appName, version, deviceId, deviceToken, pushType, notifications } = params;
     const { guid, appToken, created, pushSupported } = await setLogin(node, secure, handle, password, mfaCode, appName, version, deviceId, deviceToken, pushType, notifications);
     const login: Login = {
@@ -76,11 +76,11 @@ export class DatabagSDK {
       pushSupported,
     };
     await this.store.setLogin(login);
-    return new SessionModule(this.store, this.crypto, this.log, this.staging, guid, appToken, node, secure, created, articleTypes, channelTypes);
+    return new SessionModule(this.store, this.crypto, this.log, this.staging, guid, appToken, node, secure, created, channelTypes);
   }
 
   public async access(node: string, secure: boolean, token: string, params: SessionParams): Promise<Session> {
-    const { articleTypes, channelTypes } = this.params;
+    const { channelTypes } = this.params;
     const { appName, version, deviceId, deviceToken, pushType, notifications } = params;
     const { guid, appToken, created, pushSupported } = await setAccess(node, secure, token, appName, version, deviceId, deviceToken, pushType, notifications);
     const login: Login = {
@@ -92,11 +92,11 @@ export class DatabagSDK {
       pushSupported,
     };
     await this.store.setLogin(login);
-    return new SessionModule(this.store, this.crypto, this.log, this.staging, guid, appToken, node, secure, created, articleTypes, channelTypes);
+    return new SessionModule(this.store, this.crypto, this.log, this.staging, guid, appToken, node, secure, created, channelTypes);
   }
 
   public async create(handle: string, password: string, node: string, secure: boolean, token: string | null, params: SessionParams): Promise<Session> {
-    const { articleTypes, channelTypes } = this.params;
+    const { channelTypes } = this.params;
     await addAccount(node, secure, handle, password, token);
     const { appName, version, deviceId, deviceToken, pushType, notifications } = params;
     const { guid, appToken, created, pushSupported } = await setLogin(node, secure, handle, password, null, appName, version, deviceId, deviceToken, pushType, notifications);
@@ -109,7 +109,7 @@ export class DatabagSDK {
       pushSupported,
     };
     await this.store.setLogin(login);
-    return new SessionModule(this.store, this.crypto, this.log, this.staging, guid, appToken, node, secure, created, articleTypes, channelTypes);
+    return new SessionModule(this.store, this.crypto, this.log, this.staging, guid, appToken, node, secure, created, channelTypes);
   }
 
   public async remove(session: Session): Promise<void> {

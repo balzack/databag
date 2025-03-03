@@ -374,6 +374,111 @@ Automate allocates the Bot interface for ia specific communication channel
   <br>
 </details>
 
+<details>
+  <summary>Focus interface module manages the topics on an activated channel</summary><br>
+
+  <ul>
+
+  The current topics can be accessed with a [Topic](https://github.com/balzack/databag/blob/sdk/app/sdk/src/types.ts) listener
+
+  ```Focus::addTopicListener(ev: (arg: { topics: Topic[] | null }) => void): void```
+
+  ```Focus::removeTopicListener(ev: (arg: { topics: Topic[] }) => void): void```
+
+</ul>
+
+  <br>
+</details>
+
+<details>
+  <summary>Ring interface module provides access to incoming call requests</summary><br>
+
+  <ul>
+
+  The current calls can accessed with a call listener
+
+  ```Ring::addRingingListener(ev: (calls: { cardId: string, callId: string }[]) => void): void```
+
+  ```Ring::removeRingingListener(ev: (calls: { cardId: string, callId: string }[]) => void): void```
+
+</ul>
+
+  <br>
+</details>
+
+
+<details>
+  <summary>Link interface module provides a proxied peer to peer link</summary><br>
+
+  <ul>
+
+  The connection status can be accessed with a status listener
+
+  ```Link::addStatusListener(ev: (status: string) => Promise<void>): void```
+
+  ```Link::clearStatusListener(): void```
+
+
+</ul>
+
+  <br>
+</details>
+
+
 ## Admin Communication
 
-## Bot Communication
+<details>
+
+  <summary>Service interface provides account management and server configuration</summary><br>
+
+  <ul>
+
+  Retrieve the list of account on the server
+
+  ```Service::getMembers(): Promise<Member[]>```
+
+  Create a token allowing for the creation of an account when the server is private
+
+  ```Service::createMemberAccess(): Promise<string>```
+ 
+  Create a token allowing for access to an account without password 
+
+  ```Service::resetMemberAccess(): Promise<string>```
+
+  Enable or disable specified account on the server 
+
+  ```Service::blockMember(memberId: number, blocked: boolean): Promise<void>```
+ 
+  Delete specified account from the server 
+
+  ```Service::removeMember(memberId: number): Promise<void>```
+
+  Retrieve current server configuration 
+
+  ```Service::getSetup(): Promise<Setup>```
+
+  Update the server configuration 
+
+  ```Service::getSetup(): Promise<Setup>```
+
+  Check if multi-factor authentication is enabled for admin access
+
+  ```Service::checkMFAuth(): Promise<boolean>```
+
+  Retrieve mutli-factor authentication values to be confirmed
+
+  ```Service::enableMFAuth(): Promise<{ image: string, text: string }>```
+  
+  Confirm multi-factor authentication values to complete the enable process
+
+  ```Service::confirmMFAuth(code: string): Promise<void>```
+
+  Disable multi-factor auth for admin access
+
+  ```Service::disableMFAuth(): Promise<void>```
+
+</ul>
+
+  <br>
+</details>
+

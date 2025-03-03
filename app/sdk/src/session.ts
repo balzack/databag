@@ -44,7 +44,7 @@ export class SessionModule implements Session {
   private channelTypes: string[];
   private articleTypes: string[];
 
-  constructor(store: Store, crypto: Crypto | null, log: Logging, staging: Staging | null, guid: string, token: string, node: string, secure: boolean, loginTimestamp: number, articleTypes: string[], channelTypes: string[]) {
+  constructor(store: Store, crypto: Crypto | null, log: Logging, staging: Staging | null, guid: string, token: string, node: string, secure: boolean, loginTimestamp: number, channelTypes: string[]) {
     log.info('new databag session');
 
     this.store = store;
@@ -56,7 +56,7 @@ export class SessionModule implements Session {
     this.node = node;
     this.secure = secure;
     this.channelTypes = channelTypes;
-    this.articleTypes = articleTypes;
+    this.articleTypes = [];
     this.loginTimestamp = loginTimestamp;
     this.status = 'connecting';
     this.emitter = new EventEmitter();

@@ -251,9 +251,6 @@ export type Setup = {
 };
 
 export type Params = {
-  topicBatch: number;
-  tagBatch: number;
-  articleTypes: string[];
   channelTypes: string[];
 };
 
