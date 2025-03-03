@@ -42,7 +42,6 @@ export class SessionModule implements Session {
   private ring: RingModule;
   private connection: Connection;
   private channelTypes: string[];
-  private articleTypes: string[];
 
   constructor(store: Store, crypto: Crypto | null, log: Logging, staging: Staging | null, guid: string, token: string, node: string, secure: boolean, loginTimestamp: number, channelTypes: string[]) {
     log.info('new databag session');
@@ -56,14 +55,13 @@ export class SessionModule implements Session {
     this.node = node;
     this.secure = secure;
     this.channelTypes = channelTypes;
-    this.articleTypes = [];
     this.loginTimestamp = loginTimestamp;
     this.status = 'connecting';
     this.emitter = new EventEmitter();
 
     this.identity = new IdentityModule(log, this.store, guid, token, node, secure);
     this.settings = new SettingsModule(log, this.store, this.crypto, guid, token, node, secure);
-    this.contact = new ContactModule(log, this.store, this.crypto, this.staging, guid, token, node, secure, articleTypes, channelTypes);
+    this.contact = new ContactModule(log, this.store, this.crypto, this.staging, guid, token, node, secure, channelTypes);
     this.alias = new AliasModule(log, this.settings, this.store, guid, token, node, secure);
     this.attribute = new AttributeModule(log, this.settings, this.store, guid, token, node, secure);
     this.stream = new StreamModule(log, this.store, this.crypto, this.staging, guid, token, node, secure, channelTypes);

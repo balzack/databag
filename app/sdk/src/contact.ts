@@ -49,7 +49,6 @@ export class ContactModule implements Contact {
   private secure: boolean;
   private loaded: boolean;
   private emitter: EventEmitter;
-  private articleTypes: string[];
   private channelTypes: string[];
   private seal: { privateKey: string; publicKey: string } | null;
   private unsealAll: boolean;
@@ -84,7 +83,7 @@ export class ContactModule implements Contact {
   // view of channels
   private channelEntries: Map<string, Map<string, { item: ChannelItem; channel: Channel }>>;
 
-  constructor(log: Logging, store: Store, crypto: Crypto | null, staging: Staging | null, guid: string, token: string, node: string, secure: boolean, articleTypes: string[], channelTypes: string[]) {
+  constructor(log: Logging, store: Store, crypto: Crypto | null, staging: Staging | null, guid: string, token: string, node: string, secure: boolean, channelTypes: string[]) {
     this.guid = guid;
     this.token = token;
     this.node = node;
@@ -94,7 +93,6 @@ export class ContactModule implements Contact {
     this.crypto = crypto;
     this.staging = staging;
     this.emitter = new EventEmitter();
-    this.articleTypes = articleTypes;
     this.channelTypes = channelTypes;
     this.unsealAll = false;
     this.loaded = false;
