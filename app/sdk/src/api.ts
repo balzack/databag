@@ -84,7 +84,7 @@ export interface Contact {
   setBlockedCard(cardId: string, blocked: boolean): Promise<void>;
   getRegistry(handle: string | null, server: string | null): Promise<Profile[]>;
 
-  callCard(cardId: string, ringInterval: number): Promise<Link>;
+  callCard(cardId: string): Promise<Link>;
 
   addCardListener(ev: (cards: Card[]) => void): void;
   removeCardListener(ev: (cards: Card[]) => void): void;

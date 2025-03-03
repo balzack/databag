@@ -292,6 +292,10 @@ Configure allocates the Service interface for the server
 
   ```Contact::flagCard(cardId: string): Promise<void>```
 
+  Request a peer-to-peer link to a contact
+
+  ```Contact::callCard(cardId: string): Promise<Link>```
+
 </ul>
 
   <br>
