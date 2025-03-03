@@ -81,19 +81,6 @@ Configure allocates the Node interface for the server
 <br>
 </details>
 
-<details>
-  <summary>Automated communication is provided through the Bot interface</summary><br>
-  <ul>
-    
-Automate allocates the Bot interface for ia specific communication channel
-
-```DatabacgClientSDK::automate(node: string, secure: boolean, token: string): Promise<Bot>```
-
-</ul>
-<br>
-
-</details>
-
 ## Account Communication
 
 
@@ -391,7 +378,7 @@ Automate allocates the Bot interface for ia specific communication channel
 </details>
 
 <details>
-  <summary>Ring interface module provides access to incoming call requests</summary><br>
+  <summary>Ring interface module provides access to incoming connection requests</summary><br>
 
   <ul>
 
