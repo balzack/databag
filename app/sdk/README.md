@@ -420,7 +420,7 @@ Configure allocates the Service interface for the server
 
 <details>
 
-  <summary>Service interface provides account management and server configuration</summary><br>
+  <summary>Service interface manages accounts and server configuration</summary><br>
 
   <ul>
 
