@@ -1,8 +1,4 @@
-!!! still a work in progress !!!
-
-DatabagClientSDK provides a typescript interface for communication over the decentralized databag network. The SDK has minimal dependencies and contains reference applications for react-js, react-native, and node.
-
-The API is provided through a set of interfaces; each interface groups methods by their functionality and are only allocated as needed. The platform specific implementations of storage and cryptography are defined externally and are also provided to the SDK through interfaces.
+DatabagClientSDK provides a typescript interface for communication over the decentralized databag network. The API is provided through a set of interfaces; each interface groups methods by their functionality and only need to be allocated as needed. The platform specific implementations of storage and cryptography are defined externally and are also provided to the SDK through interfaces.
 
 ## Initialization
 
@@ -383,6 +379,18 @@ Configure allocates the Service interface for the server
   ```Ring::addRingingListener(ev: (calls: { cardId: string, callId: string }[]) => void): void```
   ```Ring::removeRingingListener(ev: (calls: { cardId: string, callId: string }[]) => void): void```
 
+  Accept an incoming link request with accept
+
+  ```Link::accept(cardId: string, callId: string, contactNode: string): Promise<Link>```
+
+  Decline an incoming link notifying requestor
+
+  ```Link::decline(cardId: string, callId: string, contactNode: string): Promise<void>```
+
+  Ignore an incoming link request without notifying requestor
+
+  ```Link::ignore(cardId: string, callId: string): Promise<void>```
+
 </ul>
 
   <br>
@@ -390,7 +398,7 @@ Configure allocates the Service interface for the server
 
 
 <details>
-  <summary>Link interface module provides a manages a link between contacts</summary><br>
+  <summary>Link interface module manages a proxied link between contacts</summary><br>
 
   <ul>
 
@@ -399,6 +407,22 @@ Configure allocates the Service interface for the server
   ```Link::setStatusListener(ev: (status: string) => Promise<void>): void```
   ```Link::clearStatusListener(): void```
 
+  The messages are received through through a listener
+
+  ```Link::setMessageListener(ev: (message: any) => Promise<void>): void```
+  ```Link::clearMessageListener(): void```
+
+  Messages are sent to contact through sendMessage
+
+  ```Link::sendMessage(message: any): Promise<void>```
+
+  WebRTC ICE params are provided through a dedicated method
+
+  ```Link::getIce(): { urls: string; username: string; credential: string }[]```
+
+  Close is called to close the connection
+
+  ```Link::close(): Promise<void>```
 
 </ul>
 
