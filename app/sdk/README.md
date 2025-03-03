@@ -382,7 +382,7 @@ Configure allocates the Service interface for the server
 </details>
 
 <details>
-  <summary>Ring interface module provides access to incoming connection requests</summary><br>
+  <summary>Ring interface module manages incoming connection requests</summary><br>
 
   <ul>
 
@@ -399,7 +399,7 @@ Configure allocates the Service interface for the server
 
 
 <details>
-  <summary>Link interface module provides a proxied link between contacts</summary><br>
+  <summary>Link interface module provides a manages a link between contacts</summary><br>
 
   <ul>
 
