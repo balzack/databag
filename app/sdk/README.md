@@ -101,14 +101,6 @@ Configure allocates the Service interface for the server
   
   ```Session::getContact(): Contact```
 
-  Contact groupings are managed through the Alias Interface
-  
-  ```Session::getAlias(): Alias```
-
-  Account attribute data is managed through the Attribute Interface
-  
-  ```Session::getAttribute(): Attribute```
-
   Account and Contact channels are managed through the Content Interface
   
   ```Session::getContent(): Content```
@@ -389,7 +381,6 @@ Configure allocates the Service interface for the server
   The current calls can accessed with a call listener
 
   ```Ring::addRingingListener(ev: (calls: { cardId: string, callId: string }[]) => void): void```
-
   ```Ring::removeRingingListener(ev: (calls: { cardId: string, callId: string }[]) => void): void```
 
 </ul>
@@ -405,8 +396,7 @@ Configure allocates the Service interface for the server
 
   The connection status can be accessed with a status listener
 
-  ```Link::addStatusListener(ev: (status: string) => Promise<void>): void```
-
+  ```Link::setStatusListener(ev: (status: string) => Promise<void>): void```
   ```Link::clearStatusListener(): void```
 
 
