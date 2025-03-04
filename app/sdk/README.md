@@ -363,8 +363,48 @@ Configure allocates the Service interface for the server
   The current topics can be accessed with a [Topic](https://github.com/balzack/databag/blob/sdk/app/sdk/src/types.ts) listener
 
   ```Focus::addTopicListener(ev: (arg: { topics: Topic[] | null }) => void): void```
-
   ```Focus::removeTopicListener(ev: (arg: { topics: Topic[] }) => void): void```
+
+  The channel configuration can be accessed with a [FocusDetail](https://github.com/balzack/databag/blob/sdk/app/sdk/src/types.ts) listener
+
+  ```Focus::addDetailListener(ev: (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => void): void```
+  ```Focus::removeDetailListener(ev: (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => void): void```
+
+  The current channel id can be retrieved with the helper function getFocused
+
+  ```Focus::getFocused(): {cardId: null|string, channelId: string}```
+
+  Adding a topic can be done through the addTopic method
+
+  ```Focus::addTopic(sealed: boolean, type: string, subject: (assets: {assetId: string, appId: string}[])=>any, assets: AssetSource[], progress: (percent: number)=>boolean): Promise<string>```
+  
+  Update a topic subject with setTopicSubject
+
+  ```Focus::setTopicSubject(topicId: string, type: string, subject: (assets: {assetId: string, appId: string}[])=>any, files: AssetSource[], progress: (percent: number)=>boolean): Promise<void>```
+
+  Delete a topic with removeTopic
+
+  ```Focus::removeTopic(topicId: string): Promise<void>```
+
+  Retrieve more than the initial topic back in listener with viewMoreTopics
+
+  ```Focus::viewMoreTopics(): Promise<void>```
+
+  Generate URL for retrieve a topic asset, sealed assets are retrieved and decrypted locally
+
+  ```Focus::getTopicAssetUrl(topicId: string, assetId: string, progress?: (percent: number) => boolean|void): Promise<string>```
+
+  Flag topic for abuse
+
+  ```Focus::flagTopic(topicId: string): Promise<void>```
+
+  Set blocked flag associated with topic
+
+  ```Focus::setBlockTopic(topicId: string): Promise<void>```
+
+  Clear blocked flag associated with topic
+
+  ```Focus::clearBlockTopic(topicId: string): Promise<void>```
 
 </ul>
 

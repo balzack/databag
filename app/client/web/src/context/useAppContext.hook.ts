@@ -4,7 +4,7 @@ import { SessionStore } from '../SessionStore'
 import { WebCrypto } from '../WebCrypto'
 import { StagingFiles } from '../StagingFiles'
 
-const databag = new DatabagSDK({ tagBatch: 32, topicBatch: 32, articleTypes: [], channelTypes: ['sealed', 'superbasic'] }, new WebCrypto(), new StagingFiles())
+const databag = new DatabagSDK({ channelTypes: ['sealed', 'superbasic'] }, new WebCrypto(), new StagingFiles())
 
 const notifications = [
     { event: 'contact.addCard', messageTitle: 'New Contact Request' },

@@ -21,9 +21,6 @@ async function requestUserPermission() {
 
 const databag = new DatabagSDK(
   {
-    tagBatch: 24,
-    topicBatch: 24,
-    articleTypes: [],
     channelTypes: ['sealed', 'superbasic'],
   },
   new NativeCrypto(),
