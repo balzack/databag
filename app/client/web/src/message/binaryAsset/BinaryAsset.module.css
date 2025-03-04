@@ -1,0 +1,114 @@
+.asset {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  .detail {
+    position: absolute;
+    top: 0;
+    width: 100%;
+
+    .label {
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .extension {
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+      overflow: hidden;
+    }
+  }
+
+  .download {
+    position: absolute;
+  }
+
+  .thumb {
+    width: auto;
+    height: 128px;
+  }
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(8,8,8, .5);
+  backdrop-filter: blur(33px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  transition: all 400ms;
+
+  .progress {
+    position: absolute;
+    bottom: 16px;
+    width: 25%;
+  }
+
+  .detail {
+    position: absolute;
+    top: 0;
+    width: 100%;
+
+    .label {
+      width: 100%;
+      text-align: center;
+      font-size: 16px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .extension {
+      width: 100%;
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+
+  .close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
+
+  .download {
+    position: absolute;
+    cursor: pointer;
+  }
+
+  .frame {
+    position: absolute;
+    width: 80vw;
+    height: 80vh;
+    max-width: 300px;
+    max-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .image {
+      width: 80vw;
+      height: 80vh;
+      max-width: 300px;
+      max-height: 300px;
+      background-color: transparent;
+      object-fit: contain;
+    }
+
+  }
+}

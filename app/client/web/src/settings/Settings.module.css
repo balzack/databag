@@ -1,0 +1,334 @@
+.seal {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .sealConfig {
+    cursor: pointer;
+    color: var(--mantine-color-dbgreen-1);
+  }
+
+  .delete {
+    background-color: var(--mantine-color-red-9);
+    color: var(--mantine-color-red-0);
+  }
+
+  .buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+    flex-grow: 1;
+  }
+}
+
+.mfa {
+  .secret {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .secretImage {
+    width: 192px;
+    height: 192px;
+  }
+
+  .secretText {
+    display: flex;
+    gap: 16px;
+  }
+
+  .authMessage {
+    height: 24px;
+  }
+
+  .copyIcon {
+    cursor: pointer;
+  }
+}
+
+.change {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.imageSelect {
+  display: flex;
+  align-items: center;
+}
+
+.control {
+  display: flex;
+  gap: 16px;
+  padding-top: 8px;
+  justify-content: flex-end;
+  flex-grow: 1;
+}
+
+.cropper {
+  position: relative;
+  height: 256px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  height: 100%;
+
+  .headerLabel {
+    font-size: 22px;
+    text-align: center;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .header {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 16px;
+    padding-right: 16px;
+    width: 100%;
+    height: 48px;
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--mantine-color-text-7);
+  }
+
+  .detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    overflow: scroll;
+    padding-left: 16px;
+    padding-right: 16px;
+    width: 100%;
+  }
+
+  .image {
+    position: relative;
+    width: 90%;
+    max-width: 250px;
+    margin-top: 8px;
+    margin-bottom: 24px;
+
+    .imageEdit {
+      color: var(--mantine-color-dbgreen-1);
+      background: var(--mantine-color-surface-2);
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
+
+      .editLabel {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+    }
+
+    .imageUnset {
+      cursor: pointer;
+
+      .unsetEdit {
+        visibility: hidden;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+
+      &:hover {
+        .unsetEdit {
+          visibility: unset;
+          color: var(--mantine-color-dbgreen-1);
+        }
+      }
+    }
+  }
+
+  .edit {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .section {
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    .sectionEdit {
+      flex-shrink: 0;
+      color: var(--mantine-color-dbgreen-1);
+      padding-left: 8px;
+      height: 0px;
+      position: relative;
+      top: -12px;
+    }
+  }
+
+  .selects {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .divider {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border: 1px solid var(--mantine-color-text-7);
+    width: 100%;
+  }
+
+  .nameSet {
+    width: 100%;
+    padding-left: 8px;
+    font-size: 24px;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .nameUnset {
+    width: 100%;
+    padding-left: 8px;
+    font-size: 24px;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-style: italic;
+    flex-shrink: 0;
+    color: var(--mantine-color-text-7);
+  }
+
+  .entry {
+    width: 100%;
+    padding-left: 8px;
+    display: flex;
+
+    .radio {
+      position: relative;
+      top: -8px;
+    }
+
+    .entryIcon {
+      width: 32px;
+      flex-shrink: 0;
+    }
+
+    .entrySet {
+      font-size: 14px;
+      white-space: preserve;
+    }
+
+    .entryUnset {
+      font-size: 14px;
+      font-style: italic;
+      color: var(--mantine-color-text-7);
+    }
+
+    .entryValue {
+      display: flex;
+      cursor: pointer;
+      align-items: center;
+    }
+
+    .controlLabel {
+      padding-right: 16px;
+      text-wrap: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      font-size: 14px;
+    }
+
+    .entryLabel {
+      padding-right: 8px;
+      color: var(--mantine-color-dbgreen-1);
+      text-wrap: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .entryControl {
+      display: flex;
+      align-items: center;
+      max-width: 40%;
+      padding: 0;
+      position: relative;
+      top: -4px;
+    }
+  }
+}
+
+.empty {
+  width: 400px;
+  height: 128px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--mantine-color-text-7);
+  border-radius: 4px;
+  overflow: auto;
+  background: var(--mantine-color-surface-1);
+
+  .emptyLabel {
+    color: var(--mantine-color-text-6);
+  }
+}
+.blocked {
+  width: 400px;
+  min-height: 128px;
+  max-height: 256px;
+  border: 1px solid var(--mantine-color-text-7);
+  border-radius: 4px;
+  overflow: auto;
+  background: var(--mantine-color-surface-1);
+
+  .blockedItem {
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--mantine-color-text-8);
+    
+    &:hover {
+      background: var(--mantine-color-surface-2);
+    }
+
+    .blockedValue {
+      flex-grow: 1;
+      font-size: 14px;
+      padding-right: 16px;
+    }
+  }
+}
+
+.controls {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  padding-top: 8px;
+  
+}
+

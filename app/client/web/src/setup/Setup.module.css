@@ -1,0 +1,117 @@
+.setup {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .content {
+    width: 100%;
+    max-width: 650px;
+    flex-grow: 1;
+    overflow: auto;
+    padding-top: 8px;
+  }
+
+  .header {
+    height: 48px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-left: 16px;
+    padding-right: 16px;
+    border-bottom: 2px solid var(--mantine-color-text-8);
+
+    .centerTitle {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .title {
+      padding-left: 16px;
+      padding-right: 16px;
+      font-size: 20px;
+    }
+    .area {
+      flex-grow: 1;
+    }
+    .loader {
+      width: 32px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+
+  .webrtc {
+    height: 256px;
+  }
+
+  .option {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 16px;
+    padding-right: 16px;
+    height: 48px;
+
+    .label {
+      font-size: 16px;
+    }
+    
+    .value {
+      padding-left: 24px; 
+      flex-grow: 1;
+    }
+
+    .radio {
+      padding-left: 24px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .switch {
+      padding-left: 24px;
+    }
+  }
+}
+
+.mfa {
+  .secret {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .secretImage { 
+    width: 192px;
+    height: 192px;
+  }
+  
+  .secretText {
+    display: flex;
+    gap: 16px;
+  } 
+    
+  .authMessage {
+    height: 24px;
+    color: var(--mantine-color-red-3);
+  }
+    
+  .copyIcon {
+    cursor: pointer;
+  }
+
+  .control {
+    display: flex;
+    gap: 16px;
+    padding-top: 8px;
+    justify-content: flex-end;
+    flex-grow: 1;
+  } 
+}

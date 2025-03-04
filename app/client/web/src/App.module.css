@@ -1,0 +1,27 @@
+.app {
+  background-color: var(--mantine-color-surface-1);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.focus {
+  &:focus {
+    border-color: red;
+    outline: 2px solid var(--mantine-color-red-filled);
+    outline-offset: 3px;
+  }
+}
+
+&:focus-within {
+  border-color: red;
+}
+
+/* Use `&:focus-visible` when you want focus ring to be visible
+   only when user navigates with keyboard, for example by pressing Tab key */
+.focus-auto {
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-red-filled);
+    outline-offset: 2px;
+  }
+}

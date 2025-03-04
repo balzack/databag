@@ -1,0 +1,31 @@
+.asset {
+  margin-top: 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  .thumb {
+    width: auto;
+    height: 92px;
+  }
+
+  .label {
+    padding-left: 2px;
+    padding-right: 2px;
+    position: absolute;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    min-width: 0;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .close {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}
+

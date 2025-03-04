@@ -1,0 +1,39 @@
+.asset {
+  margin-top: 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .thumb {
+    width: auto;
+    height: 92px;
+  }
+
+  .name {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 100%;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .extension {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .close {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}
+

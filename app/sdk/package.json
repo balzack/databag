@@ -1,0 +1,42 @@
+{
+  "name": "databag-client-sdk",
+  "version": "0.0.28",
+  "description": "an SDK for developing Databag applications",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "format": "prettier --single-quote true --print-width 200 --write src",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/balzack/databag.git"
+  },
+  "keywords": [
+    "databag",
+    "sdk"
+  ],
+  "author": "Roland Osborne <roland.osborne@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/balzack/databag/issues"
+  },
+  "homepage": "https://github.com/balzack/databag#readme",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.5",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.1.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "eventemitter3": "^5.0.1",
+    "prettier": "^3.3.3"
+  }
+}

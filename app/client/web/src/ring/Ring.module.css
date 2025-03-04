@@ -1,0 +1,69 @@
+.active {
+  width: 100%;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.inactive {
+  display: none;
+}
+.ring {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 48px;
+  max-width: 400px;
+  border-radius: 16px;
+  padding-left: 32px;
+  padding-right: 32px;
+  gap: 8px;
+  background-color: var(--mantine-color-surface-4);
+  z-index: 1;
+}
+.card {
+  padding: 8px;
+  width: 100%;
+  height: 100%;
+}
+.off {
+  margin-top: 16px;
+  transform: rotate(135deg);
+}
+.space {
+  position: relative;
+  padding: 8px;
+}
+.circleIcon {
+}
+.flipIcon {
+  transform: rotate(135deg);
+}
+.end {
+}
+.name {
+  flex-grow: 1;
+  flex-shrink: 1;
+  display: flex;
+  flex-direction: row;
+  padding-left: 8px;
+}
+.nameSet {
+  font-size: 20px;
+}
+.nameUnset {
+  font-size: 20px;
+  font-style: italic;
+}
+.status {
+  width: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.duration {
+  color: Colors.primary;
+  font-size: 20px;
+}

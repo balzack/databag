@@ -1,0 +1,88 @@
+.contacts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    padding-top: 8px;
+    align-items: center;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--mantine-color-text-8);
+    width: 100%;
+
+    .input {
+      width: 1%;
+      flex-grow: 1;
+      flex-shrink: 1;
+    }
+
+    .add {
+      flex-shrink: 0;
+    }
+  }
+
+  .none {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cards {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: auto;
+    overscroll-behavior: none;
+
+    .requested {
+      border-right: 5px solid var(--mantine-color-status-3);
+    }
+
+    .connecting {
+      border-right: 5px solid var(--mantine-color-status-4);
+    }
+
+    .pending {
+      border-right: 5px solid var(--mantine-color-status-2);
+    }
+
+    .connected {
+      border-right: 5px solid var(--mantine-color-status-5);
+    }
+
+    .confirmed {
+      border-right: 5px solid var(--mantine-color-status-1);
+    }
+
+    .unknown {
+      border-right: 5px solid var(--mantine-color-status-0);
+    }
+
+    .offsync {
+      border-right: 5px solid var(--mantine-color-status-6);
+    }
+
+    .card {
+      width: 100%;
+      height: 48px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      padding-right: 16px;
+      padding-left: 16px;
+      border-bottom: 1px solid var(--mantine-color-text-8);
+
+      &:hover {
+        background: var(--mantine-color-surface-4);
+      }
+    }
+  }
+}

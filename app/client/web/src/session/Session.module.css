@@ -1,0 +1,154 @@
+.session {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  .alert {
+    position: absolute;
+    top: 33%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .alertArea {
+      display: flex;
+      gap: 8px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      padding-left: 16px;
+      padding-right: 16px;
+      border-radius: 16px;
+      background: var(--mantine-color-surface-2);
+
+      .alertLabel {
+        color: var(--mantine-color-red-2);
+      }
+    }
+  }
+
+  .body {
+    display: flex;
+    width: 100%;
+    height: calc(100% - 48px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+  }
+
+  .show {
+    display: flex;
+    flex-grow: 1;
+    height: 10%;
+    position: relative;
+  }
+
+  .hide {
+    display: none;
+  }
+
+  .display {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+
+    .left {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 30%;
+      min-width: 325px;
+      background: var(--mantine-color-surface-2);
+
+      .content {
+        display: flex;
+        flex-grow: 1;
+        height: 1px;
+      }
+    }
+
+    .right {
+      position: relative;
+      height: 100%;
+      flex-grow: 1;
+      min-width: 0;
+      background: var(--mantine-color-surface-3);
+      display: flex;
+      flex-direction: column;
+
+      .base {
+        display: flex;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      .conversation {
+        display: flex;
+        height: 0;
+        flex-grow: 1;
+        min-width: 0;
+      }
+    }
+  }
+
+  .screen {
+    width: 100%;
+    height: 100%;
+    background-color: var(--mantine-color-surface-1);
+    overflow: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+
+  .tabs {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    .activeTabItem {
+      flex: 1;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--mantine-color-tab-2);
+      color: var(--mantine-color-dbgreen-1);
+      padding-bottom: 8px;
+      padding-top: 8px;
+      cursor: pointer;
+    }
+
+    .idleTabItem {
+      flex: 1;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--mantine-color-tab-1);
+      color: var(--mantine-color-dbgreen-0);
+      padding-bottom: 8px;
+      padding-top: 8px;
+      cursor: pointer;
+
+      &:hover {
+        background: var(--mantine-color-tab-3);
+      }
+    }
+
+    .tabDivider {
+      width: 2px;
+    }
+
+    .tabIcon {
+      width: 32px;
+      height: 32px;
+    }
+  }
+}

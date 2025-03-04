@@ -1,0 +1,78 @@
+.all {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  gap: 16px;
+  padding: 8px;
+}
+
+.identity {
+  width: 100%;
+  height: 64px;
+  cursor: pointer;
+  background: var(--mantine-color-surface-4);
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+  padding-right: 8px;
+
+  &:hover {
+    .icon {
+      color: var(--mantine-color-dbgreen-1);
+      height: 48px;
+    }
+  }
+
+  .icon {
+    width: 32px;
+  }
+
+  .image {
+    width: 48px;
+    height: 48px;
+  }
+
+  .text {
+    flex-grow: 1;
+    flex-shrink: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 8px;
+    width: 0;
+
+    .nameSet {
+      font-size: 18px;
+      text-wrap: nowrap;
+      text-overflow: ellipsis;
+      text-align: center;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .nameUnset {
+      font-size: 18px;
+      text-wrap: nowrap;
+      text-overflow: ellipsis;
+      text-align: center;
+      overflow: hidden;
+      font-style: italic;
+      color: var(--mantine-color-text-9);
+    }
+
+    .handle {
+      font-size: 14px;
+      text-wrap: nowrap;
+      text-overflow: ellipsis;
+      text-align: center;
+      overflow: hidden;
+      width: 100%;
+      font-weight: bold;
+    }
+  }
+}
+
+.menu {
+  padding: 8px;
+}
