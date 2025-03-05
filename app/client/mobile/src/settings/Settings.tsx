@@ -509,7 +509,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                   <Icon size={24} source="ticket-confirmation-outline" />
                 </View>
                 <View style={styles.control}>
-                  <TouchableOpacity activeOpacity={1} onPress={() => setRegistry(!state.config.searchable)}>
+                  <TouchableOpacity activeOpacity={1} onPress={() => setMfa(!state.config.mfaEnabled)}>
                     <Text style={styles.controlLabel}>{state.strings.mfaTitle}</Text>
                   </TouchableOpacity>
                   <Switch style={styles.controlSwitch} value={state.config.mfaEnabled} onValueChange={setMfa} />
