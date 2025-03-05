@@ -453,7 +453,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               <div className={classes.entryIcon}>
                 <IconEye />
               </div>
-              <Text className={classes.entryLabel}>{state.strings.registry}</Text>
+              <Text className={classes.entryLabel} onClick={() => setRegistry(!state.config.searchable)}>{state.strings.registry}</Text>
               <Switch className={classes.entryControl} checked={state.config.searchable} onChange={(ev) => setRegistry(ev.currentTarget.checked)} />
             </div>
             <div className={classes.entry}>
@@ -468,7 +468,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               <div className={classes.entryIcon}>
                 <IconBell />
               </div>
-              <Text className={classes.entryLabel}>{state.strings.enableNotifications}</Text>
+              <Text className={classes.entryLabel} onClick={() => setNotifications(!state.config.pushEnabled)}>{state.strings.enableNotifications}</Text>
               <Switch className={classes.entryControl} checked={state.config.pushEnabled} onChange={(ev) => setNotifications(ev.currentTarget.checked)} />
             </div>
             <div className={classes.divider} />
@@ -486,7 +486,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               <div className={classes.entryIcon}>
                 <IconTicket />
               </div>
-              <Text className={classes.entryLabel}>{state.strings.mfaTitle}</Text>
+              <Text className={classes.entryLabel} onClick={() => setMfa(!state.config.mfaEnabled)}>{state.strings.mfaTitle}</Text>
               <Switch className={classes.entryControl} checked={state.config.mfaEnabled} onChange={(ev) => setMfa(ev.currentTarget.checked)} />
             </div>
             <div className={classes.entry}>
