@@ -18,7 +18,9 @@ export function Registry({close, openContact}: {close?: () => void; openContact:
           <TextInput
             dense={true}
             style={styles.input}
-            autoCapitalize={false}
+            autoCapitalize="none"
+            autoComplete="off"
+            autoCorrect={false}
             outlineColor="transparent"
             activeOutlineColor="transparent"
             underlineStyle={styles.inputUnderline}
@@ -33,7 +35,9 @@ export function Registry({close, openContact}: {close?: () => void; openContact:
           <TextInput
             dense={true}
             style={styles.input}
-            autoCapitalize={false}
+            autoCapitalize="none"
+            autoComplete="off"
+            autoCorrect={false}
             outlineColor="transparent"
             activeOutlineColor="transparent"
             underlineStyle={styles.inputUnderline}

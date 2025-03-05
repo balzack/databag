@@ -40,6 +40,9 @@ export class MockContactModule implements Contact {
     return '';
   }
 
+  public async addAndConnectCard(server: string, guid: string): Promise<void> {
+  }
+
   public async removeCard(cardId: string): Promise<void> {
   }
 

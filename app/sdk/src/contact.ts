@@ -885,6 +885,26 @@ export class ContactModule implements Contact {
     }
   }
 
+  public async addAndConnectCard(server: string | null, guid: string): Promise<void> {
+    const { node, secure, token } = this;
+    const insecure = server ? /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server) : false;
+    const message = server ? await getContactListing(server, !insecure, guid) : await getContactListing(node, secure, guid);
+    const added = await addCard(node, secure, token, message);
+    await setCardConnecting(node, secure, token, added.id);
+    try {
+      const message = await getCardOpenMessage(node, secure, token, added.id);
+      const server = added.data.cardProfile.node ? added.data.cardProfile.node : node;
+      const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+      const contact = await setCardOpenMessage(server, !insecure, message);
+      if (contact.status === 'connected') {
+        const { token: contactToken, articleRevision, channelRevision, profileRevision } = contact;
+        await setCardConnected(node, secure, token, cardId, contactToken, articleRevision, channelRevision, profileRevision);
+      }
+    } catch (err) {
+      this.log.error('failed to deliver open message');
+    }
+  }
+
   public async disconnectCard(cardId: string): Promise<void> {
     const { node, secure, token } = this;
     await setCardConfirmed(node, secure, token, cardId);

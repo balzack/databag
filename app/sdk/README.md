@@ -246,6 +246,10 @@ Configure allocates the Service interface for the server
 
   ```Contact::connectCard(cardId: string): Promise<void>```
 
+  A new contact can be added to the account and initiate connection through the addAndConnectCard method
+
+  ```Contact::addAndConnectCard(server: string, guid: string): Promise<void>```
+
   Save contact of connection request without accepting connection with confirmCard
 
   ```Contact::confirmCard(cardId: string): Promise<void>```

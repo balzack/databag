@@ -42,7 +42,9 @@ export function Contacts({openRegistry, openContact, callContact, textContact}: 
             style={styles.input}
             outlineColor="transparent"
             activeOutlineColor="transparent"
-            autoCapitalize={false}
+            autoCapitalize="none"
+            autoComplete="off"
+            autoCorrect={false}
             underlineStyle={styles.inputUnderline}
             mode="outlined"
             placeholder={state.strings.contacts}

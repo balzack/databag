@@ -96,7 +96,9 @@ export function Content({share, closeAll, openConversation, textCard}: { share: 
           <TextInput
             dense={true}
             style={styles.input}
-            autoCapitalize={false}
+            autoCapitalize="none"
+            autoComplete="off"
+            autoCorrect={false}
             unserlineStyle={styles.inputUnderline}
             outlineColor="transparent"
             activeOutlineColor="transparent"

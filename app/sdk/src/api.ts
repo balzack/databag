@@ -76,6 +76,7 @@ export interface Contact {
   removeCard(cardId: string): Promise<void>;
   confirmCard(cardId: string): Promise<void>;
   connectCard(cardId: string): Promise<void>;
+  addAndConnectCard(server: string | null, guid: string): Promise<void>;
   disconnectCard(cardId: string): Promise<void>;
   denyCard(cardId: string): Promise<void>;
   ignoreCard(cardId: string): Promise<void>;
