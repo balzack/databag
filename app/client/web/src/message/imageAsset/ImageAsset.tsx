@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MediaAsset } from '../../conversation/Conversation';
 import { useImageAsset } from './useImageAsset.hook';
-import { Progress, Surface, ActionIcon, Image } from '@mantine/core'
+import { Progress, ActionIcon, Image } from '@mantine/core'
 import classes from './ImageAsset.module.css'
 import { IconX } from '@tabler/icons-react'
 
