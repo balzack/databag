@@ -11,6 +11,7 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
     dataUrl: null,
     loading: false,
     loadPercent: 0,
+    loaded: false,
   })
   const cancelled = useRef(false);
 
@@ -37,6 +38,9 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
   }, [asset]);    
 
   const actions = {
+    setLoaded: ()  => {
+      updateState({ loaded: true });
+    },
     cancelLoad: () => {
       cancelled.current = true;
     },

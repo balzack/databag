@@ -52,7 +52,7 @@ export function VideoAsset({ topicId, asset }: { topicId: string, asset: MediaAs
           { state.loading && state.loadPercent > 0 && (
             <Progress className={classes.progress} value={state.loadPercent} />
           )}
-          <ActionIcon className={classes.close} variant="subtle" size="lg" onClick={hide}>
+          <ActionIcon className={classes.close} variant="filled" size="lg" onClick={hide}>
             <IconX size="lg" />
           </ActionIcon>
         </div>
