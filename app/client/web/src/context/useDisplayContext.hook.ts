@@ -501,12 +501,20 @@ export function useDisplayContext() {
       localStorage.setItem('time_format', timeFormat)
       updateState({ timeFormat })
     },
-    setAudioInput: (audioId: string) => {
-      localStorage.setItem('audio_input', audioId)
+    setAudioInput: (audioId: string | null) => {
+      if (audioId == null) {
+        localStorage.removeItem('audio_input');
+      } else {
+        localStorage.setItem('audio_input', audioId)
+      }
       updateState({ audioId })
     },
-    setVideoInput: (videoId: string) => {
-      localStorage.setItem('video_input', videoId)
+    setVideoInput: (videoId: string | null) => {
+      if (videoId == null) {
+        localStorage.removeItem('video_input');
+      } else {
+        localStorage.setItem('video_input', videoId)
+      }
       updateState({ videoId })
     },
   }
