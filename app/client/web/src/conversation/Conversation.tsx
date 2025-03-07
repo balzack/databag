@@ -151,6 +151,11 @@ export function Conversation({ openDetails }: { openDetails: ()=>void }) {
     }
   });
 
+  const enableImage = state.detail?.enableImage;
+  const enableVideo = state.detail?.enableVideo;
+  const enableAudio = state.detail?.enableAudio;
+  const enableBinary = state.detail?.enableBinary;
+
   return (
     <div className={classes.conversation}>
       <div className={classes.header}>
@@ -225,27 +230,29 @@ export function Conversation({ openDetails }: { openDetails: ()=>void }) {
           </div>
           <Textarea ref={input} className={classes.message} placeholder={state.strings.newMessage} styles={{ input: {color: state.textColorSet ? state.textColor : undefined, fontSize: state.textSizeSet ? state.textSize : undefined }}} value={state.message} onChange={(event) => actions.setMessage(event.currentTarget.value)} disabled={!state.detail || state.detail.locked || sending} onKeyDown={(e) => { keyDown(e.key, e.shiftKey)}} />
           <div className={classes.controls}>
-            { state.detail?.enableImage && (
+            { enableImage && (
               <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachImage.current.click()}> 
                 <IconCamera />
               </ActionIcon>
             )}
-            { state.detail?.enableVideo && (
+            { enableVideo && (
               <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachVideo.current.click()}> 
                 <IconVideo />
               </ActionIcon>
             )}
-            { state.detail?.enableAudio && (
+            { enableAudio && (
               <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachAudio.current.click()}> 
                 <IconDisc />
               </ActionIcon>
             )}
-            { state.detail?.enableBinary && (
+            { enableBinary && (
               <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachBinary.current.click()}>
                 <IconFile />
               </ActionIcon>
             )}
-            <Divider size="sm" orientation="vertical" />
+            { (enableImage || enableVideo || enableAudio || enableBinary) && (
+              <Divider size="sm" orientation="vertical" />
+            )}
             <Menu shadow="md" position="top">
               <Menu.Target>
                 <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending}> 

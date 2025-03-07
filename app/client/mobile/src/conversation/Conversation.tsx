@@ -303,11 +303,21 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
           { avoid && (<View style={{ ...styles.avoid, height: offset }} />) }
 
           <View style={styles.controls}>
-            <Pressable style={styles.control} disabled={disableImage} onPress={addImage}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="camera" size={24} color={disableImage ? Colors.placeholder : Colors.primary} /></Surface></Pressable>
-            <Pressable style={styles.control} disabled={disableVideo} onPress={addVideo}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="video-outline" size={24} color={disableVideo ? Colors.placeholder : Colors.primary} /></Surface></Pressable>
-            <Pressable style={styles.control} disabled={disableAudio} onPress={addAudio}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="volume-high" size={24} color={disableAudio ? Colors.placeholder : Colors.primary} /></Surface></Pressable>
-            <Pressable style={styles.control} disabled={disableBinary} onPress={addBinary}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="file-outline" size={24} color={disableBinary ? Colors.placeholder : Colors.primary} /></Surface></Pressable>
-            <Divider style={styles.separator} />
+            { !disableImage && (
+              <Pressable style={styles.control} onPress={addImage}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="camera" size={24} color={Colors.primary} /></Surface></Pressable>
+            )}
+            { !disableVideo && (
+              <Pressable style={styles.control} onPress={addVideo}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} /></Surface></Pressable>
+            )}
+            { !disableAudio && (
+              <Pressable style={styles.control} onPress={addAudio}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="volume-high" size={24} color={Colors.primary} /></Surface></Pressable>
+            )}
+            { !disableBinary && (
+              <Pressable style={styles.control} onPress={addBinary}><Surface style={styles.surface} elevation={2} mode="flat"><Icon style={styles.button} source="file-outline" size={24} color={Colors.primary} /></Surface></Pressable>
+            )}
+            { (!disableImage || !disableVideo || !disableAudio || !disableBinary) && (
+              <Divider style={styles.separator} />
+            )}
             <Pressable style={styles.control} onPress={()=>setColorMenu(true)}>
               <Surface style={styles.surface} elevation={2} mode="flat">
                 <Icon style={styles.button} source="format-color-text" size={24} color={Colors.primary} />
