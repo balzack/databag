@@ -96,7 +96,7 @@ jest.mock('../src/ring', () => {
 
 test('allocates session correctly', async () => {
   let status: string = '';
-  const sdk = new DatabagSDK({ topicBatch: 3, tagBatch: 3, articleTypes: [], channelTypes: []});
+  const sdk = new DatabagSDK({ channelTypes: []});
   const params: SessionParams = { pushType: '', deviceToken: '', notifications: [], deviceId: '', version: '', appName: '' };
   const session = await sdk.login('handle', 'password', 'jest.test', true, null, params);
   session.addStatusListener((ev: string) => { status = ev; });

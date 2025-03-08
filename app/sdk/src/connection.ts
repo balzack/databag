@@ -1,5 +1,5 @@
 import { EventEmitter } from 'eventemitter3';
-import { Logging } from './api';
+import { Logging } from './logging';
 import { Revision } from './entities';
 import { Call } from './types';
 
@@ -10,7 +10,7 @@ export class Connection {
   private closed: boolean;
   private emitter: EventEmitter;
   private websocket: WebSocket;
-  private stale: number;
+  private stale: ReturnType<typeof setTimeout>;
 
   constructor(log: Logging, token: string, node: string, secure: boolean) {
     this.closed = false;
@@ -20,7 +20,8 @@ export class Connection {
 
     this.stale = setInterval(() => {
       if (this.websocket?.readyState == 1) {
-        this.websocket.ping?.(); // not defined in browser
+        const ws: any = this.websocket;
+        ws.ping?.(); // not defined in browser
       }
     }, PING_INTERVAL);
   }

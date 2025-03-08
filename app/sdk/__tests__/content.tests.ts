@@ -160,7 +160,7 @@ const store = new TestStore();
 test('received contact updates', async () => {
   const cardChannels = new Map<string | null, Channel[]>();
   const stream = new StreamModule(log, store, null, null, 'test_guid', 'test_token', 'test_url', false, []);
-  const contact = new ContactModule(log, store, null, null, 'test_guid', 'test_token', 'test_url', false, [], []);
+  const contact = new ContactModule(log, store, null, null, 'test_guid', 'test_token', 'test_url', false, []);
   const content = new ContentModule(log, null, contact, stream);
 
   const channelUpdate = ({ channels, cardId }: { channels: Channel[]; cardId: string | null }) => {
@@ -188,7 +188,7 @@ test('received contact updates', async () => {
 test('received stream updates', async () => {
   const streamChannels = new Map<string | null, Channel[]>();
   const stream = new StreamModule(log, store, null, null, 'test_guid', 'test_token', 'test_url', false, []);
-  const contact = new ContactModule(log, store, null, null, 'test_guid', 'test_token', 'test_url', false, [], []);
+  const contact = new ContactModule(log, store, null, null, 'test_guid', 'test_token', 'test_url', false, []);
   const content = new ContentModule(log, null, contact, stream);
 
   const channelUpdate = ({ channels, cardId }: { channels: Channel[]; cardId: string | null }) => {

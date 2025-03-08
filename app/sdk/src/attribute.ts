@@ -1,5 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Attribute, Settings, Logging } from './api';
+import type { Attribute, Settings } from './api';
+import { Logging } from './logging';
 import type { Article } from './types';
 import { Store } from './store';
 
@@ -30,7 +31,7 @@ export class AttributeModule implements Attribute {
     this.emitter.off('article', ev);
   }
 
-  public async close(): void {}
+  public async close(): Promise<void> {}
 
   public async setRevision(rev: number): Promise<void> {
     console.log('set attribute revision:', rev);

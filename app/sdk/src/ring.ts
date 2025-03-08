@@ -1,6 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
 import { LinkModule } from './link';
-import type { Ring, Link, Logging } from './api';
+import type { Ring, Link } from './api';
+import { Logging } from './logging';
 import type { Call } from './types';
 import { removeContactCall } from './net/removeContactCall';
 
@@ -9,9 +10,6 @@ const EXPIRES = 6000;
 export class RingModule implements Ring {
   private log: Logging;
   private emitter: EventEmitter;
-  private token: string;
-  private node: string;
-  private secure: boolean;
   private calls: Map<string, { call: Call, expires: number, status: string }>
   private closed: boolean;
   private endContactCall: (cardId: string, callId: string) => Promise<void>;
@@ -20,8 +18,7 @@ export class RingModule implements Ring {
     this.log = log;
     this.endContactCall = endContactCall;
     this.emitter = new EventEmitter();
-    this.calls = new Map<string, { call: Call, expires: number }>();
-    this.expire = null;
+    this.calls = new Map<string, { call: Call, expires: number, status: string }>();
     this.closed = false;
   }
 

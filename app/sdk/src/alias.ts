@@ -1,5 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Alias, Settings, Logging } from './api';
+import type { Alias, Settings } from './api';
+import { Logging } from './logging';
 import type { Group } from './types';
 import { Store } from './store';
 
@@ -30,7 +31,7 @@ export class AliasModule implements Alias {
     this.emitter.off('group', ev);
   }
 
-  public async close(): void {}
+  public async close(): Promise<void> {}
 
   public async setRevision(rev: number): Promise<void> {
     console.log('set alias revision:', rev);

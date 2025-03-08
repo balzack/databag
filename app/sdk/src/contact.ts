@@ -898,7 +898,7 @@ export class ContactModule implements Contact {
       const contact = await setCardOpenMessage(server, !insecure, message);
       if (contact.status === 'connected') {
         const { token: contactToken, articleRevision, channelRevision, profileRevision } = contact;
-        await setCardConnected(node, secure, token, cardId, contactToken, articleRevision, channelRevision, profileRevision);
+        await setCardConnected(node, secure, token, added.id, contactToken, articleRevision, channelRevision, profileRevision);
       }
     } catch (err) {
       this.log.error('failed to deliver open message');
