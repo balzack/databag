@@ -1,34 +1,51 @@
 import { EventEmitter } from 'eventemitter3';
-import { type Link } from '../src/api';
+import { Revision } from '../src/entities';
 
-export class MockLinkModule implements Link {
-  private emitter: EventEmitter;
+export class MockLink {
+  private statusListener: ((status: string)=>Promise<void>) | null;
+  private messageListener: ((message: any)=>Promise<void>) | null;
+  private status: string;
 
   constructor() {
-    this.emitter = new EventEmitter();
-  }
-
-  public setStatusListener(ev: (status: string) => Promise<void>): void {
-  }
-
-  public clearStatusListener(): void {
-  }
-
-  public setMessageListener(ev: (message: any) => Promise<void>): void {
-  }
-
-  public clearMessageListener(): void {
+    this.statusListener = null;
+    this.messageListener = null;
+    this.status = 'idle';
   }
 
   public getIce(): { urls: string; username: string; credential: string }[] {
     return [];
   }
 
-  public async sendMessage(message: any): Promise<void> {
+  public async call(node: string, secure: boolean, token: string, cardId: string, contactNode: string, contactSecure: boolean, contactGuid: string, contactToken: string) {
+    return;
   }
 
-  public async close(): Promise<void> {
+  public async join(server: string, secure: boolean, token: string, ice: { urls: string; username: string; credential: string }[], endCall: ()=>Promise<void>) {
+    return;
   }
 
+  public async close() {
+    return;
+  }
+
+  public setStatusListener(listener: (status: string) => Promise<void>) {
+    this.statusListener = listener;
+    this.statusListener(this.status);
+  }
+  
+  public clearStatusListener() {
+    this.statusListener = null;
+  }
+
+  public setMessageListener(listener: (message: any) => Promise<void>) {
+    this.messageListener = listener;
+  }
+  
+  public clearMessageListener() {
+    this.messageListener = null;
+  }
+
+  public async sendMessage(message: any) {
+  }
 }
 
