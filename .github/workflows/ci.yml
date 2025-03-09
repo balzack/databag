@@ -55,7 +55,12 @@ jobs:
           cd app/mobile
           yarn install
           yarn jest
-  
+
+    - name: Test SDK
+      run: |
+          cd app/sdk
+          yarn test --silent
+          
     - name: Export
       uses: actions/upload-artifact@v4
       with:
