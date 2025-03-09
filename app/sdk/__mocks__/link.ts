@@ -1,7 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
 import { Revision } from '../src/entities';
 
-export class MockLink {
+export class MockLinkModule {
   private statusListener: ((status: string)=>Promise<void>) | null;
   private messageListener: ((message: any)=>Promise<void>) | null;
   private status: string;

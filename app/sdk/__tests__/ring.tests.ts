@@ -1,5 +1,6 @@
+import { Call } from '../src/types';
 import { RingModule } from '../src/ring';
-import { MockLink } from '../__mocks__/link';
+import { MockLinkModule } from '../__mocks__/link';
 import { waitFor } from '../__mocks__/waitFor';
 import { ConsoleLogging } from '../src/logging';
 
@@ -15,7 +16,7 @@ jest.mock('../src/net/fetchUtil', () => {
   }
 });
 
-const mockLink = new MockLink();
+const mockLink = new MockLinkModule();
 jest.mock('../src/link', () => {
   return {
     Connection: jest.fn().mockImplementation(() => {
@@ -25,10 +26,11 @@ jest.mock('../src/link', () => {
 })
 
 test('rings correctly', async () => {
+
   const endContactCall = async (cardId: string, callId: string) => {
     console.log("ending");
   }
 
   const log = new ConsoleLogging();
-  const ring = new RingModule(log, endContactCall);
+  const ringModule = new RingModule(log, endContactCall);
 });
