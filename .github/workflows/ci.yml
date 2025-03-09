@@ -53,13 +53,13 @@ jobs:
     - name: Jest ReactNative
       run: |
           cd app/mobile
-          yarn install
-          yarn build
           yarn jest
 
     - name: Test SDK
       run: |
           cd app/sdk
+          yarn install
+          yarn build
           yarn test --silent
           
     - name: Export
