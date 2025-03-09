@@ -54,6 +54,7 @@ jobs:
       run: |
           cd app/mobile
           yarn install
+          yarn build
           yarn jest
 
     - name: Test SDK
