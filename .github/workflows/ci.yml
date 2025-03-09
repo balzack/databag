@@ -53,6 +53,7 @@ jobs:
     - name: Jest ReactNative
       run: |
           cd app/mobile
+          yarn install
           yarn jest
 
     - name: Test SDK
