@@ -59,10 +59,10 @@ const router = createHashRouter([
   {
     element: <Root />,
     children: [
-      { path: '/', element: <></> },
       { path: 'access', element: <Access /> },
       { path: 'session', element: <Session /> },
       { path: 'service', element: <Service /> },
+      { path: '*', element: <></> },
     ],
   },
 ])
