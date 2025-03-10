@@ -63,6 +63,12 @@ jobs:
           yarn build
           yarn test --silent
           
+    - name: Build WebApp
+      run: |
+          cd app/client/web
+          yarn install
+          yarn build
+          
     - name: Export
       uses: actions/upload-artifact@v4
       with:
