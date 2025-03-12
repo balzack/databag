@@ -654,8 +654,7 @@ export class ContactModule implements Contact {
               enableVideo,
               enableBinary,
               created,
-              members: members.map(({ member }) => ({ guid: member }))
-              //members: []
+              members: members.map(guid => ({ guid }))
             }
             this.focus.setDetail(cardId, id, focusDetail); 
           }

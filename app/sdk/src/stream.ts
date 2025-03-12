@@ -169,7 +169,7 @@ export class StreamModule {
                       enableVideo, 
                       enableBinary,
                       created,
-                      members: members.map(guid => ({ guid: guid.member })),
+                      members: members.map(guid => ({ guid })),
                     }
                     this.focus.setDetail(null, id, focusDetail);
                   }

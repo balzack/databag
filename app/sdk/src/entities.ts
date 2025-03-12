@@ -77,10 +77,7 @@ export type ChannelDetailEntity = {
     groups: string[];
     cards: string[];
   };
-  members: {
-    member: string;
-    pushEnabled: boolean;
-  }[];
+  members: string[];
 };
 
 export type ChannelEntity = {
