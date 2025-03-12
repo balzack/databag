@@ -2,6 +2,8 @@
 
 # Backlog
 
+**WebApp Memory:** use file system api in web to avoid loading full media assets in memory
+
 **Notification:** add content of message to push notification as optional admin config
 
 **Call UI:** pop-up window does not appear outside the app, nor does it activate the lock screen for interaction.
