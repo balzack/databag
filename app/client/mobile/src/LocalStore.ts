@@ -14,7 +14,7 @@ export class LocalStore implements SqlStore {
     await this.localStoreSet('CREATE TABLE IF NOT EXISTS local_store (key text, value text, unique(key));');
   }
 
-  public async get(key: string, value: string, unset: string): Promise<string> {
+  public async get(key: string, unset: string): Promise<string> {
     try {
       const rows = await this.localStoreGet(`SELECT * FROM local_store WHERE key='${key}';`);
       if (rows.length === 1 && rows[0].value != null) {

@@ -21,6 +21,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Colors} from '../constants/Colors';
 import {Ring} from '../ring/Ring';
 import {Call} from '../call/Call';
+import {Welcome} from '../welcome/Welcome';
 
 const SettingsDrawer = createDrawerNavigator();
 const ContactsDrawer = createDrawerNavigator();
@@ -187,6 +188,7 @@ export function Session({ share }: { share: { filePath: string, mimeType: string
                 </View>
               </View>
             </SafeAreaView>
+            <Welcome />
           </Surface>
         )}
         {state.layout === 'large' && (

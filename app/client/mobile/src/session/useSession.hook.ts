@@ -52,6 +52,9 @@ export function useSession() {
   }, [display.state]);
 
   const actions = {
+    clearWelcome: async () => {
+      await app.actions.setShowWelcome(false);
+    },
     logout: async () => {
       await app.actions.accountLogout();
     },

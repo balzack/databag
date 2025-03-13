@@ -5,6 +5,7 @@ export const en = {
   acceptTerms: 'Accept Terms of Service',
   terms: 'Terms of Service',
   access: 'Access',
+  continue: 'Continue',
 
   textSmall: 'Small',
   textMedium: 'Medium',
@@ -300,6 +301,7 @@ export const fr = {
   acceptTerms: 'Accepter les conditions d\'utilisation',
   terms: 'Conditions d\'utilisation',
   access: 'Accès',
+  continue: 'Continue',
 
   textSmall: 'Petit',
   textMedium: 'Moyen',
@@ -595,6 +597,7 @@ export const sp = {
   acceptTerms: 'Aceptar los términos de servicio',
   terms: 'Términos de servicio',
   access: 'Acceso',
+  continue: 'Continúa',
 
   textSmall: 'Pequeño',
   textMedium: 'Mediano',
@@ -889,6 +892,7 @@ export const pt = {
   acceptTerms: 'Aceitar os termos de serviço',
   terms: 'Termos de serviço',
   access: 'Acesso',
+  continue: 'Continue',
 
   textSmall: 'Pequeno',
   textMedium: 'Médio',
@@ -1183,6 +1187,7 @@ export const de = {
   acceptTerms: 'Nutzungsbedingungen akzeptieren',
   terms: 'Nutzungsbedingungen',
   access: 'Zugang',
+  continue: 'Weiter',
 
   textSmall: 'Klein',
   textMedium: 'Mittel',
@@ -1477,6 +1482,7 @@ export const ru = {
   acceptTerms: 'Принять условия обслуживания',
   terms: 'Условия обслуживания',
   access: 'Доступ',
+  continue: 'продолжай',
 
   textSmall: 'Маленький',
   textMedium: 'Средний',
@@ -1771,6 +1777,7 @@ export const el = {
   acceptTerms: 'Αποδεχτείτε τους όρους υπηρεσίας',
   terms: 'Όροι υπηρεσίας',
   access: 'Πρόσβαση',
+  continue: 'συνεχίζω',
 
   textSmall: 'Μικρό',
   textMedium: 'Μέσον',

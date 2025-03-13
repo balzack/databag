@@ -7,7 +7,6 @@ import {LocalStore} from '../LocalStore';
 import { StagingFiles } from '../StagingFiles'
 import messaging from '@react-native-firebase/messaging';
 
-
 const DATABAG_DB = 'db_v244.db';
 const SETTINGS_DB = 'ls_v001.db';
 
@@ -47,6 +46,7 @@ export function useAppContext() {
     fullDayTime: false,
     monthFirstDate: true,
     initialized: false,
+    showWelcome: false,
     sharing: null as null | { cardId: string, channelId: string, filePath: string, mimeType: string },
   });
 
@@ -58,14 +58,15 @@ export function useAppContext() {
     await local.current.open(SETTINGS_DB);
     const fullDayTime = (await local.current.get('time_format', '12h')) === '24h';
     const monthFirstDate = (await local.current.get('date_format', 'month_first')) === 'month_first';
+    const showWelcome = (await local.current.get('show_welcome', 'show')) !== 'hide';
 
     const store = new SessionStore();
     await store.open(DATABAG_DB);
     const session: Session | null = await sdk.current.initOfflineStore(store);
     if (session) {
-      updateState({session, fullDayTime, monthFirstDate, initialized: true});
+      updateState({session, fullDayTime, monthFirstDate, showWelcome, initialized: true});
     } else {
-      updateState({ initialized: true });
+      updateState({ fullDayTime, monthFirstDate, showWelcome, initialized: true });
     }
 
     await requestUserPermission();
@@ -94,6 +95,10 @@ export function useAppContext() {
     setFullDayTime: async (fullDayTime: boolean) => {
       updateState({fullDayTime});
       await local.current.set('time_format', fullDayTime ? '24h' : '12h');
+    },
+    setShowWelcome: async (showWelcome: boolean) => {
+      updateState({ showWelcome });
+      await local.current.set('show_welcome', showWelcome ? 'show' : 'hide');
     },
     accountLogin: async (username: string, password: string, node: string, secure: boolean, code: string) => {
       const deviceToken = await getToken();
