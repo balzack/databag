@@ -279,22 +279,24 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
           <Pressable style={styles.blur} onPress={()=>setEditing(false)}>
             <BlurView style={styles.blur} blurType="dark" blurAmount={6} reducedTransparencyFallbackColor="dark" />
           </Pressable>
-          <Surface elevation={2} style={styles.editArea}>
-            <Text style={styles.title}>{ state.strings.edit }</Text>
-            <TextInput multiline={true} mode="outlined" style={styles.message}
-                outlineColor="transparent" activeOutlineColor="transparent" spellcheck={false}
-                autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage} 
-                value={editText} onChangeText={value => setEditText(value)} />
-            <View style={styles.controls}>
-              <Button mode="outlined" onPress={()=>setEditing(false)}>
-                {state.strings.cancel}
-              </Button>
-              <Button mode="contained" loading={saving} onPress={save}>
-                {state.strings.save}
-              </Button>
-            </View>
-            <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={24} onPress={()=>setEditing(false)} />
-          </Surface>
+          <View style={styles.editArea}>
+            <Surface elevation={2} style={styles.editContent}> 
+              <Text style={styles.title}>{ state.strings.edit }</Text>
+              <TextInput multiline={true} mode="outlined" style={styles.message}
+                  outlineColor="transparent" activeOutlineColor="transparent" spellcheck={false}
+                  autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage} 
+                  value={editText} onChangeText={value => setEditText(value)} />
+              <View style={styles.controls}>
+                <Button mode="outlined" onPress={()=>setEditing(false)}>
+                  {state.strings.cancel}
+                </Button>
+                <Button mode="contained" loading={saving} onPress={save}>
+                  {state.strings.save}
+                </Button>
+              </View>
+              <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={24} onPress={()=>setEditing(false)} />
+            </Surface>
+          </View>
         </View>
       </Modal>
 

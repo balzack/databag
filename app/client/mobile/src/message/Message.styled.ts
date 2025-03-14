@@ -150,9 +150,13 @@ export const styles = StyleSheet.create({
     alignItem: 'center',
     justifyContent: 'center',
     width:'80%',
-    maxWidth: 400,
+    maxWidth: 500,
     padding: 16,
     borderRadius: 8,
+  },
+  editContent: {
+    width: '100%',
+    padding: 16,
   },
   blur: {
     position: 'absolute',

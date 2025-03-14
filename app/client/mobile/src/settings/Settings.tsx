@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useTheme, Surface, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
-import {TouchableOpacity, Modal, View, Image, ScrollView} from 'react-native';
+import {TouchableOpacity, Modal, View, Image, ScrollView, Platform} from 'react-native';
 import {styles} from './Settings.styled';
 import {useSettings} from './useSettings.hook';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -456,9 +456,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 {state.profile.description && <Text style={styles.labelSet}>{state.profile.description}</Text>}
               </View>
               <TouchableOpacity style={styles.editDetails} onPress={() => setDetails(true)}>
-                <Surface elevation={0} mode="flat">
-                  <Text style={styles.editDetailsLabel}>{state.strings.edit}</Text>
-                </Surface>
+                <Text style={styles.editDetailsLabel}>{state.strings.edit}</Text>
               </TouchableOpacity>
             </View>
 
@@ -669,15 +667,17 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                   <Text style={styles.modalDescription}>{state.strings.sealForget}</Text>
                   {!sealConfig && (
                     <View style={styles.modalControls}>
-                      <IconButton
-                        style={styles.modalOption}
-                        iconColor={Colors.primary}
-                        icon="menu-right-outline"
-                        size={32}
-                        onPress={() => {
-                          setSealConfig(true);
-                        }}
-                      />
+                      <View style={styles.modalOption}>
+                        <IconButton
+                          style={styles.optionIcon} 
+                          iconColor={Colors.primary}
+                          icon="menu-right-outline"
+                          size={32}
+                          onPress={() => {
+                            setSealConfig(true);
+                          }}
+                        />
+                      </View>
                       <Button mode="outlined" onPress={() => setSealing(false)}>
                         {state.strings.cancel}
                       </Button>
@@ -692,17 +692,19 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                         {state.strings.resave}
                       </Button>
                       <Button mode="contained" style={styles.deleteButton} loading={savingSeal} onPress={() => setSealDelete(true)}>
-                        {state.strings.delete}
+                        {state.strings.remove}
                       </Button>
-                      <IconButton
-                        style={styles.modalOption}
-                        iconColor={Colors.primary}
-                        icon="menu-left-outline"
-                        size={32}
-                        onPress={() => {
-                          setSealConfig(false);
-                        }}
-                      />
+                      <View style={styles.modalOther}>
+                        <IconButton
+                          style={styles.optionIcon} 
+                          iconColor={Colors.primary}
+                          icon="menu-left-outline"
+                          size={32}
+                          onPress={() => {
+                            setSealConfig(false);
+                          }}
+                        />
+                      </View>
                     </View>
                   )}
                 </>
@@ -717,7 +719,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     autoComplete="off"
                     autoCorrect={false}
                     value={state.sealPassword}
-                    label={Platofrm.OS==='ios'?state.strings.password:undefined}
+                    label={Platform.OS==='ios'?state.strings.password:undefined}
                     placeholder={Platform.OS!=='ios'?state.strings.password:undefined}
                     secureTextEntry={!showPassword}
                     left={<TextInput.Icon style={styles.icon} icon="lock" />}
@@ -785,15 +787,17 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                   />
                   {!sealConfig && (
                     <View style={styles.modalControls}>
-                      <IconButton
-                        style={styles.modalOption}
-                        iconColor={Colors.primary}
-                        icon="menu-right-outline"
-                        size={32}
-                        onPress={() => {
-                          setSealConfig(true);
-                        }}
-                      />
+                      <View style={modalOption}>
+                        <IconButton
+                          style={styles.optionIcon} 
+                          iconColor={Colors.primary}
+                          icon="menu-right-outline"
+                          size={32}
+                          onPress={() => {
+                            setSealConfig(true);
+                          }}
+                        />
+                      </View>
                       <Button mode="outlined" onPress={() => setSealing(false)}>
                         {state.strings.cancel}
                       </Button>
@@ -807,15 +811,17 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                       <Button mode="contained" style={styles.deleteButton} loading={savingSeal} onPress={() => setSealDelete(true)}>
                         {state.strings.delete}
                       </Button>
-                      <IconButton
-                        style={styles.modalOption}
-                        iconColor={Colors.primary}
-                        icon="menu-left-outline"
-                        size={32}
-                        onPress={() => {
-                          setSealConfig(false);
-                        }}
-                      />
+                      <View style={styles.modalOther}>
+                        <IconButton
+                          style={styles.optionIcon} 
+                          iconColor={Colors.primary}
+                          icon="menu-left-outline"
+                          size={32}
+                          onPress={() => {
+                            setSealConfig(false);
+                          }}
+                        />
+                      </View>
                     </View>
                   )}
                 </>
@@ -1136,94 +1142,100 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedMessage} onRequestClose={() => setBlockedMessage(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
-            <View style={styles.blockedHeader}>
-              <Text style={styles.blockedTitle}>{ state.strings.blockedMessages }</Text>
-              <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedMessage(false)} />
-            </View>
-            <Surface style={styles.blocked} elevation={1} mode="flat">
-              { state.blockedMessages.length == 0 && (
-                <View style={styles.blockedEmpty}>
-                  <Text style={styles.blockedLabel}>{ state.strings.noMessages }</Text>
-                </View>
-              )}
-              { state.blockedMessages.length > 0 && (
-                <View>
-                { blockedMessages }
-                </View>
-              )}
-            </Surface>            
-            <View style={styles.blockedDone}>
-              { blockedError && (
-                <Text style={styles.blockedError}>{ state.strings.operationFailed }</Text>
-              )}
-              <Button style={styles.blockedButton} mode="outlined" onPress={() => setBlockedMessage(false)}>
-                {state.strings.close}
-              </Button>
-            </View>
-          </Surface>
+          <View>
+            <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
+              <View style={styles.blockedHeader}>
+                <Text style={styles.blockedTitle}>{ state.strings.blockedMessages }</Text>
+                <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedMessage(false)} />
+              </View>
+              <Surface style={styles.blocked} elevation={1} mode="flat">
+                { state.blockedMessages.length == 0 && (
+                  <View style={styles.blockedEmpty}>
+                    <Text style={styles.blockedLabel}>{ state.strings.noMessages }</Text>
+                  </View>
+                )}
+                { state.blockedMessages.length > 0 && (
+                  <View>
+                  { blockedMessages }
+                  </View>
+                )}
+              </Surface>            
+              <View style={styles.blockedDone}>
+                { blockedError && (
+                  <Text style={styles.blockedError}>{ state.strings.operationFailed }</Text>
+                )}
+                <Button style={styles.blockedButton} mode="outlined" onPress={() => setBlockedMessage(false)}>
+                  {state.strings.close}
+                </Button>
+              </View>
+            </Surface>
+          </View>
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedChannel} onRequestClose={() => setBlockedChannel(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
-            <View style={styles.blockedHeader}>
-              <Text style={styles.blockedTitle}>{ state.strings.blockedTopics }</Text>
-              <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedChannel(false)} />
-            </View>
-            <Surface style={styles.blocked} elevation={1} mode="flat">
-              { state.blockedChannels.length == 0 && (
-                <View style={styles.blockedEmpty}>
-                  <Text style={styles.blockedLabel}>{ state.strings.noTopics }</Text>
-                </View>
-              )}    
-              { state.blockedChannels.length > 0 && (
-                <View>
-                { blockedChannels }
-                </View>
-              )}
-            </Surface>            
-            <View style={styles.blockedDone}>
-              { blockedError && (
-                <Text style={styles.blockedError}>{ state.strings.operationFailed }</Text>
-              )}
-              <Button style={styles.blockedButton} mode="outlined" onPress={() => setBlockedChannel(false)}>
-                {state.strings.close}
-              </Button>
-            </View>
-          </Surface>
+          <View>
+            <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
+              <View style={styles.blockedHeader}>
+                <Text style={styles.blockedTitle}>{ state.strings.blockedTopics }</Text>
+                <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedChannel(false)} />
+              </View>
+              <Surface style={styles.blocked} elevation={1} mode="flat">
+                { state.blockedChannels.length == 0 && (
+                  <View style={styles.blockedEmpty}>
+                    <Text style={styles.blockedLabel}>{ state.strings.noTopics }</Text>
+                  </View>
+                )}    
+                { state.blockedChannels.length > 0 && (
+                  <View>
+                  { blockedChannels }
+                  </View>
+                )}
+              </Surface>            
+              <View style={styles.blockedDone}>
+                { blockedError && (
+                  <Text style={styles.blockedError}>{ state.strings.operationFailed }</Text>
+                )}
+                <Button style={styles.blockedButton} mode="outlined" onPress={() => setBlockedChannel(false)}>
+                  {state.strings.close}
+                </Button>
+              </View>
+            </Surface>
+          </View>
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedContact} onRequestClose={() => setBlockedContact(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
-            <View style={styles.blockedHeader}>
-              <Text style={styles.blockedTitle}>{ state.strings.blockedContacts }</Text>
-              <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedContact(false)} />
-            </View>
-            <Surface style={styles.blocked} elevation={1} mode="flat">
-              { state.blockedContacts.length == 0 && (
-                <View style={styles.blockedEmpty}>
-                  <Text style={styles.blockedLabel}>{ state.strings.noContacts }</Text>
-                </View>
-              )}    
-              { state.blockedContacts.length > 0 && (
-                <View>
-                { blockedContacts }
-                </View>
-              )}
-            </Surface>            
-            <View style={styles.blockedDone}>
-              { blockedError && (
-                <Text style={styles.blockedError}>{ state.strings.operationFailed }</Text>
-              )}
-              <Button style={styles.blockedButton} mode="outlined" onPress={() => setBlockedContact(false)}>
-                {state.strings.close}
-              </Button>
-            </View>
-          </Surface>
+          <View>
+            <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
+              <View style={styles.blockedHeader}>
+                <Text style={styles.blockedTitle}>{ state.strings.blockedContacts }</Text>
+                <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedContact(false)} />
+              </View>
+              <Surface style={styles.blocked} elevation={1} mode="flat">
+                { state.blockedContacts.length == 0 && (
+                  <View style={styles.blockedEmpty}>
+                    <Text style={styles.blockedLabel}>{ state.strings.noContacts }</Text>
+                  </View>
+                )}    
+                { state.blockedContacts.length > 0 && (
+                  <View>
+                  { blockedContacts }
+                  </View>
+                )}
+              </Surface>            
+              <View style={styles.blockedDone}>
+                { blockedError && (
+                  <Text style={styles.blockedError}>{ state.strings.operationFailed }</Text>
+                )}
+                <Button style={styles.blockedButton} mode="outlined" onPress={() => setBlockedContact(false)}>
+                  {state.strings.close}
+                </Button>
+              </View>
+            </Surface>
+          </View>
         </View>
       </Modal>
       <Confirm show={alert} params={alertParams} />

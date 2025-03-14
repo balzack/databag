@@ -218,8 +218,17 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   modalOption: {
-    backgroundColor: 'transparent',
     flexGrow: 1,
+    display: 'flex',
+    alignItems: 'flex-begin',
+  },
+  modalOther: {
+    flexGrow: 1,
+    display: 'flex',
+    alignItems: 'flex-end',
+  },
+  optionIcon: {
+    backgroundColor: 'transparent',
   },
   deleteButton: {
     backgroundColor: Colors.danger,

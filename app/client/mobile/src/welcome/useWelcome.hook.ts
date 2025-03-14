@@ -17,14 +17,6 @@ export function useWelcome() {
   }
 
   useEffect(() => {
-console.log("-------> SETTING!");
-console.log("-------> SETTING!");
-console.log("-------> SETTING!");
-console.log("-------> SETTING!");
-console.log("-------> SETTING!");
-console.log("-------> SETTING!");
-  console.log(app.state);
-
     const showWelcome = app.state.showWelcome;
     updateState({ showWelcome });
   }, [app.state]);
