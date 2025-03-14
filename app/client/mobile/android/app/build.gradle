@@ -89,7 +89,7 @@ android {
         applicationId "com.databag"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1125
+        versionCode 1145
         versionName "1.5"
     }
     signingConfigs {
@@ -114,6 +114,9 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+  implementation 'com.facebook.fresco:animated-gif:3.2.0'
+  implementation 'com.facebook.fresco:animated-webp:3.2.0'
+  implementation 'com.facebook.fresco:webpsupport:3.2.0'
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

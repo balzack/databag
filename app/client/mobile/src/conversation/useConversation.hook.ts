@@ -19,7 +19,7 @@ async function getImageThumb(path: string, type: string, size: number) {
   if (size < IMAGE_SCALE_SIZE) {
     const type = await fileType(path);
     const base = await RNFS.readFile(path, 'base64')
-    return `data:image/{type.ext};base64,${base}`;
+    return `data:image/${type.ext};base64,${base}`;
   } else {
     const thumb = await ImageResizer.createResizedImage(path, 192, 192, "JPEG", 50, 0, null);
     const base = await RNFS.readFile(thumb.path, 'base64')
