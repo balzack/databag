@@ -55,7 +55,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
       const words = parsed as string[];
       words.forEach((word, index) => {
         if (!!urlPattern.test(word)) {
-          clickable.push(<Text key={index}>{ plain }</Text>);
+          clickable.push(<Text key={index} style={textStyle}>{ plain }</Text>);
           plain = '';
           const url = !!hostPattern.test(word) ? word : `https://${word}`;
           clickable.push(<Text key={'link-' + index} onPress={() => Linking.openURL(sanitizeUrl(url))} style={{ fontStyle: 'italic' }}>{ sanitizeUrl(word) + ' ' }</Text>);
@@ -67,7 +67,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
     }
 
     if (plain) {
-      clickable.push(<Text key={parsed.length}>{ plain }</Text>);
+      clickable.push(<Text key={parsed.length} style={textStyle}>{ plain }</Text>);
     }
     setMessage(clickable)
   }, [text, locked]);
