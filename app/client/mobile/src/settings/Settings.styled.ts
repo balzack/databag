@@ -342,9 +342,12 @@ export const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 4,
   },
-  blockedSurface: {
+  blockedContent: {
     width: '80%',
     maxWidth: 500,
+  },
+  blockedSurface: {
+    width: '100%',
     borderRadius: 8,
     paddingLeft: 16,
     paddingRight: 16,

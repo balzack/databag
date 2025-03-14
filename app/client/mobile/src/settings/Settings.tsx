@@ -787,7 +787,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                   />
                   {!sealConfig && (
                     <View style={styles.modalControls}>
-                      <View style={modalOption}>
+                      <View style={styles.modalOption}>
                         <IconButton
                           style={styles.optionIcon} 
                           iconColor={Colors.primary}
@@ -1142,7 +1142,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedMessage} onRequestClose={() => setBlockedMessage(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <View>
+          <View style={styles.blockedContent}>
             <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
               <View style={styles.blockedHeader}>
                 <Text style={styles.blockedTitle}>{ state.strings.blockedMessages }</Text>
@@ -1175,7 +1175,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedChannel} onRequestClose={() => setBlockedChannel(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <View>
+          <View style={styles.blockedContent}>
             <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
               <View style={styles.blockedHeader}>
                 <Text style={styles.blockedTitle}>{ state.strings.blockedTopics }</Text>
@@ -1208,7 +1208,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedContact} onRequestClose={() => setBlockedContact(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <View>
+          <View style={styles.blockedContent}>
             <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
               <View style={styles.blockedHeader}>
                 <Text style={styles.blockedTitle}>{ state.strings.blockedContacts }</Text>
