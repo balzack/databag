@@ -107,11 +107,11 @@ export function useConversation() {
       if (focused.cardId == sharing.cardId && focused.channelId == sharing.channelId) {
         const { mimeType, filePath } = sharing;
         const ext = mimeType.toLowerCase();
-        if (ext == '.jpg' || ext == 'image/jpeg' || ext == '.png' || ext == 'image/png' || ext == '.webp' || ext == 'image/webp' || ext == '.bmp' || ext == 'image/bmp') {
+        if (ext == '.jpg' || ext == 'image/jpeg' || ext == '.png' || ext == 'image/png' || ext == '.webp' || ext == 'image/webp' || ext == '.bmp' || ext == 'image/bmp' || ext == '.gif' || ext == 'image/gif') {
           actions.addImage(filePath, mimeType, IMAGE_SCALE_SIZE); 
         } else if (ext == '.mp4' || ext == 'videp/mp4' || ext == '.mov' || ext == 'video/mov') {
           actions.addVideo(filePath, mimeType);
-        } else if (ext == '.mp3' || ext == 'audio/mp3' || ext == '.aac' || 'audio/aac') {
+        } else if (ext == '.mp3' || ext == 'audio/mp3' || ext == '.aac' || ext == 'audio/aac') {
           actions.addAudio(filePath, mimeType);
         } else {
           actions.addBinary(filePath, filePath.split('/').pop());
