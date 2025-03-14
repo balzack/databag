@@ -11,9 +11,6 @@ export function Welcome() {
   const theme = useTheme();
   const { state, actions } = useWelcome();
 
-console.log("WELCOME????", state.showWelcome);
-
-
   return (
     <View style={ state.showWelcome ? styles.show : styles.hide }>
       <View style={{ ...styles.base, backgroundColor: theme.colors.base }}>
