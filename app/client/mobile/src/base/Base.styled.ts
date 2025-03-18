@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'absolute',
   },
   image: {
     width: '50%',

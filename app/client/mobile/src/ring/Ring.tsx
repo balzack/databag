@@ -152,7 +152,7 @@ export function Ring() {
           </Surface>
         )}
         { state.calling && (
-          <Surface elevation={4} mode="flat" style={styles.ring}>
+          <Surface elevation={4} mode="flat" style={{ ...styles.ring, borderRadius: state.layout === 'large' ? 16 : 0 }}>
             <IconButton style={styles.circleIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.primary} icon={state.audioEnabled ? 'microphone' : 'microphone-off'} compact="true" mode="contained" size={24} onPress={toggleAudio} />
             <IconButton style={styles.circleIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.confirmed} icon={(state.remoteVideo || state.localVideo) ? 'video-switch-outline' : 'arrow-expand-all'} compact="true" mode="contained" size={24} onPress={()=>actions.setFullscreen(true)} />
             <View style={styles.name}>
