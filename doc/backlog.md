@@ -2,6 +2,8 @@
 
 # Backlog
 
+**Unsent Text:** persist unsent text in context when switching between threads
+
 **WebApp Memory:** use file system api in web to avoid loading full media assets in memory
 
 **Notification:** add content of message to push notification as optional admin config
