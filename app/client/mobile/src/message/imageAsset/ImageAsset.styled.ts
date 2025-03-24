@@ -16,8 +16,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  image: {
-  },
+  image: {},
   thumb: {
     borderRadius: 4,
   },

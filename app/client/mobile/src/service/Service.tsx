@@ -11,7 +11,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 const SetupDrawer = createDrawerNavigator();
 
 export function Service() {
-  const { state } = useService();
+  const {state} = useService();
   const [tab, setTab] = useState('accounts');
   const scheme = useColorScheme();
   const showAccounts = {display: tab === 'accounts' ? 'flex' : 'none'};
@@ -131,4 +131,3 @@ function AccountScreen({setup}) {
     </SafeAreaView>
   );
 }
-

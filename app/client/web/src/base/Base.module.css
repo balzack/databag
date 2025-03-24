@@ -40,15 +40,15 @@
 
   .instructions {
     height: 32px;
-    
+
     .steps {
       display: flex;
       align-items: center;
-    
+
       .step {
         font-size: 16px;
         color: var(--mantine-color-text-6);
       }
     }
   }
-} 
+}

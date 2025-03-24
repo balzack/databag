@@ -12,13 +12,12 @@ export function useBinaryFile(source: File) {
   }
 
   useEffect(() => {
-    const name = source.name.split('.').shift();
-    const extension = source.name.split('.').pop();
-    updateState({ name, extension });
-  }, [source]);    
+    const name = source.name.split('.').shift()
+    const extension = source.name.split('.').pop()
+    updateState({ name, extension })
+  }, [source])
 
-  const actions = {
-  }
+  const actions = {}
 
   return { state, actions }
 }

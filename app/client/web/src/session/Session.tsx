@@ -9,17 +9,17 @@ import { Identity } from '../identity/Identity'
 import { Contacts } from '../contacts/Contacts'
 import { Registry } from '../registry/Registry'
 import { Profile, ProfileParams } from '../profile/Profile'
-import { Details } from '../details/Details';
+import { Details } from '../details/Details'
 import { Content } from '../content/Content'
 import { Conversation } from '../conversation/Conversation'
 import { useDisclosure } from '@mantine/hooks'
 import { IconAlertCircle } from '@tabler/icons-react'
-import { Base } from '../base/Base';
-import { Ring } from '../ring/Ring';
-import { Call } from '../call/Call';
+import { Base } from '../base/Base'
+import { Ring } from '../ring/Ring'
+import { Call } from '../call/Call'
 
 export function Session() {
-  const { state } = useSession();
+  const { state } = useSession()
   const [tab, setTab] = useState('content')
   const [profileParams, setProfileParams] = useState({ guid: '' } as ProfileParams)
   const [settings, { open: openSettings, close: closeSettings }] = useDisclosure(false)
@@ -27,12 +27,12 @@ export function Session() {
   const [registry, { open: openRegistry, close: closeRegistry }] = useDisclosure(false)
   const [details, { open: openDetails, close: closeDetails }] = useDisclosure(false)
   const [profile, { open: openProfile, close: closeProfile }] = useDisclosure(false)
-  const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
+  const [textCard, setTextCard] = useState({ cardId: null } as { cardId: null | string })
 
   const textContact = (cardId: string) => {
-    setTextCard({ cardId });
-    closeContacts();
-    setTab('content');
+    setTextCard({ cardId })
+    closeContacts()
+    setTab('content')
   }
 
   return (
@@ -67,7 +67,7 @@ export function Session() {
                   <Contacts
                     textContact={textContact}
                     openRegistry={openRegistry}
-                    closeContacts={()=>{}}
+                    closeContacts={() => {}}
                     openContact={(params) => {
                       setProfileParams(params)
                       openProfile()
@@ -143,9 +143,7 @@ export function Session() {
                 </div>
               )}
               <Ring />
-              <div className={classes.conversation}>
-                {state.focus && <Conversation openDetails={openDetails} />}
-              </div>
+              <div className={classes.conversation}>{state.focus && <Conversation openDetails={openDetails} />}</div>
             </div>
             <Drawer opened={contacts} onClose={closeContacts} withCloseButton={false} size="md" padding="0" position="right">
               <div style={{ height: '100vh' }}>
@@ -187,11 +185,11 @@ export function Session() {
             </Drawer>
           </div>
         )}
-        { state.disconnected && (
+        {state.disconnected && (
           <div className={classes.alert}>
             <div className={classes.alertArea}>
               <IconAlertCircle className={classes.alertLabel} />
-              <Text className={classes.alertLabel}>{ state.strings.disconnected }</Text>
+              <Text className={classes.alertLabel}>{state.strings.disconnected}</Text>
             </div>
           </div>
         )}

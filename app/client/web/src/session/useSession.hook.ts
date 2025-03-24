@@ -22,17 +22,18 @@ export function useSession() {
   useEffect(() => {
     const setStatus = (status: string) => {
       if (status === 'disconnected') {
-        updateState({ disconnected: true });
-      } if (status === 'connected') {
-        updateState({ disconnected: false });
+        updateState({ disconnected: true })
+      }
+      if (status === 'connected') {
+        updateState({ disconnected: false })
       }
     }
-    const session = app.state.session;
+    const session = app.state.session
     if (session) {
-      session.addStatusListener(setStatus);
-      return () => session.removeStatusListener();
+      session.addStatusListener(setStatus)
+      return () => session.removeStatusListener()
     }
-  }, [app.state.session]);
+  }, [app.state.session])
 
   useEffect(() => {
     const { layout, strings } = display.state
@@ -41,10 +42,10 @@ export function useSession() {
 
   useEffect(() => {
     const { focus } = app.state
-    updateState({ focus });
-  }, [app.state ]);
+    updateState({ focus })
+  }, [app.state])
 
-  const actions = { }
+  const actions = {}
 
   return { state, actions }
 }

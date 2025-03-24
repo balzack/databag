@@ -8,7 +8,7 @@ import { Setup } from '../setup/Setup'
 import { useDisclosure } from '@mantine/hooks'
 
 export function Service() {
-  const { state } = useService();
+  const { state } = useService()
   const [tab, setTab] = useState('accounts')
   const [setup, { open: openSetup, close: closeSetup }] = useDisclosure(false)
 
@@ -24,7 +24,7 @@ export function Service() {
             </div>
             <div className={tab === 'accounts' ? classes.show : classes.hide}>
               <div className={classes.screen}>
-                <Accounts openSetup={()=>{}} />
+                <Accounts openSetup={() => {}} />
               </div>
             </div>
           </div>

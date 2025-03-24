@@ -146,7 +146,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItem: 'center',
     justifyContent: 'center',
-    width:'80%',
+    width: '80%',
     maxWidth: 500,
     padding: 16,
     borderRadius: 8,

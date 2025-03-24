@@ -503,7 +503,7 @@ export function useDisplayContext() {
     },
     setAudioInput: (audioId: string | null) => {
       if (audioId == null) {
-        localStorage.removeItem('audio_input');
+        localStorage.removeItem('audio_input')
       } else {
         localStorage.setItem('audio_input', audioId)
       }
@@ -511,7 +511,7 @@ export function useDisplayContext() {
     },
     setVideoInput: (videoId: string | null) => {
       if (videoId == null) {
-        localStorage.removeItem('video_input');
+        localStorage.removeItem('video_input')
       } else {
         localStorage.setItem('video_input', videoId)
       }

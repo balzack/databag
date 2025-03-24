@@ -2,7 +2,7 @@ import {useEffect, useState, useContext} from 'react';
 import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {ContextType} from '../context/ContextType';
-import type { Member } from 'databag-client-sdk';
+import type {Member} from 'databag-client-sdk';
 
 export function useAccounts() {
   const app = useContext(AppContext) as ContextType;
@@ -22,20 +22,20 @@ export function useAccounts() {
   const sync = async () => {
     if (!state.loading) {
       try {
-        updateState({ loading: true });
+        updateState({loading: true});
         const service = app.state.service;
         const members = await service.getMembers();
-        updateState({ members, loading: false });
+        updateState({members, loading: false});
       } catch (err) {
         console.log(err);
-        updateState({ loading: false });
+        updateState({loading: false});
       }
     }
   };
 
   useEffect(() => {
-    const { layout, strings} = display.state;
-    updateState({ layout, strings});
+    const {layout, strings} = display.state;
+    updateState({layout, strings});
   }, [display.state]);
 
   const actions = {

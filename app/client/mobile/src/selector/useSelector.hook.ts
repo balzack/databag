@@ -1,7 +1,7 @@
-import { useContext } from 'react';
-import { AppContext } from '../context/AppContext';
-import { DisplayContext } from '../context/DisplayContext';
-import { ContextType } from '../context/ContextType';
+import {useContext} from 'react';
+import {AppContext} from '../context/AppContext';
+import {DisplayContext} from '../context/DisplayContext';
+import {ContextType} from '../context/ContextType';
 
 export function useSelector() {
   const app = useContext(AppContext) as ContextType;
@@ -15,5 +15,5 @@ export function useSelector() {
     clearFocus: app.actions.clearFocus,
   };
 
-  return { state, actions };
+  return {state, actions};
 }

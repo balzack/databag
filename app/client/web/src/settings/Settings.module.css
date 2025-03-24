@@ -311,7 +311,7 @@
     padding-top: 8px;
     padding-bottom: 8px;
     border-bottom: 1px solid var(--mantine-color-text-8);
-    
+
     &:hover {
       background: var(--mantine-color-surface-2);
     }
@@ -329,6 +329,4 @@
   width: 100%;
   justify-content: flex-end;
   padding-top: 8px;
-  
 }
-

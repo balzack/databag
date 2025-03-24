@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { SafeAreaView, Platform, Modal, ScrollView, View } from 'react-native';
+import React, {useState} from 'react';
+import {SafeAreaView, Platform, Modal, ScrollView, View} from 'react-native';
 import {useTheme, Switch, Surface, Icon, Divider, Button, IconButton, Text, TextInput} from 'react-native-paper';
 import {styles} from './Details.styled';
 import {useDetails} from './useDetails.hook';
-import { Confirm } from '../confirm/Confirm';
-import { Card } from '../card/Card';
+import {Confirm} from '../confirm/Confirm';
+import {Card} from '../card/Card';
 import {BlurView} from '@react-native-community/blur';
 
-export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}) {
-  const { state, actions } = useDetails();
+export function Details({close, closeAll}: {close: () => void; closeAll: () => void}) {
+  const {state, actions} = useDetails();
   const [alert, setAlert] = useState(false);
   const [saving, setSaving] = useState(false);
   const [removing, setRemoving] = useState(false);
@@ -120,44 +120,65 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
   };
 
   const cards = state.channelCards.map((card, index) => (
-      <Card containerStyle={{...styles.card, borderColor: theme.colors.outlineVariant }} key={index} imageUrl={card.imageUrl} name={card.name} placeholder={state.strings.name}
-        handle={card.handle} node={card.node} actions={[]} />
+    <Card
+      containerStyle={{...styles.card, borderColor: theme.colors.outlineVariant}}
+      key={index}
+      imageUrl={card.imageUrl}
+      name={card.name}
+      placeholder={state.strings.name}
+      handle={card.handle}
+      node={card.node}
+      actions={[]}
+    />
   ));
 
-  const members = state.cards.filter(card => {
-    if (state.detail && state.detail.members.find(member => member.guid === card.guid)) {
-      return true;
-    } else if(state.sealed && !card.sealable) {
-      return false;
-    } else {
-      return true;
-    }
-  }).map((card, index) => {
-    const enable = !state.detail ? [] : [
-      <Switch
-        key="enable"
-        style={styles.memberSwitch}
-        value={Boolean(state.detail.members.find(member => member.guid === card.guid))}
-        onValueChange={async (flag) => {
-          try {
-            setError(false);
-            if (flag) {
-              await actions.setMember(card.cardId);
-            } else {
-              await actions.clearMember(card.cardId);
-            }
-          } catch (err) {
-            console.log(err);
-            setError(true);
-          }
-        }}
-      />,
-    ];
+  const members = state.cards
+    .filter(card => {
+      if (state.detail && state.detail.members.find(member => member.guid === card.guid)) {
+        return true;
+      } else if (state.sealed && !card.sealable) {
+        return false;
+      } else {
+        return true;
+      }
+    })
+    .map((card, index) => {
+      const enable = !state.detail
+        ? []
+        : [
+            <Switch
+              key="enable"
+              style={styles.memberSwitch}
+              value={Boolean(state.detail.members.find(member => member.guid === card.guid))}
+              onValueChange={async flag => {
+                try {
+                  setError(false);
+                  if (flag) {
+                    await actions.setMember(card.cardId);
+                  } else {
+                    await actions.clearMember(card.cardId);
+                  }
+                } catch (err) {
+                  console.log(err);
+                  setError(true);
+                }
+              }}
+            />,
+          ];
 
-    return (
-      <Card containerStyle={{ ...styles.card, borderColor: theme.colors.outlineVariant }} key={index} imageUrl={card.imageUrl} name={card.name} placeholder={state.strings.name} handle={card.handle} node={card.node} actions={enable} />
-    );
-  });
+      return (
+        <Card
+          containerStyle={{...styles.card, borderColor: theme.colors.outlineVariant}}
+          key={index}
+          imageUrl={card.imageUrl}
+          name={card.name}
+          placeholder={state.strings.name}
+          handle={card.handle}
+          node={card.node}
+          actions={enable}
+        />
+      );
+    });
 
   return (
     <View style={styles.details}>
@@ -167,21 +188,15 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
             <IconButton style={styles.closeIcon} compact="true" mode="contained" icon="arrow-left" size={28} onPress={close} />
           </View>
         )}
-        <Text style={styles.title}>{ state.strings.details }</Text>
-        {close && (
-          <View style={styles.close} />
-        )}
+        <Text style={styles.title}>{state.strings.details}</Text>
+        {close && <View style={styles.close} />}
       </SafeAreaView>
       <Divider style={styles.divider} />
-      { !state.access && (
-        <Text style={styles.noAccess}>{ state.strings.noAccess }</Text>
-      )}
-      { state.access && (
+      {!state.access && <Text style={styles.noAccess}>{state.strings.noAccess}</Text>}
+      {state.access && (
         <View style={styles.info}>
-          { state.locked && (
-            <Text style={styles.encrypted}>{ state.strings.encrypted }</Text>
-          )}
-          { state.host && !state.locked && (
+          {state.locked && <Text style={styles.encrypted}>{state.strings.encrypted}</Text>}
+          {state.host && !state.locked && (
             <Surface style={styles.subject} mode="flag" elevation={4}>
               <TextInput
                 style={styles.input}
@@ -197,132 +212,105 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
                 left={<TextInput.Icon style={styles.icon} icon="label-outline" />}
                 onChangeText={value => actions.setEditSubject(value)}
               />
-              { state.subject !== state.editSubject && (
-                <IconButton style={styles.icon} icon="undo-variant" onPress={actions.undoSubject} />
-              )}
-              { state.subject !== state.editSubject && (
-                <IconButton style={styles.icon} icon="content-save-outline" loading={saving} onPress={saveSubject} />
-              )}
+              {state.subject !== state.editSubject && <IconButton style={styles.icon} icon="undo-variant" onPress={actions.undoSubject} />}
+              {state.subject !== state.editSubject && <IconButton style={styles.icon} icon="content-save-outline" loading={saving} onPress={saveSubject} />}
             </Surface>
           )}
-          { !state.host && !state.locked && (
+          {!state.host && !state.locked && (
             <View style={styles.guestSubject}>
               <Icon size={28} source="label-outline" />
-              <Text style={styles.itemHeader}>{ state.subject }</Text>
+              <Text style={styles.itemHeader}>{state.subject}</Text>
             </View>
           )}
           <View style={styles.item}>
             <Icon source="calendar-month-outline" size={20} />
-            <Text style={styles.itemLabel}>{ state.created }</Text>
+            <Text style={styles.itemLabel}>{state.created}</Text>
           </View>
-          { state.host && (
+          {state.host && (
             <View style={styles.item}>
               <Icon source="home-outline" size={20} />
-              <Text style={styles.itemLabel}>{ state.strings.channelHost }</Text>
+              <Text style={styles.itemLabel}>{state.strings.channelHost}</Text>
             </View>
           )}
-          { !state.host && (
+          {!state.host && (
             <View style={styles.item}>
               <Icon source="server" size={20} />
-              <Text style={styles.itemLabel}>{ state.strings.channelGuest }</Text>
+              <Text style={styles.itemLabel}>{state.strings.channelGuest}</Text>
             </View>
           )}
-          { state.sealed && (
+          {state.sealed && (
             <View style={styles.item}>
               <Icon source="shield-outline" size={20} />
-              <Text style={styles.itemLabel}>{ state.strings.sealed }</Text>
+              <Text style={styles.itemLabel}>{state.strings.sealed}</Text>
             </View>
           )}
-          { !state.sealed && (
+          {!state.sealed && (
             <View style={styles.item}>
               <Icon source="shield-off-outline" size={20} />
-              <Text style={styles.itemLabel}>{ state.strings.notSealed }</Text>
+              <Text style={styles.itemLabel}>{state.strings.notSealed}</Text>
             </View>
           )}
         </View>
       )}
       <Divider style={styles.divider} />
-      { !state.host && (
+      {!state.host && (
         <View style={styles.actions}>
           <View style={styles.action}>
-            <IconButton
-              style={styles.actionIcon}
-              loading={removing}
-              compact="true"
-              mode="contained"
-              icon="logout-variant"
-              size={32}
-              onPress={leave}
-            />
+            <IconButton style={styles.actionIcon} loading={removing} compact="true" mode="contained" icon="logout-variant" size={32} onPress={leave} />
             <Text style={styles.actionLabel}>{state.strings.leave}</Text>
           </View>
           <View style={styles.action}>
-            <IconButton
-              style={styles.actionIcon}
-              loading={blocking}
-              compact="true"
-              mode="contained"
-              icon="eye-off-outline"
-              size={32}
-              onPress={block}
-            />
+            <IconButton style={styles.actionIcon} loading={blocking} compact="true" mode="contained" icon="eye-off-outline" size={32} onPress={block} />
             <Text style={styles.actionLabel}>{state.strings.block}</Text>
           </View>
           <View style={styles.action}>
-            <IconButton
-              style={styles.actionIcon}
-              loading={reporting}
-              compact="true"
-              mode="contained"
-              icon="alert-octagon-outline"
-              size={32}
-              onPress={report}
-            />
+            <IconButton style={styles.actionIcon} loading={reporting} compact="true" mode="contained" icon="alert-octagon-outline" size={32} onPress={report} />
             <Text style={styles.actionLabel}>{state.strings.report}</Text>
           </View>
         </View>
       )}
-      { state.host && (
+      {state.host && (
         <View style={styles.actions}>
           <View style={styles.action}>
-            <IconButton
-              style={styles.actionIcon}
-              loading={removing}
-              compact="true"
-              mode="contained"
-              icon="message-minus-outline"
-              size={32}
-              onPress={remove}
-            />
+            <IconButton style={styles.actionIcon} loading={removing} compact="true" mode="contained" icon="message-minus-outline" size={32} onPress={remove} />
             <Text style={styles.actionLabel}>{state.strings.remove}</Text>
           </View>
           <View style={styles.action}>
-            <IconButton
-              style={styles.actionIcon}
-              compact="true"
-              mode="contained"
-              icon="account-cog-outline"
-              size={32}
-              onPress={membership}
-            />
+            <IconButton style={styles.actionIcon} compact="true" mode="contained" icon="account-cog-outline" size={32} onPress={membership} />
             <Text style={styles.actionLabel}>{state.strings.members}</Text>
           </View>
         </View>
       )}
-      <Text style={styles.membership}>{ state.strings.membership }</Text>
+      <Text style={styles.membership}>{state.strings.membership}</Text>
       <Divider style={styles.divider} />
       <ScrollView style={styles.members}>
-        { state.hostCard && (
-          <Card containerStyle={{...styles.card, borderColor: theme.colors.outlineVariant }} imageUrl={state.hostCard.imageUrl} name={state.hostCard.name} placeholder={state.strings.name}
-            handle={state.hostCard.handle} node={state.hostCard.node} actions={[<Icon key="host" source="home-outline" size={20} />]} />
+        {state.hostCard && (
+          <Card
+            containerStyle={{...styles.card, borderColor: theme.colors.outlineVariant}}
+            imageUrl={state.hostCard.imageUrl}
+            name={state.hostCard.name}
+            placeholder={state.strings.name}
+            handle={state.hostCard.handle}
+            node={state.hostCard.node}
+            actions={[<Icon key="host" source="home-outline" size={20} />]}
+          />
         )}
-        { state.profile && (
-          <Card containerStyle={{ ...styles.card, borderColor: theme.colors.outlineVariant }} imageUrl={state.profile.imageUrl} name={state.profile.name} placeholder={state.strings.name}
-            handle={state.profile.handle} node={state.profile.node} actions={state.host ? [<Icon key="host" source="home-outline" size={20} />] : []} />
+        {state.profile && (
+          <Card
+            containerStyle={{...styles.card, borderColor: theme.colors.outlineVariant}}
+            imageUrl={state.profile.imageUrl}
+            name={state.profile.name}
+            placeholder={state.strings.name}
+            handle={state.profile.handle}
+            node={state.profile.node}
+            actions={state.host ? [<Icon key="host" source="home-outline" size={20} />] : []}
+          />
         )}
-        { cards }
-        { state.unknownContacts > 0 && (
-          <Text style={styles.unknown}>{ state.strings.unknown }: {state.unknownContacts}</Text>
+        {cards}
+        {state.unknownContacts > 0 && (
+          <Text style={styles.unknown}>
+            {state.strings.unknown}: {state.unknownContacts}
+          </Text>
         )}
       </ScrollView>
       <Confirm show={alert} params={alertParams} />
@@ -335,22 +323,16 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
               <Text style={styles.modalTitle}>{state.strings.editMembership}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setMemberModal(false)} />
             </View>
-              <Surface eleveation={2} style={styles.modalArea}>
-                { members.length === 0 && (
-                  <View style={styles.noContacts}>
-                    <Text style={styles.noContactsLabel}>{ state.strings.noContacts }</Text>
-                  </View>
-                )}
-                { members.length > 0 && (
-                  <ScrollView style={styles.modalMembers}>
-                    { members }
-                  </ScrollView>
-                )}
-              </Surface>
-            <View style={styles.modalButtons}>
-              { error && (
-                <Text style={styles.error}>{ state.strings.operationFailed }</Text>
+            <Surface eleveation={2} style={styles.modalArea}>
+              {members.length === 0 && (
+                <View style={styles.noContacts}>
+                  <Text style={styles.noContactsLabel}>{state.strings.noContacts}</Text>
+                </View>
               )}
+              {members.length > 0 && <ScrollView style={styles.modalMembers}>{members}</ScrollView>}
+            </Surface>
+            <View style={styles.modalButtons}>
+              {error && <Text style={styles.error}>{state.strings.operationFailed}</Text>}
               <Button style={styles.modalButton} compact={true} mode="outlined" onPress={() => setMemberModal(false)}>
                 {state.strings.close}
               </Button>

@@ -62,68 +62,73 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
   const [authMessage, setAuthMessage] = useState('')
 
   const showBlockedCards = async () => {
-    await actions.loadBlockedCards();
-    blockedContactOpen();
+    await actions.loadBlockedCards()
+    blockedContactOpen()
   }
 
-  const unblockCard = async (blocked: {cardId: string, timestamp: number}) => {
+  const unblockCard = async (blocked: { cardId: string; timestamp: number }) => {
     try {
-      await actions.unblockCard(blocked.cardId);
+      await actions.unblockCard(blocked.cardId)
     } catch (err) {
-      console.log(err);
-      showError();
+      console.log(err)
+      showError()
     }
   }
 
   const blockedCards = state.blockedCards.map((blocked, index) => (
     <div key={index} className={classes.blockedItem}>
-      <Text className={classes.blockedValue}> { actions.getTimestamp(blocked.timestamp) }</Text>
-      <ActionIcon variant="subtle" size="md" onClick={()=>unblockCard(blocked)}><IconRestore /></ActionIcon>
+      <Text className={classes.blockedValue}> {actions.getTimestamp(blocked.timestamp)}</Text>
+      <ActionIcon variant="subtle" size="md" onClick={() => unblockCard(blocked)}>
+        <IconRestore />
+      </ActionIcon>
     </div>
-  ));
+  ))
 
   const showBlockedChannels = async () => {
-    await actions.loadBlockedChannels();
-    blockedChannelOpen();
+    await actions.loadBlockedChannels()
+    blockedChannelOpen()
   }
 
-  const unblockChannel = async (blocked: {cardId: string | null, channelId: string, timestamp: number}) => {
+  const unblockChannel = async (blocked: { cardId: string | null; channelId: string; timestamp: number }) => {
     try {
-      await actions.unblockChannel(blocked.cardId, blocked.channelId);
+      await actions.unblockChannel(blocked.cardId, blocked.channelId)
     } catch (err) {
-      console.log(err);
-      showError();
+      console.log(err)
+      showError()
     }
   }
- 
+
   const blockedChannels = state.blockedChannels.map((blocked, index) => (
     <div key={index} className={classes.blockedItem}>
-      <Text className={classes.blockedValue}> { actions.getTimestamp(blocked.timestamp) }</Text>
-      <ActionIcon variant="subtle" size="md" onClick={()=>unblockChannel(blocked)}><IconRestore /></ActionIcon>
+      <Text className={classes.blockedValue}> {actions.getTimestamp(blocked.timestamp)}</Text>
+      <ActionIcon variant="subtle" size="md" onClick={() => unblockChannel(blocked)}>
+        <IconRestore />
+      </ActionIcon>
     </div>
-  ));
-
+  ))
 
   const showBlockedMessages = async () => {
-    await actions.loadBlockedMessages();
-    blockedMessageOpen();
+    await actions.loadBlockedMessages()
+    blockedMessageOpen()
   }
 
-  const unblockMessage = async (blocked: {cardId: string | null, channelId: string, topicId: string, timestamp: number}) => {
+  const unblockMessage = async (blocked: { cardId: string | null; channelId: string; topicId: string; timestamp: number }) => {
     try {
-      await actions.unblockMessage(blocked.cardId, blocked.channelId, blocked.topicId);
+      await actions.unblockMessage(blocked.cardId, blocked.channelId, blocked.topicId)
     } catch (err) {
-      console.log(err);
-      showError();
+      console.log(err)
+      showError()
     }
   }
 
   const blockedMessages = state.blockedMessages.map((blocked, index) => (
     <div key={index} className={classes.blockedItem}>
-      <Text className={classes.blockedValue}> { actions.getTimestamp(blocked.timestamp) }</Text>
-      <ActionIcon variant="subtle" size="md" onClick={()=>unblockMessage(blocked)}><IconRestore /></ActionIcon>
+      <Text className={classes.blockedValue}> {actions.getTimestamp(blocked.timestamp)}</Text>
+      <ActionIcon variant="subtle" size="md" onClick={() => unblockMessage(blocked)}>
+        <IconRestore />
+      </ActionIcon>
     </div>
-  ));
+  ))
 
   const logout = () =>
     modals.openConfirmModal({
@@ -453,7 +458,9 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               <div className={classes.entryIcon}>
                 <IconEye />
               </div>
-              <Text className={classes.entryLabel} onClick={() => setRegistry(!state.config.searchable)}>{state.strings.registry}</Text>
+              <Text className={classes.entryLabel} onClick={() => setRegistry(!state.config.searchable)}>
+                {state.strings.registry}
+              </Text>
               <Switch className={classes.entryControl} checked={state.config.searchable} onChange={(ev) => setRegistry(ev.currentTarget.checked)} />
             </div>
             <div className={classes.entry}>
@@ -468,7 +475,9 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               <div className={classes.entryIcon}>
                 <IconBell />
               </div>
-              <Text className={classes.entryLabel} onClick={() => setNotifications(!state.config.pushEnabled)}>{state.strings.enableNotifications}</Text>
+              <Text className={classes.entryLabel} onClick={() => setNotifications(!state.config.pushEnabled)}>
+                {state.strings.enableNotifications}
+              </Text>
               <Switch className={classes.entryControl} checked={state.config.pushEnabled} onChange={(ev) => setNotifications(ev.currentTarget.checked)} />
             </div>
             <div className={classes.divider} />
@@ -486,7 +495,9 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               <div className={classes.entryIcon}>
                 <IconTicket />
               </div>
-              <Text className={classes.entryLabel} onClick={() => setMfa(!state.config.mfaEnabled)}>{state.strings.mfaTitle}</Text>
+              <Text className={classes.entryLabel} onClick={() => setMfa(!state.config.mfaEnabled)}>
+                {state.strings.mfaTitle}
+              </Text>
               <Switch className={classes.entryControl} checked={state.config.mfaEnabled} onChange={(ev) => setMfa(ev.currentTarget.checked)} />
             </div>
             <div className={classes.entry}>
@@ -872,14 +883,10 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
         </>
       </Modal>
       <Modal title={state.strings.blockedContacts} size="auto" opened={blockedContactOpened} onClose={blockedContactClose} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered>
-        { blockedCards.length > 0 && (
-          <div className={classes.blocked}>
-            { blockedCards }
-          </div>
-        )}
-        { blockedCards.length === 0 && (
+        {blockedCards.length > 0 && <div className={classes.blocked}>{blockedCards}</div>}
+        {blockedCards.length === 0 && (
           <div className={classes.empty}>
-            <Text className={classes.emptyLabel}>{ state.strings.noContacts }</Text>
+            <Text className={classes.emptyLabel}>{state.strings.noContacts}</Text>
           </div>
         )}
         <div className={classes.controls}>
@@ -889,14 +896,10 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
         </div>
       </Modal>
       <Modal title={state.strings.blockedTopics} opened={blockedChannelOpened} onClose={blockedChannelClose} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered>
-        { blockedChannels.length > 0 && (
-          <div className={classes.blocked}>
-            { blockedChannels }
-          </div>
-        )}
-        { blockedChannels.length === 0 && (
+        {blockedChannels.length > 0 && <div className={classes.blocked}>{blockedChannels}</div>}
+        {blockedChannels.length === 0 && (
           <div className={classes.empty}>
-            <Text className={classes.emptyLabel}>{ state.strings.noTopics }</Text>
+            <Text className={classes.emptyLabel}>{state.strings.noTopics}</Text>
           </div>
         )}
         <div className={classes.controls}>
@@ -906,14 +909,10 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
         </div>
       </Modal>
       <Modal title={state.strings.blockedMessages} opened={blockedMessageOpened} onClose={blockedMessageClose} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered>
-        { blockedMessages.length > 0 && (
-          <div className={classes.blocked}>
-            { blockedMessages }
-          </div>
-        )}
-        { blockedMessages.length === 0 && (
+        {blockedMessages.length > 0 && <div className={classes.blocked}>{blockedMessages}</div>}
+        {blockedMessages.length === 0 && (
           <div className={classes.empty}>
-            <Text className={classes.emptyLabel}>{ state.strings.noMessages }</Text>
+            <Text className={classes.emptyLabel}>{state.strings.noMessages}</Text>
           </div>
         )}
         <div className={classes.controls}>

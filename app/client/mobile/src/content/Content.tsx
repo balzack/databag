@@ -9,7 +9,17 @@ import {Card} from '../card/Card';
 import {Confirm} from '../confirm/Confirm';
 import {Selector} from '../selector/Selector';
 
-export function Content({share, closeAll, openConversation, textCard}: { share: { filePath: string, mimeType: string}, closeAll: ()=>void, openConversation: ()=>void, textCard: {cardId: null|string}}) {
+export function Content({
+  share,
+  closeAll,
+  openConversation,
+  textCard,
+}: {
+  share: {filePath: string; mimeType: string};
+  closeAll: () => void;
+  openConversation: () => void;
+  textCard: {cardId: null | string};
+}) {
   const [add, setAdd] = useState(false);
   const [adding, setAdding] = useState(false);
   const [sealedTopic, setSealedTopic] = useState(false);
@@ -30,8 +40,8 @@ export function Content({share, closeAll, openConversation, textCard}: { share: 
 
   const select = (cardId: string | null, channelId: string) => {
     if (share) {
-      const { filePath, mimeType } = share;
-      actions.setSharing({ cardId, channelId, filePath, mimeType });
+      const {filePath, mimeType} = share;
+      actions.setSharing({cardId, channelId, filePath, mimeType});
     }
     open(cardId, channelId);
   };
@@ -130,7 +140,7 @@ export function Content({share, closeAll, openConversation, textCard}: { share: 
               const choose = () => {
                 open(item.cardId, item.channelId);
               };
-              const Wrap = (state.layout === 'large' && focused) ? Surface : View;
+              const Wrap = state.layout === 'large' && focused ? Surface : View;
               return (
                 <Wrap elevation={1} mode="flat">
                   <Channel

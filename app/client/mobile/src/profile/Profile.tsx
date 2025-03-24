@@ -95,11 +95,11 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
             <IconButton style={styles.back} compact="true" mode="contained" icon="arrow-left" size={28} onPress={close} />
           </View>
         )}
-        { state.node && (
-          <Text style={styles.headerLabel} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.handle}@${state.node}`}</Text>
-        )}
-        { !state.node && (
-          <Text style={styles.headerLabel} adjustsFontSizeToFit={true} numberOfLines={1}>{state.handle}</Text>
+        {state.node && <Text style={styles.headerLabel} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.handle}@${state.node}`}</Text>}
+        {!state.node && (
+          <Text style={styles.headerLabel} adjustsFontSizeToFit={true} numberOfLines={1}>
+            {state.handle}
+          </Text>
         )}
         {close && <View style={styles.spaceHolder} />}
       </View>
@@ -136,7 +136,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
               </View>
             </View>
             <Divider style={styles.line} bold={true} />
-            { state.guid !== state.profile.guid && (
+            {state.guid !== state.profile.guid && (
               <View style={styles.status}>
                 <Text style={styles[state.statusLabel]}>{state.strings[state.statusLabel]}</Text>
               </View>

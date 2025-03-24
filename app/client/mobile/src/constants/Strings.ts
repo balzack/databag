@@ -116,7 +116,7 @@ export const en = {
   password: 'Password',
   newPassword: 'New Password',
   confirmPassword: 'Confirm Password',
-  deleteKey: 'Enter \'delete\' to remove key',
+  deleteKey: "Enter 'delete' to remove key",
   delete: 'delete',
   remove: 'Delete',
   username: 'Username',
@@ -297,9 +297,9 @@ export const en = {
 };
 
 export const fr = {
-  viewTerms: 'Voir les conditions d\'utilisation',
-  acceptTerms: 'Accepter les conditions d\'utilisation',
-  terms: 'Conditions d\'utilisation',
+  viewTerms: "Voir les conditions d'utilisation",
+  acceptTerms: "Accepter les conditions d'utilisation",
+  terms: "Conditions d'utilisation",
   access: 'Accès',
   continue: 'Continue',
 
@@ -320,7 +320,7 @@ export const fr = {
   blockTopicPrompt: 'Êtes-vous sûr de vouloir bloquer ce sujet ?',
   reportTopic: 'Signaler le sujet',
   reportTopicPrompt: 'Êtes-vous sûr de vouloir signaler ce sujet pour examen par un administrateur ?',
-  noAccess: 'Pas d\'Accès',
+  noAccess: "Pas d'Accès",
   connecting: 'Démarrage de la Connexion',
 
   setup: 'Installation',
@@ -328,19 +328,19 @@ export const fr = {
   noAccounts: 'Aucun Compte',
   selectShare: 'Sélectionnez le Sujet de Partage',
 
-  addingTitle: 'Ajout d\'un Compte',
+  addingTitle: "Ajout d'un Compte",
   addingLink: 'Utilisez le lien suivant pour créer un compte',
-  addingToken: 'Utilisez le jeton suivant pour créer un compte depuis l\'écran de connexion',
+  addingToken: "Utilisez le jeton suivant pour créer un compte depuis l'écran de connexion",
   accessingTitle: 'Accéder au Compte',
   accessingLink: 'Utilisez le lien suivant pour accéder au compte spécifié',
-  accessingToken: 'Utilisez le jeton suivant pour accéder au compte spécifié depuis l\'écran de connexion',
+  accessingToken: "Utilisez le jeton suivant pour accéder au compte spécifié depuis l'écran de connexion",
 
   membership: 'Adhésion',
   channelHost: 'Hôte du Sujet',
   channelGuest: 'Invité du Sujet',
   created: 'Créé',
   flagMessage: 'Signaler le message',
-  flagMessagePrompt: 'Êtes-vous sûr de vouloir signaler le message à l\'administrateur?',
+  flagMessagePrompt: "Êtes-vous sûr de vouloir signaler le message à l'administrateur?",
   flag: 'Signaler',
   blockMessage: 'Bloquer le message',
   blockMessagePrompt: 'Êtes-vous sûr de vouloir bloquer le message?',

@@ -33,7 +33,7 @@ export function useContent() {
     filter: '',
     topic: '',
     sealSet: false,
-    focused: null as null|{cardId: null|string, channelId: string},
+    focused: null as null | { cardId: null | string; channelId: string },
     loaded: null as null | boolean,
   })
 
@@ -41,9 +41,9 @@ export function useContent() {
     const aval = `${a.handle}/${a.node}`
     const bval = `${b.handle}/${b.node}`
     if (aval < bval) {
-      return 1;
+      return 1
     } else if (aval > bval) {
-      return -1;
+      return -1
     }
     return 0
   }
@@ -65,7 +65,7 @@ export function useContent() {
       if (cardId) {
         const card = state.cards.find((contact) => contact.cardId === cardId)
         if (!card || card.blocked) {
-          return null;
+          return null
         }
         contacts.push(card)
       }
@@ -91,7 +91,7 @@ export function useContent() {
         if (contacts.length === 0) {
           return []
         }
-        return contacts.map((contact) => (contact ? contact.name ? contact.name : contact.handle : null))
+        return contacts.map((contact) => (contact ? (contact.name ? contact.name : contact.handle) : null))
       }
 
       const selectImage = () => {
@@ -138,7 +138,7 @@ export function useContent() {
         return ''
       }
 
-      const focused = (state.focused?.cardId === cardId && state.focused?.channelId === channelId);
+      const focused = state.focused?.cardId === cardId && state.focused?.channelId === channelId
       const hosted = cardId == null
       const subject = data?.subject ? [data.subject] : buildSubject()
       const message = getMessage()
@@ -169,12 +169,12 @@ export function useContent() {
 
   useEffect(() => {
     if (app.state.focus) {
-      const focused = app.state.focus.getFocused();
-      updateState({ focused });
+      const focused = app.state.focus.getFocused()
+      updateState({ focused })
     } else {
-      updateState({ focused: null });
+      updateState({ focused: null })
     }
-  }, [app.state.focus]);
+  }, [app.state.focus])
 
   useEffect(() => {
     const setConfig = (config: Config) => {
@@ -182,14 +182,14 @@ export function useContent() {
       updateState({ sealSet: sealSet && sealUnlocked })
     }
     const setLoaded = (loaded: boolean) => {
-      updateState({ loaded });
+      updateState({ loaded })
     }
     const setProfile = (profile: Profile) => {
       const { guid } = profile
       updateState({ guid })
     }
     const setCards = (cards: Card[]) => {
-      const filtered = cards.filter(card => !card.blocked);
+      const filtered = cards.filter((card) => !card.blocked)
       const sorted = filtered.sort(compare)
       const connected = [] as Card[]
       const sealable = [] as Card[]
@@ -209,7 +209,7 @@ export function useContent() {
       cardChannels.current.forEach((values) => {
         merged.push(...values)
       })
-      const filtered = merged.filter(channel => !channel.blocked);
+      const filtered = merged.filter((channel) => !channel.blocked)
       const sorted = filtered.sort((a, b) => {
         const aUpdated = a?.lastTopic?.created
         const bUpdated = b?.lastTopic?.created
@@ -255,24 +255,24 @@ export function useContent() {
       await app.actions.setFocus(cardId, channelId)
     },
     setLoaded: () => {
-      updateState({ loaded: true });
+      updateState({ loaded: true })
     },
     openTopic: async (cardId: string) => {
       const content = app.state.session.getContent()
-      const card = state.cards.find(card => card.cardId === cardId)
+      const card = state.cards.find((card) => card.cardId === cardId)
       if (card) {
-        const sealable = card.sealable && state.sealSet;
-        const thread = state.sorted.find(channel => {
-          const { sealed, cardId, members} = channel;
+        const sealable = card.sealable && state.sealSet
+        const thread = state.sorted.find((channel) => {
+          const { sealed, cardId, members } = channel
           if (sealed === sealable && cardId == null && members.length === 1 && members[0].guid === card.guid) {
-            return true;
+            return true
           }
-          return false;
-        });
+          return false
+        })
         if (thread) {
           app.actions.setFocus(null, thread.channelId)
         } else {
-          const topic = await content.addChannel(sealable, sealable ? 'sealed' : 'superbasic', {}, [cardId]);
+          const topic = await content.addChannel(sealable, sealable ? 'sealed' : 'superbasic', {}, [cardId])
           app.actions.setFocus(null, topic.id)
         }
       }
@@ -281,10 +281,10 @@ export function useContent() {
       const content = app.state.session.getContent()
       if (sealed) {
         const topic = await content.addChannel(true, 'sealed', { subject }, contacts)
-        return topic.id;
+        return topic.id
       } else {
         const topic = await content.addChannel(false, 'superbasic', { subject }, contacts)
-        return topic.id;
+        return topic.id
       }
     },
   }

@@ -1,9 +1,8 @@
-import { Staging } from 'databag-client-sdk';
+import {Staging} from 'databag-client-sdk';
 import RNFS from 'react-native-fs';
 import fileType from 'react-native-file-type';
 
 export class StagingFiles implements Staging {
-
   public async clear(): Promise<void> {
     const files = await RNFS.readDir(RNFS.DocumentDirectoryPath);
     for (const entry of files) {
@@ -13,18 +12,18 @@ export class StagingFiles implements Staging {
     }
   }
 
-  public async read(source: any): Promise<{ size: number, getData: (position: number, length: number)=>Promise<string>, close: ()=>Promise<void> }> {
+  public async read(source: any): Promise<{size: number; getData: (position: number, length: number) => Promise<string>; close: () => Promise<void>}> {
     const path = source;
     const stat = await RNFS.stat(path);
     const size = stat.size;
     const getData = async (position: number, length: number) => {
       return await RNFS.read(path, length, position, 'base64');
     };
-    const close = async ()=>{};
-    return { size, getData, close };
+    const close = async () => {};
+    return {size, getData, close};
   }
 
-  public async write(): Promise<{ setData: (data: string)=>Promise<void>, getUrl: ()=>Promise<string>, close: ()=>Promise<void> }> {
+  public async write(): Promise<{setData: (data: string) => Promise<void>; getUrl: () => Promise<string>; close: () => Promise<void>}> {
     let set = false;
     let extension = '';
     const path = RNFS.DocumentDirectoryPath + `/dbTmp_${Date.now()}`;
@@ -55,7 +54,6 @@ export class StagingFiles implements Staging {
         }
       }
     };
-    return { setData, getUrl, close };
+    return {setData, getUrl, close};
   }
 }
-

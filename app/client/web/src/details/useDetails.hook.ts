@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from 'react'
 import { AppContext } from '../context/AppContext'
 import { DisplayContext } from '../context/DisplayContext'
 import { ContextType } from '../context/ContextType'
-import { FocusDetail, Card, Profile } from 'databag-client-sdk';
+import { FocusDetail, Card, Profile } from 'databag-client-sdk'
 
 export function useDetails() {
   const display = useContext(DisplayContext) as ContextType
@@ -34,131 +34,126 @@ export function useDetails() {
   }
 
   const getTimestamp = (created: number) => {
-    const now = Math.floor((new Date()).getTime() / 1000)
-    const date = new Date(created * 1000);
-    const offset = now - created;
-    if(offset < 43200) {
+    const now = Math.floor(new Date().getTime() / 1000)
+    const date = new Date(created * 1000)
+    const offset = now - created
+    if (offset < 43200) {
       if (state.timeFormat === '12h') {
-        return date.toLocaleTimeString("en-US", {hour: 'numeric', minute:'2-digit'});
+        return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+      } else {
+        return date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit' })
       }
-      else {
-        return date.toLocaleTimeString("en-GB", {hour: 'numeric', minute:'2-digit'});
-      }
-    }
-    else if (offset < 31449600) {
+    } else if (offset < 31449600) {
       if (state.dateFormat === 'mm/dd') {
-        return date.toLocaleDateString("en-US", {day: 'numeric', month:'numeric'});
+        return date.toLocaleDateString('en-US', { day: 'numeric', month: 'numeric' })
+      } else {
+        return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'numeric' })
       }
-      else {
-        return date.toLocaleDateString("en-GB", {day: 'numeric', month:'numeric'});
-      }
-    }
-    else {
+    } else {
       if (state.dateFormat === 'mm/dd') {
-        return date.toLocaleDateString("en-US");
-      }
-      else {
-        return date.toLocaleDateString("en-GB");
+        return date.toLocaleDateString('en-US')
+      } else {
+        return date.toLocaleDateString('en-GB')
       }
     }
   }
-  
-  useEffect(() => {
-    const { strings, timeFormat, dateFormat } = display.state;
-    updateState({ strings, timeFormat, dateFormat });
-  }, [display.state]);
 
   useEffect(() => {
-console.log("DETAILS", state.detail);
-
-    const hostCard = state.cards.find(entry => entry.cardId == state.cardId);
-    const profileRemoved = state.detail?.members ? state.detail.members.filter(member => state.profile?.guid != member.guid) : [];
-    const contactCards = profileRemoved.map(member => state.cards.find(card => card.guid === member.guid));
-    const channelCards = contactCards.filter(member => Boolean(member));
-    const unknownContacts = contactCards.length - channelCards.length;
-    updateState({ hostCard, channelCards, unknownContacts });
-  }, [state.detail, state.cards, state.profile, state.cardId]);
+    const { strings, timeFormat, dateFormat } = display.state
+    updateState({ strings, timeFormat, dateFormat })
+  }, [display.state])
 
   useEffect(() => {
-    const focus = app.state.focus;
-    const { contact, identity } = app.state.session || { };
+    console.log('DETAILS', state.detail)
+
+    const hostCard = state.cards.find((entry) => entry.cardId == state.cardId)
+    const profileRemoved = state.detail?.members ? state.detail.members.filter((member) => state.profile?.guid != member.guid) : []
+    const contactCards = profileRemoved.map((member) => state.cards.find((card) => card.guid === member.guid))
+    const channelCards = contactCards.filter((member) => Boolean(member))
+    const unknownContacts = contactCards.length - channelCards.length
+    updateState({ hostCard, channelCards, unknownContacts })
+  }, [state.detail, state.cards, state.profile, state.cardId])
+
+  useEffect(() => {
+    const focus = app.state.focus
+    const { contact, identity } = app.state.session || {}
     if (focus && contact && identity) {
       const setCards = (cards: Card[]) => {
-        const filtered = cards.filter(card => !card.blocked);
+        const filtered = cards.filter((card) => !card.blocked)
         const sorted = filtered.sort((a, b) => {
           if (a.handle > b.handle) {
-            return 1;
+            return 1
           } else if (a.handle < b.handle) {
-            return -1;
+            return -1
           } else {
-            return 0;
+            return 0
           }
-        });
-        updateState({ cards: sorted });
+        })
+        updateState({ cards: sorted })
       }
       const setProfile = (profile: Profile) => {
-        updateState({ profile });
+        updateState({ profile })
       }
-      const setDetail = (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => {
-        const detail = focused ? focused.detail : null;
-        const cardId = focused.cardId;
-        const channelId = focused.channelId;
-        const access = Boolean(detail);
-        const sealed = detail?.sealed;
-        const locked = detail?.locked;
-        const host = cardId == null;
-        const subject = detail?.data?.subject ? detail.data.subject : '';
-        const created = detail?.created ? getTimestamp(detail.created) : '';
-        updateState({ detail, editSubject: subject, subject, channelId, cardId, access, sealed, locked, host, created });
+      const setDetail = (focused: { cardId: string | null; channelId: string; detail: FocusDetail | null }) => {
+        const detail = focused ? focused.detail : null
+        const cardId = focused.cardId
+        const channelId = focused.channelId
+        const access = Boolean(detail)
+        const sealed = detail?.sealed
+        const locked = detail?.locked
+        const host = cardId == null
+        const subject = detail?.data?.subject ? detail.data.subject : ''
+        const created = detail?.created ? getTimestamp(detail.created) : ''
+        updateState({ detail, editSubject: subject, subject, channelId, cardId, access, sealed, locked, host, created })
       }
-      focus.addDetailListener(setDetail);
-      contact.addCardListener(setCards);
-      identity.addProfileListener(setProfile);
+      focus.addDetailListener(setDetail)
+      contact.addCardListener(setCards)
+      identity.addProfileListener(setProfile)
       return () => {
-        focus.removeDetailListener(setDetail);
-        contact.removeCardListener(setCards);
-        identity.removeProfileListener(setProfile);
+        focus.removeDetailListener(setDetail)
+        contact.removeCardListener(setCards)
+        identity.removeProfileListener(setProfile)
       }
     }
-  }, [app.state.focus, state.timeFormat, state.dateFormat]);
+  }, [app.state.focus, state.timeFormat, state.dateFormat])
 
   const actions = {
     remove: async () => {
       const content = app.state.session.getContent()
-      await content.removeChannel(state.channelId);
-      app.actions.clearFocus();
+      await content.removeChannel(state.channelId)
+      app.actions.clearFocus()
     },
     leave: async () => {
       const content = app.state.session.getContent()
-      await content.leaveChannel(state.cardId, state.channelId);
-      app.actions.clearFocus();
+      await content.leaveChannel(state.cardId, state.channelId)
+      app.actions.clearFocus()
     },
     block: async () => {
-      const content = app.state.session.getContent();
-      await content.setBlockedChannel(state.cardId, state.channelId, true);
-      app.actions.clearFocus();
+      const content = app.state.session.getContent()
+      await content.setBlockedChannel(state.cardId, state.channelId, true)
+      app.actions.clearFocus()
     },
     report: async () => {
-      const content = app.state.session.getContent();
-      await content.flagChannel(state.cardId, state.channelId);
+      const content = app.state.session.getContent()
+      await content.flagChannel(state.cardId, state.channelId)
     },
     setMember: async (cardId: string) => {
-      const content = app.state.session.getContent();
-      await content.setChannelCard(state.channelId, cardId);
+      const content = app.state.session.getContent()
+      await content.setChannelCard(state.channelId, cardId)
     },
     clearMember: async (cardId: string) => {
-      const content = app.state.session.getContent();
-      await content.clearChannelCard(state.channelId, cardId);
+      const content = app.state.session.getContent()
+      await content.clearChannelCard(state.channelId, cardId)
     },
     setEditSubject: (editSubject: string) => {
-      updateState({ editSubject });
+      updateState({ editSubject })
     },
     undoSubject: () => {
-      updateState({ editSubject: state.subject });
+      updateState({ editSubject: state.subject })
     },
     saveSubject: async () => {
       const content = app.state.session.getContent()
-      await content.setChannelSubject(state.channelId, state.sealed ? 'sealed' : 'superbasic', { subject: state.editSubject });
+      await content.setChannelSubject(state.channelId, state.sealed ? 'sealed' : 'superbasic', { subject: state.editSubject })
     },
   }
 

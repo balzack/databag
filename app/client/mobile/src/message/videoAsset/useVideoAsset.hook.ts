@@ -1,9 +1,9 @@
-import { useState, useContext, useEffect, useRef } from 'react';
-import { AppContext } from '../../context/AppContext';
-import { DisplayContext } from '../../context/DisplayContext';
-import { ContextType } from '../../context/ContextType';
-import { MediaAsset } from '../../conversation/Conversation';
-import { Download } from '../../download';
+import {useState, useContext, useEffect, useRef} from 'react';
+import {AppContext} from '../../context/AppContext';
+import {DisplayContext} from '../../context/DisplayContext';
+import {ContextType} from '../../context/ContextType';
+import {MediaAsset} from '../../conversation/Conversation';
+import {Download} from '../../download';
 
 export function useVideoAsset(topicId: string, asset: MediaAsset) {
   const app = useContext(AppContext) as ContextType;
@@ -20,18 +20,17 @@ export function useVideoAsset(topicId: string, asset: MediaAsset) {
   });
   const cancelled = useRef(false);
 
-
   const updateState = (value: any) => {
-    setState((s) => ({ ...s, ...value }));
+    setState(s => ({...s, ...value}));
   };
 
   const setThumb = async () => {
-    const { focus } = app.state;
+    const {focus} = app.state;
     const assetId = asset.video ? asset.video.thumb : asset.encrypted ? asset.encrypted.thumb : null;
     if (focus && assetId != null) {
       try {
         const thumbUrl = await focus.getTopicAssetUrl(topicId, assetId);
-        updateState({ thumbUrl });
+        updateState({thumbUrl});
       } catch (err) {
         console.log(err);
       }
@@ -44,42 +43,45 @@ export function useVideoAsset(topicId: string, asset: MediaAsset) {
   }, [asset]);
 
   const actions = {
-    loaded: (e) => {
-      const { width, height } = e.nativeEvent.source;
-      updateState({ loaded: true, ratio: width / height });
+    loaded: e => {
+      const {width, height} = e.nativeEvent.source;
+      updateState({loaded: true, ratio: width / height});
     },
     cancelLoad: () => {
       cancelled.current = true;
     },
     failed: () => {
-      updateState({ failed: true });
+      updateState({failed: true});
     },
     download: async () => {
       try {
-        updateState({ failed: false });
+        updateState({failed: false});
         await Download(state.dataUrl, topicId);
       } catch (err) {
         console.log(err);
-        updateState({ faled: true });
+        updateState({faled: true});
       }
     },
     loadVideo: async () => {
-      const { focus } = app.state;
+      const {focus} = app.state;
       const assetId = asset.video ? asset.video.hd || asset.video.lq : asset.encrypted ? asset.encrypted.parts : null;
       if (focus && assetId != null && !state.loading && !state.dataUrl) {
         cancelled.current = false;
-        updateState({ loading: true, loadPercent: 0 });
+        updateState({loading: true, loadPercent: 0});
         try {
-          const dataUrl = await focus.getTopicAssetUrl(topicId, assetId, (loadPercent: number)=>{ updateState({ loadPercent }); return !cancelled.current; });
-          updateState({ dataUrl });
+          const dataUrl = await focus.getTopicAssetUrl(topicId, assetId, (loadPercent: number) => {
+            updateState({loadPercent});
+            return !cancelled.current;
+          });
+          updateState({dataUrl});
         } catch (err) {
           console.log(err);
-          updateState({ failed: true });
+          updateState({failed: true});
         }
-        updateState({ loading: false });
+        updateState({loading: false});
       }
     },
   };
 
-  return { state, actions };
+  return {state, actions};
 }

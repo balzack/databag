@@ -1,40 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import classes from './Accounts.module.css'
 import { useAccounts } from './useAccounts.hook'
 import { Modal, Text, ActionIcon, Button } from '@mantine/core'
 import { IconUserPlus, IconUserCheck, IconCopy, IconCheck, IconReload, IconSettings, IconLockOpen2, IconUserCancel, IconTrash } from '@tabler/icons-react'
 import { Card } from '../card/Card'
-import { Colors } from '../constants/Colors';
+import { Colors } from '../constants/Colors'
 import { modals } from '@mantine/modals'
 import { useDisclosure } from '@mantine/hooks'
 
-export function Accounts({ openSetup }: { openSetup: ()=>void }) {
-  const { state, actions } = useAccounts();
-  const [loading, setLoading] = useState(false);
-  const [blocking, setBlocking] = useState(null as null | number);
-  const [removing, setRemoving] = useState(null as null | number);
-  const [accessing, setAccessing] = useState(null as null | number);
-  const [adding, setAdding] = useState(false);
+export function Accounts({ openSetup }: { openSetup: () => void }) {
+  const { state, actions } = useAccounts()
+  const [loading, setLoading] = useState(false)
+  const [blocking, setBlocking] = useState(null as null | number)
+  const [removing, setRemoving] = useState(null as null | number)
+  const [accessing, setAccessing] = useState(null as null | number)
+  const [adding, setAdding] = useState(false)
   const [accessOpened, { open: accessOpen, close: accessClose }] = useDisclosure(false)
   const [addOpened, { open: addOpen, close: addClose }] = useDisclosure(false)
-  const [tokenCopy, setTokenCopy] = useState(false);
-  const [linkCopy, setLinkCopy] = useState(false);
-  const [token, setToken] = useState('');
-  const link = `${window.location.origin}/#/create?add=${token}`;
+  const [tokenCopy, setTokenCopy] = useState(false)
+  const [linkCopy, setLinkCopy] = useState(false)
+  const [token, setToken] = useState('')
+  const link = `${window.location.origin}/#/create?add=${token}`
 
   useEffect(() => {
-    actions.reload();
-  }, []);
+    actions.reload()
+  }, [])
 
   const loadAccounts = async () => {
     if (!loading) {
-      setLoading(true);
+      setLoading(true)
       try {
-        await actions.reload();
+        await actions.reload()
       } catch (err) {
-        console.log(err);
+        console.log(err)
       }
-      setLoading(false);
+      setLoading(false)
     }
   }
 
@@ -42,29 +42,29 @@ export function Accounts({ openSetup }: { openSetup: ()=>void }) {
     if (!tokenCopy) {
       try {
         navigator.clipboard.writeText(token)
-        setTokenCopy(true);
+        setTokenCopy(true)
         setTimeout(() => {
-          setTokenCopy(false);
-        }, 2000);
+          setTokenCopy(false)
+        }, 2000)
       } catch (err) {
-        console.log(err);
+        console.log(err)
       }
     }
-  };
+  }
 
   const copyLink = async () => {
     if (!linkCopy) {
       try {
         navigator.clipboard.writeText(link)
-        setLinkCopy(true);
+        setLinkCopy(true)
         setTimeout(() => {
-          setLinkCopy(false);
-        }, 2000);
+          setLinkCopy(false)
+        }, 2000)
       } catch (err) {
-        console.log(err);
+        console.log(err)
       }
     }
-  };
+  }
 
   const showError = () => {
     modals.openConfirmModal({
@@ -82,44 +82,44 @@ export function Accounts({ openSetup }: { openSetup: ()=>void }) {
 
   const addAccount = async () => {
     if (!adding) {
-      setAdding(true);
+      setAdding(true)
       try {
-        const access = await actions.addAccount();
-        setToken(access);
-        addOpen();
+        const access = await actions.addAccount()
+        setToken(access)
+        addOpen()
       } catch (err) {
-        console.log(err);
-        showError();
+        console.log(err)
+        showError()
       }
-      setAdding(false);
+      setAdding(false)
     }
   }
 
   const accessAccount = async (accountId: number) => {
     if (!accessing) {
-      setAccessing(accountId);
+      setAccessing(accountId)
       try {
-        const access = await actions.accessAccount(accountId);
-        setToken(access);
-        accessOpen();
+        const access = await actions.accessAccount(accountId)
+        setToken(access)
+        accessOpen()
       } catch (err) {
-        console.log(err);
-        showError();
+        console.log(err)
+        showError()
       }
-      setAccessing(null);
+      setAccessing(null)
     }
   }
 
   const blockAccount = async (accountId: number, block: boolean) => {
     if (!blocking) {
-      setBlocking(accountId);
+      setBlocking(accountId)
       try {
-        await actions.blockAccount(accountId, block);
+        await actions.blockAccount(accountId, block)
       } catch (err) {
-        console.log(err);
-        showError();
+        console.log(err)
+        showError()
       }
-      setBlocking(null);
+      setBlocking(null)
     }
   }
 
@@ -131,21 +131,21 @@ export function Accounts({ openSetup }: { openSetup: ()=>void }) {
         backgroundOpacity: 0.55,
         blur: 3,
       },
-      children: <Text>{ state.strings.areSure }</Text>,
+      children: <Text>{state.strings.areSure}</Text>,
       labels: { confirm: state.strings.remove, cancel: state.strings.cancel },
       onConfirm: async () => {
         if (!removing) {
-          setRemoving(accountId);
+          setRemoving(accountId)
           try {
-            await actions.removeAccount(accountId);
+            await actions.removeAccount(accountId)
           } catch (err) {
-            console.log(err);
-            showError();
+            console.log(err)
+            showError()
           }
-          setRemoving(null);
+          setRemoving(null)
         }
-      }
-    });
+      },
+    })
   }
 
   const members = state.members.map((member, idx) => {
@@ -153,70 +153,81 @@ export function Accounts({ openSetup }: { openSetup: ()=>void }) {
       <ActionIcon key="acess" className={classes.action} variant="light" loading={removing === member.accountId} onClick={() => accessAccount(member.accountId)}>
         <IconLockOpen2 />
       </ActionIcon>,
-      <ActionIcon key="block" className={classes.action} variant="light" loading={blocking === member.accountId} color={Colors.pending} onClick={() => blockAccount(member.accountId, !member.disabled)}>
-        { member.disabled && (
-          <IconUserCheck />
-        )}
-        { !member.disabled && (
-          <IconUserCancel />
-        )}
+      <ActionIcon
+        key="block"
+        className={classes.action}
+        variant="light"
+        loading={blocking === member.accountId}
+        color={Colors.pending}
+        onClick={() => blockAccount(member.accountId, !member.disabled)}
+      >
+        {member.disabled && <IconUserCheck />}
+        {!member.disabled && <IconUserCancel />}
       </ActionIcon>,
-      <ActionIcon key="remove" className={classes.action} variant="light" loading={removing === member.accountId} color={Colors.offsync} onClick={() => removeAccount(member.accountId)}><IconTrash /></ActionIcon>,
-    ];
+      <ActionIcon key="remove" className={classes.action} variant="light" loading={removing === member.accountId} color={Colors.offsync} onClick={() => removeAccount(member.accountId)}>
+        <IconTrash />
+      </ActionIcon>,
+    ]
 
     return (
-      <Card key={idx} className={classes.member} imageUrl={member.imageUrl}  handle={member.guid}  select={()=>{}}
-        name={member.storageUsed > 1048576 ? `${member.handle} [${Math.floor(member.storageUsed / 1048576)}MB]` : member.handle} 
-        actions={options} placeholder="" node="" />
+      <Card
+        key={idx}
+        className={classes.member}
+        imageUrl={member.imageUrl}
+        handle={member.guid}
+        select={() => {}}
+        name={member.storageUsed > 1048576 ? `${member.handle} [${Math.floor(member.storageUsed / 1048576)}MB]` : member.handle}
+        actions={options}
+        placeholder=""
+        node=""
+      />
     )
-  });
+  })
 
   return (
     <div className={classes.accounts}>
       <div className={classes.content}>
         <div className={classes.header}>
-          { state.layout !== 'large' && (
-            <ActionIcon className={classes.action} variant="light" onClick={loadAccounts} loading={loading}> 
+          {state.layout !== 'large' && (
+            <ActionIcon className={classes.action} variant="light" onClick={loadAccounts} loading={loading}>
               <IconReload />
             </ActionIcon>
           )}
           <div className={state.layout === 'large' ? classes.leftTitle : classes.centerTitle}>
-            <Text className={classes.title}>{ state.strings.accounts }</Text>
+            <Text className={classes.title}>{state.strings.accounts}</Text>
           </div>
-          { state.layout === 'large' && (
-            <ActionIcon className={classes.action} variant="light" onClick={loadAccounts} loading={loading}> 
+          {state.layout === 'large' && (
+            <ActionIcon className={classes.action} variant="light" onClick={loadAccounts} loading={loading}>
               <IconReload />
             </ActionIcon>
           )}
-          <ActionIcon className={classes.action} variant="light" onClick={addAccount}> 
+          <ActionIcon className={classes.action} variant="light" onClick={addAccount}>
             <IconUserPlus />
           </ActionIcon>
-          { state.layout === 'large' && (
-            <ActionIcon className={classes.action} variant="light" onClick={openSetup}> 
+          {state.layout === 'large' && (
+            <ActionIcon className={classes.action} variant="light" onClick={openSetup}>
               <IconSettings />
             </ActionIcon>
           )}
         </div>
-        <div className={classes.members}>
-          { members }
-        </div>
+        <div className={classes.members}>{members}</div>
       </div>
       <Modal title={state.strings.addingTitle} size="lg" opened={addOpened} onClose={addClose} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered>
         <div className={classes.modal}>
           <Text className={classes.prompt}>{state.strings.addingLink}:</Text>
           <div className={classes.copy}>
-            <Text className={classes.value}>{ link }</Text>
+            <Text className={classes.value}>{link}</Text>
             {linkCopy && <IconCheck size="16" />}
             {!linkCopy && <IconCopy size="16" className={classes.icon} onClick={copyLink} />}
           </div>
           <Text className={classes.prompt}>{state.strings.addingToken}:</Text>
           <div className={classes.copy}>
-            <Text className={classes.value}>{ token }</Text>
+            <Text className={classes.value}>{token}</Text>
             {tokenCopy && <IconCheck size="16" />}
             {!tokenCopy && <IconCopy size="16" className={classes.icon} onClick={copyToken} />}
           </div>
           <div className={classes.control}>
-            <Button onClick={addClose}>{ state.strings.close }</Button>
+            <Button onClick={addClose}>{state.strings.close}</Button>
           </div>
         </div>
       </Modal>
@@ -224,22 +235,21 @@ export function Accounts({ openSetup }: { openSetup: ()=>void }) {
         <div className={classes.modal}>
           <Text className={classes.prompt}>{state.strings.accessingLink}:</Text>
           <div className={classes.copy}>
-            <Text className={classes.value}>{ link }</Text>
+            <Text className={classes.value}>{link}</Text>
             {linkCopy && <IconCheck size="16" />}
             {!linkCopy && <IconCopy size="16" className={classes.icon} onClick={copyLink} />}
           </div>
           <Text className={classes.prompt}>{state.strings.accessingToken}:</Text>
           <div className={classes.copy}>
-            <Text className={classes.value}>{ token }</Text>
+            <Text className={classes.value}>{token}</Text>
             {tokenCopy && <IconCheck size="16" />}
             {!tokenCopy && <IconCopy size="16" className={classes.icon} onClick={copyToken} />}
           </div>
           <div className={classes.control}>
-            <Button onClick={addClose}>{ state.strings.close }</Button>
+            <Button onClick={addClose}>{state.strings.close}</Button>
           </div>
         </div>
-      </Modal> 
+      </Modal>
     </div>
-  );
+  )
 }
-

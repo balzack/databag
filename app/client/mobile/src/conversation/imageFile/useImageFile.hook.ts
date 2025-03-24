@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useState} from 'react';
 
 export function useImageFile() {
   const [state, setState] = useState({
@@ -6,17 +6,16 @@ export function useImageFile() {
     ratio: 1,
   });
 
-
   const updateState = (value: any) => {
-    setState((s) => ({ ...s, ...value }));
+    setState(s => ({...s, ...value}));
   };
 
   const actions = {
-    loaded: (e) => {
-      const { width, height } = e.nativeEvent.source;
-      updateState({ loaded: true, ratio: width / height });
+    loaded: e => {
+      const {width, height} = e.nativeEvent.source;
+      updateState({loaded: true, ratio: width / height});
     },
   };
 
-  return { state, actions };
+  return {state, actions};
 }

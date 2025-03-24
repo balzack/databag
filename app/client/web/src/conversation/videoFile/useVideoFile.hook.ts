@@ -11,13 +11,14 @@ export function useVideoFile(source: File) {
   }
 
   useEffect(() => {
-    const videoUrl = URL.createObjectURL(source);
-    updateState({ videoUrl });
-    return () => { URL.revokeObjectURL(videoUrl) };
-  }, [source]);    
+    const videoUrl = URL.createObjectURL(source)
+    updateState({ videoUrl })
+    return () => {
+      URL.revokeObjectURL(videoUrl)
+    }
+  }, [source])
 
-  const actions = {
-  }
+  const actions = {}
 
   return { state, actions }
 }

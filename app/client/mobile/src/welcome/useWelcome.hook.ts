@@ -1,7 +1,7 @@
-import { useState, useContext, useEffect } from 'react';
-import { DisplayContext } from '../context/DisplayContext';
-import { AppContext } from '../context/AppContext';
-import { ContextType } from '../context/ContextType';
+import {useState, useContext, useEffect} from 'react';
+import {DisplayContext} from '../context/DisplayContext';
+import {AppContext} from '../context/AppContext';
+import {ContextType} from '../context/ContextType';
 
 export function useWelcome() {
   const app = useContext(AppContext) as ContextType;
@@ -11,14 +11,13 @@ export function useWelcome() {
     showWelcome: null as null | boolean,
   });
 
-
   const updateState = (value: any) => {
-    setState((s) => ({ ...s, ...value }));
+    setState(s => ({...s, ...value}));
   };
 
   useEffect(() => {
     const showWelcome = app.state.showWelcome;
-    updateState({ showWelcome });
+    updateState({showWelcome});
   }, [app.state]);
 
   const actions = {
@@ -27,5 +26,5 @@ export function useWelcome() {
     },
   };
 
-  return { state, actions };
+  return {state, actions};
 }

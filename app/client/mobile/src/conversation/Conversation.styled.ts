@@ -116,8 +116,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingRight: 8,
   },
-  nopad: {
-  },
+  nopad: {},
   topBorder: {
     width: '100%',
     height: 2,

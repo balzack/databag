@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { View, Animated, useAnimatedValue } from 'react-native';
+import React, {useEffect} from 'react';
+import {View, Animated, useAnimatedValue} from 'react-native';
 
-export function Shimmer({ contentStyle }: { contentStyle: any }) {
+export function Shimmer({contentStyle}: {contentStyle: any}) {
   const shimmer = useAnimatedValue(0);
 
   useEffect(() => {
@@ -17,13 +17,13 @@ export function Shimmer({ contentStyle }: { contentStyle: any }) {
           duration: 2000,
           useNativeDriver: true,
         }),
-      ])
+      ]),
     ).start();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <Animated.View style={[{},{opacity: shimmer}]}>
+    <Animated.View style={[{}, {opacity: shimmer}]}>
       <View style={contentStyle} />
     </Animated.View>
   );

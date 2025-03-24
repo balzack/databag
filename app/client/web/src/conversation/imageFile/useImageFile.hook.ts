@@ -11,13 +11,14 @@ export function useImageFile(source: File) {
   }
 
   useEffect(() => {
-    const thumbUrl = URL.createObjectURL(source);
-    updateState({ thumbUrl });
-    return () => { URL.revokeObjectURL(thumbUrl) };
-  }, [source]);    
+    const thumbUrl = URL.createObjectURL(source)
+    updateState({ thumbUrl })
+    return () => {
+      URL.revokeObjectURL(thumbUrl)
+    }
+  }, [source])
 
-  const actions = {
-  }
+  const actions = {}
 
   return { state, actions }
 }

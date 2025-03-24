@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import { Colors } from '../constants/Colors';
+import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
   active: {
@@ -27,13 +27,11 @@ export const styles = StyleSheet.create({
     padding: 8,
     width: '100%',
   },
-  circleIcon: {
-  },
+  circleIcon: {},
   flipIcon: {
-    transform: [{ rotate: '135deg' }],
+    transform: [{rotate: '135deg'}],
   },
-  end: {
-  },
+  end: {},
   name: {
     flexGrow: 1,
     flexShrink: 1,

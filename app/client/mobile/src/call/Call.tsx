@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Animated, useAnimatedValue, Image, View } from 'react-native';
-import { useCall } from './useCall.hook';
-import { styles } from './Call.styled';
-import { Text, Surface, IconButton } from 'react-native-paper';
-import { Confirm } from '../confirm/Confirm';
-import { Colors } from '../constants/Colors';
-import { RTCView } from 'react-native-webrtc';
+import React, {useEffect, useState} from 'react';
+import {Animated, useAnimatedValue, Image, View} from 'react-native';
+import {useCall} from './useCall.hook';
+import {styles} from './Call.styled';
+import {Text, Surface, IconButton} from 'react-native-paper';
+import {Confirm} from '../confirm/Confirm';
+import {Colors} from '../constants/Colors';
+import {RTCView} from 'react-native-webrtc';
 
 export function Call() {
-  const { state, actions } = useCall();
+  const {state, actions} = useCall();
   const [alert, setAlert] = useState(false);
   const [ending, setEnding] = useState(false);
   const [applyingAudio, setApplyingAudio] = useState(false);
@@ -91,60 +91,68 @@ export function Call() {
   }, [state.calling, state.fullscreen]);
 
   const viewStyle = state.calling && state.fullscreen ? styles.active : styles.inactive;
-  const showName = (state.height - (8 * state.width / 10)) > 256;
+  const showName = state.height - (8 * state.width) / 10 > 256;
   return (
-    <Animated.View style={{ ...viewStyle, opacity }}>
-      { state.calling && (
+    <Animated.View style={{...viewStyle, opacity}}>
+      {state.calling && (
         <Surface elevation={4} mode="flat" style={styles.call}>
-
-          { !state.remoteVideo && !state.localVideo && showName && (
+          {!state.remoteVideo && !state.localVideo && showName && (
             <View style={styles.titleView}>
-              { state.calling.name && (
-                <Text style={styles.titleName} adjustsFontSizeToFit={true} numberOfLines={1}>{ state.calling.name }</Text>
+              {state.calling.name && (
+                <Text style={styles.titleName} adjustsFontSizeToFit={true} numberOfLines={1}>
+                  {state.calling.name}
+                </Text>
               )}
-              { !state.calling.name && (
-                <Text style={styles.titleName} adjustsFontSizeToFit={true} numberOfLines={1}>{ `${state.calling.handle}/${state.calling.node}` }</Text>
-              )}
-              <Image
-                style={styles.titleImage}
-                resizeMode="contain"
-                source={{ uri: state.calling.imageUrl }}
-              />
-              <Text style={styles.duration}>{ `${Math.floor(state.duration / 60)}:${(state.duration % 60).toString().padStart(2, '0')}` }</Text>
+              {!state.calling.name && <Text style={styles.titleName} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.calling.handle}/${state.calling.node}`}</Text>}
+              <Image style={styles.titleImage} resizeMode="contain" source={{uri: state.calling.imageUrl}} />
+              <Text style={styles.duration}>{`${Math.floor(state.duration / 60)}:${(state.duration % 60).toString().padStart(2, '0')}`}</Text>
             </View>
           )}
 
-          { !state.remoteVideo && !state.localVideo && !showName && (
-            <Image
-              style={styles.logoView}
-              resizeMode="contain"
-              source={{ uri: state.calling.imageUrl }}
-            />
-          )}
+          {!state.remoteVideo && !state.localVideo && !showName && <Image style={styles.logoView} resizeMode="contain" source={{uri: state.calling.imageUrl}} />}
 
-          { state.remoteVideo && (
-            <RTCView
-              style={styles.full}
-              mirror={true}
-              objectFit={'contain'}
-              streamURL={state.remoteStream.toURL()}
-            />
-          )}
+          {state.remoteVideo && <RTCView style={styles.full} mirror={true} objectFit={'contain'} streamURL={state.remoteStream.toURL()} />}
 
-          { state.localVideo && (
-            <RTCView
-              style={state.remoteVideo ? styles.box : styles.full}
-              mirror={true}
-              objectFit={'contain'}
-              streamURL={state.localStream.toURL()}
-              zOrder={state.remoteVideo ? 2 : undefined}
-            />
+          {state.localVideo && (
+            <RTCView style={state.remoteVideo ? styles.box : styles.full} mirror={true} objectFit={'contain'} streamURL={state.localStream.toURL()} zOrder={state.remoteVideo ? 2 : undefined} />
           )}
 
           <Surface elevation={3} mode="flat" style={styles.controls}>
-            <IconButton style={styles.closeIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.confirmed} icon="arrow-collapse-all" compact="true" mode="contained" size={32} onPress={()=>actions.setFullscreen(false)} />
-            <IconButton style={styles.closeIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.primary} icon={state.audioEnabled ? 'microphone' : 'microphone-off'} loading={applyingAudio} compact="true" mode="contained" size={32} onPress={toggleAudio} />
-            <IconButton style={styles.closeIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.primary} icon={state.videoEnabled ? 'video-outline' : 'video-off-outline'} loading={applyingVideo} compact="true" mode="contained" size={32} onPress={toggleVideo} />
+            <IconButton
+              style={styles.closeIcon}
+              iconColor="white"
+              disabled={!state.connected}
+              containerColor={Colors.confirmed}
+              icon="arrow-collapse-all"
+              compact="true"
+              mode="contained"
+              size={32}
+              onPress={() => actions.setFullscreen(false)}
+            />
+            <IconButton
+              style={styles.closeIcon}
+              iconColor="white"
+              disabled={!state.connected}
+              containerColor={Colors.primary}
+              icon={state.audioEnabled ? 'microphone' : 'microphone-off'}
+              loading={applyingAudio}
+              compact="true"
+              mode="contained"
+              size={32}
+              onPress={toggleAudio}
+            />
+            <IconButton
+              style={styles.closeIcon}
+              iconColor="white"
+              disabled={!state.connected}
+              containerColor={Colors.primary}
+              icon={state.videoEnabled ? 'video-outline' : 'video-off-outline'}
+              loading={applyingVideo}
+              compact="true"
+              mode="contained"
+              size={32}
+              onPress={toggleVideo}
+            />
             <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.danger} icon="phone-hangup-outline" compact="true" mode="contained" size={32} onPress={end} />
           </Surface>
         </Surface>
@@ -153,4 +161,3 @@ export function Call() {
     </Animated.View>
   );
 }
-

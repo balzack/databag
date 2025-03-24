@@ -1,5 +1,5 @@
 import {useEffect, useState, useContext} from 'react';
-import { AppState } from 'react-native';
+import {AppState} from 'react-native';
 import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {ContextType} from '../context/ContextType';
@@ -27,10 +27,10 @@ export function useSession() {
       }
     };
     const setSdkState = (sdkState: string) => {
-      updateState({ sdkState: sdkState === 'connected' });
+      updateState({sdkState: sdkState === 'connected'});
     };
     const setAppState = (appState: string) => {
-      updateState({ appState: appState === 'active' });
+      updateState({appState: appState === 'active'});
     };
     const session = app.state.session;
     if (session) {

@@ -11,7 +11,7 @@ export function useProfile(params: ProfileParams) {
   const [state, setState] = useState({
     strings: display.state.strings,
     cards: [] as Card[],
-    profile: {guid:''} as {guid:string} | Profile,
+    profile: { guid: '' } as { guid: string } | Profile,
     guid: '',
     name: '',
     handle: '',
@@ -81,13 +81,13 @@ export function useProfile(params: ProfileParams) {
   }, [state.cards, state.guid])
 
   useEffect(() => {
-    const identity = app.state.session?.getIdentity();
+    const identity = app.state.session?.getIdentity()
     const contact = app.state.session?.getContact()
     const setCards = (cards: Card[]) => {
       updateState({ cards })
     }
     const setProfile = (profile: Profile) => {
-      updateState({ profile });
+      updateState({ profile })
     }
     contact.addCardListener(setCards)
     identity.addProfileListener(setProfile)
@@ -103,8 +103,8 @@ export function useProfile(params: ProfileParams) {
       await contact.addCard(state.node, state.guid)
     },
     saveAndConnect: async () => {
-      const contact = app.state.session?.getContact();
-      await contact.addAndConnectCard(state.node, state.guid);
+      const contact = app.state.session?.getContact()
+      await contact.addAndConnectCard(state.node, state.guid)
     },
     remove: async () => {
       const contact = app.state.session?.getContact()

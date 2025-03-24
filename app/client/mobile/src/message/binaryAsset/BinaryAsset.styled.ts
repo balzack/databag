@@ -83,8 +83,7 @@ export const styles = StyleSheet.create({
   alertLabel: {
     color: Colors.offsync,
   },
-  closeIcon: {
-  },
+  closeIcon: {},
   progress: {
     position: 'absolute',
     bottom: '10%',

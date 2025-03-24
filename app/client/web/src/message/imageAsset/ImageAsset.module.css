@@ -13,7 +13,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(8,8,8, .5);
+  background-color: rgba(8, 8, 8, 0.5);
   backdrop-filter: blur(33px);
   display: flex;
   align-items: center;
@@ -47,6 +47,5 @@
       background-color: transparent;
       object-fit: contain;
     }
-
   }
 }

@@ -60,9 +60,9 @@
     .label {
       font-size: 16px;
     }
-    
+
     .value {
-      padding-left: 24px; 
+      padding-left: 24px;
       flex-grow: 1;
     }
 
@@ -87,22 +87,22 @@
     align-items: center;
     gap: 16px;
   }
-  
-  .secretImage { 
+
+  .secretImage {
     width: 192px;
     height: 192px;
   }
-  
+
   .secretText {
     display: flex;
     gap: 16px;
-  } 
-    
+  }
+
   .authMessage {
     height: 24px;
     color: var(--mantine-color-red-3);
   }
-    
+
   .copyIcon {
     cursor: pointer;
   }
@@ -113,5 +113,5 @@
     padding-top: 8px;
     justify-content: flex-end;
     flex-grow: 1;
-  } 
+  }
 }

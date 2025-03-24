@@ -54,7 +54,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
     setBlockedMessage(true);
   };
 
-  const unblockMessage = async (blocked: {cardId: string | null, channelId: string, topicId: string, timestamp: number}) => {
+  const unblockMessage = async (blocked: {cardId: string | null; channelId: string; topicId: string; timestamp: number}) => {
     try {
       setBlockedError(false);
       await actions.unblockMessage(blocked.cardId, blocked.channelId, blocked.topicId);
@@ -65,8 +65,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
   };
 
   const blockedMessages = state.blockedMessages.map((blocked, index) => (
-    <View key={index} style={{ ...styles.blockedItem, borderColor: theme.colors.outlineVariant }}>
-      <Text style={styles.blockedValue}> { actions.getTimestamp(blocked.timestamp) }</Text>
+    <View key={index} style={{...styles.blockedItem, borderColor: theme.colors.outlineVariant}}>
+      <Text style={styles.blockedValue}> {actions.getTimestamp(blocked.timestamp)}</Text>
       <IconButton style={styles.blockedAction} icon="restore" size={16} onPress={() => unblockMessage(blocked)} />
     </View>
   ));
@@ -82,7 +82,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
     setBlockedChannel(true);
   };
 
-  const unblockChannel = async (blocked: {cardId: string | null, channelId: string, topicId: string, timestamp: number}) => {
+  const unblockChannel = async (blocked: {cardId: string | null; channelId: string; topicId: string; timestamp: number}) => {
     try {
       setBlockedError(false);
       await actions.unblockChannel(blocked.cardId, blocked.channelId, blocked.topicId);
@@ -93,8 +93,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
   };
 
   const blockedChannels = state.blockedChannels.map((blocked, index) => (
-    <View key={index} style={{ ...styles.blockedItem, borderColor: theme.colors.outlineVariant }}>
-      <Text style={styles.blockedValue}> { actions.getTimestamp(blocked.timestamp) }</Text>
+    <View key={index} style={{...styles.blockedItem, borderColor: theme.colors.outlineVariant}}>
+      <Text style={styles.blockedValue}> {actions.getTimestamp(blocked.timestamp)}</Text>
       <IconButton style={styles.blockedAction} icon="restore" size={16} onPress={() => unblockChannel(blocked)} />
     </View>
   ));
@@ -110,7 +110,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
     setBlockedContact(true);
   };
 
-  const unblockContact = async (blocked: {cardId: string | null, channelId: string, topicId: string, timestamp: number}) => {
+  const unblockContact = async (blocked: {cardId: string | null; channelId: string; topicId: string; timestamp: number}) => {
     try {
       setBlockedError(false);
       await actions.unblockContact(blocked.cardId, blocked.channelId, blocked.topicId);
@@ -121,8 +121,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
   };
 
   const blockedContacts = state.blockedContacts.map((blocked, index) => (
-    <View key={index} style={{ ...styles.blockedItem, borderColor: theme.colors.outlineVariant }}>
-      <Text style={styles.blockedValue}> { actions.getTimestamp(blocked.timestamp) }</Text>
+    <View key={index} style={{...styles.blockedItem, borderColor: theme.colors.outlineVariant}}>
+      <Text style={styles.blockedValue}> {actions.getTimestamp(blocked.timestamp)}</Text>
       <IconButton style={styles.blockedAction} icon="restore" size={16} onPress={() => unblockContact(blocked)} />
     </View>
   ));
@@ -1145,25 +1145,19 @@ export function Settings({showLogout}: {showLogout: boolean}) {
           <View style={styles.blockedContent}>
             <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
               <View style={styles.blockedHeader}>
-                <Text style={styles.blockedTitle}>{ state.strings.blockedMessages }</Text>
+                <Text style={styles.blockedTitle}>{state.strings.blockedMessages}</Text>
                 <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedMessage(false)} />
               </View>
               <Surface style={styles.blocked} elevation={1} mode="flat">
-                { state.blockedMessages.length === 0 && (
+                {state.blockedMessages.length === 0 && (
                   <View style={styles.blockedEmpty}>
-                    <Text style={styles.blockedLabel}>{ state.strings.noMessages }</Text>
+                    <Text style={styles.blockedLabel}>{state.strings.noMessages}</Text>
                   </View>
                 )}
-                { state.blockedMessages.length > 0 && (
-                  <View>
-                  { blockedMessages }
-                  </View>
-                )}
+                {state.blockedMessages.length > 0 && <View>{blockedMessages}</View>}
               </Surface>
               <View style={styles.blockedDone}>
-                { blockedError && (
-                  <Text style={styles.blockedError}>{ state.strings.operationFailed }</Text>
-                )}
+                {blockedError && <Text style={styles.blockedError}>{state.strings.operationFailed}</Text>}
                 <Button style={styles.blockedButton} mode="outlined" onPress={() => setBlockedMessage(false)}>
                   {state.strings.close}
                 </Button>
@@ -1178,25 +1172,19 @@ export function Settings({showLogout}: {showLogout: boolean}) {
           <View style={styles.blockedContent}>
             <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
               <View style={styles.blockedHeader}>
-                <Text style={styles.blockedTitle}>{ state.strings.blockedTopics }</Text>
+                <Text style={styles.blockedTitle}>{state.strings.blockedTopics}</Text>
                 <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedChannel(false)} />
               </View>
               <Surface style={styles.blocked} elevation={1} mode="flat">
-                { state.blockedChannels.length === 0 && (
+                {state.blockedChannels.length === 0 && (
                   <View style={styles.blockedEmpty}>
-                    <Text style={styles.blockedLabel}>{ state.strings.noTopics }</Text>
+                    <Text style={styles.blockedLabel}>{state.strings.noTopics}</Text>
                   </View>
                 )}
-                { state.blockedChannels.length > 0 && (
-                  <View>
-                  { blockedChannels }
-                  </View>
-                )}
+                {state.blockedChannels.length > 0 && <View>{blockedChannels}</View>}
               </Surface>
               <View style={styles.blockedDone}>
-                { blockedError && (
-                  <Text style={styles.blockedError}>{ state.strings.operationFailed }</Text>
-                )}
+                {blockedError && <Text style={styles.blockedError}>{state.strings.operationFailed}</Text>}
                 <Button style={styles.blockedButton} mode="outlined" onPress={() => setBlockedChannel(false)}>
                   {state.strings.close}
                 </Button>
@@ -1211,25 +1199,19 @@ export function Settings({showLogout}: {showLogout: boolean}) {
           <View style={styles.blockedContent}>
             <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
               <View style={styles.blockedHeader}>
-                <Text style={styles.blockedTitle}>{ state.strings.blockedContacts }</Text>
+                <Text style={styles.blockedTitle}>{state.strings.blockedContacts}</Text>
                 <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedContact(false)} />
               </View>
               <Surface style={styles.blocked} elevation={1} mode="flat">
-                { state.blockedContacts.length === 0 && (
+                {state.blockedContacts.length === 0 && (
                   <View style={styles.blockedEmpty}>
-                    <Text style={styles.blockedLabel}>{ state.strings.noContacts }</Text>
+                    <Text style={styles.blockedLabel}>{state.strings.noContacts}</Text>
                   </View>
                 )}
-                { state.blockedContacts.length > 0 && (
-                  <View>
-                  { blockedContacts }
-                  </View>
-                )}
+                {state.blockedContacts.length > 0 && <View>{blockedContacts}</View>}
               </Surface>
               <View style={styles.blockedDone}>
-                { blockedError && (
-                  <Text style={styles.blockedError}>{ state.strings.operationFailed }</Text>
-                )}
+                {blockedError && <Text style={styles.blockedError}>{state.strings.operationFailed}</Text>}
                 <Button style={styles.blockedButton} mode="outlined" onPress={() => setBlockedContact(false)}>
                   {state.strings.close}
                 </Button>

@@ -47,14 +47,14 @@ export function useRegistry() {
   };
 
   useEffect(() => {
-    updateState({ contacts: state.profiles.filter((profile: Profile) => profile.guid !== state.guid) });
+    updateState({contacts: state.profiles.filter((profile: Profile) => profile.guid !== state.guid)});
   }, [state.profiles, state.guid]);
 
   useEffect(() => {
     const identity = app.state?.session?.getIdentity();
     const setProfile = (profile: Profile) => {
       const {guid} = profile;
-      updateState({ guid });
+      updateState({guid});
     };
     if (identity) {
       identity.addProfileListener(setProfile);

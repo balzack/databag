@@ -11,14 +11,14 @@ export function useAudioFile(source: File) {
   }
 
   useEffect(() => {
-    const label = source.name.split('.').shift();
-    updateState({ label });
-  }, [source]);    
+    const label = source.name.split('.').shift()
+    updateState({ label })
+  }, [source])
 
   const actions = {
     setLabel: (label: string) => {
-      updateState({ label });
-    }
+      updateState({ label })
+    },
   }
 
   return { state, actions }

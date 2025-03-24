@@ -7,14 +7,14 @@ import { StagingFiles } from '../StagingFiles'
 const databag = new DatabagSDK({ channelTypes: ['sealed', 'superbasic'] }, new WebCrypto(), new StagingFiles())
 
 const notifications = [
-    { event: 'contact.addCard', messageTitle: 'New Contact Request' },
-    { event: 'contact.updateCard', messageTitle: 'Contact Update' },
-    { event: 'content.addChannel.superbasic', messageTitle: 'New Topic' },
-    { event: 'content.addChannel.sealed', messageTitle: 'New Topic' },
-    { event: 'content.addChannelTopic.superbasic', messageTitle: 'New Topic Message' },
-    { event: 'content.addChannelTopic.sealed', messageTitle: 'New Topic Message' },
-    { event: 'ring', messageTitle: 'Incoming Call' },
-  ];
+  { event: 'contact.addCard', messageTitle: 'New Contact Request' },
+  { event: 'contact.updateCard', messageTitle: 'Contact Update' },
+  { event: 'content.addChannel.superbasic', messageTitle: 'New Topic' },
+  { event: 'content.addChannel.sealed', messageTitle: 'New Topic' },
+  { event: 'content.addChannelTopic.superbasic', messageTitle: 'New Topic Message' },
+  { event: 'content.addChannelTopic.sealed', messageTitle: 'New Topic Message' },
+  { event: 'ring', messageTitle: 'Incoming Call' },
+]
 
 export function useAppContext() {
   const sdk = useRef(databag)
@@ -94,14 +94,14 @@ export function useAppContext() {
     },
     setFocus: async (cardId: string | null, channelId: string) => {
       if (state.session) {
-        const focus = await state.session.setFocus(cardId, channelId);
-        updateState({ focus });
+        const focus = await state.session.setFocus(cardId, channelId)
+        updateState({ focus })
       }
     },
     clearFocus: () => {
       if (state.session) {
-        state.session.clearFocus();
-        updateState({ focus: null });
+        state.session.clearFocus()
+        updateState({ focus: null })
       }
     },
     getAvailable: async (node: string, secure: boolean) => {

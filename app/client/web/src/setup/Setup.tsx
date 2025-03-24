@@ -6,18 +6,18 @@ import { useDisclosure } from '@mantine/hooks'
 import { IconCheck, IconLogout, IconCopy } from '@tabler/icons-react'
 
 export function Setup() {
-  const { state, actions } = useSetup();
-  const [confirmingAuth, setConfirmingAuth] = useState(false);
-  const [secretCopy, setSecretCopy] = useState(false);
-  const [updating, setUpdating] = useState(false);
+  const { state, actions } = useSetup()
+  const [confirmingAuth, setConfirmingAuth] = useState(false)
+  const [secretCopy, setSecretCopy] = useState(false)
+  const [updating, setUpdating] = useState(false)
   const [mfaOpened, { open: mfaOpen, close: mfaClose }] = useDisclosure(false)
 
   const confirmAuth = async () => {
     if (!confirmingAuth) {
-      setConfirmingAuth(true);
-      await actions.confirmMFAuth();
-      mfaClose();
-      setConfirmingAuth(false);
+      setConfirmingAuth(true)
+      await actions.confirmMFAuth()
+      mfaClose()
+      setConfirmingAuth(false)
     }
   }
 
@@ -25,39 +25,35 @@ export function Setup() {
     if (!secretCopy) {
       try {
         navigator.clipboard.writeText(state.confirmMFAuthText)
-        setSecretCopy(true);
+        setSecretCopy(true)
         setTimeout(() => {
-          setSecretCopy(false);
-        }, 2000);
+          setSecretCopy(false)
+        }, 2000)
       } catch (err) {
-        console.log(err);
+        console.log(err)
       }
     }
-  };
+  }
 
   const toggleAuth = async () => {
     if (!updating) {
-      setUpdating(true);
+      setUpdating(true)
       if (state.mfaEnabled) {
-        await actions.disableMFAuth();
+        await actions.disableMFAuth()
       } else {
-        await actions.enableMFAuth();
-        mfaOpen();
+        await actions.enableMFAuth()
+        mfaOpen()
       }
-      setUpdating(false);
+      setUpdating(false)
     }
   }
 
   return (
     <div className={classes.setup}>
       <div className={classes.header}>
-        <div className={classes.loader}>
-          { (state.loading || state.updating) && (
-            <Loader size={18} />
-          )}
-        </div>
+        <div className={classes.loader}>{(state.loading || state.updating) && <Loader size={18} />}</div>
         <div className={classes.centerTitle}>
-          <Text className={classes.title}>{ state.strings.setup }</Text>
+          <Text className={classes.title}>{state.strings.setup}</Text>
         </div>
         <div className={classes.loader}>
           <ActionIcon className={classes.action} variant="light" onClick={actions.logout}>
@@ -84,7 +80,7 @@ export function Setup() {
             value={state.setup?.domain || ''}
             placeholder={state.strings.urlHint}
             onChange={(event) => actions.setDomain(event.currentTarget.value)}
-          />  
+          />
         </div>
         <div className={classes.option}>
           <Text className={classes.label}>{state.strings.storageLimit}:</Text>
@@ -95,12 +91,12 @@ export function Setup() {
             value={state.accountStorage}
             placeholder={state.strings.storageHint}
             onChange={(event) => actions.setAccountStorage(event.currentTarget.value)}
-          />  
+          />
         </div>
         <div className={classes.option}>
           <Text className={classes.label}>{state.strings.accountCreation}:</Text>
           <Switch className={classes.switch} disabled={state.loading} checked={state.setup?.enableOpenAccess} onChange={(ev) => actions.setEnableOpenAccess(ev.currentTarget.checked)} />
-          { state.setup?.enableOpenAccess && (
+          {state.setup?.enableOpenAccess && (
             <TextInput
               className={classes.value}
               size="sm"
@@ -146,13 +142,13 @@ export function Setup() {
             <Text className={classes.label}>{state.strings.enableWeb}:</Text>
             <Switch className={classes.switch} disabled={state.loading} checked={state.setup?.enableIce} onChange={(ev) => actions.setEnableIce(ev.currentTarget.checked)} />
           </div>
-          { state.setup?.enableIce && (
+          {state.setup?.enableIce && (
             <div className={classes.option}>
               <Text className={classes.label}>{state.strings.enableService}:</Text>
               <Switch className={classes.switch} disabled={state.loading} checked={state.setup?.iceService === 'cloudflare'} onChange={(ev) => actions.setEnableService(ev.currentTarget.checked)} />
             </div>
           )}
-          { state.setup?.enableIce && state.setup?.iceService === 'cloudflare' && (
+          {state.setup?.enableIce && state.setup?.iceService === 'cloudflare' && (
             <div className={classes.option}>
               <Text className={classes.label}>TURN_KEY_ID:</Text>
               <TextInput
@@ -162,10 +158,10 @@ export function Setup() {
                 value={state.setup?.iceUsername || ''}
                 placeholder="KEY_ID"
                 onChange={(event) => actions.setIceUsername(event.currentTarget.value)}
-              />  
+              />
             </div>
           )}
-          { state.setup?.enableIce && state.setup?.iceService === 'cloudflare' && (
+          {state.setup?.enableIce && state.setup?.iceService === 'cloudflare' && (
             <div className={classes.option}>
               <Text className={classes.label}>TURN_KEY_API_TOKEN:</Text>
               <TextInput
@@ -175,10 +171,10 @@ export function Setup() {
                 value={state.setup?.icePassword || ''}
                 placeholder="API_TOKEN"
                 onChange={(event) => actions.setIcePassword(event.currentTarget.value)}
-              />  
+              />
             </div>
           )}
-          { state.setup?.enableIce && state.setup?.iceService === 'default' && (
+          {state.setup?.enableIce && state.setup?.iceService === 'default' && (
             <div className={classes.option}>
               <Text className={classes.label}>{state.strings.serverUrl}:</Text>
               <TextInput
@@ -188,10 +184,10 @@ export function Setup() {
                 value={state.setup?.iceUrl || ''}
                 placeholder={state.strings.urlHint}
                 onChange={(event) => actions.setIceUrl(event.currentTarget.value)}
-              />  
+              />
             </div>
           )}
-          { state.setup?.enableIce && state.setup?.iceService === 'default' && (
+          {state.setup?.enableIce && state.setup?.iceService === 'default' && (
             <div className={classes.option}>
               <Text className={classes.label}>{state.strings.webUsername}:</Text>
               <TextInput
@@ -201,10 +197,10 @@ export function Setup() {
                 value={state.setup?.iceUsername || ''}
                 placeholder={state.strings.username}
                 onChange={(event) => actions.setIceUsername(event.currentTarget.value)}
-              />  
+              />
             </div>
           )}
-          { state.setup?.enableIce && state.setup?.iceService === 'default' && (
+          {state.setup?.enableIce && state.setup?.iceService === 'default' && (
             <div className={classes.option}>
               <Text className={classes.label}>{state.strings.webPassword}:</Text>
               <TextInput
@@ -214,7 +210,7 @@ export function Setup() {
                 value={state.setup?.icePassword || ''}
                 placeholder={state.strings.password}
                 onChange={(event) => actions.setIcePassword(event.currentTarget.value)}
-              />  
+              />
             </div>
           )}
         </div>
@@ -233,16 +229,15 @@ export function Setup() {
             <Text className={classes.authMessage}>{state.mfaMessage}</Text>
           </div>
           <div className={classes.control}>
-            <Button variant="default" onClick={mfaClose}> 
+            <Button variant="default" onClick={mfaClose}>
               {state.strings.cancel}
             </Button>
             <Button variant="filled" onClick={confirmAuth} disabled={state.mfaCode.length != 6} loading={confirmingAuth}>
               {state.strings.save}
-            </Button> 
+            </Button>
           </div>
         </div>
       </Modal>
     </div>
-  );
+  )
 }
-

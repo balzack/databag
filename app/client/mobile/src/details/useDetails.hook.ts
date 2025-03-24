@@ -1,8 +1,8 @@
-import { useState, useContext, useEffect } from 'react';
-import { AppContext } from '../context/AppContext';
-import { DisplayContext } from '../context/DisplayContext';
-import { ContextType } from '../context/ContextType';
-import { FocusDetail, Card, Profile } from 'databag-client-sdk';
+import {useState, useContext, useEffect} from 'react';
+import {AppContext} from '../context/AppContext';
+import {DisplayContext} from '../context/DisplayContext';
+import {ContextType} from '../context/ContextType';
+import {FocusDetail, Card, Profile} from 'databag-client-sdk';
 
 export function useDetails() {
   const display = useContext(DisplayContext) as ContextType;
@@ -28,44 +28,38 @@ export function useDetails() {
     unknownContacts: 0,
   });
 
-
   const updateState = (value: any) => {
-    setState((s) => ({ ...s, ...value }));
+    setState(s => ({...s, ...value}));
   };
 
   const getTimestamp = (created: number) => {
-    const now = Math.floor((new Date()).getTime() / 1000);
+    const now = Math.floor(new Date().getTime() / 1000);
     const date = new Date(created * 1000);
     const offset = now - created;
-    if(offset < 43200) {
+    if (offset < 43200) {
       if (state.timeFormat === '12h') {
-        return date.toLocaleTimeString('en-US', {hour: 'numeric', minute:'2-digit'});
+        return date.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
+      } else {
+        return date.toLocaleTimeString('en-GB', {hour: 'numeric', minute: '2-digit'});
       }
-      else {
-        return date.toLocaleTimeString('en-GB', {hour: 'numeric', minute:'2-digit'});
-      }
-    }
-    else if (offset < 31449600) {
+    } else if (offset < 31449600) {
       if (state.dateFormat === 'mm/dd') {
-        return date.toLocaleDateString('en-US', {day: 'numeric', month:'numeric'});
+        return date.toLocaleDateString('en-US', {day: 'numeric', month: 'numeric'});
+      } else {
+        return date.toLocaleDateString('en-GB', {day: 'numeric', month: 'numeric'});
       }
-      else {
-        return date.toLocaleDateString('en-GB', {day: 'numeric', month:'numeric'});
-      }
-    }
-    else {
+    } else {
       if (state.dateFormat === 'mm/dd') {
         return date.toLocaleDateString('en-US');
-      }
-      else {
+      } else {
         return date.toLocaleDateString('en-GB');
       }
     }
   };
 
   useEffect(() => {
-    const { strings, timeFormat, dateFormat } = display.state;
-    updateState({ strings, timeFormat, dateFormat });
+    const {strings, timeFormat, dateFormat} = display.state;
+    updateState({strings, timeFormat, dateFormat});
   }, [display.state]);
 
   useEffect(() => {
@@ -74,12 +68,12 @@ export function useDetails() {
     const contactCards = profileRemoved.map(member => state.cards.find(card => card.guid === member.guid));
     const channelCards = contactCards.filter(member => Boolean(member));
     const unknownContacts = contactCards.length - channelCards.length;
-    updateState({ hostCard, channelCards, unknownContacts });
+    updateState({hostCard, channelCards, unknownContacts});
   }, [state.detail, state.cards, state.profile, state.cardId]);
 
   useEffect(() => {
     const focus = app.state.focus;
-    const { contact, identity } = app.state.session || { };
+    const {contact, identity} = app.state.session || {};
     if (focus && contact && identity) {
       const setCards = (cards: Card[]) => {
         const filtered = cards.filter(card => !card.blocked);
@@ -92,12 +86,12 @@ export function useDetails() {
             return 0;
           }
         });
-        updateState({ cards: sorted });
+        updateState({cards: sorted});
       };
       const setProfile = (profile: Profile) => {
-        updateState({ profile });
+        updateState({profile});
       };
-      const setDetail = (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => {
+      const setDetail = (focused: {cardId: string | null; channelId: string; detail: FocusDetail | null}) => {
         const detail = focused ? focused.detail : null;
         const cardId = focused.cardId;
         const channelId = focused.channelId;
@@ -107,7 +101,7 @@ export function useDetails() {
         const host = cardId == null;
         const subject = detail?.data?.subject ? detail.data.subject : '';
         const created = detail?.created ? getTimestamp(detail.created) : '';
-        updateState({ detail, editSubject: subject, subject, channelId, cardId, access, sealed, locked, host, created });
+        updateState({detail, editSubject: subject, subject, channelId, cardId, access, sealed, locked, host, created});
       };
       focus.addDetailListener(setDetail);
       contact.addCardListener(setCards);
@@ -150,16 +144,16 @@ export function useDetails() {
       await content.clearChannelCard(state.channelId, cardId);
     },
     setEditSubject: (editSubject: string) => {
-      updateState({ editSubject });
+      updateState({editSubject});
     },
     undoSubject: () => {
-      updateState({ editSubject: state.subject });
+      updateState({editSubject: state.subject});
     },
     saveSubject: async () => {
       const content = app.state.session.getContent();
-      await content.setChannelSubject(state.channelId, state.sealed ? 'sealed' : 'superbasic', { subject: state.editSubject });
+      await content.setChannelSubject(state.channelId, state.sealed ? 'sealed' : 'superbasic', {subject: state.editSubject});
     },
   };
 
-  return { state, actions };
+  return {state, actions};
 }

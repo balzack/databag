@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import { Colors } from '../constants/Colors';
+import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
   details: {
@@ -136,8 +136,7 @@ export const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
   },
-  membership: {
-  },
+  membership: {},
   card: {
     paddingBottom: 8,
     paddingTop: 8,

@@ -141,7 +141,7 @@ export function Profile({ params, showClose, close }: { params: ProfileParams; s
         if (!blocking) {
           setBlocking(true)
           await setAction(actions.block)
-          close();
+          close()
           setBlocking(false)
         }
       },
@@ -272,7 +272,7 @@ export function Profile({ params, showClose, close }: { params: ProfileParams; s
           {state.description && <Text className={classes.entrySet}>{state.description}</Text>}
         </div>
         <div className={classes.divider} />
-        { state.guid !== state.profile.guid && (
+        {state.guid !== state.profile.guid && (
           <div className={classes.status}>
             <Text className={classes[state.statusLabel]}>{state.strings[state.statusLabel]}</Text>
           </div>
@@ -507,4 +507,3 @@ export function Profile({ params, showClose, close }: { params: ProfileParams; s
     </div>
   )
 }
-

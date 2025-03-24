@@ -108,7 +108,7 @@ export function useProfile(params: ContactParams) {
       updateState({cards});
     };
     const setProfile = (profile: Profile) => {
-      updateState({ profile });
+      updateState({profile});
     };
     contact.addCardListener(setCards);
     identity.addProfileListener(setProfile);

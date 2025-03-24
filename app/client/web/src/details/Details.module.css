@@ -44,14 +44,14 @@
     padding-top: 32px;
     padding-bottom: 16px;
     justify-content: center;
-  
+
     .action {
       display: flex;
       flex-direction: column;
       align-items: center;
       cursor: pointer;
       height: fit-content;
-    
+
       .actionLabel {
         font-size: 12px;
         color: var(--mantine-color-dbgreen-1);

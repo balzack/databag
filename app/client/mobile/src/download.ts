@@ -1,12 +1,11 @@
-import { Platform, Share } from 'react-native';
+import {Platform, Share} from 'react-native';
 import fileType from 'react-native-file-type';
 import RNFS from 'react-native-fs';
 import RNFetchBlob from 'rn-fetch-blob';
 
 export async function Download(uri: string, name: string, extension?: string) {
-
   if (Platform.OS === 'ios') {
-    const options = { fileCache: true, filename: name };
+    const options = {fileCache: true, filename: name};
     const download = await RNFetchBlob.config(options).fetch('GET', uri);
     const downloadPath = download.path();
 
@@ -18,7 +17,7 @@ export async function Download(uri: string, name: string, extension?: string) {
     }
     await RNFS.moveFile(downloadPath, sharePath);
 
-    await Share.share({ url: sharePath });
+    await Share.share({url: sharePath});
     await RNFS.unlink(sharePath);
   } else {
     if (uri.startsWith('file:')) {
@@ -30,7 +29,7 @@ export async function Download(uri: string, name: string, extension?: string) {
       await RNFS.copyFile(uri, sharePath);
       await RNFS.scanFile(sharePath);
     } else {
-      const options = { fileCache: true, filename: name };
+      const options = {fileCache: true, filename: name};
       const download = await RNFetchBlob.config(options).fetch('GET', uri);
       const downloadPath = download.path();
 

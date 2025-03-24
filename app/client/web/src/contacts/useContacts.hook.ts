@@ -51,7 +51,7 @@ export function useContacts() {
   useEffect(() => {
     const contact = app.state.session?.getContact()
     const setCards = (cards: Card[]) => {
-      const filtered = cards.filter(card => !card.blocked);
+      const filtered = cards.filter((card) => !card.blocked)
       updateState({ cards: filtered })
     }
     contact.addCardListener(setCards)
@@ -67,7 +67,7 @@ export function useContacts() {
 
   const actions = {
     call: async (card: Card) => {
-      await ring.actions.call(card);
+      await ring.actions.call(card)
     },
     toggleSort: () => {
       const sortAsc = !state.sortAsc

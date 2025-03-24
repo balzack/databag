@@ -8,7 +8,7 @@ import {IconButton, Divider, Surface, Text, TextInput, Button, Checkbox} from 'r
 import {BlurView} from '@react-native-community/blur';
 import {InputCode} from '../utils/InputCode';
 import {tos} from '../constants/terms';
-import { Confirm } from '../confirm/Confirm';
+import {Confirm} from '../confirm/Confirm';
 
 export function Access() {
   const {state, actions} = useAccess();
@@ -122,15 +122,20 @@ export function Access() {
                 {state.strings.viewTerms}
               </Button>
               <View style={styles.accept}>
-                <Checkbox.Android status={accept ? 'checked' : 'unchecked'} onPress={() => { setAccept(!accept); }} />
-                <Text>{ state.strings.acceptTerms }</Text>
+                <Checkbox.Android
+                  status={accept ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setAccept(!accept);
+                  }}
+                />
+                <Text>{state.strings.acceptTerms}</Text>
               </View>
-              { (!state.username || !state.password || !state.node || !accept) && (
+              {(!state.username || !state.password || !state.node || !accept) && (
                 <Button mode="contained" style={styles.submit} disabled={true}>
                   {state.strings.login}
                 </Button>
               )}
-              { state.username && state.password && state.node && accept && (
+              {state.username && state.password && state.node && accept && (
                 <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading}>
                   {state.strings.login}
                 </Button>
@@ -173,8 +178,13 @@ export function Access() {
                 {state.strings.viewTerms}
               </Button>
               <View style={styles.accept}>
-                <Checkbox.Android status={accept ? 'checked' : 'unchecked'} onPress={() => { setAccept(!accept); }} />
-                <Text>{ state.strings.acceptTerms }</Text>
+                <Checkbox.Android
+                  status={accept ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setAccept(!accept);
+                  }}
+                />
+                <Text>{state.strings.acceptTerms}</Text>
               </View>
               <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading} disabled={!state.token || !state.node || !accept}>
                 {state.strings.access}
@@ -276,10 +286,20 @@ export function Access() {
                 {state.strings.viewTerms}
               </Button>
               <View style={styles.accept}>
-                <Checkbox.Android status={accept ? 'checked' : 'unchecked'} onPress={() => { setAccept(!accept); }} />
-                <Text>{ state.strings.acceptTerms }</Text>
+                <Checkbox.Android
+                  status={accept ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setAccept(!accept);
+                  }}
+                />
+                <Text>{state.strings.acceptTerms}</Text>
               </View>
-              <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading} disabled={!state.username || !state.password || state.password !== state.confirm || !state.node || !accept}>
+              <Button
+                mode="contained"
+                style={styles.submit}
+                onPress={login}
+                loading={state.loading}
+                disabled={!state.username || !state.password || state.password !== state.confirm || !state.node || !accept}>
                 {state.strings.create}
               </Button>
               <Button mode="text" onPress={() => actions.setMode('account')}>
@@ -329,8 +349,13 @@ export function Access() {
                 {state.strings.viewTerms}
               </Button>
               <View style={styles.accept}>
-                <Checkbox.Android status={accept ? 'checked' : 'unchecked'} onPress={() => { setAccept(!accept); }} />
-                <Text>{ state.strings.acceptTerms }</Text>
+                <Checkbox.Android
+                  status={accept ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setAccept(!accept);
+                  }}
+                />
+                <Text>{state.strings.acceptTerms}</Text>
               </View>
               <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading} disabled={!state.password || !state.node || !accept}>
                 {state.strings.login}
@@ -362,12 +387,14 @@ export function Access() {
           <Surface elevation={1} mode="flat" style={styles.modalSurface}>
             <SafeAreaView>
               <View style={styles.modalHeader}>
-                <Text style={styles.modalTitle}>{ state.strings.terms }</Text>
+                <Text style={styles.modalTitle}>{state.strings.terms}</Text>
                 <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setTerms(false)} />
               </View>
               <Divider style={styles.line} />
               <ScrollView style={styles.frame}>
-                <Text numberOfLines={0} style={styles.legal}>{ tos[state.strings.code] }</Text>
+                <Text numberOfLines={0} style={styles.legal}>
+                  {tos[state.strings.code]}
+                </Text>
               </ScrollView>
               <Divider style={styles.line} />
             </SafeAreaView>

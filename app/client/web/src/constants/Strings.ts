@@ -17,7 +17,7 @@ export const en = {
   server: 'Server',
   token: 'Token',
   delayMessage: 'Key generation can take several minutes.',
-  noAccess: 'No Access', 
+  noAccess: 'No Access',
   connecting: 'Connecting',
 
   setup: 'Setup',
@@ -113,7 +113,7 @@ export const en = {
   password: 'Password',
   newPassword: 'New Password',
   confirmPassword: 'Confirm Password',
-  deleteKey: 'Enter \'delete\' to remove key',
+  deleteKey: "Enter 'delete' to remove key",
   delete: 'delete',
   remove: 'Delete',
   username: 'Username',
@@ -294,9 +294,9 @@ export const en = {
 }
 
 export const fr = {
-  viewTerms: 'Voir les conditions d\'utilisation',
-  acceptTerms: 'Accepter les conditions d\'utilisation',
-  terms: 'Conditions d\'utilisation',
+  viewTerms: "Voir les conditions d'utilisation",
+  acceptTerms: "Accepter les conditions d'utilisation",
+  terms: "Conditions d'utilisation",
   access: 'Accès',
 
   textSmall: 'Petit',
@@ -316,7 +316,7 @@ export const fr = {
   blockTopicPrompt: 'Êtes-vous sûr de vouloir bloquer ce sujet ?',
   reportTopic: 'Signaler le sujet',
   reportTopicPrompt: 'Êtes-vous sûr de vouloir signaler ce sujet pour examen par un administrateur ?',
-  noAccess: 'Pas d\'Accès',
+  noAccess: "Pas d'Accès",
   connecting: 'Démarrage de la Connexion',
 
   setup: 'Installation',
@@ -324,19 +324,19 @@ export const fr = {
   noAccounts: 'Aucun Compte',
   selectShare: 'Sélectionnez le Sujet de Partage',
 
-  addingTitle: 'Ajout d\'un Compte',
+  addingTitle: "Ajout d'un Compte",
   addingLink: 'Utilisez le lien suivant pour créer un compte',
-  addingToken: 'Utilisez le jeton suivant pour créer un compte depuis l\'écran de connexion',
+  addingToken: "Utilisez le jeton suivant pour créer un compte depuis l'écran de connexion",
   accessingTitle: 'Accéder au Compte',
   accessingLink: 'Utilisez le lien suivant pour accéder au compte spécifié',
-  accessingToken: 'Utilisez le jeton suivant pour accéder au compte spécifié depuis l\'écran de connexion',
+  accessingToken: "Utilisez le jeton suivant pour accéder au compte spécifié depuis l'écran de connexion",
 
   membership: 'Adhésion',
   channelHost: 'Hôte du Sujet',
   channelGuest: 'Invité du Sujet',
   created: 'Créé',
   flagMessage: 'Signaler le message',
-  flagMessagePrompt: 'Êtes-vous sûr de vouloir signaler le message à l\'administrateur?',
+  flagMessagePrompt: "Êtes-vous sûr de vouloir signaler le message à l'administrateur?",
   flag: 'Signaler',
   blockMessage: 'Bloquer le message',
   blockMessagePrompt: 'Êtes-vous sûr de vouloir bloquer le message?',
@@ -625,7 +625,7 @@ export const sp = {
   accessingLink: 'Utilice el siguiente enlace para acceder a la cuenta especificada',
   accessingToken: 'Utilice el siguiente token para acceder a la cuenta especificada desde la pantalla de inicio de sesión',
 
-  noAccess: 'Sin Acceso', 
+  noAccess: 'Sin Acceso',
   membership: 'Afiliación',
   channelHost: 'Anfitrión del Tema',
   channelGuest: 'Invitado de Tema',
@@ -1206,7 +1206,7 @@ export const de = {
   accounts: 'Konten',
   noAccounts: 'Keine Konten',
   selectShare: 'Wählen Sie Das Thema Zum Teilen Aus',
- 
+
   addingTitle: 'Konto hinzufügen',
   addingLink: 'Verwenden Sie den folgenden Link, um ein Konto zu erstellen',
   addingToken: 'Verwenden Sie das folgende Token, um ein Konto vom Anmeldebildschirm aus zu erstellen',
@@ -1963,7 +1963,7 @@ export const el = {
   enableService: 'Υπηρεσία cloudflare',
   serviceHint: 'Ενεργοποίηση υπηρεσίας CloudFlare',
   serverUrl: 'URL διακομιστή WebRTC',
-  urlHint: 'turn:ip:port?transport=udp', 
+  urlHint: 'turn:ip:port?transport=udp',
   webUsername: 'Όνομα χρήστη WebRTC',
   webPassword: 'Κωδικός πρόσβασης WebRTC',
   failedLoad: 'Αποτυχία φόρτωσης',
@@ -2029,4 +2029,3 @@ export const el = {
   confirmDisable: 'Απενεργοποίηση ελέγχου ταυτότητας πολλαπλών παραγόντων',
   disablePrompt: 'Είστε βέβαιοι ότι θέλετε να απενεργοποιήσετε τον έλεγχο ταυτότητας πολλαπλών παραγόντων',
 }
-

@@ -1,34 +1,50 @@
 import React, { useState } from 'react'
 import { useDetails } from './useDetails.hook'
 import classes from './Details.module.css'
-import { IconUserCog, IconEyeOff, IconAlertHexagon, IconMessageX, IconLogout2, IconHome, IconServer, IconShield, IconShieldOff, IconCalendarClock, IconExclamationCircle, IconX, IconDeviceFloppy, IconArrowBack, IconLabel } from '@tabler/icons-react'
+import {
+  IconUserCog,
+  IconEyeOff,
+  IconAlertHexagon,
+  IconMessageX,
+  IconLogout2,
+  IconHome,
+  IconServer,
+  IconShield,
+  IconShieldOff,
+  IconCalendarClock,
+  IconExclamationCircle,
+  IconX,
+  IconDeviceFloppy,
+  IconArrowBack,
+  IconLabel,
+} from '@tabler/icons-react'
 import { Switch, Button, Modal, Divider, Text, TextInput, ActionIcon } from '@mantine/core'
-import { Card } from '../card/Card';
+import { Card } from '../card/Card'
 import { modals } from '@mantine/modals'
 import { useDisclosure } from '@mantine/hooks'
 
-export function Details({ showClose, close }: { showClose: boolean, close: () => void }) {
+export function Details({ showClose, close }: { showClose: boolean; close: () => void }) {
   const { state, actions } = useDetails()
-  const [saving, setSaving] = useState(false);
-  const [removing, setRemoving] = useState(false);
-  const [blocking, setBlocking] = useState(false);
-  const [reporting, setReporting] = useState(false);
+  const [saving, setSaving] = useState(false)
+  const [removing, setRemoving] = useState(false)
+  const [blocking, setBlocking] = useState(false)
+  const [reporting, setReporting] = useState(false)
   const [showModal, { open: setShowModal, close: clearShowModal }] = useDisclosure(false)
 
   const undo = () => {
-    actions.undoSubject();
+    actions.undoSubject()
   }
 
   const save = async () => {
     if (!saving) {
-      setSaving(true);
+      setSaving(true)
       try {
-        await actions.saveSubject();
+        await actions.saveSubject()
       } catch (err) {
-        console.log(err);
-        showError();
+        console.log(err)
+        showError()
       }
-      setSaving(false);
+      setSaving(false)
     }
   }
 
@@ -40,21 +56,21 @@ export function Details({ showClose, close }: { showClose: boolean, close: () =>
         backgroundOpacity: 0.55,
         blur: 3,
       },
-      children: <Text>{ state.strings.sureTopic }</Text>,
+      children: <Text>{state.strings.sureTopic}</Text>,
       labels: { confirm: state.strings.remove, cancel: state.strings.cancel },
       onConfirm: async () => {
         if (!removing) {
-          setRemoving(true);
+          setRemoving(true)
           try {
-            await actions.remove();
-            close();
+            await actions.remove()
+            close()
           } catch (err) {
-            console.log(err);
-            showError();
+            console.log(err)
+            showError()
           }
-          setRemoving(false);
+          setRemoving(false)
         }
-      }
+      },
     })
   }
 
@@ -66,21 +82,21 @@ export function Details({ showClose, close }: { showClose: boolean, close: () =>
         backgroundOpacity: 0.55,
         blur: 3,
       },
-      children: <Text>{ state.strings.sureLeave }</Text>,
+      children: <Text>{state.strings.sureLeave}</Text>,
       labels: { confirm: state.strings.leave, cancel: state.strings.cancel },
       onConfirm: async () => {
         if (!removing) {
-          setRemoving(true);
+          setRemoving(true)
           try {
-            await actions.leave();
-            close();
+            await actions.leave()
+            close()
           } catch (err) {
-            console.log(err);
-            showError();
+            console.log(err)
+            showError()
           }
-          setRemoving(false);
+          setRemoving(false)
         }
-      }
+      },
     })
   }
 
@@ -92,21 +108,21 @@ export function Details({ showClose, close }: { showClose: boolean, close: () =>
         backgroundOpacity: 0.55,
         blur: 3,
       },
-      children: <Text>{ state.strings.blockTopicPrompt }</Text>,
+      children: <Text>{state.strings.blockTopicPrompt}</Text>,
       labels: { confirm: state.strings.block, cancel: state.strings.cancel },
       onConfirm: async () => {
         if (!removing) {
-          setBlocking(true);
+          setBlocking(true)
           try {
-            await actions.block();
-            close();
+            await actions.block()
+            close()
           } catch (err) {
-            console.log(err);
-            showError();
+            console.log(err)
+            showError()
           }
-          setBlocking(false);
+          setBlocking(false)
         }
-      }
+      },
     })
   }
 
@@ -118,21 +134,21 @@ export function Details({ showClose, close }: { showClose: boolean, close: () =>
         backgroundOpacity: 0.55,
         blur: 3,
       },
-      children: <Text>{ state.strings.reportTopicPrompt }</Text>,
+      children: <Text>{state.strings.reportTopicPrompt}</Text>,
       labels: { confirm: state.strings.report, cancel: state.strings.cancel },
       onConfirm: async () => {
         if (!removing) {
-          setReporting(true);
+          setReporting(true)
           try {
-            await actions.report();
-            close();
+            await actions.report()
+            close()
           } catch (err) {
-            console.log(err);
-            showError();
+            console.log(err)
+            showError()
           }
-          setReporting(false);
+          setReporting(false)
         }
-      }
+      },
     })
   }
 
@@ -151,124 +167,136 @@ export function Details({ showClose, close }: { showClose: boolean, close: () =>
   }
 
   const cards = state.channelCards.map((card, index) => (
-      <Card className={classes.card} key={index} imageUrl={card.imageUrl} name={card.name} placeholder={state.strings.name}
-        handle={card.handle} node={card.node} actions={[]} />
+    <Card className={classes.card} key={index} imageUrl={card.imageUrl} name={card.name} placeholder={state.strings.name} handle={card.handle} node={card.node} actions={[]} />
   ))
 
-  const members = state.cards.filter(card => {
-    if (state.detail && state.detail.members.find(member => member.guid === card.guid)) {
-      return true;
-    } else if(state.sealed && !card.sealable) {
-      return false;
-    } else {
-      return true;
-    }
-  }).map((card, index) => {
-    const enable = !state.detail ? [] : [
-      <Switch
-        key="enable"
-        className={classes.setMember}
-        size="sm"
-        checked={Boolean(state.detail.members.find(member => member.guid === card.guid))}
-        onChange={async (ev) => {
-          try {
-            if (ev.currentTarget.checked) {
-              await actions.setMember(card.cardId);
-            } else {
-              await actions.clearMember(card.cardId);
-            }
-          } catch (err) {
-            console.log(err);
-            showError();
-          }
-        }}
-      />
-    ];
+  const members = state.cards
+    .filter((card) => {
+      if (state.detail && state.detail.members.find((member) => member.guid === card.guid)) {
+        return true
+      } else if (state.sealed && !card.sealable) {
+        return false
+      } else {
+        return true
+      }
+    })
+    .map((card, index) => {
+      const enable = !state.detail
+        ? []
+        : [
+            <Switch
+              key="enable"
+              className={classes.setMember}
+              size="sm"
+              checked={Boolean(state.detail.members.find((member) => member.guid === card.guid))}
+              onChange={async (ev) => {
+                try {
+                  if (ev.currentTarget.checked) {
+                    await actions.setMember(card.cardId)
+                  } else {
+                    await actions.clearMember(card.cardId)
+                  }
+                } catch (err) {
+                  console.log(err)
+                  showError()
+                }
+              }}
+            />,
+          ]
 
-    return (
-      <Card className={classes.card} key={index} imageUrl={card.imageUrl} name={card.name} placeholder={state.strings.name}
-        handle={card.handle} node={card.node} actions={enable} />
-    )
-  });
+      return <Card className={classes.card} key={index} imageUrl={card.imageUrl} name={card.name} placeholder={state.strings.name} handle={card.handle} node={card.node} actions={enable} />
+    })
 
   return (
     <div className={classes.details}>
       <div className={classes.header}>
-        { showClose && (<IconX className={classes.match} />)}
-        <Text className={classes.label}>{ state.strings.details }</Text>    
-        { showClose && (<IconX className={classes.close} onClick={close} />)}
+        {showClose && <IconX className={classes.match} />}
+        <Text className={classes.label}>{state.strings.details}</Text>
+        {showClose && <IconX className={classes.close} onClick={close} />}
       </div>
-      { state.access && (
+      {state.access && (
         <div className={classes.body}>
           <div className={classes.attributes}>
-            { state.host && (
+            {state.host && (
               <div className={classes.subject}>
                 <div className={classes.subjectLabel}>
-                  <TextInput size="lg" placeholder={state.strings.subject} value={state.editSubject} onChange={(event) => actions.setEditSubject(event.currentTarget.value)}
-                    leftSectionPointerEvents="none" leftSection={<IconLabel />}
-                    rightSectionPointerEvents="all" rightSectionWidth={64} rightSection={
+                  <TextInput
+                    size="lg"
+                    placeholder={state.strings.subject}
+                    value={state.editSubject}
+                    onChange={(event) => actions.setEditSubject(event.currentTarget.value)}
+                    leftSectionPointerEvents="none"
+                    leftSection={<IconLabel />}
+                    rightSectionPointerEvents="all"
+                    rightSectionWidth={64}
+                    rightSection={
                       <div className={classes.subjectControls}>
-                        { state.editSubject != state.subject && (
-                          <ActionIcon key="undo" variant="subtle" onClick={undo}><IconArrowBack /></ActionIcon>
+                        {state.editSubject != state.subject && (
+                          <ActionIcon key="undo" variant="subtle" onClick={undo}>
+                            <IconArrowBack />
+                          </ActionIcon>
                         )}
-                        { state.editSubject != state.subject && (
-                          <ActionIcon key="save" variant="subtle" onClick={save} loading={saving}><IconDeviceFloppy /></ActionIcon>
+                        {state.editSubject != state.subject && (
+                          <ActionIcon key="save" variant="subtle" onClick={save} loading={saving}>
+                            <IconDeviceFloppy />
+                          </ActionIcon>
                         )}
                       </div>
-                    } />
+                    }
+                  />
                 </div>
               </div>
             )}
-            { !state.host && state.subject && (
+            {!state.host && state.subject && (
               <div className={classes.attribute}>
                 <IconLabel size={28} className={classes.subjectValue} />
-                <Text className={classes.subjectValue}>{ state.subject }</Text>
+                <Text className={classes.subjectValue}>{state.subject}</Text>
               </div>
             )}
-            { !state.host && !state.subject && (
+            {!state.host && !state.subject && (
               <div className={classes.attribute}>
                 <IconLabel size={28} className={classes.subjectPlaceholder} />
-                <Text className={classes.subjectPlaceholder}>{ state.strings.subject }</Text>
+                <Text className={classes.subjectPlaceholder}>{state.strings.subject}</Text>
               </div>
             )}
             <div className={classes.attribute}>
-              <IconCalendarClock size={20}/>
-              <Text className={classes.attributeValue}>{ state.created }</Text>
+              <IconCalendarClock size={20} />
+              <Text className={classes.attributeValue}>{state.created}</Text>
             </div>
-            { state.sealed && (
+            {state.sealed && (
               <div className={classes.attribute}>
                 <IconShield size={20} />
-                <Text className={classes.attributeValue}>{ state.strings.sealed }</Text>
+                <Text className={classes.attributeValue}>{state.strings.sealed}</Text>
               </div>
             )}
-            { !state.sealed && (
+            {!state.sealed && (
               <div className={classes.attribute}>
                 <IconShieldOff size={20} />
-                <Text className={classes.attributeValue}>{ state.strings.notSealed }</Text>
+                <Text className={classes.attributeValue}>{state.strings.notSealed}</Text>
               </div>
             )}
-            { state.host && (
+            {state.host && (
               <div className={classes.attribute}>
                 <IconHome size={20} />
-                <Text className={classes.attributeValue}>{ state.strings.channelHost }</Text>
+                <Text className={classes.attributeValue}>{state.strings.channelHost}</Text>
               </div>
             )}
-            { !state.host && (
+            {!state.host && (
               <div className={classes.attribute}>
                 <IconServer size={20} />
-                <Text className={classes.attributeValue}>{ state.strings.channelGuest }</Text>
+                <Text className={classes.attributeValue}>{state.strings.channelGuest}</Text>
               </div>
             )}
           </div>
           <Divider className={classes.divider} />
-          { !state.host && (
+          {!state.host && (
             <div className={classes.actions}>
               <div className={classes.action}>
                 <ActionIcon variant="subtle" size={32} loading={removing} onClick={leave}>
                   <IconLogout2 size={32} />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.leave}</Text>
-              </div> 
+              </div>
               <div className={classes.action}>
                 <ActionIcon variant="subtle" size={32} loading={blocking} onClick={block}>
                   <IconEyeOff size={32} />
@@ -280,61 +308,73 @@ export function Details({ showClose, close }: { showClose: boolean, close: () =>
                   <IconAlertHexagon size={32} />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.report}</Text>
-              </div> 
+              </div>
             </div>
           )}
-          { state.host && (
+          {state.host && (
             <div className={classes.actions}>
               <div className={classes.action}>
                 <ActionIcon variant="subtle" size={32} loading={removing} onClick={remove}>
                   <IconMessageX size={32} />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.remove}</Text>
-              </div> 
+              </div>
               <div className={classes.action}>
                 <ActionIcon variant="subtle" size={32} onClick={setShowModal}>
                   <IconUserCog size={32} />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.members}</Text>
-              </div> 
+              </div>
             </div>
           )}
           <div className={classes.membership}>
-            <Text className={classes.members}>{ state.strings.membership }</Text>
+            <Text className={classes.members}>{state.strings.membership}</Text>
           </div>
           <Divider className={classes.divider} size="md" />
           <div className={classes.cards}>
-            { state.hostCard && (
-              <Card className={classes.card} imageUrl={state.hostCard.imageUrl} name={state.hostCard.name} placeholder={state.strings.name}
-                handle={state.hostCard.handle} node={state.hostCard.node} actions={[<IconHome key="host" size={20} />]} />
+            {state.hostCard && (
+              <Card
+                className={classes.card}
+                imageUrl={state.hostCard.imageUrl}
+                name={state.hostCard.name}
+                placeholder={state.strings.name}
+                handle={state.hostCard.handle}
+                node={state.hostCard.node}
+                actions={[<IconHome key="host" size={20} />]}
+              />
             )}
-            { state.profile && (
-              <Card className={classes.card} imageUrl={state.profile.imageUrl} name={state.profile.name} placeholder={state.strings.name}
-                handle={state.profile.handle} node={state.profile.node} actions={state.host ? [<IconHome key="me" size={20} />] : []} />
+            {state.profile && (
+              <Card
+                className={classes.card}
+                imageUrl={state.profile.imageUrl}
+                name={state.profile.name}
+                placeholder={state.strings.name}
+                handle={state.profile.handle}
+                node={state.profile.node}
+                actions={state.host ? [<IconHome key="me" size={20} />] : []}
+              />
             )}
-            { cards }
-            { state.unknownContacts > 0 && (
-              <Text className={classes.unknown}>{ state.strings.unknown }: {state.unknownContacts}</Text>
+            {cards}
+            {state.unknownContacts > 0 && (
+              <Text className={classes.unknown}>
+                {state.strings.unknown}: {state.unknownContacts}
+              </Text>
             )}
           </div>
         </div>
       )}
-      { !state.access && (
+      {!state.access && (
         <div className={classes.disconnected}>
           <IconExclamationCircle />
-          <Text>{ state.strings.syncError }</Text>          
+          <Text>{state.strings.syncError}</Text>
         </div>
       )}
       <Modal title={state.strings.editMembership} opened={showModal} onClose={clearShowModal} overlayProps={{ backgroundOpacity: 0.65, blur: 3 }} centered>
         <div className={classes.modalContainer}>
-          { members.length > 0 && (
-            <div className={classes.cardMembers}>
-              { members }
-            </div>
-          )}
-          { members.length === 0 && (
+          {members.length > 0 && <div className={classes.cardMembers}>{members}</div>}
+          {members.length === 0 && (
             <div className={classes.noContacts}>
-              <Text>{ state.strings.noContacts }</Text>
+              <Text>{state.strings.noContacts}</Text>
             </div>
           )}
           <div className={classes.controls}>
@@ -347,4 +387,3 @@ export function Details({ showClose, close }: { showClose: boolean, close: () =>
     </div>
   )
 }
-

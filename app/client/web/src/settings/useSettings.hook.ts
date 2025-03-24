@@ -9,18 +9,16 @@ const IMAGE_DIM = 192
 const DEBOUNCE_MS = 1000
 
 function urlB64ToUint8Array(b64: string) {
-  const padding = '='.repeat((4 - b64.length % 4) % 4);
-  const base64 = (b64 + padding)
-      .replace(/-/g, '+')
-      .replace(/_/g, '/');
+  const padding = '='.repeat((4 - (b64.length % 4)) % 4)
+  const base64 = (b64 + padding).replace(/-/g, '+').replace(/_/g, '/')
 
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
+  const rawData = window.atob(base64)
+  const outputArray = new Uint8Array(rawData.length)
 
   for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
+    outputArray[i] = rawData.charCodeAt(i)
   }
-  return outputArray;
+  return outputArray
 }
 
 export function useSettings() {
@@ -66,9 +64,9 @@ export function useSettings() {
     sealConfirm: '',
     sealDelete: '',
     secretCopied: false,
-    blockedCards: [] as {cardId: string, timestamp: number}[],
-    blockedChannels: [] as {cardId: string | null, channelId: string, timestamp: number}[],
-    blockedMessages: [] as {cardId: string | null, channelId: string, topicId: string, timestamp: number}[],
+    blockedCards: [] as { cardId: string; timestamp: number }[],
+    blockedChannels: [] as { cardId: string | null; channelId: string; timestamp: number }[],
+    blockedMessages: [] as { cardId: string | null; channelId: string; topicId: string; timestamp: number }[],
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -132,37 +130,37 @@ export function useSettings() {
 
   const actions = {
     loadBlockedMessages: async () => {
-      const settings = app.state.session.getSettings(); 
-      const blockedMessages = await settings.getBlockedTopics();
-      updateState({ blockedMessages });
+      const settings = app.state.session.getSettings()
+      const blockedMessages = await settings.getBlockedTopics()
+      updateState({ blockedMessages })
     },
     unblockMessage: async (cardId: string | null, channelId: string, topicId: string) => {
-      const content = app.state.session.getContent();
-      await content.clearBlockedChannelTopic(cardId, channelId, topicId);
-      const blockedMessages = state.blockedMessages.filter(blocked => (blocked.cardId != cardId || blocked.channelId != channelId || blocked.topicId != topicId));
-      updateState({ blockedMessages });
+      const content = app.state.session.getContent()
+      await content.clearBlockedChannelTopic(cardId, channelId, topicId)
+      const blockedMessages = state.blockedMessages.filter((blocked) => blocked.cardId != cardId || blocked.channelId != channelId || blocked.topicId != topicId)
+      updateState({ blockedMessages })
     },
     loadBlockedChannels: async () => {
-      const settings = app.state.session.getSettings(); 
-      const blockedChannels = await settings.getBlockedChannels();
-      updateState({ blockedChannels });
+      const settings = app.state.session.getSettings()
+      const blockedChannels = await settings.getBlockedChannels()
+      updateState({ blockedChannels })
     },
     unblockChannel: async (cardId: string | null, channelId: string) => {
-      const content = app.state.session.getContent();
-      await content.setBlockedChannel(cardId, channelId, false);
-      const blockedChannels = state.blockedChannels.filter(blocked => (blocked.cardId != cardId || blocked.channelId != channelId));
-      updateState({ blockedChannels });
+      const content = app.state.session.getContent()
+      await content.setBlockedChannel(cardId, channelId, false)
+      const blockedChannels = state.blockedChannels.filter((blocked) => blocked.cardId != cardId || blocked.channelId != channelId)
+      updateState({ blockedChannels })
     },
     loadBlockedCards: async () => {
-      const settings = app.state.session.getSettings(); 
-      const blockedCards = await settings.getBlockedCards();
-      updateState({ blockedCards });
+      const settings = app.state.session.getSettings()
+      const blockedCards = await settings.getBlockedCards()
+      updateState({ blockedCards })
     },
     unblockCard: async (cardId: string) => {
-      const contact = app.state.session.getContact();
-      await contact.setBlockedCard(cardId, false);
-      const blockedCards = state.blockedCards.filter(blocked => blocked.cardId != cardId);
-      updateState({ blockedCards });
+      const contact = app.state.session.getContact()
+      await contact.setBlockedCard(cardId, false)
+      const blockedCards = state.blockedCards.filter((blocked) => blocked.cardId != cardId)
+      updateState({ blockedCards })
     },
     getUsernameStatus: async (username: string) => {
       const { settings } = getSession()
@@ -173,34 +171,34 @@ export function useSettings() {
       await settings.setLogin(state.handle, state.password)
     },
     enableNotifications: async () => {
-      const webPushKey = state.config?.webPushKey;
+      const webPushKey = state.config?.webPushKey
       if (!webPushKey) {
-        throw new Error('web push key not set');
+        throw new Error('web push key not set')
       }
-      const status = await Notification.requestPermission();
+      const status = await Notification.requestPermission()
       if (status === 'granted') {
-        const registration = await navigator.serviceWorker.register('push.js');
-        await navigator.serviceWorker.ready;
-        const params = { userVisibleOnly: true, applicationServerKey: urlB64ToUint8Array(webPushKey) };
-        const subscription = await registration.pushManager.subscribe(params);
+        const registration = await navigator.serviceWorker.register('push.js')
+        await navigator.serviceWorker.ready
+        const params = { userVisibleOnly: true, applicationServerKey: urlB64ToUint8Array(webPushKey) }
+        const subscription = await registration.pushManager.subscribe(params)
 
-        const endpoint = subscription.endpoint;
-        const binPublicKey = subscription.getKey('p256dh');
-        const binAuth = subscription.getKey('auth');
+        const endpoint = subscription.endpoint
+        const binPublicKey = subscription.getKey('p256dh')
+        const binAuth = subscription.getKey('auth')
 
         if (endpoint && binPublicKey && binAuth) {
-          const numPublicKey: number[] = [];
-          (new Uint8Array(binPublicKey)).forEach(val => {
-            numPublicKey.push(val);
-          });
-          const numAuth: number[] = [];
-          (new Uint8Array(binAuth)).forEach(val => {
-            numAuth.push(val);
-          });
-          const publicKey = btoa(String.fromCharCode.apply(null, numPublicKey));
-          const auth = btoa(String.fromCharCode.apply(null, numAuth));
+          const numPublicKey: number[] = []
+          new Uint8Array(binPublicKey).forEach((val) => {
+            numPublicKey.push(val)
+          })
+          const numAuth: number[] = []
+          new Uint8Array(binAuth).forEach((val) => {
+            numAuth.push(val)
+          })
+          const publicKey = btoa(String.fromCharCode.apply(null, numPublicKey))
+          const auth = btoa(String.fromCharCode.apply(null, numAuth))
 
-          const pushParams = { endpoint, publicKey, auth, type: PushType.Web };
+          const pushParams = { endpoint, publicKey, auth, type: PushType.Web }
           const { settings } = getSession()
           await settings.enableNotifications(pushParams)
         }
@@ -385,34 +383,29 @@ export function useSettings() {
       await identity.setProfileImage(data)
     },
     getTimestamp: (created: number) => {
-      const now = Math.floor((new Date()).getTime() / 1000)
-      const date = new Date(created * 1000);
-      const offset = now - created;
-      if(offset < 43200) {
+      const now = Math.floor(new Date().getTime() / 1000)
+      const date = new Date(created * 1000)
+      const offset = now - created
+      if (offset < 43200) {
         if (state.timeFormat === '12h') {
-          return date.toLocaleTimeString("en-US", {hour: 'numeric', minute:'2-digit'});
+          return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+        } else {
+          return date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit' })
         }
-        else {
-          return date.toLocaleTimeString("en-GB", {hour: 'numeric', minute:'2-digit'});
-        }
-      }
-      else if (offset < 31449600) {
+      } else if (offset < 31449600) {
         if (state.dateFormat === 'mm/dd') {
-          return date.toLocaleDateString("en-US", {day: 'numeric', month:'numeric'});
+          return date.toLocaleDateString('en-US', { day: 'numeric', month: 'numeric' })
+        } else {
+          return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'numeric' })
         }
-        else {
-          return date.toLocaleDateString("en-GB", {day: 'numeric', month:'numeric'});
-        }
-      }
-      else {
+      } else {
         if (state.dateFormat === 'mm/dd') {
-          return date.toLocaleDateString("en-US");
-        }
-        else {
-          return date.toLocaleDateString("en-GB");
+          return date.toLocaleDateString('en-US')
+        } else {
+          return date.toLocaleDateString('en-GB')
         }
       }
-    }
+    },
   }
 
   return { state, actions }

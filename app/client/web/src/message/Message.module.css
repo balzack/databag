@@ -59,7 +59,7 @@
     align-items: center;
     flex-grow: 1;
     gap: 16px;
-  } 
+  }
 
   .failed {
     margin-left: 72px;
@@ -88,7 +88,7 @@
     padding-right: 8px;
     padding-top: 12px;
     border-top: 1px solid var(--mantine-color-text-8);
-    
+
     .logo {
       width: 40px;
       height: 40px;
@@ -108,7 +108,7 @@
       }
 
       .text {
-        word-wrap:break-word;
+        word-wrap: break-word;
         white-space: pre-wrap;
       }
 
@@ -120,7 +120,7 @@
       .unconfirmed {
         width: 100%;
       }
-    
+
       .header {
         display: flex;
         flex-direction: row;
@@ -163,7 +163,7 @@
           height: 20px;
           color: var(--mantine-color-dbgreen-1);
         }
-    
+
         .careful {
           cursor: pointer;
           width: 20px;

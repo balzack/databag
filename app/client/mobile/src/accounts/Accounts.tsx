@@ -3,14 +3,14 @@ import {FlatList, View, TouchableOpacity, Modal} from 'react-native';
 import {Text, Button, IconButton, Divider, Surface, Icon, useTheme} from 'react-native-paper';
 import {useAccounts} from './useAccounts.hook';
 import {styles} from './Accounts.styled';
-import { Card } from '../card/Card';
-import { Colors } from '../constants/Colors';
-import { Confirm } from '../confirm/Confirm';
+import {Card} from '../card/Card';
+import {Colors} from '../constants/Colors';
+import {Confirm} from '../confirm/Confirm';
 import {BlurView} from '@react-native-community/blur';
 import Clipboard from '@react-native-clipboard/clipboard';
 
-export function Accounts({ setup }: { setup: ()=>void }) {
-  const { state, actions } = useAccounts();
+export function Accounts({setup}: {setup: () => void}) {
+  const {state, actions} = useAccounts();
   const theme = useTheme();
   const [failed, setFailed] = useState(false);
   const [remove, setRemove] = useState(null);
@@ -77,7 +77,9 @@ export function Accounts({ setup }: { setup: ()=>void }) {
     prompt: state.strings.tryAgain,
     cancel: {
       label: state.strings.close,
-      action: ()=>{setFailed(false);},
+      action: () => {
+        setFailed(false);
+      },
     },
   };
 
@@ -117,7 +119,9 @@ export function Accounts({ setup }: { setup: ()=>void }) {
         },
         cancel: {
           label: state.strings.cancel,
-          action: () => {setRemove(false);},
+          action: () => {
+            setRemove(false);
+          },
         },
       });
       setRemove(true);
@@ -136,18 +140,18 @@ export function Accounts({ setup }: { setup: ()=>void }) {
 
   return (
     <View style={styles.accounts}>
-      { state.layout === 'large' && (
+      {state.layout === 'large' && (
         <View style={styles.header}>
-          <Text style={styles.largeTitle}>{ state.strings.accounts }</Text>
+          <Text style={styles.largeTitle}>{state.strings.accounts}</Text>
           <IconButton style={styles.icon} loading={loading} iconColor={Colors.primary} mode="contained" icon="refresh" onPress={loadAccounts} />
           <IconButton style={styles.icon} loading={adding} iconColor={Colors.primary} mode="contained" icon="account-plus-outline" onPress={addAccount} />
           <IconButton style={styles.icon} loading={false} iconColor={Colors.primary} mode="contained" icon="cog-outline" onPress={setup} />
         </View>
       )}
-      { state.layout === 'small' && (
+      {state.layout === 'small' && (
         <View style={styles.header}>
           <IconButton style={styles.icon} loading={loading} iconColor={Colors.primary} mode="contained" icon="refresh" onPress={loadAccounts} />
-          <Text style={styles.smallTitle}>{ state.strings.accounts }</Text>
+          <Text style={styles.smallTitle}>{state.strings.accounts}</Text>
           <IconButton style={styles.icon} loading={adding} iconColor={Colors.primary} mode="contained" icon="account-plus-outline" onPress={addAccount} />
         </View>
       )}
@@ -160,9 +164,39 @@ export function Accounts({ setup }: { setup: ()=>void }) {
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => {
             const options = [
-              <IconButton key="disable" style={styles.icon} loading={accessing === item.accountId} iconColor={Colors.primary} mode="contained" icon="lock-open-variant-outline" onPress={() => {accessAccount(item.accountId);}} />,
-              <IconButton key="reset" style={styles.icon} loading={blocking === item.accountId} iconColor={Colors.pending} mode="contained" icon={item.disabled ? 'account-check-outline' : 'account-cancel-outline'} onPress={()=>{blockAccount(item.accountId, !item.disabled);}} />,
-              <IconButton key="remove" style={styles.icon} loading={removing === item.accountId} iconColor={Colors.offsync} mode="contained" icon="trash-can-outline" onPress={()=>{removeAccount(item.accountId);}} />,
+              <IconButton
+                key="disable"
+                style={styles.icon}
+                loading={accessing === item.accountId}
+                iconColor={Colors.primary}
+                mode="contained"
+                icon="lock-open-variant-outline"
+                onPress={() => {
+                  accessAccount(item.accountId);
+                }}
+              />,
+              <IconButton
+                key="reset"
+                style={styles.icon}
+                loading={blocking === item.accountId}
+                iconColor={Colors.pending}
+                mode="contained"
+                icon={item.disabled ? 'account-check-outline' : 'account-cancel-outline'}
+                onPress={() => {
+                  blockAccount(item.accountId, !item.disabled);
+                }}
+              />,
+              <IconButton
+                key="remove"
+                style={styles.icon}
+                loading={removing === item.accountId}
+                iconColor={Colors.offsync}
+                mode="contained"
+                icon="trash-can-outline"
+                onPress={() => {
+                  removeAccount(item.accountId);
+                }}
+              />,
             ];
             return (
               <Card
@@ -175,15 +209,16 @@ export function Accounts({ setup }: { setup: ()=>void }) {
                 handle={item.guid}
                 node={item.node}
                 placeholder={state.strings.name}
-                select={()=>{}}
+                select={() => {}}
                 actions={options}
               />
             );
-          }} />
+          }}
+        />
       )}
       {state.members.length === 0 && (
         <View style={styles.empty}>
-          <Text style={styles.label}>{ state.strings.noAccounts }</Text>
+          <Text style={styles.label}>{state.strings.noAccounts}</Text>
         </View>
       )}
       <Divider style={styles.line} bold={true} />
@@ -197,7 +232,9 @@ export function Accounts({ setup }: { setup: ()=>void }) {
             <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setShowAccessModal(false)} />
             <Text style={styles.modalDescription}>{state.strings.accessingToken}</Text>
             <View style={styles.secretText}>
-              <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>{ token }</Text>
+              <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>
+                {token}
+              </Text>
               <TouchableOpacity onPress={copyToken}>
                 <Icon style={styles.secretIcon} size={18} source={tokenCopy ? 'check' : 'content-copy'} color={Colors.primary} />
               </TouchableOpacity>
@@ -218,7 +255,9 @@ export function Accounts({ setup }: { setup: ()=>void }) {
             <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setShowAddModal(false)} />
             <Text style={styles.modalDescription}>{state.strings.addingToken}</Text>
             <View style={styles.secretText}>
-              <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>{ token }</Text>
+              <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>
+                {token}
+              </Text>
               <TouchableOpacity onPress={copyToken}>
                 <Icon style={styles.secretIcon} size={18} source={tokenCopy ? 'check' : 'content-copy'} color={Colors.primary} />
               </TouchableOpacity>
@@ -234,4 +273,3 @@ export function Accounts({ setup }: { setup: ()=>void }) {
     </View>
   );
 }
-

@@ -30,23 +30,23 @@ const DetailsDrawer = createDrawerNavigator();
 const ContactStack = createNativeStackNavigator();
 const ContentStack = createNativeStackNavigator();
 
-export function Session({ share }: { share: { filePath: string, mimeType: string }}) {
+export function Session({share}: {share: {filePath: string; mimeType: string}}) {
   const {state} = useSession();
   const scheme = useColorScheme();
   const [tab, setTab] = useState('content');
-  const [textCard, setTextCard] = useState({ cardId: null} as {cardId: null|string});
-  const [callCard, setCallCard] = useState({ card: null} as {card: null|Card});
+  const [textCard, setTextCard] = useState({cardId: null} as {cardId: null | string});
+  const [callCard, setCallCard] = useState({card: null} as {card: null | Card});
   const [dismissed, setDismissed] = useState(false);
   const [disconnected, setDisconnected] = useState(false);
   const [showDisconnected, setShowDisconnected] = useState(false);
   const [focus, setFocus] = useState(false);
 
-  const textContact = (cardId: null|string) => {
-    setTextCard({ cardId });
+  const textContact = (cardId: null | string) => {
+    setTextCard({cardId});
   };
 
-  const callContact = (card: null|Card) => {
-    setCallCard({ card });
+  const callContact = (card: null | Card) => {
+    setCallCard({card});
   };
 
   const sessionNav = {strings: state.strings, callContact, callCard, textContact, textCard, focus, setFocus, share};
@@ -197,11 +197,11 @@ export function Session({ share }: { share: { filePath: string, mimeType: string
             </View>
           </NavigationContainer>
         )}
-        { disconnected && showDisconnected && !dismissed && (
+        {disconnected && showDisconnected && !dismissed && (
           <View style={styles.alert}>
             <Surface elevation={5} style={styles.alertArea}>
               <Icon color={Colors.offsync} size={20} source="alert-circle-outline" />
-              <Text style={styles.alertLabel}>{ state.strings.disconnected }</Text>
+              <Text style={styles.alertLabel}>{state.strings.disconnected}</Text>
               <Pressable onPress={dismiss}>
                 <Icon color={Colors.offsync} size={20} source="close" />
               </Pressable>
@@ -214,8 +214,8 @@ export function Session({ share }: { share: { filePath: string, mimeType: string
   );
 }
 
-function ContentTab({scheme, textCard, contentTab, share}: {scheme: string, textCard: {cardId: null|string}, contentTab: ()=>void, share: {filePath: string, mimeType: string}}) {
-  const openConversation = (props) => {
+function ContentTab({scheme, textCard, contentTab, share}: {scheme: string; textCard: {cardId: null | string}; contentTab: () => void; share: {filePath: string; mimeType: string}}) {
+  const openConversation = props => {
     props.navigation.navigate('conversation');
     contentTab();
   };
@@ -224,28 +224,24 @@ function ContentTab({scheme, textCard, contentTab, share}: {scheme: string, text
     <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
       <ContentStack.Navigator initialRouteName="contacts" screenOptions={{headerShown: false}}>
         <ContentStack.Screen name="content" options={{headerBackTitleVisible: false}}>
-          {props => (
-            <Content share={share} textCard={textCard} closeAll={()=>props.navigation.popToTop()} openConversation={()=>openConversation(props)} />
-          )}
+          {props => <Content share={share} textCard={textCard} closeAll={() => props.navigation.popToTop()} openConversation={() => openConversation(props)} />}
         </ContentStack.Screen>
         <ContentStack.Screen name="conversation" options={styles.noHeader}>
           {props => (
             <SafeAreaView style={styles.screen}>
-              <Conversation openDetails={()=>props.navigation.navigate('details')} close={()=>props.navigation.goBack()} wide={false} />
+              <Conversation openDetails={() => props.navigation.navigate('details')} close={() => props.navigation.goBack()} wide={false} />
             </SafeAreaView>
           )}
         </ContentStack.Screen>
         <ContentStack.Screen name="details" options={styles.noHeader}>
-          {props => (
-            <Details close={()=>props.navigation.goBack()} closeAll={()=>props.navigation.popToTop()} />
-          )}
+          {props => <Details close={() => props.navigation.goBack()} closeAll={() => props.navigation.popToTop()} />}
         </ContentStack.Screen>
       </ContentStack.Navigator>
     </NavigationContainer>
   );
 }
 
-function ContactTab({scheme, textContact, callContact}: {scheme: string, textContact: (cardId: string)=>void, callContact: (card: Card)=>void}) {
+function ContactTab({scheme, textContact, callContact}: {scheme: string; textContact: (cardId: string) => void; callContact: (card: Card) => void}) {
   const [contactParams, setContactParams] = useState({
     guid: '',
   } as ContactParams);
@@ -288,18 +284,15 @@ function ContactTab({scheme, textContact, callContact}: {scheme: string, textCon
 }
 
 function DetailsScreen({nav}) {
-
-  const closeAll = (props) => {
+  const closeAll = props => {
     props.navigation.closeDrawer();
     nav.setFocus(false);
   };
 
   const DetailsComponent = useCallback(
-    (props) => (
+    props => (
       <Surface elevation={3} mode="flat">
-        <Details
-          closeAll={()=>closeAll(props)}
-        />
+        <Details closeAll={() => closeAll(props)} />
       </Surface>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -330,11 +323,14 @@ function ProfileScreen({nav}) {
     open();
   };
 
-  const ProfileComponent = useCallback(() => (
-    <Surface elevation={3} mode="flat">
-      <Profile params={contactParams} />
-    </Surface>
-  ), [contactParams]);
+  const ProfileComponent = useCallback(
+    () => (
+      <Surface elevation={3} mode="flat">
+        <Profile params={contactParams} />
+      </Surface>
+    ),
+    [contactParams],
+  );
 
   return (
     <ProfileDrawer.Navigator
@@ -410,9 +406,7 @@ function ContactsScreen({nav}) {
         headerShown: false,
         overlayColor: 'rgba(8,8,8,.9)',
       }}>
-      <ContactsDrawer.Screen name="settings">{({navigation}) => (
-        <SettingsScreen nav={{...nav, contacts: navigation}} />
-      )}</ContactsDrawer.Screen>
+      <ContactsDrawer.Screen name="settings">{({navigation}) => <SettingsScreen nav={{...nav, contacts: navigation}} />}</ContactsDrawer.Screen>
     </ContactsDrawer.Navigator>
   );
 }
@@ -458,20 +452,16 @@ function HomeScreen({nav}) {
           <Identity openSettings={nav.settings.openDrawer} openContacts={nav.contacts.openDrawer} />
         </Surface>
         <Surface style={styles.channels} elevation={2} mode="flat">
-          <Content share={nav.share} textCard={nav.textCard} closeAll={()=>{}} openConversation={()=>nav.setFocus(true)} />
+          <Content share={nav.share} textCard={nav.textCard} closeAll={() => {}} openConversation={() => nav.setFocus(true)} />
         </Surface>
       </View>
       <Surface style={styles.right} mode="flat">
-        { !nav.focus && (
-          <Base />
-        )}
+        {!nav.focus && <Base />}
         <SafeAreaView style={styles.right} edges={['top']}>
           <View style={styles.ring}>
             <Ring />
           </View>
-          <View style={styles.workarea}>
-            {nav.focus && <Conversation openDetails={nav.details.openDrawer} close={()=>nav.setFocus(false)} wide={true} />}
-          </View>
+          <View style={styles.workarea}>{nav.focus && <Conversation openDetails={nav.details.openDrawer} close={() => nav.setFocus(false)} wide={true} />}</View>
         </SafeAreaView>
       </Surface>
     </View>

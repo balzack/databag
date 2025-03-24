@@ -6,9 +6,9 @@ import classes from './Content.module.css'
 import { Channel } from '../channel/Channel'
 import { Card } from '../card/Card'
 import { modals } from '@mantine/modals'
-import { Colors } from '../constants/Colors';
+import { Colors } from '../constants/Colors'
 
-export function Content({ textCard }: { textCard: { cardId: null|string }}) {
+export function Content({ textCard }: { textCard: { cardId: null | string } }) {
   const { state, actions } = useContent()
   const [add, setAdd] = useState(false)
   const [adding, setAdding] = useState(false)
@@ -18,14 +18,14 @@ export function Content({ textCard }: { textCard: { cardId: null|string }}) {
   const cards = state.sealSet && sealed ? state.sealable : state.connected
 
   const openTopic = async (cardId: string) => {
-    setAdding(true);
+    setAdding(true)
     try {
-      await actions.openTopic(cardId);
+      await actions.openTopic(cardId)
     } catch (err) {
-      console.log(err);
-      showError();
+      console.log(err)
+      showError()
     }
-    setAdding(false);
+    setAdding(false)
   }
 
   const addTopic = async () => {
@@ -36,7 +36,7 @@ export function Content({ textCard }: { textCard: { cardId: null|string }}) {
         subject,
         added.filter((id) => Boolean(cards.find((card) => card.cardId === id)))
       )
-      actions.setFocus(null, id);
+      actions.setFocus(null, id)
       setAdd(false)
       setSealed(false)
       setAdded([])
@@ -101,9 +101,9 @@ export function Content({ textCard }: { textCard: { cardId: null|string }}) {
 
   useEffect(() => {
     if (textCard.cardId) {
-      openTopic(textCard.cardId);
+      openTopic(textCard.cardId)
     }
-  }, [textCard]);
+  }, [textCard])
 
   return (
     <div className={classes.content}>
@@ -126,7 +126,7 @@ export function Content({ textCard }: { textCard: { cardId: null|string }}) {
       <Box className={classes.channels} pos="relative" onClick={actions.setLoaded}>
         {channels.length === 0 && <div className={classes.none}>{state.strings.noTopics}</div>}
         {channels.length !== 0 && <div className={classes.channels}>{channels}</div>}
-        <LoadingOverlay visible={!state.loaded} zIndex={1000} overlayProps={{ radius: 'sm', blur: 1 }} loaderProps={{ color: Colors.primary, type: 'dots' }}/>
+        <LoadingOverlay visible={!state.loaded} zIndex={1000} overlayProps={{ radius: 'sm', blur: 1 }} loaderProps={{ color: Colors.primary, type: 'dots' }} />
       </Box>
       {state.layout === 'large' && (
         <div className={classes.bar}>

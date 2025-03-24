@@ -1,7 +1,7 @@
-import { useState, useContext, useEffect } from 'react';
-import { DisplayContext } from '../context/DisplayContext';
-import { AppContext } from '../context/AppContext';
-import { ContextType } from '../context/ContextType';
+import {useState, useContext, useEffect} from 'react';
+import {DisplayContext} from '../context/DisplayContext';
+import {AppContext} from '../context/AppContext';
+import {ContextType} from '../context/ContextType';
 
 export function useBase() {
   const app = useContext(AppContext) as ContextType;
@@ -13,23 +13,22 @@ export function useBase() {
     channelSet: null as null | boolean,
   });
 
-
   const updateState = (value: any) => {
-    setState((s) => ({ ...s, ...value }));
+    setState(s => ({...s, ...value}));
   };
 
   useEffect(() => {
     const setProfile = (profile: Profile) => {
-      updateState({ profileSet: Boolean(profile.name) });
+      updateState({profileSet: Boolean(profile.name)});
     };
     const setCards = (cards: Card[]) => {
-      updateState({ cardSet: cards.length > 0 });
+      updateState({cardSet: cards.length > 0});
     };
-    const setChannels = ({ channels, cardId }: { channels: Channel[]; cardId: string | null }) => {
-      updateState({ channelSet: cardId && channels.length > 0 });
+    const setChannels = ({channels, cardId}: {channels: Channel[]; cardId: string | null}) => {
+      updateState({channelSet: cardId && channels.length > 0});
     };
 
-    const { identity, contact, content } = app.state.session;
+    const {identity, contact, content} = app.state.session;
     identity.addProfileListener(setProfile);
     contact.addCardListener(setCards);
     content.addChannelListener(setChannels);
@@ -41,8 +40,7 @@ export function useBase() {
     };
   }, [app.state.session]);
 
-  const actions = {
-  };
+  const actions = {};
 
-  return { state, actions };
+  return {state, actions};
 }

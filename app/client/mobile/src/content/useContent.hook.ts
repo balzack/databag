@@ -34,7 +34,7 @@ export function useContent() {
     filter: '',
     topic: '',
     sealSet: false,
-    focused: null as null|{cardId: null|string, channelId: string},
+    focused: null as null | {cardId: null | string; channelId: string},
   });
 
   const compare = (a: Card, b: Card) => {
@@ -47,7 +47,6 @@ export function useContent() {
     }
     return 0;
   };
-
 
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
@@ -136,7 +135,7 @@ export function useContent() {
         }
       };
 
-      const focused = (state.focused?.cardId === cardId && state.focused?.channelId === channelId);
+      const focused = state.focused?.cardId === cardId && state.focused?.channelId === channelId;
       const hosted = cardId == null;
       const subject = data?.subject ? [data.subject] : buildSubject();
       const message = getMessage();
@@ -165,9 +164,9 @@ export function useContent() {
   useEffect(() => {
     if (app.state.focus) {
       const focused = app.state.focus.getFocused();
-      updateState({ focused });
+      updateState({focused});
     } else {
-      updateState({ focused: null });
+      updateState({focused: null});
     }
   }, [app.state.focus]);
 
@@ -250,7 +249,7 @@ export function useContent() {
       if (card) {
         const sealable = card.sealable && state.sealSet;
         const thread = state.sorted.find(channel => {
-          const { sealed, cardId, members} = channel;
+          const {sealed, cardId, members} = channel;
           if (sealed === sealable && cardId == null && members.length === 1 && members[0].guid === card.guid) {
             return true;
           }
@@ -267,10 +266,10 @@ export function useContent() {
     addTopic: async (sealed: boolean, subject: string, contacts: string[]) => {
       const content = app.state.session.getContent();
       if (sealed) {
-        const topic = await content.addChannel(true, 'sealed', { subject }, contacts);
+        const topic = await content.addChannel(true, 'sealed', {subject}, contacts);
         return topic.id;
       } else {
-        const topic = await content.addChannel(false, 'superbasic', { subject }, contacts);
+        const topic = await content.addChannel(false, 'superbasic', {subject}, contacts);
         return topic.id;
       }
     },
