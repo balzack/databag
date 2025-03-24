@@ -1,5 +1,4 @@
 import { useState, useContext, useEffect, useRef } from 'react'
-import { DisplayContext } from '../context/DisplayContext';
 import { AppContext } from '../context/AppContext'
 import { ContextType } from '../context/ContextType'
 import { Link, type Card } from 'databag-client-sdk';
@@ -8,13 +7,13 @@ const CLOSE_POLL_MS = 100;
 
 export function useRingContext() {
   const app = useContext(AppContext) as ContextType;
-  const display = useContext(DisplayContext) as ContextType;
   const call = useRef(null as { peer: RTCPeerConnection, link: Link, candidates: RTCIceCandidate[] } | null);
   const localStream = useRef(null as null|MediaStream);
   const localAudio = useRef(null as null|MediaStreamTrack);
   const localVideo = useRef(null as null|MediaStreamTrack);
   const remoteStream = useRef(null as null|MediaStream);
   const updatingPeer = useRef(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const peerUpdate = useRef([] as {type: string, data?: any}[]);
   const connecting = useRef(false);
   const closing = useRef(false);
@@ -75,7 +74,6 @@ export function useRingContext() {
 
   const linkStatus = async (status: string) => {
     if (call.current) {
-      const { peer, link } = call.current;
       if (status === 'connected') {
         const connectedTime = Math.floor((new Date()).getTime() / 1000);
         updateState({ connected: true, connectedTime });
@@ -91,6 +89,7 @@ export function useRingContext() {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updatePeer = async (type: string, data?: any) => {
     peerUpdate.current.push({ type, data });
 
@@ -101,11 +100,12 @@ export function useRingContext() {
         const { type, data } = peerUpdate.current.shift() || { type: '' };
         try {
           switch (type) {
-            case 'negotiate':
+            case 'negotiate': {
               const description = await peer.createOffer();
               await peer.setLocalDescription(description);
               await link.sendMessage({ description });
               break;
+            }
             case 'candidate':
               await link.sendMessage({ data });
               break;
@@ -183,6 +183,7 @@ export function useRingContext() {
     const candidates = [] as RTCIceCandidate[];
     call.current = { peer, link, candidates };
     link.setStatusListener(linkStatus);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     link.setMessageListener((msg: any) => updatePeer('message', msg));
     updateState({ calling: card, failed: false, connected: false, connectedTime: 0,
       audioEnabled: false, videoEnabled: false, localVideo: false, remoteVideo: false,
@@ -209,7 +210,7 @@ export function useRingContext() {
       localAudio.current = null;
     }
     localStream.current = null;
-    remoteStream.current = null,
+    remoteStream.current = null;
     peerUpdate.current = [];
     updateState({ calling: null, connected: false, connectedTime: 0, fullscreen: false,
       failed: false, localStream: null, remoteStream: null, localVideo: false, remoteVideo: false });
@@ -219,19 +220,18 @@ export function useRingContext() {
   const transmit = (ice: { urls: string; username: string; credential: string }[]) => {
     const peerConnection = new RTCPeerConnection({ iceServers: ice });
     peerConnection.addEventListener( 'connectionstatechange', event => {
-      console.log("????CONNECTION STATE", event);
-      console.log(peerConnection);
+      console.log(peerConnection, event);
     });
     peerConnection.addEventListener( 'icecandidate', event => {
       updatePeer('candidate', event.candidate);
     });
     peerConnection.addEventListener( 'icecandidateerror', event => {
-      console.log("ICE ERROR");
+      console.log("ICE ERROR", event);
     });
     peerConnection.addEventListener( 'iceconnectionstatechange', event => {
       console.log("ICE STATE CHANGE", event);
     });
-    peerConnection.addEventListener( 'negotiationneeded', event => {
+    peerConnection.addEventListener( 'negotiationneeded', () => {
       updatePeer('negotiate');
     });
     peerConnection.addEventListener( 'signalingstatechange', event => {

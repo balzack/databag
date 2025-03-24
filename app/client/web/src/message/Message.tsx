@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { avatar } from '../constants/Icons'
 import { Topic, Card, Profile } from 'databag-client-sdk';
 import classes from './Message.module.css'
@@ -126,16 +126,16 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
     const hostPattern = new RegExp('^https?:\\/\\/', 'i');
 
     let plain = '';
-    let clickable = [];
+    const clickable = [];
     const parsed = !text ? [] : text.split(' ');
 
     if (parsed?.length > 0) {
       const words = parsed as string[];
       words.forEach((word, index) => {
-        if (!!urlPattern.test(word)) {
+        if (urlPattern.test(word)) {
           clickable.push(<span key={index}>{ plain }</span>);
           plain = '';
-          const url = !!hostPattern.test(word) ? word : `https://${word}`;
+          const url = hostPattern.test(word) ? word : `https://${word}`;
           clickable.push(<a key={'link-'+index} target="_blank" rel="noopener noreferrer" href={sanitizeUrl(url)}>{ `${word} ` }</a>);
         }
         else {
@@ -165,8 +165,6 @@ export function Message({ topic, card, profile, host }: { topic: Topic, card: Ca
       scroll.current.scrollTo({ top: 0, left: scroll.current.scrollLeft-92, behavior: 'smooth' }); 
     }
   }
-
-  const options = [];
 
   const media = !assets ? [] : assets.map((asset: MediaAsset, index: number) => {
     if (asset.image || asset.encrypted?.type === 'image') {

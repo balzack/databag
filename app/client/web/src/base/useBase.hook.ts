@@ -34,7 +34,7 @@ export function useBase() {
       updateState({ cardSet: cards.length > 0 });
     }
     const setChannels = ({ channels, cardId }: { channels: Channel[]; cardId: string | null }) => {
-      updateState({ channelSet: channels.length > 0 });
+      updateState({ channelSet: cardId && channels.length > 0 });
     }
     const setContent = (loaded: boolean) => {
       updateState({ contentSet: loaded });

@@ -6,7 +6,7 @@ import binary from '../../images/binary.png'
 import { IconX } from '@tabler/icons-react'
 
 export function BinaryFile({ source, disabled, remove }: {source: File, disabled: boolean, remove: ()=>void}) {
-  const { state, actions } = useBinaryFile(source);
+  const { state } = useBinaryFile(source);
 
   return (
     <div className={classes.asset}>

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useDetails } from './useDetails.hook'
 import classes from './Details.module.css'
-import { IconUserCog, IconEyeOff, IconAlertHexagon, IconMessageX, IconLogout2, IconHome, IconServer, IconShield, IconShieldOff, IconCalendarClock, IconExclamationCircle, IconX, IconEdit, IconDeviceFloppy, IconArrowBack, IconLabel } from '@tabler/icons-react'
-import { Switch, Button, Modal, Divider, Text, Textarea, Image, TextInput, ActionIcon } from '@mantine/core'
+import { IconUserCog, IconEyeOff, IconAlertHexagon, IconMessageX, IconLogout2, IconHome, IconServer, IconShield, IconShieldOff, IconCalendarClock, IconExclamationCircle, IconX, IconDeviceFloppy, IconArrowBack, IconLabel } from '@tabler/icons-react'
+import { Switch, Button, Modal, Divider, Text, TextInput, ActionIcon } from '@mantine/core'
 import { Card } from '../card/Card';
 import { modals } from '@mantine/modals'
 import { useDisclosure } from '@mantine/hooks'

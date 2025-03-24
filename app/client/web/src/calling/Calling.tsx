@@ -4,7 +4,7 @@ import { type Card } from 'databag-client-sdk'
 import { useCalling } from './useCalling.hook';
 import { Card as Contact } from '../card/Card';
 import { Loader, Image, Text, ActionIcon } from '@mantine/core'
-import { IconEyeX, IconPhone, IconPhoneOff, IconMicrophone, IconMicrophoneOff, IconVideo, IconVideoOff } from '@tabler/icons-react'
+import { IconEyeX, IconPhone, IconMicrophone, IconMicrophoneOff, IconVideo, IconVideoOff } from '@tabler/icons-react'
 import { modals } from '@mantine/modals'
 import { Colors } from '../constants/Colors'
 

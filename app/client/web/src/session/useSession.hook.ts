@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useRef } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { AppContext } from '../context/AppContext'
 import { DisplayContext } from '../context/DisplayContext'
 import { ContextType } from '../context/ContextType'

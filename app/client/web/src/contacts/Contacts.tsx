@@ -3,8 +3,7 @@ import { useContacts } from './useContacts.hook'
 import { Text, ActionIcon, TextInput, Button } from '@mantine/core'
 import { IconUserCheck, IconCancel, IconRefresh, IconSearch, IconUserPlus, IconSortAscending, IconSortDescending, IconMessage2, IconPhone } from '@tabler/icons-react'
 import classes from './Contacts.module.css'
-import { type Card } from 'databag-client-sdk';
-import { Card as Contact } from '../card/Card'
+import { Card } from '../card/Card'
 import { ProfileParams } from '../profile/Profile'
 import { Colors } from '../constants/Colors'
 import { modals } from '@mantine/modals'
@@ -48,8 +47,12 @@ export function Contacts({ openRegistry, openContact, textContact, closeContacts
         const phone = <IconPhone size={24} />
         const text = <IconMessage2 size={24} />
         return [
-          <Action key="phone" icon={phone} color={Colors.connected} select={async () => { await actions.call(card), closeContacts() }} strings={state.strings} />,
-          <Action key="text" icon={text} color={Colors.connected} select={async () => textContact(card.cardId)} strings={state.strings} />,
+          <Action key="phone" icon={phone} color={Colors.connected}
+            select={async () => { await actions.call(card); closeContacts() }}
+            strings={state.strings} />,
+          <Action key="text" icon={text} color={Colors.connected}
+            select={async () => textContact(card.cardId)}
+            strings={state.strings} />,
         ]
       } else if (status === 'offsync') {
         const resync = <IconRefresh size={24} />
@@ -76,7 +79,7 @@ export function Contacts({ openRegistry, openContact, textContact, closeContacts
     }
 
     return (
-      <Contact key={idx} className={classes.card} imageUrl={card.imageUrl} name={card.name} handle={card.handle} node={card.node} placeholder={state.strings.name} select={select} actions={options} />
+      <Card key={idx} className={classes.card} imageUrl={card.imageUrl} name={card.name} handle={card.handle} node={card.node} placeholder={state.strings.name} select={select} actions={options} />
     )
   })
 

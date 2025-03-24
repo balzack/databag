@@ -1,8 +1,7 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react'
-import { Focus } from 'databag-client-sdk'
+import React, {useState, useEffect, useRef} from 'react'
 import classes from './Conversation.module.css'
 import { useConversation } from './useConversation.hook';
-import { IconSend, IconTextSize, IconTextColor, IconVideo, IconFile, IconDisc, IconCamera, IconX, IconSettings, IconHome, IconServer, IconShield, IconLock, IconExclamationCircle } from '@tabler/icons-react'
+import { IconSend, IconTextSize, IconTextColor, IconVideo, IconFile, IconDisc, IconCamera, IconSettings, IconHome, IconServer, IconShield, IconExclamationCircle } from '@tabler/icons-react'
 import { CloseButton, Menu, Divider, Text, Textarea, ActionIcon, Loader } from '@mantine/core'
 import { Message } from '../message/Message';
 import { modals } from '@mantine/modals'
@@ -15,7 +14,6 @@ import AnimateHeight from 'react-animate-height';
 import { useResizeDetector } from 'react-resize-detector';
 
 const PAD_HEIGHT = (1024 - 64);
-const LOAD_DEBOUNCE = 1000;
 
 export type MediaAsset = {
   encrypted?: { type: string, thumb: string, label: string, extension: string, parts: { blockIv: string, partId: string }[] },
@@ -28,14 +26,13 @@ export type MediaAsset = {
 export function Conversation({ openDetails }: { openDetails: ()=>void }) {
   const thread = useRef(null as HTMLDivElement | null);
   const scrollPos = useRef(0);
-  const debounce = useRef(false);
   const [sending, setSending] = useState(false);
   const { state, actions } = useConversation();
   const attachImage = useRef({ click: ()=>{} } as HTMLInputElement);
   const attachVideo = useRef({ click: ()=>{} } as HTMLInputElement);
   const attachAudio = useRef({ click: ()=>{} } as HTMLInputElement);
   const attachBinary = useRef({ click: ()=>{} } as HTMLInputElement);
-  const { width, height, ref } = useResizeDetector();
+  const { height, ref } = useResizeDetector();
   const input = useRef(null as null | HTMLTextAreaElement);
 
   const addImage = (image: File | undefined) => {

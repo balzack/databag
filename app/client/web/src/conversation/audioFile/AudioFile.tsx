@@ -6,7 +6,7 @@ import audio from '../../images/audio.png'
 import { IconX } from '@tabler/icons-react'
 
 export function AudioFile({ source, updateLabel, disabled, remove }: {source: File, updateLabel: (label: string)=>void, disabled: boolean, remove: ()=>void}) {
-  const { state, actions } = useAudioFile(source);
+  const { state } = useAudioFile(source);
 
   useEffect(() => {
     updateLabel(state.label);

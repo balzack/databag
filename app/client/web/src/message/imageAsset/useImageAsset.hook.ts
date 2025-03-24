@@ -1,6 +1,5 @@
 import { useState, useContext, useEffect, useRef } from 'react'
 import { AppContext } from '../../context/AppContext'
-import { Focus } from 'databag-client-sdk'
 import { ContextType } from '../../context/ContextType'
 import { MediaAsset } from '../../conversation/Conversation';
 

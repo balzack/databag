@@ -6,7 +6,7 @@ import { IconX, IconChevronLeft, IconChevronRight } from '@tabler/icons-react'
 import { placeholder } from '../../constants/Icons'
 
 export function VideoFile({ source, thumbPosition, disabled, remove }: {source: File, thumbPosition: (position: number)=>void, disabled: boolean, remove: ()=>void}) {
-  const { state, actions } = useVideoFile(source);
+  const { state } = useVideoFile(source);
   const [ error, setError ] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const position = useRef(0);

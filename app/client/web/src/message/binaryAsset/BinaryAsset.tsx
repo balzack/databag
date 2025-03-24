@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MediaAsset } from '../../conversation/Conversation';
 import { useBinaryAsset } from './useBinaryAsset.hook';
 import { Progress, ActionIcon, Image } from '@mantine/core'

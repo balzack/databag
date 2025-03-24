@@ -5,9 +5,9 @@ export class StagingFiles implements Staging {
   public async clear(): Promise<void> {}
 
   private base64ToUint8Array(base64: string): Uint8Array {
-    var binaryString = atob(base64);
-    var bytes = new Uint8Array(binaryString.length);
-    for (var i = 0; i < binaryString.length; i++) {
+    const binaryString = atob(base64);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
       bytes[i] = binaryString.charCodeAt(i);
     }
     return bytes;
@@ -22,15 +22,15 @@ export class StagingFiles implements Staging {
     return window.btoa(binary);
   }
 
-  private loadFileData(file: any): Promise<ArrayBuffer> {
+  private loadFileData(file: File): Promise<ArrayBuffer> {
     return new Promise(resolve => {
       const reader = new FileReader()
-      reader.onloadend = (res) => { resolve(reader.result as ArrayBuffer) }
+      reader.onloadend = () => { resolve(reader.result as ArrayBuffer) }
       reader.readAsArrayBuffer(file)
     })
   };
 
-  public async read(source: any): Promise<{ size: number, getData: (position: number, length: number)=>Promise<string>, close: ()=>Promise<void> }> {
+  public async read(source: File): Promise<{ size: number, getData: (position: number, length: number)=>Promise<string>, close: ()=>Promise<void> }> {
     const data = await this.loadFileData(source);
     const size = data.byteLength;
     const getData = async (position: number, length: number) => {

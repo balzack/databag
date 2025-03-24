@@ -3,7 +3,6 @@ import { useProfile } from './useProfile.hook'
 import classes from './Profile.module.css'
 import { modals } from '@mantine/modals'
 import {
-  IconX,
   IconMapPin,
   IconBook,
   IconUserX,

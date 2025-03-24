@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from './Accounts.module.css'
 import { useAccounts } from './useAccounts.hook'
-import { Modal, Divider, Text, ActionIcon, Button } from '@mantine/core'
+import { Modal, Text, ActionIcon, Button } from '@mantine/core'
 import { IconUserPlus, IconUserCheck, IconCopy, IconCheck, IconReload, IconSettings, IconLockOpen2, IconUserCancel, IconTrash } from '@tabler/icons-react'
 import { Card } from '../card/Card'
 import { Colors } from '../constants/Colors';
@@ -176,7 +176,7 @@ export function Accounts({ openSetup }: { openSetup: ()=>void }) {
       <div className={classes.content}>
         <div className={classes.header}>
           { state.layout !== 'large' && (
-            <ActionIcon className={classes.action} variant="light" onClick={actions.reload} loading={loading}> 
+            <ActionIcon className={classes.action} variant="light" onClick={loadAccounts} loading={loading}> 
               <IconReload />
             </ActionIcon>
           )}
@@ -184,7 +184,7 @@ export function Accounts({ openSetup }: { openSetup: ()=>void }) {
             <Text className={classes.title}>{ state.strings.accounts }</Text>
           </div>
           { state.layout === 'large' && (
-            <ActionIcon className={classes.action} variant="light" onClick={actions.reload} loading={loading}> 
+            <ActionIcon className={classes.action} variant="light" onClick={loadAccounts} loading={loading}> 
               <IconReload />
             </ActionIcon>
           )}

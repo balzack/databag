@@ -1,8 +1,7 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import classes from './Setup.module.css'
 import { useSetup } from './useSetup.hook'
 import { PinInput, Image, Button, Radio, Group, Loader, Modal, Divider, Text, TextInput, Switch, ActionIcon } from '@mantine/core'
-import { modals } from '@mantine/modals'
 import { useDisclosure } from '@mantine/hooks'
 import { IconCheck, IconLogout, IconCopy } from '@tabler/icons-react'
 

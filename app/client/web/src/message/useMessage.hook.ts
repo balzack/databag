@@ -41,6 +41,7 @@ export function useMessage() {
         await focus.removeTopic(topicId);
       }
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     saveSubject: async (topicId: string, sealed: boolean, subject: any) => {
       const focus = app.state.focus;
       if (focus) {

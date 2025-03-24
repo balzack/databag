@@ -69,6 +69,8 @@ export function useDetails() {
   }, [display.state]);
 
   useEffect(() => {
+console.log("DETAILS", state.detail);
+
     const hostCard = state.cards.find(entry => entry.cardId == state.cardId);
     const profileRemoved = state.detail?.members ? state.detail.members.filter(member => state.profile?.guid != member.guid) : [];
     const contactCards = profileRemoved.map(member => state.cards.find(card => card.guid === member.guid));

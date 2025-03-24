@@ -61,7 +61,6 @@ export function useRegistry() {
         identity.removeProfileListener(setProfile);
       };
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

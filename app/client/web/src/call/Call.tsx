@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useCall } from './useCall.hook';
 import classes from './Call.module.css'
-import { Card as Contact } from '../card/Card';
 import { Colors } from '../constants/Colors';
 import { modals } from '@mantine/modals'
 import { Image, Text, ActionIcon } from '@mantine/core'
@@ -12,9 +11,6 @@ export function Call() {
   const [ending, setEnding] = useState(false);
   const [applyingAudio, setApplyingAudio] = useState(false);
   const [applyingVideo, setApplyingVideo] = useState(false);
-  const [accepting, setAccepting] = useState(null as null|string);
-  const [ignoring, setIgnoring] = useState(null as null|string);
-  const [declining, setDeclining] = useState(null as null|string);
   const remote = useRef(null as null|HTMLVideoElement);
   const local = useRef(null as null|HTMLVideoElement);
 

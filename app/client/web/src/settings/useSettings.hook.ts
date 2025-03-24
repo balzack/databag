@@ -2,7 +2,7 @@ import { useEffect, useState, useContext, useRef } from 'react'
 import { AppContext } from '../context/AppContext'
 import { DisplayContext } from '../context/DisplayContext'
 import { ContextType } from '../context/ContextType'
-import { type Profile, type Config, type PushParams, PushType } from 'databag-client-sdk'
+import { type Profile, type Config, PushType } from 'databag-client-sdk'
 import { Point, Area } from 'react-easy-crop/types'
 
 const IMAGE_DIM = 192
@@ -17,7 +17,7 @@ function urlB64ToUint8Array(b64: string) {
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
 
-  for (var i = 0; i < rawData.length; ++i) {
+  for (let i = 0; i < rawData.length; ++i) {
       outputArray[i] = rawData.charCodeAt(i);
   }
   return outputArray;

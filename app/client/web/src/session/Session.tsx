@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { Text, Drawer } from '@mantine/core'
-import { DisplayContext } from '../context/DisplayContext'
 import { RingContextProvider } from '../context/RingContext'
-import { ContextType } from '../context/ContextType'
 import classes from './Session.module.css'
 import { useSession } from './useSession.hook'
 import { IconAddressBook, IconMessages, IconSettings } from '@tabler/icons-react'
@@ -14,7 +12,6 @@ import { Profile, ProfileParams } from '../profile/Profile'
 import { Details } from '../details/Details';
 import { Content } from '../content/Content'
 import { Conversation } from '../conversation/Conversation'
-import { Focus, Card } from 'databag-client-sdk'
 import { useDisclosure } from '@mantine/hooks'
 import { IconAlertCircle } from '@tabler/icons-react'
 import { Base } from '../base/Base';

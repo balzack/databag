@@ -1,10 +1,9 @@
-import { useState, useContext, useEffect, useRef } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { AppContext } from '../context/AppContext'
 import { DisplayContext } from '../context/DisplayContext'
-import { Focus, FocusDetail, Topic, Profile, Card, AssetType, AssetSource, HostingMode, TransformType } from 'databag-client-sdk'
+import { Focus, FocusDetail, Topic, Profile, Card, AssetType, AssetSource, TransformType } from 'databag-client-sdk'
 import { ContextType } from '../context/ContextType'
 import Resizer from "react-image-file-resizer";
-import { placeholder } from '../constants/Icons';
 
 const IMAGE_SCALE_SIZE = (128 * 1024);
 const GIF_TYPE = 'image/gif';
@@ -19,7 +18,7 @@ function getImageThumb(file: File) {
       reader.onload = function () {
         resolve(reader.result as string);
       };
-      reader.onerror = function (error) {
+      reader.onerror = function () {
         reject();
       };
     }
@@ -35,12 +34,12 @@ function getImageThumb(file: File) {
 function getVideoThumb(file: File, position?: number) {
   return new Promise<string>((resolve, reject) => {
     const url = URL.createObjectURL(file);
-    var video = document.createElement("video");
-    var timeupdate = function (ev: any) {
+    const video = document.createElement("video");
+    const timeupdate = function () {
       video.removeEventListener("timeupdate", timeupdate);
       video.pause();
       setTimeout(() => {
-        var canvas = document.createElement("canvas");
+        const canvas = document.createElement("canvas");
         if (!canvas) {
           reject();
         } else {
@@ -57,7 +56,7 @@ function getVideoThumb(file: File, position?: number) {
             reject();
           } else {
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            var image = canvas.toDataURL("image/jpeg", 0.75);
+            const image = canvas.toDataURL("image/jpeg", 0.75);
             resolve(image);
           }
         }
@@ -116,6 +115,7 @@ export function useConversation() {
     setState((s) => ({ ...s, ...value }))
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateAsset = (index: number, value: any) => {
     setState((s) => {
       s.assets[index] = { ...s.assets[index], ...value };

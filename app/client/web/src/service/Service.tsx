@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
-import { Text, Drawer } from '@mantine/core'
-import { DisplayContext } from '../context/DisplayContext'
-import { ContextType } from '../context/ContextType'
+import { Drawer } from '@mantine/core'
 import classes from './Service.module.css'
 import { useService } from './useService.hook'
 import { IconAddressBook, IconSettings } from '@tabler/icons-react'

@@ -5,8 +5,8 @@ import { Card as Contact } from '../card/Card';
 import { Card } from 'databag-client-sdk';
 import { Colors } from '../constants/Colors';
 import { modals } from '@mantine/modals'
-import { Loader, Image, Text, ActionIcon } from '@mantine/core'
-import { IconBell, IconVideoPlus, IconEyeX, IconPhone, IconPhoneOff, IconArrowsMaximize, IconMicrophone, IconMicrophoneOff } from '@tabler/icons-react'
+import { Loader, Text, ActionIcon } from '@mantine/core'
+import { IconBell, IconVideoPlus, IconEyeX, IconPhone, IconArrowsMaximize, IconMicrophone, IconMicrophoneOff } from '@tabler/icons-react'
 
 export function Ring() {
   const { state, actions } = useRing();
@@ -117,7 +117,7 @@ export function Ring() {
     const acceptButton = <ActionIcon key="accept" variant="subtle" loading={accepting===ring.callId} onClick={()=>accept(callId, card)} color={Colors.primary}><IconPhone /></ActionIcon>
 
     return (
-      <Contact className={classes.card} placeholder={''} imageUrl={imageUrl} name={name} node={node} handle={handle} actions={[ignoreButton, declineButton, acceptButton]} />
+      <Contact key={`ring-${index}`} className={classes.card} placeholder={''} imageUrl={imageUrl} name={name} node={node} handle={handle} actions={[ignoreButton, declineButton, acceptButton]} />
     )
   });
 

@@ -30,6 +30,7 @@ export function useSetup() {
     confirmMFAuthImage: '',
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
