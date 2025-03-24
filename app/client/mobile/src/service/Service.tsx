@@ -1,25 +1,24 @@
-import React, {useState, useCallback, useEffect} from 'react';
-import {SafeAreaView, Pressable, View, useColorScheme} from 'react-native';
+import React, {useState, useCallback} from 'react';
+import {SafeAreaView, View, useColorScheme} from 'react-native';
 import {styles} from './Service.styled';
-import {IconButton, Surface, Text, Icon} from 'react-native-paper';
+import {IconButton, Surface} from 'react-native-paper';
 import {Accounts} from '../accounts/Accounts';
 import {Setup} from '../setup/Setup';
 import {useService} from './useService.hook';
 import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {Colors} from '../constants/Colors';
 
 const SetupDrawer = createDrawerNavigator();
 
 export function Service() {
-  const { state, actions } = useService();
+  const { state } = useService();
   const [tab, setTab] = useState('accounts');
   const scheme = useColorScheme();
   const showAccounts = {display: tab === 'accounts' ? 'flex' : 'none'};
   const showSetup = {display: tab === 'setup' ? 'flex' : 'none'};
 
   return (
-    <View style={styles.service}>
+    <Surface elevation={0} style={styles.service}>
       {state.layout !== 'large' && (
         <View>
           <View style={styles.full}>
@@ -95,7 +94,7 @@ export function Service() {
           </View>
         </NavigationContainer>
       )}
-    </View>
+    </Surface>
   );
 }
 

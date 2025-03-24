@@ -1,21 +1,21 @@
-import { useState, useContext, useEffect } from 'react'
-import { DisplayContext } from '../context/DisplayContext'
+import { useState, useContext, useEffect } from 'react';
+import { DisplayContext } from '../context/DisplayContext';
 import { AppContext } from '../context/AppContext';
-import { ContextType } from '../context/ContextType'
+import { ContextType } from '../context/ContextType';
 
 export function useMessage() {
-  const app = useContext(AppContext) as ContextType
-  const display = useContext(DisplayContext) as ContextType
+  const app = useContext(AppContext) as ContextType;
+  const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
     strings: display.state.strings,
     timeFormat: display.state.timeFormat,
     dateFormat: display.state.dateFormat,
-  })
+  });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const updateState = (value: any) => {
-    setState((s) => ({ ...s, ...value }))
-  }
+    setState((s) => ({ ...s, ...value }));
+  };
 
   useEffect(() => {
     const { strings, timeFormat, dateFormat } = display.state;
@@ -48,35 +48,35 @@ export function useMessage() {
       }
     },
     getTimestamp: (created: number) => {
-      const now = Math.floor((new Date()).getTime() / 1000)
+      const now = Math.floor((new Date()).getTime() / 1000);
       const date = new Date(created * 1000);
       const offset = now - created;
       if(offset < 43200) {
         if (state.timeFormat === '12h') {
-          return date.toLocaleTimeString("en-US", {hour: 'numeric', minute:'2-digit'});
+          return date.toLocaleTimeString('en-US', {hour: 'numeric', minute:'2-digit'});
         }
         else {
-          return date.toLocaleTimeString("en-GB", {hour: 'numeric', minute:'2-digit'});
+          return date.toLocaleTimeString('en-GB', {hour: 'numeric', minute:'2-digit'});
         }
       }
       else if (offset < 31449600) {
         if (state.dateFormat === 'mm/dd') {
-          return date.toLocaleDateString("en-US", {day: 'numeric', month:'numeric'});
+          return date.toLocaleDateString('en-US', {day: 'numeric', month:'numeric'});
         }
         else {
-          return date.toLocaleDateString("en-GB", {day: 'numeric', month:'numeric'});
+          return date.toLocaleDateString('en-GB', {day: 'numeric', month:'numeric'});
         }
       }
       else {
         if (state.dateFormat === 'mm/dd') {
-          return date.toLocaleDateString("en-US");
+          return date.toLocaleDateString('en-US');
         }
         else {
-          return date.toLocaleDateString("en-GB");
+          return date.toLocaleDateString('en-GB');
         }
       }
-    }
-  }
+    },
+  };
 
-  return { state, actions }
+  return { state, actions };
 }

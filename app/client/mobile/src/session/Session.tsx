@@ -1,5 +1,5 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import {SafeAreaView, Modal, Pressable, View, useColorScheme} from 'react-native';
+import {SafeAreaView, Pressable, View, useColorScheme} from 'react-native';
 import {RingContextProvider} from '../context/RingContext';
 import {styles} from './Session.styled';
 import {IconButton, Surface, Text, Icon} from 'react-native-paper';
@@ -13,8 +13,6 @@ import {Identity} from '../identity/Identity';
 import {Base} from '../base/Base';
 import {Conversation} from '../conversation/Conversation';
 import {useSession} from './useSession.hook';
-import {TransitionPresets} from '@react-navigation/stack';
-import {Focus, Card} from 'databag-client-sdk';
 import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -45,11 +43,11 @@ export function Session({ share }: { share: { filePath: string, mimeType: string
 
   const textContact = (cardId: null|string) => {
     setTextCard({ cardId });
-  }
+  };
 
   const callContact = (card: null|Card) => {
     setCallCard({ card });
-  }
+  };
 
   const sessionNav = {strings: state.strings, callContact, callCard, textContact, textCard, focus, setFocus, share};
   const showContent = {display: tab === 'content' ? 'flex' : 'none'};
@@ -61,18 +59,19 @@ export function Session({ share }: { share: { filePath: string, mimeType: string
     setTimeout(() => {
       setDismissed(false);
     }, 60000);
-  }
+  };
 
   const contentTab = () => {
     if (tab !== 'content') {
       setTab('content');
     }
-  }
+  };
 
   useEffect(() => {
     if (share) {
       contentTab();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [share]);
 
   useEffect(() => {
@@ -219,7 +218,7 @@ function ContentTab({scheme, textCard, contentTab, share}: {scheme: string, text
   const openConversation = (props) => {
     props.navigation.navigate('conversation');
     contentTab();
-  }
+  };
 
   return (
     <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
@@ -293,7 +292,7 @@ function DetailsScreen({nav}) {
   const closeAll = (props) => {
     props.navigation.closeDrawer();
     nav.setFocus(false);
-  }
+  };
 
   const DetailsComponent = useCallback(
     (props) => (
@@ -303,6 +302,7 @@ function DetailsScreen({nav}) {
         />
       </Surface>
     ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [nav],
   );
 
@@ -448,6 +448,7 @@ function SettingsScreen({nav}) {
 function HomeScreen({nav}) {
   useEffect(() => {
     nav.contacts.closeDrawer();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nav.callCard]);
 
   return (
@@ -460,7 +461,7 @@ function HomeScreen({nav}) {
           <Content share={nav.share} textCard={nav.textCard} closeAll={()=>{}} openConversation={()=>nav.setFocus(true)} />
         </Surface>
       </View>
-      <Surface style={styles.right} mode="flat">  
+      <Surface style={styles.right} mode="flat">
         { !nav.focus && (
           <Base />
         )}

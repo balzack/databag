@@ -107,6 +107,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'yellow',
   },
   members: {
+    width: '100%',
     flexGrow: 1,
   },
   actions: {
@@ -133,12 +134,9 @@ export const styles = StyleSheet.create({
     top: 8,
     backgroundColor: 'transparent',
     padding: 0,
-    margin: 0, 
+    margin: 0,
   },
   membership: {
-  },
-  members: {
-    width: '100%',
   },
   card: {
     paddingBottom: 8,

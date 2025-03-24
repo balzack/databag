@@ -1,7 +1,7 @@
-import { useRef, useEffect, useState, useCallback } from 'react';
-import { avatar } from '../constants/Icons'
+import React, { useRef, useEffect, useState } from 'react';
+import { avatar } from '../constants/Icons';
 import { Pressable, Linking, ScrollView, View, Image, Modal } from 'react-native';
-import {Icon, Text, TextInput, IconButton, Button, Surface, Divider} from 'react-native-paper';
+import { Text, TextInput, IconButton, Button, Surface, Divider} from 'react-native-paper';
 import { Topic, Card, Profile } from 'databag-client-sdk';
 import { ImageAsset } from './imageAsset/ImageAsset';
 import { AudioAsset } from './audioAsset/AudioAsset';
@@ -10,7 +10,7 @@ import { BinaryAsset } from './binaryAsset/BinaryAsset';
 import { useMessage } from './useMessage.hook';
 import {styles} from './Message.styled';
 import { MediaAsset } from '../conversation/Conversatin';
-import { Confirm } from '../confirm/Confirm'; 
+import { Confirm } from '../confirm/Confirm';
 import { Shimmer } from './shimmer/Shimmer';
 import {BlurView} from '@react-native-community/blur';
 import { sanitizeUrl } from '@braintree/sanitize-url';
@@ -18,9 +18,9 @@ import { sanitizeUrl } from '@braintree/sanitize-url';
 export function Message({ topic, card, profile, host, select, selected }: { topic: Topic, card: Card | null, profile: Profile | null, host: boolean, select: (id: null | string)=>void, selected: string }) {
   const { state, actions } = useMessage();
   const { locked, data, created, topicId, status, transform } = topic;
-  const { name, handle, node } = profile || card || { name: null, handle: null, node: null }
-  const { text, textColor, textSize, assets } = data || { text: null, textColor: null, textSize: null }
-  const textStyle = textColor && textSize ? { fontSize: textSize, color: textColor } : textColor ? { color: textColor } : textSize ? { fontSize: textSize } : {}
+  const { name, handle, node } = profile || card || { name: null, handle: null, node: null };
+  const { text, textColor, textSize, assets } = data || { text: null, textColor: null, textSize: null };
+  const textStyle = textColor && textSize ? { fontSize: textSize, color: textColor } : textColor ? { color: textColor } : textSize ? { fontSize: textSize } : {};
   const logoUrl = profile ? profile.imageUrl : card ? card.imageUrl : avatar;
   const timestamp = actions.getTimestamp(created);
   const [editing, setEditing] = useState(false);
@@ -34,6 +34,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
   const loadedCount = useRef(0);
   const [showAsset, setShowAsset] = useState(false);
   const [message, setMessage] = useState([]);
+  const fontStyle = { fontStyle: 'italic' };
 
   useEffect(() => {
     setTimeout(() => setShowAsset(true), 2000);
@@ -54,22 +55,23 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
     if (parsed?.length > 0) {
       const words = parsed as string[];
       words.forEach((word, index) => {
-        if (!!urlPattern.test(word)) {
+        if (urlPattern.test(word)) {
           clickable.push(<Text key={index} style={textStyle}>{ plain }</Text>);
           plain = '';
-          const url = !!hostPattern.test(word) ? word : `https://${word}`;
-          clickable.push(<Text key={'link-' + index} onPress={() => Linking.openURL(sanitizeUrl(url))} style={{ fontStyle: 'italic' }}>{ sanitizeUrl(word) + ' ' }</Text>);
+          const url = hostPattern.test(word) ? word : `https://${word}`;
+          clickable.push(<Text key={'link-' + index} onPress={() => Linking.openURL(sanitizeUrl(url))} style={fontStyle}>{ sanitizeUrl(word) + ' ' }</Text>);
         }
         else {
           plain += `${word} `;
         }
-      })
+      });
     }
 
     if (plain) {
       clickable.push(<Text key={parsed.length} style={textStyle}>{ plain }</Text>);
     }
-    setMessage(clickable)
+    setMessage(clickable);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text, locked]);
 
   const loaded = () => {
@@ -77,12 +79,12 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
     if (loadedCount.current >= assets.length) {
       setShowAsset(true);
     }
-  }
+  };
 
   const edit = () => {
     setEditing(true);
     select(null);
-  }
+  };
 
   const save = async () => {
     setSaving(true);
@@ -94,7 +96,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
     }
     setSaving(false);
     setEditing(false);
-  }
+  };
 
   const block = () => {
     setConfirmParams({
@@ -118,7 +120,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
             }
             setBlocking(false);
           }
-        }
+        },
       },
     });
     setConfirmShow(true);
@@ -146,7 +148,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
             }
             setReporting(false);
           }
-        }
+        },
       },
     });
     setConfirmShow(true);
@@ -174,7 +176,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
             }
             setRemoving(false);
           }
-        }
+        },
       },
     });
     setConfirmShow(true);
@@ -190,19 +192,19 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
       },
     });
     setConfirmShow(true);
-  }
+  };
 
   const media = !assets ? [] : assets.map((asset: MediaAsset, index: number) => {
     if (asset.image || asset.encrypted?.type === 'image') {
-      return <ImageAsset key={index} topicId={topicId} asset={asset as MediaAsset} loaded={loaded} show={showAsset} />
+      return <ImageAsset key={index} topicId={topicId} asset={asset as MediaAsset} loaded={loaded} show={showAsset} />;
     } else if (asset.audio || asset.encrypted?.type === 'audio') {
-      return <AudioAsset key={index} topicId={topicId} asset={asset as MediaAsset} loaded={loaded} show={showAsset} />
+      return <AudioAsset key={index} topicId={topicId} asset={asset as MediaAsset} loaded={loaded} show={showAsset} />;
     } else if (asset.video || asset.encrypted?.type === 'video') {
-      return <VideoAsset key={index} topicId={topicId} asset={asset as MediaAsset} loaded={loaded} show={showAsset} />
+      return <VideoAsset key={index} topicId={topicId} asset={asset as MediaAsset} loaded={loaded} show={showAsset} />;
     } else if (asset.binary || asset.encrypted?.type === 'binary') {
-      return <BinaryAsset key={index} topicId={topicId} asset={asset as MediaAsset} loaded={loaded} show={showAsset} />
+      return <BinaryAsset key={index} topicId={topicId} asset={asset as MediaAsset} loaded={loaded} show={showAsset} />;
     } else {
-      return <View key={index}></View>
+      return <View key={index} />;
     }
   });
 
@@ -212,7 +214,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
         <View style={styles.content}>
           <Image style={styles.logo} resizeMode={'contain'} source={{uri: logoUrl}} />
           <View style={styles.body}>
-            <Pressable style={styles.header} onPress={()=>select(topicId == selected ? null : topicId)}>
+            <Pressable style={styles.header} onPress={()=>select(topicId === selected ? null : topicId)}>
               <View style={styles.name}>
                 { name && (
                   <Text style={styles.handle}>{ name }</Text>
@@ -243,7 +245,7 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
           </View>
         </View>
       </View>
-      { !locked && assets?.length > 0 && transform === 'complete' && ( 
+      { !locked && assets?.length > 0 && transform === 'complete' && (
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.carousel} contentContainerStyle={styles.assets}>
           { media }
         </ScrollView>
@@ -280,11 +282,11 @@ export function Message({ topic, card, profile, host, select, selected }: { topi
             <BlurView style={styles.blur} blurType="dark" blurAmount={6} reducedTransparencyFallbackColor="dark" />
           </Pressable>
           <View style={styles.editArea}>
-            <Surface elevation={2} style={styles.editContent}> 
+            <Surface elevation={2} style={styles.editContent}>
               <Text style={styles.title}>{ state.strings.edit }</Text>
               <TextInput multiline={true} mode="outlined" style={styles.message}
                   outlineColor="transparent" activeOutlineColor="transparent" spellcheck={false}
-                  autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage} 
+                  autoComplete="off" autoCapitalize="none" autoCorrect={false} placeholder={state.strings.newMessage}
                   value={editText} onChangeText={value => setEditText(value)} />
               <View style={styles.controls}>
                 <Button mode="outlined" onPress={()=>setEditing(false)}>

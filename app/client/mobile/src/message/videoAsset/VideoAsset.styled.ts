@@ -75,11 +75,4 @@ export const styles = StyleSheet.create({
   spacer: {
     flexGrow: 1,
   },
-  alert: {
-    position: 'absolute',
-    bottom: 0,
-  },
-  alertLabel: {
-    color: Colors.offsync,
-  },
 });

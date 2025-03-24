@@ -1,25 +1,19 @@
-import { useState, useContext, useEffect } from 'react'
-import { AppContext } from '../context/AppContext'
+import { useContext } from 'react';
+import { AppContext } from '../context/AppContext';
 import { DisplayContext } from '../context/DisplayContext';
-import { ContextType } from '../context/ContextType'
-import { Channel } from 'databag-client-sdk';
+import { ContextType } from '../context/ContextType';
 
 export function useSelector() {
-  const app = useContext(AppContext) as ContextType
-  const display = useContext(DisplayContext) as ContextType
-  const [state, setState] = useState({
-    strings: display.state.strings,
-    channels: [] as Channel[],
-  })
+  const app = useContext(AppContext) as ContextType;
+  const display = useContext(DisplayContext) as ContextType;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const updateState = (value: any) => {
-    setState((s) => ({ ...s, ...value }))
-  }
+  const state = {
+    strings: display.state.strings,
+  };
 
   const actions = {
     clearFocus: app.actions.clearFocus,
-  }
+  };
 
-  return { state, actions }
+  return { state, actions };
 }

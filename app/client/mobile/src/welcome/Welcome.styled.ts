@@ -1,5 +1,4 @@
 import {StyleSheet} from 'react-native';
-import { Colors } from '../constants/Colors';
 
 export const styles = StyleSheet.create({
   base: {
@@ -41,7 +40,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     gap: 8,
-    align: 'center', 
+    align: 'center',
   },
   label: {
     fontSize: 18,

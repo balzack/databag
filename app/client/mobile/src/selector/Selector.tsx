@@ -19,6 +19,7 @@ export function Selector({ share, selected, channels }: { share: { filePath: str
       setShow(true);
       actions.clearFocus();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [share]);
 
   const select = () => {
@@ -28,7 +29,7 @@ export function Selector({ share, selected, channels }: { share: { filePath: str
       setTopic(null);
       selected(cardId, channelId);
     }
-  }
+  };
 
   return (
     <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={show} onRequestClose={()=>setShow(false)}>
@@ -51,8 +52,8 @@ export function Selector({ share, selected, channels }: { share: { filePath: str
                   initialNumToRender={32}
                   showsVerticalScrollIndicator={false}
                   renderItem={({item}) => {
-                    const {cardId, channelId, sealed, focused, hosted, unread, imageUrl, subject, message} = item;
-                    const select = () => {
+                    const {cardId, channelId, sealed, hosted, imageUrl, subject, message} = item;
+                    const selection = () => {
                       setTopic({ cardId, channelId });
                     };
                     return (
@@ -62,7 +63,7 @@ export function Selector({ share, selected, channels }: { share: { filePath: str
                             ...styles.channel,
                             borderColor: theme.colors.outlineVariant,
                           }}
-                          select={select}
+                          select={selection}
                           unread={false}
                           sealed={sealed}
                           hosted={hosted}
@@ -85,7 +86,7 @@ export function Selector({ share, selected, channels }: { share: { filePath: str
             <Button style={styles.control} mode="outlined" onPress={()=>setShow(false)}>
               {state.strings.cancel}
             </Button>
-            <Button style={styles.control} disabled={topic==null} mode="contained" onPress={select}>
+            <Button style={styles.control} disabled={topic == null} mode="contained" onPress={select}>
               {state.strings.selectImage}
             </Button>
           </View>

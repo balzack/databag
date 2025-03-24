@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react';
-import { View, Image } from 'react-native'
-import { IconButton } from 'react-native-paper'
-import { useBinaryFile } from './useBinaryFile.hook';
-import {styles} from './BinaryFile.styled'
+import React from 'react';
+import { View, Image } from 'react-native';
+import { IconButton } from 'react-native-paper';
+import {styles} from './BinaryFile.styled';
 import thumb from '../../images/binary.png';
 
-export function BinaryFile({ path, disabled, remove }: {path: string, disabled: boolean, remove: ()=>void}) {
-  const { state, actions } = useBinaryFile();
+export function BinaryFile({ disabled, remove }: {path: string, disabled: boolean, remove: ()=>void}) {
 
   return (
     <View style={styles.binary}>

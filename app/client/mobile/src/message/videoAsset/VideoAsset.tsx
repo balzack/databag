@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { SafeAreaView, Share, Modal, Pressable, Animated, View, Image, useAnimatedValue } from 'react-native'
-import { Text, Surface, Icon, ProgressBar, IconButton } from 'react-native-paper'
+import { SafeAreaView, Modal, Pressable, Animated, View, Image, useAnimatedValue } from 'react-native';
+import { Text, Surface, Icon, ProgressBar, IconButton } from 'react-native-paper';
 import { useVideoAsset } from './useVideoAsset.hook';
 import { MediaAsset } from '../../conversation/Conversation';
-import { styles } from './VideoAsset.styled'
+import { styles } from './VideoAsset.styled';
 import {BlurView} from '@react-native-community/blur';
-import Video, { VideoRef } from 'react-native-video'
-import { Colors } from '../../constants/Colors';
-import { activateKeepAwake, deactivateKeepAwake} from "@sayem314/react-native-keep-awake";
+import Video, { VideoRef } from 'react-native-video';
+import { activateKeepAwake, deactivateKeepAwake} from '@sayem314/react-native-keep-awake';
 
 export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, asset: MediaAsset, loaded: ()=>void, show: boolean }) {
   const { state, actions } = useVideoAsset(topicId, asset);
@@ -18,7 +17,7 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
   const [showControl, setShowControl] = useState(false);
   const clear = useRef();
   const [downloading, setDownloading] = useState(false);
- 
+
   useEffect(() => {
     if (state.loaded && show) {
       Animated.timing(opacity, {
@@ -30,6 +29,7 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
     if (state.loaded) {
       loaded();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.loaded, show]);
 
   const showVideo = () => {
@@ -42,7 +42,7 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
     setModal(false);
     actions.cancelLoad();
     deactivateKeepAwake();
-  }
+  };
 
   const controls = () => {
     clearTimeout(clear.current);
@@ -50,19 +50,19 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
     clear.current = setTimeout(() => {
       setShowControl(false);
     }, 3000);
-  }
+  };
 
   const play = () => {
     videoRef.current.resume();
-  }
+  };
 
   const pause = () => {
     videoRef.current.pause();
-  }
+  };
 
   const end = () => {
     videoRef.current.seek(0);
-  }
+  };
 
   const playbackRateChange = (e) => {
     if (e.playbackRate === 0) {
@@ -70,7 +70,7 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
     } else {
       setStatus('playing');
     }
-  }
+  };
 
   const download = async () => {
     if (!downloading) {
@@ -82,13 +82,13 @@ export function VideoAsset({ topicId, asset, loaded, show }: { topicId: string, 
       }
       setDownloading(false);
     }
-  }
+  };
 
   return (
     <View style={styles.video}>
       { state.thumbUrl && (
         <Pressable style={styles.container} onPress={showVideo}>
-          <Animated.View style={[styles.thumb,{opacity},]}>
+          <Animated.View style={[styles.thumb,{opacity}]}>
             <Image
               resizeMode="contain"
               height={92}

@@ -1,27 +1,21 @@
-import { useState, useContext, useEffect, useRef } from 'react'
-import { DisplayContext } from '../context/DisplayContext';
-import { AppContext } from '../context/AppContext'
-import { ContextType } from '../context/ContextType'
+import { useState, useContext, useEffect, useRef } from 'react';
+import { AppContext } from '../context/AppContext';
+import { ContextType } from '../context/ContextType';
 import { Link, type Card } from 'databag-client-sdk';
 import InCallManager from 'react-native-incall-manager';
 
 import {
-  ScreenCapturePickerView,
   RTCPeerConnection,
   RTCIceCandidate,
   RTCSessionDescription,
-  RTCView,
   MediaStream,
-  MediaiStreamTrack,
   mediaDevices,
-  registerGlobals
 } from 'react-native-webrtc';
 
 const CLOSE_POLL_MS = 100;
 
 export function useRingContext() {
   const app = useContext(AppContext) as ContextType;
-  const display = useContext(DisplayContext) as ContextType;
   const call = useRef(null as { peer: RTCPeerConnection, link: Link, candidates: RTCIceCandidate[] } | null);
   const sourceStream = useRef(null as null|MediaStream);
   const localStream = useRef(null as null|MediaStream);
@@ -52,12 +46,12 @@ export function useRingContext() {
     connectedTime: 0,
     failed: false,
     fullscreen: false,
-  })
+  });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const updateState = (value: any) => {
-    setState((s) => ({ ...s, ...value }))
-  }
+    setState((s) => ({ ...s, ...value }));
+  };
 
   useEffect(() => {
     const calls = ringing.map(ring => ({ callId: ring.callId, card: cards.find(card => ring.cardId === card.cardId) }))
@@ -65,18 +59,9 @@ export function useRingContext() {
     updateState({ calls });
   }, [ringing, cards]);
 
-  const constraints = {
-    mandatory: {
-      OfferToReceiveAudio: true,
-      OfferToReceiveVideo: false,
-      VoiceActivityDetection: true
-    }
-  };
-
   const linkStatus = async (status: string) => {
     if (call.current) {
       try {
-        const { peer, link } = call.current;
         if (status === 'connected') {
           const now = new Date();
           const connectedTime = Math.floor(now.getTime() / 1000);
@@ -89,10 +74,10 @@ export function useRingContext() {
         console.log(err);
       }
     }
-  }
+  };
 
-  const updatePeer = async (type: string, data?: any) => {
-    peerUpdate.current.push({ type, data });
+  const updatePeer = async (mode: string, value?: any) => {
+    peerUpdate.current.push({ type: mode, data: value });
 
     if (!updatingPeer.current) {
       updatingPeer.current = true;
@@ -114,13 +99,13 @@ export function useRingContext() {
                 const offer = new RTCSessionDescription(data.description);
                 await peer.setRemoteDescription(offer);
                 if (data.description.type === 'offer') {
-                  const description = await peer.createAnswer();
-                  await peer.setLocalDescription(description);
-                  link.sendMessage({ description });
+                  const desc = await peer.createAnswer();
+                  await peer.setLocalDescription(desc);
+                  link.sendMessage({ description: desc });
                 }
                 for (const candidate of candidates) {
                   await peer.addIceCandidate(candidate);
-                };
+                }
                 call.current.candidates = [];
               } else if (data.candidate) {
                 const candidate = new RTCIceCandidate(data.candidate);
@@ -153,7 +138,7 @@ export function useRingContext() {
               }
               if (data.kind === 'video') {
                 InCallManager.setForceSpeakerphoneOn(true);
-                updateState({ localVideo: true })
+                updateState({ localVideo: true });
               }
               break;
             default:
@@ -167,7 +152,7 @@ export function useRingContext() {
       }
       updatingPeer.current = false;
     }
-  }
+  };
 
   const setup = async (link: Link, card: Card, polite: boolean) => {
 
@@ -179,8 +164,8 @@ export function useRingContext() {
       audio: true,
       video: {
         frameRate: 30,
-        facingMode: 'user'
-      }
+        facingMode: 'user',
+      },
     });
     InCallManager.start({media: 'audio'});
     localAudio.current = sourceStream.current.getTracks().find(track => track.kind === 'audio');
@@ -201,7 +186,7 @@ export function useRingContext() {
       localStream: localStream.current, remoteStream: remoteStream.current });
     link.setStatusListener(linkStatus);
     link.setMessageListener((msg: any) => updatePeer('message', msg));
-  }
+  };
 
   const cleanup = async () => {
     closing.current = true;
@@ -232,11 +217,11 @@ export function useRingContext() {
     updateState({ calling: null, connected: false, connectedTime: 0, fullscreen: false, failed: false,
       localStream: null, remoteStream: null, localVideo: false, remoteVideo: false });
     closing.current = false;
-  }
+  };
 
   const transmit = (ice: { urls: string; username: string; credential: string }[]) => {
     const peerConnection = new RTCPeerConnection({ iceServers: ice });
-    peerConnection.addEventListener( 'connectionstatechange', event => {
+    peerConnection.addEventListener( 'connectionstatechange', () => {
       if (peerConnection.connectionState === 'failed') {
         cleanup();
       }
@@ -245,31 +230,31 @@ export function useRingContext() {
       updatePeer('candidate', event.candidate);
     });
     peerConnection.addEventListener( 'icecandidateerror', event => {
-      console.log("ICE ERROR");
+      console.log('ICE ERROR', event);
     });
     peerConnection.addEventListener( 'iceconnectionstatechange', event => {
-      console.log("ICE STATE CHANGE", event);
+      console.log('ICE STATE CHANGE', event);
     });
-    peerConnection.addEventListener( 'negotiationneeded', event => {
+    peerConnection.addEventListener( 'negotiationneeded', () => {
       updatePeer('negotiate');
     });
     peerConnection.addEventListener( 'signalingstatechange', event => {
-      console.log("ICE SIGNALING", event);
+      console.log('ICE SIGNALING', event);
     });
     peerConnection.addEventListener( 'track', event => {
       updatePeer('remote_track', event.track);
     });
     return peerConnection;
-  }
+  };
 
   useEffect(() => {
     if (app.state.session) {
-      const setRing = (ringing: { cardId: string, callId: string }[]) => {
-        setRinging(ringing);
-      }
-      const setContacts = (cards: Card[]) => {
-        setCards(cards);
-      }
+      const setRing = (incoming: { cardId: string, callId: string }[]) => {
+        setRinging(incoming);
+      };
+      const setContacts = (contacts: Card[]) => {
+        setCards(contacts);
+      };
       const ring = app.state.session.getRing();
       ring.addRingingListener(setRinging);
       const contact = app.state.session.getContact();
@@ -278,8 +263,9 @@ export function useRingContext() {
         ring.removeRingingListener(setRing);
         contact.removeCardListener(setContacts);
         cleanup();
-      }
+      };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [app.state.session]);
 
   const actions = {
@@ -330,7 +316,7 @@ export function useRingContext() {
     },
     enableAudio: async () => {
       if (closing.current || !call.current) {
-        throw new Error('cannot unmute audio')
+        throw new Error('cannot unmute audio');
       }
       if (!localAudio.current) {
         throw new Error('audio not available');
@@ -377,8 +363,8 @@ export function useRingContext() {
       }
       updateState({ videoEnabled: false });
     },
-  }
+  };
 
-  return { state, actions }
+  return { state, actions };
 }
 

@@ -478,7 +478,7 @@ Falls Sie Fragen zu diesen Bedingungen oder zum Dienst haben, können Sie uns ü
 
 Wir freuen uns, Sie als Teil der Databag-Community begrüßen zu dürfen, und wir hoffen, dass Sie unsere Dienste genießen.
 `,
-  pt: 
+  pt:
 `Agradeço por se juntar à comunidade Databag! Estes Termos de Serviço (os "Termos") abrangem seus direitos e obrigações relacionados ao seu acesso e uso dos serviços da Databag, incluindo, mas não se limitando ao Databag (coletivamente, o "Serviço"). Todas as referências a "você", "seu" ou "usuário" se referem ao usuário do Serviço. Além destes Termos, por favor, reveja a Política de Privacidade da Databag, que descreve nossas práticas relacionadas à coleta e uso de suas informações. Estes Termos se aplicam também à nossa Política de Privacidade. Ao usar o Serviço, você declara e concorda que leu, entende e concorda em cumprir tanto estes Termos quanto nossa Política de Privacidade como acordos vinculativos. Além disso, você concorda que estes Termos e nossa Política de Privacidade se aplicam ao seu uso anterior, se houver.
 
 POR FAVOR, LEIA CUIDADOSAMENTE ESTES TERMOS, POIS CONTÊM INFORMAÇÕES IMPORTANTES SOBRE SEUS DIREITOS E RESPONSABILIDADES, INCLUINDO A LIMITAÇÃO DE NOSSA RESPONSABILIDADE. SE VOCÊ NÃO ACEITAR ESTE ACORDO EM SUA TOTALIDADE, NÃO PODERÁ ACESSAR OU UTILIZAR O SERVIÇO.
@@ -825,5 +825,5 @@ support@databag.com
 
 © 2022 Databag, Inc. 
 
-`
-}
+`,
+};

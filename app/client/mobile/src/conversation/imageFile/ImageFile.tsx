@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { Image, View, Animated, useAnimatedValue } from 'react-native'
-import { IconButton, Text } from 'react-native-paper';
+import { Image, View, Animated, useAnimatedValue } from 'react-native';
+import { IconButton } from 'react-native-paper';
 import { useImageFile } from './useImageFile.hook';
-import {styles} from './ImageFile.styled'
+import {styles} from './ImageFile.styled';
 
 export function ImageFile({ path, disabled, remove }: {path: string, disabled: boolean, remove: ()=>void}) {
   const { state, actions } = useImageFile();
@@ -16,21 +16,12 @@ export function ImageFile({ path, disabled, remove }: {path: string, disabled: b
         useNativeDriver: true,
       }).start();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.loaded]);
-
-  const showImage = () => {
-    setModal(true);
-    actions.loadImage();
-  };
-
-  const hideImage = () => {
-    setModal(false);
-    actions.cancelLoad();
-  }
 
   return (
     <View style={styles.image}>
-      <Animated.View style={[styles.thumb,{opacity},]}>
+      <Animated.View style={[styles.thumb,{opacity}]}>
         <Image
           resizeMode="contain"
           height={72}

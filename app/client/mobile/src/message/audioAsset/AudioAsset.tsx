@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { SafeAreaView, Modal, Share, Pressable, View, Image, Animated, useAnimatedValue } from 'react-native'
-import { Surface, Icon, Text, ProgressBar, IconButton } from 'react-native-paper'
+import { SafeAreaView, Modal, Pressable, View, Image, Animated, useAnimatedValue } from 'react-native';
+import { Surface, Icon, Text, ProgressBar, IconButton } from 'react-native-paper';
 import { useAudioAsset } from './useAudioAsset.hook';
 import { MediaAsset } from '../../conversation/Conversation';
-import { styles } from './AudioAsset.styled'
+import { styles } from './AudioAsset.styled';
 import {BlurView} from '@react-native-community/blur';
-import Video, { VideoRef } from 'react-native-video'
+import Video, { VideoRef } from 'react-native-video';
 import thumb from '../../images/audio.png';
-import {Colors} from '../../constants/Colors';
-import { activateKeepAwake, deactivateKeepAwake} from "@sayem314/react-native-keep-awake";
+import { activateKeepAwake, deactivateKeepAwake} from '@sayem314/react-native-keep-awake';
 
 export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, asset: MediaAsset, loaded: ()=>void, show: boolean }) {
   const { state, actions } = useAudioAsset(topicId, asset);
@@ -19,38 +18,39 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
   const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
-    if (show) { 
+    if (show) {
       Animated.timing(opacity, {
         toValue: 1,
         duration: 100,
         useNativeDriver: true,
       }).start();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
 
   const showAudio = () => {
     setModal(true);
     actions.loadAudio();
-    activateKeepAwake()
+    activateKeepAwake();
   };
 
   const hideAudio = () => {
     setModal(false);
     actions.cancelLoad();
     deactivateKeepAwake();
-  }
+  };
 
   const play = () => {
     videoRef.current.resume();
-  }
+  };
 
   const pause = () => {
     videoRef.current.pause();
-  }
+  };
 
   const end = () => {
     videoRef.current.seek(0);
-  }
+  };
 
   const playbackRateChange = (e) => {
     if (e.playbackRate === 0) {
@@ -58,7 +58,7 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
     } else {
       setStatus('playing');
     }
-  }
+  };
 
   const download = async () => {
     if (!downloading) {
@@ -70,12 +70,12 @@ export function AudioAsset({ topicId, asset, loaded, show }: { topicId: string, 
       }
       setDownloading(false);
     }
-  }
+  };
 
   return (
     <View style={styles.audio}>
       <Pressable onPress={showAudio}>
-        <Animated.View style={[styles.container,{opacity},]}>
+        <Animated.View style={[styles.container,{opacity}]}>
           <Image
             style={styles.thumb}
             resizeMode="contain"

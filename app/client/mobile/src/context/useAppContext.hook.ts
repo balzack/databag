@@ -4,7 +4,7 @@ import {Platform, PermissionsAndroid} from 'react-native';
 import {SessionStore} from '../SessionStore';
 import {NativeCrypto} from '../NativeCrypto';
 import {LocalStore} from '../LocalStore';
-import { StagingFiles } from '../StagingFiles'
+import { StagingFiles } from '../StagingFiles';
 import messaging from '@react-native-firebase/messaging';
 
 const DATABAG_DB = 'db_v244.db';
@@ -85,7 +85,7 @@ export function useAppContext() {
       console.log(err);
       return { token: '', type: '' };
     }
-  }
+  };
 
   const actions = {
     setMonthFirstDate: async (monthFirstDate: boolean) => {
@@ -171,7 +171,7 @@ export function useAppContext() {
       }
     },
     clearFocus: () => {
-      if (state.session) { 
+      if (state.session) {
         state.session.clearFocus();
         updateState({ focus: null });
       }

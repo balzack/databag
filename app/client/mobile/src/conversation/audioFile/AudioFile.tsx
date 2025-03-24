@@ -1,13 +1,10 @@
-import React, { useEffect } from 'react';
-import { View, Image } from 'react-native'
+import React from 'react';
+import { View, Image } from 'react-native';
 import { IconButton } from 'react-native-paper';
-import { useAudioFile } from './useAudioFile.hook';
-import {styles} from './AudioFile.styled'
+import {styles} from './AudioFile.styled';
 import thumb from '../../images/audio.png';
 
-export function AudioFile({ path, disabled, remove }: {path: string, disabled: boolean, remove: ()=>void}) {
-  const { state, actions } = useAudioFile();
-
+export function AudioFile({ disabled, remove }: {path: string, disabled: boolean, remove: ()=>void}) {
   return (
     <View style={styles.audio}>
       <Image

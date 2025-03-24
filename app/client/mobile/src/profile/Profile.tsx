@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Icon, Text, IconButton, Divider} from 'react-native-paper';
-import {ScrollView, Image, SafeAreaView, View} from 'react-native';
+import {ScrollView, Image, View} from 'react-native';
 import {styles} from './Profile.styled';
 import {useProfile} from './useProfile.hook';
 import {Confirm} from '../confirm/Confirm';

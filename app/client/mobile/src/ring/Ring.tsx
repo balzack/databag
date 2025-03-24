@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Animated, useAnimatedValue, View } from 'react-native';
 import { useRing } from './useRing.hook';
-import { styles } from './Ring.styled'
+import { styles } from './Ring.styled';
 import { Card as Contact } from '../card/Card';
 import { Icon, Text, Surface, IconButton, ActivityIndicator } from 'react-native-paper';
 import { Confirm } from '../confirm/Confirm';
@@ -20,7 +20,7 @@ export function Ring() {
   const [accepting, setAccepting] = useState(null as null|string);
   const [ignoring, setIgnoring] = useState(null as null|string);
   const [declining, setDeclining] = useState(null as null|string);
-  const scale = useAnimatedValue(0)
+  const scale = useAnimatedValue(0);
 
   useEffect(() => {
     const ringing = setInterval(() => {
@@ -44,6 +44,7 @@ export function Ring() {
         useNativeDriver: false,
       }).start();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accepting, state.calling, state.calls]);
 
   const toggleAudio = async () => {
@@ -61,7 +62,7 @@ export function Ring() {
       }
       setApplyingAudio(false);
     }
-  }
+  };
 
   const end = async () => {
     if (!ending) {
@@ -74,7 +75,7 @@ export function Ring() {
       }
       setEnding(false);
     }
-  }
+  };
 
   const accept = async (callId, card) => {
     if (!accepting) {
@@ -88,7 +89,7 @@ export function Ring() {
       }
       setAccepting(null);
     }
-  }
+  };
 
   const ignore = async (callId, card) => {
     if (!ignoring) {
@@ -101,7 +102,7 @@ export function Ring() {
       }
       setIgnoring(null);
     }
-  }
+  };
 
   const decline = async (callId, card) => {
     if (!declining) {
@@ -114,7 +115,7 @@ export function Ring() {
       }
       setDeclining(null);
     }
-  }
+  };
 
   const alertParams = {
     title: state.strings.operationFailed,
@@ -127,22 +128,25 @@ export function Ring() {
     },
   };
 
-  const calls = state.calls.map((contact, index) => {
+  const calls = state.calls.map((contact) => {
     const { callId, card } = contact;
     const { name, handle, node, imageUrl } = card;
-    const ignoreButton = <IconButton key="ignore" style={styles.circleIcon} iconColor="white" containerColor={Colors.pending} icon="eye-off-outline" compact="true" mode="contained" size={24} loading={ignoring===callId} onPress={()=>ignore(callId, card)} />
-    const declineButton = <IconButton key="decline" style={styles.flipIcon} iconColor="white" containerColor={Colors.offsync} icon="phone-outline" compact="true" mode="contained" size={24} loading={declining===callId} onPress={()=>decline(callId, card)} />
-    const acceptButton = <IconButton key="accept" style={styles.circleIcon} iconColor="white" containerColor={Colors.primary} icon="phone-outline" compact="true" mode="contained" size={24} loading={accepting===callId} onPress={()=>accept(callId, card)} />
+    const ignoreButton = <IconButton key="ignore" style={styles.circleIcon} iconColor="white" containerColor={Colors.pending} icon="eye-off-outline" compact="true" mode="contained" size={24} loading={ignoring === callId} onPress={()=>ignore(callId, card)} />;
+    const declineButton = <IconButton key="decline" style={styles.flipIcon} iconColor="white" containerColor={Colors.offsync} icon="phone-outline" compact="true" mode="contained" size={24} loading={declining === callId} onPress={()=>decline(callId, card)} />;
+    const acceptButton = <IconButton key="accept" style={styles.circleIcon} iconColor="white" containerColor={Colors.primary} icon="phone-outline" compact="true" mode="contained" size={24} loading={accepting === callId} onPress={()=>accept(callId, card)} />;
     return (
       <Contact containerStyle={styles.card} placeholder={state.strings.name} imageUrl={imageUrl} name={name} node={node} handle={handle} actions={[ignoreButton, declineButton, acceptButton]} />
-    )
+    );
   });
 
+  const sizeStyle = { width: '100%', height: scale };
+  const borderStyle = state.layout === 'large' ? { ...styles.ring, borderRadius: 16 } : { ...styles.ring, borderRadius: 0 };
+
   return (
-    <Animated.View style={{ width: '100%', height: scale }}>
+    <Animated.View style={sizeStyle}>
       <View style={(accepting || state.calling || state.calls.length > 0) ? styles.active : styles.inactive}>
         { state.calls.length > 0 && !accepting && !state.calling && (
-          <Surface elevation={4} mode="flat" style={{ ...styles.ring, borderRadius: state.layout === 'large' ? 16 : 0 }}>
+          <Surface elevation={4} mode="flat" style={borderStyle}>
             { calls[0] }
           </Surface>
         )}
@@ -152,7 +156,7 @@ export function Ring() {
           </Surface>
         )}
         { state.calling && (
-          <Surface elevation={4} mode="flat" style={{ ...styles.ring, borderRadius: state.layout === 'large' ? 16 : 0 }}>
+          <Surface elevation={4} mode="flat" style={borderStyle}>
             <IconButton style={styles.circleIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.primary} icon={state.audioEnabled ? 'microphone' : 'microphone-off'} compact="true" mode="contained" size={24} onPress={toggleAudio} />
             <IconButton style={styles.circleIcon} iconColor="white" disabled={!state.connected} containerColor={Colors.confirmed} icon={(state.remoteVideo || state.localVideo) ? 'video-switch-outline' : 'arrow-expand-all'} compact="true" mode="contained" size={24} onPress={()=>actions.setFullscreen(true)} />
             <View style={styles.name}>
@@ -165,7 +169,7 @@ export function Ring() {
             </View>
             <View style={styles.status}>
               { state.connected && (
-                <Text style={styles.duration}>{ `${Math.floor(state.duration/60)}:${(state.duration % 60).toString().padStart(2, '0')}` }</Text>
+                <Text style={styles.duration}>{ `${Math.floor(state.duration / 60)}:${(state.duration % 60).toString().padStart(2, '0')}` }</Text>
               )}
               { !state.connected && (
                 <View style={{ transform: [{ rotate: counter % 2 ? '15deg' : '-15deg' }] }}>

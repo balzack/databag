@@ -6,6 +6,8 @@ export const styles = StyleSheet.create({
     paddingTop: 8,
     width: '100%',
     minWidth: 0,
+    fontSize: 14,
+    padding: 0,
   },
   topic: {
     paddingTop: 8,
@@ -132,11 +134,6 @@ export const styles = StyleSheet.create({
     height: 64,
     backgroundColor: 'yellow',
   },
-  message: { 
-    width: '100%',
-    fontSize: 14,
-    padding: 0,
-  },
   modal: {
     width: '100%',
     height: '100%',
@@ -183,4 +180,4 @@ export const styles = StyleSheet.create({
     paddingTop: 16,
     gap: 8,
   },
-})
+});

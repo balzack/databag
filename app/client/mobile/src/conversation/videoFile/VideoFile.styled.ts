@@ -1,5 +1,4 @@
 import {StyleSheet} from 'react-native';
-import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
   video: {
@@ -18,5 +17,5 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-end',
-  }
+  },
 });

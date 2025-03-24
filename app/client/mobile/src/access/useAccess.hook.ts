@@ -32,7 +32,7 @@ export function useAccess() {
 
   useEffect(() => {
     SplashScreen.hide();
-  }, []);    
+  }, []);
 
   useEffect(() => {
     const {username, token, node, secure, mode} = state;

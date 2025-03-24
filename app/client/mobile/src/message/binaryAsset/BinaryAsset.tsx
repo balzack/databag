@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { SafeAreaView, Modal, Share, Pressable, View, Image, Animated, useAnimatedValue } from 'react-native'
-import { Text, Surface, Icon, ProgressBar, IconButton } from 'react-native-paper'
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView, Modal, Pressable, View, Image, Animated, useAnimatedValue } from 'react-native';
+import { Text, Surface, Icon, ProgressBar, IconButton } from 'react-native-paper';
 import { useBinaryAsset } from './useBinaryAsset.hook';
 import { MediaAsset } from '../../conversation/Conversation';
-import { styles } from './BinaryAsset.styled'
+import { styles } from './BinaryAsset.styled';
 import {BlurView} from '@react-native-community/blur';
-import Video from 'react-native-video'
 import thumb from '../../images/binary.png';
 
 export function BinaryAsset({ topicId, asset, loaded, show }: { topicId: string, asset: MediaAsset, loaded: ()=>void, show: boolean }) {
@@ -23,17 +22,8 @@ export function BinaryAsset({ topicId, asset, loaded, show }: { topicId: string,
         useNativeDriver: true,
       }).start();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
-
-  const share = async () => {
-    try {
-      setAlert('');
-      await actions.download();
-    } catch (err) {
-      console.log(err);
-      setAlert(state.strings.operationFailed)
-    }
-  }
 
   const showBinary = () => {
     setAlert('');
@@ -44,7 +34,7 @@ export function BinaryAsset({ topicId, asset, loaded, show }: { topicId: string,
   const hideBinary = () => {
     setModal(false);
     actions.cancelLoad();
-  }
+  };
 
   const download = async () => {
     if (!downloading) {
@@ -56,12 +46,12 @@ export function BinaryAsset({ topicId, asset, loaded, show }: { topicId: string,
       }
       setDownloading(false);
     }
-  }
+  };
 
   return (
     <View style={styles.binary}>
       <Pressable onPress={showBinary}>
-        <Animated.View style={[styles.container,{opacity},]}>
+        <Animated.View style={[styles.container,{opacity}]}>
           <Image
             style={styles.thumb}
             resizeMode="contain"

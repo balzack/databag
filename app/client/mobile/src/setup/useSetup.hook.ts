@@ -41,14 +41,14 @@ export function useSetup() {
         const mfaEnabled = await service.checkMFAuth();
         setup.current = await service.getSetup();
         loading.current = false;
-        const storage = Math.floor((setup.current?.accountStorage || 0) / 1073741824); 
-        updateState({ setup: setup.current, mfaEnabled, accountStorage: storage.toString(), loading: false });    
+        const storage = Math.floor((setup.current?.accountStorage || 0) / 1073741824);
+        updateState({ setup: setup.current, mfaEnabled, accountStorage: storage.toString(), loading: false });
       } catch (err) {
         console.log(err);
         await new Promise((r) => setTimeout(r, DELAY_MS));
       }
     }
-  }
+  };
 
   const save = () => {
     updated.current = true;
@@ -60,7 +60,7 @@ export function useSetup() {
         const service = app.state.service;
         await service.setSetup(setup.current);
         if (updated.current) {
-          save()
+          save();
         } else {
           updateState({ updating: false });
         }
@@ -69,7 +69,7 @@ export function useSetup() {
         updateState({ error: true });
       }
     }, DEBOUNCE_MS);
-  }
+  };
 
   useEffect(() => {
     const { layout, strings} = display.state;
@@ -82,9 +82,10 @@ export function useSetup() {
       sync();
       return () => {
         loading.current = false;
-      }
+      };
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [app.state.service]);
 
   const actions = {
     logout: app.actions.adminLogout,
@@ -117,7 +118,7 @@ export function useSetup() {
         await service.confirmMFAuth(state.mfaCode);
         updateState({ confirmingMFAuth: false, mfaEnabled: true });
       } catch (err) {
-        const { message } = err as { message: string }
+        const { message } = err as { message: string };
         if (message === '401') {
           updateState({ mfaMessage: state.strings.mfaError });
         } else if (message === '429') {
@@ -142,7 +143,7 @@ export function useSetup() {
     },
     setAccountStorage: (accountStorage: string) => {
       if (setup.current) {
-        const storage = parseInt(accountStorage) * 1073741824;
+        const storage = parseInt(accountStorage, 10) * 1073741824;
         if (storage >= 0) {
           setup.current.accountStorage = storage;
           updateState({ setup: setup.current, accountStorage });
@@ -170,7 +171,7 @@ export function useSetup() {
     },
     setOpenAccessLimit: (openAccessLimit: string) => {
       if (setup.current) {
-        const limit = parseInt(openAccessLimit);
+        const limit = parseInt(openAccessLimit, 10);
         if (limit >= 0) {
           setup.current.openAccessLimit = limit;
           updateState({ setup: setup.current, openAccessLimit });

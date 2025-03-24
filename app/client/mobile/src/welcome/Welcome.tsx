@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { View, Image } from 'react-native';
 import { styles } from './Welcome.styled';
 import { useWelcome } from './useWelcome.hook';
@@ -16,7 +16,7 @@ export function Welcome() {
       <View style={{ ...styles.base, backgroundColor: theme.colors.base }}>
         <Text style={styles.title}>Databag</Text>
         <Text style={styles.description}>{ state.strings.communication }</Text>
-        <Image style={styles.image} source={theme.colors.name == 'light' ? light : dark} resizeMode="contain" />
+        <Image style={styles.image} source={theme.colors.name === 'light' ? light : dark} resizeMode="contain" />
         <View style={styles.steps}>
           <View style={styles.step}>
             <Icon size={18} source="chevron-right" color={Colors.placeholder} />

@@ -48,7 +48,7 @@ export function useContent() {
     return 0;
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
@@ -94,19 +94,19 @@ export function useContent() {
       };
 
       const selectImage = () => {
-        if (contacts.length == 0) {
+        if (contacts.length === 0) {
           return notes;
-        } else if (contacts.length == 1) {
+        } else if (contacts.length === 1) {
           if (contacts[0]) {
             return contacts[0].imageUrl;
           } else {
             return unknown;
           }
-        } else if (contacts.length == 2) {
+        } else if (contacts.length === 2) {
           return iii_group;
-        } else if (contacts.length == 3) {
+        } else if (contacts.length === 3) {
           return iiii_group;
-        } else if (contacts.length == 4) {
+        } else if (contacts.length === 4) {
           return iiiii_group;
         } else {
           return group;
@@ -204,7 +204,7 @@ export function useContent() {
       const sorted = filtered.sort((a, b) => {
         const aUpdated = a?.lastTopic?.created;
         const bUpdated = b?.lastTopic?.created;
-        if (aUpdated == bUpdated) {
+        if (aUpdated === bUpdated) {
           return 0;
         } else if (!aUpdated) {
           return 1;
@@ -231,7 +231,7 @@ export function useContent() {
       content.removeChannelListener(setChannels);
       settings.removeConfigListener(setConfig);
     };
-  }, []);
+  }, [app.state.session]);
 
   const actions = {
     setSharing: app.actions.setSharing,
@@ -244,9 +244,9 @@ export function useContent() {
     setFocus: async (cardId: string | null, channelId: string) => {
       await app.actions.setFocus(cardId, channelId);
     },
-    openTopic: async (cardId: string) => {
-      const content = app.state.session.getContent()
-      const card = state.cards.find(card => card.cardId === cardId)
+    openTopic: async (contactId: string) => {
+      const content = app.state.session.getContent();
+      const card = state.cards.find(member => member.cardId === contactId);
       if (card) {
         const sealable = card.sealable && state.sealSet;
         const thread = state.sorted.find(channel => {
@@ -256,21 +256,21 @@ export function useContent() {
           }
           return false;
         });
-        if (thread) { 
+        if (thread) {
           return thread.channelId;
-        } else { 
+        } else {
           const topic = await content.addChannel(sealable, sealable ? 'sealed' : 'superbasic', {}, [cardId]);
           return topic.id;
         }
       }
     },
     addTopic: async (sealed: boolean, subject: string, contacts: string[]) => {
-      const content = app.state.session.getContent()
+      const content = app.state.session.getContent();
       if (sealed) {
-        const topic = await content.addChannel(true, 'sealed', { subject }, contacts)
+        const topic = await content.addChannel(true, 'sealed', { subject }, contacts);
         return topic.id;
       } else {
-        const topic = await content.addChannel(false, 'superbasic', { subject }, contacts)
+        const topic = await content.addChannel(false, 'superbasic', { subject }, contacts);
         return topic.id;
       }
     },

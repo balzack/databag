@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, SafeAreaView, Image, View, Pressable, TouchableOpacity, Modal} from 'react-native';
+import {FlatList, View, TouchableOpacity, Modal} from 'react-native';
 import {Text, Button, IconButton, Divider, Surface, Icon, useTheme} from 'react-native-paper';
 import {useAccounts} from './useAccounts.hook';
 import {styles} from './Accounts.styled';
@@ -27,6 +27,7 @@ export function Accounts({ setup }: { setup: ()=>void }) {
 
   useEffect(() => {
     loadAccounts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadAccounts = async () => {
@@ -39,7 +40,7 @@ export function Accounts({ setup }: { setup: ()=>void }) {
       }
       setLoading(false);
     }
-  }
+  };
 
   const accessAccount = async (accountId: number) => {
     if (!accessing) {
@@ -54,7 +55,7 @@ export function Accounts({ setup }: { setup: ()=>void }) {
       }
       setAccessing(null);
     }
-  }
+  };
 
   const addAccount = async () => {
     if (!adding) {
@@ -69,14 +70,14 @@ export function Accounts({ setup }: { setup: ()=>void }) {
       }
       setAdding(false);
     }
-  }
+  };
 
   const failedParams = {
     title: state.strings.operationFailed,
     prompt: state.strings.tryAgain,
     cancel: {
       label: state.strings.close,
-      action: ()=>{setFailed(false)},
+      action: ()=>{setFailed(false);},
     },
   };
 
@@ -91,7 +92,7 @@ export function Accounts({ setup }: { setup: ()=>void }) {
       }
       setBlocking(null);
     }
-  }
+  };
 
   const removeAccount = (accountId: number) => {
     if (!remove) {
@@ -116,12 +117,12 @@ export function Accounts({ setup }: { setup: ()=>void }) {
         },
         cancel: {
           label: state.strings.cancel,
-          action: () => {setRemove(false)},
+          action: () => {setRemove(false);},
         },
-      })
+      });
       setRemove(true);
     }
-  }
+  };
 
   const copyToken = async () => {
     if (!tokenCopy) {
@@ -159,12 +160,12 @@ export function Accounts({ setup }: { setup: ()=>void }) {
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => {
             const options = [
-              <IconButton key="disable" style={styles.icon} loading={accessing === item.accountId} iconColor={Colors.primary} mode="contained" icon="lock-open-variant-outline" onPress={() => {accessAccount(item.accountId)}} />,
-              <IconButton key="reset" style={styles.icon} loading={blocking === item.accountId} iconColor={Colors.pending} mode="contained" icon={item.disabled ? 'account-check-outline' : 'account-cancel-outline'} onPress={()=>{blockAccount(item.accountId, !item.disabled)}} />,
-              <IconButton key="remove" style={styles.icon} loading={removing === item.accountId} iconColor={Colors.offsync} mode="contained" icon="trash-can-outline" onPress={()=>{removeAccount(item.accountId)}} />
+              <IconButton key="disable" style={styles.icon} loading={accessing === item.accountId} iconColor={Colors.primary} mode="contained" icon="lock-open-variant-outline" onPress={() => {accessAccount(item.accountId);}} />,
+              <IconButton key="reset" style={styles.icon} loading={blocking === item.accountId} iconColor={Colors.pending} mode="contained" icon={item.disabled ? 'account-check-outline' : 'account-cancel-outline'} onPress={()=>{blockAccount(item.accountId, !item.disabled);}} />,
+              <IconButton key="remove" style={styles.icon} loading={removing === item.accountId} iconColor={Colors.offsync} mode="contained" icon="trash-can-outline" onPress={()=>{removeAccount(item.accountId);}} />,
             ];
             return (
-              <Card 
+              <Card
                 containerStyle={{
                   ...styles.card,
                   borderColor: theme.colors.outlineVariant,

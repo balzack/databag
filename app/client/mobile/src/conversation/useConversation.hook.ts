@@ -1,44 +1,41 @@
-import { useState, useContext, useEffect, useRef } from 'react'
-import { Keyboard } from 'react-native'
-import { AppContext } from '../context/AppContext'
-import { DisplayContext } from '../context/DisplayContext'
-import { Focus, FocusDetail, Topic, Profile, Card, AssetType, AssetSource, HostingMode, TransformType } from 'databag-client-sdk'
-import { ContextType } from '../context/ContextType'
-import { placeholder } from '../constants/Icons';
+import { useState, useContext, useEffect, useRef } from 'react';
+import { Keyboard } from 'react-native';
+import { AppContext } from '../context/AppContext';
+import { DisplayContext } from '../context/DisplayContext';
+import { Focus, FocusDetail, Topic, Profile, Card, AssetType, AssetSource, TransformType } from 'databag-client-sdk';
+import { ContextType } from '../context/ContextType';
 import RNFS from 'react-native-fs';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
-import { createThumbnail } from "react-native-create-thumbnail";
-import fileType from 'react-native-file-type'
+import { createThumbnail } from 'react-native-create-thumbnail';
+import fileType from 'react-native-file-type';
 
 const IMAGE_SCALE_SIZE = (128 * 1024);
-const GIF_TYPE = 'image/gif';
-const WEBP_TYPE = 'image/webp';
 const LOAD_DEBOUNCE = 1000;
 
 async function getImageThumb(path: string, type: string, size: number) {
   if (size < IMAGE_SCALE_SIZE) {
-    const type = await fileType(path);
-    const base = await RNFS.readFile(path, 'base64')
-    return `data:image/${type.ext};base64,${base}`;
+    const info = await fileType(path);
+    const base = await RNFS.readFile(path, 'base64');
+    return `data:image/${info.ext};base64,${base}`;
   } else {
-    const thumb = await ImageResizer.createResizedImage(path, 192, 192, "JPEG", 50, 0, null);
-    const base = await RNFS.readFile(thumb.path, 'base64')
+    const thumb = await ImageResizer.createResizedImage(path, 192, 192, 'JPEG', 50, 0, null);
+    const base = await RNFS.readFile(thumb.path, 'base64');
     return `data:image/jpeg;base64,${base}`;
   }
 }
 
 async function getVideoThumb(path: string, position?: number) {
   const timeStamp = position ? position * 1000 : 0;
-  const shot = await createThumbnail({ url: path, timeStamp })
-  const thumb = await ImageResizer.createResizedImage('file://' + shot.path, 192, 192, "JPEG", 50, 0, null);
-  const base = await RNFS.readFile(thumb.path, 'base64')
+  const shot = await createThumbnail({ url: path, timeStamp });
+  const thumb = await ImageResizer.createResizedImage('file://' + shot.path, 192, 192, 'JPEG', 50, 0, null);
+  const base = await RNFS.readFile(thumb.path, 'base64');
   return `data:image/jpeg;base64,${base}`;
 }
 
 export function useConversation() {
   const mute = useRef(false);
-  const app = useContext(AppContext) as ContextType
-  const display = useContext(DisplayContext) as ContextType
+  const app = useContext(AppContext) as ContextType;
+  const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
     detail: undefined as FocusDetail | null | undefined,
     strings: display.state.strings,
@@ -66,19 +63,19 @@ export function useConversation() {
     progress: 0,
     avoid: 0,
     validShare: true,
-  })
+  });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const updateState = (value: any) => {
-    setState((s) => ({ ...s, ...value }))
-  }
+    setState((s) => ({ ...s, ...value }));
+  };
 
   const updateAsset = (index: number, value: any) => {
     setState((s) => {
       s.assets[index] = { ...s.assets[index], ...value };
       return { ...s };
     });
-  } 
+  };
 
   useEffect(() => {
     let validShare = true;
@@ -104,14 +101,14 @@ export function useConversation() {
     const { sharing, focus } = app.state;
     if (sharing && focus && state.loaded) {
       const focused = focus.getFocused();
-      if (focused.cardId == sharing.cardId && focused.channelId == sharing.channelId) {
+      if (focused.cardId === sharing.cardId && focused.channelId === sharing.channelId) {
         const { mimeType, filePath } = sharing;
         const ext = mimeType.toLowerCase();
-        if (ext == '.jpg' || ext == 'image/jpeg' || ext == '.png' || ext == 'image/png' || ext == '.webp' || ext == 'image/webp' || ext == '.bmp' || ext == 'image/bmp' || ext == '.gif' || ext == 'image/gif') {
-          actions.addImage(filePath, mimeType, IMAGE_SCALE_SIZE); 
-        } else if (ext == '.mp4' || ext == 'videp/mp4' || ext == '.mov' || ext == 'video/mov') {
+        if (ext === '.jpg' || ext === 'image/jpeg' || ext === '.png' || ext === 'image/png' || ext === '.webp' || ext === 'image/webp' || ext === '.bmp' || ext === 'image/bmp' || ext === '.gif' || ext === 'image/gif') {
+          actions.addImage(filePath, mimeType, IMAGE_SCALE_SIZE);
+        } else if (ext === '.mp4' || ext === 'videp/mp4' || ext === '.mov' || ext === 'video/mov') {
           actions.addVideo(filePath, mimeType);
-        } else if (ext == '.mp3' || ext == 'audio/mp3' || ext == '.aac' || ext == 'audio/aac') {
+        } else if (ext === '.mp3' || ext === 'audio/mp3' || ext === '.aac' || ext === 'audio/aac') {
           actions.addAudio(filePath, mimeType);
         } else {
           actions.addBinary(filePath, filePath.split('/').pop());
@@ -119,12 +116,13 @@ export function useConversation() {
         app.actions.clearSharing();
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [app.state, state.loaded]);
 
   useEffect(() => {
-    const { layout, strings } = display.state
-    updateState({ layout, strings })
-  }, [display.state])
+    const { layout, strings } = display.state;
+    updateState({ layout, strings });
+  }, [display.state]);
 
   useEffect(() => {
     const host = state.cardId == null;
@@ -132,8 +130,8 @@ export function useConversation() {
     const access = (state.detail != null);
     const subject = state.detail?.data?.subject ? state.detail.data.subject : null;
     const cards = Array.from(state.cards.values());
-    const card = cards.find(entry => entry.cardId == state.cardId);
-    const profileRemoved = state.detail?.members ? state.detail.members.filter(member => state.profile?.guid != member.guid) : [];
+    const card = cards.find(entry => entry.cardId === state.cardId);
+    const profileRemoved = state.detail?.members ? state.detail.members.filter(member => state.profile?.guid !== member.guid) : [];
     const unhostedCards = profileRemoved.map(member => state.cards.get(member.guid));
     const contactCards = card ? [ card, ...unhostedCards ] : unhostedCards;
     const subjectCards = contactCards.filter(member => Boolean(member));
@@ -160,25 +158,25 @@ export function useConversation() {
           });
           updateState({ topics: sorted, loaded: true });
         }
-      }
+      };
       const setCards = (cards: Card[]) => {
         const contacts = new Map<string, Card>();
         cards.forEach(card => {
           contacts.set(card.guid, card);
         });
         updateState({ cards: contacts });
-      }
+      };
       const setProfile = (profile: Profile) => {
         updateState({ profile });
-      }
+      };
       const setDetail = (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => {
         const detail = focused ? focused.detail : null;
         const cardId = focused.cardId;
         updateState({ detail, cardId });
-      }
+      };
       const setKeyboard = (event: KeyboardEvent) => {
         updateState({ avoid: event.endCoordinates.height });
-      }
+      };
       updateState({ assets: [], message: null, topics: [], loaded: false });
       focus.addTopicListener(setTopics);
       focus.addDetailListener(setDetail);
@@ -191,9 +189,9 @@ export function useConversation() {
         contact.removeCardListener(setCards);
         identity.removeProfileListener(setProfile);
         keyboard.remove();
-      }
+      };
     }
-  }, [app.state.focus]);
+  }, [app.state.session, app.state.focus]);
 
   const actions = {
     close: () => {
@@ -246,55 +244,55 @@ export function useConversation() {
             if (sealed) {
               sources.push({ type: AssetType.Image, source: asset.path, transforms: [
                 { type: TransformType.Thumb, appId: `it${sources.length}`, thumb: async () => await getImageThumb(asset.path, asset.type, asset.size) },
-                { type: TransformType.Copy, appId: `ic${sources.length}` }
+                { type: TransformType.Copy, appId: `ic${sources.length}` },
               ]});
-              return { encrypted: { type: 'image', thumb: `it${sources.length-1}`, parts: `ic${sources.length-1}` } };
+              return { encrypted: { type: 'image', thumb: `it${sources.length - 1}`, parts: `ic${sources.length - 1}` } };
             } else {
               sources.push({ type: AssetType.Image, source: asset.path, transforms: [
                 { type: TransformType.Thumb, appId: `it${sources.length}` },
-                { type: TransformType.Copy, appId: `ic${sources.length}` }
+                { type: TransformType.Copy, appId: `ic${sources.length}` },
               ]});
-              return { image: { thumb: `it${sources.length-1}`, full: `ic${sources.length-1}` } };
+              return { image: { thumb: `it${sources.length - 1}`, full: `ic${sources.length - 1}` } };
             }
           } else if (asset.type === 'video') {
             if (sealed) {
               sources.push({ type: AssetType.Video, source: asset.path, transforms: [
                 { type: TransformType.Thumb, appId: `vt${sources.length}`, thumb: async () => await getVideoThumb(asset.path, asset.position) },
-                { type: TransformType.Copy, appId: `vc${sources.length}` }
+                { type: TransformType.Copy, appId: `vc${sources.length}` },
               ]});
-              return { encrypted: { type: 'video', thumb: `vt${sources.length-1}`, parts: `vc${sources.length-1}` } };
+              return { encrypted: { type: 'video', thumb: `vt${sources.length - 1}`, parts: `vc${sources.length - 1}` } };
             } else {
               sources.push({ type: AssetType.Video, source: asset.path, transforms: [
                 { type: TransformType.Thumb, appId: `vt${sources.length}`, position: asset.position},
                 { type: TransformType.HighQuality, appId: `vh${sources.length}` },
-                { type: TransformType.LowQuality, appId: `vl${sources.length}` }
+                { type: TransformType.LowQuality, appId: `vl${sources.length}` },
               ]});
-              return { video: { thumb: `vt${sources.length-1}`, hd: `vh${sources.length-1}`, lq: `vl${sources.length-1}` } };
+              return { video: { thumb: `vt${sources.length - 1}`, hd: `vh${sources.length - 1}`, lq: `vl${sources.length - 1}` } };
             }
           } else if (asset.type === 'audio') {
             if (sealed) {
               sources.push({ type: AssetType.Audio, source: asset.path, transforms: [
-                { type: TransformType.Copy, appId: `ac${sources.length}` }
+                { type: TransformType.Copy, appId: `ac${sources.length}` },
               ]});
-              return { encrypted: { type: 'audio', label: asset.label, parts: `ac${sources.length-1}` } };
+              return { encrypted: { type: 'audio', label: asset.label, parts: `ac${sources.length - 1}` } };
             } else {
               sources.push({ type: AssetType.Audio, source: asset.path, transforms: [
-                { type: TransformType.Copy, appId: `ac${sources.length}` }
+                { type: TransformType.Copy, appId: `ac${sources.length}` },
               ]});
-              return { audio: { label: asset.label, full: `ac${sources.length-1}` } };
+              return { audio: { label: asset.label, full: `ac${sources.length - 1}` } };
             }
           } else {
             const { label, extension } = asset;
             if (sealed) {
               sources.push({ type: AssetType.Binary, source: asset.path, transforms: [
-                { type: TransformType.Copy, appId: `bc${sources.length}` }
+                { type: TransformType.Copy, appId: `bc${sources.length}` },
               ]});
-              return { encrypted: { type: 'binary', label, extension, parts: `bc${sources.length-1}` } };
+              return { encrypted: { type: 'binary', label, extension, parts: `bc${sources.length - 1}` } };
             } else {
               sources.push({ type: AssetType.Binary, source: asset.path, transforms: [
-                { type: TransformType.Copy, appId: `bc${sources.length}` }
+                { type: TransformType.Copy, appId: `bc${sources.length}` },
               ]});
-              return { binary: { label, extension, data: `bc${sources.length-1}` } };
+              return { binary: { label, extension, data: `bc${sources.length - 1}` } };
             }
           }
         });
@@ -333,8 +331,8 @@ export function useConversation() {
             }
           });
           return { text: state.message, textColor: state.textColorSet ? state.textColor : null, textSize: state.textSizeSet ? state.textSize : null, assets: assets.length > 0 ? assets : null };
-        }
-        const upload = (progress: number) => { updateState({ progress }) };
+        };
+        const upload = (progress: number) => { updateState({ progress }); };
         await focus.addTopic(sealed, sealed ? 'sealedtopic' : 'superbasictopic', subject, sources, upload);
 
         mute.current = true;
@@ -343,7 +341,7 @@ export function useConversation() {
         }, 1000);
         updateState({ message: null, assets: [], progress: 0 });
       }
-    }, 
+    },
     addImage: (path: string, mime: string, size: number) => {
       const type = 'image';
       updateState({ assets: [ ...state.assets, { type, path, mime, size } ]});
@@ -360,7 +358,7 @@ export function useConversation() {
       const type = 'binary';
       updateState({ assets: [ ...state.assets, { type, path, label: name.split('.').shift(), extension: name.split('.').pop() } ]});
     },
-  }
+  };
 
-  return { state, actions }
+  return { state, actions };
 }

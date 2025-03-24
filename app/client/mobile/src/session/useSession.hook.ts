@@ -1,4 +1,4 @@
-import {useEffect, useState, useContext, useRef} from 'react';
+import {useEffect, useState, useContext} from 'react';
 import { AppState } from 'react-native';
 import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
@@ -25,13 +25,13 @@ export function useSession() {
       if (loaded) {
         SplashScreen.hide();
       }
-    }
-    const setSdkState = (state: string) => {
-      updateState({ sdkState: state === 'connected' });
-    }
-    const setAppState = (state: string) => {
-      updateState({ appState: state === 'active' });
-    }
+    };
+    const setSdkState = (sdkState: string) => {
+      updateState({ sdkState: sdkState === 'connected' });
+    };
+    const setAppState = (appState: string) => {
+      updateState({ appState: appState === 'active' });
+    };
     const session = app.state.session;
     if (session) {
       const content = session.getContent();
@@ -42,7 +42,7 @@ export function useSession() {
         session.removeStatusListener(setSdkState);
         content.removeLoadedListener(setContentState);
         sub.remove();
-      }
+      };
     }
   }, [app.state.session]);
 

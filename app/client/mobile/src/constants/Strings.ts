@@ -20,7 +20,7 @@ export const en = {
   server: 'Server',
   token: 'Token',
   delayMessage: 'Key generation can take several minutes.',
-  noAccess: 'No Access', 
+  noAccess: 'No Access',
   connecting: 'Connecting',
 
   setup: 'Setup',
@@ -294,7 +294,7 @@ export const en = {
   disable: 'Disable',
   confirmDisable: 'Disabling Multi-Factor Authentication',
   disablePrompt: 'Are you sure you want to disable multi-factor authentication',
-}
+};
 
 export const fr = {
   viewTerms: 'Voir les conditions d\'utilisation',
@@ -590,7 +590,7 @@ export const fr = {
   disable: 'Désactiver',
   confirmDisable: "Désactivation de l'authentification multi-facteurs",
   disablePrompt: "Êtes-vous sûr de vouloir désactiver l'authentification multi-facteurs",
-}
+};
 
 export const sp = {
   viewTerms: 'Ver los términos de servicio',
@@ -630,7 +630,7 @@ export const sp = {
   accessingLink: 'Utilice el siguiente enlace para acceder a la cuenta especificada',
   accessingToken: 'Utilice el siguiente token para acceder a la cuenta especificada desde la pantalla de inicio de sesión',
 
-  noAccess: 'Sin Acceso', 
+  noAccess: 'Sin Acceso',
   membership: 'Afiliación',
   channelHost: 'Anfitrión del Tema',
   channelGuest: 'Invitado de Tema',
@@ -885,7 +885,7 @@ export const sp = {
   disable: 'Desactivar',
   confirmDisable: 'Desactivación de la autenticación de dos factores',
   disablePrompt: '¿Estás seguro de que quieres desactivar la autenticación de dos factores?',
-}
+};
 
 export const pt = {
   viewTerms: 'Ver os termos de serviço',
@@ -1180,7 +1180,7 @@ export const pt = {
   disable: 'Desativar',
   confirmDisable: 'Desativando Autenticação de Dois Fatores',
   disablePrompt: 'Tem certeza de que deseja desativar a autenticação de dois fatores?',
-}
+};
 
 export const de = {
   viewTerms: 'Nutzungsbedingungen anzeigen',
@@ -1213,7 +1213,7 @@ export const de = {
   accounts: 'Konten',
   noAccounts: 'Keine Konten',
   selectShare: 'Wählen Sie Das Thema Zum Teilen Aus',
- 
+
   addingTitle: 'Konto hinzufügen',
   addingLink: 'Verwenden Sie den folgenden Link, um ein Konto zu erstellen',
   addingToken: 'Verwenden Sie das folgende Token, um ein Konto vom Anmeldebildschirm aus zu erstellen',
@@ -1475,7 +1475,7 @@ export const de = {
   disable: 'Deaktivieren',
   confirmDisable: 'Deaktivierung der Zwei-Faktor-Authentifizierung',
   disablePrompt: 'Sind Sie sicher, dass Sie die Zwei-Faktor-Authentifizierung deaktivieren möchten?',
-}
+};
 
 export const ru = {
   viewTerms: 'Просмотреть условия обслуживания',
@@ -1770,7 +1770,7 @@ export const ru = {
   disable: 'Отключить',
   confirmDisable: 'Отключение двухфакторной аутентификации',
   disablePrompt: 'Вы уверены, что хотите отключить двухфакторную аутентификацию?',
-}
+};
 
 export const el = {
   viewTerms: 'Δείτε τους όρους υπηρεσίας',
@@ -1972,7 +1972,7 @@ export const el = {
   enableService: 'Υπηρεσία cloudflare',
   serviceHint: 'Ενεργοποίηση υπηρεσίας CloudFlare',
   serverUrl: 'URL διακομιστή WebRTC',
-  urlHint: 'turn:ip:port?transport=udp', 
+  urlHint: 'turn:ip:port?transport=udp',
   webUsername: 'Όνομα χρήστη WebRTC',
   webPassword: 'Κωδικός πρόσβασης WebRTC',
   failedLoad: 'Αποτυχία φόρτωσης',
@@ -2037,7 +2037,7 @@ export const el = {
   disable: 'Καθιστώ ανίκανο',
   confirmDisable: 'Απενεργοποίηση ελέγχου ταυτότητας πολλαπλών παραγόντων',
   disablePrompt: 'Είστε βέβαιοι ότι θέλετε να απενεργοποιήσετε τον έλεγχο ταυτότητας πολλαπλών παραγόντων',
-}
+};
 
 export function getLanguageStrings() {
   const locale = Platform.OS === 'ios' ? NativeModules.SettingsManager?.settings.AppleLocale || NativeModules.SettingsManager?.settings.AppleLanguages[0] : NativeModules.I18nManager?.localeIdentifier;

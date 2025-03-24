@@ -258,7 +258,7 @@ export function useSettings() {
     unblockMessage: async (cardId: string | null, channelId: string, topicId: string) => {
       const content = app.state.session.getContent();
       await content.clearBlockedChannelTopic(cardId, channelId, topicId);
-      const blockedMessages = state.blockedMessages.filter(blocked => (blocked.cardId != cardId || blocked.channelId != channelId || blocked.topicId != topicId));
+      const blockedMessages = state.blockedMessages.filter(blocked => (blocked.cardId !== cardId || blocked.channelId !== channelId || blocked.topicId !== topicId));
       updateState({ blockedMessages });
     },
     loadBlockedChannels: async () => {
@@ -269,7 +269,7 @@ export function useSettings() {
     unblockChannel: async (cardId: string | null, channelId: string) => {
       const content = app.state.session.getContent();
       await content.setBlockedChannel(cardId, channelId, false);
-      const blockedChannels = state.blockedChannels.filter(blocked => (blocked.cardId != cardId || blocked.channelId != channelId));
+      const blockedChannels = state.blockedChannels.filter(blocked => (blocked.cardId !== cardId || blocked.channelId !== channelId));
       updateState({ blockedChannels });
     },
     loadBlockedContacts: async () => {
@@ -280,38 +280,38 @@ export function useSettings() {
     unblockContact: async (cardId: string) => {
       const contact = app.state.session.getContact();
       await contact.setBlockedCard(cardId, false);
-      const blockedContacts = state.blockedContacts.filter(blocked => blocked.cardId != cardId);
+      const blockedContacts = state.blockedContacts.filter(blocked => blocked.cardId !== cardId);
       updateState({ blockedContacts });
     },
     getTimestamp: (created: number) => {
-      const now = Math.floor((new Date()).getTime() / 1000)
+      const now = Math.floor((new Date()).getTime() / 1000);
       const date = new Date(created * 1000);
       const offset = now - created;
       if(offset < 43200) {
         if (state.timeFormat === '12h') {
-          return date.toLocaleTimeString("en-US", {hour: 'numeric', minute:'2-digit'});
+          return date.toLocaleTimeString('en-US', {hour: 'numeric', minute:'2-digit'});
         }
         else {
-          return date.toLocaleTimeString("en-GB", {hour: 'numeric', minute:'2-digit'});
+          return date.toLocaleTimeString('en-GB', {hour: 'numeric', minute:'2-digit'});
         }
       }
       else if (offset < 31449600) {
         if (state.dateFormat === 'mm/dd') {
-          return date.toLocaleDateString("en-US", {day: 'numeric', month:'numeric'});
+          return date.toLocaleDateString('en-US', {day: 'numeric', month:'numeric'});
         }
         else {
-          return date.toLocaleDateString("en-GB", {day: 'numeric', month:'numeric'});
+          return date.toLocaleDateString('en-GB', {day: 'numeric', month:'numeric'});
         }
       }
       else {
         if (state.dateFormat === 'mm/dd') {
-          return date.toLocaleDateString("en-US");
+          return date.toLocaleDateString('en-US');
         }
         else {
-          return date.toLocaleDateString("en-GB");
+          return date.toLocaleDateString('en-GB');
         }
       }
-    }
+    },
   };
 
   return {state, actions};

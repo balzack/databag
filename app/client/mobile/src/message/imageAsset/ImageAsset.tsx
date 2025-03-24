@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { SafeAreaView, Modal, Pressable, Animated, View, Image, useAnimatedValue } from 'react-native'
-import { Text, ProgressBar, IconButton } from 'react-native-paper'
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView, Modal, Pressable, Animated, View, Image, useAnimatedValue } from 'react-native';
+import { Text, ProgressBar, IconButton } from 'react-native-paper';
 import { useImageAsset } from './useImageAsset.hook';
 import { MediaAsset } from '../../conversation/Conversation';
-import { styles } from './ImageAsset.styled'
+import { styles } from './ImageAsset.styled';
 import {BlurView} from '@react-native-community/blur';
 import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view';
-import FastImage from 'react-native-fast-image'
+import FastImage from 'react-native-fast-image';
 
 export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, asset: MediaAsset, loaded: ()=>void, show: boolean }) {
   const { state, actions } = useImageAsset(topicId, asset);
@@ -26,6 +26,7 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
     if (state.loaded) {
       loaded();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.loaded, show]);
 
   const showImage = () => {
@@ -37,7 +38,7 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
   const hideImage = () => {
     setModal(false);
     actions.cancelLoad();
-  }
+  };
 
   const download = async () => {
     if (!downloading) {
@@ -49,14 +50,14 @@ export function ImageAsset({ topicId, asset, loaded, show }: { topicId: string, 
       }
       setDownloading(false);
     }
-  }
+  };
 
   return (
     <View style={styles.image}>
       { state.thumbUrl && (
         <Pressable onPress={showImage}>
           <Animated.Image
-            style={[styles.thumb,{opacity},]}
+            style={[styles.thumb,{opacity}]}
             resizeMode="contain"
             height={92}
             width={92 * state.ratio}

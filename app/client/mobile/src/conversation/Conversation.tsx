@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {Animated, useAnimatedValue, KeyboardAvoidingView, Modal, Platform, ScrollView, Pressable, View, FlatList, TouchableOpacity} from 'react-native';
+import {Animated, useAnimatedValue, Modal, ScrollView, Pressable, View, FlatList } from 'react-native';
 import {styles} from './Conversation.styled';
 import {useConversation} from './useConversation.hook';
 import {Message} from '../message/Message';
@@ -7,14 +7,14 @@ import {Surface, Icon, Text, TextInput, Menu, IconButton, Divider} from 'react-n
 import { ActivityIndicator } from 'react-native-paper';
 import { Colors } from '../constants/Colors';
 import { Confirm } from '../confirm/Confirm';
-import ColorPicker from 'react-native-wheel-color-picker'
+import ColorPicker from 'react-native-wheel-color-picker';
 import {BlurView} from '@react-native-community/blur';
-import ImagePicker from 'react-native-image-crop-picker'
+import ImagePicker from 'react-native-image-crop-picker';
 import { ImageFile } from './imageFile/ImageFile';
 import { VideoFile } from './videoFile/VideoFile';
 import { AudioFile } from './audioFile/AudioFile';
 import { BinaryFile } from './binaryFile/BinaryFile';
-import DocumentPicker from 'react-native-document-picker'
+import DocumentPicker from 'react-native-document-picker';
 
 const SCROLL_THRESHOLD = 16;
 
@@ -40,8 +40,8 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
   const contentHeight = useRef(0);
   const contentLead = useRef(null);
   const scrollOffset = useRef(0);
-  const busy = useRef(false); 
-  const scale = useAnimatedValue(0)
+  const busy = useRef(false);
+  const scale = useAnimatedValue(0);
 
   const alertParams = {
     title: state.strings.operationFailed,
@@ -68,6 +68,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
         useNativeDriver: false,
       }).start();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.assets]);
 
   const sendMessage = async () => {
@@ -84,7 +85,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
       setSending(false);
       busy.current = false;
     }
-  }
+  };
 
   const loadMore = async () => {
     if (!more) {
@@ -92,12 +93,12 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
       await actions.more();
       setMore(false);
     }
-  }
+  };
 
   const onClose = () => {
     actions.close();
     close();
-  }
+  };
 
   const onContent = (width, height) => {
     const currentLead = state.topics.length > 0 ? state.topics[0].topicId : null;
@@ -110,7 +111,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
     }
     contentLead.current = currentLead;
     contentHeight.current = height;
-  }
+  };
 
   const onScroll = (ev) => {
     const { contentOffset } = ev.nativeEvent;
@@ -125,7 +126,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
       }
     }
     scrollOffset.current = offset;
-  }
+  };
 
   const addImage = async () => {
     try {
@@ -135,7 +136,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
     catch (err) {
       console.log(err);
     }
-  }
+  };
 
   const addVideo = async () => {
     try {
@@ -145,7 +146,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
     catch (err) {
       console.log(err);
     }
-  }
+  };
 
   const addAudio = async () => {
     try {
@@ -153,12 +154,12 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
         presentationStyle: 'fullScreen',
         copyTo: 'cachesDirectory',
         type: DocumentPicker.types.audio,
-      })
+      });
       actions.addAudio(audio.fileCopyUri, audio.name);
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   const addBinary = async () => {
     try {
@@ -166,27 +167,27 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
         presentationStyle: 'fullScreen',
         copyTo: 'cachesDirectory',
         type: DocumentPicker.types.allFiles,
-      })
+      });
       actions.addBinary(binary.fileCopyUri, binary.name);
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   const media = state.assets.map((asset, index) => {
     if (asset.type === 'image') {
-      return <ImageFile key={index} path={asset.path} disabled={sending} remove={()=>actions.removeAsset(index)} />
+      return <ImageFile key={index} path={asset.path} disabled={sending} remove={()=>actions.removeAsset(index)} />;
     } else if (asset.type === 'video') {
-      return <VideoFile key={index} path={asset.path} thumbPosition={(position: number) => actions.setThumbPosition(index, position)} disabled={sending} remove={()=>actions.removeAsset(index)} />
+      return <VideoFile key={index} path={asset.path} thumbPosition={(position: number) => actions.setThumbPosition(index, position)} disabled={sending} remove={()=>actions.removeAsset(index)} />;
     } else if (asset.type === 'audio') {
-      return <AudioFile key={index} path={asset.path} disabled={sending} remove={()=>actions.removeAsset(index)} />
+      return <AudioFile key={index} path={asset.path} disabled={sending} remove={()=>actions.removeAsset(index)} />;
     } else {
-      return <BinaryFile key={index} path={asset.path} disabled={sending} remove={()=>actions.removeAsset(index)} />
+      return <BinaryFile key={index} path={asset.path} disabled={sending} remove={()=>actions.removeAsset(index)} />;
     }
   });
 
   const containerStyle = state.layout === 'large' ? { ...styles.conversation, ...styles.largeConversation } : styles.conversation;
-  const headerStyle = state.layout === 'large' ? { ...styles.header, ...styles.largeHeader } : styles.header;
+  const headerStyle = state.layout === 'large' ? { ...styles.header, ...styles.largeHeader, flexDirection: 'row-reverse' } : { ...styles.header, flexDirection: 'row' };
   const padStyle = state.layout === 'large' ? styles.pad : styles.nopad;
   const inputPadStyle = state.layout === 'large' ? styles.pad : styles.indent;
   const offset = state.layout === 'large' ? state.avoid - 64 : state.avoid - 120;
@@ -194,18 +195,18 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
   const disableVideo = !state.detailSet || !state.detail?.enableVideo;
   const disableAudio = !state.detailSet || !state.detail?.enableAudio;
   const disableBinary = !state.detailSet || !state.detail?.enableBinary;
+  const statusStyle = state.layout === 'large' ? { ...styles.status, flexDirection: 'row-reverse' } : { ...styles.status, flexDirection: 'row' };
 
   return (
     <View style={containerStyle}>
-      <View style={{ ...headerStyle, flexDirection: state.layout === 'large' ? 'row-reverse' : 'row' }}>
+      <View style={headerStyle}>
         <IconButton style={styles.icon} mode="contained" icon={wide ? 'close' : 'arrow-left'} size={28} onPress={onClose} />
-        <View style={styles.status}>
-        </View>
+        <View style={styles.status} />
         <View style={styles.title}>
          { state.detailSet && state.subject && (
             <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.label}>{ state.subject }</Text>
           )}
-          { state.detailSet && state.host && !state.subject && state.subjectNames.length == 0 && (
+          { state.detailSet && state.host && !state.subject && state.subjectNames.length === 0 && (
             <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.label}>{ state.strings.notes }</Text>
           )}
           { state.detailSet && !state.subject && state.subjectNames.length > 0 && (
@@ -215,7 +216,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
             <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.unknown}>{ `, ${state.strings.unknownContact} (${state.unknownContacts})` }</Text>
           )}
         </View>
-        <View style={{ ...styles.status, flexDirection: state.layout === 'large' ? 'row-reverse' : 'row' }}>
+        <View style={statusStyle}>
           { state.detailSet && !state.access && (
             <Icon source="alert-circle-outline" size={20} color={Colors.offsync} />
           )}
@@ -229,7 +230,7 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
             <Icon source="shield-outline" size={20} />
           )}
         </View>
-        <IconButton style={styles.icon} mode="contained" icon={state.layout==='large' ? 'cog-transfer-outline' : 'dots-vertical'} size={28} onPress={openDetails} />
+        <IconButton style={styles.icon} mode="contained" icon={state.layout === 'large' ? 'cog-transfer-outline' : 'dots-vertical'} size={28} onPress={openDetails} />
       </View>
       <View style={padStyle}>
         <Divider style={styles.topBorder} bold={true} />
@@ -260,13 +261,13 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
                 select={(id)=>setSelected(id)}
                 selected={selected}
               />
-            )
+            );
           }}
           keyExtractor={topic => (topic.topicId)}
         />
-        { state.loaded && state.topics.length === 0 && ( 
+        { state.loaded && state.topics.length === 0 && (
           <Text style={styles.empty}>{state.strings.noMessages}</Text>
-        )} 
+        )}
         { !state.loaded && (
           <View style={styles.loading}>
             <ActivityIndicator size="large" />
@@ -334,9 +335,9 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
                   </Surface>
                 </Pressable>
               )}>
-              <Menu.Item onPress={() => { actions.setTextSize(12); setSizeMenu(false) }} title={state.strings.textSmall} />
-              <Menu.Item onPress={() => { actions.setTextSize(16); setSizeMenu(false) }} title={state.strings.textMedium} />
-              <Menu.Item onPress={() => { actions.setTextSize(20); setSizeMenu(false) }} title={state.strings.textLarge} />
+              <Menu.Item onPress={() => { actions.setTextSize(12); setSizeMenu(false); }} title={state.strings.textSmall} />
+              <Menu.Item onPress={() => { actions.setTextSize(16); setSizeMenu(false); }} title={state.strings.textMedium} />
+              <Menu.Item onPress={() => { actions.setTextSize(20); setSizeMenu(false); }} title={state.strings.textLarge} />
             </Menu>
 
             <View style={styles.end}>
@@ -345,10 +346,10 @@ export function Conversation({close, openDetails, wide}: {close: ()=>void, openD
                   { sending && (
                     <ActivityIndicator size="small" />
                   )}
-                  { !sending && state.access && state.validShare && (state.message || state.assets.length != 0) && (
+                  { !sending && state.access && state.validShare && (state.message || state.assets.length !== 0) && (
                     <Icon style={styles.button} source="send" size={24} color={Colors.primary} />
                   )}
-                  { !sending && (!state.access || !state.validShare || (!state.message && state.assets.length == 0)) && (
+                  { !sending && (!state.access || !state.validShare || (!state.message && state.assets.length === 0)) && (
                     <Icon style={styles.button} source="send" size={24} color={Colors.placeholder} />
                   )}
                 </Surface>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, Platform, Modal, ScrollView, View } from 'react-native';
 import {useTheme, Switch, Surface, Icon, Divider, Button, IconButton, Text, TextInput} from 'react-native-paper';
 import {styles} from './Details.styled';
@@ -24,34 +24,34 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
   const membership = () => {
     setError(false);
     setMemberModal(true);
-  }
+  };
 
   const remove = () => {
     const apply = async () => {
       await actions.remove();
       closeAll();
-    }
+    };
     confirmAction(state.strings.confirmTopic, state.strings.sureTopic, state.strings.remove, setRemoving, apply);
-  }
+  };
 
   const leave = () => {
     const apply = async () => {
       await actions.leave();
       closeAll();
-    }
+    };
     confirmAction(state.strings.confirmLeave, state.strings.sureLeave, state.strings.leave, setRemoving, apply);
-  }
+  };
 
   const block = () => {
     const apply = async () => {
       await actions.block();
-    }
+    };
     confirmAction(state.strings.blockTopic, state.strings.blockTopicPrompt, state.strings.block, setBlocking, apply);
-  }
+  };
 
   const report = () => {
     confirmAction(state.strings.reportTopic, state.strings.reportTopicPrompt, state.strings.report, setReporting, actions.report);
-  }
+  };
 
   const confirmAction = (title: string, prompt: string, label: string, loading: (boolean) => void, action: () => Promise<void>) => {
     setConfirmParams({
@@ -75,16 +75,6 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
       },
     });
     setConfirm(true);
-  };
-
-  const applyAction = async (loading: (boolean) => void, action: () => Promise<void>) => {
-    if (!busy) {
-      setBusy(true);
-      loading(true);
-      await setAction(action);
-      loading(false);
-      setBusy(false);
-    }
   };
 
   const setAction = async (action: () => Promise<void>) => {
@@ -126,13 +116,13 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
         setAlert(true);
       }
       setSaving(false);
-    }    
-  }
+    }
+  };
 
   const cards = state.channelCards.map((card, index) => (
       <Card containerStyle={{...styles.card, borderColor: theme.colors.outlineVariant }} key={index} imageUrl={card.imageUrl} name={card.name} placeholder={state.strings.name}
         handle={card.handle} node={card.node} actions={[]} />
-  ))
+  ));
 
   const members = state.cards.filter(card => {
     if (state.detail && state.detail.members.find(member => member.guid === card.guid)) {
@@ -161,12 +151,12 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
             setError(true);
           }
         }}
-      />
+      />,
     ];
 
     return (
       <Card containerStyle={{ ...styles.card, borderColor: theme.colors.outlineVariant }} key={index} imageUrl={card.imageUrl} name={card.name} placeholder={state.strings.name} handle={card.handle} node={card.node} actions={enable} />
-    )
+    );
   });
 
   return (
@@ -180,7 +170,7 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
         <Text style={styles.title}>{ state.strings.details }</Text>
         {close && (
           <View style={styles.close} />
-        )} 
+        )}
       </SafeAreaView>
       <Divider style={styles.divider} />
       { !state.access && (
@@ -201,8 +191,8 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
                 autoComplete="off"
                 autoCorrect={false}
                 value={state.editSubject}
-                label={Platform.OS==='ios'?state.strings.subject:undefined}
-                placeholder={Platform.OS!=='ios'?state.strings.subject:undefined}
+                label={Platform.OS === 'ios' ? state.strings.subject : undefined}
+                placeholder={Platform.OS !== 'ios' ? state.strings.subject : undefined}
                 disabled={state.locked}
                 left={<TextInput.Icon style={styles.icon} icon="label-outline" />}
                 onChangeText={value => actions.setEditSubject(value)}
@@ -211,8 +201,8 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
                 <IconButton style={styles.icon} icon="undo-variant" onPress={actions.undoSubject} />
               )}
               { state.subject !== state.editSubject && (
-                <IconButton style={styles.icon} icon="content-save-outline" loading={saving} onPress={saveSubject} /> 
-              )} 
+                <IconButton style={styles.icon} icon="content-save-outline" loading={saving} onPress={saveSubject} />
+              )}
             </Surface>
           )}
           { !state.host && !state.locked && (
@@ -335,6 +325,7 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
           <Text style={styles.unknown}>{ state.strings.unknown }: {state.unknownContacts}</Text>
         )}
       </ScrollView>
+      <Confirm show={alert} params={alertParams} />
       <Confirm show={confirm} busy={busy} params={confirmParams} />
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={memberModal} onRequestClose={() => setMemberModal(false)}>
         <View style={styles.memberModal}>
@@ -368,8 +359,5 @@ export function Details({close, closeAll}: {close: ()=>void, closeAll: ()=>void}
         </View>
       </Modal>
     </View>
-  )
+  );
 }
-
-// input if host and unsealed
-// text otherwise

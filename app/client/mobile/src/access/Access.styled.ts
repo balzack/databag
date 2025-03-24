@@ -68,6 +68,8 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     gap: 8,
+    minHeight: 0,
+    flexGrow: 1,
   },
   scroll: {
     flexGrow: 1,
@@ -189,10 +191,6 @@ export const styles = StyleSheet.create({
   },
   modalClose: {
     backgroundColor: 'transparent',
-  },
-  frame: {
-    minHeight: 0,
-    flexGrow: 1,
   },
   line: {
     width: '100%',

@@ -52,7 +52,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       setBlockedError(true);
     }
     setBlockedMessage(true);
-  }
+  };
 
   const unblockMessage = async (blocked: {cardId: string | null, channelId: string, topicId: string, timestamp: number}) => {
     try {
@@ -62,7 +62,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       console.log(err);
       setBlockedError(true);
     }
-  }
+  };
 
   const blockedMessages = state.blockedMessages.map((blocked, index) => (
     <View key={index} style={{ ...styles.blockedItem, borderColor: theme.colors.outlineVariant }}>
@@ -80,7 +80,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       setBlockedError(true);
     }
     setBlockedChannel(true);
-  }
+  };
 
   const unblockChannel = async (blocked: {cardId: string | null, channelId: string, topicId: string, timestamp: number}) => {
     try {
@@ -90,7 +90,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       console.log(err);
       setBlockedError(true);
     }
-  }
+  };
 
   const blockedChannels = state.blockedChannels.map((blocked, index) => (
     <View key={index} style={{ ...styles.blockedItem, borderColor: theme.colors.outlineVariant }}>
@@ -108,7 +108,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       setBlockedError(true);
     }
     setBlockedContact(true);
-  }
+  };
 
   const unblockContact = async (blocked: {cardId: string | null, channelId: string, topicId: string, timestamp: number}) => {
     try {
@@ -118,7 +118,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
       console.log(err);
       setBlockedError(true);
     }
-  }
+  };
 
   const blockedContacts = state.blockedContacts.map((blocked, index) => (
     <View key={index} style={{ ...styles.blockedItem, borderColor: theme.colors.outlineVariant }}>
@@ -669,7 +669,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     <View style={styles.modalControls}>
                       <View style={styles.modalOption}>
                         <IconButton
-                          style={styles.optionIcon} 
+                          style={styles.optionIcon}
                           iconColor={Colors.primary}
                           icon="menu-right-outline"
                           size={32}
@@ -696,7 +696,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                       </Button>
                       <View style={styles.modalOther}>
                         <IconButton
-                          style={styles.optionIcon} 
+                          style={styles.optionIcon}
                           iconColor={Colors.primary}
                           icon="menu-left-outline"
                           size={32}
@@ -719,8 +719,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     autoComplete="off"
                     autoCorrect={false}
                     value={state.sealPassword}
-                    label={Platform.OS==='ios'?state.strings.password:undefined}
-                    placeholder={Platform.OS!=='ios'?state.strings.password:undefined}
+                    label={Platform.OS === 'ios' ? state.strings.password : undefined}
+                    placeholder={Platform.OS !== 'ios' ? state.strings.password : undefined}
                     secureTextEntry={!showPassword}
                     left={<TextInput.Icon style={styles.icon} icon="lock" />}
                     right={
@@ -739,8 +739,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     autoComplete="off"
                     autoCorrect={false}
                     value={state.sealConfirm}
-                    label={Platform.OS==='ios'?state.strings.confirmPassword:undefined}
-                    placeholder={Platform.OS!=='ios'?state.strings.confirmPassword:undefined}
+                    label={Platform.OS === 'ios' ? state.strings.confirmPassword : undefined}
+                    placeholder={Platform.OS !== 'ios' ? state.strings.confirmPassword : undefined}
                     secureTextEntry={!showConfirm}
                     left={<TextInput.Icon style={styles.icon} icon="lock" />}
                     right={
@@ -772,8 +772,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     autoComplete="off"
                     autoCorrect={false}
                     value={state.sealPassword}
-                    label={Platform.OS==='ios'?state.strings.password:undefined}
-                    placeholder={Platform.OS!=='ios'?state.strings.password:undefined}
+                    label={Platform.OS === 'ios' ? state.strings.password : undefined}
+                    placeholder={Platform.OS !== 'ios' ? state.strings.password : undefined}
                     secureTextEntry={!showPassword}
                     left={<TextInput.Icon style={styles.icon} icon="lock" />}
                     right={
@@ -789,7 +789,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     <View style={styles.modalControls}>
                       <View style={styles.modalOption}>
                         <IconButton
-                          style={styles.optionIcon} 
+                          style={styles.optionIcon}
                           iconColor={Colors.primary}
                           icon="menu-right-outline"
                           size={32}
@@ -813,7 +813,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                       </Button>
                       <View style={styles.modalOther}>
                         <IconButton
-                          style={styles.optionIcon} 
+                          style={styles.optionIcon}
                           iconColor={Colors.primary}
                           icon="menu-left-outline"
                           size={32}
@@ -836,8 +836,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     autoComplete="off"
                     autoCorrect={false}
                     value={state.sealDelete}
-                    label={Platform.OS==='ios'?state.strings.deleteKey:undefined}
-                    placeholder={Platform.OS!=='ios'?state.strings.deleteKey:undefined}
+                    label={Platform.OS === 'ios' ? state.strings.deleteKey : undefined}
+                    placeholder={Platform.OS !== 'ios' ? state.strings.deleteKey : undefined}
                     left={<TextInput.Icon style={styles.icon} icon="lock" />}
                     onChangeText={value => actions.setSealDelete(value)}
                   />
@@ -859,8 +859,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     autoComplete="off"
                     autoCorrect={false}
                     value={state.sealPassword}
-                    label={Platform.OS==='ios'?state.strings.password:undefined}
-                    placeholder={Platform.OS!=='ios'?state.strings.password:undefined}
+                    label={Platform.OS === 'ios' ? state.strings.password : undefined}
+                    placeholder={Platform.OS !== 'ios' ? state.strings.password : undefined}
                     secureTextEntry={!showPassword}
                     left={<TextInput.Icon style={styles.icon} icon="lock" />}
                     right={
@@ -899,8 +899,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={Platform.OS==='ios'?state.strings.name:undefined}
-                placeholder={Platform.OS!=='ios'?state.strings.name:undefined}
+                label={Platform.OS === 'ios' ? state.strings.name : undefined}
+                placeholder={Platform.OS !== 'ios' ? state.strings.name : undefined}
                 value={state.name}
                 left={<TextInput.Icon style={styles.inputIcon} icon="account" />}
                 onChangeText={value => actions.setName(value)}
@@ -911,8 +911,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={Platform.OS==='ios'?state.strings.location:undefined}
-                placeholder={Platform.OS!=='ios'?state.strings.location:undefined}
+                label={Platform.OS === 'ios' ? state.strings.location : undefined}
+                placeholder={Platform.OS !== 'ios' ? state.strings.location : undefined}
                 value={state.location}
                 left={<TextInput.Icon style={styles.inputIcon} icon="map-marker-outline" />}
                 onChangeText={value => actions.setLocation(value)}
@@ -923,8 +923,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={Platform.OS==='ios'?state.strings.description:undefined}
-                placeholder={Platform.OS!=='ios'?state.strings.description:undefined}
+                label={Platform.OS === 'ios' ? state.strings.description : undefined}
+                placeholder={Platform.OS !== 'ios' ? state.strings.description : undefined}
                 value={state.description}
                 left={<TextInput.Icon style={styles.inputIcon} icon="book-open-outline" />}
                 onChangeText={value => actions.setDescription(value)}
@@ -1013,8 +1013,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={Platform.OS==='ios' ? state.strings.username : undefined}
-                placeholder={Platform.OS!=='ios' ? state.strings.username : undefined}
+                label={Platform.OS === 'ios' ? state.strings.username : undefined}
+                placeholder={Platform.OS !== 'ios' ? state.strings.username : undefined}
                 value={state.handle}
                 left={<TextInput.Icon style={styles.inputIcon} icon="account" />}
                 right={
@@ -1035,8 +1035,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoComplete="off"
                 autoCorrect={false}
                 value={state.password}
-                label={Platform.OS==='ios' ? state.strings.password : undefined}
-                placeholder={Platform.OS!=='ios' ? state.strings.password : undefined}
+                label={Platform.OS === 'ios' ? state.strings.password : undefined}
+                placeholder={Platform.OS !== 'ios' ? state.strings.password : undefined}
                 secureTextEntry={!showPassword}
                 left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
@@ -1055,8 +1055,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoComplete="off"
                 autoCorrect={false}
                 value={state.confirm}
-                label={Platform.OS==='ios' ? state.strings.confirmPassword : undefined}
-                placeholder={Platform.OS!=='ios' ? state.strings.confirmPassword : undefined}
+                label={Platform.OS === 'ios' ? state.strings.confirmPassword : undefined}
+                placeholder={Platform.OS !== 'ios' ? state.strings.confirmPassword : undefined}
                 secureTextEntry={!showConfirm}
                 left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
@@ -1121,8 +1121,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoComplete="off"
                 autoCorrect={false}
                 value={state.remove}
-                label={Platform.OS==='ios'?state.strings.deleteKey:undefined}
-                placeholder={Platform.OS!=='ios'?state.strings.deleteKey:undefined}
+                label={Platform.OS === 'ios' ? state.strings.deleteKey : undefined}
+                placeholder={Platform.OS !== 'ios' ? state.strings.deleteKey : undefined}
                 left={<TextInput.Icon style={styles.icon} icon="delete-outline" />}
                 onChangeText={value => actions.setRemove(value)}
               />
@@ -1149,7 +1149,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedMessage(false)} />
               </View>
               <Surface style={styles.blocked} elevation={1} mode="flat">
-                { state.blockedMessages.length == 0 && (
+                { state.blockedMessages.length === 0 && (
                   <View style={styles.blockedEmpty}>
                     <Text style={styles.blockedLabel}>{ state.strings.noMessages }</Text>
                   </View>
@@ -1159,7 +1159,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                   { blockedMessages }
                   </View>
                 )}
-              </Surface>            
+              </Surface>
               <View style={styles.blockedDone}>
                 { blockedError && (
                   <Text style={styles.blockedError}>{ state.strings.operationFailed }</Text>
@@ -1182,17 +1182,17 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedChannel(false)} />
               </View>
               <Surface style={styles.blocked} elevation={1} mode="flat">
-                { state.blockedChannels.length == 0 && (
+                { state.blockedChannels.length === 0 && (
                   <View style={styles.blockedEmpty}>
                     <Text style={styles.blockedLabel}>{ state.strings.noTopics }</Text>
                   </View>
-                )}    
+                )}
                 { state.blockedChannels.length > 0 && (
                   <View>
                   { blockedChannels }
                   </View>
                 )}
-              </Surface>            
+              </Surface>
               <View style={styles.blockedDone}>
                 { blockedError && (
                   <Text style={styles.blockedError}>{ state.strings.operationFailed }</Text>
@@ -1215,17 +1215,17 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedContact(false)} />
               </View>
               <Surface style={styles.blocked} elevation={1} mode="flat">
-                { state.blockedContacts.length == 0 && (
+                { state.blockedContacts.length === 0 && (
                   <View style={styles.blockedEmpty}>
                     <Text style={styles.blockedLabel}>{ state.strings.noContacts }</Text>
                   </View>
-                )}    
+                )}
                 { state.blockedContacts.length > 0 && (
                   <View>
                   { blockedContacts }
                   </View>
                 )}
-              </Surface>            
+              </Surface>
               <View style={styles.blockedDone}>
                 { blockedError && (
                   <Text style={styles.blockedError}>{ state.strings.operationFailed }</Text>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {SafeAreaView, TouchableOpacity, Modal, Image, View, Pressable} from 'react-native';
+import {TouchableOpacity, Modal, Image, View} from 'react-native';
 import {ActivityIndicator, Icon, Button, IconButton, RadioButton, Switch, Surface, Divider, TextInput, Text} from 'react-native-paper';
 import {styles} from './Setup.styled';
 import {useSetup} from './useSetup.hook';
@@ -12,18 +12,17 @@ import Clipboard from '@react-native-clipboard/clipboard';
 
 export function Setup() {
   const { state, actions } = useSetup();
-  const [mfaCode, setMfaCode] = useState('');
   const [updating, setUpdating] = useState(false);
   const [secretCopy, setSecretCopy] = useState(false);
   const [confirmingAuth, setConfirmingAuth] = useState(false);
 
   const errorParams = {
-    title: state.strings.operationFailed, 
+    title: state.strings.operationFailed,
     prompt: state.strings.tryAgain,
     cancel: {
       label: state.strings.close,
       action: actions.clearError,
-    },      
+    },
   };
 
   const confirmAuth = async () => {
@@ -32,7 +31,7 @@ export function Setup() {
       await actions.confirmMFAuth();
       setConfirmingAuth(false);
     }
-  }
+  };
 
   const copySecret = async () => {
     if (!secretCopy) {
@@ -54,7 +53,7 @@ export function Setup() {
       }
       setUpdating(false);
     }
-  }
+  };
 
   return (
     <View style={styles.setup}>
@@ -76,14 +75,14 @@ export function Setup() {
           <View style={styles.radioSelect}>
             <View style={styles.radio}>
               <Text style={styles.radioLabel}>RSA2048</Text>
-              <RadioButton.Item 
+              <RadioButton.Item
                 disabled={state.loading}
                 rippleColor="transparent"
                 style={styles.radioButton}
                 label=""
                 mode="android"
                 status={state.setup?.keyType === 'RSA2048' ? 'checked' : 'unchecked'}
-                onPress={() => { actions.setKeyType('RSA2048') }}
+                onPress={() => { actions.setKeyType('RSA2048'); }}
               />
             </View>
             <View style={styles.radio}>
@@ -95,7 +94,7 @@ export function Setup() {
                 label=""
                 mode="android"
                 status={state.setup?.keyType === 'RSA4096' ? 'checked' : 'unchecked'}
-                onPress={() => { actions.setKeyType('RSA4096') }}
+                onPress={() => { actions.setKeyType('RSA4096'); }}
               />
             </View>
           </View>

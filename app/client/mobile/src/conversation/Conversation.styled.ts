@@ -95,10 +95,10 @@ export const styles = StyleSheet.create({
     color: Colors.placeholder,
   },
   add: {
-    height: 72,
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: 'column',
+    paddingTop: 8,
+    paddingBottom: 8,
   },
   icon: {
     flexShrink: 0,
@@ -138,7 +138,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     minWidth: 0,
-    alignItems: 'center',
   },
   largeHeader: {
     paddingLeft: 16,
@@ -158,12 +157,6 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     minWidth: 0,
     flexShrink: 1,
-  },
-  add: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingTop: 8,
-    paddingBottom: 8,
   },
   message: {
     width: '100%',
@@ -200,5 +193,5 @@ export const styles = StyleSheet.create({
   separator: {
     width: 1,
     height: '100%',
-  }
+  },
 });

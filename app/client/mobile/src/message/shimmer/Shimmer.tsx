@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { View, Animated, useAnimatedValue } from 'react-native';
 
 export function Shimmer({ contentStyle }: { contentStyle: any }) {
@@ -19,11 +19,12 @@ export function Shimmer({ contentStyle }: { contentStyle: any }) {
         }),
       ])
     ).start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <Animated.View style={[{},{opacity: shimmer},]}>
-      <View style={contentStyle}></View>
+    <Animated.View style={[{},{opacity: shimmer}]}>
+      <View style={contentStyle} />
     </Animated.View>
-  )
+  );
 }

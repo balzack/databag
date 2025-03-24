@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 8,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   header: {
     width: '100%',

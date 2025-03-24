@@ -1,15 +1,13 @@
-import { useState, useContext, useEffect, useRef } from 'react'
-import { Share } from 'react-native'
-import { AppContext } from '../../context/AppContext'
-import { DisplayContext } from '../../context/DisplayContext'
-import { Focus } from 'databag-client-sdk'
-import { ContextType } from '../../context/ContextType'
+import { useState, useContext, useEffect, useRef } from 'react';
+import { AppContext } from '../../context/AppContext';
+import { DisplayContext } from '../../context/DisplayContext';
+import { ContextType } from '../../context/ContextType';
 import { MediaAsset } from '../../conversation/Conversation';
 import { Download } from '../../download';
 
 export function useImageAsset(topicId: string, asset: MediaAsset) {
-  const app = useContext(AppContext) as ContextType
-  const display = useContext(DisplayContext) as ContextType
+  const app = useContext(AppContext) as ContextType;
+  const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
     strings: display.state.strings,
     thumbUrl: null,
@@ -21,13 +19,13 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
     width: 0,
     height: 0,
     failed: false,
-  })
+  });
   const cancelled = useRef(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const updateState = (value: any) => {
-    setState((s) => ({ ...s, ...value }))
-  }
+    setState((s) => ({ ...s, ...value }));
+  };
 
   const setThumb = async () => {
     const { focus } = app.state;
@@ -44,7 +42,8 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
 
   useEffect(() => {
     setThumb();
-  }, [asset]);    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [asset]);
 
   const actions = {
     loaded: (e) => {
@@ -74,10 +73,10 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
       const { focus } = app.state;
       const assetId = asset.image ? asset.image.full : asset.encrypted ? asset.encrypted.parts : null;
       if (focus && assetId != null && !state.loading && !state.dataUrl) {
-        cancelled.current = false; 
+        cancelled.current = false;
         updateState({ loading: true, loadPercent: 0 });
         try {
-          const dataUrl = await focus.getTopicAssetUrl(topicId, assetId, (loadPercent: number)=>{ updateState({ loadPercent }); return !cancelled.current });
+          const dataUrl = await focus.getTopicAssetUrl(topicId, assetId, (loadPercent: number)=>{ updateState({ loadPercent }); return !cancelled.current; });
           updateState({ dataUrl });
         } catch (err) {
           console.log(err);
@@ -85,8 +84,8 @@ export function useImageAsset(topicId: string, asset: MediaAsset) {
         }
         updateState({ loading: false });
       }
-    }
-  }
+    },
+  };
 
-  return { state, actions }
+  return { state, actions };
 }

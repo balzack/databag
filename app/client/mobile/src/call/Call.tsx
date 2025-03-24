@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Animated, useAnimatedValue, useWindowDimensions, Dimensions, Image, View } from 'react-native';
+import { Animated, useAnimatedValue, Image, View } from 'react-native';
 import { useCall } from './useCall.hook';
-import { styles } from './Call.styled'
-import { Card as Contact } from '../card/Card';
-import { Text, Surface, IconButton, ActivityIndicator } from 'react-native-paper';
+import { styles } from './Call.styled';
+import { Text, Surface, IconButton } from 'react-native-paper';
 import { Confirm } from '../confirm/Confirm';
 import { Colors } from '../constants/Colors';
 import { RTCView } from 'react-native-webrtc';
@@ -14,11 +13,7 @@ export function Call() {
   const [ending, setEnding] = useState(false);
   const [applyingAudio, setApplyingAudio] = useState(false);
   const [applyingVideo, setApplyingVideo] = useState(false);
-  const [accepting, setAccepting] = useState(null as null|string);
-  const [ignoring, setIgnoring] = useState(null as null|string);
-  const [declining, setDeclining] = useState(null as null|string);
-  const {height, width} = useWindowDimensions();
-  const opacity = useAnimatedValue(0)
+  const opacity = useAnimatedValue(0);
 
   const toggleAudio = async () => {
     if (!applyingAudio) {
@@ -35,7 +30,7 @@ export function Call() {
       }
       setApplyingAudio(false);
     }
-  }
+  };
 
   const toggleVideo = async () => {
     if (!applyingVideo) {
@@ -52,7 +47,7 @@ export function Call() {
       }
       setApplyingVideo(false);
     }
-  }
+  };
 
   const end = async () => {
     if (!ending) {
@@ -65,7 +60,7 @@ export function Call() {
       }
       setEnding(false);
     }
-  }
+  };
 
   const alertParams = {
     title: state.strings.operationFailed,
@@ -92,6 +87,7 @@ export function Call() {
         useNativeDriver: true,
       }).start();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.calling, state.fullscreen]);
 
   const viewStyle = state.calling && state.fullscreen ? styles.active : styles.inactive;
@@ -114,7 +110,7 @@ export function Call() {
                 resizeMode="contain"
                 source={{ uri: state.calling.imageUrl }}
               />
-              <Text style={styles.duration}>{ `${Math.floor(state.duration/60)}:${(state.duration % 60).toString().padStart(2, '0')}` }</Text>
+              <Text style={styles.duration}>{ `${Math.floor(state.duration / 60)}:${(state.duration % 60).toString().padStart(2, '0')}` }</Text>
             </View>
           )}
 

@@ -1,6 +1,6 @@
-import { Staging } from 'databag-client-sdk'
+import { Staging } from 'databag-client-sdk';
 import RNFS from 'react-native-fs';
-import fileType from 'react-native-file-type'
+import fileType from 'react-native-file-type';
 
 export class StagingFiles implements Staging {
 
@@ -10,7 +10,7 @@ export class StagingFiles implements Staging {
       if (entry.name.startsWith('dbTmp_')) {
         await RNFS.unlink(entry.path);
       }
-    };
+    }
   }
 
   public async read(source: any): Promise<{ size: number, getData: (position: number, length: number)=>Promise<string>, close: ()=>Promise<void> }> {
@@ -19,19 +19,19 @@ export class StagingFiles implements Staging {
     const size = stat.size;
     const getData = async (position: number, length: number) => {
       return await RNFS.read(path, length, position, 'base64');
-    }
-    const close = async ()=>{}
+    };
+    const close = async ()=>{};
     return { size, getData, close };
   }
 
   public async write(): Promise<{ setData: (data: string)=>Promise<void>, getUrl: ()=>Promise<string>, close: ()=>Promise<void> }> {
     let set = false;
     let extension = '';
-    const path = RNFS.DocumentDirectoryPath + `/dbTmp_${Date.now()}`
+    const path = RNFS.DocumentDirectoryPath + `/dbTmp_${Date.now()}`;
     const setData = async (data: string) => {
       set = true;
       await RNFS.appendFile(path, data, 'base64');
-    }
+    };
     const getUrl = async () => {
       if (!extension) {
         try {
@@ -44,8 +44,8 @@ export class StagingFiles implements Staging {
           extension = '.dat';
         }
       }
-      return `file://${path}${extension}`
-    }
+      return `file://${path}${extension}`;
+    };
     const close = async () => {
       if (set) {
         try {
@@ -54,8 +54,8 @@ export class StagingFiles implements Staging {
           console.log(err);
         }
       }
-    }
+    };
     return { setData, getUrl, close };
   }
-}  
+}
 

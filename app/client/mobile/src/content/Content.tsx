@@ -4,7 +4,6 @@ import {SafeAreaView, Modal, FlatList, View} from 'react-native';
 import {styles} from './Content.styled';
 import {useContent} from './useContent.hook';
 import {Channel} from '../channel/Channel';
-import {Focus} from 'databag-client-sdk';
 import {BlurView} from '@react-native-community/blur';
 import {Card} from '../card/Card';
 import {Confirm} from '../confirm/Confirm';
@@ -35,23 +34,25 @@ export function Content({share, closeAll, openConversation, textCard}: { share: 
       actions.setSharing({ cardId, channelId, filePath, mimeType });
     }
     open(cardId, channelId);
-  }
+  };
 
   const open = (cardId: string | null, channelId: string) => {
     actions.setFocus(cardId, channelId);
     openConversation();
-  }
+  };
 
   useEffect(() => {
     if (share) {
       closeAll();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [share]);
 
   useEffect(() => {
     if (textCard.cardId) {
       openTopic(textCard.cardId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [textCard]);
 
   const openTopic = async (cardId: string) => {
@@ -65,7 +66,7 @@ export function Content({share, closeAll, openConversation, textCard}: { share: 
       setAlert(true);
     }
     setAdding(false);
-  } 
+  };
 
   const addTopic = async () => {
     setAdding(true);
@@ -73,7 +74,7 @@ export function Content({share, closeAll, openConversation, textCard}: { share: 
       const id = await actions.addTopic(
         sealedTopic,
         subjectTopic,
-        members.filter(id => Boolean(cards.find(card => card.cardId === id))),
+        members.filter(memberId => Boolean(cards.find(card => card.cardId === memberId))),
       );
       setAdd(false);
       setSubjectTopic('');
