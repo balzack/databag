@@ -161,6 +161,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     fontSize: 14,
     padding: 0,
+    maxHeight: 256,
   },
   controls: {
     display: 'flex',

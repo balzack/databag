@@ -199,6 +199,9 @@ export function Conversation({ openDetails }: { openDetails: () => void }) {
           <div className={classes.files}>{media}</div>
           <Textarea
             ref={input}
+            autosize={true}
+            maxRows={8}
+            minRows={2}
             className={classes.message}
             placeholder={state.strings.newMessage}
             styles={{ input: { color: state.textColorSet ? state.textColor : undefined, fontSize: state.textSizeSet ? state.textSize : undefined } }}

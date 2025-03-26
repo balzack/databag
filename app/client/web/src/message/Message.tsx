@@ -124,6 +124,7 @@ export function Message({ topic, card, profile, host }: { topic: Topic; card: Ca
   useEffect(() => {
     const urlPattern = new RegExp('(https?:\\/\\/)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)')
     const hostPattern = new RegExp('^https?:\\/\\/', 'i')
+    const dotPattern = new RegExp('^.*\\.\\..*$')
 
     let plain = ''
     const clickable = []
@@ -132,7 +133,7 @@ export function Message({ topic, card, profile, host }: { topic: Topic; card: Ca
     if (parsed?.length > 0) {
       const words = parsed as string[]
       words.forEach((word, index) => {
-        if (urlPattern.test(word)) {
+        if (urlPattern.test(word) && !dotPattern.test(word)) {
           clickable.push(<span key={index}>{plain}</span>)
           plain = ''
           const url = hostPattern.test(word) ? word : `https://${word}`
