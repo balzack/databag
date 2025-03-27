@@ -289,6 +289,7 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
             editable={!sending}
             textColor={state.textColorSet ? state.textColor : undefined}
             outlineColor="transparent"
+            activeOutlineColor={Colors.placeholder}
             spellcheck={false}
             autoComplete="off"
             autoCapitalize="none"
