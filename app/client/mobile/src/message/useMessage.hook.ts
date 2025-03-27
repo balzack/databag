@@ -8,8 +8,8 @@ export function useMessage() {
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
     strings: display.state.strings,
-    timeFormat: display.state.timeFormat,
-    dateFormat: display.state.dateFormat,
+    fullDayTime: app.state.fullDayTime,
+    monthFirstDate: app.state.monthFirstDate,
   });
 
   const updateState = (value: any) => {
@@ -17,9 +17,14 @@ export function useMessage() {
   };
 
   useEffect(() => {
-    const {strings, timeFormat, dateFormat} = display.state;
-    updateState({strings, timeFormat, dateFormat});
+    const {strings} = display.state;
+    updateState({strings});
   }, [display.state]);
+
+  useEffect(() => {
+    const {monthFirstDate, fullDayTime} = app.state;
+    updateState({ monthFirstDate, fullDayTime });
+  }, [app.state]);
 
   const actions = {
     block: async (topicId: string) => {
@@ -57,19 +62,19 @@ export function useMessage() {
       const date = new Date(created * 1000);
       const offset = now - created;
       if (offset < 43200) {
-        if (state.timeFormat === '12h') {
-          return date.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
+        if (state.fullDayTime) {
+          return date.toLocaleTimeString('en-GB', {hour12: false, hour: 'numeric', minute: '2-digit'});
         } else {
-          return date.toLocaleTimeString('en-GB', {hour: 'numeric', minute: '2-digit'});
+          return date.toLocaleTimeString('en-US', {hour12: true, hour: 'numeric', minute: '2-digit'});
         }
       } else if (offset < 31449600) {
-        if (state.dateFormat === 'mm/dd') {
+        if (state.monthFirstDate) {
           return date.toLocaleDateString('en-US', {day: 'numeric', month: 'numeric'});
         } else {
           return date.toLocaleDateString('en-GB', {day: 'numeric', month: 'numeric'});
         }
       } else {
-        if (state.dateFormat === 'mm/dd') {
+        if (state.monthFirstDate) {
           return date.toLocaleDateString('en-US');
         } else {
           return date.toLocaleDateString('en-GB');

@@ -597,7 +597,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     <RadioButton.Item
                       style={styles.radio}
                       rippleColor="transparent"
-                      label={state.strings.timeHalf}
+                      label={state.strings.timeUs}
                       labelStyle={styles.option}
                       mode="android"
                       status={state.fullDayTime ? 'unchecked' : 'checked'}
@@ -608,7 +608,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     <RadioButton.Item
                       style={styles.radio}
                       rippleColor="transparent"
-                      label={state.strings.timeFull}
+                      label={state.strings.timeEu}
                       labelStyle={styles.option}
                       mode="android"
                       status={state.fullDayTime ? 'checked' : 'unchecked'}
@@ -629,7 +629,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     <RadioButton.Item
                       style={styles.radio}
                       rippleColor="transparent"
-                      label={state.strings.monthStart}
+                      label={state.strings.dateUs}
                       labelStyle={styles.option}
                       mode="android"
                       status={state.monthFirstDate ? 'checked' : 'unchecked'}
@@ -640,7 +640,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     <RadioButton.Item
                       style={styles.radio}
                       rippleColor="transparent"
-                      label={state.strings.monthEnd}
+                      label={state.strings.dateEu}
                       labelStyle={styles.option}
                       mode="android"
                       status={state.monthFirstDate ? 'unchecked' : 'checked'}
