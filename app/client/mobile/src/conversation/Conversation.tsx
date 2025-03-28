@@ -194,6 +194,7 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
   const disableAudio = !state.detailSet || !state.detail?.enableAudio;
   const disableBinary = !state.detailSet || !state.detail?.enableBinary;
   const statusStyle = state.layout === 'large' ? {...styles.status, flexDirection: 'row-reverse'} : {...styles.status, flexDirection: 'row'};
+  const borderStyle = Platform.OS === 'ios' ? { ...styles.message, fontSize: state.textSize } : { ...styles.message, fontSize: state.textSize, paddingTop: 4, paddingBottom: 4 };
 
   return (
     <View style={containerStyle}>
@@ -280,7 +281,7 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
           <TextInput
             multiline={true}
             mode="outlined"
-            style={{...styles.message, fontSize: state.textSize}}
+            style={borderStyle}
             blurOnSubmit={true}
             onSubmitEditing={sendMessage}
             returnKeyType="send"
@@ -289,8 +290,7 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
             editable={!sending}
             textColor={state.textColorSet ? state.textColor : undefined}
             outlineColor="transparent"
-            activeOutlineColor={Platform.OS === 'ios' ? Colors.placeholder : 'transparent'}
-            cursorColor={Colors.placeholder}
+            activeOutlineColor={Colors.placeholder}
             spellcheck={false}
             autoComplete="off"
             autoCapitalize="none"

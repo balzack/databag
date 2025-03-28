@@ -89,7 +89,7 @@ android {
         applicationId "com.databag"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1145
+        versionCode 1156
         versionName "1.5"
     }
     signingConfigs {
