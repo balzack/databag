@@ -218,18 +218,20 @@ export function useContent() {
       updateState({sorted});
     };
 
-    const {identity, contact, content, settings} = app.state.session;
-    identity.addProfileListener(setProfile);
-    contact.addCardListener(setCards);
-    content.addChannelListener(setChannels);
-    settings.addConfigListener(setConfig);
+    if (app.state.session) {
+      const {identity, contact, content, settings} = app.state.session;
+      identity.addProfileListener(setProfile);
+      contact.addCardListener(setCards);
+      content.addChannelListener(setChannels);
+      settings.addConfigListener(setConfig);
 
-    return () => {
-      identity.removeProfileListener(setProfile);
-      contact.removeCardListener(setCards);
-      content.removeChannelListener(setChannels);
-      settings.removeConfigListener(setConfig);
-    };
+      return () => {
+        identity.removeProfileListener(setProfile);
+        contact.removeCardListener(setCards);
+        content.removeChannelListener(setChannels);
+        settings.removeConfigListener(setConfig);
+      };
+    }
   }, [app.state.session]);
 
   const actions = {

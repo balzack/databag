@@ -28,16 +28,18 @@ export function useBase() {
       updateState({channelSet: cardId && channels.length > 0});
     };
 
-    const {identity, contact, content} = app.state.session;
-    identity.addProfileListener(setProfile);
-    contact.addCardListener(setCards);
-    content.addChannelListener(setChannels);
+    if (app.state.session) {
+      const {identity, contact, content} = app.state.session;
+      identity.addProfileListener(setProfile);
+      contact.addCardListener(setCards);
+      content.addChannelListener(setChannels);
 
-    return () => {
-      identity.removeProfileListener(setProfile);
-      contact.removeCardListener(setCards);
-      content.removeChannelListener(setChannels);
-    };
+      return () => {
+        identity.removeProfileListener(setProfile);
+        contact.removeCardListener(setCards);
+        content.removeChannelListener(setChannels);
+      };
+    }
   }, [app.state.session]);
 
   const actions = {};

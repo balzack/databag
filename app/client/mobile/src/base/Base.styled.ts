@@ -34,4 +34,7 @@ export const styles = StyleSheet.create({
     color: Colors.label,
     fontSize: 12,
   },
+  status: {
+    height: 64,
+  },
 });
