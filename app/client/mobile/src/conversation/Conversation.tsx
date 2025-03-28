@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {Animated, useAnimatedValue, Modal, ScrollView, Pressable, View, FlatList} from 'react-native';
+import {Animated, useAnimatedValue, Modal, ScrollView, Pressable, View, FlatList, Platform} from 'react-native';
 import {styles} from './Conversation.styled';
 import {useConversation} from './useConversation.hook';
 import {Message} from '../message/Message';
@@ -289,7 +289,8 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
             editable={!sending}
             textColor={state.textColorSet ? state.textColor : undefined}
             outlineColor="transparent"
-            activeOutlineColor={Colors.placeholder}
+            activeOutlineColor={Platform.OS === 'ios' ? Colors.placeholder : 'transparent'}
+            cursorColor={Colors.placeholder}
             spellcheck={false}
             autoComplete="off"
             autoCapitalize="none"
