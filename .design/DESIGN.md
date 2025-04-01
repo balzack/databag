@@ -10,10 +10,11 @@ Databag is a product targeted for the decentralized web community. It is a feder
 
 ## How to contribute design
 
+Here is the Link to the [Figma File](https://www.figma.com/design/eVFi8bYlybn5KeyEePEaey/Databag---Github?node-id=1-6&t=Is2AiTfwktFO5aY0-1).
+Duplicate the Figma file to edit. Feedback on the UI/UX, bugs or features is greatly appreciated.
 1. Check out open [issues](https://github.com/balzack/databag/issues) here on GitHub (we label them with `design: required`)
 2. Feel free to open an issue on your own if you find something you would like to contribute to the project and use the `design: idea` label for it.
-3. There are no existing figma files yet, for now create new ones and share them publicly
-4. Add your contributions to an issue and we promise we will review your contribution carefully and foster discussions
+3. Add your contributions to an issue and we promise we will review your contribution carefully and foster discussions
 
 **We encourage you to:**
 
