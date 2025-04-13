@@ -1,51 +1,52 @@
-# Databag Design Guidelines & Resources
+# Databag UI Redesign
 
-A collection of design contribution guidelines and resources for our Databag product.
+  
+Here is the complete redesign of the UI for Databag. 
+I have worked closely with @balzack and we feel it's in a pretty good state with lots of work ahead. 
 
-> **All participating designers are highly encouraged to shape and evolve these guidelines!**
+I kept the illustrations already suggested by the community and also  kept the green hues of the current design.  
 
-## Welcome
+I applied standard design practices in font sizes, spacing  and icons. 
+The font selected is [Inter](https://fonts.google.com/specimen/Inter)  and for icons I used  [Phosphor Icons](https://phosphoricons.com).
 
-Databag is a product targeted for the decentralized web community. It is a federeated messenger that gives people back their privacy and control of their data.
+### _**The current Figma file is here**_ -->
+[Databag.fig.zip](https://github.com/user-attachments/files/19713647/Databag.fig.zip)
 
-## How to contribute design
+**Still missing:** 
+- Dark Mode
+- Animations
+- Overall Branding (if seen necessary)
 
-1. Check out open [issues](https://github.com/balzack/databag/issues) here on GitHub (we label them with `design: required`)
-2. Feel free to open an issue on your own if you find something you would like to contribute to the project and use the `design: idea` label for it.
-3. There are no existing figma files yet, for now create new ones and share them publicly
-4. Add your contributions to an issue and we promise we will review your contribution carefully and foster discussions
 
-**We encourage you to:**
 
-- Get in touch with the team by starting a discussion on [GitHub](https://github.com/balzack/databag/discussions).
+### **Screenshots:**
+### **Mobile Proposed Design**
 
-## Target audience
 
-The initial users are typically very technical, but hopefully this product will be embedded into consumer electronics and reach a much less technical audience. The design may benefit by exposing some technical attributes. For example, with a self-hosted product the users my be interested in knowing where their data actually lives.
 
-## Design relevant materials
 
-Here is a list of design relevant information and materials:
+<img width="1440" alt="Mobile" src="https://github.com/user-attachments/assets/78be3ac6-5f55-4b9e-a625-e758145406bc" />
 
-### Fonts
 
-Currently we're using Roboto everywhere.
 
-### Colors
+### **Desktop Proposed Design**
 
-We're using shades of green deliberately staying away from the corporate blue. The current background color is (#8fbea7) with the primary button color (#448866).
 
-### Logos
 
-We don't really have a logo yet, and are currently just using a scaled image from the app as the [icon](https://github.com/balzack/databag/blob/main/doc/icon.png)
+<img width="1440" alt="Desktop" src="https://github.com/user-attachments/assets/89aaa25a-a0c3-4583-8f04-29bbc43eef9a" />
 
-### Design Files, Screenshots, etc
 
-We don't have any design files yet. Initially you can reference screenshots for the [browser app](https://github.com/balzack/databag/blob/main/doc/browser.png) and [mobile app](https://github.com/balzack/databag/blob/main/doc/mobile.png)
 
-## License
+### **Style Guide**
 
-All design work is licensed under the
-[Apache-2.0](https://github.com/balzack/databag/blob/main/LICENSE)
 
-[(Back to top)](#-table-of-contents)
+
+<img width="1440" alt="Styleguide" src="https://github.com/user-attachments/assets/c5402ab4-a0fe-4594-a34f-498af4494def" />
+
+
+_*There are some more screens in the figma file_
+
+
+
+
+
