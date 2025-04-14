@@ -279,20 +279,14 @@ export function useTopicItem(item, hosting, remove, contentKey) {
   };
 
   const clickableText = (text) => {
-      const urlPatternn = new RegExp('^(https?:\\/\\/)?'+ // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-
+      const urlPattern = new RegExp('(https?:\\/\\/)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)');
       const hostPattern = new RegExp('^https?:\\/\\/', 'i');
 
       let clickable = [];
       let group = '';
       const words = text == null ? [''] : text.split(' ');
       words.forEach((word, index) => {
-        if (!!urlPatternn.test(word)) {
+        if (!!urlPattern.test(word)) {
           clickable.push(<Text key={index}>{ group }</Text>);
           group = '';
           const url = !!hostPattern.test(word) ? word : `https://${word}`;

@@ -121,9 +121,8 @@ func SendPushEvent(account store.Account, event string) {
         if pushToken == "" || pushToken == "null" {
           continue;
         }
-        url := "https://fcm.googleapis.com/fcm/send"
-        payload := Payload{ Title: messageTitle, Body: messageBody, Sound: "default" };
-        message := Message{ Notification: payload, To: pushToken };
+        url := "https://repeater.coredb.org/notify"
+        message := PushMessage{ Title: messageTitle, Body: messageBody, Token: pushToken };
 
         body, err := json.Marshal(message)
         if err != nil {
@@ -136,7 +135,6 @@ func SendPushEvent(account store.Account, event string) {
           continue
         }
         req.Header.Set("Content-Type", "application/json; charset=utf-8")
-        req.Header.Set("Authorization", "key=AAAAkgDXt8c:APA91bEjH67QpUWU6uAfCIXLqm0kf6AdPNVICZPCcWbmgW9NGYIErAxMDTy4LEbe4ik93Ho4Z-AJNIhr6nXXKC9qKmyKkkYHJWAEVH47_FXBQV6rsoi9ZB_oiuV66XKKAy1V40GmvfaX")
         client := &http.Client{}
         resp, err := client.Do(req)
         if err != nil {

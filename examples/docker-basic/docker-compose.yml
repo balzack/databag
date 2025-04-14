@@ -1,0 +1,14 @@
+name: databag-example-http
+
+services:
+  app:
+    image: balzack/databag:latest
+    restart: unless-stopped
+    ports:
+      - 127.0.0.1:7000:7000
+    volumes:
+      - database:/var/lib/databag
+    environment:
+      - ADMIN=password
+volumes:
+  database:

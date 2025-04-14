@@ -1,0 +1,17 @@
+[Unit]
+Description=push notification repeater for databag network
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+ExecStart=/usr/bin/repeater -p 443 -c /etc/letsencrypt/live/repeater.coredb.org/fullchain.pem -k /etc/letsencrypt/live/repeater.coredb.org/privkey.pem
+
+[Service]
+Environment="GOOGLE_APPLICATION_CREDENTIALS=/opt/databag/databag.json"
+
+[Install]
+WantedBy=multi-user.target
