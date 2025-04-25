@@ -13,15 +13,20 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3CE0531313B421FDF792C8FE /* Pods_Databag.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06CDD19F1F7DE25CC8A02055 /* Pods_Databag.framework */; };
+		62426252AD39473F9FB5D909 /* Inter.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EFD22053930A4D7D98285168 /* Inter.ttf */; };
 		7B906BF52D6B981C00CD259B /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B906BF42D6B981C00CD259B /* ShareViewController.swift */; };
 		7B906BF82D6B981C00CD259B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B906BF62D6B981C00CD259B /* MainInterface.storyboard */; };
 		7B906BFC2D6B981C00CD259B /* Sharing.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7B906BF22D6B981C00CD259B /* Sharing.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7BA1FE852D5A980A00E0BA61 /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 7BA1FE842D5A980900E0BA61 /* splash.png */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		A5B7FC281C05400F8757671A /* InterTight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EF6236F602944D28727D6F7 /* InterTight.ttf */; };
+		D0DB12D1FB9E41F69A47108A /* InterTightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE1B7AAB91474CEDBC33ADCA /* InterTightItalic.ttf */; };
 		D1C6D9BEEAC47E1C73323937 /* Pods_Databag_DatabagTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 090757CEAF7E8ADAF5BD2FA0 /* Pods_Databag_DatabagTests.framework */; };
+		EFB89D9915224D5798CB5212 /* InterItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D88CDB35846C4B4FA7059BD9 /* InterItalic.ttf */; };
 		F010EC9C2D6FD0AB004D69A6 /* blended.png in Resources */ = {isa = PBXBuildFile; fileRef = F010EC9B2D6FD0AB004D69A6 /* blended.png */; };
 		F072E6EA2D3701D9007511E6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F072E6E92D3701D9007511E6 /* GoogleService-Info.plist */; };
 		F0C4E50B2D3B1A95009FC1C9 /* login.png in Resources */ = {isa = PBXBuildFile; fileRef = F0C4E50A2D3B1A95009FC1C9 /* login.png */; };
+		54551D1D71344D2EB771F91F /* InterRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9001084093C847C68F97F092 /* InterRegular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +74,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Databag/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = Databag/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-Databag.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Databag.debug.xcconfig"; path = "Target Support Files/Pods-Databag/Pods-Databag.debug.xcconfig"; sourceTree = "<group>"; };
+		4EF6236F602944D28727D6F7 /* InterTight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = InterTight.ttf; path = ../assets/fonts/InterTight.ttf; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-Databag.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Databag.release.xcconfig"; path = "Target Support Files/Pods-Databag/Pods-Databag.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-Databag-DatabagTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Databag-DatabagTests.debug.xcconfig"; path = "Target Support Files/Pods-Databag-DatabagTests/Pods-Databag-DatabagTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7B413FF92C6CFD4F0032D17C /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
@@ -80,12 +86,16 @@
 		7BA1FE842D5A980900E0BA61 /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = splash.png; path = ../src/images/splash.png; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Databag/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Databag-DatabagTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Databag-DatabagTests.release.xcconfig"; path = "Target Support Files/Pods-Databag-DatabagTests/Pods-Databag-DatabagTests.release.xcconfig"; sourceTree = "<group>"; };
+		CE1B7AAB91474CEDBC33ADCA /* InterTightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = InterTightItalic.ttf; path = ../assets/fonts/InterTightItalic.ttf; sourceTree = "<group>"; };
+		D88CDB35846C4B4FA7059BD9 /* InterItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = InterItalic.ttf; path = ../assets/fonts/InterItalic.ttf; sourceTree = "<group>"; };
 		EA9B975EA9789519AEC0AE47 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Databag/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		EFD22053930A4D7D98285168 /* Inter.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Inter.ttf; path = ../assets/fonts/Inter.ttf; sourceTree = "<group>"; };
 		F010EC9B2D6FD0AB004D69A6 /* blended.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blended.png; sourceTree = "<group>"; };
 		F072E6E92D3701D9007511E6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F072E6EB2D370868007511E6 /* Databag.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Databag.entitlements; path = Databag/Databag.entitlements; sourceTree = "<group>"; };
 		F0C4E50A2D3B1A95009FC1C9 /* login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = login.png; path = ../src/images/login.png; sourceTree = "<group>"; };
+		9001084093C847C68F97F092 /* InterRegular.ttf */ = {isa = PBXFileReference; name = "InterRegular.ttf"; path = "../assets/fonts/InterRegular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +140,19 @@
 				00E356F11AD99517003FC87E /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		11ABFBF13D274735BDE673CE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				EFD22053930A4D7D98285168 /* Inter.ttf */,
+				D88CDB35846C4B4FA7059BD9 /* InterItalic.ttf */,
+				4EF6236F602944D28727D6F7 /* InterTight.ttf */,
+				CE1B7AAB91474CEDBC33ADCA /* InterTightItalic.ttf */,
+				9001084093C847C68F97F092 /* InterRegular.ttf */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 		13B07FAE1A68108700A75B9A /* Databag */ = {
@@ -191,6 +214,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				11ABFBF13D274735BDE673CE /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -344,6 +368,11 @@
 				7BA1FE852D5A980A00E0BA61 /* splash.png in Resources */,
 				054418A1394B8F74B2D5F56A /* PrivacyInfo.xcprivacy in Resources */,
 				F010EC9C2D6FD0AB004D69A6 /* blended.png in Resources */,
+				62426252AD39473F9FB5D909 /* Inter.ttf in Resources */,
+				EFB89D9915224D5798CB5212 /* InterItalic.ttf in Resources */,
+				A5B7FC281C05400F8757671A /* InterTight.ttf in Resources */,
+				D0DB12D1FB9E41F69A47108A /* InterTightItalic.ttf in Resources */,
+				54551D1D71344D2EB771F91F /* InterRegular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

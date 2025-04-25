@@ -11,12 +11,12 @@ import {Session} from './src/session/Session';
 import ReceiveSharingIntent from 'react-native-receive-sharing-intent';
 
 import {useColorScheme} from 'react-native';
-import {MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
+import {configureFonts, MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
 
 const databagColors = {
   light: {
     name: 'light',
-    primary: 'rgb(0, 108, 71)',
+    primary: '#224433',
     onPrimary: 'rgb(255, 255, 255)',
     primaryContainer: 'rgb(142, 247, 193)',
     onPrimaryContainer: 'rgb(0, 33, 19)',
@@ -52,6 +52,10 @@ const databagColors = {
       level3: 'rgb(216, 216, 216)',
       level4: 'rgb(208, 208, 208)',
       level5: 'rgb(200, 200, 200)',
+      level6: 'rgb(200, 200, 200)',
+      level7: 'rgb(200, 200, 200)',
+      level8: 'rgb(200, 200, 200)',
+      level9: '#8FBEA7',
     },
     surfaceDisabled: 'rgba(25, 28, 26, 0.12)',
     onSurfaceDisabled: 'rgba(25, 28, 26, 0.38)',
@@ -96,6 +100,10 @@ const databagColors = {
       level3: 'rgb(24, 24, 24)',
       level4: 'rgb(64, 64, 64)',
       level5: 'rgb(80, 80, 80)',
+      level6: 'rgb(200, 200, 200)',
+      level7: 'rgb(200, 200, 200)',
+      level8: 'rgb(200, 200, 200)',
+      level9: '#224433',
     },
     surfaceDisabled: 'rgba(225, 227, 223, 0.12)',
     onSurfaceDisabled: 'rgba(225, 227, 223, 0.38)',
@@ -123,10 +131,29 @@ function App(): React.JSX.Element {
     return () => {ReceiveSharingIntent.clearReceivedFiles() }
   }, []);
 
+  const fonts = {
+    default: {fontFamily: "Inter-Regular", fontWeight: "400", letterSpacing: 0},
+    bodyLarge: {fontFamily: "Inter-Regular", fontSize: 16, fontWeight: "400", letterSpacing: 0.15, lineHeight: 24},
+    bodyMedium: {fontFamily: "Inter-Regular", fontSize: 14, fontWeight: "400", letterSpacing: 0.25, lineHeight: 20},
+    bodySmall: {fontFamily: "Inter-Regular", fontSize: 12, fontWeight: "400", letterSpacing: 0.4, lineHeight: 16},
+    displayLarge: {fontFamily: "Inter-Regular", fontSize: 57, fontWeight: "400", letterSpacing: 0, lineHeight: 64},
+    displayMedium: {fontFamily: "Inter-Regular", fontSize: 45, fontWeight: "400", letterSpacing: 0, lineHeight: 52},
+    displaySmall: {fontFamily: "Inter-Regular", fontSize: 36, fontWeight: "400", letterSpacing: 0, lineHeight: 44},
+    headlineLarge: {fontFamily: "Inter-Regular", fontSize: 32, fontWeight: "400", letterSpacing: 0, lineHeight: 40},
+    headlineMedium: {fontFamily: "Inter-Regular", fontSize: 28, fontWeight: "400", letterSpacing: 0, lineHeight: 36},
+    headlineSmall: {fontFamily: "Inter-Regular", fontSize: 24, fontWeight: "400", letterSpacing: 0, lineHeight: 32},
+    labelLarge: {fontFamily: "Inter-Regular", fontSize: 14, fontWeight: "500", letterSpacing: 0.1, lineHeight: 20},
+    labelMedium: {fontFamily: "Inter-Regular", fontSize: 12, fontWeight: "500", letterSpacing: 0.5, lineHeight: 16},
+    labelSmall: {fontFamily: "Inter-Regular", fontSize: 11, fontWeight: "500", letterSpacing: 0.5, lineHeight: 16},
+    titleLarge: {fontFamily: "Inter-Tight", fontSize: 48, fontWeight: "900", letterSpacing: 0, lineHeight: 28},
+    titleMedium: {fontFamily: "Inter-Regular", fontSize: 16, fontWeight: "500", letterSpacing: 0.15, lineHeight: 24},
+    titleSmall: {fontFamily: "Inter-Regular", fontSize: 14, fontWeight: "500", letterSpacing: 0.1, lineHeight: 20}
+  }
+
   const theme =
     colorScheme === 'dark'
-      ? {...MD3DarkTheme, colors: databagColors.dark}
-      : {...MD3LightTheme, colors: databagColors.light};
+      ? {...MD3DarkTheme, colors: databagColors.dark, fonts }
+      : {...MD3LightTheme, colors: databagColors.light, fonts };
 
   barStyle = colorScheme === 'dark' ? 'light-content' : 'dark-content';
   backgroundColor = colorScheme === 'dark' ? databagColors.dark.elevation.level3 : databagColors.light.elevation.level3;

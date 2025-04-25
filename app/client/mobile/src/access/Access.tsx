@@ -57,13 +57,13 @@ export function Access() {
   };
 
   return (
-    <Surface style={styles.split}>
+    <Surface style={styles.split} elevation={9}>
       {state.layout === 'large' && <Image style={styles.left} source={left} resizeMode="contain" />}
       <KeyboardAwareScrollView style={styles.frame} contentContainerStyle={styles.scroll} enableOnAndroid={true}>
         <SafeAreaView style={styles.right} edges={['top', 'bottom']}>
           <View style={styles.header}>
             <View style={styles.admin} />
-            <Text style={styles.label} variant="headlineLarge">
+            <Text style={styles.label} variant="titleLarge">
               Databag
             </Text>
             <View style={styles.admin}>
@@ -76,12 +76,11 @@ export function Access() {
               <Text variant="headlineSmall">{state.strings.accountLogin}</Text>
               <TextInput
                 style={styles.input}
-                mode="flat"
+                mode="outlined"
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={Platform.OS === 'ios' ? state.strings.server : undefined}
-                placeholder={Platform.OS !== 'ios' ? state.strings.server : undefined}
+                placeholder={state.strings.server}
                 value={state.node}
                 left={<TextInput.Icon style={styles.icon} icon="server" />}
                 onChangeText={value => actions.setNode(value)}
