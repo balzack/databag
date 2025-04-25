@@ -1,6 +1,8 @@
 import {NativeModules, Platform} from 'react-native';
 
 export const en = {
+  notUser: 'Not a user?',
+
   viewTerms: 'View Terms of Service',
   acceptTerms: 'Accept Terms of Service',
   terms: 'Terms of Service',

@@ -145,9 +145,9 @@ function App(): React.JSX.Element {
     labelLarge: {fontFamily: "Inter-Regular", fontSize: 14, fontWeight: "500", letterSpacing: 0.1, lineHeight: 20},
     labelMedium: {fontFamily: "Inter-Regular", fontSize: 12, fontWeight: "500", letterSpacing: 0.5, lineHeight: 16},
     labelSmall: {fontFamily: "Inter-Regular", fontSize: 11, fontWeight: "500", letterSpacing: 0.5, lineHeight: 16},
-    titleLarge: {fontFamily: "Inter-Tight", fontSize: 48, fontWeight: "900", letterSpacing: 0, lineHeight: 28},
-    titleMedium: {fontFamily: "Inter-Regular", fontSize: 16, fontWeight: "500", letterSpacing: 0.15, lineHeight: 24},
-    titleSmall: {fontFamily: "Inter-Regular", fontSize: 14, fontWeight: "500", letterSpacing: 0.1, lineHeight: 20}
+    titleLarge: {fontFamily: "Inter-Tight", fontSize: 48, fontWeight: "900", letterSpacing: 0, lineHeight: 48},
+    titleMedium: {fontFamily: "Inter-Regular", fontSize: 20, fontWeight: "500", letterSpacing: 0.15, lineHeight: 20},
+    titleSmall: {fontFamily: "Inter-Regular", fontSize: 18, fontWeight: "500", letterSpacing: 0.1, lineHeight: 24}
   }
 
   const theme =

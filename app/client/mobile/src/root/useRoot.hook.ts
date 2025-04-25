@@ -4,7 +4,7 @@ import {ContextType} from '../context/ContextType';
 import {useLocation, useNavigate} from 'react-router-dom';
 import SplashScreen from 'react-native-splash-screen';
 
-const CLEAR_TIME = 2000;
+const CLEAR_TIME = 5000;
 
 export function useRoot() {
   const app = useContext(AppContext) as ContextType;

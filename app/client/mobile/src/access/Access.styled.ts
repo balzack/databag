@@ -1,6 +1,74 @@
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
+  splash: {
+    position: 'absolute',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+  },
+  typer: {
+    width: 286,
+    height: 257,
+  },
+  full: {
+    width: '100%',
+    height: '100%',
+  },
+  frame: {
+    width: '100%',
+    height: '100%',
+  },
+  scroll: {
+    flexGrow: 1,
+    width: '100%',
+  },
+  wrapper: {
+    display: 'flex',
+    flexGrow: 1,
+  },
+  form: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    paddingTop: 64,
+    flexGrow: 1,
+  },
+  header: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  headline: {
+    textAlign: 'center',
+    paddingTop: 16,
+    paddingLeft: 48,
+    paddingRight: 48,
+  },
+  footer: {
+    display: 'flex',
+    flexGrow: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingBottom: 64,
+    gap: 16,
+  },    
+  footline: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  continue: {
+    borderRadius: 8,
+    paddingLeft: 32,
+    paddingRight: 32,
+  },
+
+
   avoid: {
     flex: 1,
   },
@@ -61,24 +129,6 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
     height: '100%',
     backgroundColor: '#90bea7',
-  },
-  frame: {
-    position: 'relative',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 8,
-    minHeight: 0,
-    flexGrow: 1,
-  },
-  scroll: {
-    flexGrow: 1,
-    justifyContent: 'space-between',
-  },
-  header: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
   },
   body: {
     display: 'flex',

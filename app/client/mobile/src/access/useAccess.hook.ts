@@ -12,7 +12,7 @@ export function useAccess() {
   const [state, setState] = useState({
     layout: null,
     strings: {},
-    mode: 'account',
+    mode: 'splash',
     username: '',
     handle: '',
     password: '',
@@ -79,6 +79,7 @@ export function useAccess() {
   };
 
   useEffect(() => {
+console.log("SHOW BASE")
     const {layout, strings} = display.state;
     updateState({layout, strings});
   }, [display.state]);

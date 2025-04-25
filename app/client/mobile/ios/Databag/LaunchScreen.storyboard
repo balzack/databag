@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="iPad13_0rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
+    <device id="retina6_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
@@ -13,23 +13,23 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="1032" height="1376"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="956"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blended.png" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RlL-UR-Ow6">
-                                <rect key="frame" x="416" y="588" width="200" height="200"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="typer.png" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RlL-UR-Ow6">
+                                <rect key="frame" x="77" y="349.66666666666669" width="286" height="257.00000000000006"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="286" id="UEN-IM-MWB"/>
+                                    <constraint firstAttribute="height" constant="257" id="glV-z2-YVi"/>
+                                </constraints>
                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="medium"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" red="0.60049933200000005" green="0.73875194789999998" blue="0.65881437060000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
-                            <constraint firstItem="RlL-UR-Ow6" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="78i-Gt-UyF"/>
-                            <constraint firstItem="RlL-UR-Ow6" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="78q-8P-Juo"/>
-                            <constraint firstItem="RlL-UR-Ow6" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Jun-fC-1Jh"/>
-                            <constraint firstItem="RlL-UR-Ow6" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="QB0-4P-fdi"/>
-                            <constraint firstItem="RlL-UR-Ow6" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="i5a-Pg-eJC"/>
-                            <constraint firstItem="RlL-UR-Ow6" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="rtl-wH-ne0"/>
+                            <constraint firstItem="RlL-UR-Ow6" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Nlj-5w-t4d"/>
+                            <constraint firstItem="RlL-UR-Ow6" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="ga7-1i-Bhf"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -39,6 +39,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="blended.png" width="200" height="200"/>
+        <image name="typer.png" width="286" height="257"/>
     </resources>
 </document>

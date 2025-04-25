@@ -4,6 +4,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useAccess} from './useAccess.hook';
 import {styles} from './Access.styled';
 import left from '../images/login.png';
+import typer from '../images/typer.png';
 import {IconButton, Divider, Surface, Text, TextInput, Button, Checkbox} from 'react-native-paper';
 import {BlurView} from '@react-native-community/blur';
 import {InputCode} from '../utils/InputCode';
@@ -57,312 +58,37 @@ export function Access() {
   };
 
   return (
-    <Surface style={styles.split} elevation={9}>
-      {state.layout === 'large' && <Image style={styles.left} source={left} resizeMode="contain" />}
+    <Surface style={styles.full} elevation={9}>
       <KeyboardAwareScrollView style={styles.frame} contentContainerStyle={styles.scroll} enableOnAndroid={true}>
-        <SafeAreaView style={styles.right} edges={['top', 'bottom']}>
-          <View style={styles.header}>
-            <View style={styles.admin} />
-            <Text style={styles.label} variant="titleLarge">
-              Databag
-            </Text>
-            <View style={styles.admin}>
-              {state.mode !== 'admin' && <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => actions.setMode('admin')} />}
-              {state.mode === 'admin' && <IconButton style={styles.admin} icon="account-outline" size={28} onPress={() => actions.setMode('account')} />}
+        <SafeAreaView style={styles.wrapper} edges={['top', 'bottom']}>
+          <View style={styles.form}>
+            <View style={styles.header}>
+              <Text variant="titleLarge">
+                Databag
+              </Text>
             </View>
-          </View>
-          {state.mode === 'account' && (
-            <View style={styles.body}>
-              <Text variant="headlineSmall">{state.strings.accountLogin}</Text>
-              <TextInput
-                style={styles.input}
-                mode="outlined"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect={false}
-                placeholder={state.strings.server}
-                value={state.node}
-                left={<TextInput.Icon style={styles.icon} icon="server" />}
-                onChangeText={value => actions.setNode(value)}
-              />
-              <TextInput
-                style={styles.input}
-                mode="flat"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect={false}
-                label={Platform.OS === 'ios' ? state.strings.username : undefined}
-                placeholder={Platform.OS !== 'ios' ? state.strings.username : undefined}
-                value={state.username}
-                left={<TextInput.Icon style={styles.icon} icon="account" />}
-                onChangeText={value => actions.setUsername(value)}
-              />
-              <TextInput
-                style={styles.input}
-                mode="flat"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect={false}
-                value={state.password}
-                label={Platform.OS === 'ios' ? state.strings.password : undefined}
-                placeholder={Platform.OS !== 'ios' ? state.strings.password : undefined}
-                secureTextEntry={!showPassword}
-                left={<TextInput.Icon style={styles.icon} icon="lock" />}
-                right={
-                  showPassword ? (
-                    <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
-                  ) : (
-                    <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
-                  )
-                }
-                onChangeText={value => actions.setPassword(value)}
-              />
-              <Button style={styles.terms} mode="text" onPress={() => setTerms(true)}>
-                {state.strings.viewTerms}
-              </Button>
-              <View style={styles.accept}>
-                <Checkbox.Android
-                  status={accept ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setAccept(!accept);
-                  }}
-                />
-                <Text>{state.strings.acceptTerms}</Text>
-              </View>
-              {(!state.username || !state.password || !state.node || !accept) && (
-                <Button mode="contained" style={styles.submit} disabled={true}>
-                  {state.strings.login}
-                </Button>
-              )}
-              {state.username && state.password && state.node && accept && (
-                <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading}>
-                  {state.strings.login}
-                </Button>
-              )}
-              <Button mode="text" onPress={() => actions.setMode('create')}>
-                {state.strings.createAccount}
-              </Button>
-              <Button mode="text" onPress={() => actions.setMode('reset')}>
-                {state.strings.forgotPassword}
-              </Button>
+            <View style={styles.header}>
+              <Text style={styles.headline} variant="titleSmall">{ state.strings.communication }</Text>
             </View>
-          )}
-          {state.mode === 'reset' && (
-            <View style={styles.body}>
-              <Text variant="headlineSmall">{state.strings.accessAccount}</Text>
-              <TextInput
-                style={styles.input}
-                mode="flat"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect={false}
-                label={Platform.OS === 'ios' ? state.strings.token : undefined}
-                placeholder={Platform.OS !== 'ios' ? state.strings.token : undefined}
-                left={<TextInput.Icon style={styles.icon} icon="ticket-account" />}
-                onChangeText={value => actions.setToken(value)}
-              />
-              <TextInput
-                style={styles.input}
-                mode="flat"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect={false}
-                label={Platform.OS === 'ios' ? state.strings.server : undefined}
-                placeholder={Platform.OS !== 'ios' ? state.strings.server : undefined}
-                value={state.node}
-                left={<TextInput.Icon style={styles.icon} icon="server" />}
-                onChangeText={value => actions.setNode(value)}
-              />
-              <Button style={styles.terms} mode="text" onPress={() => setTerms(true)}>
-                {state.strings.viewTerms}
-              </Button>
-              <View style={styles.accept}>
-                <Checkbox.Android
-                  status={accept ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setAccept(!accept);
-                  }}
-                />
-                <Text>{state.strings.acceptTerms}</Text>
-              </View>
-              <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading} disabled={!state.token || !state.node || !accept}>
-                {state.strings.access}
-              </Button>
-              <Button mode="text" onPress={() => actions.setMode('create')}>
-                {state.strings.createAccount}
-              </Button>
-              <Button mode="text" onPress={() => actions.setMode('account')}>
-                {state.strings.accountLogin}
-              </Button>
-            </View>
-          )}
-          {state.mode === 'create' && (
-            <View style={styles.body}>
-              <Text variant="headlineSmall">{state.strings.createAccount}</Text>
-              <View style={styles.spacer}>
-                {!state.available && (
-                  <TextInput
-                    style={styles.input}
-                    mode="flat"
-                    autoCapitalize="none"
-                    autoComplete="off"
-                    autoCorrect={false}
-                    label={Platform.OS === 'ios' ? state.strings.token : undefined}
-                    placeholder={Platform.OS !== 'ios' ? state.strings.token : undefined}
-                    left={<TextInput.Icon style={styles.icon} icon="ticket-account" />}
-                    onChangeText={value => actions.setToken(value)}
-                  />
-                )}
-              </View>
-              <TextInput
-                style={styles.input}
-                mode="flat"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect={false}
-                label={Platform.OS === 'ios' ? state.strings.server : undefined}
-                placeholder={Platform.OS !== 'ios' ? state.strings.server : undefined}
-                value={state.node}
-                left={<TextInput.Icon style={styles.icon} icon="server" />}
-                onChangeText={value => actions.setNode(value)}
-              />
-              <TextInput
-                style={styles.input}
-                mode="flat"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect={false}
-                error={state.taken}
-                label={Platform.OS === 'ios' ? state.strings.username : undefined}
-                placeholder={Platform.OS !== 'ios' ? state.strings.username : undefined}
-                value={state.username}
-                left={<TextInput.Icon style={styles.icon} icon="account" />}
-                onChangeText={value => actions.setUsername(value)}
-              />
-              <TextInput
-                style={styles.input}
-                mode="flat"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect={false}
-                textContentType={'oneTimeCode'}
-                value={state.password}
-                label={Platform.OS === 'ios' ? state.strings.password : undefined}
-                placeholder={Platform.OS !== 'ios' ? state.strings.password : undefined}
-                secureTextEntry={!showPassword}
-                left={<TextInput.Icon style={styles.icon} icon="lock" />}
-                right={
-                  showPassword ? (
-                    <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
-                  ) : (
-                    <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
-                  )
-                }
-                onChangeText={value => actions.setPassword(value)}
-              />
-              <TextInput
-                style={styles.input}
-                mode="flat"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect={false}
-                textContentType={'oneTimeCode'}
-                value={state.confirm}
-                label={Platform.OS === 'ios' ? state.strings.confirmPassword : undefined}
-                placeholder={Platform.OS !== 'ios' ? state.strings.confirmPassword : undefined}
-                secureTextEntry={!showConfirm}
-                left={<TextInput.Icon style={styles.icon} icon="lock" />}
-                right={
-                  showPassword ? (
-                    <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowConfirm(false)} />
-                  ) : (
-                    <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowConfirm(true)} />
-                  )
-                }
-                onChangeText={value => actions.setConfirm(value)}
-              />
-              <Button style={styles.terms} mode="text" onPress={() => setTerms(true)}>
-                {state.strings.viewTerms}
-              </Button>
-              <View style={styles.accept}>
-                <Checkbox.Android
-                  status={accept ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setAccept(!accept);
-                  }}
-                />
-                <Text>{state.strings.acceptTerms}</Text>
-              </View>
-              <Button
-                mode="contained"
-                style={styles.submit}
-                onPress={login}
-                loading={state.loading}
-                disabled={!state.username || !state.password || state.password !== state.confirm || !state.node || !accept}>
-                {state.strings.create}
-              </Button>
-              <Button mode="text" onPress={() => actions.setMode('account')}>
-                {state.strings.accountLogin}
-              </Button>
-              <Button mode="text" onPress={() => actions.setMode('reset')}>
-                {state.strings.forgotPassword}
-              </Button>
-            </View>
-          )}
-          {state.mode === 'admin' && (
-            <View style={styles.body}>
-              <Text variant="headlineSmall">{state.strings.admin}</Text>
-              <TextInput
-                style={styles.input}
-                mode="flat"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect={false}
-                label={Platform.OS === 'ios' ? state.strings.server : undefined}
-                placeholder={Platform.OS !== 'ios' ? state.strings.server : undefined}
-                value={state.node}
-                left={<TextInput.Icon style={styles.icon} icon="server" />}
-                onChangeText={value => actions.setNode(value)}
-              />
-              <TextInput
-                style={styles.input}
-                mode="flat"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect={false}
-                label={Platform.OS === 'ios' ? state.strings.password : undefined}
-                placeholder={Platform.OS !== 'ios' ? state.strings.password : undefined}
-                value={state.password}
-                secureTextEntry={!showPassword}
-                left={<TextInput.Icon style={styles.icon} icon="lock" />}
-                right={
-                  showPassword ? (
-                    <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
-                  ) : (
-                    <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
-                  )
-                }
-                onChangeText={value => actions.setPassword(value)}
-              />
-              <Button style={styles.terms} mode="text" onPress={() => setTerms(true)}>
-                {state.strings.viewTerms}
-              </Button>
-              <View style={styles.accept}>
-                <Checkbox.Android
-                  status={accept ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setAccept(!accept);
-                  }}
-                />
-                <Text>{state.strings.acceptTerms}</Text>
-              </View>
-              <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading} disabled={!state.password || !state.node || !accept}>
+            <View style={styles.footer}>
+              <Button mode="contained" style={styles.continue} onPress={actions.continue}>
                 {state.strings.login}
               </Button>
+              <View style={styles.footline}>
+                <Text>{ state.strings.notUser }</Text>
+                <Button mode="text" onPress={actions.continue}>
+                  {state.strings.createAccount}
+                </Button>
+              </View>
             </View>
-          )}
+          </View>
         </SafeAreaView>
       </KeyboardAwareScrollView>
+      {state.mode === 'splash' && (
+        <View style={styles.splash}>
+          <Image style={styles.typer} source={typer} resizeMode="contain" />
+        </View>
+      )}
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={otp} onRequestClose={() => setOtp(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />

@@ -68,8 +68,6 @@ export function useAppContext() {
     } else {
       updateState({fullDayTime, monthFirstDate, showWelcome, initialized: true});
     }
-
-    await requestUserPermission();
   };
 
   useEffect(() => {
@@ -194,6 +192,9 @@ export function useAppContext() {
     },
     clearSharing: () => {
       updateState({sharing: null});
+    },
+    requestPermission: async () => {
+      await requestUserPermission();
     },
   };
 
