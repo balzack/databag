@@ -48,6 +48,14 @@ export const styles = StyleSheet.create({
     paddingLeft: 48,
     paddingRight: 48,
   },
+  start: {
+    display: 'flex',
+    flexGrow: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingBottom: '20%',
+  },
   footer: {
     display: 'flex',
     flexGrow: 1,
@@ -55,6 +63,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     gap: 16,
+    paddingTop: 16,
+    paddingBottom: 16,
   },    
   footline: {
     display: 'flex',
@@ -71,22 +81,20 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     alignItems: 'center',
-    paddingTop: 16,
-    paddingBottom: 16,
     flexGrow: 1,
+    marginTop: 16,
   },
   block: {
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
     alignItems: 'center',
-    paddingTop: 16,
-    paddingBottom: 16,
+    paddingTop: 8,
+    paddingBottom: 8,
   },  
   legal: {
     padding: 16,
   },
-
   avoid: {
     flex: 1,
   },
@@ -157,7 +165,6 @@ export const styles = StyleSheet.create({
     maxWidth: 300,
     width: '80%',
     margin: 4,
-    marginTop: 16,
   },
   spacer: {
     width: '100%',

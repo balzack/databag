@@ -78,7 +78,7 @@ export function Access() {
               </View>
             )}
             { state.mode === 'splash' && (
-              <View style={styles.footer}>
+              <View style={styles.start}>
                 <Button mode="contained" style={styles.submit} onPress={() => actions.continue(false)}>
                   {state.strings.login}
                 </Button>
@@ -87,6 +87,253 @@ export function Access() {
                   <Button mode="text" onPress={() => actions.continue(true)}>
                     {state.strings.createAccount}
                   </Button>
+                </View>
+              </View>
+            )}
+            {state.mode === 'admin' && (
+              <View style={styles.blocks}>
+                <Text variant="headlineSmall">{state.strings.adminAccess}</Text>
+                <View style={styles.block}>
+                  <TextInput
+                    style={styles.input}
+                    mode="outlined"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    placeholder={state.strings.server}
+                    value={state.node}
+                    left={<TextInput.Icon style={styles.icon} icon="server" />}
+                    onChangeText={value => actions.setNode(value)}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    mode="outlined"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    placeholder={state.strings.password}
+                    value={state.password}
+                    secureTextEntry={!showPassword}
+                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                    right={
+                      showPassword ? (
+                        <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
+                      ) : (
+                        <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
+                      )
+                    }
+                    onChangeText={value => actions.setPassword(value)}
+                  />
+                </View>
+                <View style={styles.block}>
+                  <Button style={styles.terms} mode="text" onPress={() => setTerms(true)}>
+                    {state.strings.viewTerms}
+                  </Button>
+                  <View style={styles.accept}>
+                    <Checkbox.Android
+                      status={accept ? 'checked' : 'unchecked'}
+                      onPress={() => {
+                        setAccept(!accept);
+                      }}
+                    />
+                    <Text>{state.strings.acceptTerms}</Text>
+                  </View>
+                </View>
+                {(!state.password || !state.node || !accept) && (
+                  <Button mode="contained" style={styles.submit} disabled={true}>
+                    {state.strings.access}
+                  </Button>
+                )}
+                {state.password && state.node && accept && (
+                  <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading}>
+                    {state.strings.access}
+                  </Button>
+                )}
+                <View style={styles.footer}>
+                  <View style={styles.footline}>
+                    <IconButton style={styles.admin} icon="account-outline" size={28} onPress={() => actions.setMode('account')} />
+                    <Button mode="text" onPress={() => actions.setMode('account')}>
+                      {state.strings.accounts}
+                    </Button>
+                  </View>
+                </View>
+              </View>
+            )}
+            {state.mode === 'reset' && (
+              <View style={styles.blocks}>
+                <Text variant="headlineSmall">{state.strings.accessAccount}</Text>
+                <View style={styles.block}>
+                  <TextInput
+                    style={styles.input}
+                    mode="outlined"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    placeholder={state.strings.token}
+                    left={<TextInput.Icon style={styles.icon} icon="ticket-account" />}
+                    onChangeText={value => actions.setToken(value)}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    mode="outlined"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    placeholder={state.strings.server}
+                    value={state.node}
+                    left={<TextInput.Icon style={styles.icon} icon="server" />}
+                    onChangeText={value => actions.setNode(value)}
+                  />
+                </View>
+                <View style={styles.block}>
+                  <Button style={styles.terms} mode="text" onPress={() => setTerms(true)}>
+                    {state.strings.viewTerms}
+                  </Button>
+                  <View style={styles.accept}>
+                    <Checkbox.Android
+                      status={accept ? 'checked' : 'unchecked'}
+                      onPress={() => {
+                        setAccept(!accept);
+                      }}
+                    />
+                    <Text>{state.strings.acceptTerms}</Text>
+                  </View>
+                </View>
+                {(!state.username || !state.password || !state.node || !accept) && (
+                  <Button mode="contained" style={styles.submit} disabled={true}>
+                    {state.strings.access}
+                  </Button>
+                )}
+                {state.username && state.password && state.node && accept && (
+                  <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading}>
+                    {state.strings.access}
+                  </Button>
+                )}
+                <View style={styles.block}>
+                  <View style={styles.footline}>
+                    <Text>{ state.strings.notUser }</Text>
+                    <Button mode="text" onPress={() => actions.setMode('create')}>
+                      {state.strings.createAccount}
+                    </Button>
+                  </View>
+                  <Button mode="text" onPress={() => actions.setMode('account')}>
+                    {state.strings.accountLogin}
+                  </Button>
+                </View>
+                <View style={styles.footer}>
+                  <View style={styles.footline}>
+                    <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => actions.setMode('account')} />
+                    <Button mode="text" onPress={() => actions.setMode('admin')}>
+                      {state.strings.admin}
+                    </Button>
+                  </View>
+                </View>
+              </View>
+            )}
+            {state.mode === 'create' && (
+              <View style={styles.blocks}>
+                <Text variant="headlineSmall">{state.strings.createAccount}</Text>
+                <View style={styles.block}>
+                  <TextInput
+                    style={styles.input}
+                    mode="outlined"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    placeholder={state.strings.server}
+                    value={state.node}
+                    left={<TextInput.Icon style={styles.icon} icon="server" />}
+                    onChangeText={value => actions.setNode(value)}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    mode="outlined"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    error={state.taken}
+                    placeholder={state.strings.username}
+                    value={state.username}
+                    left={<TextInput.Icon style={styles.icon} icon="account" />}
+                    onChangeText={value => actions.setUsername(value)}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    mode="outlined"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    textContentType={'oneTimeCode'}
+                    value={state.password}
+                    placeholder={state.strings.password}
+                    secureTextEntry={!showPassword}
+                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                    right={
+                      showPassword ? (
+                        <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
+                      ) : (
+                        <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
+                      )
+                    }
+                    onChangeText={value => actions.setPassword(value)}
+                  />
+                  <View style={styles.spacer}>
+                    {!state.available && (
+                      <TextInput
+                        style={styles.input}
+                        mode="outlined"
+                        autoCapitalize="none"
+                        autoComplete="off"
+                        autoCorrect={false}
+                        placeholder={state.strings.token}
+                        left={<TextInput.Icon style={styles.icon} icon="ticket-account" />}
+                        onChangeText={value => actions.setToken(value)}
+                      />
+                    )}
+                  </View>
+                </View>
+                <View style={styles.block}>
+                  <Button style={styles.terms} mode="text" onPress={() => setTerms(true)}>
+                    {state.strings.viewTerms}
+                  </Button>
+                  <View style={styles.accept}>
+                    <Checkbox.Android
+                      status={accept ? 'checked' : 'unchecked'}
+                      onPress={() => {
+                        setAccept(!accept);
+                      }}
+                    />
+                    <Text>{state.strings.acceptTerms}</Text>
+                  </View>
+                </View>
+                {(!state.username || !state.password || !state.node || !accept) && (
+                  <Button mode="contained" style={styles.submit} disabled={true}>
+                    {state.strings.create}
+                  </Button>
+                )}
+                {state.username && state.password && state.node && accept && (
+                  <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading}>
+                    {state.strings.create}
+                  </Button>
+                )}
+                <View style={styles.block}>
+                  <View style={styles.footline}>
+                    <Text>{ state.strings.notUser }</Text>
+                    <Button mode="text" onPress={() => actions.setMode('create')}>
+                      {state.strings.createAccount}
+                    </Button>
+                  </View>
+                  <Button mode="text" onPress={() => actions.setMode('account')}>
+                    {state.strings.accountLogin}
+                  </Button>
+                </View>
+                <View style={styles.footer}>
+                  <View style={styles.footline}>
+                    <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => actions.setMode('account')} />
+                    <Button mode="text" onPress={() => actions.setMode('admin')}>
+                      {state.strings.admin}
+                    </Button>
+                  </View>
                 </View>
               </View>
             )}

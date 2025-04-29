@@ -2,6 +2,7 @@ import {NativeModules, Platform} from 'react-native';
 
 export const en = {
   notUser: 'Not a user?',
+  adminAccess: 'Admin Access',
 
   viewTerms: 'View Terms of Service',
   acceptTerms: 'Accept Terms of Service',
