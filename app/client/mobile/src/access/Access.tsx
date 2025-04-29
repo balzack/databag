@@ -59,6 +59,11 @@ export function Access() {
 
   return (
     <Surface style={styles.full} elevation={9}>
+      {state.mode === 'splash' && (
+        <View style={styles.splash}>
+          <Image style={styles.typer} source={typer} resizeMode="contain" />
+        </View>
+      )}
       <KeyboardAwareScrollView style={styles.frame} contentContainerStyle={styles.scroll} enableOnAndroid={true}>
         <SafeAreaView style={styles.wrapper} edges={['top', 'bottom']}>
           <View style={styles.form}>
@@ -67,28 +72,118 @@ export function Access() {
                 Databag
               </Text>
             </View>
-            <View style={styles.header}>
-              <Text style={styles.headline} variant="titleSmall">{ state.strings.communication }</Text>
-            </View>
-            <View style={styles.footer}>
-              <Button mode="contained" style={styles.continue} onPress={actions.continue}>
-                {state.strings.login}
-              </Button>
-              <View style={styles.footline}>
-                <Text>{ state.strings.notUser }</Text>
-                <Button mode="text" onPress={actions.continue}>
-                  {state.strings.createAccount}
-                </Button>
+            { state.mode === 'splash' && (
+              <View style={styles.header}>
+                <Text style={styles.headline} variant="titleSmall">{ state.strings.communication }</Text>
               </View>
-            </View>
+            )}
+            { state.mode === 'splash' && (
+              <View style={styles.footer}>
+                <Button mode="contained" style={styles.submit} onPress={() => actions.continue(false)}>
+                  {state.strings.login}
+                </Button>
+                <View style={styles.footline}>
+                  <Text variant="bodySmall">{ state.strings.notUser }</Text>
+                  <Button mode="text" onPress={() => actions.continue(true)}>
+                    {state.strings.createAccount}
+                  </Button>
+                </View>
+              </View>
+            )}
+            {state.mode === 'account' && (
+              <View style={styles.blocks}>
+                <Text variant="headlineSmall">{state.strings.login}</Text>
+                <View style={styles.block}>
+                  <TextInput
+                    style={styles.input}
+                    mode="outlined"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    placeholder={state.strings.server}
+                    value={state.node}
+                    left={<TextInput.Icon style={styles.icon} icon="server" />}
+                    onChangeText={value => actions.setNode(value)}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    mode="outlined"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    placeholder={state.strings.username}
+                    value={state.username}
+                    left={<TextInput.Icon style={styles.icon} icon="account" />}
+                    onChangeText={value => actions.setUsername(value)}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    mode="outlined"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    value={state.password}
+                    placeholder={state.strings.password}
+                    secureTextEntry={!showPassword}
+                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                    right={
+                      showPassword ? (
+                        <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
+                      ) : (
+                        <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
+                      )
+                    }
+                    onChangeText={value => actions.setPassword(value)}
+                  />
+                </View>
+                <View style={styles.block}>
+                  <Button style={styles.terms} mode="text" onPress={() => setTerms(true)}>
+                    {state.strings.viewTerms}
+                  </Button>
+                  <View style={styles.accept}>
+                    <Checkbox.Android
+                      status={accept ? 'checked' : 'unchecked'}
+                      onPress={() => {
+                        setAccept(!accept);
+                      }}
+                    />
+                    <Text>{state.strings.acceptTerms}</Text>
+                  </View>
+                </View>
+                {(!state.username || !state.password || !state.node || !accept) && (
+                  <Button mode="contained" style={styles.submit} disabled={true}>
+                    {state.strings.login}
+                  </Button>
+                )}
+                {state.username && state.password && state.node && accept && (
+                  <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading}>
+                    {state.strings.login}
+                  </Button>
+                )}
+                <View style={styles.block}>
+                  <View style={styles.footline}>
+                    <Text>{ state.strings.notUser }</Text>
+                    <Button mode="text" onPress={() => actions.setMode('create')}>
+                      {state.strings.createAccount}
+                    </Button>
+                  </View>
+                  <Button mode="text" onPress={() => actions.setMode('reset')}>
+                    {state.strings.forgotPassword}
+                  </Button>
+                </View>
+                <View style={styles.footer}>
+                  <View style={styles.footline}>
+                    <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => actions.setMode('account')} />
+                    <Button mode="text" onPress={() => actions.setMode('admin')}>
+                      {state.strings.admin}
+                    </Button>
+                  </View>
+                </View>
+              </View>
+            )}
           </View>
         </SafeAreaView>
       </KeyboardAwareScrollView>
-      {state.mode === 'splash' && (
-        <View style={styles.splash}>
-          <Image style={styles.typer} source={typer} resizeMode="contain" />
-        </View>
-      )}
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={otp} onRequestClose={() => setOtp(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />

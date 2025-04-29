@@ -79,7 +79,6 @@ export function useAccess() {
   };
 
   useEffect(() => {
-console.log("SHOW BASE")
     const {layout, strings} = display.state;
     updateState({layout, strings});
   }, [display.state]);
@@ -125,6 +124,10 @@ console.log("SHOW BASE")
     adminLogin: async () => {
       const {password, node, secure, code} = state;
       await app.actions.adminLogin(password, node, secure, code);
+    },
+    continue: (create: boolean) => {
+      updateState({ mode: create ? 'create' : 'account' });
+      app.actions.requestPermission();
     },
   };
 

@@ -54,7 +54,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    paddingBottom: 64,
     gap: 16,
   },    
   footline: {
@@ -62,12 +61,31 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  continue: {
+  submit: {
     borderRadius: 8,
     paddingLeft: 32,
     paddingRight: 32,
   },
-
+  blocks: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    alignItems: 'center',
+    paddingTop: 16,
+    paddingBottom: 16,
+    flexGrow: 1,
+  },
+  block: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    alignItems: 'center',
+    paddingTop: 16,
+    paddingBottom: 16,
+  },  
+  legal: {
+    padding: 16,
+  },
 
   avoid: {
     flex: 1,
@@ -105,12 +123,9 @@ export const styles = StyleSheet.create({
     paddingTop: 64,
   },
   admin: {
-    width: 64,
-    marginRight: 8,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: 'transparent',
+    margin: 0,
+    padding: 0,
   },
   split: {
     display: 'flex',
@@ -161,11 +176,6 @@ export const styles = StyleSheet.create({
     top: 0,
     margin: 64,
   },
-  submit: {
-    marginTop: 16,
-    marginBottom: 8,
-    width: 'auto',
-  },
   float: {
     position: 'absolute',
     right: 0,
@@ -211,7 +221,6 @@ export const styles = StyleSheet.create({
     gap: 16,
   },
   terms: {
-    marginTop: 16,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
