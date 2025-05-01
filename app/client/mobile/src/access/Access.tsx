@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Modal, Platform, ScrollView, View, Image, SafeAreaView} from 'react-native';
+import { useAnimatedValue, Animated, Modal, Platform, ScrollView, View, Image, SafeAreaView} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useAccess} from './useAccess.hook';
 import {styles} from './Access.styled';
@@ -19,6 +19,30 @@ export function Access() {
   const [alert, setAlert] = useState(false);
   const [otp, setOtp] = useState(false);
   const [terms, setTerms] = useState(false);
+
+  const switching = useAnimatedValue(1);
+
+  const fadeIn = (mode: string) => {
+    actions.setMode(mode);
+    Animated.timing(switching, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  const begin = (create: boolean) => {
+    actions.requestPermission();
+    fadeOut(create ? 'create' : 'account');
+  };
+
+  const fadeOut = (mode: string) => {
+    Animated.timing(switching, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: false,
+    }).start(() => fadeIn(mode));
+  };
 
   const alertParams = {
     title: state.strings.operationFailed,
@@ -60,9 +84,9 @@ export function Access() {
   return (
     <Surface style={styles.full} elevation={9}>
       {state.mode === 'splash' && (
-        <View style={styles.splash}>
+        <Animated.View style={[styles.splash, {opacity: switching}]}>
           <Image style={styles.typer} source={typer} resizeMode="contain" />
-        </View>
+        </Animated.View>
       )}
       <KeyboardAwareScrollView style={styles.frame} contentContainerStyle={styles.scroll} enableOnAndroid={true}>
         <SafeAreaView style={styles.wrapper} edges={['top', 'bottom']}>
@@ -73,25 +97,29 @@ export function Access() {
               </Text>
             </View>
             { state.mode === 'splash' && (
-              <View style={styles.header}>
+              <Animated.View style={[styles.header, {opacity: switching}]}>
                 <Text style={styles.headline} variant="titleSmall">{ state.strings.communication }</Text>
-              </View>
+              </Animated.View>
             )}
             { state.mode === 'splash' && (
-              <View style={styles.start}>
-                <Button mode="contained" style={styles.submit} onPress={() => actions.continue(false)}>
+              <Animated.View style={[styles.start, {opacity: switching}]}>
+                <Button mode="contained" style={styles.submit} onPress={() => begin(false)}>
                   {state.strings.login}
                 </Button>
-                <View style={styles.footline}>
-                  <Text variant="bodySmall">{ state.strings.notUser }</Text>
-                  <Button mode="text" onPress={() => actions.continue(true)}>
-                    {state.strings.createAccount}
-                  </Button>
+                <View style={styles.linkline}>
+                  <Text>{ state.strings.notUser }</Text>
+                  <Button compact="true" mode="text" onPress={() => begin(true)}>
+                    <View style={styles.linkText}>
+                      <Text>
+                        {state.strings.createAccount}
+                      </Text>
+                    </View>
+                  </Button> 
                 </View>
-              </View>
+              </Animated.View>
             )}
             {state.mode === 'admin' && (
-              <View style={styles.blocks}>
+              <Animated.View style={[styles.blocks, { opacity: switching }]}>
                 <Text variant="headlineSmall">{state.strings.adminAccess}</Text>
                 <View style={styles.block}>
                   <TextInput
@@ -155,16 +183,16 @@ export function Access() {
                 )}
                 <View style={styles.footer}>
                   <View style={styles.footline}>
-                    <IconButton style={styles.admin} icon="account-outline" size={28} onPress={() => actions.setMode('account')} />
-                    <Button mode="text" onPress={() => actions.setMode('account')}>
+                    <IconButton style={styles.admin} icon="account-outline" size={28} onPress={() => fadeOut('account')} />
+                    <Button mode="text" onPress={() => fadeOut('account')}>
                       {state.strings.accounts}
                     </Button>
                   </View>
                 </View>
-              </View>
+              </Animated.View>
             )}
             {state.mode === 'reset' && (
-              <View style={styles.blocks}>
+              <Animated.View style={[styles.blocks, {opacity: switching}]}>
                 <Text variant="headlineSmall">{state.strings.accessAccount}</Text>
                 <View style={styles.block}>
                   <TextInput
@@ -217,21 +245,21 @@ export function Access() {
                     {state.strings.access}
                   </Button>
                 )}
-                <Button mode="text" onPress={() => actions.setMode('account')}>
+                <Button mode="text" onPress={() => fadeOut('account')}>
                   {state.strings.accountLogin}
                 </Button>
                 <View style={styles.footer}>
                   <View style={styles.footline}>
-                    <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => actions.setMode('account')} />
-                    <Button mode="text" onPress={() => actions.setMode('admin')}>
+                    <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => fadeOut('account')} />
+                    <Button mode="text" onPress={() => fadeOut('admin')}>
                       {state.strings.admin}
                     </Button>
                   </View>
                 </View>
-              </View>
+              </Animated.View>
             )}
             {state.mode === 'create' && (
-              <View style={styles.blocks}>
+              <Animated.View style={[styles.blocks, { opacity: switching }]}>
                 <Text variant="headlineSmall">{state.strings.createAccount}</Text>
                 <View style={styles.block}>
                   <TextInput
@@ -322,21 +350,21 @@ export function Access() {
                     {state.strings.create}
                   </Button>
                 )}
-                <Button mode="text" onPress={() => actions.setMode('account')}>
+                <Button mode="text" onPress={() => fadeOut('account')}>
                   {state.strings.accountLogin}
                 </Button>
                 <View style={styles.footer}>
                   <View style={styles.footline}>
-                    <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => actions.setMode('account')} />
-                    <Button mode="text" onPress={() => actions.setMode('admin')}>
+                    <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => fadeOut('account')} />
+                    <Button mode="text" onPress={() => fadeOut('admin')}>
                       {state.strings.admin}
                     </Button>
                   </View>
                 </View>
-              </View>
+              </Animated.View>
             )}
             {state.mode === 'account' && (
-              <View style={styles.blocks}>
+              <Animated.View style={[styles.blocks, { opacity: switching }]}>
                 <Text variant="headlineSmall">{state.strings.login}</Text>
                 <View style={styles.block}>
                   <TextInput
@@ -412,7 +440,7 @@ export function Access() {
                 )}
                 <View style={styles.linkline}>
                   <Text>{ state.strings.notUser }</Text>
-                  <Button compact="true" mode="text" onPress={() => actions.setMode('create')}>
+                  <Button compact="true" mode="text" onPress={() => fadeOut('create')}>
                     <View style={styles.linkText}>
                       <Text>
                         {state.strings.createAccount}
@@ -420,18 +448,18 @@ export function Access() {
                     </View>
                   </Button>
                 </View>
-                <Button mode="text" onPress={() => actions.setMode('reset')}>
+                <Button mode="text" onPress={() => fadeOut('reset')}>
                   {state.strings.forgotPassword}
                 </Button>
                 <View style={styles.footer}>
                   <View style={styles.footline}>
-                    <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => actions.setMode('account')} />
-                    <Button mode="text" onPress={() => actions.setMode('admin')}>
+                    <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => fadeOut('account')} />
+                    <Button mode="text" onPress={() => fadeOut('admin')}>
                       {state.strings.admin}
                     </Button>
                   </View>
                 </View>
-              </View>
+              </Animated.View>
             )}
           </View>
         </SafeAreaView>

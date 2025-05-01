@@ -125,8 +125,7 @@ export function useAccess() {
       const {password, node, secure, code} = state;
       await app.actions.adminLogin(password, node, secure, code);
     },
-    continue: (create: boolean) => {
-      updateState({ mode: create ? 'create' : 'account' });
+    requestPermission: () => {
       app.actions.requestPermission();
     },
   };
