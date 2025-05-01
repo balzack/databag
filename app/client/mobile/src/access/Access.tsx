@@ -109,11 +109,7 @@ export function Access() {
                 <View style={styles.linkline}>
                   <Text>{ state.strings.notUser }</Text>
                   <Button compact="true" mode="text" onPress={() => begin(true)}>
-                    <View style={styles.linkText}>
-                      <Text>
-                        {state.strings.createAccount}
-                      </Text>
-                    </View>
+                    {state.strings.createAccount}
                   </Button> 
                 </View>
               </Animated.View>
@@ -164,11 +160,7 @@ export function Access() {
                   />
                   <Text>{ state.strings.accept }</Text>
                   <Button compact="true" mode="text" onPress={() => setTerms(true)}>
-                    <View style={styles.linkText}>
-                      <Text>
-                        {state.strings.terms}
-                      </Text>
-                    </View>
+                    {state.strings.terms}
                   </Button>
                 </View>
                 {(!state.password || !state.node || !accept) && (
@@ -184,8 +176,8 @@ export function Access() {
                 <View style={styles.footer}>
                   <View style={styles.footline}>
                     <IconButton style={styles.admin} icon="account-outline" size={28} onPress={() => fadeOut('account')} />
-                    <Button mode="text" onPress={() => fadeOut('account')}>
-                      {state.strings.accounts}
+                    <Button mode="text" compact="true" onPress={() => fadeOut('account')}>
+                      <Text variant="labelLarge">{state.strings.accounts}</Text>
                     </Button>
                   </View>
                 </View>
@@ -228,11 +220,7 @@ export function Access() {
                   />
                   <Text>{ state.strings.accept }</Text>
                   <Button compact="true" mode="text" onPress={() => setTerms(true)}>
-                    <View style={styles.linkText}>
-                      <Text>
-                        {state.strings.terms}
-                      </Text>
-                    </View>
+                    {state.strings.terms}
                   </Button>
                 </View>
                 {(!state.username || !state.password || !state.node || !accept) && (
@@ -251,8 +239,8 @@ export function Access() {
                 <View style={styles.footer}>
                   <View style={styles.footline}>
                     <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => fadeOut('account')} />
-                    <Button mode="text" onPress={() => fadeOut('admin')}>
-                      {state.strings.admin}
+                    <Button mode="text" compact="true" onPress={() => fadeOut('admin')}>
+                      <Text variant="labelLarge">{state.strings.admin}</Text>
                     </Button>
                   </View>
                 </View>
@@ -333,11 +321,7 @@ export function Access() {
                   />
                   <Text>{ state.strings.accept }</Text>
                   <Button compact="true" mode="text" onPress={() => setTerms(true)}>
-                    <View style={styles.linkText}>
-                      <Text>
-                        {state.strings.terms}
-                      </Text>
-                    </View>
+                    {state.strings.terms}
                   </Button>
                 </View>
                 {(!state.username || !state.password || !state.node || !accept) && (
@@ -356,8 +340,8 @@ export function Access() {
                 <View style={styles.footer}>
                   <View style={styles.footline}>
                     <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => fadeOut('account')} />
-                    <Button mode="text" onPress={() => fadeOut('admin')}>
-                      {state.strings.admin}
+                    <Button mode="text" compact="true" onPress={() => fadeOut('admin')}>
+                      <Text variant="labelLarge">{state.strings.admin}</Text>
                     </Button>
                   </View>
                 </View>
@@ -421,11 +405,7 @@ export function Access() {
                   />
                   <Text>{ state.strings.accept }</Text>
                   <Button compact="true" mode="text" onPress={() => setTerms(true)}>
-                    <View style={styles.linkText}>
-                      <Text>
-                        {state.strings.terms}
-                      </Text>
-                    </View>
+                    {state.strings.terms}
                   </Button>
                 </View>
                 {(!state.username || !state.password || !state.node || !accept) && (
@@ -441,11 +421,7 @@ export function Access() {
                 <View style={styles.linkline}>
                   <Text>{ state.strings.notUser }</Text>
                   <Button compact="true" mode="text" onPress={() => fadeOut('create')}>
-                    <View style={styles.linkText}>
-                      <Text>
-                        {state.strings.createAccount}
-                      </Text>
-                    </View>
+                    {state.strings.createAccount}
                   </Button>
                 </View>
                 <Button mode="text" onPress={() => fadeOut('reset')}>
@@ -454,8 +430,8 @@ export function Access() {
                 <View style={styles.footer}>
                   <View style={styles.footline}>
                     <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => fadeOut('account')} />
-                    <Button mode="text" onPress={() => fadeOut('admin')}>
-                      {state.strings.admin}
+                    <Button mode="text" compact="true" onPress={() => fadeOut('admin')}>
+                      <Text variant="labelLarge">{state.strings.admin}</Text>
                     </Button>
                   </View>
                 </View>
