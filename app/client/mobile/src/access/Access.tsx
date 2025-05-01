@@ -97,6 +97,7 @@ export function Access() {
                   <TextInput
                     style={styles.input}
                     mode="outlined"
+                    outlineStyle={{ borderWidth: 0 }}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
@@ -108,6 +109,7 @@ export function Access() {
                   <TextInput
                     style={styles.input}
                     mode="outlined"
+                    outlineStyle={{ borderWidth: 0 }}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
@@ -125,19 +127,21 @@ export function Access() {
                     onChangeText={value => actions.setPassword(value)}
                   />
                 </View>
-                <View style={styles.block}>
-                  <Button style={styles.terms} mode="text" onPress={() => setTerms(true)}>
-                    {state.strings.viewTerms}
+                <View style={styles.linkline}>
+                  <Checkbox.Android
+                    status={accept ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                      setAccept(!accept);
+                    }}
+                  />
+                  <Text>{ state.strings.accept }</Text>
+                  <Button compact="true" mode="text" onPress={() => setTerms(true)}>
+                    <View style={styles.linkText}>
+                      <Text>
+                        {state.strings.terms}
+                      </Text>
+                    </View>
                   </Button>
-                  <View style={styles.accept}>
-                    <Checkbox.Android
-                      status={accept ? 'checked' : 'unchecked'}
-                      onPress={() => {
-                        setAccept(!accept);
-                      }}
-                    />
-                    <Text>{state.strings.acceptTerms}</Text>
-                  </View>
                 </View>
                 {(!state.password || !state.node || !accept) && (
                   <Button mode="contained" style={styles.submit} disabled={true}>
@@ -166,6 +170,7 @@ export function Access() {
                   <TextInput
                     style={styles.input}
                     mode="outlined"
+                    outlineStyle={{ borderWidth: 0 }}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
@@ -176,6 +181,7 @@ export function Access() {
                   <TextInput
                     style={styles.input}
                     mode="outlined"
+                    outlineStyle={{ borderWidth: 0 }}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
@@ -185,19 +191,21 @@ export function Access() {
                     onChangeText={value => actions.setNode(value)}
                   />
                 </View>
-                <View style={styles.block}>
-                  <Button style={styles.terms} mode="text" onPress={() => setTerms(true)}>
-                    {state.strings.viewTerms}
+                <View style={styles.linkline}>
+                  <Checkbox.Android
+                    status={accept ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                      setAccept(!accept);
+                    }}
+                  />
+                  <Text>{ state.strings.accept }</Text>
+                  <Button compact="true" mode="text" onPress={() => setTerms(true)}>
+                    <View style={styles.linkText}>
+                      <Text>
+                        {state.strings.terms}
+                      </Text>
+                    </View>
                   </Button>
-                  <View style={styles.accept}>
-                    <Checkbox.Android
-                      status={accept ? 'checked' : 'unchecked'}
-                      onPress={() => {
-                        setAccept(!accept);
-                      }}
-                    />
-                    <Text>{state.strings.acceptTerms}</Text>
-                  </View>
                 </View>
                 {(!state.username || !state.password || !state.node || !accept) && (
                   <Button mode="contained" style={styles.submit} disabled={true}>
@@ -209,17 +217,9 @@ export function Access() {
                     {state.strings.access}
                   </Button>
                 )}
-                <View style={styles.block}>
-                  <View style={styles.footline}>
-                    <Text>{ state.strings.notUser }</Text>
-                    <Button mode="text" onPress={() => actions.setMode('create')}>
-                      {state.strings.createAccount}
-                    </Button>
-                  </View>
-                  <Button mode="text" onPress={() => actions.setMode('account')}>
-                    {state.strings.accountLogin}
-                  </Button>
-                </View>
+                <Button mode="text" onPress={() => actions.setMode('account')}>
+                  {state.strings.accountLogin}
+                </Button>
                 <View style={styles.footer}>
                   <View style={styles.footline}>
                     <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => actions.setMode('account')} />
@@ -237,6 +237,7 @@ export function Access() {
                   <TextInput
                     style={styles.input}
                     mode="outlined"
+                    outlineStyle={{ borderWidth: 0 }}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
@@ -248,6 +249,7 @@ export function Access() {
                   <TextInput
                     style={styles.input}
                     mode="outlined"
+                    outlineStyle={{ borderWidth: 0 }}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
@@ -260,6 +262,7 @@ export function Access() {
                   <TextInput
                     style={styles.input}
                     mode="outlined"
+                    outlineStyle={{ borderWidth: 0 }}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
@@ -282,6 +285,7 @@ export function Access() {
                       <TextInput
                         style={styles.input}
                         mode="outlined"
+                        outlineStyle={{ borderWidth: 0 }}
                         autoCapitalize="none"
                         autoComplete="off"
                         autoCorrect={false}
@@ -292,19 +296,21 @@ export function Access() {
                     )}
                   </View>
                 </View>
-                <View style={styles.block}>
-                  <Button style={styles.terms} mode="text" onPress={() => setTerms(true)}>
-                    {state.strings.viewTerms}
+                <View style={styles.linkline}>
+                  <Checkbox.Android
+                    status={accept ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                      setAccept(!accept);
+                    }}
+                  />
+                  <Text>{ state.strings.accept }</Text>
+                  <Button compact="true" mode="text" onPress={() => setTerms(true)}>
+                    <View style={styles.linkText}>
+                      <Text>
+                        {state.strings.terms}
+                      </Text>
+                    </View>
                   </Button>
-                  <View style={styles.accept}>
-                    <Checkbox.Android
-                      status={accept ? 'checked' : 'unchecked'}
-                      onPress={() => {
-                        setAccept(!accept);
-                      }}
-                    />
-                    <Text>{state.strings.acceptTerms}</Text>
-                  </View>
                 </View>
                 {(!state.username || !state.password || !state.node || !accept) && (
                   <Button mode="contained" style={styles.submit} disabled={true}>
@@ -316,17 +322,9 @@ export function Access() {
                     {state.strings.create}
                   </Button>
                 )}
-                <View style={styles.block}>
-                  <View style={styles.footline}>
-                    <Text>{ state.strings.notUser }</Text>
-                    <Button mode="text" onPress={() => actions.setMode('create')}>
-                      {state.strings.createAccount}
-                    </Button>
-                  </View>
-                  <Button mode="text" onPress={() => actions.setMode('account')}>
-                    {state.strings.accountLogin}
-                  </Button>
-                </View>
+                <Button mode="text" onPress={() => actions.setMode('account')}>
+                  {state.strings.accountLogin}
+                </Button>
                 <View style={styles.footer}>
                   <View style={styles.footline}>
                     <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => actions.setMode('account')} />
@@ -345,6 +343,7 @@ export function Access() {
                     style={styles.input}
                     mode="outlined"
                     autoCapitalize="none"
+                    outlineStyle={{ borderWidth: 0 }}
                     autoComplete="off"
                     autoCorrect={false}
                     placeholder={state.strings.server}
@@ -355,6 +354,7 @@ export function Access() {
                   <TextInput
                     style={styles.input}
                     mode="outlined"
+                    outlineStyle={{ borderWidth: 0 }}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
@@ -366,6 +366,7 @@ export function Access() {
                   <TextInput
                     style={styles.input}
                     mode="outlined"
+                    outlineStyle={{ borderWidth: 0 }}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
@@ -383,19 +384,21 @@ export function Access() {
                     onChangeText={value => actions.setPassword(value)}
                   />
                 </View>
-                <View style={styles.block}>
-                  <Button style={styles.terms} mode="text" onPress={() => setTerms(true)}>
-                    {state.strings.viewTerms}
+                <View style={styles.linkline}>
+                  <Checkbox.Android
+                    status={accept ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                      setAccept(!accept);
+                    }}
+                  />
+                  <Text>{ state.strings.accept }</Text>
+                  <Button compact="true" mode="text" onPress={() => setTerms(true)}>
+                    <View style={styles.linkText}>
+                      <Text>
+                        {state.strings.terms}
+                      </Text>
+                    </View>
                   </Button>
-                  <View style={styles.accept}>
-                    <Checkbox.Android
-                      status={accept ? 'checked' : 'unchecked'}
-                      onPress={() => {
-                        setAccept(!accept);
-                      }}
-                    />
-                    <Text>{state.strings.acceptTerms}</Text>
-                  </View>
                 </View>
                 {(!state.username || !state.password || !state.node || !accept) && (
                   <Button mode="contained" style={styles.submit} disabled={true}>
@@ -407,17 +410,19 @@ export function Access() {
                     {state.strings.login}
                   </Button>
                 )}
-                <View style={styles.block}>
-                  <View style={styles.footline}>
-                    <Text>{ state.strings.notUser }</Text>
-                    <Button mode="text" onPress={() => actions.setMode('create')}>
-                      {state.strings.createAccount}
-                    </Button>
-                  </View>
-                  <Button mode="text" onPress={() => actions.setMode('reset')}>
-                    {state.strings.forgotPassword}
+                <View style={styles.linkline}>
+                  <Text>{ state.strings.notUser }</Text>
+                  <Button compact="true" mode="text" onPress={() => actions.setMode('create')}>
+                    <View style={styles.linkText}>
+                      <Text>
+                        {state.strings.createAccount}
+                      </Text>
+                    </View>
                   </Button>
                 </View>
+                <Button mode="text" onPress={() => actions.setMode('reset')}>
+                  {state.strings.forgotPassword}
+                </Button>
                 <View style={styles.footer}>
                   <View style={styles.footline}>
                     <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => actions.setMode('account')} />

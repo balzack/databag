@@ -65,7 +65,17 @@ export const styles = StyleSheet.create({
     gap: 16,
     paddingTop: 16,
     paddingBottom: 16,
-  },    
+  },  
+  linkline: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }, 
+  linkText: {
+    paddingTop: 6,
+    borderBottomWidth: 1,
+  }, 
   footline: {
     display: 'flex',
     flexDirection: 'row',
@@ -83,14 +93,14 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     flexGrow: 1,
     marginTop: 16,
+    gap: 16,
   },
   block: {
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
     alignItems: 'center',
-    paddingTop: 8,
-    paddingBottom: 8,
+    gap: 8,
   },  
   legal: {
     padding: 16,
@@ -134,6 +144,9 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     margin: 0,
     padding: 0,
+  },
+  adminLabel: {
+    fontSize: 32,
   },
   split: {
     display: 'flex',
