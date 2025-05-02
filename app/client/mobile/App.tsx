@@ -9,6 +9,9 @@ import {Access} from './src/access/Access';
 import {Service} from './src/service/Service';
 import {Session} from './src/session/Session';
 import ReceiveSharingIntent from 'react-native-receive-sharing-intent';
+import AntIcon from 'react-native-vector-icons/AntDesign';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {useColorScheme} from 'react-native';
 import {configureFonts, MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
@@ -161,7 +164,17 @@ function App(): React.JSX.Element {
   return (
     <AppContextProvider>
       <DisplayContextProvider>
-        <PaperProvider theme={theme}>
+        <PaperProvider settings={{icon: (props) => {
+              if (props.name === 'user') {
+                return <AntIcon {...props} />
+              } else if (props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings') {
+                return <FeatherIcon {...props} />
+              } else {
+                return <MaterialIcon {...props} />
+              }
+            }}}
+            theme={theme}
+          >
           <NativeRouter>
             <StatusBar />
             <Root />

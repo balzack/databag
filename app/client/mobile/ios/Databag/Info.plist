@@ -20,10 +20,17 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Camera permission description</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Microphone permission description</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>databag</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -35,12 +42,18 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera permission description</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Microphone permission description</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Used to set profile image and post photos</string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Feather.ttf</string>
+		<string>AntDesign.ttf</string>
 		<string>MaterialCommunityIcons.ttf</string>
 		<string>Inter.ttf</string>
 		<string>InterItalic.ttf</string>
@@ -63,16 +76,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>databag</string>
-			</array>
-		</dict>
-	</array>
 </dict>
 </plist>

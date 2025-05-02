@@ -175,7 +175,7 @@ export function Access() {
                 )}
                 <View style={styles.footer}>
                   <View style={styles.footline}>
-                    <IconButton style={styles.admin} icon="account-outline" size={28} onPress={() => fadeOut('account')} />
+                    <IconButton style={styles.admin} icon="user" size={24} onPress={() => fadeOut('account')} />
                     <Button mode="text" compact="true" onPress={() => fadeOut('account')}>
                       <Text variant="labelLarge">{state.strings.accounts}</Text>
                     </Button>
@@ -238,7 +238,7 @@ export function Access() {
                 </Button>
                 <View style={styles.footer}>
                   <View style={styles.footline}>
-                    <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => fadeOut('account')} />
+                    <IconButton style={styles.admin} icon="settings" size={24} onPress={() => fadeOut('account')} />
                     <Button mode="text" compact="true" onPress={() => fadeOut('admin')}>
                       <Text variant="labelLarge">{state.strings.admin}</Text>
                     </Button>
@@ -272,7 +272,7 @@ export function Access() {
                     error={state.taken}
                     placeholder={state.strings.username}
                     value={state.username}
-                    left={<TextInput.Icon style={styles.icon} icon="account" />}
+                    left={<TextInput.Icon style={styles.icon} icon="user" />}
                     onChangeText={value => actions.setUsername(value)}
                   />
                   <TextInput
@@ -339,7 +339,7 @@ export function Access() {
                 </Button>
                 <View style={styles.footer}>
                   <View style={styles.footline}>
-                    <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => fadeOut('account')} />
+                    <IconButton style={styles.admin} icon="settings" size={24} onPress={() => fadeOut('account')} />
                     <Button mode="text" compact="true" onPress={() => fadeOut('admin')}>
                       <Text variant="labelLarge">{state.strings.admin}</Text>
                     </Button>
@@ -372,7 +372,7 @@ export function Access() {
                     autoCorrect={false}
                     placeholder={state.strings.username}
                     value={state.username}
-                    left={<TextInput.Icon style={styles.icon} icon="account" />}
+                    left={<TextInput.Icon style={styles.icon} icon="user" />}
                     onChangeText={value => actions.setUsername(value)}
                   />
                   <TextInput
@@ -429,7 +429,7 @@ export function Access() {
                 </Button>
                 <View style={styles.footer}>
                   <View style={styles.footline}>
-                    <IconButton style={styles.admin} icon="cog-outline" size={28} onPress={() => fadeOut('account')} />
+                    <IconButton style={styles.admin} icon="settings" size={24} onPress={() => fadeOut('account')} />
                     <Button mode="text" compact="true" onPress={() => fadeOut('admin')}>
                       <Text variant="labelLarge">{state.strings.admin}</Text>
                     </Button>
