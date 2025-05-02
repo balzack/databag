@@ -36,7 +36,7 @@ const databagColors = {
     errorContainer: 'rgb(255, 218, 214)',
     onErrorContainer: 'rgb(65, 0, 2)',
     background: 'rgb(251, 253, 248)',
-    onBackground: 'rgb(25, 28, 26)',
+    onBackground: 'rgb(4, 4, 4)',
     surface: 'rgb(251, 253, 248)',
     onSurface: 'rgb(25, 28, 26)',
     surfaceVariant: 'rgb(220, 229, 220)',

@@ -108,7 +108,7 @@ export function Access() {
                 </Button>
                 <View style={styles.linkline}>
                   <Text>{ state.strings.notUser }</Text>
-                  <Button compact="true" mode="text" onPress={() => begin(true)}>
+                  <Button labelStyle={styles.textButton} compact="true" mode="text" onPress={() => begin(true)}>
                     {state.strings.createAccount}
                   </Button> 
                 </View>
@@ -121,7 +121,7 @@ export function Access() {
                   <TextInput
                     style={styles.input}
                     mode="outlined"
-                    outlineStyle={{ borderWidth: 0 }}
+                    outlineStyle={styles.inputBorder}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
@@ -133,7 +133,7 @@ export function Access() {
                   <TextInput
                     style={styles.input}
                     mode="outlined"
-                    outlineStyle={{ borderWidth: 0 }}
+                    outlineStyle={styles.inputBorder}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
@@ -159,7 +159,7 @@ export function Access() {
                     }}
                   />
                   <Text>{ state.strings.accept }</Text>
-                  <Button compact="true" mode="text" onPress={() => setTerms(true)}>
+                  <Button labelStyle={styles.textButton} compact="true" mode="text" onPress={() => setTerms(true)}>
                     {state.strings.terms}
                   </Button>
                 </View>
@@ -175,7 +175,7 @@ export function Access() {
                 )}
                 <View style={styles.footer}>
                   <View style={styles.footline}>
-                    <IconButton style={styles.admin} icon="user" size={24} onPress={() => fadeOut('account')} />
+                    <IconButton style={styles.admin} icon="account-circle-outline" size={24} onPress={() => fadeOut('account')} />
                     <Button mode="text" compact="true" onPress={() => fadeOut('account')}>
                       <Text variant="labelLarge">{state.strings.accounts}</Text>
                     </Button>
@@ -190,18 +190,18 @@ export function Access() {
                   <TextInput
                     style={styles.input}
                     mode="outlined"
-                    outlineStyle={{ borderWidth: 0 }}
+                    outlineStyle={styles.inputBorder}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
                     placeholder={state.strings.token}
-                    left={<TextInput.Icon style={styles.icon} icon="ticket-account" />}
+                    left={<TextInput.Icon style={styles.icon} icon="ticket-outline" />}
                     onChangeText={value => actions.setToken(value)}
                   />
                   <TextInput
                     style={styles.input}
                     mode="outlined"
-                    outlineStyle={{ borderWidth: 0 }}
+                    outlineStyle={styles.inputBorder}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
@@ -219,7 +219,7 @@ export function Access() {
                     }}
                   />
                   <Text>{ state.strings.accept }</Text>
-                  <Button compact="true" mode="text" onPress={() => setTerms(true)}>
+                  <Button labelStyle={styles.textButton} compact="true" mode="text" onPress={() => setTerms(true)}>
                     {state.strings.terms}
                   </Button>
                 </View>
@@ -253,7 +253,7 @@ export function Access() {
                   <TextInput
                     style={styles.input}
                     mode="outlined"
-                    outlineStyle={{ borderWidth: 0 }}
+                    outlineStyle={styles.inputBorder}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
@@ -265,7 +265,7 @@ export function Access() {
                   <TextInput
                     style={styles.input}
                     mode="outlined"
-                    outlineStyle={{ borderWidth: 0 }}
+                    outlineStyle={styles.inputBorder}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
@@ -278,7 +278,7 @@ export function Access() {
                   <TextInput
                     style={styles.input}
                     mode="outlined"
-                    outlineStyle={{ borderWidth: 0 }}
+                    outlineStyle={styles.inputBorder}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
@@ -301,12 +301,12 @@ export function Access() {
                       <TextInput
                         style={styles.input}
                         mode="outlined"
-                        outlineStyle={{ borderWidth: 0 }}
+                        outlineStyle={styles.inputBorder}
                         autoCapitalize="none"
                         autoComplete="off"
                         autoCorrect={false}
                         placeholder={state.strings.token}
-                        left={<TextInput.Icon style={styles.icon} icon="ticket-account" />}
+                        left={<TextInput.Icon style={styles.icon} icon="ticket-outline" />}
                         onChangeText={value => actions.setToken(value)}
                       />
                     )}
@@ -320,7 +320,7 @@ export function Access() {
                     }}
                   />
                   <Text>{ state.strings.accept }</Text>
-                  <Button compact="true" mode="text" onPress={() => setTerms(true)}>
+                  <Button labelStyle={styles.textButton} compact="true" mode="text" onPress={() => setTerms(true)}>
                     {state.strings.terms}
                   </Button>
                 </View>
@@ -355,7 +355,7 @@ export function Access() {
                     style={styles.input}
                     mode="outlined"
                     autoCapitalize="none"
-                    outlineStyle={{ borderWidth: 0 }}
+                    outlineStyle={styles.inputBorder}
                     autoComplete="off"
                     autoCorrect={false}
                     placeholder={state.strings.server}
@@ -366,7 +366,7 @@ export function Access() {
                   <TextInput
                     style={styles.input}
                     mode="outlined"
-                    outlineStyle={{ borderWidth: 0 }}
+                    outlineStyle={styles.inputBorder}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
@@ -378,7 +378,7 @@ export function Access() {
                   <TextInput
                     style={styles.input}
                     mode="outlined"
-                    outlineStyle={{ borderWidth: 0 }}
+                    outlineStyle={styles.inputBorder}
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
@@ -404,7 +404,7 @@ export function Access() {
                     }}
                   />
                   <Text>{ state.strings.accept }</Text>
-                  <Button compact="true" mode="text" onPress={() => setTerms(true)}>
+                  <Button labelStyle={styles.textButton} compact="true" mode="text" onPress={() => setTerms(true)}>
                     {state.strings.terms}
                   </Button>
                 </View>
@@ -420,7 +420,7 @@ export function Access() {
                 )}
                 <View style={styles.linkline}>
                   <Text>{ state.strings.notUser }</Text>
-                  <Button compact="true" mode="text" onPress={() => fadeOut('create')}>
+                  <Button labelStyle={styles.textButton} compact="true" mode="text" onPress={() => fadeOut('create')}>
                     {state.strings.createAccount}
                   </Button>
                 </View>

@@ -179,6 +179,13 @@ export const styles = StyleSheet.create({
     width: '80%',
     margin: 4,
   },
+  inputBorder: {
+    borderWidth: 0,
+    borderRadius: 12,
+  },
+  textButton: {
+    textDecorationLine: 'underline'
+  },
   spacer: {
     width: '100%',
     display: 'flex',
