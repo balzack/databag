@@ -74,6 +74,7 @@ export function Access() {
         if (err.message === '405' || err.message === '403' || err.message === '429') {
           setOtp(true);
         } else {
+          console.log(err);
           setAlert(true);
         }
       }

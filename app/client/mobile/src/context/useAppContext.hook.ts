@@ -112,7 +112,7 @@ export function useAppContext() {
       };
 
       const login = await sdk.current.login(username, password, node, secure, code, params);
-      updateState({session: login, showWelcome});
+      updateState({session: login, showWelcome: false});
     },
     accountLogout: async (all: boolean) => {
       if (state.session) {
