@@ -14,6 +14,7 @@ export function useSession() {
     strings: {},
     appState: true,
     sdkState: true,
+    showWelcome: null as null | boolean,
   });
 
   const updateState = (value: any) => {
@@ -45,6 +46,12 @@ export function useSession() {
       };
     }
   }, [app.state.session]);
+
+  useEffect(() => {
+console.log("------- SHOW", app.state.showWelcome);
+
+    updateState({ showWelcome: app.state.showWelcome });
+  }, [app.state.showWelcome]);
 
   useEffect(() => {
     const {layout, strings} = display.state;

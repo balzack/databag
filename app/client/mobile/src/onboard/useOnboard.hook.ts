@@ -3,12 +3,12 @@ import {DisplayContext} from '../context/DisplayContext';
 import {AppContext} from '../context/AppContext';
 import {ContextType} from '../context/ContextType';
 
-export function useWelcome() {
+export function useOnboard() {
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
     strings: display.state.strings,
-    showWelcome: null as null | boolean,
+    show: null as null | boolean,
   });
 
   const updateState = (value: any) => {
@@ -16,16 +16,13 @@ export function useWelcome() {
   };
 
   useEffect(() => {
-    const showWelcome = app.state.showWelcome;
-    updateState({showWelcome});
+    const show = app.state.showWelcome;
+    updateState({show});
   }, [app.state]);
 
   const actions = {
-    clearWelcome: async () => {
+    done: async () => {
       await app.actions.setShowWelcome(false);
-    },
-    next: () => {
-      app.actions.setShowWelcome(false);
     },
   };
 

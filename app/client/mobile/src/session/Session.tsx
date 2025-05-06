@@ -19,6 +19,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Colors} from '../constants/Colors';
 import {Ring} from '../ring/Ring';
 import {Call} from '../call/Call';
+import {Onboard} from '../onboard/Onboard';
 import {Welcome} from '../welcome/Welcome';
 
 const SettingsDrawer = createDrawerNavigator();
@@ -29,6 +30,7 @@ const DetailsDrawer = createDrawerNavigator();
 
 const ContactStack = createNativeStackNavigator();
 const ContentStack = createNativeStackNavigator();
+const OnboardStack = createNativeStackNavigator();
 
 export function Session({share}: {share: {filePath: string; mimeType: string}}) {
   const {state} = useSession();
@@ -187,7 +189,9 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                 </View>
               </View>
             </SafeAreaView>
-            <Welcome />
+            { state.showWelcome && (
+              <Onboarding scheme={scheme} show={state.showWelcome} />
+            )}
           </Surface>
         )}
         {state.layout === 'large' && (
@@ -211,6 +215,23 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
         <Call />
       </View>
     </RingContextProvider>
+  );
+}
+
+function Onboarding({ scheme, show }: { scheme: string, show: boolean }) {
+  return (
+    <View style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0 }}>
+      <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <OnboardStack.Navigator initialRouteName="welcome" screenOptions={{headerShown: false}}>
+          <OnboardStack.Screen name="welcome" options={{headerBackTitleVisible: false}}>
+            {props => <Welcome next={() => props.navigation.navigate('identity')} />}
+          </OnboardStack.Screen>
+          <OnboardStack.Screen name="identity">
+            {props => <SafeAreaView><Settings /></SafeAreaView>}
+          </OnboardStack.Screen>
+        </OnboardStack.Navigator>
+      </NavigationContainer>
+    </View>
   );
 }
 

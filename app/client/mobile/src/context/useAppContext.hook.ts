@@ -7,8 +7,8 @@ import {LocalStore} from '../LocalStore';
 import {StagingFiles} from '../StagingFiles';
 import messaging from '@react-native-firebase/messaging';
 
-const DATABAG_DB = 'db_v244.db';
-const SETTINGS_DB = 'ls_v001.db';
+const DATABAG_DB = 'db_v251.db';
+const SETTINGS_DB = 'ls_v003.db';
 
 async function requestUserPermission() {
   if (Platform.OS === 'ios') {
@@ -58,15 +58,14 @@ export function useAppContext() {
     await local.current.open(SETTINGS_DB);
     const fullDayTime = (await local.current.get('time_format', '12h')) === '24h';
     const monthFirstDate = (await local.current.get('date_format', 'month_first')) === 'month_first';
-    const showWelcome = (await local.current.get('show_welcome', 'show')) !== 'hide';
 
     const store = new SessionStore();
     await store.open(DATABAG_DB);
     const session: Session | null = await sdk.current.initOfflineStore(store);
     if (session) {
-      updateState({session, fullDayTime, monthFirstDate, showWelcome, initialized: true});
+      updateState({session, fullDayTime, monthFirstDate, initialized: true});
     } else {
-      updateState({fullDayTime, monthFirstDate, showWelcome, initialized: true});
+      updateState({fullDayTime, monthFirstDate, initialized: true});
     }
   };
 
@@ -96,7 +95,6 @@ export function useAppContext() {
     },
     setShowWelcome: async (showWelcome: boolean) => {
       updateState({showWelcome});
-      await local.current.set('show_welcome', showWelcome ? 'show' : 'hide');
     },
     accountLogin: async (username: string, password: string, node: string, secure: boolean, code: string) => {
       const deviceToken = await getToken();
@@ -114,7 +112,7 @@ export function useAppContext() {
       };
 
       const login = await sdk.current.login(username, password, node, secure, code, params);
-      updateState({session: login});
+      updateState({session: login, showWelcome});
     },
     accountLogout: async (all: boolean) => {
       if (state.session) {
@@ -143,7 +141,7 @@ export function useAppContext() {
         appName: 'databag',
       };
       const session = await sdk.current.create(handle, password, node, secure, token, params);
-      updateState({session});
+      updateState({session, showWelcome: true});
     },
     accountAccess: async (node: string, secure: boolean, token: string) => {
       const deviceToken = await getToken();
@@ -160,7 +158,7 @@ export function useAppContext() {
         appName: 'databag',
       };
       const session = await sdk.current.access(node, secure, token, params);
-      updateState({session});
+      updateState({session, showWelcome: false});
     },
     setFocus: async (cardId: string | null, channelId: string) => {
       if (state.session) {

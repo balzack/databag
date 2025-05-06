@@ -165,9 +165,9 @@ function App(): React.JSX.Element {
     <AppContextProvider>
       <DisplayContextProvider>
         <PaperProvider settings={{icon: (props) => {
-              if (props.name === 'user') {
+              if (props.name === 'user' || props.name === 'contacts') {
                 return <AntIcon {...props} />
-              } else if (props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings') {
+              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings') {
                 return <FeatherIcon {...props} />
               } else {
                 return <MaterialIcon {...props} />

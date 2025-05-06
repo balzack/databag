@@ -1,53 +1,75 @@
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
-  base: {
+  splash: {
+    position: 'absolute',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     width: '100%',
     height: '100%',
+  },
+  typer: {
+    width: 286,
+    height: 257,
+  },
+  full: {
+    width: '100%',
+    height: '100%',
+  },
+  frame: {
+    width: '100%',
+    height: '100%',
+  },
+  scroll: {
+    flexGrow: 1,
+    width: '100%',
+  },
+  wrapper: {
+    display: 'flex',
+    flexGrow: 1,
+  },
+  form: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    paddingTop: 64,
+    flexGrow: 1,
+  },
+  header: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  detail: {
+    flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
+    justifyContent: 'flex-end',
+    paddingBottom: 32,
   },
-  show: {
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-  },
-  hide: {
-    display: 'none',
-  },
-  image: {
-    width: '50%',
-    height: '50%',
-  },
-  title: {
-    fontSize: 24,
-  },
-  description: {
-    fontSize: 16,
+  headline: {
+    textAlign: 'center',
+    paddingTop: 16,
+    paddingLeft: 48,
+    paddingRight: 48,
   },
   steps: {
     display: 'flex',
     flexDirection: 'column',
-    gap: 16,
-    paddingTop: 16,
+    gap: 20,
   },
   step: {
     display: 'flex',
     flexDirection: 'row',
-    gap: 8,
-    align: 'center',
+    gap: 12,
+    alignItems: 'center',
   },
-  label: {
-    fontSize: 18,
-  },
-  button: {
+  submit: {
     borderRadius: 8,
-    fontSize: 18,
-    marginTop: 32,
+    paddingLeft: 32,
+    paddingRight: 32,
   },
 });

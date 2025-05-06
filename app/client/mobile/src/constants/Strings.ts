@@ -3,6 +3,10 @@ import {NativeModules, Platform} from 'react-native';
 export const en = {
   notUser: 'Not a user?',
   adminAccess: 'Admin Access',
+  yourProfile: 'Setup Your Profile',
+  connectWith: 'Connect with People',
+  startTopic: 'Start a Conversation',
+  getStarted: 'Get Started',
 
   viewTerms: 'View Terms of Service',
   acceptTerms: 'Accept Terms of Service',
