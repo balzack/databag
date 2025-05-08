@@ -88,8 +88,9 @@ export function useSettings() {
   }, [app.state]);
 
   useEffect(() => {
-    const {strings, dateFormat, timeFormat} = display.state;
+    const {strings, dateFormat, timeFormat, layout} = display.state;
     updateState({
+      layout,
       strings,
       dateFormat,
       timeFormat,

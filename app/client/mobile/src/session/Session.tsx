@@ -1,5 +1,6 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import {SafeAreaView, Pressable, View, useColorScheme} from 'react-native';
+import {Pressable, View, useColorScheme} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {RingContextProvider} from '../context/RingContext';
 import {styles} from './Session.styled';
 import {IconButton, Surface, Text, Icon} from 'react-native-paper';
@@ -190,7 +191,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
               </View>
             </SafeAreaView>
             { state.showWelcome && (
-              <Onboarding scheme={scheme} show={state.showWelcome} />
+              <Onboarding scheme={scheme} />
             )}
           </Surface>
         )}
@@ -218,7 +219,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
   );
 }
 
-function Onboarding({ scheme, show }: { scheme: string, show: boolean }) {
+function Onboarding({ scheme }: { scheme: string }) {
   return (
     <View style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0 }}>
       <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
@@ -226,8 +227,14 @@ function Onboarding({ scheme, show }: { scheme: string, show: boolean }) {
           <OnboardStack.Screen name="welcome" options={{headerBackTitleVisible: false}}>
             {props => <Welcome next={() => props.navigation.navigate('identity')} />}
           </OnboardStack.Screen>
-          <OnboardStack.Screen name="identity">
-            {props => <SafeAreaView><Settings /></SafeAreaView>}
+          <OnboardStack.Screen name="identity" options={{ animation: 'fade' }}>
+            {props => (
+              <Surface elevation={9} mode="flat" style={styles.screen}>
+                <SafeAreaView edges={['top']}>
+                  <Settings setupNav={{ back: ()=>props.navigation.navigate('welcome'), next: ()=>props.navigation.navigate('welcome') }} />
+                </SafeAreaView>
+              </Surface>
+            )}
           </OnboardStack.Screen>
         </OnboardStack.Navigator>
       </NavigationContainer>

@@ -7,6 +7,10 @@ export const en = {
   connectWith: 'Connect with People',
   startTopic: 'Start a Conversation',
   getStarted: 'Get Started',
+  enterName: 'Enter Your Name',
+  uploadImage: 'Upload Profile Image',
+  yourLocation: 'Your Location',
+  next: 'Next',
 
   viewTerms: 'View Terms of Service',
   acceptTerms: 'Accept Terms of Service',

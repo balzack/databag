@@ -48,9 +48,8 @@ export function useSession() {
   }, [app.state.session]);
 
   useEffect(() => {
-console.log("------- SHOW", app.state.showWelcome);
-
-    updateState({ showWelcome: app.state.showWelcome });
+    const showWelcome = app.state.showWelcome;
+    updateState({ showWelcome });
   }, [app.state.showWelcome]);
 
   useEffect(() => {

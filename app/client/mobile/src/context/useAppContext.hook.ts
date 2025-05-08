@@ -46,7 +46,7 @@ export function useAppContext() {
     fullDayTime: false,
     monthFirstDate: true,
     initialized: false,
-    showWelcome: false,
+    showWelcome: true,
     sharing: null as null | {cardId: string; channelId: string; filePath: string; mimeType: string},
   });
 

@@ -57,7 +57,7 @@ const databagColors = {
       level5: 'rgb(200, 200, 200)',
       level6: 'rgb(200, 200, 200)',
       level7: 'rgb(200, 200, 200)',
-      level8: 'rgb(200, 200, 200)',
+      level8: 'transparent',
       level9: '#8FBEA7',
     },
     surfaceDisabled: 'rgba(25, 28, 26, 0.12)',
@@ -105,7 +105,7 @@ const databagColors = {
       level5: 'rgb(80, 80, 80)',
       level6: 'rgb(200, 200, 200)',
       level7: 'rgb(200, 200, 200)',
-      level8: 'rgb(200, 200, 200)',
+      level8: 'transparent',
       level9: '#191919',
     },
     surfaceDisabled: 'rgba(225, 227, 223, 0.12)',
@@ -150,7 +150,7 @@ function App(): React.JSX.Element {
     labelSmall: {fontFamily: "Inter-Regular", fontSize: 11, fontWeight: "500", letterSpacing: 0.5, lineHeight: 16},
     titleLarge: {fontFamily: "Inter-Tight", fontSize: 48, fontWeight: "900", letterSpacing: 0, lineHeight: 48},
     titleMedium: {fontFamily: "Inter-Regular", fontSize: 20, fontWeight: "500", letterSpacing: 0.15, lineHeight: 20},
-    titleSmall: {fontFamily: "Inter-Regular", fontSize: 18, fontWeight: "500", letterSpacing: 0.1, lineHeight: 24}
+    titleSmall: {fontFamily: "Inter-Regular", fontSize: 20, fontWeight: "500", letterSpacing: 0.1, lineHeight: 24}
   }
 
   const theme =
@@ -165,9 +165,9 @@ function App(): React.JSX.Element {
     <AppContextProvider>
       <DisplayContextProvider>
         <PaperProvider settings={{icon: (props) => {
-              if (props.name === 'user' || props.name === 'contacts') {
+              if (props.name === 'user' || props.name === 'contacts' || props.name === 'left' || props.name === 'idcard' || props.name === 'picture') {
                 return <AntIcon {...props} />
-              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings') {
+              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book') {
                 return <FeatherIcon {...props} />
               } else {
                 return <MaterialIcon {...props} />

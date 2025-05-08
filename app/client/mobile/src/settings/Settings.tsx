@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useTheme, Surface, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
-import {TouchableOpacity, Modal, View, Image, ScrollView, Platform} from 'react-native';
+import {TouchableOpacity, Pressable, Modal, View, Image, ScrollView, Platform} from 'react-native';
 import {styles} from './Settings.styled';
 import {useSettings} from './useSettings.hook';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -11,7 +11,7 @@ import {InputCode} from '../utils/InputCode';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {Confirm} from '../confirm/Confirm';
 
-export function Settings({showLogout}: {showLogout: boolean}) {
+export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, next: ()=>void }, showLogout: boolean}) {
   const {state, actions} = useSettings();
   const [alert, setAlert] = useState(false);
   const [details, setDetails] = useState(false);
@@ -148,8 +148,6 @@ export function Settings({showLogout}: {showLogout: boolean}) {
     if (!savingChange) {
       setSavingChange(true);
       try {
-        await actions.setLogin();
-        setChange(false);
       } catch (err) {
         console.log(err);
         setChange(false);
@@ -411,250 +409,343 @@ export function Settings({showLogout}: {showLogout: boolean}) {
 
   return (
     <View>
-      <View style={styles.settings}>
-        <View style={styles.title}>
-          <Text style={styles.header} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.profile.handle}${state.profile.node ? '@' + state.profile.node : ''}`}</Text>
-          <Divider style={styles.border} bold={true} />
+      { state.layout === 'small' && (
+        <View style={styles.settings}>
+          <View style={styles.navHeader}>
+            <Pressable style={styles.navIcon} onPress={setupNav?.back}>
+              <Icon size={24} source="left" color={'white'} />
+            </Pressable>
+            <Text variant="titleMedium" style={styles.navTitle}>{ state.strings.yourProfile }</Text>
+            <View style={styles.navIcon} />
+          </View>
+          <Surface elevation={3} style={styles.scrollWrapper}>
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
+              <View style={styles.navImage}>
+                {!state.profile.imageSet && <Image style={styles.navLogo} resizeMode={'contain'} source={{uri: state.imageUrl}} />}
+                {state.profile.imageSet && <Image style={styles.navLogo} resizeMode={'contain'} source={{uri: state.imageUrl}} />}
+              </View>
+              <View style={styles.navWrapper}>
+                <Surface elevation={0} mode="flat" style={styles.navData}>
+                  <TextInput
+                    style={styles.navInput}
+                    mode="outlined"
+                    outlineStyle={styles.navInputBorder}
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    returnKeyType="done"
+                    placeholder={state.strings.enterName}
+                    value={state.node}
+                    left={<TextInput.Icon style={styles.icon} size={22} icon="idcard" />}
+                    onChangeText={value => actions.setName(value)}
+                  />
+                  <Divider style={styles.navDivider} />
+                  <View style={styles.navUpload}>
+                    <TextInput
+                      style={styles.navInput}
+                      mode="outlined"
+                      outlineStyle={styles.navInputBorder}
+                      placeholder={state.strings.uploadImage}
+                      left={<TextInput.Icon style={styles.icon} size={22} icon="picture" />}
+                    />
+                    <Pressable style={styles.navPress} onPress={() => console.log("PRESSED")} />
+                  </View>
+                  <Divider style={styles.navDivider} />
+                  <TextInput
+                    style={styles.navInput}
+                    mode="outlined"
+                    outlineStyle={styles.navInputBorder}
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    returnKeyType="done"
+                    placeholder={state.strings.yourLocation}
+                    value={state.node}
+                    left={<TextInput.Icon style={styles.icon} size={22} icon="map-pin" />}
+                    onChangeText={value => actions.setName(value)}
+                  />
+                  <Divider style={styles.navDivider} />
+                  <TextInput
+                    style={styles.navDescription}
+                    mode="outlined"
+                    multiline={true}
+                    outlineStyle={styles.navInputBorder}
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    returnKeyType="done"
+                    placeholder={state.strings.description}
+                    value={state.node}
+                    left={<TextInput.Icon style={styles.icon} size={22} icon="book" />}
+                    onChangeText={value => actions.setName(value)}
+                  />
+                  <Divider style={styles.navDivider} />
+                  <View style={styles.navUpload}>
+                    <TextInput
+                      style={styles.navInput}
+                      mode="outlined"
+                      outlineStyle={styles.navInputBorder}
+                      placeholder={state.strings.registry}
+                      left={<TextInput.Icon style={styles.icon} size={22} icon="eye" />}
+                    />
+                    <Switch style={styles.controlSwitch} value={state.config.searchable} onValueChange={setRegistry} />
+                    <Pressable style={styles.navPress} onPress={() => console.log("PRESSED")} />
+                  </View>
+                </Surface>
+              </View>
+              <Button mode="contained" style={styles.navSubmit}>
+                {state.strings.next}
+              </Button>
+            </KeyboardAwareScrollView>
+          </Surface>
         </View>
-        <View style={styles.scrollWrapper}>
-          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
-            <View style={styles.image}>
-              {!state.profile.imageSet && <Image style={styles.logoUnset} resizeMode={'contain'} source={{uri: state.imageUrl}} />}
-              {state.profile.imageSet && <Image style={styles.logoSet} resizeMode={'contain'} source={{uri: state.imageUrl}} />}
-              <View style={styles.editBar}>
-                <TouchableOpacity onPress={selectImage}>
-                  <Surface style={styles.editBorder} elevation={0} mode="flat">
-                    <Text style={styles.editLogo}>{state.strings.edit}</Text>
-                  </Surface>
+      )}
+      { state.layout === 'large' && (
+        <View style={styles.settings}>
+          <View style={styles.title}>
+            <Text style={styles.header} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.profile.handle}${state.profile.node ? '@' + state.profile.node : ''}`}</Text>
+            <Divider style={styles.border} bold={true} />
+          </View>
+          <View style={styles.scrollWrapper}>
+            <KeyboardAwareScrollView enableOnAndroid={true} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
+              <View style={styles.image}>
+                {!state.profile.imageSet && <Image style={styles.logoUnset} resizeMode={'contain'} source={{uri: state.imageUrl}} />}
+                {state.profile.imageSet && <Image style={styles.logoSet} resizeMode={'contain'} source={{uri: state.imageUrl}} />}
+                <View style={styles.editBar}>
+                  <TouchableOpacity onPress={selectImage}>
+                    <Surface style={styles.editBorder} elevation={0} mode="flat">
+                      <Text style={styles.editLogo}>{state.strings.edit}</Text>
+                    </Surface>
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <View style={styles.divider}>
+                <Divider style={styles.line} bold={true} />
+              </View>
+
+              <View style={styles.attributes}>
+                {!state.profile.name && <Text style={styles.nameUnset}>{state.strings.name}</Text>}
+                {state.profile.name && (
+                  <Text style={styles.nameSet} adjustsFontSizeToFit={true} numberOfLines={1}>
+                    {state.profile.name}
+                  </Text>
+                )}
+                <View style={styles.attribute}>
+                  <View style={styles.icon}>
+                    <Icon size={24} source="map-marker-outline" />
+                  </View>
+                  {!state.profile.location && <Text style={styles.labelUnset}>{state.strings.location}</Text>}
+                  {state.profile.location && <Text style={styles.labelSet}>{state.profile.location}</Text>}
+                </View>
+                <View style={styles.attribute}>
+                  <View style={styles.icon}>
+                    <Icon size={24} source="book-open-outline" />
+                  </View>
+                  {!state.profile.description && <Text style={styles.labelUnset}>{state.strings.description}</Text>}
+                  {state.profile.description && <Text style={styles.labelSet}>{state.profile.description}</Text>}
+                </View>
+                <TouchableOpacity style={styles.editDetails} onPress={() => setDetails(true)}>
+                  <Text style={styles.editDetailsLabel}>{state.strings.edit}</Text>
                 </TouchableOpacity>
               </View>
-            </View>
 
-            <View style={styles.divider}>
-              <Divider style={styles.line} bold={true} />
-            </View>
-
-            <View style={styles.attributes}>
-              {!state.profile.name && <Text style={styles.nameUnset}>{state.strings.name}</Text>}
-              {state.profile.name && (
-                <Text style={styles.nameSet} adjustsFontSizeToFit={true} numberOfLines={1}>
-                  {state.profile.name}
-                </Text>
-              )}
-              <View style={styles.attribute}>
-                <View style={styles.icon}>
-                  <Icon size={24} source="map-marker-outline" />
-                </View>
-                {!state.profile.location && <Text style={styles.labelUnset}>{state.strings.location}</Text>}
-                {state.profile.location && <Text style={styles.labelSet}>{state.profile.location}</Text>}
+              <View style={styles.divider}>
+                <Divider style={styles.line} bold={true} />
               </View>
-              <View style={styles.attribute}>
-                <View style={styles.icon}>
-                  <Icon size={24} source="book-open-outline" />
-                </View>
-                {!state.profile.description && <Text style={styles.labelUnset}>{state.strings.description}</Text>}
-                {state.profile.description && <Text style={styles.labelSet}>{state.profile.description}</Text>}
-              </View>
-              <TouchableOpacity style={styles.editDetails} onPress={() => setDetails(true)}>
-                <Text style={styles.editDetailsLabel}>{state.strings.edit}</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.divider}>
-              <Divider style={styles.line} bold={true} />
-            </View>
-            <View style={styles.attributes}>
-              <View style={styles.attribute}>
-                <View style={styles.controlIcon}>
-                  <Icon size={24} source="eye-outline" />
-                </View>
-                <View style={styles.control}>
-                  <TouchableOpacity activeOpacity={1} onPress={() => setRegistry(!state.config.searchable)}>
-                    <Text style={styles.controlLabel}>{state.strings.registry}</Text>
-                  </TouchableOpacity>
-                  <Switch style={styles.controlSwitch} value={state.config.searchable} onValueChange={setRegistry} />
-                </View>
-              </View>
-              <View style={styles.attribute}>
-                <View style={styles.controlIcon}>
-                  <Icon size={24} source="cloud-lock-outline" />
-                </View>
-                <View style={styles.control}>
-                  <TouchableOpacity activeOpacity={1} onPress={setSeal}>
-                    <Text style={styles.controlLabel}>{state.strings.manageTopics}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View style={styles.attribute}>
-                <View style={styles.controlIcon}>
-                  <Icon size={24} source="bell-outline" />
-                </View>
-                <View style={styles.control}>
-                  <TouchableOpacity activeOpacity={1} onPress={() => setRegistry(!state.config.pushEnabled)}>
-                    <Text style={styles.controlLabel}>{state.strings.enableNotifications}</Text>
-                  </TouchableOpacity>
-                  <Switch style={styles.controlSwitch} value={state.config.pushEnabled} onValueChange={setNotifications} />
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.divider}>
-              <Divider style={styles.line} bold={true} />
-            </View>
-            <View style={styles.attributes}>
-              <View style={styles.attribute}>
-                <View style={styles.controlIcon}>
-                  <Icon size={24} source="ticket-confirmation-outline" />
-                </View>
-                <View style={styles.control}>
-                  <TouchableOpacity activeOpacity={1} onPress={() => setMfa(!state.config.mfaEnabled)}>
-                    <Text style={styles.controlLabel}>{state.strings.mfaTitle}</Text>
-                  </TouchableOpacity>
-                  <Switch style={styles.controlSwitch} value={state.config.mfaEnabled} onValueChange={setMfa} />
-                </View>
-              </View>
-              <View style={styles.attribute}>
-                <View style={styles.controlIcon}>
-                  <Icon size={24} source="login" />
-                </View>
-                <View style={styles.control}>
-                  <TouchableOpacity activeOpacity={1} onPress={changeLogin}>
-                    <Text style={styles.controlLabel}>{state.strings.changeLogin}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              {showLogout && (
+              <View style={styles.attributes}>
                 <View style={styles.attribute}>
                   <View style={styles.controlIcon}>
-                    <Icon size={24} source="logout" />
+                    <Icon size={24} source="eye-outline" />
                   </View>
                   <View style={styles.control}>
-                    <TouchableOpacity activeOpacity={1} onPress={() => setLogout(true)}>
-                      <Text style={styles.controlLabel}>{state.strings.logout}</Text>
+                    <TouchableOpacity activeOpacity={1} onPress={() => setRegistry(!state.config.searchable)}>
+                      <Text style={styles.controlLabel}>{state.strings.registry}</Text>
+                    </TouchableOpacity>
+                    <Switch style={styles.controlSwitch} value={state.config.searchable} onValueChange={setRegistry} />
+                  </View>
+                </View>
+                <View style={styles.attribute}>
+                  <View style={styles.controlIcon}>
+                    <Icon size={24} source="cloud-lock-outline" />
+                  </View>
+                  <View style={styles.control}>
+                    <TouchableOpacity activeOpacity={1} onPress={setSeal}>
+                      <Text style={styles.controlLabel}>{state.strings.manageTopics}</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
-              )}
-              <View style={styles.attribute}>
-                <View style={styles.controlIcon}>
-                  <Icon size={24} source="account-remove" />
-                </View>
-                <View style={styles.control}>
-                  <TouchableOpacity activeOpacity={1} onPress={() => setRemove(true)}>
-                    <Text style={styles.dangerLabel}>{state.strings.deleteAccount}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.divider}>
-              <Divider style={styles.line} bold={true} />
-            </View>
-            <View style={styles.attributes}>
-              <View style={styles.attribute}>
-                <View style={styles.controlIcon}>
-                  <Icon size={24} source="account-cancel-outline" />
-                </View>
-                <View style={styles.control}>
-                  <TouchableOpacity activeOpacity={1} onPress={showBlockedContact}>
-                    <Text style={styles.controlLabel}>{state.strings.blockedContacts}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View style={styles.attribute}>
-                <View style={styles.controlIcon}>
-                  <Icon size={24} source="archive-cancel-outline" />
-                </View>
-                <View style={styles.control}>
-                  <TouchableOpacity activeOpacity={1} onPress={showBlockedChannel}>
-                    <Text style={styles.controlLabel}>{state.strings.blockedTopics}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View style={styles.attribute}>
-                <View style={styles.controlIcon}>
-                  <Icon size={24} source="file-cancel-outline" />
-                </View>
-                <View style={styles.control}>
-                  <TouchableOpacity activeOpacity={1} onPress={showBlockedMessage}>
-                    <Text style={styles.controlLabel}>{state.strings.blockedMessages}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.divider}>
-              <Divider style={styles.line} bold={true} />
-            </View>
-            <View style={styles.options}>
-              <View style={styles.attribute}>
-                <View style={styles.radioIcon}>
-                  <Icon size={24} source="clock-outline" />
-                </View>
-                <View style={styles.radioControl}>
-                  <Text style={styles.smallLabel}>{state.strings.timeFormat}:</Text>
-                  <View style={styles.radioButtons}>
-                    <RadioButton.Item
-                      style={styles.radio}
-                      rippleColor="transparent"
-                      label={state.strings.timeUs}
-                      labelStyle={styles.option}
-                      mode="android"
-                      status={state.fullDayTime ? 'unchecked' : 'checked'}
-                      onPress={() => {
-                        actions.setFullDayTime(false);
-                      }}
-                    />
-                    <RadioButton.Item
-                      style={styles.radio}
-                      rippleColor="transparent"
-                      label={state.strings.timeEu}
-                      labelStyle={styles.option}
-                      mode="android"
-                      status={state.fullDayTime ? 'checked' : 'unchecked'}
-                      onPress={() => {
-                        actions.setFullDayTime(true);
-                      }}
-                    />
+                <View style={styles.attribute}>
+                  <View style={styles.controlIcon}>
+                    <Icon size={24} source="bell-outline" />
+                  </View>
+                  <View style={styles.control}>
+                    <TouchableOpacity activeOpacity={1} onPress={() => setRegistry(!state.config.pushEnabled)}>
+                      <Text style={styles.controlLabel}>{state.strings.enableNotifications}</Text>
+                    </TouchableOpacity>
+                    <Switch style={styles.controlSwitch} value={state.config.pushEnabled} onValueChange={setNotifications} />
                   </View>
                 </View>
               </View>
-              <View style={styles.attribute}>
-                <View style={styles.radioIcon}>
-                  <Icon size={24} source="calendar-text-outline" />
+
+              <View style={styles.divider}>
+                <Divider style={styles.line} bold={true} />
+              </View>
+              <View style={styles.attributes}>
+                <View style={styles.attribute}>
+                  <View style={styles.controlIcon}>
+                    <Icon size={24} source="ticket-confirmation-outline" />
+                  </View>
+                  <View style={styles.control}>
+                    <TouchableOpacity activeOpacity={1} onPress={() => setMfa(!state.config.mfaEnabled)}>
+                      <Text style={styles.controlLabel}>{state.strings.mfaTitle}</Text>
+                    </TouchableOpacity>
+                    <Switch style={styles.controlSwitch} value={state.config.mfaEnabled} onValueChange={setMfa} />
+                  </View>
                 </View>
-                <View style={styles.radioControl}>
-                  <Text style={styles.smallLabel}>{state.strings.dateFormat}:</Text>
-                  <View style={styles.radioButtons}>
-                    <RadioButton.Item
-                      style={styles.radio}
-                      rippleColor="transparent"
-                      label={state.strings.dateUs}
-                      labelStyle={styles.option}
-                      mode="android"
-                      status={state.monthFirstDate ? 'checked' : 'unchecked'}
-                      onPress={() => {
-                        actions.setMonthFirstDate(true);
-                      }}
-                    />
-                    <RadioButton.Item
-                      style={styles.radio}
-                      rippleColor="transparent"
-                      label={state.strings.dateEu}
-                      labelStyle={styles.option}
-                      mode="android"
-                      status={state.monthFirstDate ? 'unchecked' : 'checked'}
-                      onPress={() => {
-                        actions.setMonthFirstDate(false);
-                      }}
-                    />
+                <View style={styles.attribute}>
+                  <View style={styles.controlIcon}>
+                    <Icon size={24} source="login" />
+                  </View>
+                  <View style={styles.control}>
+                    <TouchableOpacity activeOpacity={1} onPress={changeLogin}>
+                      <Text style={styles.controlLabel}>{state.strings.changeLogin}</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                {showLogout && (
+                  <View style={styles.attribute}>
+                    <View style={styles.controlIcon}>
+                      <Icon size={24} source="logout" />
+                    </View>
+                    <View style={styles.control}>
+                      <TouchableOpacity activeOpacity={1} onPress={() => setLogout(true)}>
+                        <Text style={styles.controlLabel}>{state.strings.logout}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )}
+                <View style={styles.attribute}>
+                  <View style={styles.controlIcon}>
+                    <Icon size={24} source="account-remove" />
+                  </View>
+                  <View style={styles.control}>
+                    <TouchableOpacity activeOpacity={1} onPress={() => setRemove(true)}>
+                      <Text style={styles.dangerLabel}>{state.strings.deleteAccount}</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
-            </View>
-          </ScrollView>
+
+              <View style={styles.divider}>
+                <Divider style={styles.line} bold={true} />
+              </View>
+              <View style={styles.attributes}>
+                <View style={styles.attribute}>
+                  <View style={styles.controlIcon}>
+                    <Icon size={24} source="account-cancel-outline" />
+                  </View>
+                  <View style={styles.control}>
+                    <TouchableOpacity activeOpacity={1} onPress={showBlockedContact}>
+                      <Text style={styles.controlLabel}>{state.strings.blockedContacts}</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={styles.attribute}>
+                  <View style={styles.controlIcon}>
+                    <Icon size={24} source="archive-cancel-outline" />
+                  </View>
+                  <View style={styles.control}>
+                    <TouchableOpacity activeOpacity={1} onPress={showBlockedChannel}>
+                      <Text style={styles.controlLabel}>{state.strings.blockedTopics}</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={styles.attribute}>
+                  <View style={styles.controlIcon}>
+                    <Icon size={24} source="file-cancel-outline" />
+                  </View>
+                  <View style={styles.control}>
+                    <TouchableOpacity activeOpacity={1} onPress={showBlockedMessage}>
+                      <Text style={styles.controlLabel}>{state.strings.blockedMessages}</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.divider}>
+                <Divider style={styles.line} bold={true} />
+              </View>
+              <View style={styles.options}>
+                <View style={styles.attribute}>
+                  <View style={styles.radioIcon}>
+                    <Icon size={24} source="clock-outline" />
+                  </View>
+                  <View style={styles.radioControl}>
+                    <Text style={styles.smallLabel}>{state.strings.timeFormat}:</Text>
+                    <View style={styles.radioButtons}>
+                      <RadioButton.Item
+                        style={styles.radio}
+                        rippleColor="transparent"
+                        label={state.strings.timeUs}
+                        labelStyle={styles.option}
+                        mode="android"
+                        status={state.fullDayTime ? 'unchecked' : 'checked'}
+                        onPress={() => {
+                          actions.setFullDayTime(false);
+                        }}
+                      />
+                      <RadioButton.Item
+                        style={styles.radio}
+                        rippleColor="transparent"
+                        label={state.strings.timeEu}
+                        labelStyle={styles.option}
+                        mode="android"
+                        status={state.fullDayTime ? 'checked' : 'unchecked'}
+                        onPress={() => {
+                          actions.setFullDayTime(true);
+                        }}
+                      />
+                    </View>
+                  </View>
+                </View>
+                <View style={styles.attribute}>
+                  <View style={styles.radioIcon}>
+                    <Icon size={24} source="calendar-text-outline" />
+                  </View>
+                  <View style={styles.radioControl}>
+                    <Text style={styles.smallLabel}>{state.strings.dateFormat}:</Text>
+                    <View style={styles.radioButtons}>
+                      <RadioButton.Item
+                        style={styles.radio}
+                        rippleColor="transparent"
+                        label={state.strings.dateUs}
+                        labelStyle={styles.option}
+                        mode="android"
+                        status={state.monthFirstDate ? 'checked' : 'unchecked'}
+                        onPress={() => {
+                          actions.setMonthFirstDate(true);
+                        }}
+                      />
+                      <RadioButton.Item
+                        style={styles.radio}
+                        rippleColor="transparent"
+                        label={state.strings.dateEu}
+                        labelStyle={styles.option}
+                        mode="android"
+                        status={state.monthFirstDate ? 'unchecked' : 'checked'}
+                        onPress={() => {
+                          actions.setMonthFirstDate(false);
+                        }}
+                      />
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </KeyboardAwareScrollView>
+          </View>
         </View>
-      </View>
+      )}
       <Modal animationType="fade" transparent={true} visible={sealing} supportedOrientations={['portrait', 'landscape']} onRequestClose={() => setSealing(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />

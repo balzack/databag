@@ -40,7 +40,7 @@ export function Welcome({ next }: { next: ()=>void }) {
                 <Icon size={24} source="message-circle" color={Colors.icon} />
                 <Text variant="labelLarge">{ state.strings.startTopic }</Text>
               </View>
-              <Button mode="contained" style={styles.submit} onPress={actions.next}>
+              <Button mode="contained" style={styles.submit} onPress={next}>
                 {state.strings.getStarted}
               </Button>
             </View>

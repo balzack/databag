@@ -2,6 +2,92 @@ import {StyleSheet} from 'react-native';
 import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
+  navHeader: {
+    height: 48,
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  navTitle: {
+    color: 'white',
+    flexGrow: 1,
+    textAlign: 'center',
+  },
+  navIcon: {
+    color: 'white',
+    width: 48,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  navImage: {
+    width: '100%',
+    maxHeight: 256,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  navLogo: {
+    width: '100%',
+    height: null,
+    aspectRatio: 1,
+  },
+  navLabel: {
+    width: '100%',
+    padding: 16,
+    paddingTop: 24,
+  },
+  navInput: {
+    fontSize: 14,
+    textWrap: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    textAlign: 'auto',
+  },
+  navDescription: {
+    width: '100%',
+    fontSize: 14,
+    maxHeight: 92,
+  },
+  navInputBorder: {
+    borderWidth: 0,
+  },
+  navWrapper: {
+    width: '100%',
+    padding: 16,
+  },
+  navData: {
+    width: '100%',
+    borderRadius: 4,
+    display: 'flex',
+    flexDirection: 'column',
+    marginBottom: 16,
+  },
+  navDivider: {
+    marginLeft: 16,
+    marginRight: 16,
+  },
+  navUpload: {
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+  },
+  navPress: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  navSubmit: {
+    borderRadius: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
   modal: {
     display: 'flex',
     width: '100%',
