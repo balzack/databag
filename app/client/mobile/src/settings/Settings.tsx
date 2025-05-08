@@ -418,7 +418,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
             <Text variant="titleMedium" style={styles.navTitle}>{ state.strings.yourProfile }</Text>
             <View style={styles.navIcon} />
           </View>
-          <Surface elevation={3} style={styles.scrollWrapper}>
+          <Surface elevation={3} mode="flat" style={styles.scrollWrapper}>
             <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
               <View style={styles.navImage}>
                 {!state.profile.imageSet && <Image style={styles.navLogo} resizeMode={'contain'} source={{uri: state.imageUrl}} />}
@@ -493,8 +493,11 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                   </View>
                 </Surface>
               </View>
-              <Button mode="contained" style={styles.navSubmit}>
+              <Button mode="contained" style={styles.navSubmit} onPress={setupNav?.next}>
                 {state.strings.next}
+              </Button>
+              <Button mode="text" style={styles.navSkip}>
+                {state.strings.skipSetup}
               </Button>
             </KeyboardAwareScrollView>
           </Surface>

@@ -11,7 +11,7 @@ export function useAccess() {
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
     layout: null,
-    strings: {},
+    strings: display.state.strings,
     mode: 'splash',
     username: '',
     handle: '',

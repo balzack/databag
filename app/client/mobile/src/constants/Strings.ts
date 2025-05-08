@@ -11,6 +11,7 @@ export const en = {
   uploadImage: 'Upload Profile Image',
   yourLocation: 'Your Location',
   next: 'Next',
+  skipSetup: 'Skip',
 
   viewTerms: 'View Terms of Service',
   acceptTerms: 'Accept Terms of Service',
