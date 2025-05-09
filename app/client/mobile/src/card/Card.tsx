@@ -25,7 +25,7 @@ export function Card({
   return (
     <Pressable style={containerStyle} onPress={select ? select : () => {}}>
       <SafeAreaView style={styles.card}>
-        <Image style={styles.image} resizeMode={'contain'} source={{uri: imageUrl}} />
+        <Image style={{ ...styles.image, ...containerStyle.icon }} resizeMode={'contain'} source={{uri: imageUrl}} />
         <View style={styles.details}>
           {name && (
             <Text numberOfLines={1} style={styles.nameSet}>
@@ -37,7 +37,7 @@ export function Card({
               {placeholder}
             </Text>
           )}
-          <Text numberOfLines={1} style={styles.handle}>
+          <Text numberOfLines={1} style={{ ...styles.handle, ...containerStyle.handle }}>
             {node ? `${handle}@${node}` : handle}
           </Text>
         </View>

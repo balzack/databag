@@ -38,4 +38,40 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
   },
+  cards: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    overscrollBehavior: 'none',
+    flexGrow: 1,
+    minHeight: 0,
+    flexShrink: 1,
+  },
+  cardsContainer: {
+    paddingBottom: 64,
+  },
+  card: {
+    width: '100%',
+    height: 72,
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingRight: 16,
+    paddingLeft: 16,
+    icon: {
+      borderRadius: 24,
+      overflow: 'hidden',
+    }
+  },
+  submit: {
+    borderRadius: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
+  control: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingBottom: 16,
+    paddingTop: 16,
+  },
 });

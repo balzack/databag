@@ -10,6 +10,7 @@ export const en = {
   enterName: 'Enter Your Name',
   uploadImage: 'Upload Profile Image',
   yourLocation: 'Your Location',
+  requestConnection: 'Request Connection',
   next: 'Next',
   skipSetup: 'Skip',
 
