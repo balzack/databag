@@ -10,6 +10,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
   },
+  connect: {
+    backgroundColor: 'transparent',
+  },
   navHeader: {
     height: 48,
     width: '100%',

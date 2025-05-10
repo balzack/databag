@@ -13,6 +13,8 @@ export const en = {
   requestConnection: 'Request Connection',
   next: 'Next',
   skipSetup: 'Skip',
+  allDone: 'All Done!',
+  moreContacts: 'More people can be found from the contacts tab. Once accepted you can start a private conversation.',
 
   viewTerms: 'View Terms of Service',
   acceptTerms: 'Accept Terms of Service',

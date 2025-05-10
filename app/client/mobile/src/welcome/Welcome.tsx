@@ -23,7 +23,7 @@ export function Welcome({ next }: { next: ()=>void }) {
               </Text>
             </View>
             <View style={styles.header}>
-              <Text style={styles.headline} variant="titleSmall">{ state.strings.communication }</Text>
+              <Text style={styles.headline} variant="headlineMedium">{ state.strings.communication }</Text>
             </View>
           </View>
           <View style={styles.detail}>

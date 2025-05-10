@@ -141,16 +141,16 @@ function App(): React.JSX.Element {
     bodySmall: {fontFamily: "Inter-Regular", fontSize: 12, fontWeight: "400", letterSpacing: 0.4, lineHeight: 16},
     displayLarge: {fontFamily: "Inter-Regular", fontSize: 57, fontWeight: "400", letterSpacing: 0, lineHeight: 64},
     displayMedium: {fontFamily: "Inter-Regular", fontSize: 45, fontWeight: "400", letterSpacing: 0, lineHeight: 52},
-    displaySmall: {fontFamily: "Inter-Regular", fontSize: 36, fontWeight: "400", letterSpacing: 0, lineHeight: 44},
-    headlineLarge: {fontFamily: "Inter-Regular", fontSize: 32, fontWeight: "400", letterSpacing: 0, lineHeight: 40},
-    headlineMedium: {fontFamily: "Inter-Regular", fontSize: 28, fontWeight: "400", letterSpacing: 0, lineHeight: 36},
-    headlineSmall: {fontFamily: "Inter-Regular", fontSize: 24, fontWeight: "400", letterSpacing: 0, lineHeight: 32},
+    displaySmall: {fontFamily: "Inter-Regular", fontSize: 36, fontWeight: "400", letterSpacing: 0, lineHeight: 36},
+    headlineLarge: {fontFamily: "Inter-Regular", fontSize: 32, fontWeight: "500", letterSpacing: 0, lineHeight: 32},
+    headlineMedium: {fontFamily: "Inter-Regular", fontSize: 28, fontWeight: "500", letterSpacing: 0, lineHeight: 32},
+    headlineSmall: {fontFamily: "Inter-Regular", fontSize: 24, fontWeight: "500", letterSpacing: 0, lineHeight: 24},
     labelLarge: {fontFamily: "Inter-Regular", fontSize: 16, fontWeight: "500", letterSpacing: 0.1, lineHeight: 20},
     labelMedium: {fontFamily: "Inter-Regular", fontSize: 12, fontWeight: "500", letterSpacing: 0.5, lineHeight: 16},
     labelSmall: {fontFamily: "Inter-Regular", fontSize: 11, fontWeight: "500", letterSpacing: 0.5, lineHeight: 16},
     titleLarge: {fontFamily: "Inter-Tight", fontSize: 48, fontWeight: "900", letterSpacing: 0, lineHeight: 48},
-    titleMedium: {fontFamily: "Inter-Regular", fontSize: 20, fontWeight: "500", letterSpacing: 0.15, lineHeight: 20},
-    titleSmall: {fontFamily: "Inter-Regular", fontSize: 20, fontWeight: "500", letterSpacing: 0.1, lineHeight: 24}
+    titleMedium: {fontFamily: "Inter-Regular", fontSize: 32, fontWeight: "900", letterSpacing: 0.15, lineHeight: 32},
+    titleSmall: {fontFamily: "Inter-Regular", fontSize: 28, fontWeight: "900", letterSpacing: 0.1, lineHeight: 28}
   }
 
   const theme =
@@ -167,7 +167,7 @@ function App(): React.JSX.Element {
         <PaperProvider settings={{icon: (props) => {
               if (props.name === 'user' || props.name === 'contacts' || props.name === 'left' || props.name === 'idcard' || props.name === 'picture') {
                 return <AntIcon {...props} />
-              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book') {
+              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus') {
                 return <FeatherIcon {...props} />
               } else {
                 return <MaterialIcon {...props} />

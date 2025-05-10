@@ -23,6 +23,7 @@ import {Call} from '../call/Call';
 import {Onboard} from '../onboard/Onboard';
 import {Welcome} from '../welcome/Welcome';
 import {Request} from '../request/Request';
+import {Ready} from '../ready/Ready';
 
 const SettingsDrawer = createDrawerNavigator();
 const ContactsDrawer = createDrawerNavigator();
@@ -241,10 +242,13 @@ function Onboarding({ scheme }: { scheme: string }) {
             {props => (
               <Surface elevation={9} mode="flat" style={styles.screen}>
                 <SafeAreaView edges={['top']}>
-                  <Request setupNav={{ back: ()=>props.navigation.navigate('identity'), next: ()=>props.navigation.navigate('welcome') }} />
+                  <Request setupNav={{ back: ()=>props.navigation.navigate('identity'), next: ()=>props.navigation.navigate('ready') }} />
                 </SafeAreaView>
               </Surface>
             )}
+          </OnboardStack.Screen>
+          <OnboardStack.Screen name="ready" options={{headerBackTitleVisible: false, animation: 'fade'}}>
+            {props => <Ready />}
           </OnboardStack.Screen>
         </OnboardStack.Navigator>
       </NavigationContainer>

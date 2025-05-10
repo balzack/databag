@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {useTheme, Surface, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch, Checkbox} from 'react-native-paper';
+import {useTheme, Surface, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
 import {TouchableOpacity, FlatList, Pressable, Modal, View, Image, ScrollView, Platform} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {styles} from './Request.styled';
 import {useRequest} from './useRequest.hook';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -18,13 +19,13 @@ export function Request({ setupNav }: { setupNav: {back: ()=>void, next: ()=>voi
         <Pressable style={styles.navIcon} onPress={setupNav?.back}>
           <Icon size={24} source="left" color={'white'} />
         </Pressable>
-        <Text variant="titleMedium" style={styles.navTitle}>{ state.strings.connectWith }</Text>
+        <Text variant="headlineSmall" style={styles.navTitle}>{ state.strings.connectWith }</Text>
         <View style={styles.navIcon} />
       </View>
       <Surface elevation={1} mode="flat" style={styles.scrollWrapper}>
         <FlatList
           style={styles.cards}
-          data={state.contacts}
+          data={state.profiles}
           initialNumToRender={32}
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => {
@@ -37,7 +38,7 @@ export function Request({ setupNav }: { setupNav: {back: ()=>void, next: ()=>voi
                 node={item.node}
                 placeholder={state.strings.name}
                 select={()=>{}}
-                actions={[<Checkbox.Android />]}
+                actions={[<IconButton style={styles.connect} icon="user-plus" key="request" />]}
               />
             );
           }}
@@ -46,7 +47,7 @@ export function Request({ setupNav }: { setupNav: {back: ()=>void, next: ()=>voi
         <Divider />
         <Surface elevation={2} mode="flat"  style={styles.control}>
           <Button mode="contained" style={styles.submit} onPress={setupNav?.next}>
-            {state.strings.requestConnection}
+            {state.strings.next}
           </Button>
           <Button mode="text" style={styles.skip}>
             {state.strings.skipSetup}

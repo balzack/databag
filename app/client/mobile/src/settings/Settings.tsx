@@ -415,7 +415,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
             <Pressable style={styles.navIcon} onPress={setupNav?.back}>
               <Icon size={24} source="left" color={'white'} />
             </Pressable>
-            <Text variant="titleMedium" style={styles.navTitle}>{ state.strings.yourProfile }</Text>
+            <Text variant="headlineSmall" style={styles.navTitle}>{ state.strings.yourProfile }</Text>
             <View style={styles.navIcon} />
           </View>
           <Surface elevation={2} mode="flat" style={styles.scrollWrapper}>
