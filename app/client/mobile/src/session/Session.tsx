@@ -95,8 +95,8 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
     <RingContextProvider>
       <View style={styles.session}>
         {state.layout !== 'large' && (
-          <Surface elevation={3}>
-            <SafeAreaView style={styles.full}>
+          <Surface elevation={9}>
+            <SafeAreaView style={styles.full} edges={['top']}>
               <View style={styles.screen}>
                 <Ring />
                 <View
@@ -122,74 +122,78 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                     <Settings showLogout={true} />
                   </Surface>
                 </View>
-                <View style={styles.tabs}>
-                  {tab === 'content' && (
-                    <IconButton
-                      style={styles.activeTab}
-                      mode="contained"
-                      icon={'comment-multiple'}
-                      size={28}
-                      onPress={() => {
-                        setTab('content');
-                      }}
-                    />
-                  )}
-                  {tab !== 'content' && (
-                    <IconButton
-                      style={styles.idleTab}
-                      mode="contained"
-                      icon={'comment-multiple-outline'}
-                      size={28}
-                      onPress={() => {
-                        setTab('content');
-                      }}
-                    />
-                  )}
-                  {tab === 'contacts' && (
-                    <IconButton
-                      style={styles.activeTab}
-                      mode="contained"
-                      icon={'contacts'}
-                      size={28}
-                      onPress={() => {
-                        setTab('contacts');
-                      }}
-                    />
-                  )}
-                  {tab !== 'contacts' && (
-                    <IconButton
-                      style={styles.idleTab}
-                      mode="contained"
-                      icon={'contacts-outline'}
-                      size={28}
-                      onPress={() => {
-                        setTab('contacts');
-                      }}
-                    />
-                  )}
-                  {tab === 'settings' && (
-                    <IconButton
-                      style={styles.activeTab}
-                      mode="contained"
-                      icon={'cog'}
-                      size={28}
-                      onPress={() => {
-                        setTab('settings');
-                      }}
-                    />
-                  )}
-                  {tab !== 'settings' && (
-                    <IconButton
-                      style={styles.idleTab}
-                      mode="contained"
-                      icon={'cog-outline'}
-                      size={28}
-                      onPress={() => {
-                        setTab('settings');
-                      }}
-                    />
-                  )}
-                </View>
+                <Surface mode="flat" elevation={1}>
+                  <SafeAreaView edges={['bottom']}>
+                    <View style={styles.tabs}>
+                      {tab === 'content' && (
+                        <IconButton
+                          style={styles.activeTab}
+                          mode="contained"
+                          icon={'comment-multiple'}
+                          size={28}
+                          onPress={() => {
+                            setTab('content');
+                          }}
+                        />
+                      )}
+                      {tab !== 'content' && (
+                        <IconButton
+                          style={styles.idleTab}
+                          mode="contained"
+                          icon={'comment-multiple-outline'}
+                          size={28}
+                          onPress={() => {
+                            setTab('content');
+                          }}
+                        />
+                      )}
+                      {tab === 'contacts' && (
+                        <IconButton
+                          style={styles.activeTab}
+                          mode="contained"
+                          icon={'contacts'}
+                          size={28}
+                          onPress={() => {
+                            setTab('contacts');
+                          }}
+                        />
+                      )}
+                      {tab !== 'contacts' && (
+                        <IconButton
+                          style={styles.idleTab}
+                          mode="contained"
+                          icon={'contacts-outline'}
+                          size={28}
+                          onPress={() => {
+                            setTab('contacts');
+                          }}
+                        />
+                      )}
+                      {tab === 'settings' && (
+                        <IconButton
+                          style={styles.activeTab}
+                          mode="contained"
+                          icon={'cog'}
+                          size={28}
+                          onPress={() => {
+                            setTab('settings');
+                          }}
+                        />
+                      )}
+                      {tab !== 'settings' && (
+                        <IconButton
+                          style={styles.idleTab}
+                          mode="contained"
+                          icon={'cog-outline'}
+                          size={28}
+                          onPress={() => {
+                            setTab('settings');
+                          }}
+                        />
+                      )}
+                    </View>
+                  </SafeAreaView>
+                </Surface>
               </View>
             </SafeAreaView>
             { state.showWelcome && (

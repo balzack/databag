@@ -15,6 +15,7 @@ export const en = {
   skipSetup: 'Skip',
   allDone: 'All Done!',
   moreContacts: 'More people can be found from the contacts tab. Once accepted you can start a private conversation.',
+  messaging: 'Messaging',
 
   viewTerms: 'View Terms of Service',
   acceptTerms: 'Accept Terms of Service',

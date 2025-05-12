@@ -2,6 +2,18 @@ import {StyleSheet} from 'react-native';
 import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
+  handle: {
+    marginTop: 8,
+  },
+  username: {
+    fontWeight: 'bold',
+  },
+  sectionLabel: {
+    width: '100%',
+    paddingLeft: 20,
+    paddingBottom: 4,
+    paddingTop: 4,
+  },
   navHeader: {
     height: 48,
     width: '100%',
@@ -28,6 +40,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
+    marginBottom: 16,
   },
   navLogo: {
     width: '100%',
@@ -56,14 +69,15 @@ export const styles = StyleSheet.create({
   },
   navWrapper: {
     width: '100%',
-    padding: 16,
+    paddingLeft: 16,
+    paddingRight: 16,
+    marginBottom: 16,
   },
   navData: {
     width: '100%',
     borderRadius: 4,
     display: 'flex',
     flexDirection: 'column',
-    marginBottom: 16,
   },
   navDivider: {
     marginLeft: 16,
@@ -378,6 +392,13 @@ export const styles = StyleSheet.create({
   dangerLabel: {
     fontSize: 16,
     color: Colors.danger,
+  },
+  controlAlign: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    flexGrow: 1,
+    paddingRight: 8,
   },
   controlSwitch: {
     transform: [{scaleX: 0.7}, {scaleY: 0.7}],

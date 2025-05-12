@@ -15,7 +15,7 @@ export function Ready() {
         <SafeAreaView style={styles.wrapper} edges={['top', 'bottom']}>
           <View style={styles.form}>
             <View style={styles.header}>
-              <Text variant="titleSmall">{ state.strings.startTopic }</Text>
+              <Text variant="titleSmall">{ state.strings.allDone }</Text>
             </View>
               <Text variant="labelLarge" style={styles.info}>{ state.strings.moreContacts }</Text>
             <Button mode="contained" style={styles.submit} onPress={actions.done}>

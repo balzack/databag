@@ -411,6 +411,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
     <View>
       { state.layout === 'small' && (
         <View style={styles.settings}>
+          {setupNav && (
           <View style={styles.navHeader}>
             <Pressable style={styles.navIcon} onPress={setupNav?.back}>
               <Icon size={24} source="left" color={'white'} />
@@ -418,14 +419,38 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
             <Text variant="headlineSmall" style={styles.navTitle}>{ state.strings.yourProfile }</Text>
             <View style={styles.navIcon} />
           </View>
+          )}
+          {!setupNav && (
+            <Surface mode="flat" elevation={9} style={styles.navHeader}>
+              <Text variant="headlineSmall" style={styles.navTitle}>{ state.strings.settings }</Text>
+            </Surface>
+          )}
           <Surface elevation={2} mode="flat" style={styles.scrollWrapper}>
             <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
               <View style={styles.navImage}>
                 {!state.profile.imageSet && <Image style={styles.navLogo} resizeMode={'contain'} source={{uri: state.imageUrl}} />}
                 {state.profile.imageSet && <Image style={styles.navLogo} resizeMode={'contain'} source={{uri: state.imageUrl}} />}
               </View>
+              {!setupNav && (
+                <Text variant="labelLarge" style={styles.sectionLabel}>{ state.strings.profile }</Text>
+              )}
               <View style={styles.navWrapper}>
                 <Surface elevation={0} mode="flat" style={styles.navData}>
+                  {!setupNav && (
+                    <TextInput
+                      style={{ ...styles.navInput, ...styles.username }}
+                      mode="outlined"
+                      outlineStyle={styles.navInputBorder}
+                      autoCapitalize="none"
+                      disabled={true}
+                      value={`${state.profile.handle}${state.profile.node ? '@' + state.profile.node : ''}`}
+                      left={<TextInput.Icon style={styles.icon} size={22} icon="user" />}
+                      onChangeText={value => actions.setName(value)}
+                    />
+                  )}
+                  {!setupNav && (
+                    <Divider style={styles.navDivider} />
+                  )}
                   <TextInput
                     style={styles.navInput}
                     mode="outlined"
@@ -435,7 +460,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                     autoCorrect={false}
                     returnKeyType="done"
                     placeholder={state.strings.enterName}
-                    value={state.node}
+                    value={state.profile.name}
                     left={<TextInput.Icon style={styles.icon} size={22} icon="idcard" />}
                     onChangeText={value => actions.setName(value)}
                   />
@@ -460,7 +485,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                     autoCorrect={false}
                     returnKeyType="done"
                     placeholder={state.strings.yourLocation}
-                    value={state.node}
+                    value={state.profile.location}
                     left={<TextInput.Icon style={styles.icon} size={22} icon="map-pin" />}
                     onChangeText={value => actions.setName(value)}
                   />
@@ -475,7 +500,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                     autoCorrect={false}
                     returnKeyType="done"
                     placeholder={state.strings.description}
-                    value={state.node}
+                    value={state.profile.description}
                     left={<TextInput.Icon style={styles.icon} size={22} icon="book" />}
                     onChangeText={value => actions.setName(value)}
                   />
@@ -488,17 +513,102 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                       placeholder={state.strings.registry}
                       left={<TextInput.Icon style={styles.icon} size={22} icon="eye" />}
                     />
-                    <Switch style={styles.controlSwitch} value={state.config.searchable} onValueChange={setRegistry} />
-                    <Pressable style={styles.navPress} onPress={() => console.log("PRESSED")} />
+                    <View style={styles.controlAlign}>
+                      <Switch style={styles.controlSwitch} value={state.searchable} disabled={savingRegistry} />
+                    </View>
+                    <Pressable style={styles.navPress} onPress={() => setRegistry(!state.config.searchable)} />
                   </View>
                 </Surface>
               </View>
-              <Button mode="contained" style={styles.navSubmit} onPress={setupNav?.next}>
-                {state.strings.next}
-              </Button>
-              <Button mode="text" style={styles.navSkip}>
-                {state.strings.skipSetup}
-              </Button>
+              {setupNav && (
+                <Button mode="contained" style={styles.navSubmit} onPress={setupNav?.next}>
+                  {state.strings.next}
+                </Button>
+              )}
+              {setupNav && (
+                <Button mode="text" style={styles.navSkip}>
+                  {state.strings.skipSetup}
+                </Button>
+              )}
+              {!setupNav && (
+                <Text variant="labelLarge" style={styles.sectionLabel}>{ state.strings.account }</Text>
+              )}
+              {!setupNav && (
+                <View style={styles.navWrapper}>
+                  <Surface elevation={0} mode="flat" style={styles.navData}>
+                    <View style={styles.navUpload}>
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        placeholder={state.strings.mfaTitle}
+                        left={<TextInput.Icon style={styles.icon} size={22} icon="key" />}
+                      />
+                      <View style={styles.controlAlign}>
+                        <Switch style={styles.controlSwitch} value={state.searchable} disabled={savingRegistry} onValueChange={setRegistry} />
+                      </View>
+                      <Pressable style={styles.navPress} onPress={() => console.log('pressed!')} />
+                    </View>
+                    <Divider style={styles.navDivider} />
+                    <View style={styles.navUpload}>
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        placeholder={state.strings.changeLogin}
+                        left={<TextInput.Icon style={styles.icon} size={22} icon="sensor-occupied" />}
+                      />
+                      <Pressable style={styles.navPress} onPress={changeLogin} />
+                    </View>
+                    <Divider style={styles.navDivider} />
+                    <View style={styles.navUpload}>
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        placeholder={state.strings.logout}
+                        left={<TextInput.Icon style={styles.icon} size={22} icon="logout" />}
+                      />
+                      <Pressable style={styles.navPress} onPress={()=>setLogout(true)} />
+                    </View>
+                    <Divider style={styles.navDivider} />
+                    <View style={styles.navUpload}>
+                      <TextInput
+                        style={styles.navInput}
+                        textColor={theme.colors.error}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        value={state.strings.deleteAccount}
+                        left={<TextInput.Icon style={styles.icon} color={theme.colors.error} size={22} icon="trash-2" />}
+                      />
+                      <Pressable style={styles.navPress} onPress={()=>setRemove(true)} />
+                    </View>
+                  </Surface>
+                </View>
+              )}
+              {!setupNav && (
+                <Text variant="labelLarge" style={styles.sectionLabel}>{ state.strings.messaging }</Text>
+              )}
+              {!setupNav && (
+                <View style={styles.navWrapper}>
+                  <Surface elevation={0} mode="flat" style={styles.navData}>
+                    <View style={styles.navUpload}>
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        placeholder={state.strings.enableNotifications}
+                        left={<TextInput.Icon style={styles.icon} size={22} icon="bell-outline" />}
+                      />
+                      <View style={styles.controlAlign}>
+                        <Switch style={styles.controlSwitch} value={state.pushEnabled} disabled={savingNotifications} />
+                      </View>
+                      <Pressable style={styles.navPress} onPress={()=>setNotifications(!state.pushEnabled)} />
+                    </View>
+                    <Divider style={styles.navDivider} />
+                  </Surface>
+                </View>
+              )}
             </KeyboardAwareScrollView>
           </Surface>
         </View>
@@ -583,7 +693,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                     <Icon size={24} source="bell-outline" />
                   </View>
                   <View style={styles.control}>
-                    <TouchableOpacity activeOpacity={1} onPress={() => setRegistry(!state.config.pushEnabled)}>
+                    <TouchableOpacity activeOpacity={1} onPress={() => setNotifications(!state.config.pushEnabled)}>
                       <Text style={styles.controlLabel}>{state.strings.enableNotifications}</Text>
                     </TouchableOpacity>
                     <Switch style={styles.controlSwitch} value={state.config.pushEnabled} onValueChange={setNotifications} />

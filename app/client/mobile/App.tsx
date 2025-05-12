@@ -11,7 +11,8 @@ import {Session} from './src/session/Session';
 import ReceiveSharingIntent from 'react-native-receive-sharing-intent';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import {useColorScheme} from 'react-native';
 import {configureFonts, MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
@@ -31,7 +32,7 @@ const databagColors = {
     onTertiary: 'rgb(255, 255, 255)',
     tertiaryContainer: 'rgb(192, 233, 250)',
     onTertiaryContainer: 'rgb(0, 31, 40)',
-    error: 'rgb(186, 26, 26)',
+    error: '#B22626',
     onError: 'rgb(255, 255, 255)',
     errorContainer: 'rgb(255, 218, 214)',
     onErrorContainer: 'rgb(65, 0, 2)',
@@ -167,10 +168,12 @@ function App(): React.JSX.Element {
         <PaperProvider settings={{icon: (props) => {
               if (props.name === 'user' || props.name === 'contacts' || props.name === 'left' || props.name === 'idcard' || props.name === 'picture') {
                 return <AntIcon {...props} />
-              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus') {
+              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2') {
                 return <FeatherIcon {...props} />
+              } else if (props.name === 'sensor-occupied') {
+                return <MaterialIcon {...props}  />
               } else {
-                return <MaterialIcon {...props} />
+                return <CommunityIcon {...props} />
               }
             }}}
             theme={theme}

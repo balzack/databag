@@ -23,6 +23,8 @@ export function useSettings() {
     username: '',
     taken: false,
     checked: true,
+    searchable: null as null | boolean,
+    pushEnabled: null as null | boolean,
     name: '',
     description: '',
     location: '',
@@ -58,7 +60,8 @@ export function useSettings() {
   useEffect(() => {
     const {settings, identity} = getSession();
     const setConfig = (config: Config) => {
-      updateState({config});
+      const { searchable, pushEnabled } = config;
+      updateState({config, searchable, pushEnabled});
     };
     settings.addConfigListener(setConfig);
     const setProfile = (profile: Profile) => {
@@ -107,18 +110,22 @@ export function useSettings() {
       await settings.setLogin(state.handle, state.password);
     },
     enableNotifications: async () => {
+      updateState({ pushEnabled: true });
       const {settings} = getSession();
       await settings.enableNotifications();
     },
     disableNotifications: async () => {
+      updateState({ pushEnabled: false });
       const {settings} = getSession();
       await settings.disableNotifications();
     },
     enableRegistry: async () => {
+      updateState({ searchable: true });
       const {settings} = getSession();
       await settings.enableRegistry();
     },
     disableRegistry: async () => {
+      updateState({ searchable: false });
       const {settings} = getSession();
       await settings.disableRegistry();
     },
