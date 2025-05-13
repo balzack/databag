@@ -21,6 +21,11 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  slider: {
+    paddingLeft: 16,
+    paddingRight: 16,
+    paddingBottom: 8,
+  },
   navTitle: {
     color: 'white',
     flexGrow: 1,

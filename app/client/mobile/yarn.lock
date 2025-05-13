@@ -2975,6 +2975,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/slider@npm:^4.5.6":
+  version: 4.5.6
+  resolution: "@react-native-community/slider@npm:4.5.6"
+  checksum: 8287f3f69b63e0b313639d7dc9a45718a85c4c4494f78485695d7e80bcf3fa9d3891d05a557affc66306df5f2a0a9853d319a35ffcc875ae71149a38a2258bb8
+  languageName: node
+  linkType: hard
+
 "@react-native-firebase/app@npm:^21.7.1":
   version: 21.11.0
   resolution: "@react-native-firebase/app@npm:21.11.0"
@@ -4152,6 +4159,7 @@ __metadata:
     "@openspacelabs/react-native-zoomable-view": ^2.3.1
     "@react-native-clipboard/clipboard": ^1.14.2
     "@react-native-community/blur": ^4.4.0
+    "@react-native-community/slider": ^4.5.6
     "@react-native-firebase/app": ^21.7.1
     "@react-native-firebase/messaging": ^21.7.1
     "@react-native/babel-preset": 0.75.4

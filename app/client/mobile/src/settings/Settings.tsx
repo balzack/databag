@@ -10,6 +10,7 @@ import {Colors} from '../constants/Colors';
 import {InputCode} from '../utils/InputCode';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {Confirm} from '../confirm/Confirm';
+import Slider from '@react-native-community/slider';
 
 export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, next: ()=>void }, showLogout: boolean}) {
   const {state, actions} = useSettings();
@@ -604,6 +605,95 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                         <Switch style={styles.controlSwitch} value={state.pushEnabled} disabled={savingNotifications} />
                       </View>
                       <Pressable style={styles.navPress} onPress={()=>setNotifications(!state.pushEnabled)} />
+                    </View>
+                    <Divider style={styles.navDivider} />
+                  </Surface>
+                </View>
+              )}
+              {!setupNav && (
+                <Text variant="labelLarge" style={styles.sectionLabel}>{ state.strings.format }</Text>
+              )}
+              {!setupNav && (
+                <View style={styles.navWrapper}>
+                  <Surface elevation={0} mode="flat" style={styles.navData}>
+                    <View style={styles.navUpload}>
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        placeholder={state.strings.hourLabel}
+                        left={<TextInput.Icon style={styles.icon} size={22} icon="clock" />}
+                      />
+                      <View style={styles.controlAlign}>
+                        <View style={styles.radioButtons}>
+                          <RadioButton.Item
+                            style={styles.radio}
+                            rippleColor="transparent"
+                            label={state.strings.timeUs}
+                            labelStyle={styles.option}
+                            mode="android"
+                            status={state.fullDayTime ? 'unchecked' : 'checked'}
+                          />
+                          <RadioButton.Item
+                            style={styles.radio}
+                            rippleColor="transparent"
+                            label={state.strings.timeEu}
+                            labelStyle={styles.option}
+                            mode="android"
+                            status={state.fullDayTime ? 'checked' : 'unchecked'}
+                          />
+                        </View>
+                      </View>
+                      <Pressable style={styles.navPress} onPress={()=>actions.setFullDayTime(!state.fullDayTime)} />
+                    </View>
+                    <Divider style={styles.navDivider} />
+                    <View style={styles.navUpload}>
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        placeholder={state.strings.dateLabel}
+                        left={<TextInput.Icon style={styles.icon} size={22} icon="calendar" />}
+                      />
+                      <View style={styles.controlAlign}>
+                        <View style={styles.radioButtons}>
+                          <RadioButton.Item
+                            style={styles.radio}
+                            rippleColor="transparent"
+                            label={state.strings.dateUs}
+                            labelStyle={styles.option}
+                            mode="android"
+                            status={state.monthFirstDate ? 'checked' : 'unchecked'}
+                          />
+                          <RadioButton.Item
+                            style={styles.radio}
+                            rippleColor="transparent"
+                            label={state.strings.dateEu}
+                            labelStyle={styles.option}
+                            mode="android"
+                            status={state.monthFirstDate ? 'unchecked' : 'checked'}
+                          />
+                        </View>
+                      </View>
+                      <Pressable style={styles.navPress} onPress={()=>actions.setMonthFirstDate(!state.monthFirstDate)} />
+                    </View>
+                    <Divider style={styles.navDivider} />
+                    <View style={styles.navFont}>
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        placeholder={state.strings.fontFormat}
+                      />
+                      <View style={styles.navPress} />
+                    </View>
+                    <View style={styles.slider}>
+                      <Slider
+                        minimumValue={-2}
+                        maximumValue={2}
+                        minimumTrackTintColor={theme.colors.primary}
+                        value={1}
+                      />
                     </View>
                     <Divider style={styles.navDivider} />
                   </Surface>
