@@ -63,6 +63,7 @@ export const styles = StyleSheet.create({
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     textAlign: 'auto',
+    backgroundColor: 'transparent',
   },
   navDescription: {
     width: '100%',

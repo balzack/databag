@@ -16,6 +16,7 @@ export const en = {
   allDone: 'All Done!',
   moreContacts: 'More people can be found from the contacts tab. Once accepted you can start a private conversation.',
   messaging: 'Messaging',
+  manageSealed: 'Manage Sealed Topics',
   format: 'Format',
   fontFormat: 'Aa Font Size',
   dateLabel: 'Date',

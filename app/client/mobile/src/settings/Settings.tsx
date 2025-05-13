@@ -607,6 +607,16 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                       <Pressable style={styles.navPress} onPress={()=>setNotifications(!state.pushEnabled)} />
                     </View>
                     <Divider style={styles.navDivider} />
+                    <View style={styles.navUpload}>
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        placeholder={state.strings.manageSealed}
+                        left={<TextInput.Icon style={styles.icon} size={22} icon="lock" />}
+                      />
+                      <Pressable style={styles.navPress} onPress={setSeal} />
+                    </View>
                   </Surface>
                 </View>
               )}
