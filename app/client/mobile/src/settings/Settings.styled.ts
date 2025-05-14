@@ -77,12 +77,13 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
     textAlign: 'auto',
     backgroundColor: 'transparent',
-height: 40,
+    height: 48,
   },
   navDescription: {
     width: '100%',
     fontSize: 14,
     maxHeight: 92,
+    backgroundColor: 'transparent',
   },
   navInputBorder: {
     borderWidth: 0,

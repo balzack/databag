@@ -33,7 +33,7 @@ export function Welcome({ next }: { next: ()=>void }) {
                 <Text variant="labelLarge">{ state.strings.yourProfile }</Text>
               </View>
               <View style={styles.step}>
-                <Icon size={24} source="contacts" color={Colors.icon} />
+                <Icon size={24} source="rolodex" color={Colors.icon} />
                 <Text variant="labelLarge">{ state.strings.connectPeople }</Text>
               </View>
               <View style={styles.step}>

@@ -99,9 +99,9 @@ const databagColors = {
     inversePrimary: 'rgb(0, 108, 71)',
     elevation: {
       level0: 'rgb(0, 0, 0)',
-      level1: 'rgb(8, 8, 8)',
-      level2: 'rgb(16, 16, 16)',
-      level3: 'rgb(24, 24, 24)',
+      level1: 'rgb(16,16,16)',
+      level2: 'rgb(32, 32, 32)',
+      level3: 'rgb(48, 48, 48)',
       level4: 'rgb(64, 64, 64)',
       level5: 'rgb(80, 80, 80)',
       level6: 'rgb(200, 200, 200)',
@@ -166,7 +166,11 @@ function App(): React.JSX.Element {
     <AppContextProvider>
       <DisplayContextProvider>
         <PaperProvider settings={{icon: (props) => {
-              if (props.name === 'contacts' || props.name === 'left' || props.name === 'idcard' || props.name === 'picture') {
+              if (props.name === 'rolodex') {
+                props.name = 'contacts';
+                return <AntIcon {...props} />
+              }
+              else if (props.name === 'left' || props.name === 'idcard' || props.name === 'picture') {
                 return <AntIcon {...props} />
               } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock' || props.name === 'user' || props.name === 'users' || props.name === 'message-circle' || props.name === 'github') {
                 return <FeatherIcon {...props} />
