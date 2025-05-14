@@ -463,7 +463,7 @@ function SettingsScreen({nav}) {
   const SettingsComponent = useCallback(
     () => (
       <Surface elevation={3} mode="flat">
-        <SafeAreaView>
+        <SafeAreaView edges={['top', 'right']}>
           <Settings />
         </SafeAreaView>
       </Surface>
