@@ -122,7 +122,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                     <Settings showLogout={true} />
                   </Surface>
                 </View>
-                <Surface mode="flat" elevation={1}>
+                <Surface elevation={1}>
                   <SafeAreaView edges={['bottom']}>
                     <View style={styles.tabs}>
                       {tab === 'content' && (

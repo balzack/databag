@@ -82,7 +82,6 @@ export const styles = StyleSheet.create({
   navDescription: {
     width: '100%',
     fontSize: 14,
-    maxHeight: 92,
     backgroundColor: 'transparent',
   },
   navInputBorder: {
@@ -183,6 +182,7 @@ export const styles = StyleSheet.create({
   scrollContainer: {
     display: 'flex',
     alignItems: 'center',
+    paddingBottom: 32,
   },
   modalHeader: {
     width: '100%',

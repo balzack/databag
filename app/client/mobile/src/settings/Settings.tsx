@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {useTheme, Surface, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
-import {TouchableOpacity, Pressable, Modal, View, Image, ScrollView, Platform} from 'react-native';
+import {TouchableOpacity, Pressable, Modal, View, Image, ScrollView, Platform, Linking} from 'react-native';
 import {styles} from './Settings.styled';
 import {useSettings} from './useSettings.hook';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -43,6 +43,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
   const [blockedContact, setBlockedContact] = useState(false);
   const [blockedError, setBlockedError] = useState(false);
   const theme = useTheme();
+  const descriptionRef = useRef();
 
   const showBlockedMessage = async () => {
     setBlockedError(false);
@@ -444,11 +445,9 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                         style={{ ...styles.navInput, ...styles.username }}
                         mode="outlined"
                         outlineStyle={styles.navInputBorder}
-                        autoCapitalize="none"
                         disabled={true}
                         value={`${state.profile.handle}${state.profile.node ? '@' + state.profile.node : ''}`}
                         left={<TextInput.Icon style={styles.icon} size={22} icon="user" />}
-                        onChangeText={value => actions.setName(value)}
                       />
                     )}
                     {!setupNav && (
@@ -463,9 +462,10 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                       autoCorrect={false}
                       returnKeyType="done"
                       placeholder={state.strings.enterName}
-                      value={state.profile.name}
+                      value={state.name}
                       left={<TextInput.Icon style={styles.icon} size={22} icon="idcard" />}
                       onChangeText={value => actions.setName(value)}
+                      onSubmitEditing={saveDetails}
                     />
                     <Divider style={styles.navDivider} />
                     <View style={styles.navUpload}>
@@ -488,12 +488,14 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                       autoCorrect={false}
                       returnKeyType="done"
                       placeholder={state.strings.yourLocation}
-                      value={state.profile.location}
+                      value={state.location}
                       left={<TextInput.Icon style={styles.icon} size={22} icon="map-pin" />}
-                      onChangeText={value => actions.setName(value)}
+                      onChangeText={value => actions.setLocation(value)}
+                      onSubmitEditing={saveDetails}
                     />
                     <Divider style={styles.navDivider} />
                     <TextInput
+                      ref={descriptionRef}
                       style={styles.navDescription}
                       mode="outlined"
                       multiline={true}
@@ -503,9 +505,12 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                       autoCorrect={false}
                       returnKeyType="done"
                       placeholder={state.strings.description}
-                      value={state.profile.description}
+                      value={state.description}
                       left={<TextInput.Icon style={styles.icon} size={22} icon="book" />}
-                      onChangeText={value => actions.setName(value)}
+                      onChangeText={value => actions.setDescription(value)}
+                      blurOnSubmit={true}
+                      scrollEnabled={false}
+                      onSubmitEditing={saveDetails}
                     />
                     <Divider style={styles.navDivider} />
                     <View style={styles.navUpload}>
@@ -548,9 +553,9 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                           left={<TextInput.Icon style={styles.icon} size={22} icon="key" />}
                         />
                         <View style={styles.controlAlign}>
-                          <Switch style={styles.controlSwitch} value={state.searchable} disabled={savingRegistry} onValueChange={setRegistry} />
+                          <Switch style={styles.controlSwitch} value={state.mfaEnabled} disabled={savingAuth} />
                         </View>
-                        <Pressable style={styles.navPress} onPress={() => console.log('pressed!')} />
+                        <Pressable style={styles.navPress} onPress={()=>setMfa(!state.mfaEnabled)} />
                       </View>
                       <Divider style={styles.navDivider} />
                       <View style={styles.navUpload}>
@@ -725,7 +730,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                           placeholder={state.strings.contacts}
                           left={<TextInput.Icon style={styles.icon} size={22} icon="users" />}
                         />
-                        <Pressable style={styles.navPress} onPress={()=>{}} />
+                        <Pressable style={styles.navPress} onPress={showBlockedContact} />
                       </View>
                       <Divider style={styles.navDivider} />
                       <View style={styles.navUpload}>
@@ -736,7 +741,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                           placeholder={state.strings.topics}
                           left={<TextInput.Icon style={styles.icon} size={22} icon="text-box-outline" />}
                         />
-                        <Pressable style={styles.navPress} onPress={()=>{}} />
+                        <Pressable style={styles.navPress} onPress={showBlockedChannel} />
                       </View>
                       <Divider style={styles.navDivider} />
                       <View style={styles.navUpload}>
@@ -747,7 +752,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                           placeholder={state.strings.messages}
                           left={<TextInput.Icon style={styles.icon} size={22} icon="message-circle" />}
                         />
-                        <Pressable style={styles.navPress} onPress={()=>{}} />
+                        <Pressable style={styles.navPress} onPress={showBlockedMessage} />
                       </View>
                     </Surface>
                   </View>
@@ -766,7 +771,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                           placeholder="github.com/balzack/databag"
                           left={<TextInput.Icon style={styles.icon} size={22} icon="github" />}
                         />
-                        <Pressable style={styles.navPress} onPress={()=>{}} />
+                        <Pressable style={styles.navPress} onPress={()=>Linking.openURL('https://github.com/balzack/databag')} />
                       </View>
                     </Surface>
                   </View>
