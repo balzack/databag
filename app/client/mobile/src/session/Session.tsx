@@ -118,7 +118,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                     ...styles.body,
                     ...showSettings,
                   }}>
-                  <Surface elevation={0}>
+                  <Surface mode="flat" elevation={2}>
                     <Settings showLogout={true} />
                   </Surface>
                 </View>
@@ -237,7 +237,9 @@ function Onboarding({ scheme }: { scheme: string }) {
             {props => (
               <Surface elevation={9} mode="flat" style={styles.screen}>
                 <SafeAreaView edges={['top']}>
-                  <Settings setupNav={{ back: ()=>props.navigation.navigate('welcome'), next: ()=>props.navigation.navigate('request') }} />
+                  <Surface elevation={2} mode="flat">
+                    <Settings setupNav={{ back: ()=>props.navigation.navigate('welcome'), next: ()=>props.navigation.navigate('request') }} />
+                  </Surface>
                 </SafeAreaView>
               </Surface>
             )}

@@ -26,6 +26,13 @@ export const styles = StyleSheet.create({
     paddingRight: 16,
     paddingBottom: 8,
   },
+  navForm: {
+    borderRadius: 4,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingTop: 16,
+  },
   navTitle: {
     color: 'white',
     flexGrow: 1,
@@ -46,6 +53,12 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     overflow: 'hidden',
     marginBottom: 16,
+    position: 'absolute',
+    top: 48,
+  },
+  imageSpacer: {
+    width: '100%',
+    height: 256,
   },
   navLogo: {
     width: '100%',
