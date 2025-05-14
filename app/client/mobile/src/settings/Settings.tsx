@@ -427,7 +427,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
             </Surface>
           )}
           <Surface elevation={2} mode="flat" style={styles.scrollWrapper}>
-            <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
+            <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer} bounces={false}>
               <View style={styles.navImage}>
                 {!state.profile.imageSet && <Image style={styles.navLogo} resizeMode={'contain'} source={{uri: state.imageUrl}} />}
                 {state.profile.imageSet && <Image style={styles.navLogo} resizeMode={'contain'} source={{uri: state.imageUrl}} />}
@@ -705,7 +705,67 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                         value={1}
                       />
                     </View>
+                  </Surface>
+
+                </View>
+              )}
+              {!setupNav && (
+                <Text variant="labelLarge" style={styles.sectionLabel}>{ state.strings.blocked }</Text>
+              )}
+              {!setupNav && (
+                <View style={styles.navWrapper}>
+                  <Surface elevation={0} mode="flat" style={styles.navData}>
+                    <View style={styles.navUpload}>
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        placeholder={state.strings.contacts}
+                        left={<TextInput.Icon style={styles.icon} size={22} icon="users" />}
+                      />
+                      <Pressable style={styles.navPress} onPress={()=>{}} />
+                    </View>
                     <Divider style={styles.navDivider} />
+                    <View style={styles.navUpload}>
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        placeholder={state.strings.topics}
+                        left={<TextInput.Icon style={styles.icon} size={22} icon="text-box-outline" />}
+                      />
+                      <Pressable style={styles.navPress} onPress={()=>{}} />
+                    </View>
+                    <Divider style={styles.navDivider} />
+                    <View style={styles.navUpload}>
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        placeholder={state.strings.messages}
+                        left={<TextInput.Icon style={styles.icon} size={22} icon="message-circle" />}
+                      />
+                      <Pressable style={styles.navPress} onPress={()=>{}} />
+                    </View>
+                  </Surface>
+                </View>
+              )}
+              {!setupNav && (
+                <Text variant="labelLarge" style={styles.sectionLabel}>{ state.strings.support }</Text>
+              )}
+              {!setupNav && (
+                <View style={styles.navWrapper}>
+                  <Surface elevation={0} mode="flat" style={styles.navData}>
+                    <View style={styles.navUpload}>
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        placeholder="github.com/balzack/databag"
+                        left={<TextInput.Icon style={styles.icon} size={22} icon="github" />}
+                      />
+                      <Pressable style={styles.navPress} onPress={()=>{}} />
+                    </View>
                   </Surface>
                 </View>
               )}

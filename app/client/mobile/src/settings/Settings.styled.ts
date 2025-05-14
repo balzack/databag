@@ -64,6 +64,7 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
     textAlign: 'auto',
     backgroundColor: 'transparent',
+height: 40,
   },
   navDescription: {
     width: '100%',

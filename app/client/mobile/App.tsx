@@ -166,9 +166,9 @@ function App(): React.JSX.Element {
     <AppContextProvider>
       <DisplayContextProvider>
         <PaperProvider settings={{icon: (props) => {
-              if (props.name === 'user' || props.name === 'contacts' || props.name === 'left' || props.name === 'idcard' || props.name === 'picture') {
+              if (props.name === 'contacts' || props.name === 'left' || props.name === 'idcard' || props.name === 'picture') {
                 return <AntIcon {...props} />
-              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock') {
+              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock' || props.name === 'user' || props.name === 'users' || props.name === 'message-outline' || props.name === 'github') {
                 return <FeatherIcon {...props} />
               } else if (props.name === 'sensor-occupied') {
                 return <MaterialIcon {...props}  />

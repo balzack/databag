@@ -21,6 +21,9 @@ export const en = {
   fontFormat: 'Aa Font Size',
   dateLabel: 'Date',
   hourLabel: 'Hour',
+  blocked: 'Blocked',
+  messages: 'Messages',
+  support: 'Support',
 
   viewTerms: 'View Terms of Service',
   acceptTerms: 'Accept Terms of Service',
