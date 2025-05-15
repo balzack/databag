@@ -67,7 +67,7 @@ export function Request({ setupNav }: { setupNav: {back: ()=>void, next: ()=>voi
           <Button mode="contained" style={styles.submit} onPress={setupNav?.next}>
             {state.strings.next}
           </Button>
-          <Button mode="text" style={styles.skip}>
+          <Button mode="text" style={styles.skip} onPress={actions.clearWelcome}>
             {state.strings.skipSetup}
           </Button>
         </Surface>

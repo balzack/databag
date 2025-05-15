@@ -534,7 +534,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                   </Button>
                 )}
                 {setupNav && (
-                  <Button mode="text" style={styles.navSkip}>
+                  <Button mode="text" style={styles.navSkip} onPress={actions.clearWelcome}>
                     {state.strings.skipSetup}
                   </Button>
                 )}

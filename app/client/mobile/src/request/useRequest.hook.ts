@@ -85,7 +85,10 @@ export function useRequest() {
     saveAndConnect: async (server: string, guid: string) => {
       const contact = app.state.session?.getContact();
       await contact.addAndConnectCard(server, guid);
-    }
+    },
+    clearWelcome: () => {
+      app.actions.setShowWelcome(false);
+    },
   };
 
   return {state, actions};

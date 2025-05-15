@@ -101,6 +101,9 @@ export function useSettings() {
   }, [display.state]);
 
   const actions = {
+    clearWelcome: () => {
+      app.actions.setShowWelcome(false);
+    },
     getUsernameStatus: async (username: string) => {
       const {settings} = getSession();
       return await settings.getUsernameStatus(username);
