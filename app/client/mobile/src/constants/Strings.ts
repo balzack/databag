@@ -1,6 +1,7 @@
 import {NativeModules, Platform} from 'react-native';
 
 export const en = {
+  welcomeTo: 'Welcome To Databag',
   notUser: 'Not a user?',
   adminAccess: 'Admin Access',
   yourProfile: 'Setup Your Profile',

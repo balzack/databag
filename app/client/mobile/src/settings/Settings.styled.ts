@@ -32,6 +32,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     paddingTop: 16,
+    width: '100%',
   },
   navTitle: {
     color: 'white',
@@ -183,6 +184,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     paddingBottom: 32,
+    width: '100%',
   },
   modalHeader: {
     width: '100%',

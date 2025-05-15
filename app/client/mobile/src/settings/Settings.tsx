@@ -476,7 +476,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                         placeholder={state.strings.uploadImage}
                         left={<TextInput.Icon style={styles.icon} size={22} icon="picture" />}
                       />
-                      <Pressable style={styles.navPress} onPress={() => console.log("PRESSED")} />
+                      <Pressable style={styles.navPress} onPress={selectImage} />
                     </View>
                     <Divider style={styles.navDivider} />
                     <TextInput

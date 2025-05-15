@@ -18,9 +18,7 @@ export function Welcome({ next }: { next: ()=>void }) {
         <SafeAreaView style={styles.wrapper} edges={['top', 'bottom']}>
           <View style={styles.form}>
             <View style={styles.header}>
-              <Text variant="titleLarge">
-                Databag
-              </Text>
+              <Text variant="titleMedium">{ state.strings.welcomeTo }</Text>
             </View>
             <View style={styles.header}>
               <Text style={styles.headline} variant="headlineMedium">{ state.strings.communication }</Text>
