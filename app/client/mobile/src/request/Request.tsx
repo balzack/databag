@@ -10,8 +10,25 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Card} from '../card/Card';
 
 export function Request({ setupNav }: { setupNav: {back: ()=>void, next: ()=>void}}) {
-  const { state, request } = useRequest();
+  const { state, actions } = useRequest();
   const theme = useTheme();
+  const [connecting, setConnecting] = useState(null as null | string);
+  const [requested, setRequested] = useState(false);
+
+  const addContact = async (server: string, guid: string) => {
+    if (!connecting) {
+      setConnecting(guid);
+      try {
+        await actions.saveAndConnect(server, guid);
+        setRequested(true);
+        await new Promise(r => setTimeout(r, 3000));
+        setRequested(false);
+      } catch (err) {
+        console.log(err);
+      }
+      setConnecting(null);
+    }
+  }
 
   return (
     <View style={styles.request}>
@@ -25,10 +42,11 @@ export function Request({ setupNav }: { setupNav: {back: ()=>void, next: ()=>voi
       <Surface elevation={1} mode="flat" style={styles.scrollWrapper}>
         <FlatList
           style={styles.cards}
-          data={state.profiles}
+          data={state.contacts}
           initialNumToRender={32}
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => {
+            const connect = state.cards.has(item.guid) ? [] : [<IconButton style={styles.connect} iconColor={theme.colors.primary} icon={'user-plus'} key="request" onPress={()=>addContact(item.node, item.guid)} loading={connecting === item.guid} />];
             return (
               <Card
                 containerStyle={{ ...styles.card, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
@@ -38,7 +56,7 @@ export function Request({ setupNav }: { setupNav: {back: ()=>void, next: ()=>voi
                 node={item.node}
                 placeholder={state.strings.name}
                 select={()=>{}}
-                actions={[<IconButton style={styles.connect} icon="user-plus" key="request" />]}
+                actions={connect}
               />
             );
           }}
@@ -54,6 +72,16 @@ export function Request({ setupNav }: { setupNav: {back: ()=>void, next: ()=>voi
           </Button>
         </Surface>
       </Surface>
+      <Modal animationType="fade" transparent={true} visible={requested} supportedOrientations={['portrait', 'landscape']} onRequestClose={() => setSealing(false)}>
+        <View style={styles.modal}> 
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <Surface elevation={3} style={styles.content}>
+            <Icon size={64} source="check" color={theme.colors.primary} />
+            <Text variant="headlineSmall">{ state.strings.requestSent }</Text>
+            <Text style={styles.label}>{ state.strings.friendsNotified }</Text>
+          </Surface>
+        </View>
+      </Modal>
     </View>
   );
 }

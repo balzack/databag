@@ -2,6 +2,25 @@ import {StyleSheet} from 'react-native';
 import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
+  modal: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  content: {
+    padding: 32,
+    borderRadius: 8,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 16,
+  },
+  label: {
+    textAlign: 'center',
+  },
   request: {
     width: '100%',
     height: '100%',

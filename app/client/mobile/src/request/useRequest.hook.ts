@@ -12,7 +12,8 @@ export function useRequest() {
   const [state, setState] = useState({
     strings: display.state.strings,
     profiles: [] as Profile[],
-    contacts: new Set<string>(),
+    contacts: [] as Profile[],
+    cards: new Set<string>(),
     guid: null as null | string,
     node: null as null | string,
   });
@@ -49,11 +50,11 @@ export function useRequest() {
     const identity = app.state?.session?.getIdentity();
     const contact = app.state?.session?.getContact();
     const setCards = (cards: Card[]) => {
-      const contacts = new Set<string>();
+      const guids = new Set<string>();
       cards.forEach(card => {
-        contacts.add(card.guid);
+        guids.add(card.guid);
       });
-      updateState({contacts});
+      updateState({cards: guids});
     };
     const setProfile = (profile: Profile) => {
       const {guid, node} = profile;
@@ -81,6 +82,10 @@ export function useRequest() {
   }, [state.node]);
 
   const actions = {
+    saveAndConnect: async (server: string, guid: string) => {
+      const contact = app.state.session?.getContact();
+      await contact.addAndConnectCard(server, guid);
+    }
   };
 
   return {state, actions};

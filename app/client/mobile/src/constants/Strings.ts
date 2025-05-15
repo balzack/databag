@@ -24,6 +24,8 @@ export const en = {
   blocked: 'Blocked',
   messages: 'Messages',
   support: 'Support',
+  requestSent: 'Request Sent',
+  friendsNotified: 'Your friends will be notified you have added them!',
 
   viewTerms: 'View Terms of Service',
   acceptTerms: 'Accept Terms of Service',
