@@ -336,6 +336,35 @@ export const en = {
 };
 
 export const fr = {
+  welcomeTo: 'Bienvenue sur Databag',
+  notUser: 'Pas un utilisateur ?',
+  adminAccess: 'Accès administrateur',
+  yourProfile: 'Configurez votre profil',
+  connectWith: 'Connectez-vous avec des personnes',
+  startTopic: 'Commencez une conversation',
+  getStarted: 'Commencer',
+  enterName: 'Entrez votre nom',
+  uploadImage: 'Télécharger l\'image de profil',
+  yourLocation: 'Votre emplacement',
+  requestConnection: 'Demander une connexion',
+  next: 'Suivant',
+  skipSetup: 'Ignorer',
+  allDone: 'Tout est prêt !',
+  moreContacts: 'Plus de personnes peuvent être trouvées dans l\'onglet contacts. Une fois acceptées, vous pouvez démarrer une conversation privée.',
+  messaging: 'Messagerie',
+  manageSealed: 'Gérer les sujets scellés',
+  format: 'Format',
+  fontFormat: 'Taille de la police Aa',
+  dateLabel: 'Date',
+  hourLabel: 'Heure',
+  blocked: 'Bloqué',
+  messages: 'Messages',
+  support: 'Support',
+  requestSent: 'Demande envoyée',
+  friendsNotified: 'Vos amis seront informés que vous les avez ajoutés !',
+  appLanguage: 'Langue de l\'application',
+  languageName: 'Français',
+
   viewTerms: "Voir les conditions d'utilisation",
   acceptTerms: "Accepter les conditions d'utilisation",
   terms: "Conditions d'utilisation",
@@ -631,7 +660,36 @@ export const fr = {
   disablePrompt: "Êtes-vous sûr de vouloir désactiver l'authentification multi-facteurs",
 };
 
-export const sp = {
+export const es = {
+  welcomeTo: 'Bienvenido a Databag',
+  notUser: '¿No eres un usuario?',
+  adminAccess: 'Acceso de administrador',
+  yourProfile: 'Configura tu perfil',
+  connectWith: 'Conéctate con personas',
+  startTopic: 'Iniciar una conversación',
+  getStarted: 'Comenzar',
+  enterName: 'Ingresa tu nombre',
+  uploadImage: 'Subir imagen de perfil',
+  yourLocation: 'Tu ubicación',
+  requestConnection: 'Solicitar conexión',
+  next: 'Siguiente',
+  skipSetup: 'Omitir',
+  allDone: '¡Todo listo!',
+  moreContacts: 'Puedes encontrar más personas en la pestaña de contactos. Una vez aceptadas, puedes iniciar una conversación privada.',
+  messaging: 'Mensajería',
+  manageSealed: 'Gestionar temas sellados',
+  format: 'Formato',
+  fontFormat: 'Tamaño de fuente Aa',
+  dateLabel: 'Fecha',
+  hourLabel: 'Hora',
+  blocked: 'Bloqueado',
+  messages: 'Mensajes',
+  support: 'Soporte',
+  requestSent: 'Solicitud enviada',
+  friendsNotified: '¡Tus amigos serán notificados de que los has agregado!',
+  appLanguage: 'Idioma de la aplicación',
+  languageName: 'Español',
+
   viewTerms: 'Ver los términos de servicio',
   acceptTerms: 'Aceptar los términos de servicio',
   terms: 'Términos de servicio',
@@ -927,6 +985,35 @@ export const sp = {
 };
 
 export const pt = {
+  welcomeTo: 'Bem-vindo ao Databag',
+  notUser: 'Não é um usuário?',
+  adminAccess: 'Acesso de Administrador',
+  yourProfile: 'Configure seu perfil',
+  connectWith: 'Conecte-se com pessoas',
+  startTopic: 'Iniciar uma conversa',
+  getStarted: 'Começar',
+  enterName: 'Digite seu nome',
+  uploadImage: 'Enviar imagem de perfil',
+  yourLocation: 'Sua localização',
+  requestConnection: 'Solicitar conexão',
+  next: 'Próximo',
+  skipSetup: 'Pular',
+  allDone: 'Tudo pronto!',
+  moreContacts: 'Mais pessoas podem ser encontradas na aba de contatos. Uma vez aceitas, você pode iniciar uma conversa privada.',
+  messaging: 'Mensagens',
+  manageSealed: 'Gerenciar tópicos selados',
+  format: 'Formato',
+  fontFormat: 'Tamanho da fonte Aa',
+  dateLabel: 'Data',
+  hourLabel: 'Hora',
+  blocked: 'Bloqueado',
+  messages: 'Mensagens',
+  support: 'Suporte',
+  requestSent: 'Solicitação enviada',
+  friendsNotified: 'Seus amigos serão notificados de que você os adicionou!',
+  appLanguage: 'Idioma do aplicativo',
+  languageName: 'Português',
+
   viewTerms: 'Ver os termos de serviço',
   acceptTerms: 'Aceitar os termos de serviço',
   terms: 'Termos de serviço',
@@ -1222,6 +1309,35 @@ export const pt = {
 };
 
 export const de = {
+  welcomeTo: 'Willkommen bei Databag',
+  notUser: 'Kein Benutzer?',
+  adminAccess: 'Administratorzugang',
+  yourProfile: 'Profil einrichten',
+  connectWith: 'Mit Personen verbinden',
+  startTopic: 'Ein Gespräch beginnen',
+  getStarted: 'Loslegen',
+  enterName: 'Gib deinen Namen ein',
+  uploadImage: 'Profilbild hochladen',
+  yourLocation: 'Dein Standort',
+  requestConnection: 'Verbindungsanfrage senden',
+  next: 'Weiter',
+  skipSetup: 'Überspringen',
+  allDone: 'Alles erledigt!',
+  moreContacts: 'Weitere Personen findest du im Reiter Kontakte. Nach Annahme kannst du ein privates Gespräch starten.',
+  messaging: 'Nachrichten',
+  manageSealed: 'Versiegelte Themen verwalten',
+  format: 'Format',
+  fontFormat: 'Schriftgröße Aa',
+  dateLabel: 'Datum',
+  hourLabel: 'Uhrzeit',
+  blocked: 'Blockiert',
+  messages: 'Nachrichten',
+  support: 'Support',
+  requestSent: 'Anfrage gesendet',
+  friendsNotified: 'Deine Freunde werden benachrichtigt, dass du sie hinzugefügt hast!',
+  appLanguage: 'App-Sprache',
+  languageName: 'Deutsch',
+
   viewTerms: 'Nutzungsbedingungen anzeigen',
   acceptTerms: 'Nutzungsbedingungen akzeptieren',
   terms: 'Nutzungsbedingungen',
@@ -1517,6 +1633,35 @@ export const de = {
 };
 
 export const ru = {
+  welcomeTo: 'Добро пожаловать в Databag',
+  notUser: 'Не пользователь?',
+  adminAccess: 'Доступ администратора',
+  yourProfile: 'Настройте свой профиль',
+  connectWith: 'Связаться с людьми',
+  startTopic: 'Начать разговор',
+  getStarted: 'Начать',
+  enterName: 'Введите своё имя',
+  uploadImage: 'Загрузить изображение профиля',
+  yourLocation: 'Ваше местоположение',
+  requestConnection: 'Отправить запрос на подключение',
+  next: 'Далее',
+  skipSetup: 'Пропустить',
+  allDone: 'Готово!',
+  moreContacts: 'Больше людей можно найти на вкладке контактов. После принятия вы сможете начать личную беседу.',
+  messaging: 'Сообщения',
+  manageSealed: 'Управление закрытыми темами',
+  format: 'Формат',
+  fontFormat: 'Размер шрифта Aa',
+  dateLabel: 'Дата',
+  hourLabel: 'Время',
+  blocked: 'Заблокировано',
+  messages: 'Сообщения',
+  support: 'Поддержка',
+  requestSent: 'Запрос отправлен',
+  friendsNotified: 'Ваши друзья будут уведомлены, что вы их добавили!',
+  appLanguage: 'Язык приложения',
+  languageName: 'Русский',
+
   viewTerms: 'Просмотреть условия обслуживания',
   acceptTerms: 'Принять условия обслуживания',
   terms: 'Условия обслуживания',
@@ -1812,6 +1957,35 @@ export const ru = {
 };
 
 export const el = {
+  welcomeTo: 'Καλώς ήρθατε στο Databag',
+  notUser: 'Δεν είστε χρήστης;',
+  adminAccess: 'Πρόσβαση διαχειριστή',
+  yourProfile: 'Ρυθμίστε το προφίλ σας',
+  connectWith: 'Συνδεθείτε με άτομα',
+  startTopic: 'Ξεκινήστε μια συζήτηση',
+  getStarted: 'Ξεκινήστε',
+  enterName: 'Εισάγετε το όνομά σας',
+  uploadImage: 'Μεταφόρτωση εικόνας προφίλ',
+  yourLocation: 'Η τοποθεσία σας',
+  requestConnection: 'Αίτημα σύνδεσης',
+  next: 'Επόμενο',
+  skipSetup: 'Παράλειψη',
+  allDone: 'Όλα έτοιμα!',
+  moreContacts: 'Μπορείτε να βρείτε περισσότερα άτομα από την καρτέλα επαφών. Μόλις αποδεχτούν, μπορείτε να ξεκινήσετε μια ιδιωτική συζήτηση.',
+  messaging: 'Μηνύματα',
+  manageSealed: 'Διαχείριση κλειδωμένων θεμάτων',
+  format: 'Μορφή',
+  fontFormat: 'Μέγεθος γραμματοσειράς Aa',
+  dateLabel: 'Ημερομηνία',
+  hourLabel: 'Ώρα',
+  blocked: 'Αποκλεισμένο',
+  messages: 'Μηνύματα',
+  support: 'Υποστήριξη',
+  requestSent: 'Το αίτημα στάλθηκε',
+  friendsNotified: 'Οι φίλοι σας θα ειδοποιηθούν ότι τους προσθέσατε!',
+  appLanguage: 'Γλώσσα εφαρμογής',
+  languageName: 'Ελληνικά',
+
   viewTerms: 'Δείτε τους όρους υπηρεσίας',
   acceptTerms: 'Αποδεχτείτε τους όρους υπηρεσίας',
   terms: 'Όροι υπηρεσίας',
@@ -2078,31 +2252,3 @@ export const el = {
   disablePrompt: 'Είστε βέβαιοι ότι θέλετε να απενεργοποιήσετε τον έλεγχο ταυτότητας πολλαπλών παραγόντων',
 };
 
-export function getLanguageStrings() {
-  const locale = Platform.OS === 'ios' ? NativeModules.SettingsManager?.settings.AppleLocale || NativeModules.SettingsManager?.settings.AppleLanguages[0] : NativeModules.I18nManager?.localeIdentifier;
-
-  const lang = locale?.slice(0, 2) || '';
-
-  if (lang === 'en') {
-    return en;
-  }
-  if (lang === 'fr') {
-    return fr;
-  }
-  if (lang === 'es') {
-    return es;
-  }
-  if (lang === 'de') {
-    return de;
-  }
-  if (lang === 'pt') {
-    return pt;
-  }
-  if (lang === 'ru') {
-    return ru;
-  }
-  if (lang === 'el') {
-    return el;
-  }
-  return en;
-}

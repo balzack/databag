@@ -101,6 +101,9 @@ export function useSettings() {
   }, [display.state]);
 
   const actions = {
+    setLanguage: (language: string) => {
+      app.actions.setLanguage(language);
+    },
     clearWelcome: () => {
       app.actions.setShowWelcome(false);
     },

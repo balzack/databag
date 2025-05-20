@@ -411,7 +411,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
     }
   };
 
-  const languageOptions = languages.map(item => <Menu.Item key={item.value} onPress={() => console.log(`${item.name} -- ${item.value}`)} trailingIcon={item.value === state.strings.code ? 'check' : undefined} title={item.name} />)
+  const languageOptions = languages.map(item => <Menu.Item key={item.value} onPress={() => { setLanguage(false); actions.setLanguage(item.value)}} trailingIcon={item.value === state.strings.code ? 'check' : undefined} title={item.name} />)
 
   return (
     <View>

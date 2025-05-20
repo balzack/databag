@@ -1,6 +1,6 @@
 import {useState, useEffect, useRef} from 'react';
 import {DatabagSDK, Service, Session, Focus} from 'databag-client-sdk';
-import {Platform, PermissionsAndroid} from 'react-native';
+import {NativeModules, Platform, PermissionsAndroid} from 'react-native';
 import {SessionStore} from '../SessionStore';
 import {NativeCrypto} from '../NativeCrypto';
 import {LocalStore} from '../LocalStore';
@@ -45,6 +45,7 @@ export function useAppContext() {
     focus: null as null | Focus,
     fullDayTime: false,
     monthFirstDate: true,
+    lanaguge: null as null | string,
     initialized: false,
     showWelcome: true,
     sharing: null as null | {cardId: string; channelId: string; filePath: string; mimeType: string},
@@ -58,14 +59,20 @@ export function useAppContext() {
     await local.current.open(SETTINGS_DB);
     const fullDayTime = (await local.current.get('time_format', '12h')) === '24h';
     const monthFirstDate = (await local.current.get('date_format', 'month_first')) === 'month_first';
+    const setLanguage = (await local.current.get('language', null));
+
+    const locale = Platform.OS === 'ios' ? NativeModules.SettingsManager?.settings.AppleLocale || NativeModules.SettingsManager?.settings.AppleLanguages[0] : NativeModules.I18nManager?.localeIdentifier;
+    const defaultLanguage = locale?.slice(0, 2) || '';
+    const lang = setLanguage ? setLanguage : defaultLanguage;
+    const language = lang === 'fr' ? 'fr' : lang === 'es' ? 'es' : lang === 'pt' ? 'pt' : lang === 'de' ? 'de' : lang === 'ru' ? 'ru' : lang === 'el' ? 'el' : 'en';
 
     const store = new SessionStore();
     await store.open(DATABAG_DB);
     const session: Session | null = await sdk.current.initOfflineStore(store);
     if (session) {
-      updateState({session, fullDayTime, monthFirstDate, initialized: true});
+      updateState({session, fullDayTime, monthFirstDate, language, initialized: true});
     } else {
-      updateState({fullDayTime, monthFirstDate, initialized: true});
+      updateState({fullDayTime, monthFirstDate, language, initialized: true});
     }
   };
 
@@ -92,6 +99,10 @@ export function useAppContext() {
     setFullDayTime: async (fullDayTime: boolean) => {
       updateState({fullDayTime});
       await local.current.set('time_format', fullDayTime ? '24h' : '12h');
+    },
+    setLanguage: async (language: string) => {
+      updateState({language});
+      await local.current.set('language', language);
     },
     setShowWelcome: async (showWelcome: boolean) => {
       updateState({showWelcome});

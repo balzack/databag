@@ -1,11 +1,14 @@
-import {useEffect, useState} from 'react';
-import {getLanguageStrings} from '../constants/Strings';
+import {useEffect, useState, useContext} from 'react';
+import {en, fr, es, pt, de, ru, el} from '../constants/Strings';
 import {useWindowDimensions} from 'react-native';
+import {AppContext} from './AppContext';
+import {ContextType} from './ContextType';
 
 export function useDisplayContext() {
+  const app = useContext(AppContext) as ContextType;
   const dim = useWindowDimensions();
   const [state, setState] = useState({
-    strings: getLanguageStrings(),
+    strings: {},
     layout: null,
     width: 0,
     height: 0,
@@ -21,6 +24,12 @@ export function useDisplayContext() {
     const layout = dim.width < SMALL_LARGE ? 'small' : 'large';
     updateState({layout, width: dim.width, height: dim.height});
   }, [dim.height, dim.width]);
+
+  useEffect(() => {
+    const lang = app.state.language;
+    const strings = lang === 'fr' ? fr : lang === 'es' ? es : lang === 'pt' ? pt : lang === 'de' ? de : lang === 'ru' ? ru : lang === 'el' ? el : en;
+    updateState({strings});
+  }, [app.state.language]);
 
   const actions = {};
 
