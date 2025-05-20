@@ -40,28 +40,35 @@ export function Request({ setupNav }: { setupNav: {back: ()=>void, next: ()=>voi
         <View style={styles.navIcon} />
       </View>
       <Surface elevation={1} mode="flat" style={styles.scrollWrapper}>
-        <FlatList
-          style={styles.cards}
-          data={state.contacts}
-          initialNumToRender={32}
-          showsVerticalScrollIndicator={false}
-          renderItem={({item}) => {
-            const connect = state.cards.has(item.guid) ? [] : [<IconButton style={styles.connect} iconColor={theme.colors.primary} icon={'user-plus'} key="request" onPress={()=>addContact(item.node, item.guid)} loading={connecting === item.guid} />];
-            return (
-              <Card
-                containerStyle={{ ...styles.card, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
-                imageUrl={item.imageUrl}
-                name={item.name}
-                handle={item.handle}
-                node={item.node}
-                placeholder={state.strings.name}
-                select={()=>{}}
-                actions={connect}
-              />
-            );
-          }}
-          keyExtractor={profile => profile.guid}
-        />
+        { state.contacts.length > 0 && (
+          <FlatList
+            style={styles.cards}
+            data={state.contacts}
+            initialNumToRender={32}
+            showsVerticalScrollIndicator={false}
+            renderItem={({item}) => {
+              const connect = state.cards.has(item.guid) ? [] : [<IconButton style={styles.connect} iconColor={theme.colors.primary} icon={'user-plus'} key="request" onPress={()=>addContact(item.node, item.guid)} loading={connecting === item.guid} />];
+              return (
+                <Card
+                  containerStyle={{ ...styles.card, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
+                  imageUrl={item.imageUrl}
+                  name={item.name}
+                  handle={item.handle}
+                  node={item.node}
+                  placeholder={state.strings.name}
+                  select={()=>{}}
+                  actions={connect}
+                />
+              );
+            }}
+            keyExtractor={profile => profile.guid}
+          />
+        )}
+        { state.contacts.length === 0 && (
+          <View style={styles.empty}>
+            <Text style={styles.noContacts}>{ state.strings.noContacts }</Text>
+          </View>
+        )}
         <Divider />
         <Surface elevation={2} mode="flat"  style={styles.control}>
           <Button mode="contained" style={styles.submit} onPress={setupNav?.next}>

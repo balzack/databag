@@ -80,6 +80,16 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     height: 48,
   },
+  navFullInput: {
+    fontSize: 14,
+   textWrap: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    textAlign: 'auto',
+    backgroundColor: 'transparent',
+    height: 48,
+    width: '100%',
+  },
   navDescription: {
     width: '100%',
     fontSize: 14,
@@ -117,6 +127,10 @@ export const styles = StyleSheet.create({
     left: 0,
     width: '100%',
     height: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   navSubmit: {
     borderRadius: 8,

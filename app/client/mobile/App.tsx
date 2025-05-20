@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {Alert, Text, StatusBar} from 'react-native';
+import {Alert, View, StatusBar} from 'react-native';
 import {AppContextProvider} from './src/context/AppContext';
 import {DisplayContextProvider} from './src/context/DisplayContext';
 import {NativeRouter} from 'react-router-native';
@@ -186,7 +186,7 @@ function App(): React.JSX.Element {
             <StatusBar />
             <Root />
             <Routes>
-              <Route path="/" element={<Text>EMPTY</Text>} />
+              <Route path="/" element={<View />} />
               <Route path="/access" element={<Access />} />
               <Route path="/service" element={<Service />} />
               <Route path="/session" element={<Session share={share} />} />

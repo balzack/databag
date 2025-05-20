@@ -1,5 +1,15 @@
 import {NativeModules, Platform} from 'react-native';
 
+export const languages = [
+  { name: 'English', value: 'en' },
+  { name: 'Français', value: 'fr' },
+  { name: 'Español', value: 'es' },
+  { name: 'Deutsch', value: 'de' },
+  { name: 'Português', value: 'pt' },
+  { name: 'Русский', value: 'ru' },
+  { name: 'ελληνικά', value: 'el' },
+];
+
 export const en = {
   welcomeTo: 'Welcome To Databag',
   notUser: 'Not a user?',
@@ -27,6 +37,8 @@ export const en = {
   support: 'Support',
   requestSent: 'Request Sent',
   friendsNotified: 'Your friends will be notified you have added them!',
+  appLanguage: 'App Language',
+  languageName: 'English',
 
   viewTerms: 'View Terms of Service',
   acceptTerms: 'Accept Terms of Service',

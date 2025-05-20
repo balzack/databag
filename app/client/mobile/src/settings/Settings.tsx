@@ -1,6 +1,7 @@
 import React, {useState, useRef} from 'react';
-import {useTheme, Surface, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
+import {useTheme, Surface, Menu, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
 import {TouchableOpacity, Pressable, Modal, View, Image, ScrollView, Platform, Linking} from 'react-native';
+import {languages} from '../constants/Strings';
 import {styles} from './Settings.styled';
 import {useSettings} from './useSettings.hook';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -22,6 +23,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
   const [change, setChange] = useState(false);
   const [logout, setLogout] = useState(false);
   const [remove, setRemove] = useState(false);
+  const [language, setLanguage] = useState(false);
   const [applyingLogout, setApplyingLogout] = useState(false);
   const [applyingRemove, setApplyingRemove] = useState(false);
   const [sealDelete, setSealDelete] = useState(false);
@@ -409,6 +411,8 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
     }
   };
 
+  const languageOptions = languages.map(item => <Menu.Item key={item.value} onPress={() => console.log(`${item.name} -- ${item.value}`)} trailingIcon={item.value === state.strings.code ? 'check' : undefined} title={item.name} />)
+
   return (
     <View>
       { state.layout === 'small' && (
@@ -623,6 +627,32 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                           left={<TextInput.Icon style={styles.icon} size={22} icon="lock" />}
                         />
                         <Pressable style={styles.navPress} onPress={setSeal} />
+                      </View>
+                    </Surface>
+                  </View>
+                )}
+                {!setupNav && (
+                  <Text variant="labelLarge" style={styles.sectionLabel}>{ state.strings.appLanguage }</Text>
+                )}
+                {!setupNav && (
+                  <View style={styles.navWrapper}>
+                    <Surface elevation={0} mode="flat" style={styles.navData}>
+                      <View style={styles.navUpload}>
+                        <TextInput
+                          style={styles.navFullInput}
+                          mode="outlined"
+                          outlineStyle={styles.navInputBorder}
+                          placeholder={ state.strings.languageName }
+                          right={<TextInput.Icon style={styles.icon} size={22} icon="dots-horizontal-circle-outline" />}
+                        />
+                        <Pressable style={styles.navPress} onPress={()=>setLanguage(true)}>
+                          <Menu
+                            visible={language}
+                            onDismiss={()=>setLanguage(false)}
+                            anchor={<Text></Text>}>
+                            { languageOptions }
+                          </Menu>
+                        </Pressable>
                       </View>
                     </Surface>
                   </View>

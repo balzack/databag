@@ -56,6 +56,17 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     height: 1,
   },
+  empty: {
+    width: '100%',
+    flexGrow: 1,
+    height: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  noContacts: {
+    color: '#888888',
+  },
   scrollContainer: {
     display: 'flex',
     alignItems: 'center',
