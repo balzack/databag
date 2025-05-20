@@ -56,6 +56,9 @@ export const styles = StyleSheet.create({
     paddingLeft: 48,
     paddingRight: 48,
   },
+  title: {
+    textAlign: 'center',
+  },
   steps: {
     display: 'flex',
     flexDirection: 'column',

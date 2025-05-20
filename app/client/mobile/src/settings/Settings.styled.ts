@@ -9,10 +9,11 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   sectionLabel: {
+    fontSize: 24,
     width: '100%',
-    paddingLeft: 20,
-    paddingBottom: 4,
-    paddingTop: 4,
+    paddingLeft: 18,
+    paddingBottom: 8,
+    paddingTop: 16,
   },
   navHeader: {
     height: 48,
@@ -24,7 +25,8 @@ export const styles = StyleSheet.create({
   slider: {
     paddingLeft: 16,
     paddingRight: 16,
-    paddingBottom: 8,
+    position: 'relative',
+    top: -8,
   },
   navForm: {
     borderRadius: 4,
@@ -72,28 +74,25 @@ export const styles = StyleSheet.create({
     paddingTop: 24,
   },
   navInput: {
-    fontSize: 14,
+    fontSize: 16,
     textWrap: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     textAlign: 'auto',
     backgroundColor: 'transparent',
-    height: 48,
+    fontWeight: 'normal',
   },
   navFullInput: {
-    fontSize: 14,
-   textWrap: 'nowrap',
+    fontSize: 16,
+    textWrap: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     textAlign: 'auto',
     backgroundColor: 'transparent',
-    height: 48,
     width: '100%',
   },
   navDescription: {
-    width: '100%',
-    fontSize: 14,
-    backgroundColor: 'transparent',
+    paddingTop: 18,
   },
   navInputBorder: {
     borderWidth: 0,
@@ -106,13 +105,17 @@ export const styles = StyleSheet.create({
   },
   navData: {
     width: '100%',
-    borderRadius: 4,
+    borderRadius: 6,
     display: 'flex',
     flexDirection: 'column',
+    paddingTop: 12,
+    paddingBottom: 12,
   },
   navDivider: {
     marginLeft: 16,
     marginRight: 16,
+    marginTop: 6,
+    marginBottom: 6,
   },
   navUpload: {
     position: 'relative',

@@ -446,12 +446,13 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                   <Surface elevation={0} mode="flat" style={styles.navData}>
                     {!setupNav && (
                       <TextInput
-                        style={{ ...styles.navInput, ...styles.username }}
+                        style={styles.navInput}
                         mode="outlined"
                         outlineStyle={styles.navInputBorder}
+                        textColor={theme.colors.tertiary}
                         disabled={true}
-                        value={`${state.profile.handle}${state.profile.node ? '@' + state.profile.node : ''}`}
-                        left={<TextInput.Icon style={styles.icon} size={22} icon="user" />}
+                        value={`${state.profile.handle}${state.profile.node ? '/' + state.profile.node : ''}`}
+                        left={<TextInput.Icon style={styles.icon} iconColor={theme.colors.tertiary} size={22} icon="user" />}
                       />
                     )}
                     {!setupNav && (
@@ -500,7 +501,8 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                     <Divider style={styles.navDivider} />
                     <TextInput
                       ref={descriptionRef}
-                      style={styles.navDescription}
+                      style={styles.navInput}
+                      contentStyle={styles.navDescription}
                       mode="outlined"
                       multiline={true}
                       outlineStyle={styles.navInputBorder}
@@ -510,7 +512,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                       returnKeyType="done"
                       placeholder={state.strings.description}
                       value={state.description}
-                      left={<TextInput.Icon style={styles.icon} size={22} icon="book" />}
+                      left={<TextInput.Icon style={styles.icon} size={22} icon="align-left" />}
                       onChangeText={value => actions.setDescription(value)}
                       blurOnSubmit={true}
                       scrollEnabled={false}

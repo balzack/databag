@@ -18,7 +18,7 @@ export function Welcome({ next }: { next: ()=>void }) {
         <SafeAreaView style={styles.wrapper} edges={['top', 'bottom']}>
           <View style={styles.form}>
             <View style={styles.header}>
-              <Text variant="titleMedium">{ state.strings.welcomeTo }</Text>
+              <Text style={styles.title} variant="titleMedium">{ state.strings.welcomeTo }</Text>
             </View>
             <View style={styles.header}>
               <Text style={styles.headline} variant="headlineMedium">{ state.strings.communication }</Text>
@@ -32,7 +32,7 @@ export function Welcome({ next }: { next: ()=>void }) {
               </View>
               <View style={styles.step}>
                 <Icon size={24} source="rolodex" color={Colors.icon} />
-                <Text variant="labelLarge">{ state.strings.connectPeople }</Text>
+                <Text variant="labelLarge">{ state.strings.connectWith }</Text>
               </View>
               <View style={styles.step}>
                 <Icon size={24} source="message-circle" color={Colors.icon} />

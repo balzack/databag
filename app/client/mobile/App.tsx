@@ -43,7 +43,7 @@ const databagColors = {
     surfaceVariant: 'rgb(220, 229, 220)',
     onSurfaceVariant: 'rgb(64, 73, 67)',
     outline: 'rgb(112, 121, 114)',
-    outlineVariant: 'rgb(128, 128, 128)',
+    outlineVariant: '#8FBEA7',
     shadow: 'rgb(0, 0, 0)',
     scrim: 'rgb(0, 0, 0)',
     inverseSurface: 'rgb(46, 49, 46)',
@@ -52,7 +52,7 @@ const databagColors = {
     elevation: {
       level0: 'rgb(255, 255, 255)',
       level1: 'rgb(240, 245, 242)',
-      level2: 'rgb(232, 232, 232)',
+      level2: '#F0F5F2',
       level3: 'rgb(216, 216, 216)',
       level4: 'rgb(208, 208, 208)',
       level5: 'rgb(200, 200, 200)',
@@ -172,7 +172,7 @@ function App(): React.JSX.Element {
               }
               else if (props.name === 'left' || props.name === 'idcard' || props.name === 'picture') {
                 return <AntIcon {...props} />
-              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock' || props.name === 'user' || props.name === 'users' || props.name === 'message-circle' || props.name === 'github') {
+              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock' || props.name === 'user' || props.name === 'users' || props.name === 'message-circle' || props.name === 'github' || props.name === 'align-left') {
                 return <FeatherIcon {...props} />
               } else if (props.name === 'sensor-occupied') {
                 return <MaterialIcon {...props}  />
