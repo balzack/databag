@@ -432,8 +432,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
             </Surface>
           )}
           <View style={styles.navImage}>
-            {!state.profile.imageSet && <Image style={styles.navLogo} resizeMode={'contain'} source={{uri: state.imageUrl}} />}
-            {state.profile.imageSet && <Image style={styles.navLogo} resizeMode={'contain'} source={{uri: state.imageUrl}} />}
+            <Image style={styles.navLogo} resizeMode={'contain'} source={{uri: state.imageUrl}} />
           </View>
           <View style={styles.scrollWrapper}>
             <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
@@ -651,7 +650,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                           <Menu
                             visible={language}
                             onDismiss={()=>setLanguage(false)}
-                            anchor={<Text></Text>}>
+                            anchor={<View style={styles.anchor} />}>
                             { languageOptions }
                           </Menu>
                         </Pressable>

@@ -30,6 +30,26 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  navImage: {
+    width: '100%',
+    maxHeight: 256,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    marginBottom: 16,
+    position: 'absolute',
+    top: 48,
+  },
+  imageSpacer: {
+    width: '100%',
+    height: 256,
+  },
+  navLogo: {
+    width: '100%',
+    height: null,
+    aspectRatio: 1,
+  },
   scrollWrapper: {
     flexGrow: 1,
     height: 1,

@@ -2,6 +2,10 @@ import {StyleSheet} from 'react-native';
 import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
+  anchor: {
+    width: 32,
+    height: 32,
+  },
   handle: {
     marginTop: 8,
   },

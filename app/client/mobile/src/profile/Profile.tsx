@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Icon, Text, IconButton, Divider} from 'react-native-paper';
+import {Icon, Text, Surface, IconButton, Divider} from 'react-native-paper';
 import {ScrollView, Pressable, Image, View} from 'react-native';
 import {styles} from './Profile.styled';
 import {useProfile} from './useProfile.hook';
@@ -91,12 +91,21 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
     <View style={styles.component}>
       { state.layout === 'small' && (
         <View style={styles.profile}>
-          <View style={styles.navHeader}>
+          <Surface elevation={9} style={styles.navHeader}>
             <Pressable style={styles.navIcon} onPress={close}>
               <Icon size={24} source="left" color={'white'} />
             </Pressable>
             <Text variant="headlineSmall" style={styles.navTitle}>{ state.strings.profile }</Text>
             <View style={styles.navIcon} />
+          </Surface>
+          <View style={styles.navImage}>
+            <Image style={styles.navLogo} resizeMode={'contain'} source={{uri: state.imageUrl}} />
+          </View>
+          <View style={styles.scrollWrapper}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
+              <View style={styles.imageSpacer} />
+              <Divider style={styles.line} bold={true} />
+            </ScrollView>
           </View>
         </View>
       )}
