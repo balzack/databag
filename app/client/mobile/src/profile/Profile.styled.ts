@@ -2,10 +2,33 @@ import {StyleSheet} from 'react-native';
 import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
+  component: {
+    width: '100%',
+    height: '100%',
+  },
   profile: {
     width: '100%',
     height: '100%',
     display: 'flex',
+  },
+  navHeader: {
+    height: 48,
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  navTitle: {
+    color: 'white',
+    flexGrow: 1,
+    textAlign: 'center',
+  },
+  navIcon: {
+    color: 'white',
+    width: 48,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   scrollWrapper: {
     flexGrow: 1,

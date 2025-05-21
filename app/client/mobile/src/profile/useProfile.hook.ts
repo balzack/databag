@@ -9,6 +9,7 @@ export function useProfile(params: ContactParams) {
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
+    layout: null as null | string,
     strings: display.state.strings,
     cards: [] as Card[],
     profile: {} as {} | Profile,
@@ -28,6 +29,11 @@ export function useProfile(params: ContactParams) {
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
+
+  useEffect(() => {
+    const { layout, strings } = display.state;
+    updateState({ layout, strings });
+  }, [display.state]);
 
   useEffect(() => {
     const guid = params.guid;
