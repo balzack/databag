@@ -104,7 +104,14 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
           <View style={styles.scrollWrapper}>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
               <View style={styles.imageSpacer} />
-              <Divider style={styles.line} bold={true} />
+              <Surface elevation={2} mode="flat" style={styles.form}>
+                <View style={styles.nameTag}>
+                  <Text variant="headlineMedium" style={styles.name} numberOfLines={1} minimumFontScale={0.75} adjustsFontSizeToFit={true}>Roland Osborne</Text>
+                  <View style={styles.tag}>
+                    <Text variant="labelMedium" style={styles.tagLabel}>Connected</Text>
+                  </View>
+                </View>
+              </Surface>
             </ScrollView>
           </View>
         </View>
