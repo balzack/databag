@@ -18,11 +18,53 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  field: {
+    position: 'relative',
+  },
+  cover: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  navInput: {
+    fontSize: 16,
+    textWrap: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    textAlign: 'auto',
+    backgroundColor: 'transparent',
+    fontWeight: 'normal',
+  },
+  navInputBorder: {
+    borderWidth: 0,
+  },
+  navDescription: {
+    paddingTop: 18,
+  },
+  navDivider: {
+    marginLeft: 16,
+    marginRight: 16,
+    marginTop: 6,
+    marginBottom: 6,
+  },
   form: {
     width: '100%',
     display: 'flex',
     flexGrow: 1,
     height: '100%',
+    paddingLeft: 16,
+    paddingRight: 16,
+    borderRadius: 4, 
+  },
+  data: {
+    width: '100%',
+    borderRadius: 6,
+    display: 'flex',
+    flexDirection: 'column',
+    paddingTop: 12,
+    paddingBottom: 12,
   },
   nameTag: {
     width: '100%',
@@ -30,8 +72,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
-    paddingLeft: 24,
-    paddingRight: 24,
     paddingTop: 32,
     paddingBottom: 16,
     minWidth: 0,
@@ -42,13 +82,16 @@ export const styles = StyleSheet.create({
     textOverflow: 'ellipsis',
     textWrap: 'nowrap',
     flexShrink: 1,
-  }, 
+  },
+  namePlaceholder: {
+    fontStyle: 'italic',
+    flexShrink: 1,
+  },
   tag: {
     borderRadius: 8,
     padding: 4,
     paddingLeft: 8,
     paddingRight: 8,
-    backgroundColor: 'green',
   },
   tagLabel: {
     color: 'white',
@@ -76,9 +119,16 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     top: 48,
   },
+  overlap: {
+    position: 'absolute',
+    top: 253,
+    borderRadius: 4,
+    width: '100%',
+    height: 8
+  },
   imageSpacer: {
     width: '100%',
-    height: 256,
+    height: 253,
   },
   navLogo: {
     width: '100%',

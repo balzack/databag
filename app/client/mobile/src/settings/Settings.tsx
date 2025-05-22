@@ -433,6 +433,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
           )}
           <View style={styles.navImage}>
             <Image style={styles.navLogo} resizeMode={'contain'} source={{uri: state.imageUrl}} />
+            <Surface style={styles.overlap} elevation={2} mode="flat" />
           </View>
           <View style={styles.scrollWrapper}>
             <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>

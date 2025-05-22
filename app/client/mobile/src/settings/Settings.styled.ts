@@ -63,9 +63,16 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     top: 48,
   },
+  overlap: {
+    position: 'absolute',
+    top: 253,
+    borderRadius: 4,
+    width: '100%',
+    height: 8
+  },
   imageSpacer: {
     width: '100%',
-    height: 256,
+    height: 253,
   },
   navLogo: {
     width: '100%',

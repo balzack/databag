@@ -65,6 +65,12 @@ const databagColors = {
     onSurfaceDisabled: 'rgba(25, 28, 26, 0.38)',
     backdrop: 'rgba(42, 50, 45, 0.4)',
     base: '#8fbea7',
+    connected: '#008800',
+    requested: '#aa8800',
+    connecting: '#0000aa',
+    pending: '#dd8800',
+    confirmed: '#00aaaa',
+    unsaved: '#888888',
   },
   dark: {
     name: 'dark',
@@ -113,6 +119,12 @@ const databagColors = {
     onSurfaceDisabled: 'rgba(225, 227, 223, 0.38)',
     backdrop: 'rgba(42, 50, 45, 0.4)',
     base: 'rgb(0,0,0)',
+    connected: '#008800',
+    requested: '#aa8800',
+    connecting: '#0000aa',
+    pending: '#dd8800',
+    confirmed: '#00aaaa',
+    unsaved: '#888888',
   },
 };
 
