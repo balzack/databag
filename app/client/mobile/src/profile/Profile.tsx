@@ -167,468 +167,172 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                     />
                     <View style={styles.cover} />
                   </View>
+
                   {state.statusLabel === 'unknownStatus' && state.guid !== state.profile.guid && (
-                    <View style={styles.actions}>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={connecting}
-                          compact="true"
-                          mode="contained"
-                          icon="electric-switch-closed"
-                          size={32}
-                          onPress={() => {
-                            applyAction(setConnecting, actions.saveAndConnect);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.connect}</Text>
-                      </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={saving}
-                          compact="true"
-                          mode="contained"
-                          icon="content-save-outline"
-                          size={32}
-                          onPress={() => {
-                            applyAction(setSaving, actions.save);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.save}</Text>
-                      </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={reporting}
-                          compact="true"
-                          mode="contained"
-                          icon="alert-octagon-outline"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.report}</Text>
-                      </View>
+                    <View style={styles.field}>
+                      <Divider style={styles.navDivider} />
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        value={state.strings.connectAction}
+                        left={<TextInput.Icon style={styles.icon} loading={connecting} size={24} icon="electric-switch-closed" />}
+                      />
+                      <Pressable style={styles.cover} onPress={() => applyAction(setConnecting, actions.saveAndConnect)} />
                     </View>
                   )}
 
                   {state.statusLabel === 'savedStatus' && state.guid !== state.profile.guid && (
-                    <View>
-                      <View style={styles.field}>
-                        <Divider style={styles.navDivider} />
-                        <TextInput
-                          style={styles.navInput}
-                          mode="outlined"
-                          outlineStyle={styles.navInputBorder}
-                          value={state.strings.connectAction}
-                          left={<TextInput.Icon style={styles.icon} loading={saving} size={24} icon="electric-switch-closed" />}
-                        />
-                        <Pressable style={styles.cover} onPress={() => applyAction(setSaving, actions.connect)} />
-                      </View>
-                      <View style={styles.field}>
-                        <Divider style={styles.navDivider} />
-                        <TextInput
-                          style={styles.navInput}
-                          mode="outlined"
-                          outlineStyle={styles.navInputBorder}
-                          value={state.strings.deleteAction}
-                          left={<TextInput.Icon style={styles.icon} loading={removing} size={24} icon="trash-2" />}
-                        />
-                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove)} />
-                      </View>
-                      <View style={styles.field}>
-                        <Divider style={styles.navDivider} />
-                        <TextInput
-                          style={styles.navInput}
-                          mode="outlined"
-                          outlineStyle={styles.navInputBorder}
-                          value={state.strings.blockAction}
-                          left={<TextInput.Icon style={styles.icon} loading={blocking} size={24} icon="close-circle-outline" />}
-                        />
-                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block)} />
-                      </View>
-                      <View style={styles.field}>
-                        <Divider style={styles.navDivider} />
-                        <TextInput
-                          style={styles.navInput}
-                          mode="outlined"
-                          outlineStyle={styles.navInputBorder}
-                          value={state.strings.reportAction}
-                          left={<TextInput.Icon style={styles.icon} loading={blocking} size={24} icon="alert-decagram-outline" />}
-                        />
-                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report)} />
-                      </View>
- 
+                     <View style={styles.field}>
+                      <Divider style={styles.navDivider} />
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        value={state.strings.connectAction}
+                        left={<TextInput.Icon style={styles.icon} loading={connecting} size={24} icon="electric-switch-closed" />}
+                      />
+                      <Pressable style={styles.cover} onPress={() => applyAction(setConnecting, actions.connect)} />
                     </View>
                   )}
 
-                  {state.statusLabel === 'pendingStatus' && state.guid !== state.profile.guid && (
-                    <View>
-                      <View style={styles.field}>
-                        <Divider style={styles.navDivider} />
-                        <TextInput
-                          style={styles.navInput}
-                          mode="outlined"
-                          outlineStyle={styles.navInputBorder}
-                          value={state.strings.saveAction}
-                          left={<TextInput.Icon style={styles.icon} loading={saving} size={24} icon="content-save-outline" />}
-                        />
-                        <Pressable style={styles.cover} onPress={() => applyAction(setSaving, actions.save)} />
-                      </View>
-                      <View style={styles.field}>
-                        <Divider style={styles.navDivider} />
-                        <TextInput
-                          style={styles.navInput}
-                          mode="outlined"
-                          outlineStyle={styles.navInputBorder}
-                          value={state.strings.acceptAction}
-                          left={<TextInput.Icon style={styles.icon} loading={accepting} size={24} icon="account-check-outline" />}
-                        />
-                        <Pressable style={styles.cover} onPress={() => applyAction(setAccepting, actions.accept)} />
-                      </View>
-                      <View style={styles.field}>
-                        <Divider style={styles.navDivider} />
-                        <TextInput
-                          style={styles.navInput}
-                          mode="outlined"
-                          outlineStyle={styles.navInputBorder}
-                          value={state.strings.ignoreAction}
-                          left={<TextInput.Icon style={styles.icon} loading={ignoring} size={24} icon="volume-mute" />}
-                        />
-                        <Pressable style={styles.cover} onPress={() => applyAction(setIgnoring, actions.ignore)} />
-                      </View>
-                      <View style={styles.field}>
-                        <Divider style={styles.navDivider} />
-                        <TextInput
-                          style={styles.navInput}
-                          mode="outlined"
-                          outlineStyle={styles.navInputBorder}
-                          value={state.strings.denyAction}
-                          left={<TextInput.Icon style={styles.icon} loading={denying} size={24} icon="account-cancel-outline" />}
-                        />
-                        <Pressable style={styles.cover} onPress={() => applyAction(setDenying, actions.deny)} />
-                      </View>
-                      <View style={styles.field}>
-                        <Divider style={styles.navDivider} />
-                        <TextInput
-                          style={styles.navInput}
-                          mode="outlined"
-                          outlineStyle={styles.navInputBorder}
-                          value={state.strings.deleteAction}
-                          left={<TextInput.Icon style={styles.icon} loading={removing} size={24} icon="trash-2" />}
-                        />
-                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove)} />
-                      </View>
-                      <View style={styles.field}>
-                        <Divider style={styles.navDivider} />
-                        <TextInput
-                          style={styles.navInput}
-                          mode="outlined"
-                          outlineStyle={styles.navInputBorder}
-                          value={state.strings.blockAction}
-                          left={<TextInput.Icon style={styles.icon} loading={blocking} size={24} icon="close-circle-outline" />}
-                        />
-                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block)} />
-                      </View>
-                      <View style={styles.field}>
-                        <Divider style={styles.navDivider} />
-                        <TextInput
-                          style={styles.navInput}
-                          mode="outlined"
-                          outlineStyle={styles.navInputBorder}
-                          value={state.strings.reportAction}
-                          left={<TextInput.Icon style={styles.icon} loading={blocking} size={24} icon="alert-decagram-outline" />}
-                        />
-                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report)} />
-                      </View>
+                  {(state.statusLabel === 'pendingStatus' || state.statusLabel === 'unknownStatus') && state.guid !== state.profile.guid && (
+                    <View style={styles.field}>
+                      <Divider style={styles.navDivider} />
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        value={state.strings.saveAction}
+                        left={<TextInput.Icon style={styles.icon} loading={saving} size={24} icon="content-save-outline" />}
+                      />
+                      <Pressable style={styles.cover} onPress={() => applyAction(setSaving, actions.save)} />
                     </View>
                   )}
 
-                  {state.statusLabel === 'requestedStatus' && state.guid !== state.profile.guid && (
-                    <View style={styles.actions}>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={saving}
-                          compact="true"
-                          mode="contained"
-                          icon="account-check-outline"
-                          size={32}
-                          onPress={() => {
-                            applyAction(setAccepting, actions.accept);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.accept}</Text>
-                      </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={ignoring}
-                          compact="true"
-                          mode="contained"
-                          icon="volume-mute"
-                          size={32}
-                          onPress={() => {
-                            applyAction(setIgnoring, actions.ignore);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.ignore}</Text>
-                      </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={denying}
-                          compact="true"
-                          mode="contained"
-                          icon="close-circle-outline"
-                          size={32}
-                          onPress={() => {
-                            applyAction(setDenying, actions.deny);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.deny}</Text>
-                      </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={removing}
-                          compact="true"
-                          mode="contained"
-                          icon="account-remove"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.remove}</Text>
-                      </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={blocking}
-                          compact="true"
-                          mode="contained"
-                          icon="eye-remove-outline"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.block}</Text>
-                      </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={reporting}
-                          compact="true"
-                          mode="contained"
-                          icon="alert-octagon-outline"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.report}</Text>
-                      </View>
-                    </View>
-                  )}
-
-                  {state.statusLabel === 'connectingStatus' && state.guid !== state.profile.guid && (
-                    <View style={styles.actions}>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={canceling}
-                          compact="true"
-                          mode="contained"
-                          icon="cancel"
-                          size={32}
-                          onPress={() => {
-                            applyAction(setCanceling, actions.cancel);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.cancel}</Text>
-                      </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={removing}
-                          compact="true"
-                          mode="contained"
-                          icon="account-remove"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.remove}</Text>
-                      </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={blocking}
-                          compact="true"
-                          mode="contained"
-                          icon="eye-remove-outline"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.block}</Text>
-                      </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={reporting}
-                          compact="true"
-                          mode="contained"
-                          icon="alert-octagon-outline"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.report}</Text>
-                      </View>
-                    </View>
-                  )}
-
-                  {state.statusLabel === 'connectedStatus' && state.guid !== state.profile.guid && (
-                    <View style={styles.actions}>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={disconnecting}
-                          compact="true"
-                          mode="contained"
-                          icon="electric-switch"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.disconnecting, state.strings.confirmDisconnect, state.strings.disconnect, setDisconnecting, actions.disconnect);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.disconnect}</Text>
-                      </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={removing}
-                          compact="true"
-                          mode="contained"
-                          icon="account-remove"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.remove}</Text>
-                      </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={blocking}
-                          compact="true"
-                          mode="contained"
-                          icon="eye-remove-outline"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.block}</Text>
-                      </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={reporting}
-                          compact="true"
-                          mode="contained"
-                          icon="alert-octagon-outline"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.report}</Text>
-                      </View>
+                  {(state.statusLabel === 'requestedStatus' || state.statusLabel === 'pendingStatus') && state.guid !== state.profile.guid && (
+                    <View style={styles.field}>
+                      <Divider style={styles.navDivider} />
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        value={state.strings.acceptAction}
+                        left={<TextInput.Icon style={styles.icon} loading={accepting} size={24} icon="account-check-outline" />}
+                      />
+                      <Pressable style={styles.cover} onPress={() => applyAction(setAccepting, actions.accept)} />
                     </View>
                   )}
 
                   {state.statusLabel === 'offsyncStatus' && state.guid !== state.profile.guid && (
-                    <View style={styles.actions}>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={resyncing}
-                          compact="true"
-                          mode="contained"
-                          icon="cached"
-                          size={32}
-                          onPress={() => {
-                            applyAction(setResyncing, actions.resync);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.resync}</Text>
-                      </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={disconnecting}
-                          compact="true"
-                          mode="contained"
-                          icon="electric-switch"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.disconnecting, state.strings.confirmDisconnect, state.strings.disconnect, setDisconnecting, actions.disconnect);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.disconnect}</Text>
-                      </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={removing}
-                          compact="true"
-                          mode="contained"
-                          icon="account-remove"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.remove}</Text>
-                      </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={blocking}
-                          compact="true"
-                          mode="contained"
-                          icon="eye-remove-outline"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.block}</Text>
-                      </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={reporting}
-                          compact="true"
-                          mode="contained"
-                          icon="alert-octagon-outline"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
-                          }}
-                        />
-                        <Text style={styles.actionLabel}>{state.strings.report}</Text>
-                      </View>
+                    <View style={styles.field}>
+                      <Divider style={styles.navDivider} />
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        value={state.strings.resyncAction}
+                        left={<TextInput.Icon style={styles.icon} loading={resycning} size={24} icon="cached" />}
+                      />
+                      <Pressable style={styles.cover} onPress={() => applyAction(setResyncing, actions.resync)} />
+                    </View>
+                  )}
+
+                  {(state.statusLabel === 'connectedStatus' || state.statusLabel === 'offsyncStatus') && state.guid !== state.profile.guid && (
+                    <View style={styles.field}>
+                      <Divider style={styles.navDivider} />
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        value={state.strings.disconnectAction}
+                        left={<TextInput.Icon style={styles.icon} loading={disconnecting} size={24} icon="electric-switch" />}
+                      />
+                      <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.disconnecting, state.strings.confirmDisconnect, state.strings.disconnect, setDisconnecting, actions.disconnect)} />
+                    </View>
+                  )}
+
+                  {state.statusLabel === 'connectingStatus' && state.guid !== state.profile.guid && (
+                    <View style={styles.field}>
+                      <Divider style={styles.navDivider} />
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        value={state.strings.cancelAction}
+                        left={<TextInput.Icon style={styles.icon} loading={canceling} size={24} icon="cancel" />}
+                      />
+                      <Pressable style={styles.cover} onPress={() => applyAction(setCanceling, actions.cancel)} />
+                    </View>
+                  )}
+
+                  {(state.statusLabel === 'requestedStatus' || state.statusLabel === 'pendingStatus') && state.guid !== state.profile.guid && (
+                    <View style={styles.field}>
+                      <Divider style={styles.navDivider} />
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        value={state.strings.ignoreAction}
+                        left={<TextInput.Icon style={styles.icon} loading={ignoring} size={24} icon="volume-mute" />}
+                      />
+                      <Pressable style={styles.cover} onPress={() => applyAction(setIgnoring, actions.ignore)} />
+                    </View>
+                  )}
+
+                  {(state.statusLabel === 'requestedStatus' || state.statusLabel === 'pendingStatus') && state.guid !== state.profile.guid && (
+                    <View style={styles.field}>
+                      <Divider style={styles.navDivider} />
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        value={state.strings.denyAction}
+                        left={<TextInput.Icon style={styles.icon} loading={denying} size={24} icon="account-cancel-outline" />}
+                      />
+                      <Pressable style={styles.cover} onPress={() => applyAction(setDenying, actions.deny)} />
+                    </View>
+                  )}
+
+                  {(state.statusLabel === 'connectedStatus' || state.statusLabel === 'offsyncStatus' || state.statusLabel === 'connectingStatus' || state.statusLabel === 'requestedStatus' || state.statusLabel === 'pendingStatus' || state.statusLabel === 'savedStatus') && state.guid !== state.profile.guid && (
+                    <View style={styles.field}>
+                      <Divider style={styles.navDivider} />
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        value={state.strings.deleteAction}
+                        left={<TextInput.Icon style={styles.icon} loading={removing} size={24} icon="trash-2" />}
+                      />
+                      <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove)} />
+                    </View>
+                  )}
+
+                  {(state.statusLabel === 'connectedStatus' || state.statusLabel === 'offsyncStatus' || state.statusLabel === 'connectingStatus' || state.statusLabel === 'requestedStatus' || state.statusLabel === 'pendingStatus' || state.statusLabel === 'savedStatus') && state.guid !== state.profile.guid && (
+                    <View style={styles.field}>
+                      <Divider style={styles.navDivider} />
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        value={state.strings.blockAction}
+                        left={<TextInput.Icon style={styles.icon} loading={blocking} size={24} icon="close-circle-outline" />}
+                      />
+                      <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block)} />
+                    </View>
+                  )}
+
+                  {(state.statusLabel === 'connectedStatus' || state.statusLabel === 'offsyncStatus' || state.statusLabel === 'connectingStatus' || state.statusLabel === 'requestedStatus' || state.statusLabel === 'pendingStatus' || state.statusLabel === 'savedStatus' || state.statusLabel === 'unknownStatus') && state.guid !== state.profile.guid && (
+                    <View style={styles.field}>
+                      <Divider style={styles.navDivider} />
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        value={state.strings.reportAction}
+                        left={<TextInput.Icon style={styles.icon} loading={blocking} size={24} icon="alert-decagram-outline" />}
+                      />
+                      <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report)} />
                     </View>
                   )}
                 </Surface>

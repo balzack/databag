@@ -54,6 +54,8 @@ export const en = {
   deleteAction: 'Delete Contact',
   blockAction: 'Block Contact',
   reportAction: 'Report Contact',
+  disconnectAction: 'Disconnect Contact',
+  cancelAction: 'Cancel Request',
 
   viewTerms: 'View Terms of Service',
   acceptTerms: 'Accept Terms of Service',
