@@ -40,6 +40,7 @@ export const en = {
   appLanguage: 'App Language',
   languageName: 'English',
 
+  offsyncTag: 'Offsync',
   connectedTag: 'Connected',
   requestedTag: 'Requested',
   connectingTag: 'Connecting',
@@ -56,6 +57,7 @@ export const en = {
   reportAction: 'Report Contact',
   disconnectAction: 'Disconnect Contact',
   cancelAction: 'Cancel Request',
+  resyncAction: 'Resync Contact',
 
   viewTerms: 'View Terms of Service',
   acceptTerms: 'Accept Terms of Service',

@@ -115,7 +115,10 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                   { state.status === 'requested' && (
                     <View style={{ ...styles.tag, backgroundColor: theme.colors.requested }}><Text variant="labelMedium" style={styles.tagLabel}>{ state.strings.requestedTag }</Text></View>
                   )}
-                  { state.status === 'connected' && (
+                  { state.offsync && state.status === 'connected' && (
+                    <View style={{ ...styles.tag, backgroundColor: theme.colors.offsync }}><Text variant="labelMedium" style={styles.tagLabel}>{ state.strings.offsyncTag }</Text></View>
+                  )}
+                  { !state.offsync && state.status === 'connected' && (
                     <View style={{ ...styles.tag, backgroundColor: theme.colors.connected }}><Text variant="labelMedium" style={styles.tagLabel}>{ state.strings.connectedTag }</Text></View>
                   )}
                   { state.status === 'connecting' && (
@@ -232,7 +235,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                         mode="outlined"
                         outlineStyle={styles.navInputBorder}
                         value={state.strings.resyncAction}
-                        left={<TextInput.Icon style={styles.icon} loading={resycning} size={24} icon="cached" />}
+                        left={<TextInput.Icon style={styles.icon} loading={resyncing} size={24} icon="cached" />}
                       />
                       <Pressable style={styles.cover} onPress={() => applyAction(setResyncing, actions.resync)} />
                     </View>

@@ -71,6 +71,7 @@ const databagColors = {
     pending: '#dd8800',
     confirmed: '#00aaaa',
     unsaved: '#888888',
+    offsync: '#aa0000',
   },
   dark: {
     name: 'dark',
@@ -125,6 +126,7 @@ const databagColors = {
     pending: '#dd8800',
     confirmed: '#00aaaa',
     unsaved: '#888888',
+    offsync: '#aa0000',
   },
 };
 
