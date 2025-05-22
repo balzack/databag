@@ -91,7 +91,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
   return (
     <View style={styles.component}>
       { state.layout === 'small' && (
-        <View style={styles.profile}>
+        <Surface elevation={2} style={styles.profile}>
           <Surface elevation={9} style={styles.navHeader}>
             <Pressable style={styles.navIcon} onPress={close}>
               <Icon size={24} source="left" color={'white'} />
@@ -124,8 +124,8 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                   { state.status === 'pending' && (
                     <View style={{ ...styles.tag, backgroundColor: theme.colors.pending }}><Text variant="labelMedium" style={styles.tagLabel}>{ state.strings.pendingTag }</Text></View>
                   )}
-                  { state.status === 'saved' && (
-                    <View style={{ ...styles.tag, backgroundColor: theme.colors.saved }}><Text variant="labelMedium" style={styles.tagLabel}>{ state.strings.savedTag }</Text></View>
+                  { state.status === 'confirmed' && (
+                    <View style={{ ...styles.tag, backgroundColor: theme.colors.confirmed }}><Text variant="labelMedium" style={styles.tagLabel}>{ state.strings.confirmedTag }</Text></View>
                   )}
                   { state.status === '' && (
                     <View style={{ ...styles.tag, backgroundColor: theme.colors.unsaved }}><Text variant="labelMedium" style={styles.tagLabel}>{ state.strings.unsavedTag }</Text></View>
@@ -215,63 +215,52 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                   )}
 
                   {state.statusLabel === 'savedStatus' && state.guid !== state.profile.guid && (
-                    <View style={styles.actions}>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={saving}
-                          compact="true"
-                          mode="contained"
-                          icon="electric-switch-closed"
-                          size={32}
-                          onPress={() => {
-                            applyAction(setSaving, actions.connect);
-                          }}
+                    <View>
+                      <View style={styles.field}>
+                        <Divider style={styles.navDivider} />
+                        <TextInput
+                          style={styles.navInput}
+                          mode="outlined"
+                          outlineStyle={styles.navInputBorder}
+                          value={state.strings.connectAction}
+                          left={<TextInput.Icon style={styles.icon} loading={saving} size={24} icon="electric-switch-closed" />}
                         />
-                        <Text style={styles.actionLabel}>{state.strings.connect}</Text>
+                        <Pressable style={styles.cover} onPress={() => applyAction(setSaving, actions.connect)} />
                       </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={removing}
-                          compact="true"
-                          mode="contained"
-                          icon="account-remove"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
-                          }}
+                      <View style={styles.field}>
+                        <Divider style={styles.navDivider} />
+                        <TextInput
+                          style={styles.navInput}
+                          mode="outlined"
+                          outlineStyle={styles.navInputBorder}
+                          value={state.strings.deleteAction}
+                          left={<TextInput.Icon style={styles.icon} loading={removing} size={24} icon="trash-2" />}
                         />
-                        <Text style={styles.actionLabel}>{state.strings.remove}</Text>
+                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove)} />
                       </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={blocking}
-                          compact="true"
-                          mode="contained"
-                          icon="eye-remove-outline"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
-                          }}
+                      <View style={styles.field}>
+                        <Divider style={styles.navDivider} />
+                        <TextInput
+                          style={styles.navInput}
+                          mode="outlined"
+                          outlineStyle={styles.navInputBorder}
+                          value={state.strings.blockAction}
+                          left={<TextInput.Icon style={styles.icon} loading={blocking} size={24} icon="close-circle-outline" />}
                         />
-                        <Text style={styles.actionLabel}>{state.strings.block}</Text>
+                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block)} />
                       </View>
-                      <View style={styles.action}>
-                        <IconButton
-                          style={styles.actionIcon}
-                          loading={reporting}
-                          compact="true"
-                          mode="contained"
-                          icon="alert-octagon-outline"
-                          size={32}
-                          onPress={() => {
-                            confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
-                          }}
+                      <View style={styles.field}>
+                        <Divider style={styles.navDivider} />
+                        <TextInput
+                          style={styles.navInput}
+                          mode="outlined"
+                          outlineStyle={styles.navInputBorder}
+                          value={state.strings.reportAction}
+                          left={<TextInput.Icon style={styles.icon} loading={blocking} size={24} icon="alert-decagram-outline" />}
                         />
-                        <Text style={styles.actionLabel}>{state.strings.report}</Text>
+                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report)} />
                       </View>
+ 
                     </View>
                   )}
 
@@ -354,7 +343,6 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                         />
                         <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report)} />
                       </View>
- 
                     </View>
                   )}
 
@@ -647,7 +635,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
               </Surface>
             </ScrollView>
           </View>
-        </View>
+        </Surface>
       )}
       { state.layout === 'large' && (
         <View style={styles.profile}>

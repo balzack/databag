@@ -60,7 +60,7 @@ export const styles = StyleSheet.create({
   },
   data: {
     width: '100%',
-    borderRadius: 6,
+    borderRadius: 8,
     display: 'flex',
     flexDirection: 'column',
     paddingTop: 12,
@@ -121,14 +121,14 @@ export const styles = StyleSheet.create({
   },
   overlap: {
     position: 'absolute',
-    top: 253,
-    borderRadius: 4,
+    top: 252,
+    borderRadius: 8,
     width: '100%',
     height: 8
   },
   imageSpacer: {
     width: '100%',
-    height: 253,
+    height: 252,
   },
   navLogo: {
     width: '100%',

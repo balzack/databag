@@ -48,6 +48,7 @@ export const en = {
   unsavedTag: 'Unsaved',
   saveAction: 'Save Contact',
   acceptAction: 'Accept Connection',
+  connectAction: 'Request Connection',
   ignoreAction: 'Ignore Request',
   denyAction: 'Deny Request',
   deleteAction: 'Delete Contact',
