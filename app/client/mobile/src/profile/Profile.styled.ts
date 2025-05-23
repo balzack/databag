@@ -28,6 +28,12 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  sectionLabel: {
+    fontSize: 24,
+    width: '100%',
+    paddingBottom: 8,
+    paddingTop: 24,
+  },
   navInput: {
     fontSize: 16,
     textWrap: 'nowrap',
@@ -73,7 +79,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 16,
     paddingTop: 32,
-    paddingBottom: 16,
+    paddingBottom: 8,
     minWidth: 0,
   },
   name: {

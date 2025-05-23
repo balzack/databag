@@ -40,6 +40,7 @@ export const en = {
   appLanguage: 'App Language',
   languageName: 'English',
 
+  contact: 'Contact',
   offsyncTag: 'Offsync',
   connectedTag: 'Connected',
   requestedTag: 'Requested',
