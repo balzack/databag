@@ -151,6 +151,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                       mode="outlined"
                       outlineStyle={styles.navInputBorder}
                       placeholder={state.strings.location}
+                      placeholderTextColor={theme.colors.secondary}
                       value={state.location}
                       left={<TextInput.Icon style={styles.icon} size={22} icon="map-pin" />}
                     />
@@ -165,6 +166,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                       multiline={true}
                       outlineStyle={styles.navInputBorder}
                       placeholder={state.strings.description}
+                      placeholderTextColor={theme.colors.secondary}
                       value={state.description}
                       left={<TextInput.Icon style={styles.icon} size={22} icon="align-left" />}
                     />

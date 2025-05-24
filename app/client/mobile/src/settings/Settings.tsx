@@ -466,7 +466,8 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                       autoComplete="off"
                       autoCorrect={false}
                       returnKeyType="done"
-                      placeholder={state.strings.enterName}
+                      placeholder={setupNav ? state.strings.enterName : state.strings.name}
+                      placeholderTextColor={theme.colors.secondary}
                       value={state.name}
                       left={<TextInput.Icon style={styles.icon} size={22} icon="idcard" />}
                       onChangeText={value => actions.setName(value)}
@@ -492,7 +493,8 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                       autoComplete="off"
                       autoCorrect={false}
                       returnKeyType="done"
-                      placeholder={state.strings.yourLocation}
+                      placeholder={setupNav ? state.strings.yourLocation : state.strings.location}
+                      placeholderTextColor={theme.colors.secondary}
                       value={state.location}
                       left={<TextInput.Icon style={styles.icon} size={22} icon="map-pin" />}
                       onChangeText={value => actions.setLocation(value)}
