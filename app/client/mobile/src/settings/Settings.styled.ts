@@ -13,7 +13,6 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   sectionLabel: {
-    fontSize: 24,
     width: '100%',
     paddingLeft: 18,
     paddingBottom: 8,
@@ -85,7 +84,7 @@ export const styles = StyleSheet.create({
     paddingTop: 24,
   },
   navInput: {
-    fontSize: 16,
+    fontSize: 15,
     textWrap: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
@@ -119,14 +118,14 @@ export const styles = StyleSheet.create({
     borderRadius: 6,
     display: 'flex',
     flexDirection: 'column',
-    paddingTop: 12,
-    paddingBottom: 12,
+    paddingTop: 8,
+    paddingBottom: 8,
   },
   navDivider: {
     marginLeft: 16,
     marginRight: 16,
-    marginTop: 6,
-    marginBottom: 6,
+    marginTop: 2,
+    marginBottom: 2,
   },
   navUpload: {
     position: 'relative',
@@ -211,7 +210,7 @@ export const styles = StyleSheet.create({
   scrollContainer: {
     display: 'flex',
     alignItems: 'center',
-    paddingBottom: 32,
+    paddingBottom: 92,
     width: '100%',
   },
   modalHeader: {

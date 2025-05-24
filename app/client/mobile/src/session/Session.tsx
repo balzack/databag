@@ -3,7 +3,8 @@ import {Pressable, View, useColorScheme} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RingContextProvider} from '../context/RingContext';
 import {styles} from './Session.styled';
-import {IconButton, Surface, Text, Icon} from 'react-native-paper';
+import {IconButton, Surface, Text, Icon, useTheme} from 'react-native-paper';
+import {BlurView} from '@react-native-community/blur';
 import {Settings} from '../settings/Settings';
 import {Contacts} from '../contacts/Contacts';
 import {Content} from '../content/Content';
@@ -45,6 +46,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
   const [disconnected, setDisconnected] = useState(false);
   const [showDisconnected, setShowDisconnected] = useState(false);
   const [focus, setFocus] = useState(false);
+  const theme = useTheme();
 
   const textContact = (cardId: null | string) => {
     setTextCard({cardId});
@@ -122,77 +124,80 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                     <Settings showLogout={true} />
                   </Surface>
                 </View>
-                <Surface elevation={1}>
-                  <SafeAreaView edges={['bottom']}>
-                    <View style={styles.tabs}>
-                      {tab === 'content' && (
-                        <IconButton
-                          style={styles.activeTab}
-                          mode="contained"
-                          icon={'comment-multiple'}
-                          size={28}
-                          onPress={() => {
-                            setTab('content');
-                          }}
-                        />
-                      )}
-                      {tab !== 'content' && (
-                        <IconButton
-                          style={styles.idleTab}
-                          mode="contained"
-                          icon={'comment-multiple-outline'}
-                          size={28}
-                          onPress={() => {
-                            setTab('content');
-                          }}
-                        />
-                      )}
-                      {tab === 'contacts' && (
-                        <IconButton
-                          style={styles.activeTab}
-                          mode="contained"
-                          icon={'contacts'}
-                          size={28}
-                          onPress={() => {
-                            setTab('contacts');
-                          }}
-                        />
-                      )}
-                      {tab !== 'contacts' && (
-                        <IconButton
-                          style={styles.idleTab}
-                          mode="contained"
-                          icon={'contacts-outline'}
-                          size={28}
-                          onPress={() => {
-                            setTab('contacts');
-                          }}
-                        />
-                      )}
-                      {tab === 'settings' && (
-                        <IconButton
-                          style={styles.activeTab}
-                          mode="contained"
-                          icon={'cog'}
-                          size={28}
-                          onPress={() => {
-                            setTab('settings');
-                          }}
-                        />
-                      )}
-                      {tab !== 'settings' && (
-                        <IconButton
-                          style={styles.idleTab}
-                          mode="contained"
-                          icon={'cog-outline'}
-                          size={28}
-                          onPress={() => {
-                            setTab('settings');
-                          }}
-                        />
-                      )}
-                    </View>
-                  </SafeAreaView>
+                <Surface style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', backgroundColor: 'transparent' }} elevation={4}>
+                  <BlurView style={styles.blur} blurType="light" blurAmount={8} reducedTransparencyFallbackColor="dark" />
+                  <View style={{ backgroundColor: theme.colors.bar }}>
+                    <SafeAreaView edges={['bottom']}>
+                      <View style={styles.tabs}>
+                        {tab === 'content' && (
+                          <IconButton
+                            style={styles.activeTab}
+                            mode="contained"
+                            icon={'comment-multiple'}
+                            size={28}
+                            onPress={() => {
+                              setTab('content');
+                            }}
+                          />
+                        )}
+                        {tab !== 'content' && (
+                          <IconButton
+                            style={styles.idleTab}
+                            mode="contained"
+                            icon={'comment-multiple-outline'}
+                            size={28}
+                            onPress={() => {
+                              setTab('content');
+                            }}
+                          />
+                        )}
+                        {tab === 'contacts' && (
+                          <IconButton
+                            style={styles.activeTab}
+                            mode="contained"
+                            icon={'account-group'}
+                            size={28}
+                            onPress={() => {
+                              setTab('contacts');
+                            }}
+                          />
+                        )}
+                        {tab !== 'contacts' && (
+                          <IconButton
+                            style={styles.idleTab}
+                            mode="contained"
+                            icon={'account-group-outline'}
+                            size={28}
+                            onPress={() => {
+                              setTab('contacts');
+                            }}
+                          />
+                        )}
+                        {tab === 'settings' && (
+                          <IconButton
+                            style={styles.activeTab}
+                            mode="contained"
+                            icon={'cog'}
+                            size={28}
+                            onPress={() => {
+                              setTab('settings');
+                            }}
+                          />
+                        )}
+                        {tab !== 'settings' && (
+                          <IconButton
+                            style={styles.idleTab}
+                            mode="contained"
+                            icon={'cog-outline'}
+                            size={28}
+                            onPress={() => {
+                              setTab('settings');
+                            }}
+                          />
+                        )}
+                      </View>
+                    </SafeAreaView>
+                  </View>
                 </Surface>
               </View>
             </SafeAreaView>

@@ -170,13 +170,10 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                     />
                     <View style={styles.cover} />
                   </View>
-                </Surface>
-    
-                <Text variant="labelLarge" style={styles.sectionLabel}>{state.strings.contact}</Text>
 
-                <Surface elevation={0} mode="flat" style={styles.data}>
                   {state.statusLabel === 'unknownStatus' && state.guid !== state.profile.guid && (
                     <View style={styles.field}>
+                      <Divider style={styles.navDivider} />
                       <TextInput
                         style={styles.navInput}
                         mode="outlined"
@@ -190,6 +187,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
 
                   {state.statusLabel === 'savedStatus' && state.guid !== state.profile.guid && (
                      <View style={styles.field}>
+                      <Divider style={styles.navDivider} />
                       <TextInput
                         style={styles.navInput}
                         mode="outlined"
@@ -203,9 +201,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
 
                   {(state.statusLabel === 'pendingStatus' || state.statusLabel === 'unknownStatus') && state.guid !== state.profile.guid && (
                     <View style={styles.field}>
-                      { state.statusLabel !== 'pendingStatus' && (
-                        <Divider style={styles.navDivider} />
-                      )}
+                      <Divider style={styles.navDivider} />
                       <TextInput
                         style={styles.navInput}
                         mode="outlined"
@@ -219,9 +215,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
 
                   {(state.statusLabel === 'requestedStatus' || state.statusLabel === 'pendingStatus') && state.guid !== state.profile.guid && (
                     <View style={styles.field}>
-                      { state.statusLabel !== 'requestedStatus' && (
-                        <Divider style={styles.navDivider} />
-                      )}
+                      <Divider style={styles.navDivider} />
                       <TextInput
                         style={styles.navInput}
                         mode="outlined"
@@ -235,6 +229,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
 
                   {state.statusLabel === 'offsyncStatus' && state.guid !== state.profile.guid && (
                     <View style={styles.field}>
+                      <Divider style={styles.navDivider} />
                       <TextInput
                         style={styles.navInput}
                         mode="outlined"
@@ -248,9 +243,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
 
                   {(state.statusLabel === 'connectedStatus' || state.statusLabel === 'offsyncStatus') && state.guid !== state.profile.guid && (
                     <View style={styles.field}>
-                      { state.statusLabel !== 'connectedStatus' && (
-                        <Divider style={styles.navDivider} />
-                      )}
+                      <Divider style={styles.navDivider} />
                       <TextInput
                         style={styles.navInput}
                         mode="outlined"
@@ -264,6 +257,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
 
                   {state.statusLabel === 'connectingStatus' && state.guid !== state.profile.guid && (
                     <View style={styles.field}>
+                      <Divider style={styles.navDivider} />
                       <TextInput
                         style={styles.navInput}
                         mode="outlined"
@@ -305,9 +299,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
 
                   {(state.statusLabel === 'connectedStatus' || state.statusLabel === 'offsyncStatus' || state.statusLabel === 'connectingStatus' || state.statusLabel === 'requestedStatus' || state.statusLabel === 'pendingStatus' || state.statusLabel === 'savedStatus') && state.guid !== state.profile.guid && (
                     <View style={styles.field}>
-                      { state.statusLabel !== 'savedStatus' && (
-                        <Divider style={styles.navDivider} />
-                      )}
+                      <Divider style={styles.navDivider} />
                       <TextInput
                         style={styles.navInput}
                         mode="outlined"

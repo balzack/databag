@@ -98,7 +98,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     paddingTop: 8,
-    paddingBottom: 8,
+    paddingBottom: 64,
   },
   icon: {
     flexShrink: 0,

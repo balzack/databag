@@ -75,7 +75,7 @@ export function Contacts({
           style={styles.cards}
           data={state.filtered}
           initialNumToRender={32}
-          contentContainerStyle={state.layout === 'large' ? styles.cardsContainer : {}}
+          contentContainerStyle={styles.cardsContainer}
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => {
             const syncStatus = item.offsync ? 'offsync' : item.status;

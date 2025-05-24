@@ -132,6 +132,7 @@ export function Content({
         {state.filtered.length !== 0 && (
           <FlatList
             style={styles.channels}
+            contentContainerStyle={{ paddingBottom: 92 }}
             data={state.filtered}
             initialNumToRender={32}
             showsVerticalScrollIndicator={false}

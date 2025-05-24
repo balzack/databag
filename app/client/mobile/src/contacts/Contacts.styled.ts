@@ -76,7 +76,7 @@ export const styles = StyleSheet.create({
     overscrollBehavior: 'none',
   },
   cardsContainer: {
-    paddingBottom: 64,
+    paddingBottom: 92,
   },
   card: {
     width: '100%',

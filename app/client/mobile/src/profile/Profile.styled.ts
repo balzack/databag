@@ -29,13 +29,13 @@ export const styles = StyleSheet.create({
     height: '100%',
   },
   sectionLabel: {
-    fontSize: 24,
+    fontSize: 23,
     width: '100%',
     paddingBottom: 8,
     paddingTop: 24,
   },
   navInput: {
-    fontSize: 16,
+    fontSize: 15,
     textWrap: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
@@ -52,8 +52,8 @@ export const styles = StyleSheet.create({
   navDivider: {
     marginLeft: 16,
     marginRight: 16,
-    marginTop: 6,
-    marginBottom: 6,
+    marginTop: 2,
+    marginBottom: 2,
   },
   form: {
     width: '100%',
@@ -69,8 +69,8 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     display: 'flex',
     flexDirection: 'column',
-    paddingTop: 12,
-    paddingBottom: 12,
+    paddingTop: 8,
+    paddingBottom: 8,
   },
   nameTag: {
     width: '100%',
@@ -150,7 +150,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     width: '100%',
-    paddingBottom: 32,
+    paddingBottom: 92,
   },
   body: {
     display: 'flex',

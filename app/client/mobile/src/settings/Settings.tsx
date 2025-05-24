@@ -440,7 +440,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
               <View style={styles.imageSpacer} />
               <Surface mode="flat" elevation={2} style={styles.navForm}>
                 {!setupNav && (
-                  <Text variant="labelLarge" style={styles.sectionLabel}>{ state.strings.profile }</Text>
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.profile }</Text>
                 )}
                 <View style={styles.navWrapper}>
                   <Surface elevation={0} mode="flat" style={styles.navData}>
@@ -545,7 +545,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                   </Button>
                 )}
                 {!setupNav && (
-                  <Text variant="labelLarge" style={styles.sectionLabel}>{ state.strings.account }</Text>
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.account }</Text>
                 )}
                 {!setupNav && (
                   <View style={styles.navWrapper}>
@@ -601,7 +601,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                   </View>
                 )}
                 {!setupNav && (
-                  <Text variant="labelLarge" style={styles.sectionLabel}>{ state.strings.messaging }</Text>
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.messaging }</Text>
                 )}
                 {!setupNav && (
                   <View style={styles.navWrapper}>
@@ -634,7 +634,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                   </View>
                 )}
                 {!setupNav && (
-                  <Text variant="labelLarge" style={styles.sectionLabel}>{ state.strings.appLanguage }</Text>
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.appLanguage }</Text>
                 )}
                 {!setupNav && (
                   <View style={styles.navWrapper}>
@@ -660,7 +660,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                   </View>
                 )}
                 {!setupNav && (
-                  <Text variant="labelLarge" style={styles.sectionLabel}>{ state.strings.format }</Text>
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.format }</Text>
                 )}
                 {!setupNav && (
                   <View style={styles.navWrapper}>
@@ -749,7 +749,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                   </View>
                 )}
                 {!setupNav && (
-                  <Text variant="labelLarge" style={styles.sectionLabel}>{ state.strings.blocked }</Text>
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.blocked }</Text>
                 )}
                 {!setupNav && (
                   <View style={styles.navWrapper}>
@@ -790,7 +790,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                   </View>
                 )}
                 {!setupNav && (
-                  <Text variant="labelLarge" style={styles.sectionLabel}>{ state.strings.support }</Text>
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.support }</Text>
                 )}
                 {!setupNav && (
                   <View style={styles.navWrapper}>
