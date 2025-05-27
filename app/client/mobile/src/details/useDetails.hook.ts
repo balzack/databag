@@ -26,6 +26,7 @@ export function useDetails() {
     hostCard: null as null | Card,
     channelCards: [] as Card[],
     unknownContacts: 0,
+    layout: null as null | string,
   });
 
   const updateState = (value: any) => {
@@ -58,8 +59,8 @@ export function useDetails() {
   };
 
   useEffect(() => {
-    const {strings, timeFormat, dateFormat} = display.state;
-    updateState({strings, timeFormat, dateFormat});
+    const {strings, timeFormat, dateFormat, layout} = display.state;
+    updateState({strings, timeFormat, dateFormat, layout});
   }, [display.state]);
 
   useEffect(() => {

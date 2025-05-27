@@ -11,6 +11,9 @@ export const languages = [
 ];
 
 export const en = {
+  chatSettings: 'Chat Settings',
+
+
   welcomeTo: 'Welcome To Databag',
   notUser: 'Not a user?',
   adminAccess: 'Admin Access',

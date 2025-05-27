@@ -2,6 +2,34 @@ import {StyleSheet} from 'react-native';
 import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
+  component: {
+    width: '100%',
+    height: '100%',
+  },
+  smDetails: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+  },
+  smHeader: {
+    height: 48,
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  smTitle: {
+    color: 'white',
+    flexGrow: 1,
+    textAlign: 'center',
+  },
+  smIcon: {
+    color: 'white',
+    width: 48,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   details: {
     display: 'flex',
     flexDirection: 'column',
