@@ -43,12 +43,6 @@ export function useDetails() {
       } else {
         return date.toLocaleTimeString('en-GB', {hour: 'numeric', minute: '2-digit'});
       }
-    } else if (offset < 31449600) {
-      if (state.dateFormat === 'mm/dd') {
-        return date.toLocaleDateString('en-US', {day: 'numeric', month: 'numeric'});
-      } else {
-        return date.toLocaleDateString('en-GB', {day: 'numeric', month: 'numeric'});
-      }
     } else {
       if (state.dateFormat === 'mm/dd') {
         return date.toLocaleDateString('en-US');

@@ -12,7 +12,9 @@ export const languages = [
 
 export const en = {
   chatSettings: 'Chat Settings',
-
+  host: 'Host',
+  guest: 'Guest',
+  e2ee: 'End-to-end Encrypted',
 
   welcomeTo: 'Welcome To Databag',
   notUser: 'Not a user?',

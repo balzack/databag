@@ -20,6 +20,7 @@ export function Details({close, closeAll}: {close: () => void; closeAll: () => v
   const [memberModal, setMemberModal] = useState(false);
   const [error, setError] = useState(false);
   const theme = useTheme();
+  const [editing, setEditing] = useState(false);
 
   const membership = () => {
     setError(false);
@@ -190,6 +191,44 @@ export function Details({close, closeAll}: {close: () => void; closeAll: () => v
             </Pressable>
             <Text variant="headlineSmall" style={styles.smTitle}>{ state.strings.chatSettings }</Text>
             <View style={styles.smIcon} />
+          </Surface>
+          <Surface mode="flat" elevation={2} style={styles.scrollWrapper}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
+              <Text variant="labelLarge" style={styles.smDate}>{ state.created }</Text>
+              <View style={styles.smSubject}>
+                <TextInput
+                  style={styles.smInput}
+                  dense={true}
+                  underlineStyle={styles.underline}
+                  mode="flat"
+                  autoCapitalize="none"
+                  autoComplete="off"
+                  autoCorrect={false}
+                  value={state.editSubject}
+                  placeholder={state.strings.subject}
+                  placeholderTextColor={theme.colors.secondary}
+                  disabled={state.locked}
+                  editable={state.host && !state.locked}
+                  right={!editing && state.host && !state.locked ? <TextInput.Icon style={styles.icon} icon="edit" /> : undefined}
+                  onChangeText={value => actions.setEditSubject(value)}
+                  returnKeyType="done"
+                  onSubmitEditing={saveSubject}
+                  onFocus={() => setEditing(true)}
+                  onBlur={() => setEditing(false)}
+                />
+                <View style={styles.smSpace} />
+              </View>
+              <Text variant="labelLarge" style={styles.smHost}>{ state.host ? state.strings.host : state.strings.guest }</Text>
+              { state.sealed && (
+                <View style={styles.sealed}>
+                  <View style={{ ...styles.highlight, backgroundColor: theme.colors.connected }}>
+                  <Icon source="shield-outline" color="white" size={16} />
+                  <Text style={styles.e2ee}>{state.strings.e2ee}</Text>
+                  </View>
+                  <View style={styles.smSpace} />
+                </View>
+              )}
+            </ScrollView>
           </Surface>
         </Surface>
       )}

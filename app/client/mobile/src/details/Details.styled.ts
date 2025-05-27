@@ -23,12 +23,67 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     textAlign: 'center',
   },
+  smDate: {
+    paddingLeft: 16,
+  },
+  smHost: {
+    paddingLeft: 16,
+    paddingTop: 4,
+  },
   smIcon: {
     color: 'white',
     width: 48,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  smSubject: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  smInput: {
+    fontSize: 24,
+    fontWeight: 600,
+    width: 'fit-content',
+    backgroundColor: 'transparent',
+    flexShrink: 1,
+  },
+  smSpace: {
+    flexGrow: 1,
+  },
+  e2ee: {
+    color: 'white',
+    paddingLeft: 8,
+  },
+  sealed: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingLeft: 16,
+    alignItems: 'center',
+    paddingTop: 12,
+  },
+  highlight: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexShrink: 1,
+    paddingLeft: 12,
+    paddingRight: 21,
+    paddingTop: 8,
+    paddingBottom: 8,
+    alignItems: 'center',
+    borderRadius: 8,
+  },
+  scrollWrapper: {
+    flexGrow: 1,
+    height: 1,
+  },
+  scrollContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    paddingBottom: 128,
+    paddingTop: 16,
   },
   details: {
     display: 'flex',
