@@ -6,6 +6,42 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  option: {
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+  },
+  border: {
+    borderWidth: 0,
+  },
+  split: {
+    marginLeft: 16,
+    marginRight: 16,
+    marginTop: 2,
+    marginBottom: 2,
+  },
+  label: {
+    fontSize: 15,
+    textWrap: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    textAlign: 'auto',
+    backgroundColor: 'transparent',
+    fontWeight: 'normal',
+  },
+  press: {
+    position: 'absolute',
+    top: 0,
+    left: 0, 
+    width: '100%', 
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   smDetails: {
     width: '100%',
     height: '100%',
@@ -72,12 +108,12 @@ export const styles = StyleSheet.create({
     color: 'white',
     paddingLeft: 8,
   },
-  smMembers: {
+  section: {
     padding: 16,
     width: '100%',
   },
-  smCards: {
-    borderRadius: 4,
+  content: {
+    borderRadius: 8,
     paddingTop: 16,
     paddingBottom: 16,
   },

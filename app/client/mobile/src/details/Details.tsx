@@ -229,8 +229,8 @@ export function Details({close, closeAll}: {close: () => void; closeAll: () => v
                 </View>
               )}
               <Text variant="headlineSmall" style={styles.smLabel}>{ state.strings.members }</Text>
-              <View style={styles.smMembers}>
-                <Surface mode="flat" elevation={0} style={styles.smCards}>
+              <View style={styles.section}>
+                <Surface mode="flat" elevation={0} style={styles.content}>
                   {state.hostCard && (
                     <Card
                       containerStyle={{ ...styles.smCard, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
@@ -260,6 +260,87 @@ export function Details({close, closeAll}: {close: () => void; closeAll: () => v
                     <Text style={styles.unknown}>
                       {state.strings.unknown}: {state.unknownContacts}
                     </Text>
+                  )}
+                </Surface>
+              </View>
+              <View style={styles.section}>
+                <Surface mode="flat" elevation={0} style={styles.content}>
+
+                  { state.host && !state.locked && (
+                    <View style={styles.option}>
+                      <TextInput
+                        style={styles.label}
+                        mode="outlined"
+                        outlineStyle={styles.border}
+                        placeholder={state.strings.editMembers}
+                        left={<TextInput.Icon style={styles.icon} size={24} icon="users" />}
+                      />
+                      <Pressable style={styles.press} onPress={()=>{}} />
+                    </View>
+                  )}
+
+                  { state.host && !state.locked && (
+                    <Divider style={styles.split} />
+                  )}
+
+                  { state.host && (
+                    <View style={styles.option}>
+                      <TextInput
+                        style={styles.label}
+                        mode="outlined"
+                        outlineStyle={styles.border}
+                        placeholder={state.strings.deleteChat}
+                        left={<TextInput.Icon style={styles.icon} size={24} icon="text-box-remove-outline" />}
+                      />
+                      <Pressable style={styles.press} onPress={()=>{}} />
+                    </View>
+                  )}
+
+                  { !state.host && (
+                    <View style={styles.option}>
+                      <TextInput
+                        style={styles.label}
+                        mode="outlined"
+                        outlineStyle={styles.border}
+                        placeholder={state.strings.leaveChat}
+                        left={<TextInput.Icon style={styles.icon} size={24} icon="log-out" />}
+                      />
+                      <Pressable style={styles.press} onPress={()=>{}} />
+                    </View>
+                  )}
+
+                  { !state.host && (
+                    <Divider style={styles.split} />
+                  )}
+
+                  { !state.host && (
+                    <View style={styles.option}>
+                      <TextInput
+                        style={styles.label}
+                        mode="outlined"
+                        outlineStyle={styles.border}
+                        placeholder={state.strings.blockChat}
+                        left={<TextInput.Icon style={styles.icon} size={24} icon="close-circle-outline" />}
+                      />
+                      <Pressable style={styles.press} onPress={()=>{}} />
+                    </View>
+                  )}
+
+                  { !state.host && (
+                    <Divider style={styles.split} />
+                  )}
+
+                  { !state.host && (
+                    <View style={styles.option}>
+                      <TextInput
+                        style={styles.label}
+                        mode="outlined"
+                        outlineStyle={styles.border}
+                        placeholder={state.strings.report}
+                        left={<TextInput.Icon style={styles.icon} size={24} icon="alert-decagram-outline" />}
+                      />
+                      <Pressable style={styles.press} onPress={()=>{}} />
+                    </View>
                   )}
                 </Surface>
               </View>

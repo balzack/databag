@@ -15,6 +15,10 @@ export const en = {
   host: 'Host',
   guest: 'Guest',
   e2ee: 'End-to-end Encrypted',
+  leaveChat: 'Leave Chat',
+  blockChat: 'Block Chat',
+  editMembers: 'Edit Members',
+  deleteChat: 'Delete Chat',
 
   welcomeTo: 'Welcome To Databag',
   notUser: 'Not a user?',
