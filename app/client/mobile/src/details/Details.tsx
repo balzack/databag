@@ -275,7 +275,7 @@ export function Details({close, closeAll}: {close: () => void; closeAll: () => v
                         placeholder={state.strings.editMembers}
                         left={<TextInput.Icon style={styles.icon} size={24} icon="users" />}
                       />
-                      <Pressable style={styles.press} onPress={()=>{}} />
+                      <Pressable style={styles.press} onPress={membership} />
                     </View>
                   )}
 
@@ -290,9 +290,9 @@ export function Details({close, closeAll}: {close: () => void; closeAll: () => v
                         mode="outlined"
                         outlineStyle={styles.border}
                         placeholder={state.strings.deleteChat}
-                        left={<TextInput.Icon style={styles.icon} size={24} icon="text-box-remove-outline" />}
+                        left={<TextInput.Icon style={styles.icon} loading={removing} size={24} icon="text-box-remove-outline" />}
                       />
-                      <Pressable style={styles.press} onPress={()=>{}} />
+                      <Pressable style={styles.press} onPress={remove} />
                     </View>
                   )}
 
@@ -303,9 +303,9 @@ export function Details({close, closeAll}: {close: () => void; closeAll: () => v
                         mode="outlined"
                         outlineStyle={styles.border}
                         placeholder={state.strings.leaveChat}
-                        left={<TextInput.Icon style={styles.icon} size={24} icon="log-out" />}
+                        left={<TextInput.Icon style={styles.icon} loading={removing} size={24} icon="log-out" />}
                       />
-                      <Pressable style={styles.press} onPress={()=>{}} />
+                      <Pressable style={styles.press} onPress={leave} />
                     </View>
                   )}
 
@@ -320,9 +320,9 @@ export function Details({close, closeAll}: {close: () => void; closeAll: () => v
                         mode="outlined"
                         outlineStyle={styles.border}
                         placeholder={state.strings.blockChat}
-                        left={<TextInput.Icon style={styles.icon} size={24} icon="close-circle-outline" />}
+                        left={<TextInput.Icon style={styles.icon} loading={blocking} size={24} icon="close-circle-outline" />}
                       />
-                      <Pressable style={styles.press} onPress={()=>{}} />
+                      <Pressable style={styles.press} onPress={block} />
                     </View>
                   )}
 
@@ -337,9 +337,9 @@ export function Details({close, closeAll}: {close: () => void; closeAll: () => v
                         mode="outlined"
                         outlineStyle={styles.border}
                         placeholder={state.strings.report}
-                        left={<TextInput.Icon style={styles.icon} size={24} icon="alert-decagram-outline" />}
+                        left={<TextInput.Icon style={styles.icon} loading={reporting} size={24} icon="alert-decagram-outline" />}
                       />
-                      <Pressable style={styles.press} onPress={()=>{}} />
+                      <Pressable style={styles.press} onPress={report} />
                     </View>
                   )}
                 </Surface>
