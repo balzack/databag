@@ -91,8 +91,8 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
   return (
     <View style={styles.component}>
       { state.layout === 'small' && (
-        <Surface elevation={2} style={styles.profile}>
-          <Surface elevation={9} style={styles.navHeader}>
+        <Surface mode="flat" elevation={2} style={styles.profile}>
+          <Surface mode="flat" elevation={9} style={styles.navHeader}>
             <Pressable style={styles.navIcon} onPress={close}>
               <Icon size={24} source="left" color={'white'} />
             </Pressable>

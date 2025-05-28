@@ -48,7 +48,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
   },
   smHeader: {
-    height: 48,
+    height: 64,
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
@@ -81,7 +81,6 @@ export const styles = StyleSheet.create({
   smInput: {
     fontSize: 24,
     fontWeight: 600,
-    width: 'fit-content',
     backgroundColor: 'transparent',
     flexShrink: 1,
   },

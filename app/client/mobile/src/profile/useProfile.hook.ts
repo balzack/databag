@@ -9,7 +9,7 @@ export function useProfile(params: ContactParams) {
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
-    layout: null as null | string,
+    layout: 'small' as null | string,
     strings: display.state.strings,
     cards: [] as Card[],
     profile: {} as {} | Profile,

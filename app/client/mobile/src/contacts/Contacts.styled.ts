@@ -9,6 +9,26 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  smCards: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    overscrollBehavior: 'none',
+    paddingTop: 16,
+    paddingBottom: 64,
+  },
+  smCard: {
+    width: '100%',
+    height: 72,
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingRight: 16,
+    paddingLeft: 16,
+    icon: {
+      borderRadius: 24,
+      overflow: 'hidden',
+    }
+  },
   button: {
     borderRadius: 8,
     marginRight: 4,

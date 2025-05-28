@@ -19,6 +19,7 @@ export const en = {
   blockChat: 'Block Chat',
   editMembers: 'Edit Members',
   deleteChat: 'Delete Chat',
+  searchContacts: 'Search Contacts',
 
   welcomeTo: 'Welcome To Databag',
   notUser: 'Not a user?',

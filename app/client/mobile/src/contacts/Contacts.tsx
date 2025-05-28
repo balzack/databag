@@ -42,168 +42,247 @@ export function Contacts({
   });
 
   return (
-    <View style={styles.contacts}>
-      <SafeAreaView style={styles.header}>
-        <IconButton style={styles.sort} mode="contained" icon={state.sortAsc ? 'sort-descending' : 'sort-ascending'} size={24} onPress={actions.toggleSort} />
-
-        <Surface mode="flat" elevation={5} style={styles.inputSurface}>
-          <TextInput
-            dense={true}
-            style={styles.input}
-            outlineColor="transparent"
-            activeOutlineColor="transparent"
-            autoCapitalize="none"
-            autoComplete="off"
-            autoCorrect={false}
-            underlineStyle={styles.inputUnderline}
-            mode="outlined"
-            placeholder={state.strings.contacts}
-            left={<TextInput.Icon style={styles.icon} icon="magnify" />}
-            value={state.filter}
-            onChangeText={value => actions.setFilter(value)}
-          />
-        </Surface>
-
-        <Button icon="account-plus" mode="contained" style={styles.button} onPress={openRegistry}>
-          {state.strings.add}
-        </Button>
-      </SafeAreaView>
-      <Divider style={styles.divider} />
-
-      {state.filtered.length !== 0 && (
-        <FlatList
-          style={styles.cards}
-          data={state.filtered}
-          initialNumToRender={32}
-          contentContainerStyle={styles.cardsContainer}
-          showsVerticalScrollIndicator={false}
-          renderItem={({item}) => {
-            const syncStatus = item.offsync ? 'offsync' : item.status;
-            const getOptions = () => {
-              if (syncStatus === 'connected') {
-                return [
-                  <Action
-                    key="call"
-                    icon="phone-outline"
-                    color={Colors.connected}
-                    select={async () => {
-                      try {
-                        await actions.call(item);
-                        callContact(item);
-                      } catch (err) {
-                        console.log(err);
-                        setAlert(true);
-                      }
-                    }}
-                  />,
-                  <Action key="text" icon="message-outline" color={Colors.connected} select={() => textContact(item.cardId)} />,
-                ];
-              } else if (syncStatus === 'offsync') {
-                return [
-                  <Action
-                    key="resync"
-                    icon="cached"
-                    color={Colors.offsync}
-                    select={async () => {
-                      try {
-                        await actions.resync(item.cardId);
-                      } catch (err) {
-                        console.log(err);
-                        setAlert(true);
-                      }
-                    }}
-                  />,
-                ];
-              } else if (syncStatus === 'received') {
-                return [
-                  <Action
-                    key="accept"
-                    icon="account-check-outline"
-                    color={Colors.requested}
-                    select={async () => {
-                      try {
-                        await actions.accept(item.cardId);
-                      } catch (err) {
-                        console.log(err);
-                        setAlert(true);
-                      }
-                    }}
-                  />,
-                ];
-              } else if (syncStatus === 'connecting') {
-                return [
-                  <Action
-                    key="cancel"
-                    icon="cancel"
-                    color={Colors.connecting}
-                    select={async () => {
-                      try {
-                        await actions.cancel(item.cardId);
-                      } catch (err) {
-                        console.log(err);
-                        setAlert(true);
-                      }
-                    }}
-                  />,
-                ];
-              } else if (syncStatus === 'pending') {
-                return [
-                  <Action
-                    key="accept"
-                    icon="account-check-outline"
-                    color={Colors.pending}
-                    select={async () => {
-                      try {
-                        await actions.accept(item.cardId);
-                      } catch (err) {
-                        console.log(err);
-                        setAlert(true);
-                      }
-                    }}
-                  />,
-                ];
-              }
-              return [];
-            };
-            const options = getOptions();
-            const select = () => {
-              const {guid, handle, node, name, location, description, offsync, imageUrl, cardId, status} = item;
-              const params = {
-                guid,
-                handle,
-                node,
-                name,
-                location,
-                description,
-                offsync,
-                imageUrl,
-                cardId,
-                status,
-              };
-              openContact(params);
-            };
-            return (
-              <Card
-                containerStyle={{
-                  ...styles.card,
-                  borderColor: theme.colors.outlineVariant,
-                }}
-                imageUrl={item.imageUrl}
-                name={item.name}
-                handle={item.handle}
-                node={item.node}
-                placeholder={state.strings.name}
-                select={select}
-                actions={options}
+    <View style={styles.component}>
+      { state.layout === 'small' && (
+        <View style={styles.contacts}>
+          <Surface elevation={9} mode="flat" style={{ width: '100%', height: 64, display: 'flex', flexDirection: 'row', paddingBottom: 16, paddingLeft: 16, paddingRight: 16, alignItems: 'center', gap: 16 }}>
+            <Surface mode="flat" elevation={0} style={{ flexGrow: 1, borderRadius: 8, overflow: 'hidden' }}>
+              <TextInput
+                dense={true}
+                outlineColor="transparent"
+                activeOutlineColor="transparent"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                underlineStyle={styles.inputUnderline}
+                mode="outlined"
+                placeholder={state.strings.searchContacts}
+                left={<TextInput.Icon style={styles.icon} icon="search" />}
+                value={state.filter}
+                onChangeText={value => actions.setFilter(value)}
               />
-            );
-          }}
-          keyExtractor={card => card.cardId}
-        />
+            </Surface>
+            <Button icon="user-plus" mode="contained" style={{ height: '100%', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onPress={openRegistry}>
+              {state.strings.new}
+            </Button>
+
+          </Surface>
+          {state.filtered.length !== 0 && (
+            <FlatList
+              style={styles.smCards}
+              data={state.filtered}
+              initialNumToRender={32}
+              contentContainerStyle={styles.cardsContainer}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item}) => {
+                const syncStatus = item.offsync ? 'offsync' : item.status;
+                const options = [];
+                const select = () => {
+                  const {guid, handle, node, name, location, description, offsync, imageUrl, cardId, status} = item;
+                  const params = {
+                    guid,
+                    handle,
+                    node,
+                    name,
+                    location,
+                    description,
+                    offsync,
+                    imageUrl,
+                    cardId,
+                    status,
+                  };
+                  openContact(params);
+                };
+                return (
+                  <Card
+                    containerStyle={{ ...styles.smCard, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
+                    imageUrl={item.imageUrl}
+                    name={item.name}
+                    handle={item.handle}
+                    node={item.node}
+                    placeholder={state.strings.name}
+                    select={select}
+                    actions={options}
+                  />
+                );
+              }}
+              keyExtractor={card => card.cardId}
+            />
+          )}
+          {state.filtered.length === 0 && (
+            <View style={styles.none}>
+              <Text style={styles.noneLabel}>{state.strings.noContacts}</Text>
+            </View>
+          )}
+
+
+        </View>
       )}
-      {state.filtered.length === 0 && (
-        <View style={styles.none}>
-          <Text style={styles.noneLabel}>{state.strings.noContacts}</Text>
+      { state.layout === 'large' && (
+        <View style={styles.contacts}>
+          <SafeAreaView style={styles.header}>
+            <IconButton style={styles.sort} mode="contained" icon={state.sortAsc ? 'sort-descending' : 'sort-ascending'} size={24} onPress={actions.toggleSort} />
+
+            <Surface mode="flat" elevation={5} style={styles.inputSurface}>
+              <TextInput
+                dense={true}
+                style={styles.input}
+                outlineColor="transparent"
+                activeOutlineColor="transparent"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                underlineStyle={styles.inputUnderline}
+                mode="outlined"
+                placeholder={state.strings.contacts}
+                left={<TextInput.Icon style={styles.icon} icon="magnify" />}
+                value={state.filter}
+                onChangeText={value => actions.setFilter(value)}
+              />
+            </Surface>
+
+            <Button icon="account-plus" mode="contained" style={styles.button} onPress={openRegistry}>
+              {state.strings.add}
+            </Button>
+          </SafeAreaView>
+          <Divider style={styles.divider} />
+
+          {state.filtered.length !== 0 && (
+            <FlatList
+              style={styles.cards}
+              data={state.filtered}
+              initialNumToRender={32}
+              contentContainerStyle={styles.cardsContainer}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item}) => {
+                const syncStatus = item.offsync ? 'offsync' : item.status;
+                const getOptions = () => {
+                  if (syncStatus === 'connected') {
+                    return [
+                      <Action
+                        key="call"
+                        icon="phone-outline"
+                        color={Colors.connected}
+                        select={async () => {
+                          try {
+                            await actions.call(item);
+                            callContact(item);
+                          } catch (err) {
+                            console.log(err);
+                            setAlert(true);
+                          }
+                        }}
+                      />,
+                      <Action key="text" icon="message-outline" color={Colors.connected} select={() => textContact(item.cardId)} />,
+                    ];
+                  } else if (syncStatus === 'offsync') {
+                    return [
+                      <Action
+                        key="resync"
+                        icon="cached"
+                        color={Colors.offsync}
+                        select={async () => {
+                          try {
+                            await actions.resync(item.cardId);
+                          } catch (err) {
+                            console.log(err);
+                            setAlert(true);
+                          }
+                        }}
+                      />,
+                    ];
+                  } else if (syncStatus === 'received') {
+                    return [
+                      <Action
+                        key="accept"
+                        icon="account-check-outline"
+                        color={Colors.requested}
+                        select={async () => {
+                          try {
+                            await actions.accept(item.cardId);
+                          } catch (err) {
+                            console.log(err);
+                            setAlert(true);
+                          }
+                        }}
+                      />,
+                    ];
+                  } else if (syncStatus === 'connecting') {
+                    return [
+                      <Action
+                        key="cancel"
+                        icon="cancel"
+                        color={Colors.connecting}
+                        select={async () => {
+                          try {
+                            await actions.cancel(item.cardId);
+                          } catch (err) {
+                            console.log(err);
+                            setAlert(true);
+                          }
+                        }}
+                      />,
+                    ];
+                  } else if (syncStatus === 'pending') {
+                    return [
+                      <Action
+                        key="accept"
+                        icon="account-check-outline"
+                        color={Colors.pending}
+                        select={async () => {
+                          try {
+                            await actions.accept(item.cardId);
+                          } catch (err) {
+                            console.log(err);
+                            setAlert(true);
+                          }
+                        }}
+                      />,
+                    ];
+                  }
+                  return [];
+                };
+                const options = getOptions();
+                const select = () => {
+                  const {guid, handle, node, name, location, description, offsync, imageUrl, cardId, status} = item;
+                  const params = {
+                    guid,
+                    handle,
+                    node,
+                    name,
+                    location,
+                    description,
+                    offsync,
+                    imageUrl,
+                    cardId,
+                    status,
+                  };
+                  openContact(params);
+                };
+                return (
+                  <Card
+                    containerStyle={{
+                      ...styles.card,
+                      borderColor: theme.colors.outlineVariant,
+                    }}
+                    imageUrl={item.imageUrl}
+                    name={item.name}
+                    handle={item.handle}
+                    node={item.node}
+                    placeholder={state.strings.name}
+                    select={select}
+                    actions={options}
+                  />
+                );
+              }}
+              keyExtractor={card => card.cardId}
+            />
+          )}
+          {state.filtered.length === 0 && (
+            <View style={styles.none}>
+              <Text style={styles.noneLabel}>{state.strings.noContacts}</Text>
+            </View>
+          )}
         </View>
       )}
       <Confirm show={alert} params={alertParams} />

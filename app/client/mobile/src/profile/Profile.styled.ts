@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
   },
   navHeader: {
-    height: 48,
+    height: 64,
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
@@ -123,7 +123,7 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: 16,
     position: 'absolute',
-    top: 48,
+    top: 64,
   },
   overlap: {
     position: 'absolute',
