@@ -52,9 +52,34 @@ export const styles = StyleSheet.create({
   smSpace: {
     flexGrow: 1,
   },
+  smLabel: {
+    paddingLeft: 16,
+    paddingTop: 32,
+  },
+  smCard: {
+    width: '100%',
+    height: 72,
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingRight: 16,
+    paddingLeft: 16,
+    icon: {
+      borderRadius: 24,
+      overflow: 'hidden',
+    }
+  },
   e2ee: {
     color: 'white',
     paddingLeft: 8,
+  },
+  smMembers: {
+    padding: 16,
+    width: '100%',
+  },
+  smCards: {
+    borderRadius: 4,
+    paddingTop: 16,
+    paddingBottom: 16,
   },
   sealed: {
     display: 'flex',
@@ -68,9 +93,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     flexShrink: 1,
     paddingLeft: 12,
-    paddingRight: 21,
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingRight: 12,
+    paddingTop: 6,
+    paddingBottom: 6,
     alignItems: 'center',
     borderRadius: 8,
   },

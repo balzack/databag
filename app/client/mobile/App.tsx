@@ -66,8 +66,8 @@ const databagColors = {
     backdrop: 'rgba(42, 50, 45, 0.4)',
     base: '#8fbea7',
     bar: 'rgba(240, 245, 242, 0.8)',
-    connected: '#008800',
-    requested: '#aa8800',
+    connected: '#18A42B',
+    requested: '#EDB612',
     connecting: '#0000aa',
     pending: '#dd8800',
     confirmed: '#00aaaa',
@@ -122,8 +122,8 @@ const databagColors = {
     backdrop: 'rgba(42, 50, 45, 0.4)',
     base: 'rgb(0,0,0)',
     bar: 'rgba(16, 10, 8, 0.8)',
-    connected: '#008800',
-    requested: '#aa8800',
+    connected: '#18A42B',
+    requested: '#EDB612',
     connecting: '#0000aa',
     pending: '#dd8800',
     confirmed: '#00aaaa',
@@ -188,7 +188,7 @@ function App(): React.JSX.Element {
               }
               else if (props.name === 'left' || props.name === 'idcard' || props.name === 'picture') {
                 return <AntIcon {...props} />
-              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock' || props.name === 'user' || props.name === 'users' || props.name === 'message-circle' || props.name === 'github' || props.name === 'align-left') {
+              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock' || props.name === 'user' || props.name === 'users' || props.name === 'message-circle' || props.name === 'github' || props.name === 'align-left' || props.name === 'edit' || props.name === 'star') {
                 return <FeatherIcon {...props} />
               } else if (props.name === 'sensor-occupied') {
                 return <MaterialIcon {...props}  />

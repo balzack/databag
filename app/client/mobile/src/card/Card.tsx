@@ -10,6 +10,7 @@ export function Card({
   handle,
   node,
   select,
+  flair,
   actions,
   containerStyle,
 }: {
@@ -20,6 +21,7 @@ export function Card({
   handle: string;
   node: string;
   select?: () => void;
+  flair: ReactNode;
   actions: ReactNode[];
 }) {
   return (
@@ -27,6 +29,7 @@ export function Card({
       <SafeAreaView style={styles.card}>
         <Image style={{ ...styles.image, ...containerStyle.icon }} resizeMode={'contain'} source={{uri: imageUrl}} />
         <View style={styles.details}>
+          <View style={styles.flair}>
           {name && (
             <Text numberOfLines={1} style={styles.nameSet}>
               {name}
@@ -37,6 +40,8 @@ export function Card({
               {placeholder}
             </Text>
           )}
+          {flair}
+          </View>
           <Text numberOfLines={1} style={{ ...styles.handle, ...containerStyle.handle }}>
             {node ? `${handle}@${node}` : handle}
           </Text>

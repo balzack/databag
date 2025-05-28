@@ -8,6 +8,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
   },
+  flair: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'center'
+  },
   cursor: {
     display: 'flex',
     flexDirection: 'row',

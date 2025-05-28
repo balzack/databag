@@ -228,6 +228,41 @@ export function Details({close, closeAll}: {close: () => void; closeAll: () => v
                   <View style={styles.smSpace} />
                 </View>
               )}
+              <Text variant="headlineSmall" style={styles.smLabel}>{ state.strings.members }</Text>
+              <View style={styles.smMembers}>
+                <Surface mode="flat" elevation={0} style={styles.smCards}>
+                  {state.hostCard && (
+                    <Card
+                      containerStyle={{ ...styles.smCard, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
+                      imageUrl={state.hostCard.imageUrl}
+                      name={state.hostCard.name}
+                      placeholder={state.strings.name}
+                      handle={state.hostCard.handle}
+                      node={state.hostCard.node}
+                      flair={<Icon key="host" source="star" size={18} color={theme.colors.requested} />}
+                      actions={[]}
+                    />
+                  )}
+                  {state.profile && (
+                    <Card
+                      containerStyle={{ ...styles.smCard, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
+                      imageUrl={state.profile.imageUrl}
+                      name={state.profile.name}
+                      placeholder={state.strings.name}
+                      handle={state.profile.handle}
+                      node={state.profile.node}
+                      flair={state.host ? <Icon key="host" source="star" size={18} color={theme.colors.requested} /> : <></>}
+                      actions={[]}
+                    />
+                  )}
+                  {cards}
+                  {state.unknownContacts > 0 && (
+                    <Text style={styles.unknown}>
+                      {state.strings.unknown}: {state.unknownContacts}
+                    </Text>
+                  )}
+                </Surface>
+              </View>
             </ScrollView>
           </Surface>
         </Surface>
