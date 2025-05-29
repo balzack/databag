@@ -92,7 +92,7 @@ export function useDetails() {
         const channelId = focused.channelId;
         const access = Boolean(detail);
         const sealed = detail?.sealed;
-        const locked = detail?.locked;
+        const locked = detail ? detail.locked : true;
         const host = cardId == null;
         const subject = detail?.data?.subject ? detail.data.subject : '';
         const created = detail?.created ? getTimestamp(detail.created) : '';

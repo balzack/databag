@@ -19,7 +19,7 @@ export function useProfile(params: ContactParams) {
     node: '',
     location: '',
     description: '',
-    imageUrl: null as string | null,
+    imageUrl: params.imageUrl ? params.imageUrl : null,
     cardId: null as string | null,
     status: '',
     offsync: false,

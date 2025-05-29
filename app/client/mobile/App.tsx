@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import {Alert, View, StatusBar} from 'react-native';
 import {AppContextProvider} from './src/context/AppContext';
 import {DisplayContextProvider} from './src/context/DisplayContext';
-import {NativeRouter} from 'react-router-native';
-import {Routes, Route} from 'react-router-dom';
+import {Routes, Route, MemoryRouter} from 'react-router-dom';
 import {Root} from './src/root/Root';
 import {Access} from './src/access/Access';
 import {Service} from './src/service/Service';
@@ -198,7 +197,7 @@ function App(): React.JSX.Element {
             }}}
             theme={theme}
           >
-          <NativeRouter>
+          <MemoryRouter>
             <StatusBar />
             <Root />
             <Routes>
@@ -207,7 +206,7 @@ function App(): React.JSX.Element {
               <Route path="/service" element={<Service />} />
               <Route path="/session" element={<Session share={share} />} />
             </Routes>
-          </NativeRouter>
+          </MemoryRouter>
         </PaperProvider>
       </DisplayContextProvider>
     </AppContextProvider>

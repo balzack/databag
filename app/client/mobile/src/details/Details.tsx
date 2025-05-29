@@ -181,6 +181,8 @@ export function Details({close, closeAll}: {close: () => void; closeAll: () => v
       );
     });
 
+console.log(state.locked);
+
   return (
     <View style={styles.component}>
       { state.layout === 'small' && (
