@@ -135,6 +135,13 @@ export function useConversation() {
   }, [display.state]);
 
   useEffect(() => {
+    display.actions.lockLayout(true);
+    return () => {
+      display.actions.lockLayout(false);
+    }
+  }, []);
+
+  useEffect(() => {
     const host = state.cardId == null;
     const sealed = state.detail ? state.detail.sealed : false;
     const access = state.detail != null;

@@ -241,7 +241,7 @@ console.log(state.locked);
                       placeholder={state.strings.name}
                       handle={state.hostCard.handle}
                       node={state.hostCard.node}
-                      flair={<Icon key="host" source="star" size={18} color={theme.colors.requested} />}
+                      flair={<Icon key="host" source="award" size={18} color={theme.colors.requested} />}
                       actions={[]}
                     />
                   )}
