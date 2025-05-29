@@ -68,11 +68,11 @@ const databagColors = {
     bar: 'rgba(240, 245, 242, 0.8)',
     connected: '#18A42B',
     requested: '#EDB612',
-    connecting: '#0000aa',
     pending: '#dd8800',
-    confirmed: '#00aaaa',
     unsaved: '#888888',
     offsync: '#aa0000',
+    connecting: '#2288dd',
+    confirmed: '#6688cc',
   },
   dark: {
     name: 'dark',
@@ -124,11 +124,11 @@ const databagColors = {
     bar: 'rgba(16, 10, 8, 0.8)',
     connected: '#18A42B',
     requested: '#EDB612',
-    connecting: '#0000aa',
     pending: '#dd8800',
-    confirmed: '#00aaaa',
     unsaved: '#888888',
     offsync: '#aa0000',
+    connecting: '#2288dd',
+    confirmed: '#6688cc',
   },
 };
 
