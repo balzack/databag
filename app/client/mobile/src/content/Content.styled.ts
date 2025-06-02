@@ -133,6 +133,9 @@ export const styles = StyleSheet.create({
     width: 500,
     maxWidth: '90%',
   },
+  action: {
+    backgroundColor: 'transparent',
+  },
   addHeader: {
     display: 'flex',
     flexDirection: 'row',

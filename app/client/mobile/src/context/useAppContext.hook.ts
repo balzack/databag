@@ -43,6 +43,7 @@ export function useAppContext() {
     service: null as null | Service,
     session: null as null | Session,
     focus: null as null | Focus,
+    favorite: [] as { cardId: null | string, channelId: string }[],
     fullDayTime: false,
     monthFirstDate: true,
     lanaguge: null as null | string,
@@ -57,6 +58,7 @@ export function useAppContext() {
 
   const setup = async () => {
     await local.current.open(SETTINGS_DB);
+    const favorite = JSON.parse(await local.current.get('favorite', JSON.stringify([])));
     const fullDayTime = (await local.current.get('time_format', '12h')) === '24h';
     const monthFirstDate = (await local.current.get('date_format', 'month_first')) === 'month_first';
     const setLanguage = (await local.current.get('language', null));
@@ -70,7 +72,7 @@ export function useAppContext() {
     await store.open(DATABAG_DB);
     const session: Session | null = await sdk.current.initOfflineStore(store);
     if (session) {
-      updateState({session, fullDayTime, monthFirstDate, language, initialized: true});
+      updateState({session, fullDayTime, monthFirstDate, language, favorite, initialized: true});
     } else {
       updateState({fullDayTime, monthFirstDate, language, initialized: true});
     }
@@ -104,6 +106,10 @@ export function useAppContext() {
       updateState({language});
       await local.current.set('language', language);
     },
+    setFavorite: async (favorite: { cardId: string | null, channelId: string} []) => {
+      updateState({ favorite });
+      await local.current.set('favorite', JSON.stringify(favorite));
+    },
     setShowWelcome: async (showWelcome: boolean) => {
       updateState({showWelcome});
     },
@@ -127,12 +133,14 @@ export function useAppContext() {
     },
     accountLogout: async (all: boolean) => {
       if (state.session) {
+        await local.current.clear('favorite');
         await sdk.current.logout(state.session, all);
         updateState({session: null});
       }
     },
     accountRemove: async () => {
       if (state.session) {
+        await local.current.clear('favorite');
         await sdk.current.remove(state.session);
         updateState({session: null});
       }

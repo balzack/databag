@@ -35,6 +35,7 @@ export function useContent() {
     topic: '',
     sealSet: false,
     focused: null as null | {cardId: null | string; channelId: string},
+    favorite: [] as { cardId: null | string, channelId: string }[],
   });
 
   const compare = (a: Card, b: Card) => {
@@ -171,6 +172,11 @@ export function useContent() {
   }, [app.state.focus]);
 
   useEffect(() => {
+    const favorite = app.state.favorite;
+    updateState({ favorite });
+  }, [app.state.favorite]);
+
+  useEffect(() => {
     const setConfig = (config: Config) => {
       const {sealSet, sealUnlocked} = config;
       updateState({sealSet: sealSet && sealUnlocked});
@@ -244,6 +250,14 @@ export function useContent() {
     },
     setFocus: async (cardId: string | null, channelId: string) => {
       await app.actions.setFocus(cardId, channelId);
+    },
+    setFavorite: async (cardId: string | null, channelId: string) => {
+      const favorites = state.favorite.concat([{ cardId, channelId }]);
+      await app.actions.setFavorite(favorites);
+    },
+    clearFavorite: async (cardId: string | null, channelId: string) => {
+      const favorites = state.favorite.filter(item => item.cardId !== cardId || item.channelId !== channelId);
+      await app.actions.setFavorite(favorites);
     },
     openTopic: async (contactId: string) => {
       const content = app.state.session.getContent();

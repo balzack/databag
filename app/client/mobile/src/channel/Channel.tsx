@@ -13,6 +13,7 @@ export function Channel({
   message,
   messagePlaceholder,
   select,
+  action,
 }: {
   containerStyle: any;
   unread: boolean;
@@ -23,6 +24,7 @@ export function Channel({
   message: string;
   messagePlaceholder: string;
   select?: () => void;
+  action: ReactNode;
 }) {
   const title = subject.length ? (
     subject.map((part, index) =>
@@ -55,7 +57,7 @@ export function Channel({
           )}
           {message == null && <Text style={styles.messageUnset}>{messagePlaceholder}</Text>}
         </View>
-        {unread && <View style={styles.unread} />}
+        { action }
       </SafeAreaView>
     </Pressable>
   );

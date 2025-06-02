@@ -121,7 +121,7 @@ export function Content({
           />
         </Surface>
         {state.layout !== 'large' && (
-          <Button icon="comment-plus" mode="contained" style={styles.button} onPress={() => setAdd(true)}>
+          <Button icon="comment-plus" mode="contained" style={styles.button} onPress={() => actions.setFavorite('2233', '4455')}>
             {state.strings.new}
           </Button>
         )}
@@ -142,6 +142,7 @@ export function Content({
                 open(item.cardId, item.channelId);
               };
               const Wrap = state.layout === 'large' && focused ? Surface : View;
+              const action = <IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>{}} />
               return (
                 <Wrap elevation={1} mode="flat">
                   <Channel
@@ -159,6 +160,7 @@ export function Content({
                     subject={subject}
                     messagePlaceholder={`[${state.strings.sealed}]`}
                     message={message}
+                    action={action}
                   />
                 </Wrap>
               );
