@@ -102,84 +102,152 @@ export function Content({
 
   return (
     <View style={styles.container}>
-      <SafeAreaView style={styles.header}>
-        <Surface mode="flat" elevation={5} style={styles.inputSurface}>
-          <TextInput
-            dense={true}
-            style={styles.input}
-            autoCapitalize="none"
-            autoComplete="off"
-            autoCorrect={false}
-            unserlineStyle={styles.inputUnderline}
-            outlineColor="transparent"
-            activeOutlineColor="transparent"
-            mode="outlined"
-            placeholder={state.strings.topics}
-            left={<TextInput.Icon style={styles.icon} icon="magnify" />}
-            value={state.filter}
-            onChangeText={value => actions.setFilter(value)}
-          />
-        </Surface>
-        {state.layout !== 'large' && (
-          <Button icon="comment-plus" mode="contained" style={styles.button} onPress={() => actions.setFavorite('2233', '4455')}>
-            {state.strings.new}
-          </Button>
-        )}
-      </SafeAreaView>
-      <Divider style={styles.divider} />
+      { state.layout === 'small' && (
+        <View style={styles.content}>
+          <Surface elevation={9} mode="flat" style={{ width: '100%', height: 64, display: 'flex', flexDirection: 'row', paddingBottom: 16, paddingLeft: 16, paddingRight: 16, alignItems: 'center', gap: 16 }}>
+            <Surface mode="flat" elevation={0} style={{ flexGrow: 1, borderRadius: 8, overflow: 'hidden' }}>
+              <TextInput
+                dense={true}
+                outlineColor="transparent"
+                activeOutlineColor="transparent"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                underlineStyle={styles.inputUnderline}
+                mode="outlined"
+                placeholder={state.strings.topics}
+                left={<TextInput.Icon style={styles.icon} icon="search" />}
+                value={state.filter}
+                onChangeText={value => actions.setFilter(value)}
+              />
+            </Surface>
+            <Button icon="message1" mode="contained" style={{ height: '100%', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onPress={() => setAdd(true)}>
+              {state.strings.new}
+            </Button>
+          </Surface>
 
-      <View style={styles.content}>
-        {state.filtered.length !== 0 && (
-          <FlatList
-            style={styles.channels}
-            contentContainerStyle={{ paddingBottom: 92 }}
-            data={state.filtered}
-            initialNumToRender={32}
-            showsVerticalScrollIndicator={false}
-            renderItem={({item}) => {
-              const {sealed, focused, hosted, unread, imageUrl, subject, message} = item;
-              const choose = () => {
-                open(item.cardId, item.channelId);
-              };
-              const Wrap = state.layout === 'large' && focused ? Surface : View;
-              const action = <IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>{}} />
-              return (
-                <Wrap elevation={1} mode="flat">
-                  <Channel
-                    containerStyle={{
-                      ...styles.channel,
-                      borderColor: theme.colors.outlineVariant,
-                    }}
-                    select={choose}
-                    unread={unread}
-                    sealed={sealed}
-                    hosted={hosted}
-                    imageUrl={imageUrl}
-                    notesPlaceholder={state.strings.notes}
-                    subjectPlaceholder={state.strings.unknown}
-                    subject={subject}
-                    messagePlaceholder={`[${state.strings.sealed}]`}
-                    message={message}
-                    action={action}
-                  />
-                </Wrap>
-              );
-            }}
-            keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
-          />
-        )}
-        {state.filtered.length === 0 && (
-          <View style={styles.none}>
-            <Text style={styles.noneLabel}>{state.strings.noTopics}</Text>
+          <View style={styles.topics}>
+            {state.filtered.length !== 0 && (
+              <FlatList
+                style={styles.channels}
+                contentContainerStyle={{ paddingBottom: 92 }}
+                data={state.filtered}
+                initialNumToRender={32}
+                showsVerticalScrollIndicator={false}
+                renderItem={({item}) => {
+                  const {sealed, focused, hosted, unread, imageUrl, subject, message} = item;
+                  const choose = () => {
+                    open(item.cardId, item.channelId);
+                  };
+                  const Wrap = state.layout === 'large' && focused ? Surface : View;
+                  const action = <IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>{}} />
+                  return (
+                    <Wrap elevation={1} mode="flat">
+                      <Channel
+                        containerStyle={styles.smChannel}
+                        select={choose}
+                        sealed={sealed}
+                        hosted={hosted}
+                        imageUrl={imageUrl}
+                        notesPlaceholder={state.strings.notes}
+                        subjectPlaceholder={state.strings.unknown}
+                        subject={subject}
+                        messagePlaceholder={`[${state.strings.sealed}]`}
+                        message={message}
+                        action={action}
+                      />
+                    </Wrap>
+                  );
+                }}
+                keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
+              />
+            )}
+            {state.filtered.length === 0 && (
+              <View style={styles.none}>
+                <Text style={styles.noneLabel}>{state.strings.noTopics}</Text>
+              </View>
+            )}
           </View>
-        )}
-      </View>
-      {state.layout === 'large' && (
-        <View style={styles.bar}>
+
+        </View>
+      )}
+      { state.layout === 'large' && (
+        <View style={styles.content}>
+          <SafeAreaView style={styles.header}>
+            <Surface mode="flat" elevation={5} style={styles.inputSurface}>
+              <TextInput
+                dense={true}
+                style={styles.input}
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                unserlineStyle={styles.inputUnderline}
+                outlineColor="transparent"
+                activeOutlineColor="transparent"
+                mode="outlined"
+                placeholder={state.strings.topics}
+                left={<TextInput.Icon style={styles.icon} icon="magnify" />}
+                value={state.filter}
+                onChangeText={value => actions.setFilter(value)}
+              />
+            </Surface>
+            <Button icon="comment-plus" mode="contained" style={styles.button} onPress={() => setAdd(true)}>
+              {state.strings.new}
+            </Button>
+          </SafeAreaView>
           <Divider style={styles.divider} />
-          <Button icon="comment-plus" mode="contained" style={styles.button} onPress={() => setAdd(true)}>
-            {state.strings.new}
-          </Button>
+
+          <View style={styles.topics}>
+            {state.filtered.length !== 0 && (
+              <FlatList
+                style={styles.channels}
+                contentContainerStyle={{ paddingBottom: 92 }}
+                data={state.filtered}
+                initialNumToRender={32}
+                showsVerticalScrollIndicator={false}
+                renderItem={({item}) => {
+                  const {sealed, focused, hosted, unread, imageUrl, subject, message} = item;
+                  const choose = () => {
+                    open(item.cardId, item.channelId);
+                  };
+                  const Wrap = state.layout === 'large' && focused ? Surface : View;
+                  //const action = <IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>{}} />
+                  return (
+                    <Wrap elevation={1} mode="flat">
+                      <Channel
+                        containerStyle={{
+                          ...styles.channel,
+                          borderColor: theme.colors.outlineVariant,
+                        }}
+                        select={choose}
+                        unread={unread}
+                        sealed={sealed}
+                        hosted={hosted}
+                        imageUrl={imageUrl}
+                        notesPlaceholder={state.strings.notes}
+                        subjectPlaceholder={state.strings.unknown}
+                        subject={subject}
+                        messagePlaceholder={`[${state.strings.sealed}]`}
+                        message={message}
+                      />
+                    </Wrap>
+                  );
+                }}
+                keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
+              />
+            )}
+            {state.filtered.length === 0 && (
+              <View style={styles.none}>
+                <Text style={styles.noneLabel}>{state.strings.noTopics}</Text>
+              </View>
+            )}
+          </View>
+          <View style={styles.bar}>
+            <Divider style={styles.divider} />
+            <Button icon="comment-plus" mode="contained" style={styles.button} onPress={() => setAdd(true)}>
+              {state.strings.new}
+            </Button>
+          </View>
         </View>
       )}
 

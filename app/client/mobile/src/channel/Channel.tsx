@@ -45,7 +45,7 @@ export function Channel({
   return (
     <Pressable style={containerStyle} onPress={select ? select : () => {}}>
       <SafeAreaView style={styles.channel}>
-        <Image style={styles.image} resizeMode={'contain'} source={{uri: imageUrl}} />
+        <Image style={{ ...styles.image, ...containerStyle.logo }} resizeMode={'contain'} source={{uri: imageUrl}} />
         <View style={styles.details}>
           <Text numberofLines={1} style={styles.subject}>
             {title}
@@ -57,6 +57,7 @@ export function Channel({
           )}
           {message == null && <Text style={styles.messageUnset}>{messagePlaceholder}</Text>}
         </View>
+        {unread && <View style={styles.unread} />}
         { action }
       </SafeAreaView>
     </Pressable>

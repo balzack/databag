@@ -3,13 +3,17 @@ import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
   container: {
+    width: '100%',
+    height: '100%',
+  },
+  content: {
     display: 'flex',
     flexDirection: 'column',
     position: 'relative',
     flexGrow: 1,
     width: '100%',
   },
-  content: {
+  topics: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -95,6 +99,16 @@ export const styles = StyleSheet.create({
   },
   channels: {
     width: '100%',
+  },
+  smChannel: {
+    width: '100%',
+    height: 76,
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingLeft: 16,
+    logo: {
+      borderRadius: 24,
+    },
   },
   channel: {
     width: '100%',
