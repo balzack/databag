@@ -20,6 +20,10 @@ export const en = {
   editMembers: 'Edit Members',
   deleteChat: 'Delete Chat',
   searchContacts: 'Search Contacts',
+  searchTopics: 'Search Topics',
+  all: 'All',
+  unread: 'Unread',
+  favorites: 'Favorites',
 
   welcomeTo: 'Welcome To Databag',
   notUser: 'Not a user?',

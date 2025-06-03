@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Divider, Switch, Surface, IconButton, Button, Text, TextInput, useTheme} from 'react-native-paper';
-import {SafeAreaView, Modal, FlatList, View} from 'react-native';
+import {SafeAreaView, Pressable, Modal, FlatList, View} from 'react-native';
 import {styles} from './Content.styled';
 import {useContent} from './useContent.hook';
 import {Channel} from '../channel/Channel';
@@ -20,6 +20,7 @@ export function Content({
   openConversation: () => void;
   textCard: {cardId: null | string};
 }) {
+  const [tab, setTab] = useState('all');
   const [add, setAdd] = useState(false);
   const [adding, setAdding] = useState(false);
   const [sealedTopic, setSealedTopic] = useState(false);
@@ -100,6 +101,11 @@ export function Content({
     setAdding(false);
   };
 
+  const allTab = tab === 'all' && state.filtered.length !== 0;
+  const unreadTab = tab === 'unread' && state.unread.length !== 0;
+  const favoritesTab = tab === 'favorites' && state.favorites.length !== 0;
+  const emptyTab = !allTab && !unreadTab && !favoritesTab;
+
   return (
     <View style={styles.container}>
       { state.layout === 'small' && (
@@ -107,6 +113,7 @@ export function Content({
           <Surface elevation={9} mode="flat" style={{ width: '100%', height: 64, display: 'flex', flexDirection: 'row', paddingBottom: 16, paddingLeft: 16, paddingRight: 16, alignItems: 'center', gap: 16 }}>
             <Surface mode="flat" elevation={0} style={{ flexGrow: 1, borderRadius: 8, overflow: 'hidden' }}>
               <TextInput
+                style={{ height: 40 }}
                 dense={true}
                 outlineColor="transparent"
                 activeOutlineColor="transparent"
@@ -115,24 +122,24 @@ export function Content({
                 autoCorrect={false}
                 underlineStyle={styles.inputUnderline}
                 mode="outlined"
-                placeholder={state.strings.topics}
+                placeholder={state.strings.searchTopics}
                 left={<TextInput.Icon style={styles.icon} icon="search" />}
                 value={state.filter}
                 onChangeText={value => actions.setFilter(value)}
               />
             </Surface>
-            <Button icon="message1" mode="contained" style={{ height: '100%', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onPress={() => setAdd(true)}>
+            <Button icon="message1" mode="contained" style={{ height: 40, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onPress={() => setAdd(true)}>
               {state.strings.new}
             </Button>
           </Surface>
 
           <View style={styles.topics}>
-            {state.filtered.length !== 0 && (
+            <View style={{ width: '100%', height: '100%', display: allTab ? 'block' : 'none' }}>
               <FlatList
                 style={styles.channels}
-                contentContainerStyle={{ paddingBottom: 92 }}
+                contentContainerStyle={{ paddingBottom: 92, paddingTop: 16 }}
                 data={state.filtered}
-                initialNumToRender={32}
+                initialNumToRender={10}
                 showsVerticalScrollIndicator={false}
                 renderItem={({item}) => {
                   const {sealed, focused, hosted, unread, imageUrl, subject, message} = item;
@@ -161,14 +168,100 @@ export function Content({
                 }}
                 keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
               />
-            )}
-            {state.filtered.length === 0 && (
+            </View>
+            <View style={{ width: '100%', height: '100%', display: unreadTab ? 'block' : 'none' }}>
+              <FlatList
+                style={styles.channels}
+                contentContainerStyle={{ paddingBottom: 92, paddingTop: 16 }}
+                data={state.unread}
+                initialNumToRender={10}
+                showsVerticalScrollIndicator={false}
+                renderItem={({item}) => {
+                  const {sealed, focused, hosted, unread, imageUrl, subject, message} = item;
+                  const choose = () => {
+                    open(item.cardId, item.channelId);
+                  };
+                  const Wrap = state.layout === 'large' && focused ? Surface : View;
+                  const action = <IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>{}} />
+                  return (
+                    <Wrap elevation={1} mode="flat">
+                      <Channel
+                        containerStyle={styles.smChannel}
+                        select={choose}
+                        sealed={sealed}
+                        hosted={hosted}
+                        imageUrl={imageUrl}
+                        notesPlaceholder={state.strings.notes}
+                        subjectPlaceholder={state.strings.unknown}
+                        subject={subject}
+                        messagePlaceholder={`[${state.strings.sealed}]`}
+                        message={message}
+                        action={action}
+                      />
+                    </Wrap>
+                  );
+                }}
+                keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
+              />
+            </View>
+            <View style={{ width: '100%', height: '100%', display: favoritesTab ? 'block' : 'none' }}>
+              <FlatList
+                style={styles.channels}
+                contentContainerStyle={{ paddingBottom: 92, paddingTop: 16 }}
+                data={state.favorites}
+                initialNumToRender={10}
+                showsVerticalScrollIndicator={false}
+                renderItem={({item}) => {
+                  const {sealed, focused, hosted, unread, imageUrl, subject, message} = item;
+                  const choose = () => {
+                    open(item.cardId, item.channelId);
+                  };
+                  const Wrap = state.layout === 'large' && focused ? Surface : View;
+                  const action = <IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>{}} />
+                  return (
+                    <Wrap elevation={1} mode="flat">
+                      <Channel
+                        containerStyle={styles.smChannel}
+                        select={choose}
+                        sealed={sealed}
+                        hosted={hosted}
+                        imageUrl={imageUrl}
+                        notesPlaceholder={state.strings.notes}
+                        subjectPlaceholder={state.strings.unknown}
+                        subject={subject}
+                        messagePlaceholder={`[${state.strings.sealed}]`}
+                        message={message}
+                        action={action}
+                      />
+                    </Wrap>
+                  );
+                }}
+                keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
+              />
+            </View>
+            <View style={{ width: '100%', height: '100%', display: emptyTab ? 'block' : 'none' }}>
               <View style={styles.none}>
                 <Text style={styles.noneLabel}>{state.strings.noTopics}</Text>
               </View>
-            )}
+            </View>
           </View>
-
+            <View style={styles.tabs}>
+              <Pressable style={tab === 'all' ? styles.opaque : styles.opacity} onPress={() => setTab('all')}>
+                <Surface style={styles.tab} elevation={tab === 'all' ? 10 : 2}>
+                  <Text style={tab === 'all' ? styles.tabSet : styles.tabUnset} color="white">{ state.strings.all }</Text>
+                </Surface>
+              </Pressable>
+              <Pressable style={tab === 'unread' ? styles.opaque : styles.opacity} onPress={() => setTab('unread')}>
+                <Surface style={styles.tab} elevation={tab === 'unread' ? 10 : 2}>
+                  <Text style={tab === 'unread' ? styles.tabSet : styles.tabUnset} color="white">{ state.strings.unread }</Text>
+                </Surface>
+              </Pressable>
+              <Pressable style={tab === 'favorites' ? styles.opaque : styles.opacity} onPress={() => setTab('favorites')}>
+                <Surface style={styles.tab} elevation={tab === 'favorites' ? 10 : 2}>
+                  <Text style={tab === 'favorites' ? styles.tabSet : styles.tabUnset} color="white">{ state.strings.favorites }</Text>
+                </Surface>
+              </Pressable>
+            </View>
         </View>
       )}
       { state.layout === 'large' && (

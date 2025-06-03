@@ -49,6 +49,7 @@ export function Contacts({
             <Surface mode="flat" elevation={0} style={{ flexGrow: 1, borderRadius: 8, overflow: 'hidden' }}>
               <TextInput
                 dense={true}
+                style={{ height: 40 }}
                 outlineColor="transparent"
                 activeOutlineColor="transparent"
                 autoCapitalize="none"
@@ -62,7 +63,7 @@ export function Contacts({
                 onChangeText={value => actions.setFilter(value)}
               />
             </Surface>
-            <Button icon="user-plus" mode="contained" style={{ height: '100%', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onPress={openRegistry}>
+            <Button icon="user-plus" mode="contained" style={{ height: 40, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onPress={openRegistry}>
               {state.strings.new}
             </Button>
 

@@ -31,6 +31,8 @@ export function useContent() {
     sorted: [] as Channel[],
     channels: [] as ChannelParams[],
     filtered: [] as ChannelParams[],
+    unread: [] as ChannelParams[],
+    favorites: [] as ChannelParams[],
     filter: '',
     topic: '',
     sealSet: false,
@@ -158,8 +160,10 @@ export function useContent() {
       }
       return true;
     });
+    const unread = filtered.filter(item => item.unread);
+    const favorites = [];
 
-    updateState({channels, filtered});
+    updateState({channels, filtered, unread, favorites});
   }, [state.sorted, state.cards, state.guid, state.filter, state.focused]);
 
   useEffect(() => {

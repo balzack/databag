@@ -13,6 +13,37 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     width: '100%',
   },
+  tabs: {
+    position: 'absolute',
+    top: 56,
+    height: 24,
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
+  tab: {
+    width: 105,
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 12,
+  },
+  opaque: {},
+  opacity: {
+    opacity: 0.8,
+  },
+  tabSet: {
+    fontSize: 12,
+    color: 'white',
+  },
+  tabUnset: {
+    fontSize: 12,
+  },
   topics: {
     display: 'flex',
     flexDirection: 'column',
