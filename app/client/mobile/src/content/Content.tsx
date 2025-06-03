@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Divider, Switch, Surface, IconButton, Button, Text, TextInput, useTheme} from 'react-native-paper';
+import {Divider, Switch, Surface, IconButton, Menu, Button, Text, TextInput, useTheme} from 'react-native-paper';
 import {SafeAreaView, Pressable, Modal, FlatList, View} from 'react-native';
 import {styles} from './Content.styled';
 import {useContent} from './useContent.hook';
@@ -20,6 +20,7 @@ export function Content({
   openConversation: () => void;
   textCard: {cardId: null | string};
 }) {
+  const [more, setMore] = useState(null as null | string);
   const [tab, setTab] = useState('all');
   const [add, setAdd] = useState(false);
   const [adding, setAdding] = useState(false);
@@ -147,7 +148,25 @@ export function Content({
                     open(item.cardId, item.channelId);
                   };
                   const Wrap = state.layout === 'large' && focused ? Surface : View;
-                  const action = <IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>{}} />
+                  const action = (
+                    <Menu
+                      visible={allTab && more === `${item.cardId}:${item.channelId}`}
+                      onDismiss={()=>setMore(null)}
+                      anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>setMore(`${item.cardId}:${item.channelId}`)} />}>
+                        { state.favorite.some(entry => item.cardId == entry.cardId && item.channelId === entry.channelId) && (
+                          <Menu.Item key='clearFavorite' leadingIcon="star" title={state.strings.removeFavorites} onPress={()=>{setMore(null); actions.clearFavorite(item.cardId, item.channelId)}} />
+                        )}
+                        { !state.favorite.some(entry => item.cardId == entry.cardId && item.channelId === entry.channelId) && (
+                          <Menu.Item key='setFavorite' leadingIcon="star" title={state.strings.addFavorites} onPress={()=>{setMore(null); actions.setFavorite(item.cardId, item.channelId)}} />
+                        )}
+                        { unread && (
+                          <Menu.Item key='markRead' leadingIcon="email-open-outline" title={state.strings.markRead} onPress={()=>{setMore(null); actions.clearUnread(item.cardId, item.channelId)}} />
+                        )}
+                        { !unread && (
+                          <Menu.Item key='markUnread' leadingIcon="email-outline" title={state.strings.markUnread} onPress={()=>{setMore(null); actions.setUnread(item.cardId, item.channelId)}} />
+                        )}
+                    </Menu>
+                  );
                   return (
                     <Wrap elevation={1} mode="flat">
                       <Channel
@@ -182,7 +201,20 @@ export function Content({
                     open(item.cardId, item.channelId);
                   };
                   const Wrap = state.layout === 'large' && focused ? Surface : View;
-                  const action = <IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>{}} />
+                  const action = (
+                    <Menu
+                      visible={unreadTab && more === `${item.cardId}:${item.channelId}`}
+                      onDismiss={()=>setMore(null)}
+                      anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>setMore(`${item.cardId}:${item.channelId}`)} />}>
+                        { state.favorite.some(entry => item.cardId == entry.cardId && item.channelId === entry.channelId) && (
+                          <Menu.Item key='clearFavorite' leadingIcon="star" title={state.strings.removeFavorites} onPress={()=>{setMore(null); actions.clearFavorite(item.cardId, item.channelId)}} />
+                        )}
+                        { !state.favorite.some(entry => item.cardId == entry.cardId && item.channelId === entry.channelId) && (
+                          <Menu.Item key='setFavorite' leadingIcon="star" title={state.strings.addFavorites} onPress={()=>{setMore(null); actions.setFavorite(item.cardId, item.channelId)}} />
+                        )}
+                        <Menu.Item key='markRead' leadingIcon="email-open-outline" title={state.strings.markRead} onPress={()=>{setMore(null); actions.clearUnread(item.cardId, item.channelId)}} />
+                    </Menu>
+                  );
                   return (
                     <Wrap elevation={1} mode="flat">
                       <Channel
@@ -217,7 +249,21 @@ export function Content({
                     open(item.cardId, item.channelId);
                   };
                   const Wrap = state.layout === 'large' && focused ? Surface : View;
-                  const action = <IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>{}} />
+                  const action = (
+                    <Menu
+                      visible={favoritesTab && more === `${item.cardId}:${item.channelId}`}
+                      onDismiss={()=>setMore(null)}
+                      anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>setMore(`${item.cardId}:${item.channelId}`)} />}>
+                        <Menu.Item key='clearFavorite' leadingIcon="star" title={state.strings.removeFavorites} onPress={()=>{setMore(null); actions.clearFavorite(item.cardId, item.channelId)}} />
+                        { unread && (
+                          <Menu.Item key='markRead' leadingIcon="email-open-outline" title={state.strings.markRead} onPress={()=>{setMore(null); actions.clearUnread(item.cardId, item.channelId)}} />
+                        )}
+                        { !unread && (
+                          <Menu.Item key='markUnread' leadingIcon="email-outline" title={state.strings.markUnread} onPress={()=>{setMore(null); actions.setUnread(item.cardId, item.channelId)}} />
+                        )}
+                    </Menu>
+                  );
+
                   return (
                     <Wrap elevation={1} mode="flat">
                       <Channel
@@ -245,23 +291,23 @@ export function Content({
               </View>
             </View>
           </View>
-            <View style={styles.tabs}>
-              <Pressable style={tab === 'all' ? styles.opaque : styles.opacity} onPress={() => setTab('all')}>
-                <Surface style={styles.tab} elevation={tab === 'all' ? 10 : 2}>
-                  <Text style={tab === 'all' ? styles.tabSet : styles.tabUnset} color="white">{ state.strings.all }</Text>
-                </Surface>
-              </Pressable>
-              <Pressable style={tab === 'unread' ? styles.opaque : styles.opacity} onPress={() => setTab('unread')}>
-                <Surface style={styles.tab} elevation={tab === 'unread' ? 10 : 2}>
-                  <Text style={tab === 'unread' ? styles.tabSet : styles.tabUnset} color="white">{ state.strings.unread }</Text>
-                </Surface>
-              </Pressable>
-              <Pressable style={tab === 'favorites' ? styles.opaque : styles.opacity} onPress={() => setTab('favorites')}>
-                <Surface style={styles.tab} elevation={tab === 'favorites' ? 10 : 2}>
-                  <Text style={tab === 'favorites' ? styles.tabSet : styles.tabUnset} color="white">{ state.strings.favorites }</Text>
-                </Surface>
-              </Pressable>
-            </View>
+          <View style={styles.tabs}>
+            <Pressable style={tab === 'all' ? styles.opaque : styles.opacity} onPress={() => setTab('all')}>
+              <Surface style={styles.tab} elevation={tab === 'all' ? 10 : 2}>
+                <Text style={tab === 'all' ? styles.tabSet : styles.tabUnset} color="white">{ state.strings.all }</Text>
+              </Surface>
+            </Pressable>
+            <Pressable style={tab === 'unread' ? styles.opaque : styles.opacity} onPress={() => setTab('unread')}>
+              <Surface style={styles.tab} elevation={tab === 'unread' ? 10 : 2}>
+                <Text style={tab === 'unread' ? styles.tabSet : styles.tabUnset} color="white">{ state.strings.unread }</Text>
+              </Surface>
+            </Pressable>
+            <Pressable style={tab === 'favorites' ? styles.opaque : styles.opacity} onPress={() => setTab('favorites')}>
+              <Surface style={styles.tab} elevation={tab === 'favorites' ? 10 : 2}>
+                <Text style={tab === 'favorites' ? styles.tabSet : styles.tabUnset} color="white">{ state.strings.favorites }</Text>
+              </Surface>
+            </Pressable>
+          </View>
         </View>
       )}
       { state.layout === 'large' && (

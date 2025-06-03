@@ -24,6 +24,10 @@ export const en = {
   all: 'All',
   unread: 'Unread',
   favorites: 'Favorites',
+  addFavorites: 'Add To Favorites',
+  removeFavorites: 'Remove From Favorites',
+  markRead: 'Mark As Read',
+  markUnread: 'Mark As Unread',
 
   welcomeTo: 'Welcome To Databag',
   notUser: 'Not a user?',

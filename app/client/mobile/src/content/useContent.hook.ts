@@ -161,7 +161,7 @@ export function useContent() {
       return true;
     });
     const unread = filtered.filter(item => item.unread);
-    const favorites = [];
+    const favorites = filtered.filter(item => state.favorite.find(entry => item.cardId === entry.cardId && item.channelId === entry.channelId));
 
     updateState({channels, filtered, unread, favorites});
   }, [state.sorted, state.cards, state.guid, state.filter, state.focused]);
@@ -177,8 +177,9 @@ export function useContent() {
 
   useEffect(() => {
     const favorite = app.state.favorite;
-    updateState({ favorite });
-  }, [app.state.favorite]);
+    const favorites = state.filtered.filter(item => favorite.find(entry => item.cardId === entry.cardId && item.channelId === entry.channelId));
+    updateState({ favorite, favorites });
+  }, [app.state.favorite, state.filtered]);
 
   useEffect(() => {
     const setConfig = (config: Config) => {
@@ -292,6 +293,14 @@ export function useContent() {
         const topic = await content.addChannel(false, 'superbasic', {subject}, contacts);
         return topic.id;
       }
+    },
+    setUnread: async (cardId: string | null, channelId: string) => {
+      const content = app.state.session.getContent();
+      await content.setUnreadChannel(cardId, channelId, true);
+    },
+    clearUnread: async (cardId: string | null, channelId: string) => {
+      const content = app.state.session.getContent();
+      await content.setUnreadChannel(cardId, channelId, false);
     },
   };
 
