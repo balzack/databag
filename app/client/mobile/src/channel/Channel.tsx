@@ -51,7 +51,7 @@ export function Channel({
             {title}
           </Text>
           {message != null && (
-            <Text numberOfLines={1} style={styles.messageSet}>
+            <Text numberOfLines={1} style={{ ...styles.messageSet, ...containerStyle.message }}>
               {message}
             </Text>
           )}

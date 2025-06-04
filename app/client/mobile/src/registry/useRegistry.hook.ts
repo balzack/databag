@@ -11,7 +11,7 @@ export function useRegistry() {
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
-    layout: '',
+    layout: 'small',
     strings: display.state.strings,
     username: '',
     server: '',

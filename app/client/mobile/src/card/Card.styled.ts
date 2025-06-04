@@ -60,11 +60,12 @@ export const styles = StyleSheet.create({
     color: Colors.placeholder,
   },
   handle: {
-    fontSize: 12,
+    fontSize: 14,
     textWrap: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     fontWeight: 'bold',
+    paddingTop: 4,
   },
   actions: {
     display: 'flex',

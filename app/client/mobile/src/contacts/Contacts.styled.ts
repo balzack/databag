@@ -30,8 +30,8 @@ export const styles = StyleSheet.create({
   },
   tabs: {
     position: 'absolute',
-    top: 56,
-    height: 24,
+    top: 54,
+    height: 28,
     width: '100%',
     display: 'flex',
     flexDirection: 'row',

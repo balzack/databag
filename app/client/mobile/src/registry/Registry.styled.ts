@@ -2,12 +2,35 @@ import {StyleSheet} from 'react-native';
 import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
+  component: {
+    width: '100%',
+    height: '100%',
+  },
   registry: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     width: '100%',
     height: '100%',
+  },
+  smCards: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    overscrollBehavior: 'none',
+    paddingTop: 16,
+    paddingBottom: 64,
+  },
+  smCard: {
+    width: '100%',
+    height: 72,
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingLeft: 16,
+    icon: {
+      borderRadius: 24,
+      overflow: 'hidden',
+    }
   },
   header: {
     position: 'relative',

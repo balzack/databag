@@ -15,8 +15,8 @@ export const styles = StyleSheet.create({
   },
   tabs: {
     position: 'absolute',
-    top: 56,
-    height: 24,
+    top: 54,
+    height: 28,
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
@@ -123,6 +123,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingBottom: 64,
   },
   noneLabel: {
     fontSize: 20,

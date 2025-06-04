@@ -107,7 +107,7 @@ export function Contacts({
                 onChangeText={value => actions.setFilter(value)}
               />
             </Surface>
-            <Button icon="user-plus" mode="contained" style={{ height: 40, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onPress={openRegistry}>
+            <Button icon="user-plus" mode="contained" textColor="white" style={{ height: 40, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onPress={openRegistry}>
               {state.strings.new}
             </Button>
 

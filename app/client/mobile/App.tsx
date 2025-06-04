@@ -189,7 +189,7 @@ function App(): React.JSX.Element {
               }
               else if (props.name === 'left' || props.name === 'idcard' || props.name === 'picture' || props.name === 'message1') {
                 return <AntIcon {...props} />
-              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock' || props.name === 'user' || props.name === 'users' || props.name === 'message-circle' || props.name === 'github' || props.name === 'align-left' || props.name === 'edit' || props.name === 'award' || props.name === 'log-out' || props.name === 'search' || props.name === 'star') {
+              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock' || props.name === 'user' || props.name === 'users' || props.name === 'message-circle' || props.name === 'github' || props.name === 'align-left' || props.name === 'edit' || props.name === 'award' || props.name === 'log-out' || props.name === 'search' || props.name === 'star' || props.name === 'filter') {
                 return <FeatherIcon {...props} />
               } else if (props.name === 'sensor-occupied') {
                 return <MaterialIcon {...props}  />

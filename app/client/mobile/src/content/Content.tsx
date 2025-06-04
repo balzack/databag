@@ -129,7 +129,7 @@ export function Content({
                 onChangeText={value => actions.setFilter(value)}
               />
             </Surface>
-            <Button icon="message1" mode="contained" style={{ height: 40, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onPress={() => setAdd(true)}>
+            <Button icon="message1" mode="contained" textColor="white" style={{ height: 40, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onPress={() => setAdd(true)}>
               {state.strings.new}
             </Button>
           </Surface>
@@ -170,7 +170,7 @@ export function Content({
                   return (
                     <Wrap elevation={1} mode="flat">
                       <Channel
-                        containerStyle={styles.smChannel}
+                        containerStyle={{ ...styles.smChannel, message: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
                         select={choose}
                         sealed={sealed}
                         hosted={hosted}

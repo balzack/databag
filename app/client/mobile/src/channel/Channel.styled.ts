@@ -9,15 +9,15 @@ export const styles = StyleSheet.create({
     height: '100%',
   },
   messageSet: {
-    fontSize: 12,
+    fontSize: 14,
     textWrap: 'nowrap',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
-    height: 16,
+    paddingTop: 4,
   },
   messageUnset: {
-    fontSize: 12,
+    fontSize: 14,
     textWrap: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
     marginRight: 8,
   },
   subject: {
-    fontSize: 14,
+    fontSize: 16,
     textWrap: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
