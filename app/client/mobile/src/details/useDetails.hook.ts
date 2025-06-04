@@ -26,7 +26,7 @@ export function useDetails() {
     hostCard: null as null | Card,
     channelCards: [] as Card[],
     unknownContacts: 0,
-    layout: null as null | string,
+    layout: 'small',
   });
 
   const updateState = (value: any) => {

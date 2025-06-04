@@ -42,7 +42,7 @@ export function useConversation() {
     cardId: null as null | string,
     detailSet: false,
     focus: null as Focus | null,
-    layout: null,
+    layout: 'small',
     topics: [] as Topic[],
     loaded: false,
     loadingMore: false,

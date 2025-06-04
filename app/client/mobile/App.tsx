@@ -59,7 +59,7 @@ const databagColors = {
       level7: 'rgb(200, 200, 200)',
       level8: 'transparent',
       level9: '#8FBEA7',
-      level10: '#224433',
+      level10: '#377753',
     },
     surfaceDisabled: 'rgba(25, 28, 26, 0.12)',
     onSurfaceDisabled: 'rgba(25, 28, 26, 0.38)',
@@ -73,6 +73,7 @@ const databagColors = {
     offsync: '#aa0000',
     connecting: '#2288dd',
     confirmed: '#6688cc',
+    textColor: '#224433',
   },
   dark: {
     name: 'dark',
@@ -116,7 +117,7 @@ const databagColors = {
       level7: 'rgb(200, 200, 200)',
       level8: 'transparent',
       level9: '#191919',
-      level10: '#448866',
+      level10: '#377753',
     },
     surfaceDisabled: 'rgba(225, 227, 223, 0.12)',
     onSurfaceDisabled: 'rgba(225, 227, 223, 0.38)',
@@ -130,6 +131,7 @@ const databagColors = {
     offsync: '#aa0000',
     connecting: '#2288dd',
     confirmed: '#6688cc',
+    textColor: '#224433',
   },
 };
 
@@ -189,7 +191,7 @@ function App(): React.JSX.Element {
               }
               else if (props.name === 'left' || props.name === 'idcard' || props.name === 'picture' || props.name === 'message1') {
                 return <AntIcon {...props} />
-              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock' || props.name === 'user' || props.name === 'users' || props.name === 'message-circle' || props.name === 'github' || props.name === 'align-left' || props.name === 'edit' || props.name === 'award' || props.name === 'log-out' || props.name === 'search' || props.name === 'star' || props.name === 'filter') {
+              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock' || props.name === 'user' || props.name === 'users' || props.name === 'message-circle' || props.name === 'github' || props.name === 'align-left' || props.name === 'edit' || props.name === 'award' || props.name === 'log-out' || props.name === 'search' || props.name === 'star' || props.name === 'filter' || props.name === 'plus-square' || props.name === 'send') {
                 return <FeatherIcon {...props} />
               } else if (props.name === 'sensor-occupied') {
                 return <MaterialIcon {...props}  />

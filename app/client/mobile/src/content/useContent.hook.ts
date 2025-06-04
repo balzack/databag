@@ -92,7 +92,7 @@ export function useContent() {
         if (contacts.length === 0) {
           return [];
         }
-        return contacts.map(contact => (contact ? contact.handle : null));
+        return contacts.map(contact => (contact?.name ? contact.name : contact?.handle ? contact.handle : null));
       };
 
       const selectImage = () => {

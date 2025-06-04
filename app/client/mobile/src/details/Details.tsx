@@ -120,6 +120,19 @@ export function Details({close, closeAll}: {close: () => void; closeAll: () => v
     }
   };
 
+  const smCards = state.channelCards.map((card, index) => (
+    <Card
+      containerStyle={{ ...styles.smCard, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
+      key={index}
+      imageUrl={card.imageUrl}
+      name={card.name}
+      placeholder={state.strings.name}
+      handle={card.handle}
+      node={card.node}
+      actions={[]}
+    />
+  ));
+
   const cards = state.channelCards.map((card, index) => (
     <Card
       containerStyle={{...styles.card, borderColor: theme.colors.outlineVariant}}
@@ -181,13 +194,11 @@ export function Details({close, closeAll}: {close: () => void; closeAll: () => v
       );
     });
 
-console.log(state.locked);
-
   return (
     <View style={styles.component}>
       { state.layout === 'small' && (
-        <Surface elevation={2} style={styles.smDetails}>
-          <Surface elevation={9} style={styles.smHeader}>
+        <Surface elevation={2} style={styles.smDetails} mode="flat">
+          <Surface elevation={9} style={styles.smHeader} mode="flat">
             <Pressable style={styles.smIcon} onPress={close}>
               <Icon size={24} source="left" color={'white'} />
             </Pressable>
@@ -257,7 +268,7 @@ console.log(state.locked);
                       actions={[]}
                     />
                   )}
-                  {cards}
+                  {smCards}
                   {state.unknownContacts > 0 && (
                     <Text style={styles.unknown}>
                       {state.strings.unknown}: {state.unknownContacts}

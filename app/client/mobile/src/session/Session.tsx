@@ -126,7 +126,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                 </View>
                 <Surface style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', backgroundColor: 'transparent' }} elevation={4}>
                   <BlurView style={styles.blur} blurType="light" blurAmount={8} reducedTransparencyFallbackColor="dark" />
-                  <View style={{ backgroundColor: theme.colors.bar }}>
+                  <View style={{ backgroundColor: theme.colors.bar, height: 96 }}>
                     <SafeAreaView edges={['bottom']}>
                       <View style={styles.tabs}>
                         {tab === 'content' && (
@@ -279,14 +279,10 @@ function ContentTab({scheme, textCard, contentTab, share}: {scheme: string; text
         <ContentStack.Screen name="content" options={{headerBackTitleVisible: false}}>
           {props => <Content share={share} textCard={textCard} closeAll={() => props.navigation.popToTop()} openConversation={() => openConversation(props)} />}
         </ContentStack.Screen>
-        <ContentStack.Screen name="conversation" options={styles.noHeader}>
-          {props => (
-            <SafeAreaView style={styles.screen}>
-              <Conversation openDetails={() => props.navigation.navigate('details')} close={() => props.navigation.goBack()} wide={false} />
-            </SafeAreaView>
-          )}
+        <ContentStack.Screen name="conversation" options={styles.noHeader} options={{ animation: 'simple_push' }} >
+          {props => (<Conversation openDetails={() => props.navigation.navigate('details')} close={() => props.navigation.goBack()} wide={false} /> )}
         </ContentStack.Screen>
-        <ContentStack.Screen name="details" options={styles.noHeader}>
+        <ContentStack.Screen name="details" options={styles.noHeader} options={{ animation: 'simple_push' }}>
           {props => <Details close={() => props.navigation.goBack()} closeAll={() => props.navigation.popToTop()} />}
         </ContentStack.Screen>
       </ContentStack.Navigator>

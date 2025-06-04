@@ -2,10 +2,44 @@ import {StyleSheet} from 'react-native';
 import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
+  component: {
+    width: '100%',
+    height: '100%',
+  },
+  smLabel: {
+    fontSize: 24,
+    minWidth: 0,
+    flexShrink: 1,
+    color: 'white',
+  },
+  canvas: {
+    width: '100%',
+    paddingLeft: 12,
+    paddingRight: 12,
+    paddingBottom: 8,
+  },
+  compose: {
+    borderRadius: 8,
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 12,
+  },
+  componseInput: {
+    borderWidth: 0,
+  },
   conversation: {
     flex: 1,
     width: '100%',
     flexShrink: 1,
+  },
+  navIcon: {
+    color: 'white',
+    width: 48,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   avoid: {
     width: '100%',
@@ -68,6 +102,17 @@ export const styles = StyleSheet.create({
   messages: {
     paddingBottom: 64,
   },
+  smMessages: {
+    paddingBottom: 64,
+  },
+  content: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    paddingBottom: 96,
+    display: 'flex',
+    flexDirection: 'column',
+  },
   thread: {
     display: 'flex',
     flexGrow: 1,
@@ -94,11 +139,25 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     color: Colors.placeholder,
   },
+  smAdd: {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingTop: 8,
+  },
   add: {
     display: 'flex',
     flexDirection: 'column',
     paddingTop: 8,
     paddingBottom: 64,
+  },
+  options: {
+    margin: 2,
+    backgroundColor: 'transparent',
+  },
+  send: {
+    margin: 2,
+    backgroundColor: 'transparent',
+    transform: [{rotate: '45deg'}],
   },
   icon: {
     flexShrink: 0,
