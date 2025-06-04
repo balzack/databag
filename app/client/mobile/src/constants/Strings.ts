@@ -28,6 +28,8 @@ export const en = {
   removeFavorites: 'Remove From Favorites',
   markRead: 'Mark As Read',
   markUnread: 'Mark As Unread',
+  callAction: 'Call Contact',
+  textAction: 'Text Contact',
 
   welcomeTo: 'Welcome To Databag',
   notUser: 'Not a user?',

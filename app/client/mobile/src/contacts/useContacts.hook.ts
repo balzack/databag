@@ -14,6 +14,8 @@ export function useContacts() {
     strings: display.state.strings,
     cards: [] as Card[],
     filtered: [] as Card[],
+    requested: [] as Card[],
+    connected: [] as Card[],
     sortAsc: false,
     filter: '',
   });
@@ -66,7 +68,9 @@ export function useContacts() {
       return false;
     };
     const filtered = state.cards.sort(compare).filter(select);
-    updateState({filtered});
+    const requested = filtered.filter(item => item.status === 'requested' || item.status === 'pending');
+    const connected = filtered.filter(item => item.status === 'connected');
+    updateState({filtered, requested, connected});
   }, [state.sortAsc, state.filter, state.cards]);
 
   const actions = {

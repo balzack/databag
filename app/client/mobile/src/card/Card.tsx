@@ -13,6 +13,7 @@ export function Card({
   flair,
   actions,
   containerStyle,
+  options,
 }: {
   containerStyle: any;
   imageUrl: string;
@@ -23,6 +24,7 @@ export function Card({
   select?: () => void;
   flair: ReactNode;
   actions: ReactNode[];
+  options: ReactNode;
 }) {
   return (
     <Pressable style={containerStyle} onPress={select ? select : () => {}}>
@@ -47,6 +49,7 @@ export function Card({
           </Text>
         </View>
         <View style={styles.actions}>{actions}</View>
+        {options}
       </SafeAreaView>
     </Pressable>
   );

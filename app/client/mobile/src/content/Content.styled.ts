@@ -133,7 +133,7 @@ export const styles = StyleSheet.create({
   },
   smChannel: {
     width: '100%',
-    height: 76,
+    height: 72,
     paddingTop: 12,
     paddingBottom: 12,
     paddingLeft: 16,

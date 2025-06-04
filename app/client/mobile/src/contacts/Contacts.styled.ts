@@ -22,12 +22,45 @@ export const styles = StyleSheet.create({
     height: 72,
     paddingTop: 12,
     paddingBottom: 12,
-    paddingRight: 16,
     paddingLeft: 16,
     icon: {
       borderRadius: 24,
       overflow: 'hidden',
     }
+  },
+  tabs: {
+    position: 'absolute',
+    top: 56,
+    height: 24,
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
+  action: {
+    backgroundColor: 'transparent',
+  },
+  tab: {
+    width: 105,
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 12,
+  },
+  opaque: {},
+  opacity: {
+    opacity: 0.8,
+  },
+  tabSet: {
+    fontSize: 12,
+    color: 'white',
+  },
+  tabUnset: {
+    fontSize: 12,
   },
   button: {
     borderRadius: 8,
@@ -84,6 +117,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingBottom: 128,
   },
   noneLabel: {
     fontSize: 20,
