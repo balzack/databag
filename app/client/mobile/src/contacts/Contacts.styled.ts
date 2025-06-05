@@ -130,7 +130,7 @@ export const styles = StyleSheet.create({
     overscrollBehavior: 'none',
   },
   cardsContainer: {
-    paddingBottom: 92,
+    paddingBottom: 200,
   },
   card: {
     width: '100%',

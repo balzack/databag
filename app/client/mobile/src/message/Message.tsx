@@ -242,14 +242,35 @@ export function Message({
     <View style={styles.message}>
       { small && (
         <View style={styles.component}>
-          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 8, paddingLeft: 16, paddingRight: 16 }}>
+          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 8, paddingLeft: 16, paddingRight: 16, alignItems: 'center' }}>
             {name && <Text style={styles.labelName}>{name}</Text>}
             {!name && handle && <Text style={styles.labelHandle}>{`${handle}${node ? '@' + node : ''}`}</Text>}
             {!name && !handle && <Text style={styles.labelUnknown}>{state.strings.unknownContact}</Text>}
             <Text style={styles.timestamp}> {timestamp}</Text>
           </View>
-          <View style={{ width: '100%', display: 'flex', flexDirection: host ? 'row' : 'row-inverted', justifyContent: 'flex-end', paddingLeft: 16, paddingRight: 16 }}>
+          <View style={{ width: '100%', display: 'flex', flexDirection: profile ? 'row-reverse' : 'row', justifyContent: 'flex-begin', paddingLeft: 16, paddingRight: 16, gap: 8, paddingBottom: 16 }}>
             <Image style={styles.image} resizeMode={'contain'} source={{uri: logoUrl}} />
+            <View style={{ display: 'flex', flexDirection: 'column', flexShrink: 1, minWidth: 0 }}>
+              <Surface style={{ borderRadius: 8, paddingTop: 8, paddingBottom: 8 }} mode="flat" elevation={0}>
+                {!locked && status === 'confirmed' && text && (
+                  <Text style={{...styles.text, ...textStyle, paddingTop: 8, paddingBottom: 8, paddingLeft: 16, paddingRight: 16 }}>{message}</Text>
+                )}
+                {!locked && status !== 'confirmed' && (
+                  <View style={{ padding: 16 }}>
+                    <Shimmer contentStyle={styles.longbone} />
+                    <Shimmer contentStyle={styles.shortbone} />
+                  </View>
+                )}
+                {locked && <Text style={{ ...styles.locked, padding: 16 }}>{state.strings.encrypted}</Text>}
+                {!locked && assets?.length > 0 && transform === 'complete' && (
+                  <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ paddingTop: 8 }} contentContainerStyle={styles.assets}>
+                    {media}
+                  </ScrollView>
+                )}
+                {!locked && media.length > 0 && transform === 'incomplete' && <Shimmer contentStyle={styles.dot} />}
+                {!locked && media.length > 0 && transform !== 'complete' && transform !== 'incomplete' && <Text style={styles.error}>{state.strings.processingError}</Text>}
+              </Surface>
+            </View>
           </View>
         </View>
       )}

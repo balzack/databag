@@ -16,7 +16,10 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  image: {},
+  image: {
+    padding: 1,
+    borderRadius: 4
+  },
   thumb: {
     borderRadius: 4,
   },

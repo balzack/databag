@@ -63,9 +63,9 @@ export const styles = StyleSheet.create({
     marginLeft: 8,
   },
   image: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
  },
   body: {
     display: 'flex',
@@ -143,7 +143,9 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     gap: 16,
-    paddingRight: 32,
+    paddingRight: 16,
+    paddingLeft: 16,
+    paddingBottom: 16,
   },
   item: {
     width: 64,

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {SafeAreaView, Modal, Pressable, Animated, View, Image, useAnimatedValue} from 'react-native';
-import {Text, ProgressBar, IconButton} from 'react-native-paper';
+import {Text, Surface, ProgressBar, IconButton} from 'react-native-paper';
 import {useImageAsset} from './useImageAsset.hook';
 import {MediaAsset} from '../../conversation/Conversation';
 import {styles} from './ImageAsset.styled';
@@ -53,7 +53,7 @@ export function ImageAsset({topicId, asset, loaded, show}: {topicId: string; ass
   };
 
   return (
-    <View style={styles.image}>
+    <Surface elevation={1} style={styles.image}>
       {state.thumbUrl && (
         <Pressable onPress={showImage}>
           <Animated.Image style={[styles.thumb, {opacity}]} resizeMode="contain" height={92} width={92 * state.ratio} source={{uri: state.thumbUrl}} onLoad={actions.loaded} />
@@ -87,6 +87,6 @@ export function ImageAsset({topicId, asset, loaded, show}: {topicId: string; ass
           <SafeAreaView style={styles.alert}>{state.failed && <Text style={styles.alertLabel}>{state.strings.failedLoad}</Text>}</SafeAreaView>
         </View>
       </Modal>
-    </View>
+    </Surface>
   );
 }
