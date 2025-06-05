@@ -266,7 +266,7 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
                 const {host} = state;
                 const card = state.cards.get(item.guid) || null;
                 const profile = state.profile?.guid === item.guid ? state.profile : null;
-                return <Message topic={item} card={card} profile={profile} host={host} select={id => setSelected(id)} selected={selected} />;
+                return <Message small={true} topic={item} card={card} profile={profile} host={host} select={id => setSelected(id)} selected={selected} />;
               }}
               keyExtractor={topic => topic.topicId}
             />
@@ -362,7 +362,7 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
                 const {host} = state;
                 const card = state.cards.get(item.guid) || null;
                 const profile = state.profile?.guid === item.guid ? state.profile : null;
-                return <Message topic={item} card={card} profile={profile} host={host} select={id => setSelected(id)} selected={selected} />;
+                return <Message small={false} topic={item} card={card} profile={profile} host={host} select={id => setSelected(id)} selected={selected} />;
               }}
               keyExtractor={topic => topic.topicId}
             />

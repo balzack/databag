@@ -1,7 +1,7 @@
 import React, {useRef, useEffect, useState} from 'react';
 import {avatar} from '../constants/Icons';
 import {Pressable, Linking, ScrollView, View, Image, Modal} from 'react-native';
-import {Text, TextInput, IconButton, Button, Surface, Divider} from 'react-native-paper';
+import {useTheme, Text, TextInput, IconButton, Button, Surface, Divider} from 'react-native-paper';
 import {Topic, Card, Profile} from 'databag-client-sdk';
 import {ImageAsset} from './imageAsset/ImageAsset';
 import {AudioAsset} from './audioAsset/AudioAsset';
@@ -22,6 +22,7 @@ export function Message({
   host,
   select,
   selected,
+  small,
 }: {
   topic: Topic;
   card: Card | null;
@@ -29,6 +30,7 @@ export function Message({
   host: boolean;
   select: (id: null | string) => void;
   selected: string;
+  small: boolean;
 }) {
   const {state, actions} = useMessage();
   const {locked, data, created, topicId, status, transform} = topic;
@@ -36,7 +38,7 @@ export function Message({
   const {text, textColor, textSize, assets} = data || {text: null, textColor: null, textSize: null};
   const textStyle = textColor && textSize ? {fontSize: textSize, color: textColor} : textColor ? {color: textColor} : textSize ? {fontSize: textSize} : {};
   const logoUrl = profile ? profile.imageUrl : card ? card.imageUrl : avatar;
-  const timestamp = actions.getTimestamp(created);
+  const timestamp = small ? actions.getSMTimestamp(created).replace(' at ', ' ') : actions.getTimestamp(created);
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState('');
   const [saving, setSaving] = useState(false);
@@ -49,6 +51,7 @@ export function Message({
   const [showAsset, setShowAsset] = useState(false);
   const [message, setMessage] = useState([]);
   const fontStyle = {fontStyle: 'italic'};
+  const theme = useTheme();
 
   useEffect(() => {
     setTimeout(() => setShowAsset(true), 2000);
@@ -237,49 +240,66 @@ export function Message({
 
   return (
     <View style={styles.message}>
-      <View style={styles.topic}>
-        <View style={styles.content}>
-          <Image style={styles.logo} resizeMode={'contain'} source={{uri: logoUrl}} />
-          <View style={styles.body}>
-            <Pressable style={styles.header} onPress={() => select(topicId === selected ? null : topicId)}>
-              <View style={styles.name}>
-                {name && <Text style={styles.handle}>{name}</Text>}
-                {!name && handle && <Text style={styles.handle}>{`${handle}${node ? '@' + node : ''}`}</Text>}
-                {!name && !handle && <Text style={styles.unknown}>{state.strings.unknownContact}</Text>}
-                <Text style={styles.timestamp}> {timestamp}</Text>
-              </View>
-            </Pressable>
-            <View style={styles.padding}>
-              {!locked && status === 'confirmed' && text && <Text style={{...styles.text, ...textStyle}}>{message}</Text>}
-              {!locked && status !== 'confirmed' && (
-                <View>
-                  <Shimmer contentStyle={styles.longbone} />
-                  <Shimmer contentStyle={styles.shortbone} />
-                </View>
-              )}
-              {locked && <Text style={styles.locked}>{state.strings.encrypted}</Text>}
-            </View>
+      { small && (
+        <View style={styles.component}>
+          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 8, paddingLeft: 16, paddingRight: 16 }}>
+            {name && <Text style={styles.labelName}>{name}</Text>}
+            {!name && handle && <Text style={styles.labelHandle}>{`${handle}${node ? '@' + node : ''}`}</Text>}
+            {!name && !handle && <Text style={styles.labelUnknown}>{state.strings.unknownContact}</Text>}
+            <Text style={styles.timestamp}> {timestamp}</Text>
+          </View>
+          <View style={{ width: '100%', display: 'flex', flexDirection: host ? 'row' : 'row-inverted', justifyContent: 'flex-end', paddingLeft: 16, paddingRight: 16 }}>
+            <Image style={styles.image} resizeMode={'contain'} source={{uri: logoUrl}} />
           </View>
         </View>
-      </View>
-      {!locked && assets?.length > 0 && transform === 'complete' && (
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.carousel} contentContainerStyle={styles.assets}>
-          {media}
-        </ScrollView>
       )}
-      {!locked && media.length > 0 && transform === 'incomplete' && <Shimmer contentStyle={styles.dot} />}
-      {!locked && media.length > 0 && transform !== 'complete' && transform !== 'incomplete' && <Text style={styles.error}>{state.strings.processingError}</Text>}
-      {topicId === selected && (
-        <Surface style={styles.options}>
-          {!locked && profile && status === 'confirmed' && <IconButton style={styles.option} loading={false} compact="true" mode="contained" icon="square-edit-outline" size={24} onPress={edit} />}
-          {(host || profile) && <IconButton style={styles.option} loading={removing} compact="true" mode="contained" icon="trash-can-outline" size={24} onPress={remove} />}
-          {!profile && <IconButton style={styles.option} loading={false} compact="true" mode="contained" icon="eye-remove-outline" size={24} onPress={block} />}
-          {!profile && <IconButton style={styles.option} loading={false} compact="true" mode="contained" icon="alert-octagon-outline" size={24} onPress={report} />}
-        </Surface>
+      { !small && (
+        <View style={styles.content}>
+          <View style={styles.topic}>
+            <View style={styles.content}>
+              <Image style={styles.logo} resizeMode={'contain'} source={{uri: logoUrl}} />
+              <View style={styles.body}>
+                <Pressable style={styles.header} onPress={() => select(topicId === selected ? null : topicId)}>
+                  <View style={styles.name}>
+                    {name && <Text style={styles.handle}>{name}</Text>}
+                    {!name && handle && <Text style={{ ...styles.handle, color: theme.colors.onSecondary }}>{`${handle}${node ? '@' + node : ''}`}</Text>}
+                    {!name && !handle && <Text style={{ ...styles.unknown, color: theme.colors.tertiery }}>{state.strings.unknownContact}</Text>}
+                    <Text style={styles.timestamp}> {timestamp}</Text>
+                  </View>
+                </Pressable>
+                <View style={styles.padding}>
+                  {!locked && status === 'confirmed' && text && <Text style={{...styles.text, ...textStyle}}>{message}</Text>}
+                  {!locked && status !== 'confirmed' && (
+                    <View>
+                      <Shimmer contentStyle={styles.longbone} />
+                      <Shimmer contentStyle={styles.shortbone} />
+                    </View>
+                  )}
+                  {locked && <Text style={styles.locked}>{state.strings.encrypted}</Text>}
+                </View>
+              </View>
+            </View>
+          </View>
+          {!locked && assets?.length > 0 && transform === 'complete' && (
+            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.carousel} contentContainerStyle={styles.assets}>
+              {media}
+            </ScrollView>
+          )}
+          {!locked && media.length > 0 && transform === 'incomplete' && <Shimmer contentStyle={styles.dot} />}
+          {!locked && media.length > 0 && transform !== 'complete' && transform !== 'incomplete' && <Text style={styles.error}>{state.strings.processingError}</Text>}
+          {topicId === selected && (
+            <Surface style={styles.options}>
+              {!locked && profile && status === 'confirmed' && <IconButton style={styles.option} loading={false} compact="true" mode="contained" icon="square-edit-outline" size={24} onPress={edit} />}
+              {(host || profile) && <IconButton style={styles.option} loading={removing} compact="true" mode="contained" icon="trash-can-outline" size={24} onPress={remove} />}
+              {!profile && <IconButton style={styles.option} loading={false} compact="true" mode="contained" icon="eye-remove-outline" size={24} onPress={block} />}
+              {!profile && <IconButton style={styles.option} loading={false} compact="true" mode="contained" icon="alert-octagon-outline" size={24} onPress={report} />}
+            </Surface>
+          )}
+          <View style={styles.pad}>
+            <Divider style={styles.border} />
+          </View>
+        </View>
       )}
-      <View style={styles.pad}>
-        <Divider style={styles.border} />
-      </View>
       <Confirm show={confirmShow} busy={removing || reporting || blocking} params={confirmParams} />
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={editing} onRequestClose={() => setEditing(false)}>
         <View style={styles.modal}>

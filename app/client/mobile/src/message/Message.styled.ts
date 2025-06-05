@@ -3,11 +3,12 @@ import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
   message: {
-    paddingTop: 8,
     width: '100%',
-    minWidth: 0,
-    fontSize: 14,
-    padding: 0,
+  },
+  component: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
   },
   topic: {
     paddingTop: 8,
@@ -61,6 +62,11 @@ export const styles = StyleSheet.create({
     borderRadius: 2,
     marginLeft: 8,
   },
+  image: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+ },
   body: {
     display: 'flex',
     flexGrow: 1,
@@ -82,6 +88,16 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 12,
+  },
+  labelName: {
+    fontWeight: 700,
+    fontSize: 16,
+  },
+  labelHandle: {
+    fontSize: 16,
+  },
+  labelUnknown: {
+    fontSize: 16,
   },
   handle: {
     fontSize: 14,
