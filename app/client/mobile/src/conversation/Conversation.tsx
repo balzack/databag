@@ -219,7 +219,7 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
   return (
     <View style={styles.component}>
       { state.layout === 'small' && (
-        <View style={styles.content}>
+        <Surface elevation={1} mode="flat" style={styles.content}>
           <Surface elevation={9} mode="flat" style={{ width: '100%', height: 64, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16 }}>
             <Pressable style={styles.navIcon} onPress={onClose}>
               <Icon size={24} source="left" color={'white'} />
@@ -283,12 +283,12 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
             )}
             <View style={styles.canvas}>
               <Surface style={styles.compose} mode="flat" elevation={0}>
-                <IconButton style={styles.options} mode="contained" icon="plus-square" size={18} onPress={()=>{}} />
+                <IconButton style={styles.options} mode="contained" iconColor={theme.colors.onSurface} icon="plus-square" size={20} onPress={()=>{}} />
                 <RawInput
                   multiline={true}
                   mode="outlined"
                   dense={true}
-                  style={{ color: theme.colors.textColor, paddingTop: 2, paddingBottom: 10, flexGrow: 1 }}
+                  style={{ color: theme.colors.onSurface, paddingTop: 10, paddingBottom: 10, flexGrow: 1, flexShrink: 1, minWidth: 0, fontSize: 16 }}
                   outlineColor="transparent"
                   activeOutlineColor={Colors.placeholder}
                   spellcheck={false}
@@ -296,18 +296,18 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
                   autoCapitalize="none"
                   autoCorrect={false}
                   placeholder={state.strings.newMessage}
-                  placeholderTextColor={state.textColorSet ? state.textColor : theme.colors.textColor}
+                  placeholderTextColor={state.textColorSet ? state.textColor : theme.colors.tertiery}
                   cursorColor={state.textColorSet ? state.textColor : undefined}
                   value={state.message}
                   onChangeText={value => actions.setMessage(value)}
                 />
-                <IconButton style={styles.send} mode="contained" icon="send" size={18} onPress={sendMessage} />
+                <IconButton style={styles.send} mode="contained" iconColor={theme.colors.onSurface} icon="send" size={20} onPress={sendMessage} />
               </Surface>
             </View>
 
             <View style={{ width: '100%', height: keyboardHeight-96 }}></View>
           </View>
-        </View>
+        </Surface>
       )}
       { state.layout === 'large' && (
         <View style={containerStyle}>
