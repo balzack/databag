@@ -1,7 +1,7 @@
 import React, {useRef, useEffect, useState} from 'react';
 import {avatar} from '../constants/Icons';
 import {Pressable, Linking, ScrollView, View, Image, Modal} from 'react-native';
-import {useTheme, Text, TextInput, IconButton, Button, Surface, Divider} from 'react-native-paper';
+import {useTheme, Menu, Text, TextInput, IconButton, Button, Surface, Divider} from 'react-native-paper';
 import {Topic, Card, Profile} from 'databag-client-sdk';
 import {ImageAsset} from './imageAsset/ImageAsset';
 import {AudioAsset} from './audioAsset/AudioAsset';
@@ -51,6 +51,7 @@ export function Message({
   const [showAsset, setShowAsset] = useState(false);
   const [message, setMessage] = useState([]);
   const fontStyle = {fontStyle: 'italic'};
+  const [options, setOptions] = useState(false);
   const theme = useTheme();
 
   useEffect(() => {
@@ -242,11 +243,31 @@ export function Message({
     <View style={styles.message}>
       { small && (
         <View style={styles.component}>
-          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 8, paddingLeft: 16, paddingRight: 16, alignItems: 'center' }}>
+          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 16, paddingRight: 8, alignItems: 'center' }}>
             {name && <Text style={styles.labelName}>{name}</Text>}
             {!name && handle && <Text style={styles.labelHandle}>{`${handle}${node ? '@' + node : ''}`}</Text>}
             {!name && !handle && <Text style={styles.labelUnknown}>{state.strings.unknownContact}</Text>}
-            <Text style={styles.timestamp}> {timestamp}</Text>
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={styles.timestamp}> {timestamp}</Text>
+              <Menu
+                key="actions"
+                visible={options}
+                onDismiss={()=>setOptions(false)}
+                anchor={<IconButton style={{ backgroundColor: 'transparent', padding: 0, margin: 0 }} icon="dots-horizontal-circle-outline" size={16} onPress={()=>setOptions(true)} />}>
+                  {!locked && profile && status === 'confirmed' && (
+                    <Menu.Item key='edit' leadingIcon="square-edit-outline" title={state.strings.editOption} onPress={edit} />
+                  )}
+                  {(host || profile) && (
+                    <Menu.Item key='delete' leadingIcon="trash-can-outline" title={state.strings.deleteOption} onPress={remove} />
+                  )}
+                  {!profile && (
+                    <Menu.Item key='block' leadingIcon="eye-remove-outline" title={state.strings.blockOption} onPress={block} />
+                  )}
+                  {!profile && (
+                    <Menu.Item key='report' leadingIcon="alert-octagon-outline" title={state.strings.reportOption} onPress={report} />
+                  )}
+              </Menu>
+            </View>
           </View>
           <View style={{ width: '100%', display: 'flex', flexDirection: profile ? 'row-reverse' : 'row', justifyContent: 'flex-begin', paddingLeft: 16, paddingRight: 16, gap: 8, paddingBottom: 16 }}>
             <Image style={styles.image} resizeMode={'contain'} source={{uri: logoUrl}} />

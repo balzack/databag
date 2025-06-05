@@ -299,7 +299,7 @@ export function Content({
             </Pressable>
             <Pressable style={tab === 'unread' ? styles.opaque : styles.opacity} onPress={() => setTab('unread')}>
               <Surface style={styles.tab} elevation={tab === 'unread' ? 10 : 2}>
-                <Text style={tab === 'unread' ? styles.tabSet : styles.tabUnset} color="white">{ state.strings.unread }</Text>
+                <Text style={tab === 'unread' ? styles.tabSet : styles.tabUnset} color="white">{ `${state.strings.unread}${state.unread.length > 0 ? ' (' + state.unread.length + ')' : ''}` }</Text>
               </Surface>
             </Pressable>
             <Pressable style={tab === 'favorites' ? styles.opaque : styles.opacity} onPress={() => setTab('favorites')}>

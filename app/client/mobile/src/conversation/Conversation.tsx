@@ -301,7 +301,7 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
                   value={state.message}
                   onChangeText={value => actions.setMessage(value)}
                 />
-                <IconButton style={styles.send} mode="contained" iconColor={theme.colors.onSurface} icon="send" size={20} onPress={sendMessage} />
+                <IconButton style={styles.send} loading={sending} mode="contained" iconColor={ !state.access || !state.validShare || (!state.message && state.assets.length === 0) ? theme.colors.secondary : theme.colors.onSurface} icon="send" size={20} onPress={sendMessage} />
               </Surface>
             </View>
 

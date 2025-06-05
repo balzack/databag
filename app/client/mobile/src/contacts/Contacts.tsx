@@ -297,7 +297,7 @@ export function Contacts({
             </Pressable>
             <Pressable style={tab === 'requested' ? styles.opaque : styles.opacity} onPress={() => setTab('requested')}>
               <Surface style={styles.tab} elevation={tab === 'requested' ? 10 : 2}>
-                <Text style={tab === 'requested' ? styles.tabSet : styles.tabUnset} color="white">{ state.strings.requestedTag }</Text>
+                <Text style={tab === 'requested' ? styles.tabSet : styles.tabUnset} color="white">{ `${state.strings.requestedTag}${state.requested.length > 0 ? ' (' + state.requested.length + ')' : ''}` }</Text>
               </Surface>
             </Pressable>
             <Pressable style={tab === 'connected' ? styles.opaque : styles.opacity} onPress={() => setTab('connected')}>

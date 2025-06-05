@@ -30,6 +30,10 @@ export const en = {
   markUnread: 'Mark As Unread',
   callAction: 'Call Contact',
   textAction: 'Text Contact',
+  editOption: 'Edit Message',
+  blockOption: 'Block Message',
+  deleteOption: 'Delete Message',
+  reportOption: 'Report Message',
 
   welcomeTo: 'Welcome To Databag',
   notUser: 'Not a user?',
