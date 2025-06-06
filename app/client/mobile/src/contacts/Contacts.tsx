@@ -89,11 +89,11 @@ export function Contacts({
     <View style={styles.component}>
       { state.layout === 'small' && (
         <View style={styles.contacts}>
-          <Surface elevation={9} mode="flat" style={{ width: '100%', height: 64, display: 'flex', flexDirection: 'row', paddingBottom: 16, paddingLeft: 16, paddingRight: 16, alignItems: 'center', gap: 16 }}>
-            <Surface mode="flat" elevation={0} style={{ flexGrow: 1, borderRadius: 8, overflow: 'hidden' }}>
+          <Surface elevation={9} mode="flat" style={styles.headerSurface}>
+            <Surface mode="flat" elevation={0} style={styles.searchSurface}>
               <TextInput
                 dense={true}
-                style={{ height: 40 }}
+                style={styles.input}
                 outlineColor="transparent"
                 activeOutlineColor="transparent"
                 autoCapitalize="none"
@@ -107,12 +107,12 @@ export function Contacts({
                 onChangeText={value => actions.setFilter(value)}
               />
             </Surface>
-            <Button icon="user-plus" mode="contained" textColor="white" style={{ height: 40, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onPress={openRegistry}>
+            <Button icon="user-plus" mode="contained" textColor="white" style={styles.newContactButton} onPress={openRegistry}>
               {state.strings.new}
             </Button>
-
           </Surface>
-          <View style={{ width: '100%', height: '100%', display: allTab ? 'block' : 'none' }}>
+
+          <View style={{ ...styles.tabContainer, display: allTab ? 'block' : 'none' }}>
             <FlatList
               style={styles.smCards}
               data={state.filtered}
@@ -176,7 +176,8 @@ export function Contacts({
               keyExtractor={card => card.cardId}
             />
           </View>
-          <View style={{ width: '100%', height: '100%', display: requestedTab ? 'block' : 'none' }}>
+
+          <View style={{ ...styles.tabContainer, display: requestedTab ? 'block' : 'none' }}>
             <FlatList
               style={styles.smCards}
               data={state.requested}
@@ -226,7 +227,8 @@ export function Contacts({
               keyExtractor={card => card.cardId}
             />
           </View>
-          <View style={{ width: '100%', height: '100%', display: connectedTab ? 'block' : 'none' }}>
+
+          <View style={{ ...styles.tabContainer, display: connectedTab ? 'block' : 'none' }}>
             <FlatList
               style={styles.smCards}
               data={state.connected}
@@ -284,11 +286,13 @@ export function Contacts({
               keyExtractor={card => card.cardId}
             />
           </View>
-          <View style={{ width: '100%', height: '100%', display: emptyTab ? 'block' : 'none' }}>
+
+          <View style={{ ...styles.tabContainer, display: emptyTab ? 'block' : 'none' }}>
             <View style={styles.none}>
               <Text style={styles.noneLabel}>{state.strings.noContacts}</Text>
             </View>
           </View>
+
           <View style={styles.tabs}>
             <Pressable style={tab === 'all' ? styles.opaque : styles.opacity} onPress={() => setTab('all')}>
               <Surface style={styles.tab} elevation={tab === 'all' ? 10 : 2}>

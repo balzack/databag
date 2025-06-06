@@ -9,6 +9,33 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  headerSurface: {
+    width: '100%',
+    height: 64,
+    display: 'flex',
+    flexDirection: 'row',
+    paddingBottom: 16,
+    paddingLeft: 16,
+    paddingRight: 16,
+    alignItems: 'center',
+    gap: 16,
+  },
+  searchSurface: {
+    flexGrow: 1,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  newContactButton: {
+    height: 40,
+    borderRadius: 8,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tabContainer: {
+    width: '100%',
+    height: '100%',
+  },
   smCards: {
     display: 'flex',
     flexDirection: 'column',
