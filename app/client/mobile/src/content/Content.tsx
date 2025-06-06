@@ -111,10 +111,10 @@ export function Content({
     <View style={styles.container}>
       { state.layout === 'small' && (
         <View style={styles.content}>
-          <Surface elevation={9} mode="flat" style={{ width: '100%', height: 64, display: 'flex', flexDirection: 'row', paddingBottom: 16, paddingLeft: 16, paddingRight: 16, alignItems: 'center', gap: 16 }}>
-            <Surface mode="flat" elevation={0} style={{ flexGrow: 1, borderRadius: 8, overflow: 'hidden' }}>
+          <Surface elevation={9} mode="flat" style={styles.searchContainer}>
+            <Surface mode="flat" elevation={0} style={styles.searchInputContainer}>
               <TextInput
-                style={{ height: 40 }}
+                style={styles.searchInput}
                 dense={true}
                 outlineColor="transparent"
                 activeOutlineColor="transparent"
@@ -129,16 +129,16 @@ export function Content({
                 onChangeText={value => actions.setFilter(value)}
               />
             </Surface>
-            <Button icon="message1" mode="contained" textColor="white" style={{ height: 40, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }} onPress={() => setAdd(true)}>
+            <Button icon="message1" mode="contained" textColor="white" style={styles.newButton} onPress={() => setAdd(true)}>
               {state.strings.new}
             </Button>
           </Surface>
 
           <View style={styles.topics}>
-            <View style={{ width: '100%', height: '100%', display: allTab ? 'block' : 'none' }}>
+            <View style={styles.tabView}>
               <FlatList
                 style={styles.channels}
-                contentContainerStyle={{ paddingBottom: 92, paddingTop: 16 }}
+                contentContainerStyle={styles.flatListContent}
                 data={state.filtered}
                 initialNumToRender={10}
                 showsVerticalScrollIndicator={false}
@@ -188,10 +188,10 @@ export function Content({
                 keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
               />
             </View>
-            <View style={{ width: '100%', height: '100%', display: unreadTab ? 'block' : 'none' }}>
+            <View style={styles.tabView}>
               <FlatList
                 style={styles.channels}
-                contentContainerStyle={{ paddingBottom: 92, paddingTop: 16 }}
+                contentContainerStyle={styles.flatListContent}
                 data={state.unread}
                 initialNumToRender={10}
                 showsVerticalScrollIndicator={false}
@@ -236,10 +236,10 @@ export function Content({
                 keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
               />
             </View>
-            <View style={{ width: '100%', height: '100%', display: favoritesTab ? 'block' : 'none' }}>
+            <View style={styles.tabView}>
               <FlatList
                 style={styles.channels}
-                contentContainerStyle={{ paddingBottom: 92, paddingTop: 16 }}
+                contentContainerStyle={styles.flatListContent}
                 data={state.favorites}
                 initialNumToRender={10}
                 showsVerticalScrollIndicator={false}
@@ -285,7 +285,7 @@ export function Content({
                 keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
               />
             </View>
-            <View style={{ width: '100%', height: '100%', display: emptyTab ? 'block' : 'none' }}>
+            <View style={styles.tabView}>
               <View style={styles.none}>
                 <Text style={styles.noneLabel}>{state.strings.noTopics}</Text>
               </View>
@@ -340,7 +340,7 @@ export function Content({
             {state.filtered.length !== 0 && (
               <FlatList
                 style={styles.channels}
-                contentContainerStyle={{ paddingBottom: 92 }}
+                contentContainerStyle={styles.largeFlatListContent}
                 data={state.filtered}
                 initialNumToRender={32}
                 showsVerticalScrollIndicator={false}

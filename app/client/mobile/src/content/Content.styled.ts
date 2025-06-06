@@ -276,4 +276,41 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     borderBottomWidth: 1,
   },
+  searchContainer: {
+    width: '100%',
+    height: 64,
+    display: 'flex',
+    flexDirection: 'row',
+    paddingBottom: 16,
+    paddingLeft: 16,
+    paddingRight: 16,
+    alignItems: 'center',
+    gap: 16,
+  },
+  searchInputContainer: {
+    flexGrow: 1,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  searchInput: {
+    height: 40,
+  },
+  newButton: {
+    height: 40,
+    borderRadius: 8,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tabView: {
+    width: '100%',
+    height: '100%',
+  },
+  flatListContent: {
+    paddingBottom: 92,
+    paddingTop: 16,
+  },
+  largeFlatListContent: {
+    paddingBottom: 92,
+  },
 });
