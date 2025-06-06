@@ -57,7 +57,7 @@ export function useMessage() {
         );
       }
     },
-    getTimestamp: (created: number) => {
+    formatCompactTimestamp: (created: number) => {
       const now = Math.floor(new Date().getTime() / 1000);
       const date = new Date(created * 1000);
       const offset = now - created;
@@ -81,21 +81,21 @@ export function useMessage() {
         }
       }
     },
-    getSMTimestamp: (created: number) => {
+    formatDetailedTimestamp: (created: number) => {
       const now = Math.floor(new Date().getTime() / 1000);
       const date = new Date(created * 1000);
       const offset = now - created;
       if (offset < 31449600) {
         if (state.monthFirstDate) {
-          return date.toLocaleDateString('en-US', {day: '2-digit', month: 'long', hour12: false, hour: 'numeric', minute: '2-digit'});
+          return date.toLocaleDateString('en-US', {day: '2-digit', month: 'long', hour12: !state.fullDayTime, hour: 'numeric', minute: '2-digit'});
         } else {
-          return date.toLocaleDateString('en-GB', {day: '2-digit', month: 'long', hour12: false, hour: 'numeric', minute: '2-digit'});
+          return date.toLocaleDateString('en-GB', {day: '2-digit', month: 'long', hour12: !state.fullDayTime, hour: 'numeric', minute: '2-digit'});
         }
       } else {
         if (state.monthFirstDate) {
-          return date.toLocaleDateString('en-US', {year: 'numeric', day: '2-digit', month: 'long', hour12: false, hour: 'numeric', minute: '2-digit'});
+          return date.toLocaleDateString('en-US', {year: 'numeric', day: '2-digit', month: 'long', hour12: !state.fullDayTime, hour: 'numeric', minute: '2-digit'});
         } else { 
-          return date.toLocaleDateString('en-GB', {year: 'numeric', day: '2-digit', month: 'long', hour12: false, hour: 'numeric', minute: '2-digit'});
+          return date.toLocaleDateString('en-GB', {year: 'numeric', day: '2-digit', month: 'long', hour12: !state.fullDayTime, hour: 'numeric', minute: '2-digit'});
         }
       }
     },

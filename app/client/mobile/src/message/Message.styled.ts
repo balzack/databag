@@ -66,7 +66,7 @@ export const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
- },
+  },
   body: {
     display: 'flex',
     flexGrow: 1,
@@ -162,7 +162,7 @@ export const styles = StyleSheet.create({
   editArea: {
     position: 'relative',
     display: 'flex',
-    alignItem: 'center',
+    alignItems: 'center',
     justifyContent: 'center',
     width: '80%',
     maxWidth: 500,
@@ -197,5 +197,64 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingTop: 16,
     gap: 8,
+  },
+  border: {
+    width: '100%',
+    height: 1,
+  },
+  headerContainer: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 16,
+    paddingRight: 8,
+    alignItems: 'center',
+  },
+  headerActions: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  menuButton: {
+    backgroundColor: 'transparent',
+    padding: 0,
+    margin: 0,
+  },
+  messageContainer: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    paddingLeft: 16,
+    paddingRight: 16,
+    gap: 8,
+    paddingBottom: 16,
+  },
+  messageContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexShrink: 1,
+    minWidth: 0,
+  },
+  messageSurface: {
+    borderRadius: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
+  },
+  messageText: {
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
+  shimmerContainer: {
+    padding: 16,
+  },
+  mediaScroll: {
+    paddingTop: 12,
+  },
+  lockedText: {
+    padding: 16,
   },
 });

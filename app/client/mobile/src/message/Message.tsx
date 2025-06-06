@@ -9,7 +9,7 @@ import {VideoAsset} from './videoAsset/VideoAsset';
 import {BinaryAsset} from './binaryAsset/BinaryAsset';
 import {useMessage} from './useMessage.hook';
 import {styles} from './Message.styled';
-import {MediaAsset} from '../conversation/Conversatin';
+import {MediaAsset} from '../conversation/Conversation';
 import {Confirm} from '../confirm/Confirm';
 import {Shimmer} from './shimmer/Shimmer';
 import {BlurView} from '@react-native-community/blur';
@@ -38,7 +38,7 @@ export function Message({
   const {text, textColor, textSize, assets} = data || {text: null, textColor: null, textSize: null};
   const textStyle = textColor && textSize ? {fontSize: textSize, color: textColor} : textColor ? {color: textColor} : textSize ? {fontSize: textSize} : {};
   const logoUrl = profile ? profile.imageUrl : card ? card.imageUrl : avatar;
-  const timestamp = small ? actions.getSMTimestamp(created).replace(' at ', ' ') : actions.getTimestamp(created);
+  const timestamp = small ? actions.formatDetailedTimestamp(created).replace(' at ', ' ') : actions.formatCompactTimestamp(created);
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState('');
   const [saving, setSaving] = useState(false);
@@ -49,8 +49,8 @@ export function Message({
   const [reporting, setReporting] = useState(false);
   const loadedCount = useRef(0);
   const [showAsset, setShowAsset] = useState(false);
-  const [message, setMessage] = useState([]);
-  const fontStyle = {fontStyle: 'italic'};
+  const [message, setMessage] = useState<React.ReactNode[]>([]);
+  const fontStyle = {fontStyle: 'italic' as const};
   const [options, setOptions] = useState(false);
   const theme = useTheme();
 
@@ -243,17 +243,17 @@ export function Message({
     <View style={styles.message}>
       { small && (
         <View style={styles.component}>
-          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 16, paddingRight: 8, alignItems: 'center' }}>
+          <View style={styles.headerContainer}>
             {name && <Text style={styles.labelName}>{name}</Text>}
             {!name && handle && <Text style={styles.labelHandle}>{`${handle}${node ? '@' + node : ''}`}</Text>}
             {!name && !handle && <Text style={styles.labelUnknown}>{state.strings.unknownContact}</Text>}
-            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            <View style={styles.headerActions}>
               <Text style={styles.timestamp}> {timestamp}</Text>
               <Menu
                 key="actions"
                 visible={options}
                 onDismiss={()=>setOptions(false)}
-                anchor={<IconButton style={{ backgroundColor: 'transparent', padding: 0, margin: 0 }} icon="dots-horizontal-circle-outline" size={16} onPress={()=>setOptions(true)} />}>
+                anchor={<IconButton style={styles.menuButton} icon="dots-horizontal-circle-outline" size={16} onPress={()=>setOptions(true)} />}>
                   {!locked && profile && status === 'confirmed' && (
                     <Menu.Item key='edit' leadingIcon="square-edit-outline" title={state.strings.editOption} onPress={edit} />
                   )}
@@ -269,22 +269,22 @@ export function Message({
               </Menu>
             </View>
           </View>
-          <View style={{ width: '100%', display: 'flex', flexDirection: profile ? 'row-reverse' : 'row', justifyContent: 'flex-begin', paddingLeft: 16, paddingRight: 16, gap: 8, paddingBottom: 16 }}>
+          <View style={[styles.messageContainer, { flexDirection: profile ? 'row-reverse' : 'row' }]}>
             <Image style={styles.image} resizeMode={'contain'} source={{uri: logoUrl}} />
-            <View style={{ display: 'flex', flexDirection: 'column', flexShrink: 1, minWidth: 0 }}>
-              <Surface style={{ borderRadius: 8, paddingTop: 8, paddingBottom: 8 }} mode="flat" elevation={0}>
+            <View style={styles.messageContent}>
+              <Surface style={styles.messageSurface} mode="flat" elevation={0}>
                 {!locked && status === 'confirmed' && text && (
-                  <Text style={{...styles.text, ...textStyle, paddingTop: 8, paddingBottom: 8, paddingLeft: 16, paddingRight: 16 }}>{message}</Text>
+                  <Text style={{...styles.text, ...textStyle, ...styles.messageText}}>{message}</Text>
                 )}
                 {!locked && status !== 'confirmed' && (
-                  <View style={{ padding: 16 }}>
+                  <View style={styles.shimmerContainer}>
                     <Shimmer contentStyle={styles.longbone} />
                     <Shimmer contentStyle={styles.shortbone} />
                   </View>
                 )}
-                {locked && <Text style={{ ...styles.locked, padding: 16 }}>{state.strings.encrypted}</Text>}
+                {locked && <Text style={[styles.locked, styles.lockedText]}>{state.strings.encrypted}</Text>}
                 {!locked && assets?.length > 0 && transform === 'complete' && (
-                  <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ paddingTop: 12 }} contentContainerStyle={styles.assets}>
+                  <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.mediaScroll} contentContainerStyle={styles.assets}>
                     {media}
                   </ScrollView>
                 )}
@@ -304,8 +304,8 @@ export function Message({
                 <Pressable style={styles.header} onPress={() => select(topicId === selected ? null : topicId)}>
                   <View style={styles.name}>
                     {name && <Text style={styles.handle}>{name}</Text>}
-                    {!name && handle && <Text style={{ ...styles.handle, color: theme.colors.onSecondary }}>{`${handle}${node ? '@' + node : ''}`}</Text>}
-                    {!name && !handle && <Text style={{ ...styles.unknown, color: theme.colors.tertiery }}>{state.strings.unknownContact}</Text>}
+                    {!name && handle && <Text style={[styles.handle, { color: theme.colors.onSecondary }]}>{`${handle}${node ? '@' + node : ''}`}</Text>}
+                    {!name && !handle && <Text style={[styles.unknown, { color: theme.colors.tertiary }]}>{state.strings.unknownContact}</Text>}
                     <Text style={styles.timestamp}> {timestamp}</Text>
                   </View>
                 </Pressable>
@@ -317,7 +317,7 @@ export function Message({
                       <Shimmer contentStyle={styles.shortbone} />
                     </View>
                   )}
-                  {locked && <Text style={styles.locked}>{state.strings.encrypted}</Text>}
+                  {locked && <Text style={[styles.locked, styles.lockedText]}>{state.strings.encrypted}</Text>}
                 </View>
               </View>
             </View>
@@ -331,10 +331,10 @@ export function Message({
           {!locked && media.length > 0 && transform !== 'complete' && transform !== 'incomplete' && <Text style={styles.error}>{state.strings.processingError}</Text>}
           {topicId === selected && (
             <Surface style={styles.options}>
-              {!locked && profile && status === 'confirmed' && <IconButton style={styles.option} loading={false} compact="true" mode="contained" icon="square-edit-outline" size={24} onPress={edit} />}
-              {(host || profile) && <IconButton style={styles.option} loading={removing} compact="true" mode="contained" icon="trash-can-outline" size={24} onPress={remove} />}
-              {!profile && <IconButton style={styles.option} loading={false} compact="true" mode="contained" icon="eye-remove-outline" size={24} onPress={block} />}
-              {!profile && <IconButton style={styles.option} loading={false} compact="true" mode="contained" icon="alert-octagon-outline" size={24} onPress={report} />}
+              {!locked && profile && status === 'confirmed' && <IconButton style={styles.option} loading={false} icon="square-edit-outline" size={24} onPress={edit} />}
+              {(host || profile) && <IconButton style={styles.option} loading={removing} icon="trash-can-outline" size={24} onPress={remove} />}
+              {!profile && <IconButton style={styles.option} loading={false} icon="eye-remove-outline" size={24} onPress={block} />}
+              {!profile && <IconButton style={styles.option} loading={false} icon="alert-octagon-outline" size={24} onPress={report} />}
             </Surface>
           )}
           <View style={styles.pad}>
@@ -357,7 +357,7 @@ export function Message({
                 style={styles.message}
                 outlineColor="transparent"
                 activeOutlineColor="transparent"
-                spellcheck={false}
+                spellCheck={false}
                 autoComplete="off"
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -373,7 +373,7 @@ export function Message({
                   {state.strings.save}
                 </Button>
               </View>
-              <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={24} onPress={() => setEditing(false)} />
+              <IconButton style={styles.closeIcon} icon="close" size={24} onPress={() => setEditing(false)} />
             </Surface>
           </View>
         </View>
