@@ -284,7 +284,7 @@ export function Message({
                 )}
                 {locked && <Text style={{ ...styles.locked, padding: 16 }}>{state.strings.encrypted}</Text>}
                 {!locked && assets?.length > 0 && transform === 'complete' && (
-                  <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ paddingTop: 8 }} contentContainerStyle={styles.assets}>
+                  <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ paddingTop: 12 }} contentContainerStyle={styles.assets}>
                     {media}
                   </ScrollView>
                 )}

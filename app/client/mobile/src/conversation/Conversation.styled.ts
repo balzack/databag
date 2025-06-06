@@ -12,15 +12,26 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
     color: 'white',
   },
+  option: {
+    padding: 8,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
   canvas: {
     width: '100%',
     paddingLeft: 12,
     paddingRight: 12,
     paddingBottom: 8,
   },
-  compose: {
+  frame: {
     borderRadius: 8,
     width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  compose: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -87,6 +98,16 @@ export const styles = StyleSheet.create({
     width: 300,
     padding: 16,
     borderRadius: 8,
+  },
+  sizeArea: {
+    position: 'relative',
+    display: 'flex',
+    alignItem: 'center',
+    justifyContent: 'center',
+    width: 200,
+    padding: 16,
+    borderRadius: 8,
+    gap: 8,
   },
   blur: {
     position: 'absolute',

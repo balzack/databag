@@ -34,6 +34,12 @@ export const en = {
   blockOption: 'Block Message',
   deleteOption: 'Delete Message',
   reportOption: 'Report Message',
+  attachImage: 'Attach Image',
+  attachVideo: 'Attach Video',
+  attachAudio: 'Attach Audio',
+  attachFile: 'Attach File',
+  textColor: 'Text Color',
+  textSize: 'Text Size',
 
   welcomeTo: 'Welcome To Databag',
   notUser: 'Not a user?',

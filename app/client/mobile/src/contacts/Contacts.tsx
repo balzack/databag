@@ -139,7 +139,7 @@ export function Contacts({
                       { syncStatus === 'connecting' && (
                         <Menu.Item key='cancel' leadingIcon="cancel" title={state.strings.cancelAction} onPress={() => cancel(item)} />
                       )}
-                      { (syncStatus === 'pending' || syncStatus === 'received') && (
+                      { (syncStatus === 'pending' || syncStatus === 'requested') && (
                         <Menu.Item key='accept' leadingIcon="account-check-outline" title={state.strings.acceptAction} onPress={() => accept(item)} />
                       )}
                   </Menu>

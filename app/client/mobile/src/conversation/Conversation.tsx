@@ -34,6 +34,7 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
   const [selected, setSelected] = useState(null as null | string);
   const [sizeMenu, setSizeMenu] = useState(false);
   const [colorMenu, setColorMenu] = useState(false);
+  const [sizeModal, setSizeModal] = useState(false);
   const [avoid, setAvoid] = useState(false);
   const thread = useRef();
   const scrolled = useRef(false);
@@ -42,6 +43,7 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
   const scrollOffset = useRef(0);
   const busy = useRef(false);
   const scale = useAnimatedValue(0);
+  const [options, setOptions] = useState(false);
   const theme = useTheme();
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
@@ -149,6 +151,7 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
   };
 
   const addImage = async () => {
+    setOptions(false);
     try {
       const {path, mime, size} = await ImagePicker.openPicker({mediaType: 'photo'});
       actions.addImage(path, mime, size);
@@ -158,6 +161,7 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
   };
 
   const addVideo = async () => {
+    setOptions(false);
     try {
       const {path, mime} = await ImagePicker.openPicker({mediaType: 'video'});
       actions.addVideo(path, mime);
@@ -167,6 +171,7 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
   };
 
   const addAudio = async () => {
+    setOptions(false);
     try {
       const audio = await DocumentPicker.pickSingle({
         presentationStyle: 'fullScreen',
@@ -180,6 +185,7 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
   };
 
   const addBinary = async () => {
+    setOptions(false);
     try {
       const binary = await DocumentPicker.pickSingle({
         presentationStyle: 'fullScreen',
@@ -282,26 +288,73 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
               </View>
             )}
             <View style={styles.canvas}>
-              <Surface style={styles.compose} mode="flat" elevation={0}>
-                <IconButton style={styles.options} mode="contained" iconColor={theme.colors.onSurface} icon="plus-square" size={20} onPress={()=>{}} />
-                <RawInput
-                  multiline={true}
-                  mode="outlined"
-                  dense={true}
-                  style={{ color: theme.colors.onSurface, paddingTop: 10, paddingBottom: 10, flexGrow: 1, flexShrink: 1, minWidth: 0, fontSize: 16 }}
-                  outlineColor="transparent"
-                  activeOutlineColor={Colors.placeholder}
-                  spellcheck={false}
-                  autoComplete="off"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  placeholder={state.strings.newMessage}
-                  placeholderTextColor={state.textColorSet ? state.textColor : theme.colors.tertiery}
-                  cursorColor={state.textColorSet ? state.textColor : undefined}
-                  value={state.message}
-                  onChangeText={value => actions.setMessage(value)}
-                />
-                <IconButton style={styles.send} loading={sending} mode="contained" iconColor={ !state.access || !state.validShare || (!state.message && state.assets.length === 0) ? theme.colors.secondary : theme.colors.onSurface} icon="send" size={20} onPress={sendMessage} />
+              <Surface style={styles.frame} mode="flat" elevation={0}>
+                <Animated.View style={[{}, {height: scale}]}>
+                  { state.assets.length > 0 && <View style={{ width: '100%', height: 8 }}></View> }
+                  <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.carousel} contentContainerStyle={styles.assets}>
+                    {media}
+                  </ScrollView>
+                </Animated.View>
+                <View style={styles.compose}>
+                  <Menu
+                      key="actions"
+                      visible={options}
+                      onDismiss={()=>setOptions(false)}
+                      anchorPosition="top"
+                      anchor={<IconButton style={styles.options} mode="contained" iconColor={theme.colors.onSurface} icon="plus-square" size={20} onPress={()=>setOptions(true)} />}>
+                    {!disableImage && (
+                      <Pressable style={styles.option} onPress={addImage}>
+                        <Icon style={styles.button} source="camera" size={24} color={Colors.primary} />
+                        <Text>{ state.strings.attachImage }</Text>
+                      </Pressable>
+                    )}
+                    {!disableVideo && (
+                      <Pressable style={styles.option} onPress={addVideo}>
+                        <Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} />
+                        <Text>{ state.strings.attachVideo }</Text>
+                      </Pressable>
+                    )}
+                    {!disableAudio && (
+                      <Pressable style={styles.option} onPress={addAudio}>
+                        <Icon style={styles.button} source="volume-high" size={24} color={Colors.primary} />
+                        <Text>{ state.strings.attachAudio }</Text>
+                      </Pressable>
+                    )}
+                    {!disableBinary && (
+                      <Pressable style={styles.option} onPress={addBinary}>
+                        <Icon style={styles.button} source="file-outline" size={24} color={Colors.primary} />
+                        <Text>{ state.strings.attachFile }</Text>
+                      </Pressable>
+                    )}
+                    {(!disableImage || !disableVideo || !disableAudio || !disableBinary) && <Divider /> }
+                    <Pressable style={styles.option} onPress={() => { setOptions(false); setColorMenu(true)}}>
+                      <Icon style={styles.button} source="format-color-text" size={24} color={Colors.primary} />
+                      <Text>{ state.strings.textColor }</Text>
+                    </Pressable>
+                    <Pressable style={styles.option} onPress={() => { setOptions(false); setSizeModal(true)}}>
+                      <Icon style={styles.button} source="format-size" size={24} color={Colors.primary} />
+                      <Text>{ state.strings.textSize }</Text>
+                    </Pressable>
+                  </Menu>
+                  <RawInput
+                    multiline={true}
+                    mode="outlined"
+                    dense={true}
+                    style={{ color: state.textColorSet ? state.textColor : theme.colors.onSurface, paddingTop: 10, paddingBottom: 10, flexGrow: 1, flexShrink: 1, minWidth: 0, fontSize: state.textSize }}
+                    outlineColor="transparent"
+                    activeOutlineColor={Colors.placeholder}
+                    spellcheck={false}
+                    autoComplete="off"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    placeholder={state.strings.newMessage}
+                    placeholderTextColor={state.textColorSet ? state.textColor : theme.colors.tertiery}
+                    selectionColor={state.textColorSet ? state.textColor : theme.colors.onSurface}
+                    value={state.message}
+                    onChangeText={value => actions.setMessage(value)}
+                  />
+                  <IconButton style={styles.send} loading={sending} mode="contained" iconColor={ !state.access || !state.validShare || (!state.message && state.assets.length === 0) ? theme.colors.secondary : theme.colors.onSurface} icon="send" size={20} onPress={sendMessage} />
+                </View>
               </Surface>
             </View>
 
@@ -514,6 +567,20 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
           </Surface>
         </View>
       </Modal>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={sizeModal} onRequestClose={() => setSizeModal(false)}>
+        <View style={styles.modal}>
+          <Pressable style={styles.blur} onPress={() => setSizeModal(false)}>
+            <BlurView style={styles.blur} blurType="dark" blurAmount={6} reducedTransparencyFallbackSize="dark" />
+          </Pressable>
+          <Surface elevation={2} style={styles.sizeArea}>
+            <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={20} onPress={() => setSizeModal(false)} />
+            <Pressable onPress={() => {actions.setTextSize(20); setSizeModal(false)}}><Text>{ state.strings.textLarge }</Text></Pressable>
+            <Pressable onPress={() => {actions.setTextSize(16); setSizeModal(false)}}><Text>{ state.strings.textMedium }</Text></Pressable>
+            <Pressable onPress={() => {actions.setTextSize(12); setSizeModal(false)}}><Text>{ state.strings.textSmall }</Text></Pressable>
+          </Surface>
+        </View>
+      </Modal>
+
     </View>
   );
 }
