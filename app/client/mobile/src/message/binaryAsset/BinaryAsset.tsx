@@ -49,7 +49,7 @@ export function BinaryAsset({topicId, asset, loaded, show}: {topicId: string; as
   };
 
   return (
-    <View style={styles.binary}>
+    <Surface elevation={1} style={styles.binary}>
       <Pressable onPress={showBinary}>
         <Animated.View style={[styles.container, {opacity}]}>
           <Image style={styles.thumb} resizeMode="contain" height={92} width={92} source={thumb} onLoad={loaded} />
@@ -88,6 +88,6 @@ export function BinaryAsset({topicId, asset, loaded, show}: {topicId: string; as
           </SafeAreaView>
         </View>
       </Modal>
-    </View>
+    </Surface>
   );
 }

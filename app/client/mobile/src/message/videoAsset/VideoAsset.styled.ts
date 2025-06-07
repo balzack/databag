@@ -34,6 +34,8 @@ export const styles = StyleSheet.create({
   },
   video: {
     position: 'relative',
+    padding: 1,
+    borderRadius: 4,
   },
   thumb: {
     borderRadius: 4,

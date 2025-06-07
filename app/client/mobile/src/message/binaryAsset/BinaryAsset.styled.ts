@@ -46,6 +46,8 @@ export const styles = StyleSheet.create({
   },
   binary: {
     position: 'relative',
+    borderRadius: 4,
+    padding: 1,
   },
   thumb: {
     borderRadius: 4,

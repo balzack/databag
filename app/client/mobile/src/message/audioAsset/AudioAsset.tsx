@@ -73,7 +73,7 @@ export function AudioAsset({topicId, asset, loaded, show}: {topicId: string; ass
   };
 
   return (
-    <View style={styles.audio}>
+    <Surface elevation={1} style={styles.audio}>
       <Pressable onPress={showAudio}>
         <Animated.View style={[styles.container, {opacity}]}>
           <Image style={styles.thumb} resizeMode="contain" height={92} width={92} source={thumb} onLoad={loaded} />
@@ -128,6 +128,6 @@ export function AudioAsset({topicId, asset, loaded, show}: {topicId: string; ass
           <SafeAreaView style={styles.alert}>{state.failed && <Text style={styles.alertLabel}>{state.strings.failedLoad}</Text>}</SafeAreaView>
         </View>
       </Modal>
-    </View>
+    </Surface>
   );
 }

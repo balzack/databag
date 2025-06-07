@@ -46,6 +46,7 @@ export function useAppContext() {
     favorite: [] as { cardId: null | string, channelId: string }[],
     fullDayTime: false,
     monthFirstDate: true,
+    fontSize: 0,
     lanaguge: null as null | string,
     initialized: false,
     showWelcome: false,
@@ -62,6 +63,7 @@ export function useAppContext() {
     const fullDayTime = (await local.current.get('time_format', '12h')) === '24h';
     const monthFirstDate = (await local.current.get('date_format', 'month_first')) === 'month_first';
     const setLanguage = (await local.current.get('language', null));
+    const fontSize = parseInt(await local.current.get('font_size', '0')) || 0;
 
     const locale = Platform.OS === 'ios' ? NativeModules.SettingsManager?.settings.AppleLocale || NativeModules.SettingsManager?.settings.AppleLanguages[0] : NativeModules.I18nManager?.localeIdentifier;
     const defaultLanguage = locale?.slice(0, 2) || '';
@@ -72,9 +74,9 @@ export function useAppContext() {
     await store.open(DATABAG_DB);
     const session: Session | null = await sdk.current.initOfflineStore(store);
     if (session) {
-      updateState({session, fullDayTime, monthFirstDate, language, favorite, initialized: true});
+      updateState({session, fullDayTime, monthFirstDate, fontSize, language, favorite, initialized: true});
     } else {
-      updateState({fullDayTime, monthFirstDate, language, initialized: true});
+      updateState({fullDayTime, monthFirstDate, language, fontSize, initialized: true});
     }
   };
 
@@ -101,6 +103,10 @@ export function useAppContext() {
     setFullDayTime: async (fullDayTime: boolean) => {
       updateState({fullDayTime});
       await local.current.set('time_format', fullDayTime ? '24h' : '12h');
+    },
+    setFontSize: async (fontSize: number) => {
+      updateState({ fontSize });
+      await local.current.set('font_size', fontSize.toString());
     },
     setLanguage: async (language: string) => {
       updateState({language});

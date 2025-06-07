@@ -41,6 +41,8 @@ export const styles = StyleSheet.create({
   },
   audio: {
     position: 'relative',
+    padding: 1,
+    borderRadius: 4,
   },
   thumb: {
     borderRadius: 4,

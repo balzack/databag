@@ -740,10 +740,11 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                       </View>
                       <View style={styles.slider}>
                         <Slider
-                          minimumValue={-2}
-                          maximumValue={2}
+                          minimumValue={-4}
+                          maximumValue={4}
                           minimumTrackTintColor={theme.colors.primary}
-                          value={1}
+                          value={state.fontSize}
+                          onSlidingComplete={(val)=>actions.setFontSize(val)}
                         />
                       </View>
                     </Surface>

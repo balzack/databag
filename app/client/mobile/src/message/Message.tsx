@@ -36,7 +36,8 @@ export function Message({
   const {locked, data, created, topicId, status, transform} = topic;
   const {name, handle, node} = profile || card || {name: null, handle: null, node: null};
   const {text, textColor, textSize, assets} = data || {text: null, textColor: null, textSize: null};
-  const textStyle = textColor && textSize ? {fontSize: textSize, color: textColor} : textColor ? {color: textColor} : textSize ? {fontSize: textSize} : {};
+  const fontSize = textSize ? textSize + state.fontSize : 16 + state.fontSize;
+  const textStyle = textColor ? {fontSize, color: textColor} : {fontSize};
   const logoUrl = profile ? profile.imageUrl : card ? card.imageUrl : avatar;
   const timestamp = small ? actions.formatDetailedTimestamp(created).replace(' at ', ' ') : actions.formatCompactTimestamp(created);
   const [editing, setEditing] = useState(false);
@@ -102,7 +103,7 @@ export function Message({
     }
     setMessage(clickable);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [text, locked]);
+  }, [text, locked, state.fontSize]);
 
   const loaded = () => {
     loadedCount.current += 1;

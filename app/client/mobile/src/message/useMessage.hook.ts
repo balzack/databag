@@ -10,6 +10,7 @@ export function useMessage() {
     strings: display.state.strings,
     fullDayTime: app.state.fullDayTime,
     monthFirstDate: app.state.monthFirstDate,
+    fontSize: app.state.fontSize,
   });
 
   const updateState = (value: any) => {
@@ -22,8 +23,8 @@ export function useMessage() {
   }, [display.state]);
 
   useEffect(() => {
-    const {monthFirstDate, fullDayTime} = app.state;
-    updateState({ monthFirstDate, fullDayTime });
+    const {monthFirstDate, fullDayTime, fontSize} = app.state;
+    updateState({ monthFirstDate, fullDayTime, fontSize });
   }, [app.state]);
 
   const actions = {

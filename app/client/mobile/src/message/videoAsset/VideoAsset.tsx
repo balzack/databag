@@ -85,7 +85,7 @@ export function VideoAsset({topicId, asset, loaded, show}: {topicId: string; ass
   };
 
   return (
-    <View style={styles.video}>
+    <Surface elevation={1} style={styles.video}>
       {state.thumbUrl && (
         <Pressable style={styles.container} onPress={showVideo}>
           <Animated.View style={[styles.thumb, {opacity}]}>
@@ -135,6 +135,6 @@ export function VideoAsset({topicId, asset, loaded, show}: {topicId: string; ass
           <SafeAreaView style={styles.alert}>{state.failed && <Text style={styles.alertLabel}>{state.strings.failedLoad}</Text>}</SafeAreaView>
         </Pressable>
       </Modal>
-    </View>
+    </Surface>
   );
 }

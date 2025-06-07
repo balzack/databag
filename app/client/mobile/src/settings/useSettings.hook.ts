@@ -37,6 +37,7 @@ export function useSettings() {
     sealDelete: '',
     secretCopied: false,
     monthFirstDate: true,
+    fontSize: 0,
     fullDayTime: false,
     blockedContacts: [] as {cardId: string; timestamp: number}[],
     blockedChannels: [] as {cardId: string | null; channelId: string; timestamp: number}[],
@@ -86,8 +87,8 @@ export function useSettings() {
   }, []);
 
   useEffect(() => {
-    const {fullDayTime, monthFirstDate} = app.state;
-    updateState({fullDayTime, monthFirstDate});
+    const {fullDayTime, monthFirstDate, fontSize} = app.state;
+    updateState({fullDayTime, monthFirstDate, fontSize});
   }, [app.state]);
 
   useEffect(() => {
@@ -196,6 +197,9 @@ export function useSettings() {
     setTimeFormat: (format: string) => {
       display.actions.setTimeFormat(format);
     },
+    setFontSize: (fontSize: number) => {
+      display.actions.setFontSize(fontSize);
+    },
     setAll: (all: boolean) => {
       updateState({all});
     },
@@ -262,7 +266,18 @@ export function useSettings() {
       }
     },
     setMonthFirstDate: async (flag: boolean) => {
-      await app.actions.setMonthFirstDate(flag);
+      try {
+        await app.actions.setMonthFirstDate(flag);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    setFontSize: async (fontSize: number) => {
+      try {
+        await app.actions.setFontSize(fontSize);
+      } catch (err) {
+        console.log(err);
+      }
     },
     loadBlockedMessages: async () => {
       const settings = app.state.session.getSettings();
