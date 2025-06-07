@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
   },
   headerSurface: {
     width: '100%',
-    height: 64,
+    height: 72,
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 16,
@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   newContactButton: {
-    height: 40,
+    height: 48,
     borderRadius: 8,
     display: 'flex',
     alignItems: 'center',
@@ -41,23 +41,23 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     overscrollBehavior: 'none',
-    paddingTop: 16,
+    paddingTop: 24,
     paddingBottom: 64,
   },
   smCard: {
     width: '100%',
-    height: 72,
+    height: 80,
     paddingTop: 12,
     paddingBottom: 12,
     paddingLeft: 16,
     icon: {
-      borderRadius: 24,
+      borderRadius: 28,
       overflow: 'hidden',
     }
   },
   tabs: {
     position: 'absolute',
-    top: 54,
+    top: 64,
     height: 28,
     width: '100%',
     display: 'flex',
@@ -128,8 +128,8 @@ export const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 0,
     display: 'flex',
-    height: 40,
-    maxHeight: 40,
+    height: 48,
+    maxHeight: 48,
     borderRadius: 8,
   },
   inputUnderline: {

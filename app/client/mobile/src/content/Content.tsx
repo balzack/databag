@@ -61,6 +61,7 @@ export function Content({
   }, [share]);
 
   useEffect(() => {
+console.log("HERE????", textCard);
     if (textCard.cardId) {
       openTopic(textCard.cardId);
     }
@@ -135,7 +136,7 @@ export function Content({
           </Surface>
 
           <View style={styles.topics}>
-            <View style={styles.tabView}>
+            <View style={{ ...styles.tabView, display: allTab ? 'flex' : 'none' }}>
               <FlatList
                 style={styles.channels}
                 contentContainerStyle={styles.flatListContent}
@@ -152,7 +153,7 @@ export function Content({
                     <Menu
                       visible={allTab && more === `${item.cardId}:${item.channelId}`}
                       onDismiss={()=>setMore(null)}
-                      anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>setMore(`${item.cardId}:${item.channelId}`)} />}>
+                      anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={24} onPress={()=>setMore(`${item.cardId}:${item.channelId}`)} />}>
                         { state.favorite.some(entry => item.cardId == entry.cardId && item.channelId === entry.channelId) && (
                           <Menu.Item key='clearFavorite' leadingIcon="star" title={state.strings.removeFavorites} onPress={()=>{setMore(null); actions.clearFavorite(item.cardId, item.channelId)}} />
                         )}
@@ -188,7 +189,7 @@ export function Content({
                 keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
               />
             </View>
-            <View style={styles.tabView}>
+            <View style={{ ...styles.tabView, display: unreadTab ? 'flex' : 'none' }}>
               <FlatList
                 style={styles.channels}
                 contentContainerStyle={styles.flatListContent}
@@ -236,7 +237,7 @@ export function Content({
                 keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
               />
             </View>
-            <View style={styles.tabView}>
+            <View style={{ ...styles.tabView, display: favoritesTab ? 'flex' : 'none' }}>
               <FlatList
                 style={styles.channels}
                 contentContainerStyle={styles.flatListContent}
@@ -285,7 +286,7 @@ export function Content({
                 keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
               />
             </View>
-            <View style={styles.tabView}>
+            <View style={{...styles.tabView, display: emptyTab ? 'flex' : 'none' }}>
               <View style={styles.none}>
                 <Text style={styles.noneLabel}>{state.strings.noTopics}</Text>
               </View>

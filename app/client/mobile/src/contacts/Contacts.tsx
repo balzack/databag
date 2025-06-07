@@ -30,6 +30,7 @@ export function Contacts({
   textContact: (cardId: null | string) => void;
 }) {
   const theme = useTheme();
+  const [menuAction, setMenuAction] = useState(null as null | string);
   const {state, actions} = useContacts();
   const [more, setMore] = useState(null as null | string);
   const [tab, setTab] = useState('all');
@@ -49,6 +50,8 @@ export function Contacts({
   const emptyTab = !allTab && !requestedTab && !connectedTab;
 
   const call = async (card: Card) => {
+    setMore(null);
+    setMenuAction(card.cardId);
     try {
       await actions.call(card);
       callContact(card);
@@ -56,33 +59,43 @@ export function Contacts({
       console.log(err);
       setAlert(true);
     }
+    setMenuAction(null);
   };
 
   const resync = async (card: Card) => {
+    setMore(null);
+    setMenuAction(card.cardId);
     try {
       await actions.resync(card.cardId);
     } catch (err) {
       console.log(err);
       setAlert(true);
     }
+    setMenuAction(null);
   }
 
   const cancel = async (card: Card) => {
+    setMore(null);
+    setMenuAction(card.cardId);
     try {
       await actions.cancel(card.cardId);
     } catch (err) {
       console.log(err);
       setAlert(true);
     }
+    setMenuAction(null);
   }
 
   const accept = async (card: Card) => {
+    setMore(null);
+    setMenuAction(card.cardId);
     try {
       await actions.accept(card.cardId);
     } catch (err) {
       console.log(err);
       setAlert(true);
     }
+    setMenuAction(null);
   }
 
   return (
@@ -126,7 +139,7 @@ export function Contacts({
                     key="actions"
                     visible={allTab && more === item.cardId}
                     onDismiss={()=>setMore(null)}
-                    anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>setMore(item.cardId)} />}>
+                    anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={24} onPress={()=>setMore(item.cardId)} />}>
                       { syncStatus === 'offsync' && (
                         <Menu.Item key='resync' leadingIcon="cached" title={state.strings.resyncAction} onPress={() => resync(item)} />
                       )}
@@ -134,7 +147,7 @@ export function Contacts({
                         <Menu.Item key='call' leadingIcon="phone-outline" title={state.strings.callAction} onPress={() => call(item)} />
                       )}
                       { syncStatus === 'connected' && (
-                        <Menu.Item key='text' leadingIcon="message-outline" title={state.strings.textAction} onPress={() => textContact(item.cardId)} />
+                        <Menu.Item key='text' leadingIcon="message-outline" title={state.strings.textAction} onPress={() => { setMore(null); textContact(item.cardId)}} />
                       )}
                       { syncStatus === 'connecting' && (
                         <Menu.Item key='cancel' leadingIcon="cancel" title={state.strings.cancelAction} onPress={() => cancel(item)} />

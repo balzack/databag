@@ -48,7 +48,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
   },
   smHeader: {
-    height: 64,
+    height: 72,
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
@@ -93,13 +93,13 @@ export const styles = StyleSheet.create({
   },
   smCard: {
     width: '100%',
-    height: 72,
+    height: 80,
     paddingTop: 12,
     paddingBottom: 12,
     paddingRight: 16,
     paddingLeft: 16,
     icon: {
-      borderRadius: 24,
+      borderRadius: 28,
       overflow: 'hidden',
     }
   },

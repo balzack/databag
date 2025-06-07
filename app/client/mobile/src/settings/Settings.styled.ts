@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     paddingTop: 16,
   },
   navHeader: {
-    height: 64,
+    height: 72,
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
@@ -60,7 +60,7 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: 16,
     position: 'absolute',
-    top: 64,
+    top: 72,
   },
   overlap: {
     position: 'absolute',
@@ -248,7 +248,7 @@ export const styles = StyleSheet.create({
     textWrap: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
-    height: 52,
+    height: 64,
     paddingTop: 16,
   },
   image: {

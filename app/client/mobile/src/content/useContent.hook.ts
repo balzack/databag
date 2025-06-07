@@ -279,7 +279,7 @@ export function useContent() {
         if (thread) {
           return thread.channelId;
         } else {
-          const topic = await content.addChannel(sealable, sealable ? 'sealed' : 'superbasic', {}, [cardId]);
+          const topic = await content.addChannel(sealable, sealable ? 'sealed' : 'superbasic', {}, [contactId]);
           return topic.id;
         }
       }

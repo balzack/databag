@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
   },
   tabs: {
     position: 'absolute',
-    top: 54,
+    top: 64,
     height: 28,
     width: '100%',
     display: 'flex',
@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 12,
+    borderRadius: 14,
   },
   opaque: {},
   opacity: {
@@ -134,12 +134,12 @@ export const styles = StyleSheet.create({
   },
   smChannel: {
     width: '100%',
-    height: 72,
+    height: 80,
     paddingTop: 12,
     paddingBottom: 12,
     paddingLeft: 16,
     logo: {
-      borderRadius: 24,
+      borderRadius: 28,
     },
   },
   channel: {
@@ -278,7 +278,7 @@ export const styles = StyleSheet.create({
   },
   searchContainer: {
     width: '100%',
-    height: 64,
+    height: 72,
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 16,
@@ -293,10 +293,10 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   searchInput: {
-    height: 40,
+    height: 48,
   },
   newButton: {
-    height: 40,
+    height: 48,
     borderRadius: 8,
     display: 'flex',
     alignItems: 'center',
@@ -308,7 +308,7 @@ export const styles = StyleSheet.create({
   },
   flatListContent: {
     paddingBottom: 92,
-    paddingTop: 16,
+    paddingTop: 24,
   },
   largeFlatListContent: {
     paddingBottom: 92,

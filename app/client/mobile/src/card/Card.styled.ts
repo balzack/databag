@@ -50,6 +50,7 @@ export const styles = StyleSheet.create({
     textWrap: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
+    fontWeight: 700,
   },
   nameUnset: {
     fontSize: 16,
