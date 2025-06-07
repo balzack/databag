@@ -25,6 +25,7 @@ export function useContent() {
     strings: display.state.strings,
     layout: null,
     guid: '',
+    loading: [] as Card[],
     cards: [] as Card[],
     connected: [] as Card[],
     sealable: [] as Card[],
@@ -38,6 +39,7 @@ export function useContent() {
     sealSet: false,
     focused: null as null | {cardId: null | string; channelId: string},
     favorite: [] as { cardId: null | string, channelId: string }[],
+    loaded: false,
   });
 
   const compare = (a: Card, b: Card) => {
@@ -61,6 +63,10 @@ export function useContent() {
   }, [display.state]);
 
   useEffect(() => {
+    if (!state.loaded) {
+      return;
+    }
+
     const channels = state.sorted.map(channel => {
       const {cardId, channelId, unread, sealed, members, data, lastTopic} = channel;
       const contacts = [] as (Card | undefined)[];
@@ -164,7 +170,7 @@ export function useContent() {
     const favorites = filtered.filter(item => state.favorite.find(entry => item.cardId === entry.cardId && item.channelId === entry.channelId));
 
     updateState({channels, filtered, unread, favorites});
-  }, [state.sorted, state.cards, state.guid, state.filter, state.focused]);
+  }, [state.loaded, state.sorted, state.cards, state.guid, state.filter, state.focused]);
 
   useEffect(() => {
     if (app.state.focus) {
@@ -228,18 +234,23 @@ export function useContent() {
       });
       updateState({sorted});
     };
+    const setContentState = (loaded: boolean) => {
+      updateState({ loaded });
+    };
 
     if (app.state.session) {
       const {identity, contact, content, settings} = app.state.session;
       identity.addProfileListener(setProfile);
       contact.addCardListener(setCards);
       content.addChannelListener(setChannels);
+      content.addLoadedListener(setContentState);
       settings.addConfigListener(setConfig);
 
       return () => {
         identity.removeProfileListener(setProfile);
         contact.removeCardListener(setCards);
         content.removeChannelListener(setChannels);
+        content.removeLoadedListener(setContentState);
         settings.removeConfigListener(setConfig);
       };
     }

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Divider, Switch, Surface, IconButton, Menu, Button, Text, TextInput, useTheme} from 'react-native-paper';
-import {SafeAreaView, Pressable, Modal, FlatList, View} from 'react-native';
+import {Pressable, Modal, FlatList, View} from 'react-native';
 import {styles} from './Content.styled';
 import {useContent} from './useContent.hook';
 import {Channel} from '../channel/Channel';
@@ -8,6 +8,7 @@ import {BlurView} from '@react-native-community/blur';
 import {Card} from '../card/Card';
 import {Confirm} from '../confirm/Confirm';
 import {Selector} from '../selector/Selector';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export function Content({
   share,
@@ -311,8 +312,8 @@ export function Content({
         </View>
       )}
       { state.layout === 'large' && (
-        <View style={styles.content}>
-          <SafeAreaView style={styles.header}>
+        <SafeAreaView style={styles.content} edges={['bottom']}>
+          <View style={styles.header}>
             <Surface mode="flat" elevation={5} style={styles.inputSurface}>
               <TextInput
                 dense={true}
@@ -330,7 +331,7 @@ export function Content({
                 onChangeText={value => actions.setFilter(value)}
               />
             </Surface>
-          </SafeAreaView>
+          </View>
           <Divider style={styles.divider} />
 
           <View style={styles.topics}>
@@ -384,7 +385,7 @@ export function Content({
               {state.strings.new}
             </Button>
           </View>
-        </View>
+        </SafeAreaView>
       )}
 
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={add} onRequestClose={() => setAdd(false)}>
