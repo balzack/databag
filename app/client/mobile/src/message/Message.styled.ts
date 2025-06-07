@@ -35,6 +35,13 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.placeholder,
     marginTop: 8,
   },
+  smDot: {
+    width: 64,
+    height: 64,
+    backgroundColor: Colors.placeholder,
+    margin: 8,
+    borderRadius: 16,
+  },
   dot: {
     width: 64,
     height: 64,

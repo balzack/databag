@@ -81,7 +81,7 @@ const databagColors = {
     onPrimary: 'rgb(0, 56, 35)',
     primaryContainer: 'rgb(0, 82, 52)',
     onPrimaryContainer: 'rgb(142, 247, 193)',
-    secondary: 'rgb(248, 189, 42)',
+    secondary: '#888888',
     onSecondary: '#448866',
     secondaryContainer: 'rgb(92, 67, 0)',
     onSecondaryContainer: 'rgb(255, 223, 160)',

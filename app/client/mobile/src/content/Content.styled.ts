@@ -290,10 +290,10 @@ export const styles = StyleSheet.create({
   searchInputContainer: {
     flexGrow: 1,
     borderRadius: 8,
-    overflow: 'hidden',
   },
   searchInput: {
     height: 48,
+    backgroundColor: 'transparent',
   },
   newButton: {
     height: 48,

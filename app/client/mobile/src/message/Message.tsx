@@ -288,7 +288,7 @@ export function Message({
                     {media}
                   </ScrollView>
                 )}
-                {!locked && media.length > 0 && transform === 'incomplete' && <Shimmer contentStyle={styles.dot} />}
+                {!locked && media.length > 0 && transform === 'incomplete' && <Shimmer contentStyle={styles.smDot} />}
                 {!locked && media.length > 0 && transform !== 'complete' && transform !== 'incomplete' && <Text style={styles.error}>{state.strings.processingError}</Text>}
               </Surface>
             </View>

@@ -61,7 +61,6 @@ export function Content({
   }, [share]);
 
   useEffect(() => {
-console.log("HERE????", textCard);
     if (textCard.cardId) {
       openTopic(textCard.cardId);
     }
