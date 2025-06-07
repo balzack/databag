@@ -207,7 +207,12 @@ export function Details({close, closeAll}: {close: () => void; closeAll: () => v
           </Surface>
           <Surface mode="flat" elevation={2} style={styles.scrollWrapper}>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
-              <Text variant="labelLarge" style={styles.smDate}>{ state.created }</Text>
+              { state.locked && (
+                <Text variant="labelLarge" style={{ ...styles.offsync, color: theme.colors.offsync }}>{ state.strings.offsync }</Text>
+              )}
+              { !state.locked && (
+                <Text variant="labelLarge" style={styles.smDate}>{ state.created }</Text>
+              )}
               <View style={styles.smSubject}>
                 <TextInput
                   style={styles.smInput}
