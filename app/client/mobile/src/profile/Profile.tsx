@@ -4,6 +4,7 @@ import {ScrollView, Pressable, Image, View} from 'react-native';
 import {styles} from './Profile.styled';
 import {useProfile} from './useProfile.hook';
 import {Confirm} from '../confirm/Confirm';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export type ContactParams = {
   guid: string;
@@ -348,7 +349,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
       )}
       { state.layout === 'large' && (
         <View style={styles.profile}>
-          <View style={styles.header}>
+          <SafeAreaView style={styles.header}>
             {close && (
               <View style={styles.spaceHolder}>
                 <IconButton style={styles.back} compact="true" mode="contained" icon="arrow-left" size={28} onPress={close} />
@@ -361,7 +362,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
               </Text>
             )}
             {close && <View style={styles.spaceHolder} />}
-          </View>
+          </SafeAreaView>
           <Divider style={styles.border} bold={true} />
 
           <View style={styles.scrollWrapper}>

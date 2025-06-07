@@ -330,9 +330,6 @@ export function Content({
                 onChangeText={value => actions.setFilter(value)}
               />
             </Surface>
-            <Button icon="comment-plus" mode="contained" style={styles.button} onPress={() => setAdd(true)}>
-              {state.strings.new}
-            </Button>
           </SafeAreaView>
           <Divider style={styles.divider} />
 

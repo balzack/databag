@@ -297,7 +297,7 @@ export function Message({
         </View>
       )}
       { !small && (
-        <View style={styles.content}>
+        <View style={styles.component}>
           <View style={styles.topic}>
             <View style={styles.content}>
               <Image style={styles.logo} resizeMode={'contain'} source={{uri: logoUrl}} />
