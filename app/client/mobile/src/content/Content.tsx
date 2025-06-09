@@ -14,11 +14,13 @@ export function Content({
   share,
   closeAll,
   openConversation,
+  createConversation,
   textCard,
 }: {
   share: {filePath: string; mimeType: string};
   closeAll: () => void;
   openConversation: () => void;
+  createConversation: () => void;
   textCard: {cardId: null | string};
 }) {
   const [more, setMore] = useState(null as null | string);
@@ -130,7 +132,7 @@ export function Content({
                 onChangeText={value => actions.setFilter(value)}
               />
             </Surface>
-            <Button icon="message1" mode="contained" textColor="white" style={styles.newButton} onPress={() => setAdd(true)}>
+            <Button icon="message1" mode="contained" textColor="white" style={styles.newButton} onPress={createConversation}>
               {state.strings.new}
             </Button>
           </Surface>

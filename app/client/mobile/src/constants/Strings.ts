@@ -11,6 +11,9 @@ export const languages = [
 ];
 
 export const en = {
+  addSubject: 'Add Subject',
+  chat: 'Chat',
+
   chatSettings: 'Chat Settings',
   host: 'Host',
   guest: 'Guest',
