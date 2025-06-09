@@ -522,10 +522,12 @@ export class StreamModule {
   }
 
   private async getChannelKey(seals: [{ publicKey: string; sealedKey: string }]): Promise<string | null> {
-    const seal = seals.find(({ publicKey }) => this.seal && publicKey === this.seal.publicKey);
-    if (seal && this.crypto && this.seal) {
-      const key = await this.crypto.rsaDecrypt(seal.sealedKey, this.seal.privateKey);
-      return key.data;
+    if (seals) {
+      const seal = seals.find(({ publicKey }) => this.seal && publicKey === this.seal.publicKey);
+      if (seal && this.crypto && this.seal) {
+        const key = await this.crypto.rsaDecrypt(seal.sealedKey, this.seal.privateKey);
+        return key.data;
+      }
     }
     return null;
   }

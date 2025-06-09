@@ -799,6 +799,10 @@ export class FocusModule implements Focus {
       throw new Error('topic entry not found');
     }
     const { assets } = this.getTopicData(entry.item);
+    if (!assets) {
+      throw new Error('asset entry not found');
+    }
+
     const asset = assets.find(item => item.assetId === assetId);
     if (!asset) {
       throw new Error('asset entry not found');
