@@ -392,6 +392,12 @@ export const en = {
 };
 
 export const fr = {
+  addSubject: 'Ajouter un sujet',
+  chat: 'Discussion',
+  sealingKey: 'Gérer la clé E2EE',
+  createSealed: 'Créer des sujets E2EE',
+  noKey: 'Aucune clé',
+
   chatSettings: 'Paramètres de discussion',
   host: 'Hôte',
   guest: 'Invité',
@@ -767,6 +773,12 @@ export const fr = {
 };
 
 export const es = {
+  addSubject: 'Agregar tema',
+  chat: 'Chat',
+  sealingKey: 'Gestionar clave E2EE',
+  createSealed: 'Crear temas E2EE',
+  noKey: 'Sin clave',
+
   chatSettings: 'Configuración del chat',
   host: 'Anfitrión',
   guest: 'Invitado',
@@ -1141,6 +1153,12 @@ export const es = {
 };
 
 export const pt = {
+  addSubject: 'Adicionar assunto',
+  chat: 'Chat',
+  sealingKey: 'Gerenciar chave E2EE',
+  createSealed: 'Criar tópicos E2EE',
+  noKey: 'Nenhuma chave',
+
   chatSettings: 'Configurações do chat',
   host: 'Anfitrião',
   guest: 'Convidado',
@@ -1515,6 +1533,12 @@ export const pt = {
 };
 
 export const de = {
+  addSubject: 'Thema hinzufügen',
+  chat: 'Chat',
+  sealingKey: 'E2EE-Schlüssel verwalten',
+  createSealed: 'E2EE-Themen erstellen',
+  noKey: 'Kein Schlüssel',
+
   chatSettings: 'Chat-Einstellungen',
   host: 'Gastgeber',
   guest: 'Gast',
@@ -1889,6 +1913,12 @@ export const de = {
 };
 
 export const ru = {
+  addSubject: 'Добавить тему',
+  chat: 'Чат',
+  sealingKey: 'Управление ключом E2EE',
+  createSealed: 'Создать E2EE темы',
+  noKey: 'Нет ключа',
+
   chatSettings: 'Настройки чата',
   host: 'Хост',
   guest: 'Гость',
@@ -2263,6 +2293,12 @@ export const ru = {
 };
 
 export const el = {
+  addSubject: 'Προσθήκη θέματος',
+  chat: 'Συνομιλία',
+  sealingKey: 'Διαχείριση κλειδιού E2EE',
+  createSealed: 'Δημιουργία θεμάτων E2EE',
+  noKey: 'Χωρίς κλειδί',
+
   chatSettings: 'Ρυθμίσεις συνομιλίας',
   host: 'Κεντρικός',
   guest: 'Καλεσμένος',

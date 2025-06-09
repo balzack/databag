@@ -96,6 +96,9 @@ export const styles = StyleSheet.create({
   cardsContainer: {
     paddingBottom: 64,
   },
+  icon: {
+    backgroundColor: 'transparent',
+  },
   card: {
     width: '100%',
     height: 72,

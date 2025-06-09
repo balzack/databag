@@ -755,7 +755,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                       </View>
                       <View style={styles.slider}>
                         <Slider
-                          minimumValue={-5}
+                          minimumValue={-10}
                           maximumValue={10}
                           minimumTrackTintColor={theme.colors.primary}
                           value={state.fontSize}
