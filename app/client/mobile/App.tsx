@@ -12,7 +12,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-
+import {AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
 import {useColorScheme} from 'react-native';
 import {configureFonts, MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
 
@@ -195,6 +195,18 @@ function App(): React.JSX.Element {
                 return <FeatherIcon {...props} />
               } else if (props.name === 'sensor-occupied') {
                 return <MaterialIcon {...props}  />
+              } else if (props.name === 'address-book') {
+                return <AddressBook color={props.color} size={props.size} />
+              } else if (props.name === 'address-book-filled') {
+                return <AddressBook weight="fill" color={props.color} size={props.size} />
+              } else if (props.name === 'chat-circle') {
+                return <ChatCircle color={props.color} size={props.size} />
+              } else if (props.name === 'chat-circle-filled') {
+                return <ChatCircle weight="fill" color={props.color} size={props.size} />
+              } else if (props.name === 'gear-six') {
+                return <GearSix color={props.color} size={props.size} />
+              } else if (props.name === 'gear-six-filled') {
+                return <GearSix weight="fill" color={props.color} size={props.size} />
               } else {
                 return <CommunityIcon {...props} />
               }

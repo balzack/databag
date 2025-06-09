@@ -134,7 +134,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                           <IconButton
                             style={styles.activeTab}
                             mode="contained"
-                            icon={'comment-multiple'}
+                            icon={'chat-circle-filled'}
                             size={28}
                             onPress={() => {
                               setTab('content');
@@ -145,7 +145,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                           <IconButton
                             style={styles.idleTab}
                             mode="contained"
-                            icon={'comment-multiple-outline'}
+                            icon={'chat-circle'}
                             size={28}
                             onPress={() => {
                               setTab('content');
@@ -156,7 +156,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                           <IconButton
                             style={styles.activeTab}
                             mode="contained"
-                            icon={'account-group'}
+                            icon={'address-book-filled'}
                             size={28}
                             onPress={() => {
                               setTab('contacts');
@@ -167,7 +167,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                           <IconButton
                             style={styles.idleTab}
                             mode="contained"
-                            icon={'account-group-outline'}
+                            icon={'address-book'}
                             size={28}
                             onPress={() => {
                               setTab('contacts');
@@ -178,7 +178,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                           <IconButton
                             style={styles.activeTab}
                             mode="contained"
-                            icon={'cog'}
+                            icon={'gear-six-filled'}
                             size={28}
                             onPress={() => {
                               setTab('settings');
@@ -189,7 +189,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                           <IconButton
                             style={styles.idleTab}
                             mode="contained"
-                            icon={'cog-outline'}
+                            icon={'gear-six'}
                             size={28}
                             onPress={() => {
                               setTab('settings');
