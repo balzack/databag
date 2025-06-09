@@ -15,7 +15,8 @@ export const en = {
   chat: 'Chat',
   sealingKey: 'Manage E2EE Key',
   createSealed: 'Create E2EE Topics',
-
+  noKey: 'No Key',
+  
   chatSettings: 'Chat Settings',
   host: 'Host',
   guest: 'Guest',

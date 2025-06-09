@@ -25,6 +25,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  input: {
+  },
+  inputBorder: {
+    borderRadius: 12,
+    borderWidth: 0,
+  },
   label: {
     textAlign: 'center',
   },

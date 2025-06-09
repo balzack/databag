@@ -139,7 +139,7 @@ export function Contacts({
                     key="actions"
                     visible={allTab && more === item.cardId}
                     onDismiss={()=>setMore(null)}
-                    anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={24} onPress={()=>setMore(item.cardId)} />}>
+                    anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={()=>setMore(item.cardId)} />}>
                       { syncStatus === 'offsync' && (
                         <Menu.Item key='resync' leadingIcon="cached" title={state.strings.resyncAction} onPress={() => resync(item)} />
                       )}

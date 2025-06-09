@@ -2,12 +2,9 @@ import {useState, useContext, useEffect, useRef} from 'react';
 import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {ContextType} from '../context/ContextType';
-import {Profile} from 'databag-client-sdk';
 import {Config} from 'databag-client-sdk';
 
 export function useAssemble() {
-  const update = useRef(null as string | null);
-  const updating = useRef(false);
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
@@ -15,43 +12,25 @@ export function useAssemble() {
     sealSet: false,
     createSealed: false,
     strings: display.state.strings,
-    profiles: [] as Profile[],
-    contacts: [] as Profile[],
-    cards: new Set<string>(),
-    guid: null as null | string,
-    node: null as null | string,
+    connected: [] as Card[],
   });
+
+  const compare = (a: Card, b: Card) => {
+    const aval = `${a.handle}/${a.node}`;
+    const bval = `${b.handle}/${b.node}`;
+    if (aval < bval) {
+      return 1;
+    } else if (aval > bval) {
+      return -1;
+    }
+    return 0;
+  };
 
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
 
-  const getRegistry = async (server: string) => {
-    update.current = server;
-    if (!updating.current) {
-      while (update.current != null) {
-        updating.current = true;
-        const param = update.current;
-        update.current = null;
-        try {
-          const contact = app.state.session?.getContact();
-          const profiles = await contact.getRegistry(null, param);
-          updateState({profiles});
-        } catch (err) {
-          console.log(err);
-          updateState({profiles: []});
-        }
-        updating.current = false;
-      }
-    }
-  };
-
   useEffect(() => {
-    updateState({contacts: state.profiles.filter((profile: Profile) => profile.guid !== state.guid)});
-  }, [state.profiles, state.guid]);
-
-  useEffect(() => {
-    const identity = app.state?.session?.getIdentity();
     const contact = app.state?.session?.getContact();
     const settings = app.state?.session?.getSettings();
     const setConfig = (config: Config) => {
@@ -59,23 +38,20 @@ export function useAssemble() {
       updateState({sealSet, sealUnlocked});
     };
     const setCards = (cards: Card[]) => {
-      const guids = new Set<string>();
-      cards.forEach(card => {
-        guids.add(card.guid);
+      const sorted = cards.sort(compare);
+      const connected = [] as Card[];
+      sorted.forEach(card => {
+        if (card.status === 'connected') {
+          connected.push(card);
+        }
       });
-      updateState({cards: guids});
+      updateState({connected});
     };
-    const setProfile = (profile: Profile) => {
-      const {guid, node} = profile;
-      updateState({node, guid});
-    };
-    if (identity && contact) {
-      identity.addProfileListener(setProfile);
+    if (settings && contact) {
       contact.addCardListener(setCards);
       settings.addConfigListener(setConfig);
       return () => {
         settings.removeConfigListener(setConfig);
-        identity.removeProfileListener(setProfile);
         contact.removeCardListener(setCards);
       };
     }
@@ -92,23 +68,20 @@ export function useAssemble() {
     updateState({layout});
   }, [display.state]);
 
-  useEffect(() => {
-    getRegistry(state.node);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.node]);
-
   const actions = {
-    saveAndConnect: async (server: string, guid: string) => {
-      const contact = app.state.session?.getContact();
-      await contact.addAndConnectCard(server, guid);
-    },
-    clearWelcome: () => {
-      app.actions.setShowWelcome(false);
-    },
     setFocus: async (cardId: string | null, channelId: string) => {
       await app.actions.setFocus(cardId, channelId);
     },
-    
+    addTopic: async (sealed: boolean, subject: string, contacts: string[]) => {
+      const content = app.state.session.getContent();
+      if (sealed) {
+        const topic = await content.addChannel(true, 'sealed', {subject}, contacts);
+        return topic.id;
+      } else {
+        const topic = await content.addChannel(false, 'superbasic', {subject}, contacts);
+        return topic.id;
+      }
+    },    
   };
 
   return {state, actions};

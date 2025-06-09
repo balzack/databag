@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {useTheme, Surface, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
+import React, {useState, useRef} from 'react';
+import {useTheme, Surface, Checkbox, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
 import {TouchableOpacity, FlatList, Pressable, Modal, View, Image, ScrollView, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {styles} from './Assemble.styled';
@@ -8,66 +8,94 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {BlurView} from '@react-native-community/blur';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Card} from '../card/Card';
+import {Confirm} from '../confirm/Confirm';
+
+function Member({ enabled, toggle, placeholder }: { enabled: boolean, toggle: (checked: boolean)=>void, placeholder: string }) {
+  const [checked, setChecked] = useState(false);
+  if (enabled) {
+    return <Checkbox.Android status={checked ? 'checked' : 'unchecked'} onPress={() => { toggle(!checked); setChecked(!checked) }} />
+  } else {
+    return <Text style={{ fontSize: 12, fontWeight: 'bold' }}>{ placeholder }</Text>
+  }
+}
 
 export function Assemble({ close, openConversation }: { close: ()=>void, openConversation: ()=>void}) {
   const { state, actions } = useAssemble();
+  const selected = useRef(new Set<string>());
+  const [subject, setSubject] = useState(null);
+  const [creating, setCreating] = useState(false);
   const theme = useTheme();
-  const [connecting, setConnecting] = useState(null as null | string);
-  const [requested, setRequested] = useState(false);
+  const [alert, setAlert] = useState(false);
+  const [alertParams] = useState({
+    title: state.strings.operationFailed,
+    prompt: state.strings.tryAgain,
+    confirm: {
+      label: state.strings.ok,
+      action: () => setAlert(false),
+    },
+  });
+  const seal = state.sealSet && state.sealUnlocked && state.createSealed;
 
-  const addContact = async (server: string, guid: string) => {
-    if (!connecting) {
-      setConnecting(guid);
-      try {
-        await actions.saveAndConnect(server, guid);
-        setRequested(true);
-        await new Promise(r => setTimeout(r, 3000));
-        setRequested(false);
-      } catch (err) {
-        console.log(err);
-      }
-      setConnecting(null);
+  const toggle = (cardId: string, set: boolean) => {
+    if (set) {
+      selected.current.add(cardId);
+    } else {
+      selected.current.delete(cardId);
     }
   }
 
-
-console.log(">>> ", state.sealSet, state.sealUnlocked, state.createSealed);
+  const create = async () => {
+    if (!creating) {
+      setCreating(true);
+      try {
+        const filtered = state.connected.filter(item => (!seal || item.sealable) && selected.current.has(item.cardId));
+        const id = await actions.addTopic(seal, subject, filtered.map(item => item.cardId));
+        actions.setFocus(null, id);
+        openConversation();
+      } catch (err) {
+        console.log(err);
+        setAlert(true);
+      }
+      setCreating(false);
+    }
+  }
 
   return (
     <View style={styles.request}>
-      <Surface elevation={9} mode="flat" style={{ width: '100%', height: 72, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16, paddingRight: 16 }}>
+      <Surface elevation={9} mode="flat" style={{ width: '100%', height: 72, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16, paddingRight: 16, paddingBottom: 16 }}>
         <Pressable style={styles.navIcon} onPress={close}>
           <Icon size={24} source="left" color={'white'} />
         </Pressable>
         <Surface mode="flat" elevation={0} style={{ flexGrow: 1, borderRadius: 8, overflow: 'hidden' }}>
           <TextInput
-            dense={true}
             style={styles.input}
+            mode="outlined"
+            outlineStyle={styles.inputBorder}
             autoCapitalize="none"
             autoComplete="off"
             autoCorrect={false}
-            outlineColor="transparent"
-            activeOutlineColor="transparent"
-            underlineStyle={styles.inputUnderline}
-            mode="outlined"
+            dense={true}
             placeholder={state.strings.addSubject}
             left={<TextInput.Icon style={styles.icon} icon="search" />}
+            value={subject}
+            onChangeText={value => setSubject(value)}
           />
         </Surface>
-        <Button icon="message1" mode="contained" textColor="white" style={styles.newButton} onPress={openConversation}>
+        <Button icon="message1" mode="contained" loading={creating} textColor="white" style={styles.newButton} onPress={create}>
           {state.strings.chat}
         </Button>
       </Surface>
 
       <Surface elevation={1} mode="flat" style={styles.scrollWrapper}>
-        { state.contacts.length > 0 && (
+        { state.connected.length > 0 && (
           <FlatList
             style={styles.cards}
-            data={state.contacts}
+            contentContainerStyle={{ paddingBottom: 128 }}
+            data={state.connected}
             initialNumToRender={32}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
-              const connect = state.cards.has(item.guid) ? [] : [<IconButton style={styles.connect} iconColor={theme.colors.primary} icon={'user-plus'} key="request" onPress={() => { actions.setFocus(null, '2c05d60e-872b-4688-9ec8-94b64e9e4150'), openConversation()}} loading={connecting === item.guid} />];
+              const member = <Member key="member" enabled={!seal || item.sealable} toggle={(set) => toggle(item.cardId, set)} placeholder={state.strings.noKey} />
               return (
                 <Card
                   containerStyle={{ ...styles.card, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
@@ -77,19 +105,20 @@ console.log(">>> ", state.sealSet, state.sealUnlocked, state.createSealed);
                   node={item.node}
                   placeholder={state.strings.name}
                   select={()=>{}}
-                  actions={connect}
+                  actions={[member]}
                 />
               );
             }}
             keyExtractor={profile => profile.guid}
           />
         )}
-        { state.contacts.length === 0 && (
+        { state.connected.length === 0 && (
           <View style={styles.empty}>
             <Text style={styles.noContacts}>{ state.strings.noContacts }</Text>
           </View>
         )}
       </Surface>
+      <Confirm show={alert} params={alertParams} />
     </View>
   );
 }

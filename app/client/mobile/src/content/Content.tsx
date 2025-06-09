@@ -155,7 +155,7 @@ export function Content({
                     <Menu
                       visible={allTab && more === `${item.cardId}:${item.channelId}`}
                       onDismiss={()=>setMore(null)}
-                      anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={24} onPress={()=>setMore(`${item.cardId}:${item.channelId}`)} />}>
+                      anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>setMore(`${item.cardId}:${item.channelId}`)} />}>
                         { state.favorite.some(entry => item.cardId == entry.cardId && item.channelId === entry.channelId) && (
                           <Menu.Item key='clearFavorite' leadingIcon="star" title={state.strings.removeFavorites} onPress={()=>{setMore(null); actions.clearFavorite(item.cardId, item.channelId)}} />
                         )}
