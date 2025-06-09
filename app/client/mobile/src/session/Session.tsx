@@ -135,7 +135,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                             style={styles.activeTab}
                             mode="contained"
                             icon={'chat-circle-filled'}
-                            size={28}
+                            size={32}
                             onPress={() => {
                               setTab('content');
                             }}
@@ -146,7 +146,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                             style={styles.idleTab}
                             mode="contained"
                             icon={'chat-circle'}
-                            size={28}
+                            size={32}
                             onPress={() => {
                               setTab('content');
                             }}
@@ -157,7 +157,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                             style={styles.activeTab}
                             mode="contained"
                             icon={'address-book-filled'}
-                            size={28}
+                            size={32}
                             onPress={() => {
                               setTab('contacts');
                             }}
@@ -168,7 +168,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                             style={styles.idleTab}
                             mode="contained"
                             icon={'address-book'}
-                            size={28}
+                            size={32}
                             onPress={() => {
                               setTab('contacts');
                             }}
@@ -179,7 +179,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                             style={styles.activeTab}
                             mode="contained"
                             icon={'gear-six-filled'}
-                            size={28}
+                            size={32}
                             onPress={() => {
                               setTab('settings');
                             }}
@@ -190,7 +190,7 @@ export function Session({share}: {share: {filePath: string; mimeType: string}}) 
                             style={styles.idleTab}
                             mode="contained"
                             icon={'gear-six'}
-                            size={28}
+                            size={32}
                             onPress={() => {
                               setTab('settings');
                             }}

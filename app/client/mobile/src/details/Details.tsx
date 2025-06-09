@@ -269,7 +269,7 @@ export function Details({close, closeAll}: {close: () => void; closeAll: () => v
                       placeholder={state.strings.name}
                       handle={state.profile.handle}
                       node={state.profile.node}
-                      flair={state.host ? <Icon key="host" source="star" size={18} color={theme.colors.requested} /> : <></>}
+                      flair={state.host ? <Icon key="host" source="award" size={18} color={theme.colors.requested} /> : <></>}
                       actions={[]}
                     />
                   )}
