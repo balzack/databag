@@ -15,7 +15,7 @@ export function Registry({close, openContact}: {close?: () => void; openContact:
     <View style={styles.component}>
       { state.layout === 'small' && (
         <View style={styles.registry}>
-          <Surface elevation={9} mode="flat" style={{ width: '100%', height: 64, display: 'flex', flexDirection: 'row', paddingBottom: 16, paddingLeft: 16, paddingRight: 16, alignItems: 'center', gap: 16 }}>
+          <Surface elevation={9} mode="flat" style={{ width: '100%', height: 72, display: 'flex', flexDirection: 'row', paddingBottom: 16, paddingRight: 16, alignItems: 'center', gap: 16 }}>
             <Pressable style={styles.navIcon} onPress={close}>
               <Icon size={24} source="left" color={'white'} />
             </Pressable>
@@ -65,7 +65,7 @@ export function Registry({close, openContact}: {close?: () => void; openContact:
               style={styles.smCards}
               data={state.contacts}
               initialNumToRender={32}
-              contentContainerStyle={state.layout === 'large' ? styles.cardsContainer : {}}
+              contentContainerStyle={{ paddingBottom: 128 }}
               showsVerticalScrollIndicator={false}
               renderItem={({item}) => {
                 const select = () => {

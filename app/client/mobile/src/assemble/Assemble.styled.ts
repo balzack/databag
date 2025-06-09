@@ -26,6 +26,14 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   input: {
+    flexGrow: 1,
+    backgroundColor: 'transparent',
+    paddingTop: 0,
+    paddingBottom: 0,
+    display: 'flex',
+    height: 48,
+    maxHeight: 48,
+    borderRadius: 8,
   },
   inputBorder: {
     borderRadius: 12,

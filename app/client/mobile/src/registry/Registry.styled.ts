@@ -18,8 +18,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     overscrollBehavior: 'none',
-    paddingTop: 16,
-    paddingBottom: 64,
   },
   smCard: {
     width: '100%',
@@ -42,6 +40,13 @@ export const styles = StyleSheet.create({
     paddingLeft: 8,
     width: '100%',
     zIndex: 1,
+  },
+  navIcon: {
+    color: 'white',
+    width: 48,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   close: {
     flexShrink: 0,
@@ -83,8 +88,8 @@ export const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 0,
     display: 'flex',
-    height: 40,
-    maxHeight: 40,
+    height: 48,
+    maxHeight: 48,
     borderRadius: 8,
   },
   inputUnderline: {

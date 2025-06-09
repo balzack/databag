@@ -57,6 +57,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    paddingBottom: 16,
   },
   smTitle: {
     color: 'white',
