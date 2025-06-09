@@ -422,7 +422,7 @@ export function Content({
                         <Switch
                           key="enable"
                           style={styles.memberSwitch}
-                          value={Boolean(members.find(cardId => cardId === item.cardId))}
+                          value={Boolean(members?.find(cardId => cardId === item.cardId))}
                           onValueChange={flag => {
                             if (flag) {
                               setMembers([item.cardId, ...members]);

@@ -30,9 +30,12 @@ export function Assemble({ close, openConversation }: { close: ()=>void, openCon
     }
   }
 
+
+console.log(">>> ", state.sealSet, state.sealUnlocked, state.createSealed);
+
   return (
     <View style={styles.request}>
-      <Surface elevation={9} mode="flat" style={{ width: '100%', height: 72, display: 'flex', flexDirection: 'row', paddingBottom: 16, paddingLeft: 16, paddingRight: 16, alignItems: 'center', gap: 16 }}>
+      <Surface elevation={9} mode="flat" style={{ width: '100%', height: 72, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16, paddingRight: 16 }}>
         <Pressable style={styles.navIcon} onPress={close}>
           <Icon size={24} source="left" color={'white'} />
         </Pressable>

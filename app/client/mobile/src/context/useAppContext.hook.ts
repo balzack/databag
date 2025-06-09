@@ -51,6 +51,7 @@ export function useAppContext() {
     initialized: false,
     showWelcome: false,
     sharing: null as null | {cardId: string; channelId: string; filePath: string; mimeType: string},
+    createSealed: true,
   });
 
   const updateState = (value: any) => {
@@ -64,6 +65,7 @@ export function useAppContext() {
     const monthFirstDate = (await local.current.get('date_format', 'month_first')) === 'month_first';
     const setLanguage = (await local.current.get('language', null));
     const fontSize = parseInt(await local.current.get('font_size', '0')) || 0;
+    const createSealed = (await local.current.get('create_sealed', 'true') === 'true');
 
     const locale = Platform.OS === 'ios' ? NativeModules.SettingsManager?.settings.AppleLocale || NativeModules.SettingsManager?.settings.AppleLanguages[0] : NativeModules.I18nManager?.localeIdentifier;
     const defaultLanguage = locale?.slice(0, 2) || '';
@@ -74,9 +76,9 @@ export function useAppContext() {
     await store.open(DATABAG_DB);
     const session: Session | null = await sdk.current.initOfflineStore(store);
     if (session) {
-      updateState({session, fullDayTime, monthFirstDate, fontSize, language, favorite, initialized: true});
+      updateState({session, fullDayTime, monthFirstDate, fontSize, createSealed, language, favorite, initialized: true});
     } else {
-      updateState({fullDayTime, monthFirstDate, language, fontSize, initialized: true});
+      updateState({fullDayTime, monthFirstDate, language, fontSize, createSealed, initialized: true});
     }
   };
 
@@ -107,6 +109,10 @@ export function useAppContext() {
     setFontSize: async (fontSize: number) => {
       updateState({ fontSize });
       await local.current.set('font_size', fontSize.toString());
+    },
+    setCreateSealed: async (createSealed: boolean) => {
+      updateState({ createSealed });
+      await local.current.set('create_sealed', createSealed ? 'true' : 'false');
     },
     setLanguage: async (language: string) => {
       updateState({language});

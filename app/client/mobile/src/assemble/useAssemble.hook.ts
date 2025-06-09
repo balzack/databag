@@ -3,6 +3,7 @@ import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {ContextType} from '../context/ContextType';
 import {Profile} from 'databag-client-sdk';
+import {Config} from 'databag-client-sdk';
 
 export function useAssemble() {
   const update = useRef(null as string | null);
@@ -10,6 +11,9 @@ export function useAssemble() {
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
+    sealUnlocked: false,
+    sealSet: false,
+    createSealed: false,
     strings: display.state.strings,
     profiles: [] as Profile[],
     contacts: [] as Profile[],
@@ -49,6 +53,11 @@ export function useAssemble() {
   useEffect(() => {
     const identity = app.state?.session?.getIdentity();
     const contact = app.state?.session?.getContact();
+    const settings = app.state?.session?.getSettings();
+    const setConfig = (config: Config) => {
+      const { sealSet, sealUnlocked } = config;
+      updateState({sealSet, sealUnlocked});
+    };
     const setCards = (cards: Card[]) => {
       const guids = new Set<string>();
       cards.forEach(card => {
@@ -63,13 +72,20 @@ export function useAssemble() {
     if (identity && contact) {
       identity.addProfileListener(setProfile);
       contact.addCardListener(setCards);
+      settings.addConfigListener(setConfig);
       return () => {
+        settings.removeConfigListener(setConfig);
         identity.removeProfileListener(setProfile);
         contact.removeCardListener(setCards);
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [app.state.session]);
+
+  useEffect(() => {
+    const createSealed = app.state.createSealed;
+    updateState({ createSealed });
+  }, [app.state.createSealed]);
 
   useEffect(() => {
     const {layout} = display.state;
@@ -92,6 +108,7 @@ export function useAssemble() {
     setFocus: async (cardId: string | null, channelId: string) => {
       await app.actions.setFocus(cardId, channelId);
     },
+    
   };
 
   return {state, actions};

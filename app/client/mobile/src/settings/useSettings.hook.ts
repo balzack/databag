@@ -37,6 +37,7 @@ export function useSettings() {
     sealDelete: '',
     secretCopied: false,
     monthFirstDate: true,
+    createSealed: false,
     fontSize: 0,
     fullDayTime: false,
     blockedContacts: [] as {cardId: string; timestamp: number}[],
@@ -87,8 +88,8 @@ export function useSettings() {
   }, []);
 
   useEffect(() => {
-    const {fullDayTime, monthFirstDate, fontSize} = app.state;
-    updateState({fullDayTime, monthFirstDate, fontSize});
+    const {fullDayTime, monthFirstDate, fontSize, createSealed} = app.state;
+    updateState({fullDayTime, monthFirstDate, fontSize, createSealed});
   }, [app.state]);
 
   useEffect(() => {
@@ -104,6 +105,9 @@ export function useSettings() {
   const actions = {
     setLanguage: (language: string) => {
       app.actions.setLanguage(language);
+    },
+    setCreateSealed: (createSealed: boolean) => {
+      app.actions.setCreateSealed(createSealed);
     },
     clearWelcome: () => {
       app.actions.setShowWelcome(false);

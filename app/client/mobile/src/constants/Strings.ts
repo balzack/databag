@@ -13,6 +13,8 @@ export const languages = [
 export const en = {
   addSubject: 'Add Subject',
   chat: 'Chat',
+  sealingKey: 'Manage E2EE Key',
+  createSealed: 'Create E2EE Topics',
 
   chatSettings: 'Chat Settings',
   host: 'Host',
