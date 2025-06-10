@@ -39,6 +39,7 @@ const notifications = [
 export function useAppContext() {
   const local = useRef(new LocalStore());
   const sdk = useRef(databag);
+  const msgs = useRef(new Map<string, string>());
   const [state, setState] = useState({
     service: null as null | Service,
     session: null as null | Session,
@@ -98,6 +99,17 @@ export function useAppContext() {
   };
 
   const actions = {
+    getUnsent: (cardId: string, channelId: string) => {
+      const id = `${cardId}:${channelId}`;
+      if (msgs.current.has(id)) {
+        return msgs.current.get(id);
+      }
+      return '';
+    },
+    setUnsent: (cardId: string, channelId: string, message: string) => {
+      const id = `${cardId}:${channelId}`;
+      msgs.current.set(id, message);
+    },
     setMonthFirstDate: async (monthFirstDate: boolean) => {
       updateState({monthFirstDate});
       await local.current.set('date_format', monthFirstDate ? 'month_first' : 'day_first');

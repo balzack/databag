@@ -17,12 +17,12 @@ export function useAssemble() {
   });
 
   const compare = (a: Card, b: Card) => {
-    const aval = `${a.handle}/${a.node}`;
-    const bval = `${b.handle}/${b.node}`;
+    const aval = (`${a.handle}/${a.node}`).toLowerCase();
+    const bval = (`${b.handle}/${b.node}`).toLowerCase();
     if (aval < bval) {
-      return 1;
-    } else if (aval > bval) {
       return -1;
+    } else if (aval > bval) {
+      return 1;
     }
     return 0;
   };

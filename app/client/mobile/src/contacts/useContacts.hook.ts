@@ -44,8 +44,8 @@ export function useContacts() {
 
   useEffect(() => {
     const compare = (a: Card, b: Card) => {
-      const aval = `${a.handle}/${a.node}`;
-      const bval = `${b.handle}/${b.node}`;
+      const aval = (`${a.handle}/${a.node}`).toLowerCase();
+      const bval = (`${b.handle}/${b.node}`).toLowerCase();
       if (aval < bval) {
         return state.sortAsc ? 1 : -1;
       } else if (aval > bval) {

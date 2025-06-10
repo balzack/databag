@@ -34,6 +34,7 @@ async function getVideoThumb(path: string, position?: number) {
 
 export function useConversation() {
   const mute = useRef(false);
+  const unsent = useRef('');
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
@@ -135,6 +136,21 @@ export function useConversation() {
   }, [display.state]);
 
   useEffect(() => {
+    unsent.current = state.message;
+  }, [state.message]);
+
+  useEffect(() => {
+    if (app.state.focus) {
+      const { cardId, channelId } = app.state.focus.getFocused();
+      const message = app.actions.getUnsent(cardId, channelId);
+      updateState({ message });
+      return () => {
+        app.actions.setUnsent(cardId, channelId, unsent.current)
+      }
+    }
+  }, [app.state.focus]);
+
+  useEffect(() => {
     display.actions.lockLayout(true);
     return () => {
       display.actions.lockLayout(false);
@@ -194,7 +210,7 @@ export function useConversation() {
       const setKeyboard = (event: KeyboardEvent) => {
         updateState({avoid: event.endCoordinates.height});
       };
-      updateState({assets: [], message: null, topics: [], loaded: false});
+      updateState({assets: [], topics: [], loaded: false});
       focus.addTopicListener(setTopics);
       focus.addDetailListener(setDetail);
       contact.addCardListener(setCards);
