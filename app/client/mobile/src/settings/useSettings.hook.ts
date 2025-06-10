@@ -40,6 +40,7 @@ export function useSettings() {
     createSealed: false,
     fontSize: 0,
     fullDayTime: false,
+    allowUnsealed: false,
     blockedContacts: [] as {cardId: string; timestamp: number}[],
     blockedChannels: [] as {cardId: string | null; channelId: string; timestamp: number}[],
     blockedMessages: [] as {cardId: string | null; channelId: string; topicId: string; timestamp: number}[],
@@ -62,8 +63,8 @@ export function useSettings() {
   useEffect(() => {
     const {settings, identity} = getSession();
     const setConfig = (config: Config) => {
-      const { searchable, pushEnabled } = config;
-      updateState({config, searchable, pushEnabled});
+      const { searchable, pushEnabled, allowUnsealed } = config;
+      updateState({config, searchable, pushEnabled, allowUnsealed});
     };
     settings.addConfigListener(setConfig);
     const setProfile = (profile: Profile) => {

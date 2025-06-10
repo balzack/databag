@@ -37,6 +37,7 @@ export function useContent() {
     filter: '',
     topic: '',
     sealSet: false,
+    allowUnsealed: false,
     focused: null as null | {cardId: null | string; channelId: string},
     favorite: [] as { cardId: null | string, channelId: string }[],
     loaded: false,
@@ -189,8 +190,8 @@ export function useContent() {
 
   useEffect(() => {
     const setConfig = (config: Config) => {
-      const {sealSet, sealUnlocked} = config;
-      updateState({sealSet: sealSet && sealUnlocked});
+      const {sealSet, sealUnlocked, allowUnsealed} = config;
+      updateState({sealSet: sealSet && sealUnlocked, allowUnsealed});
     };
     const setProfile = (profile: Profile) => {
       const {guid} = profile;

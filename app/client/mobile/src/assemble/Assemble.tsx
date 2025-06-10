@@ -49,7 +49,7 @@ export function Assemble({ close, openConversation }: { close: ()=>void, openCon
       setCreating(true);
       try {
         const filtered = state.connected.filter(item => (!seal || item.sealable) && selected.current.has(item.cardId));
-        const id = await actions.addTopic(seal, subject, filtered.map(item => item.cardId));
+        const id = await actions.addTopic(seal || !state.allowUnsealed, subject, filtered.map(item => item.cardId));
         actions.setFocus(null, id);
         openConversation();
       } catch (err) {
@@ -81,9 +81,11 @@ export function Assemble({ close, openConversation }: { close: ()=>void, openCon
             onChangeText={value => setSubject(value)}
           />
         </Surface>
-        <Button icon="message1" mode="contained" loading={creating} textColor="white" style={styles.newButton} onPress={create}>
-          {state.strings.chat}
-        </Button>
+        { (seal || state.allowUnsealed) && (
+          <Button icon="message1" mode="contained" loading={creating} textColor="white" style={styles.newButton} onPress={create}>
+            {state.strings.chat}
+          </Button>
+        )}
       </Surface>
 
       <Surface elevation={1} mode="flat" style={styles.scrollWrapper}>

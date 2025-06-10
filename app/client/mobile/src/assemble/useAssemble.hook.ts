@@ -11,6 +11,7 @@ export function useAssemble() {
     sealUnlocked: false,
     sealSet: false,
     createSealed: false,
+    allowUnsealed: false,
     strings: display.state.strings,
     connected: [] as Card[],
   });
@@ -34,8 +35,8 @@ export function useAssemble() {
     const contact = app.state?.session?.getContact();
     const settings = app.state?.session?.getSettings();
     const setConfig = (config: Config) => {
-      const { sealSet, sealUnlocked } = config;
-      updateState({sealSet, sealUnlocked});
+      const { sealSet, sealUnlocked, allowUnsealed } = config;
+      updateState({sealSet, sealUnlocked, allowUnsealed});
     };
     const setCards = (cards: Card[]) => {
       const sorted = cards.sort(compare);

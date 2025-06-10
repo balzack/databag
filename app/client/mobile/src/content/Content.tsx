@@ -87,7 +87,7 @@ export function Content({
     setAdding(true);
     try {
       const id = await actions.addTopic(
-        sealedTopic,
+        sealedTopic || !state.allowUnsealed,
         subjectTopic,
         members.filter(memberId => Boolean(cards.find(card => card.cardId === memberId))),
       );
@@ -130,9 +130,11 @@ export function Content({
                 onChangeText={value => actions.setFilter(value)}
               />
             </Surface>
-            <Button icon="message1" mode="contained" textColor="white" style={styles.newButton} onPress={createConversation}>
-              {state.strings.new}
-            </Button>
+            { (state.sealSet || state.allowUnsealed) && (
+              <Button icon="message1" mode="contained" textColor="white" style={styles.newButton} onPress={createConversation}>
+                {state.strings.new}
+              </Button>
+            )}
           </Surface>
 
           <View style={styles.topics}>
@@ -379,12 +381,14 @@ export function Content({
               </View>
             )}
           </View>
-          <View style={styles.bar}>
-            <Divider style={styles.divider} />
-            <Button icon="comment-plus" mode="contained" style={styles.button} onPress={() => setAdd(true)}>
-              {state.strings.new}
-            </Button>
-          </View>
+          { (state.sealSet || state.allowUnsealed) && (
+            <View style={styles.bar}>
+              <Divider style={styles.divider} />
+              <Button icon="comment-plus" mode="contained" style={styles.button} onPress={() => setAdd(true)}>
+                {state.strings.new}
+              </Button>
+            </View>
+          )}
         </SafeAreaView>
       )}
 
@@ -452,7 +456,7 @@ export function Content({
               </View>
               <View style={styles.addControls}>
                 <View style={styles.sealable}>
-                  {state.sealSet && (
+                  {state.sealSet && state.allowUnsealed && (
                     <View style={styles.sealableContent}>
                       <Text style={styles.switchLabel}>{state.strings.sealedTopic}</Text>
                       <Switch style={styles.sealSwitch} value={sealedTopic} onValueChange={flag => setSealedTopic(flag)} />

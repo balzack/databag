@@ -632,21 +632,25 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
                         />
                         <Pressable style={styles.navPress} onPress={setSeal} />
                       </View>
-                      <Divider style={styles.navDivider} />
-                      <View style={styles.navUpload}>
-                        <TextInput
-                          style={styles.navInput}
-                          mode="outlined"
-                          placeholderTextColor={state.config.sealSet && state.config.sealUnlocked ? undefined : theme.colors.secondary}
-                          outlineStyle={styles.navInputBorder}
-                          placeholder={state.strings.createSealed}
-                          left={<TextInput.Icon style={styles.icon} size={22} icon="sort-variant-lock" />}
-                        />
-                        <View style={styles.controlAlign}>
-                          <Switch style={styles.controlSwitch} value={state.createSealed && state.config.sealSet && state.config.sealUnlocked} disabled={!state.config.sealSet || !state.config.sealUnlocked} />
+                      { state.allowUnsealed && (
+                        <Divider style={styles.navDivider} />
+                      )}
+                      { state.allowUnsealed && (
+                        <View style={styles.navUpload}>
+                          <TextInput
+                            style={styles.navInput}
+                            mode="outlined"
+                            placeholderTextColor={state.config.sealSet && state.config.sealUnlocked ? undefined : theme.colors.secondary}
+                            outlineStyle={styles.navInputBorder}
+                            placeholder={state.strings.createSealed}
+                            left={<TextInput.Icon style={styles.icon} size={22} icon="sort-variant-lock" />}
+                          />
+                          <View style={styles.controlAlign}>
+                            <Switch style={styles.controlSwitch} value={state.createSealed && state.config.sealSet && state.config.sealUnlocked} disabled={!state.config.sealSet || !state.config.sealUnlocked} />
+                          </View>
+                          <Pressable style={styles.navPress} onPress={()=>{actions.setCreateSealed(!state.createSealed)}} />
                         </View>
-                        <Pressable style={styles.navPress} onPress={()=>{actions.setCreateSealed(!state.createSealed)}} />
-                      </View>
+                      )}
                     </Surface>
                   </View>
                 )}
