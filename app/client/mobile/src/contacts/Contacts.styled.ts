@@ -36,6 +36,10 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  inputBorder: {
+    borderRadius: 12,
+    borderWidth: 0,
+  },
   smCards: {
     display: 'flex',
     flexDirection: 'column',
@@ -71,7 +75,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   tab: {
-    width: 105,
+    width: 108,
     height: '100%',
     display: 'flex',
     alignItems: 'center',

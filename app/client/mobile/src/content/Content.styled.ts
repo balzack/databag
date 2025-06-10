@@ -25,8 +25,12 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
   },
+  inputBorder: {
+    borderRadius: 12,
+    borderWidth: 0,
+  },
   tab: {
-    width: 105,
+    width: 108,
     height: '100%',
     display: 'flex',
     alignItems: 'center',

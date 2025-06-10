@@ -18,6 +18,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingBottom: 16,
+    paddingLeft: 8,
+    paddingRight: 8,
   },
   field: {
     position: 'relative',

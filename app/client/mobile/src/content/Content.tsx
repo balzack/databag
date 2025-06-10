@@ -118,13 +118,11 @@ export function Content({
             <Surface mode="flat" elevation={0} style={styles.searchInputContainer}>
               <TextInput
                 style={styles.searchInput}
+                outlineStyle={styles.inputBorder}
                 dense={true}
-                outlineColor="transparent"
-                activeOutlineColor="transparent"
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                underlineStyle={styles.inputUnderline}
                 mode="outlined"
                 placeholder={state.strings.searchTopics}
                 left={<TextInput.Icon style={styles.icon} icon="search" />}

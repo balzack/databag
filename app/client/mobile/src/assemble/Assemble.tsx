@@ -62,7 +62,7 @@ export function Assemble({ close, openConversation }: { close: ()=>void, openCon
 
   return (
     <View style={styles.request}>
-      <Surface elevation={9} mode="flat" style={{ width: '100%', height: 72, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16, paddingRight: 16, paddingBottom: 16 }}>
+      <Surface elevation={9} mode="flat" style={{ width: '100%', height: 72, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16, paddingRight: 16, paddingLeft: 8, paddingBottom: 16 }}>
         <Pressable style={styles.navIcon} onPress={close}>
           <Icon size={24} source="left" color={'white'} />
         </Pressable>

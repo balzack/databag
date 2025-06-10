@@ -107,12 +107,10 @@ export function Contacts({
               <TextInput
                 dense={true}
                 style={styles.input}
-                outlineColor="transparent"
-                activeOutlineColor="transparent"
+                outlineStyle={styles.inputBorder}
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                underlineStyle={styles.inputUnderline}
                 mode="outlined"
                 placeholder={state.strings.searchContacts}
                 left={<TextInput.Icon style={styles.icon} icon="search" />}

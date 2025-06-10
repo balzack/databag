@@ -30,6 +30,10 @@ export const styles = StyleSheet.create({
       overflow: 'hidden',
     }
   },
+  inputBorder: {
+    borderRadius: 12,
+    borderWidth: 0,
+  },
   header: {
     position: 'relative',
     display: 'flex',
