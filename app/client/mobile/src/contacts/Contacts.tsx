@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Divider, Surface, IconButton, Menu, Button, Text, TextInput, useTheme} from 'react-native-paper';
+import {Divider, Surface, Icon, IconButton, Menu, Button, Text, TextInput, useTheme} from 'react-native-paper';
 import {SafeAreaView, Pressable, FlatList, View} from 'react-native';
 import {styles} from './Contacts.styled';
 import {Colors} from '../constants/Colors';
@@ -86,6 +86,18 @@ export function Contacts({
     setMenuAction(null);
   }
 
+  const connect = async (card: Card) => {
+    setMore(null);
+    setMenuAction(card.cardId);
+    try {
+      await actions.connect(card.cardId);
+    } catch (err) {
+      console.log(err);
+      setAlert(true);
+    }
+    setMenuAction(null);
+  }
+
   const accept = async (card: Card) => {
     setMore(null);
     setMenuAction(card.cardId);
@@ -132,6 +144,7 @@ export function Contacts({
               showsVerticalScrollIndicator={false}
               renderItem={({item}) => {
                 const syncStatus = item.offsync ? 'offsync' : item.status;
+                const flair = item.status === 'connected' && item.offsync ? <Icon key="host" source="warning-circle" size={18} color={theme.colors.offsync} /> : <></>
                 const action = (
                   <Menu
                     key="actions"
@@ -146,6 +159,9 @@ export function Contacts({
                       )}
                       { syncStatus === 'connected' && (
                         <Menu.Item key='text' leadingIcon="message-outline" title={state.strings.textAction} onPress={() => { setMore(null); textContact(item.cardId)}} />
+                      )}
+                      { syncStatus === 'confirmed' && (
+                        <Menu.Item key='saved' leadingIcon="link" title={state.strings.connectAction} onPress={() => connect(item)} />
                       )}
                       { syncStatus === 'connecting' && (
                         <Menu.Item key='cancel' leadingIcon="cancel" title={state.strings.cancelAction} onPress={() => cancel(item)} />
@@ -181,6 +197,7 @@ export function Contacts({
                     placeholder={state.strings.name}
                     select={select}
                     actions={[action]}
+                    flair={flair}
                   />
                 );
               }}
@@ -197,6 +214,7 @@ export function Contacts({
               showsVerticalScrollIndicator={false}
               renderItem={({item}) => {
                 const syncStatus = item.offsync ? 'offsync' : item.status;
+                const flair = item.status === 'connected' && item.offsync ? <Icon key="host" source="warning-circle" size={18} color={theme.colors.offsync} /> : <></>
                 const action = (
                   <Menu
                     key="actions"
@@ -232,6 +250,7 @@ export function Contacts({
                     placeholder={state.strings.name}
                     select={select}
                     actions={[action]}
+                    flair={flair}
                   />
                 );
               }}
@@ -248,6 +267,7 @@ export function Contacts({
               showsVerticalScrollIndicator={false}
               renderItem={({item}) => {
                 const syncStatus = item.offsync ? 'offsync' : item.status;
+                const flair = item.status === 'connected' && item.offsync ? <Icon key="host" source="warning-circle" size={18} color={theme.colors.offsync} /> : <></>
                 const action = (
                   <Menu
                     key="actions"
@@ -291,6 +311,7 @@ export function Contacts({
                     placeholder={state.strings.name}
                     select={select}
                     actions={[action]}
+                    flair={flair}
                   />
                 );
               }}

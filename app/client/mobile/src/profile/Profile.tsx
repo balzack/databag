@@ -182,7 +182,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                         mode="outlined"
                         outlineStyle={styles.navInputBorder}
                         value={state.strings.connectAction}
-                        left={<TextInput.Icon style={styles.icon} loading={connecting} size={24} icon="electric-switch-closed" />}
+                        left={<TextInput.Icon style={styles.icon} loading={connecting} size={24} icon="link" />}
                       />
                       <Pressable style={styles.cover} onPress={() => applyAction(setConnecting, actions.saveAndConnect)} />
                     </View>
@@ -196,7 +196,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                         mode="outlined"
                         outlineStyle={styles.navInputBorder}
                         value={state.strings.connectAction}
-                        left={<TextInput.Icon style={styles.icon} loading={connecting} size={24} icon="electric-switch-closed" />}
+                        left={<TextInput.Icon style={styles.icon} loading={connecting} size={24} icon="link" />}
                       />
                       <Pressable style={styles.cover} onPress={() => applyAction(setConnecting, actions.connect)} />
                     </View>
@@ -252,7 +252,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                         mode="outlined"
                         outlineStyle={styles.navInputBorder}
                         value={state.strings.disconnectAction}
-                        left={<TextInput.Icon style={styles.icon} loading={disconnecting} size={24} icon="electric-switch" />}
+                        left={<TextInput.Icon style={styles.icon} loading={disconnecting} size={24} icon="link-break" />}
                       />
                       <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.disconnecting, state.strings.confirmDisconnect, state.strings.disconnect, setDisconnecting, actions.disconnect)} />
                     </View>
@@ -410,7 +410,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                         loading={connecting}
                         compact="true"
                         mode="contained"
-                        icon="electric-switch-closed"
+                        icon="link"
                         size={32}
                         onPress={() => {
                           applyAction(setConnecting, actions.saveAndConnect);
@@ -457,7 +457,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                         loading={saving}
                         compact="true"
                         mode="contained"
-                        icon="electric-switch-closed"
+                        icon="link"
                         size={32}
                         onPress={() => {
                           applyAction(setSaving, actions.connect);
@@ -771,7 +771,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                         loading={disconnecting}
                         compact="true"
                         mode="contained"
-                        icon="electric-switch"
+                        icon="link-break"
                         size={32}
                         onPress={() => {
                           confirmAction(state.strings.disconnecting, state.strings.confirmDisconnect, state.strings.disconnect, setDisconnecting, actions.disconnect);
@@ -846,7 +846,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                         loading={disconnecting}
                         compact="true"
                         mode="contained"
-                        icon="electric-switch"
+                        icon="link-break"
                         size={32}
                         onPress={() => {
                           confirmAction(state.strings.disconnecting, state.strings.confirmDisconnect, state.strings.disconnect, setDisconnecting, actions.disconnect);

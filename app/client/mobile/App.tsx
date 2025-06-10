@@ -12,7 +12,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
+import {WarningCircle, Link, LinkBreak, AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
 import {useColorScheme} from 'react-native';
 import {configureFonts, MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
 
@@ -207,6 +207,12 @@ function App(): React.JSX.Element {
                 return <GearSix color={props.color} size={props.size} />
               } else if (props.name === 'gear-six-filled') {
                 return <GearSix weight="fill" color={props.color} size={props.size} />
+              } else if (props.name === 'link') {
+                return <Link color={props.color} size={props.size} /> 
+              } else if (props.name === 'link-break') {
+                return <LinkBreak color={props.color} size={props.size} />
+              } else if (props.name === 'warning-circle') {
+                return <WarningCircle weight="fill" color={props.color} size={props.size} />
               } else {
                 return <CommunityIcon {...props} />
               }

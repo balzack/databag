@@ -91,6 +91,10 @@ export function useContacts() {
       const contact = app.state.session?.getContact();
       await contact.disconnectCard(cardId);
     },
+    connect: async (cardId: string) => {
+      const contact = app.state.session?.getContact();
+      await contact.connectCard(cardId);
+    },
     accept: async (cardId: string) => {
       const contact = app.state.session?.getContact();
       await contact.connectCard(cardId);
