@@ -226,7 +226,7 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
     <View style={styles.component}>
       { state.layout === 'small' && (
         <Surface elevation={1} mode="flat" style={styles.content}>
-          <Surface elevation={9} mode="flat" style={{ width: '100%', height: 72, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+          <Surface elevation={9} mode="flat" style={{ width: '100%', height: 72, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16, paddingBottom: 16, paddingRight: 8 }}>
             <Pressable style={styles.navIcon} onPress={onClose}>
               <Icon size={24} source="left" color={'white'} />
             </Pressable>
