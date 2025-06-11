@@ -202,7 +202,7 @@ export function Details({close, closeAll}: {close: () => void; closeAll: () => v
             <Pressable style={styles.smIcon} onPress={close}>
               <Icon size={24} source="left" color={'white'} />
             </Pressable>
-            <Text variant="headlineSmall" style={styles.smTitle}>{ state.strings.chatSettings }</Text>
+            <Text style={styles.smTitle}>{ state.strings.chatSettings }</Text>
             <View style={styles.smIcon} />
           </Surface>
           <Surface mode="flat" elevation={2} style={styles.scrollWrapper}>

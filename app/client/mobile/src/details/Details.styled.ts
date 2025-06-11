@@ -65,6 +65,7 @@ export const styles = StyleSheet.create({
     color: 'white',
     flexGrow: 1,
     textAlign: 'center',
+    fontSize: 24,
   },
   smDate: {
     paddingLeft: 16,
