@@ -1,6 +1,6 @@
 import {useState, useContext, useEffect, useRef} from 'react';
 import {Keyboard} from 'react-native';
-import {AppContext} from '../context/AppContext';
+import {UnsentTopic, AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {Focus, FocusDetail, Topic, Profile, Card, AssetType, AssetSource, TransformType} from 'databag-client-sdk';
 import {ContextType} from '../context/ContextType';
@@ -136,14 +136,14 @@ export function useConversation() {
   }, [display.state]);
 
   useEffect(() => {
-    unsent.current = state.message;
-  }, [state.message]);
+    unsent.current = { message: state.message, assets: state.assets };
+  }, [state.message, state.assets]);
 
   useEffect(() => {
     if (app.state.focus) {
       const { cardId, channelId } = app.state.focus.getFocused();
-      const message = app.actions.getUnsent(cardId, channelId);
-      updateState({ message });
+      const { message, assets } = app.actions.getUnsent(cardId, channelId);
+      updateState({ message, assets });
       return () => {
         app.actions.setUnsent(cardId, channelId, unsent.current)
       }
@@ -210,7 +210,7 @@ export function useConversation() {
       const setKeyboard = (event: KeyboardEvent) => {
         updateState({avoid: event.endCoordinates.height});
       };
-      updateState({assets: [], topics: [], loaded: false});
+      updateState({topics: [], loaded: false});
       focus.addTopicListener(setTopics);
       focus.addDetailListener(setDetail);
       contact.addCardListener(setCards);

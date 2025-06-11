@@ -6,6 +6,7 @@ import {NativeCrypto} from '../NativeCrypto';
 import {LocalStore} from '../LocalStore';
 import {StagingFiles} from '../StagingFiles';
 import messaging from '@react-native-firebase/messaging';
+import {UnsentTopic} from 'AppContext';
 
 const DATABAG_DB = 'db_v251.db';
 const SETTINGS_DB = 'ls_v003.db';
@@ -39,7 +40,7 @@ const notifications = [
 export function useAppContext() {
   const local = useRef(new LocalStore());
   const sdk = useRef(databag);
-  const msgs = useRef(new Map<string, string>());
+  const topics = useRef(new Map<string, UnsentTopic>());
   const [state, setState] = useState({
     service: null as null | Service,
     session: null as null | Session,
@@ -101,14 +102,14 @@ export function useAppContext() {
   const actions = {
     getUnsent: (cardId: string, channelId: string) => {
       const id = `${cardId}:${channelId}`;
-      if (msgs.current.has(id)) {
-        return msgs.current.get(id);
+      if (topics.current.has(id)) {
+        return topics.current.get(id);
       }
-      return '';
+      return { message: null, assets: [] };
     },
-    setUnsent: (cardId: string, channelId: string, message: string) => {
+    setUnsent: (cardId: string, channelId: string, topic: UnsentTopic) => {
       const id = `${cardId}:${channelId}`;
-      msgs.current.set(id, message);
+      topics.current.set(id, topic);
     },
     setMonthFirstDate: async (monthFirstDate: boolean) => {
       updateState({monthFirstDate});
