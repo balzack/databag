@@ -83,7 +83,7 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     weight: 400,
     color: 'white',
-    width: 32,
+    width: 40,
     display: 'flex',
     justifyContent: 'flex-begin',
   },
@@ -93,6 +93,5 @@ export const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   clearIcon: {
-    backgroundColor: 'transparent',
   },
 });

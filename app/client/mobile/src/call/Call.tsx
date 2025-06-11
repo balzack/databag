@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Animated, useAnimatedValue, Image, View} from 'react-native';
 import {useCall} from './useCall.hook';
 import {styles} from './Call.styled';
-import {Text, Surface, IconButton} from 'react-native-paper';
+import {useTheme, Text, Surface, IconButton} from 'react-native-paper';
 import {Confirm} from '../confirm/Confirm';
 import {Colors} from '../constants/Colors';
 import {RTCView} from 'react-native-webrtc';
@@ -15,6 +15,7 @@ export function Call() {
   const [applyingAudio, setApplyingAudio] = useState(false);
   const [applyingVideo, setApplyingVideo] = useState(false);
   const opacity = useAnimatedValue(0);
+  const theme = useTheme();
 
   const toggleAudio = async () => {
     if (!applyingAudio) {
@@ -124,7 +125,7 @@ export function Call() {
 
           <View style={styles.controls}>
             <IconButton
-              style={styles.clearIcon}
+              style={{ backgroundColor: theme.colors.primary }}
               iconColor="white"
               disabled={!state.connected}
               containerColor={Colors.primary}
@@ -137,7 +138,7 @@ export function Call() {
             />
             <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.danger} icon="phone" compact="true" mode="contained" size={48} onPress={end} />
             <IconButton
-              style={styles.clearIcon}
+              style={{ backgroundColor: theme.colors.primary }}
               iconColor="white"
               disabled={!state.connected}
               containerColor={Colors.primary}
