@@ -3,7 +3,7 @@ import {Animated, useAnimatedValue, View} from 'react-native';
 import {useRing} from './useRing.hook';
 import {styles} from './Ring.styled';
 import {Card as Contact} from '../card/Card';
-import {Icon, Text, Surface, IconButton, ActivityIndicator} from 'react-native-paper';
+import {useTheme, Icon, Text, Surface, IconButton, ActivityIndicator} from 'react-native-paper';
 import {Confirm} from '../confirm/Confirm';
 import {Colors} from '../constants/Colors';
 
@@ -21,6 +21,7 @@ export function Ring() {
   const [ignoring, setIgnoring] = useState(null as null | string);
   const [declining, setDeclining] = useState(null as null | string);
   const scale = useAnimatedValue(0);
+  const theme = useTheme();
 
   useEffect(() => {
     const ringing = setInterval(() => {
@@ -33,7 +34,7 @@ export function Ring() {
   useEffect(() => {
     if (accepting || state.calling || state.calls.length > 0) {
       Animated.timing(scale, {
-        toValue: 64,
+        toValue: 80,
         duration: 100,
         useNativeDriver: false,
       }).start();
@@ -148,7 +149,7 @@ export function Ring() {
     const declineButton = (
       <IconButton
         key="decline"
-        style={styles.flipIcon}
+        style={styles.circleIcon}
         iconColor="white"
         containerColor={Colors.offsync}
         icon="phone-outline"
@@ -176,68 +177,81 @@ export function Ring() {
     return <Contact containerStyle={styles.card} placeholder={state.strings.name} imageUrl={imageUrl} name={name} node={node} handle={handle} actions={[ignoreButton, declineButton, acceptButton]} />;
   });
 
-  const sizeStyle = {width: '100%', height: scale};
+  const sizeStyle = { marginBottom: 8, height: '100%', width: '100%', height: scale};
   const borderStyle = state.layout === 'large' ? {...styles.ring, borderRadius: 16} : {...styles.ring, borderRadius: 0};
 
   return (
     <Animated.View style={sizeStyle}>
       <View style={accepting || state.calling || state.calls.length > 0 ? styles.active : styles.inactive}>
         {state.calls.length > 0 && !accepting && !state.calling && (
-          <Surface elevation={4} mode="flat" style={borderStyle}>
-            {calls[0]}
+          <Surface elevation={10} mode="flat" style={borderStyle}>
+            <View style={styles.name}>
+              <Text style={styles.nameSet} numberOfLines={1}>
+                { state.calls[0].card.name ? state.calls[0].card.name : `${state.calls[0].card.handle}@${state.calls[0].card.node}` }
+              </Text>
+              <View style={styles.status}>
+                {state.connected && <Text style={styles.duration}>{`${Math.floor(state.duration / 60)}:${(state.duration % 60).toString().padStart(2, '0')}`}</Text>}
+                {!state.connected && <Text style={styles.duration} color="white">0:00</Text>}
+              </View>
+            </View>
+
+              <IconButton
+                style={styles.clearIcon}
+                iconColor="white"
+                icon="bell-slash"
+                size={28}
+                loading={ignoring === state.calls[0].callId}
+                onPress={() => ignore(state.calls[0].callId, state.calls[0].card)}
+              />
+              <IconButton style={styles.flipIcon} iconColor="white" containerColor={Colors.offsync} icon="phone" size={28} 
+                loading={declining === state.calls[0].callId}
+                onPress={() => decline(state.calls[0].callId, state.calls[0].card)} />
+              <IconButton
+                style={styles.circleIcon}
+                iconColor="white"
+                containerColor={theme.colors.connecting}
+                icon="phone"
+                size={28}
+                loading={accepting === state.calls[0].callId}
+                onPress={() => accept(state.calls[0].callId, state.calls[0].card)}
+              />
           </Surface>
         )}
         {accepting && !state.calling && (
-          <Surface elevation={4} mode="flat" style={styles.ring}>
+          <Surface elevation={10} mode="flat" style={styles.ring}>
             <ActivityIndicator size={32} />
           </Surface>
         )}
         {state.calling && (
-          <Surface elevation={4} mode="flat" style={borderStyle}>
+          <Surface elevation={10} mode="flat" style={borderStyle}>
+            <View style={styles.name}>
+              <Text style={styles.nameSet} numberOfLines={1}>
+                { state.calling.name ? state.calling.name : `${state.calling.handle}@${state.calling.node}` }
+              </Text>
+              <View style={styles.status}>
+                {state.connected && <Text style={styles.duration}>{`${Math.floor(state.duration / 60)}:${(state.duration % 60).toString().padStart(2, '0')}`}</Text>}
+                {!state.connected && <Text style={{ ...styles.ringing, color: theme.colors.onSurfaceDisabled }} color="white">0:00</Text>}
+              </View>
+            </View>
             <IconButton
-              style={styles.circleIcon}
+              style={styles.clearIcon}
               iconColor="white"
               disabled={!state.connected}
-              containerColor={Colors.primary}
-              icon={state.audioEnabled ? 'microphone' : 'microphone-off'}
-              compact="true"
-              mode="contained"
-              size={24}
+              icon={state.audioEnabled ? 'microphone' : 'microphone-slash'}
+              size={28}
               onPress={toggleAudio}
             />
             <IconButton
-              style={styles.circleIcon}
+              style={styles.clearIcon}
               iconColor="white"
               disabled={!state.connected}
-              containerColor={Colors.confirmed}
-              icon={state.remoteVideo || state.localVideo ? 'video-switch-outline' : 'arrow-expand-all'}
-              compact="true"
-              mode="contained"
-              size={24}
+              icon={state.remoteVideo || state.localVideo ? 'video-switch-outline' : 'frame-corners'}
+              size={28}
               onPress={() => actions.setFullscreen(true)}
             />
-            <View style={styles.name}>
-              {state.calling.name && (
-                <Text style={styles.nameSet} numberOfLines={1}>
-                  {state.calling.name}
-                </Text>
-              )}
-              {!state.calling.name && (
-                <Text style={styles.nameUnset} adjustsFontSizeToFit={true} numberOfLines={1}>
-                  {state.strings.name}
-                </Text>
-              )}
-            </View>
-            <View style={styles.status}>
-              {state.connected && <Text style={styles.duration}>{`${Math.floor(state.duration / 60)}:${(state.duration % 60).toString().padStart(2, '0')}`}</Text>}
-              {!state.connected && (
-                <View style={{transform: [{rotate: counter % 2 ? '15deg' : '-15deg'}]}}>
-                  <Icon size={24} source="bell-outline" color={Colors.primary} />
-                </View>
-              )}
-            </View>
+
             <View style={styles.end}>
-              <IconButton style={styles.flipIcon} iconColor="white" containerColor={Colors.offsync} icon="phone-outline" compact="true" mode="contained" size={24} onPress={end} />
+              <IconButton style={styles.circleIcon} iconColor="white" containerColor={Colors.offsync} icon="phone" mode="contained" size={28} onPress={end} />
             </View>
           </Surface>
         )}

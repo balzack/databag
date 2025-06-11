@@ -155,10 +155,10 @@ export function Contacts({
                         <Menu.Item key='resync' leadingIcon="cached" title={state.strings.resyncAction} onPress={() => resync(item)} />
                       )}
                       { syncStatus === 'connected' && (
-                        <Menu.Item key='call' leadingIcon="phone-outline" title={state.strings.callAction} onPress={() => call(item)} />
+                        <Menu.Item key='call' leadingIcon="phone" title={state.strings.callAction} onPress={() => call(item)} />
                       )}
                       { syncStatus === 'connected' && (
-                        <Menu.Item key='text' leadingIcon="message-outline" title={state.strings.textAction} onPress={() => { setMore(null); textContact(item.cardId)}} />
+                        <Menu.Item key='text' leadingIcon="chat-circle" title={state.strings.textAction} onPress={() => { setMore(null); textContact(item.cardId)}} />
                       )}
                       { syncStatus === 'confirmed' && (
                         <Menu.Item key='saved' leadingIcon="link" title={state.strings.connectAction} onPress={() => connect(item)} />
@@ -278,10 +278,10 @@ export function Contacts({
                         <Menu.Item key='resync' leadingIcon="cached" title={state.strings.resyncAction} onPress={() => resync(item)} />
                       )}
                       { syncStatus === 'connected' && (
-                        <Menu.Item key='call' leadingIcon="phone-outline" title={state.strings.callAction} onPress={() => call(item)} />
+                        <Menu.Item key='call' leadingIcon="phone" title={state.strings.callAction} onPress={() => call(item)} />
                       )}
                       { syncStatus === 'connected' && (
-                        <Menu.Item key='text' leadingIcon="message-outline" title={state.strings.textAction} onPress={() => textContact(item.cardId)} />
+                        <Menu.Item key='text' leadingIcon="chat-circle" title={state.strings.textAction} onPress={() => textContact(item.cardId)} />
                       )}
                   </Menu>
                 );
@@ -387,7 +387,7 @@ export function Contacts({
                     return [
                       <Action
                         key="call"
-                        icon="phone-outline"
+                        icon="phone"
                         color={Colors.connected}
                         select={async () => {
                           try {
@@ -399,7 +399,7 @@ export function Contacts({
                           }
                         }}
                       />,
-                      <Action key="text" icon="message-outline" color={Colors.connected} select={() => textContact(item.cardId)} />,
+                      <Action key="text" icon="chat-circle" color={Colors.connected} select={() => textContact(item.cardId)} />,
                     ];
                   } else if (syncStatus === 'offsync') {
                     return [

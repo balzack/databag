@@ -114,6 +114,7 @@ export const styles = StyleSheet.create({
   },
   ring: {
     paddingLeft: 16,
+    paddingRight: 16,
   },
   base: {
     width: '100%',

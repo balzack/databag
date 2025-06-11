@@ -6,6 +6,7 @@ import {Text, Surface, IconButton} from 'react-native-paper';
 import {Confirm} from '../confirm/Confirm';
 import {Colors} from '../constants/Colors';
 import {RTCView} from 'react-native-webrtc';
+import {caller} from '../constants/Icons';
 
 export function Call() {
   const {state, actions} = useCall();
@@ -77,13 +78,13 @@ export function Call() {
     if (state.calling && state.fullscreen) {
       Animated.timing(opacity, {
         toValue: 1.0,
-        duration: 100,
+        duration: 200,
         useNativeDriver: true,
       }).start();
     } else {
       Animated.timing(opacity, {
         toValue: 0.0,
-        duration: 100,
+        duration: 200,
         useNativeDriver: true,
       }).start();
     }
@@ -95,67 +96,73 @@ export function Call() {
   return (
     <Animated.View style={{...viewStyle, opacity}}>
       {state.calling && (
-        <Surface elevation={4} mode="flat" style={styles.call}>
-          {!state.remoteVideo && !state.localVideo && showName && (
-            <View style={styles.titleView}>
-              {state.calling.name && (
-                <Text style={styles.titleName} adjustsFontSizeToFit={true} numberOfLines={1}>
-                  {state.calling.name}
-                </Text>
-              )}
-              {!state.calling.name && <Text style={styles.titleName} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.calling.handle}/${state.calling.node}`}</Text>}
-              <Image style={styles.titleImage} resizeMode="contain" source={{uri: state.calling.imageUrl}} />
-              <Text style={styles.duration}>{`${Math.floor(state.duration / 60)}:${(state.duration % 60).toString().padStart(2, '0')}`}</Text>
-            </View>
+        <View style={styles.call}>
+
+          {!state.remoteVideo && !state.localVideo && (
+            <Image style={styles.full} resizeMode="cover" source={{ uri: caller }} />
           )}
 
-          {!state.remoteVideo && !state.localVideo && !showName && <Image style={styles.logoView} resizeMode="contain" source={{uri: state.calling.imageUrl}} />}
-
-          {state.remoteVideo && <RTCView style={styles.full} mirror={true} objectFit={'contain'} streamURL={state.remoteStream.toURL()} />}
+          {state.remoteVideo && (
+            <RTCView style={styles.full} mirror={true} objectFit={'contain'} streamURL={state.remoteStream.toURL()} />
+          )}
 
           {state.localVideo && (
             <RTCView style={state.remoteVideo ? styles.box : styles.full} mirror={true} objectFit={'contain'} streamURL={state.localStream.toURL()} zOrder={state.remoteVideo ? 2 : undefined} />
           )}
 
-          <Surface elevation={3} mode="flat" style={styles.controls}>
+          {!state.remoteVideo && !state.localVideo && showName && (
+            <View style={styles.titleView}>
+              <Text style={styles.titleName} adjustsFontSizeToFit={true} numberOfLines={1}>
+                {state.calling.name ? state.calling.name : `${state.calling.handle}@${state.calling.node}`}
+              </Text>
+              <View style={styles.duration}>
+                <Text style={styles.minutes}>{`${Math.floor(state.duration / 60)}`}:</Text>
+                <Text style={styles.seconds}>{`${(state.duration % 60).toString().padStart(2, '0')}`}</Text>
+              </View>
+            </View>
+          )}
+
+          <View style={styles.controls}>
             <IconButton
-              style={styles.closeIcon}
-              iconColor="white"
-              disabled={!state.connected}
-              containerColor={Colors.confirmed}
-              icon="arrow-collapse-all"
-              compact="true"
-              mode="contained"
-              size={32}
-              onPress={() => actions.setFullscreen(false)}
-            />
-            <IconButton
-              style={styles.closeIcon}
+              style={styles.clearIcon}
               iconColor="white"
               disabled={!state.connected}
               containerColor={Colors.primary}
-              icon={state.audioEnabled ? 'microphone' : 'microphone-off'}
+              icon={state.audioEnabled ? 'microphone' : 'microphone-slash'}
               loading={applyingAudio}
               compact="true"
               mode="contained"
               size={32}
               onPress={toggleAudio}
             />
+            <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.danger} icon="phone" compact="true" mode="contained" size={48} onPress={end} />
             <IconButton
-              style={styles.closeIcon}
+              style={styles.clearIcon}
               iconColor="white"
               disabled={!state.connected}
               containerColor={Colors.primary}
-              icon={state.videoEnabled ? 'video-outline' : 'video-off-outline'}
+              icon={state.videoEnabled ? 'video' : 'video-slash'}
               loading={applyingVideo}
               compact="true"
               mode="contained"
               size={32}
               onPress={toggleVideo}
             />
-            <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.danger} icon="phone-hangup-outline" compact="true" mode="contained" size={32} onPress={end} />
-          </Surface>
-        </Surface>
+          </View>
+
+            <IconButton
+              style={styles.collapse}
+              iconColor="white"
+              disabled={!state.connected}
+              containerColor={{ backgroundColor: 'transparent' }}
+              icon="arrows-in"
+              compact="true"
+              mode="contained"
+              size={32}
+              onPress={() => actions.setFullscreen(false)}
+            />
+
+        </View>
       )}
       <Confirm show={alert} params={alertParams} />
     </Animated.View>

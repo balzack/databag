@@ -4,7 +4,7 @@ import {Colors} from '../constants/Colors';
 export const styles = StyleSheet.create({
   active: {
     width: '100%',
-    height: 64,
+    height: 80,
     maxWidth: 500,
     display: 'flex',
     alignItems: 'center',
@@ -27,33 +27,43 @@ export const styles = StyleSheet.create({
     padding: 8,
     width: '100%',
   },
-  circleIcon: {},
+  clearIcon: {
+    backgroundColor: 'transparent',
+    padding: 0,
+    margin: 0,
+  },
   flipIcon: {
     transform: [{rotate: '135deg'}],
   },
-  end: {},
+  end: {
+    padding: 8,
+    transform: [{rotate: '135deg'}],
+  },
   name: {
     flexGrow: 1,
     flexShrink: 1,
     display: 'flex',
-    flexDirection: 'row',
-    paddingLeft: 8,
+    flexDirection: 'column',
   },
   nameSet: {
-    fontSize: 20,
+    fontSize: 24,
+    fontWeight: 600,
+    color: 'white',
+  },
+  ringing: {
+    fontSize: 14,
   },
   nameUnset: {
-    fontSize: 20,
+    fontSize: 24,
     fontStyle: 'italic',
+    color: 'white',
   },
-  status: {
-    width: 64,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+  handle: {
+    fontSize: 18,
+    color: 'white',
   },
   duration: {
-    color: Colors.primary,
-    fontSize: 20,
+    color: 'white',
+    fontSize: 14,
   },
 });

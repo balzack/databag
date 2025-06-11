@@ -12,7 +12,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {WarningCircle, Link, LinkBreak, AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
+import {DotsThreeCircle, VideoCamera, VideoCameraSlash, ArrowsInSimple, BellSlash, Phone, Microphone, MicrophoneSlash, FrameCorners, WarningCircle, Link, LinkBreak, AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
 import {useColorScheme} from 'react-native';
 import {configureFonts, MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
 
@@ -213,6 +213,24 @@ function App(): React.JSX.Element {
                 return <LinkBreak color={props.color} size={props.size} />
               } else if (props.name === 'warning-circle') {
                 return <WarningCircle weight="fill" color={props.color} size={props.size} />
+              } else if (props.name === 'frame-corners') {
+                return <FrameCorners color={props.color} size={props.size} /> 
+              } else if (props.name === 'microphone-slash') {
+                return <MicrophoneSlash color={props.color} size={props.size} />
+              } else if (props.name === 'microphone') {
+                return <Microphone color={props.color} size={props.size} />
+              } else if (props.name === 'phone') {
+                return <Phone color={props.color} size={props.size} />
+              } else if (props.name === 'bell-slash') {
+                return <BellSlash color={props.color} size={props.size} />
+              } else if (props.name === 'arrows-in') {
+                return <ArrowsInSimple color={props.color} size={props.size} />
+              } else if (props.name === 'video') {
+                return <VideoCamera color={props.color} size={props.size} />
+              } else if (props.name === 'video-slash') {
+                return <VideoCameraSlash color={props.color} size={props.size} />
+              } else if (props.name === 'dots-horizontal-circle-outline') {
+                return <DotsThreeCircle color={props.color} size={props.size} />
               } else {
                 return <CommunityIcon {...props} />
               }
