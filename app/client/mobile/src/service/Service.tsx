@@ -13,7 +13,7 @@ const SetupDrawer = createDrawerNavigator();
 
 export function Service() {
   const {state} = useService();
-  const [tab, setTab] = useState('accounts');
+  const [tab, setTab] = useState('setup');
   const scheme = useColorScheme();
   const showAccounts = {width: '100%', height: '100%', display: tab === 'accounts' ? 'flex' : 'none'};
   const showSetup = {width: '100%', height: '100%', display: tab === 'setup' ? 'flex' : 'none'};
@@ -34,6 +34,28 @@ export function Service() {
               <BlurView style={styles.blur} blurType="light" blurAmount={8} reducedTransparencyFallbackColor="dark" />
               <View style={{ backgroundColor: theme.colors.bar, height: 96 }}>
                 <SafeAreaView style={{ width: '100%', display: 'flex', flexDirection: 'row' }} edges={['bottom']}>
+                 {tab === 'setup' && (
+                    <IconButton
+                      style={styles.activeTab}
+                      mode="contained"
+                      icon={'cog'}
+                      size={28}
+                      onPress={() => {
+                        setTab('setup');
+                      }}
+                    />
+                  )}
+                  {tab !== 'setup' && (
+                    <IconButton
+                      style={styles.idleTab}
+                      mode="contained"
+                      icon={'cog-outline'}
+                      size={28}
+                      onPress={() => {
+                        setTab('setup');
+                      }}
+                    />
+                  )}
                   {tab === 'accounts' && (
                     <IconButton
                       style={styles.activeTab}
@@ -53,28 +75,6 @@ export function Service() {
                       size={28}
                       onPress={() => {
                         setTab('accounts');
-                      }}
-                    />
-                  )}
-                  {tab === 'setup' && (
-                    <IconButton
-                      style={styles.activeTab}
-                      mode="contained"
-                      icon={'cog'}
-                      size={28}
-                      onPress={() => {
-                        setTab('setup');
-                      }}
-                    />
-                  )}
-                  {tab !== 'setup' && (
-                    <IconButton
-                      style={styles.idleTab}
-                      mode="contained"
-                      icon={'cog-outline'}
-                      size={28}
-                      onPress={() => {
-                        setTab('setup');
                       }}
                     />
                   )}

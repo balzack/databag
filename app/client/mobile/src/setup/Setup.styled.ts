@@ -19,7 +19,6 @@ export const styles = StyleSheet.create({
   scrollContainer: {
     display: 'flex',
     alignItems: 'center',
-    paddingBottom: 92,
     width: '100%',
   },
   sectionLabel: {
@@ -35,6 +34,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 16,
     width: '100%',
+    paddingBottom: 128,
   },
   navInput: {
     fontSize: 15,
@@ -59,6 +59,37 @@ export const styles = StyleSheet.create({
   },
   navInputBorder: {
     borderWidth: 0,
+  },
+  field: {
+    width: '100%',
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 16,
+  },
+  fieldData: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  fieldLabel: {
+    fontSize: 15,
+  },
+  fieldInput: {
+    fontSize: 15,
+    textWrap: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    textAlign: 'auto',
+    backgroundColor: 'transparent',
+    fontWeight: 'normal',
+  },
+  fieldInputBorder: {
   },
   navWrapper: {
     width: '100%',
@@ -190,7 +221,49 @@ export const styles = StyleSheet.create({
     left: -36,
     fontWeight: 'bold',
   },
+  separator: {
+    marginLeft: 16,
+    marginRight: 16,
+  },
+  selectOptions: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 16,
+    height: 28,
+    alignItems: 'center',
+  },
+  selectLabel: {
+    fontSize: 14,
+  },
+  selectOption: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingRight: 16,
+  },
+  checked: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  unchecked: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  selectButton: {
+    padding: 0,
+    margin: 0,
+  }, 
   controlSwitch: {
+    transform: [{scaleX: 0.7}, {scaleY: 0.7}],
+  },
+  fieldSwitch: {
+    position: 'relative',
+    left: 8,
     transform: [{scaleX: 0.7}, {scaleY: 0.7}],
   },
   ice: {

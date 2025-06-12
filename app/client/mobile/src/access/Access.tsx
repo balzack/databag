@@ -104,7 +104,7 @@ export function Access() {
             )}
             { state.mode === 'splash' && (
               <Animated.View style={[styles.start, {opacity: switching}]}>
-                <Button mode="contained" style={styles.submit} onPress={() => begin(false)}>
+                <Button mode="contained" textColor="white" style={styles.submit} onPress={() => begin(false)}>
                   {state.strings.login}
                 </Button>
                 <View style={styles.linkline}>
@@ -164,16 +164,9 @@ export function Access() {
                     {state.strings.terms}
                   </Button>
                 </View>
-                {(!state.password || !state.node || !accept) && (
-                  <Button mode="contained" style={styles.submit} disabled={true}>
-                    {state.strings.access}
-                  </Button>
-                )}
-                {state.password && state.node && accept && (
-                  <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading}>
-                    {state.strings.access}
-                  </Button>
-                )}
+                <Button mode="contained" style={styles.submit} disabled={!state.password || !state.node || !accept} textColor="white" onPress={login} loading={state.loading}>
+                  {state.strings.access}
+                </Button>
                 <View style={styles.footer}>
                   <View style={styles.footline}>
                     <IconButton style={styles.admin} icon="account-circle-outline" size={24} onPress={() => fadeOut('account')} />
@@ -224,22 +217,15 @@ export function Access() {
                     {state.strings.terms}
                   </Button>
                 </View>
-                {(!state.username || !state.password || !state.node || !accept) && (
-                  <Button mode="contained" style={styles.submit} disabled={true}>
-                    {state.strings.access}
-                  </Button>
-                )}
-                {state.username && state.password && state.node && accept && (
-                  <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading}>
-                    {state.strings.access}
-                  </Button>
-                )}
+                <Button mode="contained" style={styles.submit} disabled={!state.username || !state.password || !state.node || !accept} onPress={login} loading={state.loading}>
+                  {state.strings.access}
+                </Button>
                 <Button mode="text" onPress={() => fadeOut('account')}>
                   {state.strings.accountLogin}
                 </Button>
                 <View style={styles.footer}>
                   <View style={styles.footline}>
-                    <IconButton style={styles.admin} icon="settings" size={24} onPress={() => fadeOut('account')} />
+                    <IconButton style={styles.admin} icon="settings" size={24} onPress={() => fadeOut('admin')} />
                     <Button mode="text" compact="true" onPress={() => fadeOut('admin')}>
                       <Text variant="labelLarge">{state.strings.admin}</Text>
                     </Button>
@@ -325,22 +311,15 @@ export function Access() {
                     {state.strings.terms}
                   </Button>
                 </View>
-                {(!state.username || !state.password || !state.node || !accept) && (
-                  <Button mode="contained" style={styles.submit} disabled={true}>
-                    {state.strings.create}
-                  </Button>
-                )}
-                {state.username && state.password && state.node && accept && (
-                  <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading}>
-                    {state.strings.create}
-                  </Button>
-                )}
+                <Button mode="contained" style={styles.submit} textColor="white" disabled={!state.username || !state.password || !state.node || !accept} onPress={login} loading={state.loading}>
+                  {state.strings.create}
+                </Button>
                 <Button mode="text" onPress={() => fadeOut('account')}>
                   {state.strings.accountLogin}
                 </Button>
                 <View style={styles.footer}>
                   <View style={styles.footline}>
-                    <IconButton style={styles.admin} icon="settings" size={24} onPress={() => fadeOut('account')} />
+                    <IconButton style={styles.admin} icon="settings" size={24} onPress={() => fadeOut('admin')} />
                     <Button mode="text" compact="true" onPress={() => fadeOut('admin')}>
                       <Text variant="labelLarge">{state.strings.admin}</Text>
                     </Button>
@@ -409,16 +388,9 @@ export function Access() {
                     {state.strings.terms}
                   </Button>
                 </View>
-                {(!state.username || !state.password || !state.node || !accept) && (
-                  <Button mode="contained" style={styles.submit} disabled={true}>
-                    {state.strings.login}
-                  </Button>
-                )}
-                {state.username && state.password && state.node && accept && (
-                  <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading}>
-                    {state.strings.login}
-                  </Button>
-                )}
+                <Button mode="contained" style={styles.submit} textColor="white" disabled={!state.username || !state.password || !state.node || !accept} onPress={login} loading={state.loading}>
+                  {state.strings.login}
+                </Button>
                 <View style={styles.linkline}>
                   <Text>{ state.strings.notUser }</Text>
                   <Button labelStyle={styles.textButton} compact="true" mode="text" onPress={() => fadeOut('create')}>
@@ -430,7 +402,7 @@ export function Access() {
                 </Button>
                 <View style={styles.footer}>
                   <View style={styles.footline}>
-                    <IconButton style={styles.admin} icon="settings" size={24} onPress={() => fadeOut('account')} />
+                    <IconButton style={styles.admin} icon="settings" size={24} onPress={() => fadeOut('admin')} />
                     <Button mode="text" compact="true" onPress={() => fadeOut('admin')}>
                       <Text variant="labelLarge">{state.strings.admin}</Text>
                     </Button>

@@ -12,6 +12,14 @@ export const languages = [
 
 export const en = {
   adminSettings: 'Admin Settings',
+  accountKeyType: 'Account Key Type',
+  media: 'Media',
+  calling: 'Calling',
+  serviceId: 'Service ID',
+  serviceToken: 'Service Token',
+  serviceUrl: 'Service URL',
+  idHint: 'ID / Username',
+  tokenHint: 'Token / Password',
 
   addSubject: 'Add Subject',
   chat: 'Chat',
