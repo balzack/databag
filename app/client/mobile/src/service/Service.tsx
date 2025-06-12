@@ -60,7 +60,7 @@ export function Service() {
                     <IconButton
                       style={styles.activeTab}
                       mode="contained"
-                      icon={'contacts'}
+                      icon={'users-four-filled'}
                       size={28}
                       onPress={() => {
                         setTab('accounts');
@@ -71,7 +71,7 @@ export function Service() {
                     <IconButton
                       style={styles.idleTab}
                       mode="contained"
-                      icon={'contacts-outline'}
+                      icon={'users-four'}
                       size={28}
                       onPress={() => {
                         setTab('accounts');

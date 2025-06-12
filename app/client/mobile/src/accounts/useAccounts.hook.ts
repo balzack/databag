@@ -11,8 +11,10 @@ export function useAccounts() {
     layout: '',
     strings: display.state.strings,
     members: [] as Member[],
+    filtered: [] as Member[],
     loading: false,
     secretText: '',
+    filter: '',
   });
 
   const updateState = (value: any) => {
@@ -38,10 +40,18 @@ export function useAccounts() {
     updateState({layout, strings});
   }, [display.state]);
 
+  useEffect(() => {
+    const filtered = state.members.filter(item => !state.filter || item.handle.includes(state.filter.toLowerCase()))
+    updateState({ filtered });
+  }, [state.members, state.filter]);
+
   const actions = {
     reload: sync,
     addAccount: async () => {
       return await app.state.service.createMemberAccess();
+    },
+    setFilter: (filter: string) => {
+      updateState({ filter });
     },
     accessAccount: async (accountId: number) => {
       return await app.state.service.resetMemberAccess(accountId);

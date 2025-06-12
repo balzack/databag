@@ -2,12 +2,64 @@ import {StyleSheet} from 'react-native';
 import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
+  component: {
+    width: '100%',
+    height: '100%',
+  },
   accounts: {
     width: '100%',
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
     minHeight: 0,
+  },
+  action: {
+    backgroundColor: 'transparent',
+  },
+  contacts: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    overscrollBehavior: 'none',
+    paddingTop: 24,
+    paddingBottom: 64,
+  },
+  contact: {
+    width: '100%',
+    height: 80,
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingLeft: 16,
+    icon: {
+      borderRadius: 28,
+      overflow: 'hidden',
+    }
+  },
+  input: { 
+    flexGrow: 1,
+    backgroundColor: 'transparent',
+    paddingTop: 0,
+    paddingBottom: 0,
+    display: 'flex',
+    height: 48,
+    maxHeight: 48,
+    borderRadius: 8,
+  },
+  searchSurface: {
+    flexGrow: 1,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  newContactButton: {
+    height: 48,
+    borderRadius: 8,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputBorder: {
+    borderRadius: 12,
+    borderWidth: 0,
   },
   largeTitle: {
     fontSize: 20,

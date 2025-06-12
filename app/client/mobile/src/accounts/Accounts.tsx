@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {FlatList, View, TouchableOpacity, Modal} from 'react-native';
-import {Text, Button, IconButton, Divider, Surface, Icon, useTheme} from 'react-native-paper';
+import {Text, Button, TextInput, Menu, IconButton, Divider, Surface, Icon, useTheme} from 'react-native-paper';
 import {useAccounts} from './useAccounts.hook';
 import {styles} from './Accounts.styled';
 import {Card} from '../card/Card';
@@ -8,6 +8,7 @@ import {Colors} from '../constants/Colors';
 import {Confirm} from '../confirm/Confirm';
 import {BlurView} from '@react-native-community/blur';
 import Clipboard from '@react-native-clipboard/clipboard';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export function Accounts({setup}: {setup: () => void}) {
   const {state, actions} = useAccounts();
@@ -24,6 +25,7 @@ export function Accounts({setup}: {setup: () => void}) {
   const [showAddModal, setShowAddModal] = useState(false);
   const [token, setToken] = useState('');
   const [tokenCopy, setTokenCopy] = useState(false);
+  const [more, setMore] = useState(null as null | string);
 
   useEffect(() => {
     loadAccounts();
@@ -43,6 +45,7 @@ export function Accounts({setup}: {setup: () => void}) {
   };
 
   const accessAccount = async (accountId: number) => {
+    setMore(null);
     if (!accessing) {
       setAccessing(accountId);
       try {
@@ -84,6 +87,7 @@ export function Accounts({setup}: {setup: () => void}) {
   };
 
   const blockAccount = async (accountId: number, block: boolean) => {
+    setMore(null);
     if (!blocking) {
       setBlocking(accountId);
       try {
@@ -97,6 +101,7 @@ export function Accounts({setup}: {setup: () => void}) {
   };
 
   const removeAccount = (accountId: number) => {
+    setMore(null);
     if (!remove) {
       setRemoveParams({
         title: state.strings.confirmDelete,
@@ -139,89 +144,158 @@ export function Accounts({setup}: {setup: () => void}) {
   };
 
   return (
-    <View style={styles.accounts}>
+    <View style={styles.component}>
+      { state.layout === 'small' && (
+        <Surface elevation={1} mode="flat" style={{ width: '100%', height: '100%' }}>
+          <Surface elevation={9} mode="flat">
+            <SafeAreaView edges={['top']}>
+              <View style={{ width: '100%', display: 'flex', flexDirection: 'row', height: 72, gap: 16, justifyContent: 'center', alignItems: 'center', paddingBottom: 16, paddingRight: 16, paddingLeft: 16 }}>
+                <Surface mode="flat" elevation={0} style={styles.searchSurface}>
+                  <TextInput
+                    dense={true}
+                    style={styles.input}
+                    outlineStyle={styles.inputBorder}
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    mode="outlined"
+                    placeholder={state.strings.searchAccounts}
+                    left={<TextInput.Icon style={styles.icon} icon="search" />}
+                    value={state.filter}
+                    onChangeText={value => actions.setFilter(value)}
+                  />
+                </Surface>
+                <Button icon="user-plus" mode="contained" textColor="white" style={styles.newContactButton} onPress={addAccount}>
+                  {state.strings.new}
+                </Button>
+              </View>
+            </SafeAreaView>
+          </Surface>
+
+          {state.members.length !== 0 && (
+            <FlatList
+              style={styles.contacts}
+              data={state.filtered}
+              initialNumToRender={32}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item}) => {
+                const action = (
+                  <Menu
+                    key="actions"
+                    visible={more === item.accountId}
+                    onDismiss={()=>setMore(null)}
+                    anchor={<IconButton style={styles.action} loading={accessing === item.accountId || blocking === item.accountId || removing === item.accountId} icon="dots-horizontal-circle-outline" size={22} onPress={()=>setMore(item.accountId)} />}>
+                      <Menu.Item key='storage' leadingIcon="hard-drive" disabled={true} title={`${Math.floor(item.storageUsed / 1048576)} MB`} onPress={()=>{}} />
+                      <Menu.Item key='access' leadingIcon="lock-open" title={state.strings.accessAccount} onPress={() => accessAccount(item.accountId)} />
+                      { item.disabled && (
+                        <Menu.Item key='enable' leadingIcon="play-circle" title={state.strings.enableAccount} onPress={() => blockAccount(item.accountId, false)} />
+                      )}
+                      { !item.disabled && (
+                        <Menu.Item key='enable' leadingIcon="stop-circle" title={state.strings.disableAccount} onPress={() => { console.log(item); blockAccount(item.accountId, true)}} />
+                      )}
+                      <Menu.Item key='delete' leadingIcon="user-minus" title={state.strings.deleteAccount} onPress={() => removeAccount(item.accountId)} />
+                  </Menu>
+                );
+                return (
+                  <Card
+                    containerStyle={{ ...styles.contact, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
+                    imageUrl={item.imageUrl}
+                    name={item.name}
+                    handle={item.handle}
+                    node={item.node}
+                    placeholder={state.strings.name}
+                    select={() => {}}
+                    actions={[action]}
+                  />
+                );
+              }}
+            />
+          )}
+          {state.members.length === 0 && (
+            <View style={styles.empty}>
+              <Text style={styles.label}>{state.strings.noAccounts}</Text>
+            </View>
+          )}
+
+        </Surface>
+      )}
       {state.layout === 'large' && (
-        <View style={styles.header}>
-          <Text style={styles.largeTitle}>{state.strings.accounts}</Text>
-          <IconButton style={styles.icon} loading={loading} iconColor={Colors.primary} mode="contained" icon="refresh" onPress={loadAccounts} />
-          <IconButton style={styles.icon} loading={adding} iconColor={Colors.primary} mode="contained" icon="account-plus-outline" onPress={addAccount} />
-          <IconButton style={styles.icon} loading={false} iconColor={Colors.primary} mode="contained" icon="cog-outline" onPress={setup} />
+        <View style={styles.accounts}>
+          <View style={styles.header}>
+            <Text style={styles.largeTitle}>{state.strings.accounts}</Text>
+            <IconButton style={styles.icon} loading={loading} iconColor={Colors.primary} mode="contained" icon="refresh" onPress={loadAccounts} />
+            <IconButton style={styles.icon} loading={adding} iconColor={Colors.primary} mode="contained" icon="account-plus-outline" onPress={addAccount} />
+            <IconButton style={styles.icon} loading={false} iconColor={Colors.primary} mode="contained" icon="cog-outline" onPress={setup} />
+          </View>
+          <Divider style={styles.line} bold={true} />
+          {state.members.length !== 0 && (
+            <FlatList
+              style={styles.members}
+              data={state.members}
+              initialNumToRender={32}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item}) => {
+                const options = [
+                  <IconButton
+                    key="disable"
+                    style={styles.icon}
+                    loading={accessing === item.accountId}
+                    iconColor={Colors.primary}
+                    mode="contained"
+                    icon="lock-open-variant-outline"
+                    onPress={() => {
+                      accessAccount(item.accountId);
+                    }}
+                  />,
+                  <IconButton
+                    key="reset"
+                    style={styles.icon}
+                    loading={blocking === item.accountId}
+                    iconColor={Colors.pending}
+                    mode="contained"
+                    icon={item.disabled ? 'account-check-outline' : 'account-cancel-outline'}
+                    onPress={() => {
+                      blockAccount(item.accountId, !item.disabled);
+                    }}
+                  />,
+                  <IconButton
+                    key="remove"
+                    style={styles.icon}
+                    loading={removing === item.accountId}
+                    iconColor={Colors.offsync}
+                    mode="contained"
+                    icon="trash-can-outline"
+                    onPress={() => {
+                      removeAccount(item.accountId);
+                    }}
+                  />,
+                ];
+                return (
+                  <Card
+                    containerStyle={{
+                      ...styles.card,
+                      borderColor: theme.colors.outlineVariant,
+                    }}
+                    imageUrl={item.imageUrl}
+                    name={item.storageUsed > 1048576 ? `${item.handle} [${Math.floor(item.storageUsed / 1048576)}MB]` : item.handle}
+                    handle={item.guid}
+                    node={item.node}
+                    placeholder={state.strings.name}
+                    select={() => {}}
+                    actions={options}
+                  />
+                );
+              }}
+            />
+          )}
+          {state.members.length === 0 && (
+            <View style={styles.empty}>
+              <Text style={styles.label}>{state.strings.noAccounts}</Text>
+            </View>
+          )}
+          <Divider style={styles.line} bold={true} />
         </View>
       )}
-      {state.layout === 'small' && (
-        <View style={styles.header}>
-          <IconButton style={styles.icon} loading={loading} iconColor={Colors.primary} mode="contained" icon="refresh" onPress={loadAccounts} />
-          <Text style={styles.smallTitle}>{state.strings.accounts}</Text>
-          <IconButton style={styles.icon} loading={adding} iconColor={Colors.primary} mode="contained" icon="account-plus-outline" onPress={addAccount} />
-        </View>
-      )}
-      <Divider style={styles.line} bold={true} />
-      {state.members.length !== 0 && (
-        <FlatList
-          style={styles.members}
-          data={state.members}
-          initialNumToRender={32}
-          showsVerticalScrollIndicator={false}
-          renderItem={({item}) => {
-            const options = [
-              <IconButton
-                key="disable"
-                style={styles.icon}
-                loading={accessing === item.accountId}
-                iconColor={Colors.primary}
-                mode="contained"
-                icon="lock-open-variant-outline"
-                onPress={() => {
-                  accessAccount(item.accountId);
-                }}
-              />,
-              <IconButton
-                key="reset"
-                style={styles.icon}
-                loading={blocking === item.accountId}
-                iconColor={Colors.pending}
-                mode="contained"
-                icon={item.disabled ? 'account-check-outline' : 'account-cancel-outline'}
-                onPress={() => {
-                  blockAccount(item.accountId, !item.disabled);
-                }}
-              />,
-              <IconButton
-                key="remove"
-                style={styles.icon}
-                loading={removing === item.accountId}
-                iconColor={Colors.offsync}
-                mode="contained"
-                icon="trash-can-outline"
-                onPress={() => {
-                  removeAccount(item.accountId);
-                }}
-              />,
-            ];
-            return (
-              <Card
-                containerStyle={{
-                  ...styles.card,
-                  borderColor: theme.colors.outlineVariant,
-                }}
-                imageUrl={item.imageUrl}
-                name={item.storageUsed > 1048576 ? `${item.handle} [${Math.floor(item.storageUsed / 1048576)}MB]` : item.handle}
-                handle={item.guid}
-                node={item.node}
-                placeholder={state.strings.name}
-                select={() => {}}
-                actions={options}
-              />
-            );
-          }}
-        />
-      )}
-      {state.members.length === 0 && (
-        <View style={styles.empty}>
-          <Text style={styles.label}>{state.strings.noAccounts}</Text>
-        </View>
-      )}
-      <Divider style={styles.line} bold={true} />
       <Confirm show={failed} params={failedParams} />
       <Confirm show={remove} busy={removing} params={removeParams} />
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={showAccessModal} onRequestClose={() => setShowAccessModal(false)}>

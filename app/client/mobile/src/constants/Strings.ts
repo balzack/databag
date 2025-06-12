@@ -20,6 +20,7 @@ export const en = {
   serviceUrl: 'Service URL',
   idHint: 'ID / Username',
   tokenHint: 'Token / Password',
+  searchAccounts: 'Search Accounts',
 
   addSubject: 'Add Subject',
   chat: 'Chat',

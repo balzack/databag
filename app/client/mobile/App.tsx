@@ -12,7 +12,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {DotsThreeCircle, VideoCamera, VideoCameraSlash, ArrowsInSimple, BellSlash, Phone, Microphone, MicrophoneSlash, FrameCorners, WarningCircle, Link, LinkBreak, AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
+import {HardDrive, LockOpen, UserMinus, PlayCircle, StopCircle, UsersFour, DotsThreeCircle, VideoCamera, VideoCameraSlash, ArrowsInSimple, BellSlash, Phone, Microphone, MicrophoneSlash, FrameCorners, WarningCircle, Link, LinkBreak, AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
 import {useColorScheme} from 'react-native';
 import {configureFonts, MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
 
@@ -231,6 +231,20 @@ function App(): React.JSX.Element {
                 return <VideoCameraSlash color={props.color} size={props.size} />
               } else if (props.name === 'dots-horizontal-circle-outline') {
                 return <DotsThreeCircle color={props.color} size={props.size} />
+              } else if (props.name === 'users-four') {
+                return <UsersFour color={props.color} size={props.size} />
+              } else if (props.name === 'users-four-filled') {
+                return <UsersFour weight="fill" color={props.color} size={props.size} />
+              } else if (props.name === 'hard-drive') {
+                return <HardDrive color={props.color} size={props.size} />
+              } else if (props.name === 'lock-open') {
+                return <LockOpen color={props.color} size={props.size} />
+              } else if (props.name === 'user-minus') {
+                return <UserMinus color={props.color} size={props.size} />
+              } else if (props.name === 'play-circle') {
+                return <PlayCircle color={props.color} size={props.size} />
+              } else if (props.name === 'stop-circle') {
+                return <StopCircle color={props.color} size={props.size} />
               } else {
                 return <CommunityIcon {...props} />
               }
