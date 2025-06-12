@@ -220,7 +220,7 @@ export function Contacts({
                     key="actions"
                     visible={requestedTab && more === item.cardId}
                     onDismiss={()=>setMore(null)}
-                    anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>setMore(item.cardId)} />}>
+                    anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={()=>setMore(item.cardId)} />}>
                       <Menu.Item key='accept' leadingIcon="account-check-outline" title={state.strings.acceptAction} onPress={() => accept(item)} />
                   </Menu>
                 );
@@ -273,7 +273,7 @@ export function Contacts({
                     key="actions"
                     visible={connectedTab && more === item.cardId}
                     onDismiss={()=>setMore(null)}
-                    anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>setMore(item.cardId)} />}>
+                    anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={()=>setMore(item.cardId)} />}>
                       { syncStatus === 'offsync' && (
                         <Menu.Item key='resync' leadingIcon="cached" title={state.strings.resyncAction} onPress={() => resync(item)} />
                       )}

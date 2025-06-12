@@ -11,6 +11,8 @@ export const languages = [
 ];
 
 export const en = {
+  adminSettings: 'Admin Settings',
+
   addSubject: 'Add Subject',
   chat: 'Chat',
   sealingKey: 'Manage E2EE Key',
