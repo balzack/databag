@@ -47,6 +47,8 @@ export const styles = StyleSheet.create({
     paddingTop: 16,
     paddingLeft: 48,
     paddingRight: 48,
+    fontSize: 20,
+    fontWeight: 600,
   },
   start: {
     display: 'flex',
