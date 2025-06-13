@@ -2,6 +2,7 @@ import React from 'react';
 import {useConversation} from './useConversation.hook';
 import {ConversationSmall} from './ConversationSmall';
 import {ConversationLarge} from './ConversationLarge';
+import {LayoutSelector} from '../utils/LayoutSelector';
 
 export type MediaAsset = {
   encrypted?: {type: string; thumb: string; label: string; extension: string; parts: {blockIv: string; partId: string}[]};
@@ -11,12 +12,21 @@ export type MediaAsset = {
   binary?: {label: string; extension: string; data: string};
 };
 
-export function Conversation({close, openDetails, wide}: {close: () => void; openDetails: () => void; wide: boolean}) {
+type ConversationProps = {
+  close: () => void;
+  openDetails: () => void;
+  wide: boolean;
+};
+
+export function Conversation({close, openDetails, wide}: ConversationProps) {
   const {state} = useConversation();
 
-  if (state.layout === 'small') {
-    return <ConversationSmall close={close} openDetails={openDetails} wide={wide} />;
-  }
-
-  return <ConversationLarge close={close} openDetails={openDetails} wide={wide} />;
+  return (
+    <LayoutSelector
+      layout={state.layout}
+      SmallComponent={ConversationSmall}
+      LargeComponent={ConversationLarge}
+      props={{close, openDetails, wide}}
+    />
+  );
 }
