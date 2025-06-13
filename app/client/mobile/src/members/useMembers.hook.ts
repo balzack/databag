@@ -70,8 +70,8 @@ export function useMembers() {
   }, [state.members, state.sorted]);
 
   useEffect(() => {
-    const {layout} = display.state;
-    updateState({layout});
+    const {strings, layout} = display.state;
+    updateState({strings, layout});
   }, [display.state]);
 
   const actions = {
