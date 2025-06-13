@@ -111,12 +111,6 @@ export function useContent() {
           } else {
             return unknown;
           }
-        } else if (contacts.length === 2) {
-          return iii_group;
-        } else if (contacts.length === 3) {
-          return iiii_group;
-        } else if (contacts.length === 4) {
-          return iiiii_group;
         } else {
           return group;
         }
