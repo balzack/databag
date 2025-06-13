@@ -47,7 +47,7 @@ export function Channel({
       <SafeAreaView style={styles.channel}>
         <Image style={{ ...styles.image, ...containerStyle.logo }} resizeMode={'contain'} source={{uri: imageUrl}} />
         <View style={styles.details}>
-          <Text numberofLines={1} style={styles.subject}>
+          <Text numberOfLines={1} style={styles.subject}>
             {title}
           </Text>
           {message != null && (

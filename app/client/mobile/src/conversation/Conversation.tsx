@@ -232,22 +232,22 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
             </Pressable>
             <View style={styles.title}>
               {state.detailSet && state.subject && (
-                <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.smLabel}>
+                <Text numberOfLines={1} style={styles.smLabel}>
                   {state.subject}
                 </Text>
               )}
               {state.detailSet && state.host && !state.subject && state.subjectNames.length === 0 && (
-                <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.smLabel}>
+                <Text numberOfLines={1} style={styles.smLabel}>
                   {state.strings.notes}
                 </Text>
               )}
               {state.detailSet && !state.subject && state.subjectNames.length > 0 && (
-                <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.smLabel}>
+                <Text numberOfLines={1} style={styles.smLabel}>
                   {state.subjectNames.join(', ')}
                 </Text>
               )}
               {state.detailSet && !state.subject && state.unknownContacts > 0 && (
-                <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.smUnknown}>{`, ${state.strings.unknownContact} (${state.unknownContacts})`}</Text>
+                <Text numberOfLines={1} style={styles.smUnknown}>{`, ${state.strings.unknownContact} (${state.unknownContacts})`}</Text>
               )}
             </View>
             <Pressable onPress={openDetails} style={styles.navIcon}>
