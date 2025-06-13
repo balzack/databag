@@ -1,6 +1,6 @@
 import {useEffect, useState, useContext} from 'react';
 import {en, fr, es, pt, de, ru, el} from '../constants/Strings';
-import {useWindowDimensions} from 'react-native';
+import {useWindowDimensions, Platform} from 'react-native';
 import {AppContext} from './AppContext';
 import {ContextType} from './ContextType';
 
@@ -22,7 +22,7 @@ export function useDisplayContext() {
   };
 
   useEffect(() => {
-    const layout = dim.width < SMALL_LARGE ? 'small' : 'large';
+    const layout = Platform.isPad ? 'large' : 'small';
     if (locked) {
       updateState({width: dim.width, height: dim.height});
     } else {

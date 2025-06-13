@@ -15,6 +15,7 @@ import {VideoFile} from './videoFile/VideoFile';
 import {AudioFile} from './audioFile/AudioFile';
 import {BinaryFile} from './binaryFile/BinaryFile';
 import DocumentPicker from 'react-native-document-picker';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const SCROLL_THRESHOLD = 16;
 
@@ -226,140 +227,141 @@ export function Conversation({close, openDetails, wide}: {close: () => void; ope
     <View style={styles.component}>
       { state.layout === 'small' && (
         <Surface elevation={1} mode="flat" style={styles.content}>
-          <Surface elevation={9} mode="flat" style={{ width: '100%', height: 72, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16, paddingBottom: 16, paddingRight: 8, paddingLeft: 8 }}>
-            <Pressable style={styles.navIcon} onPress={onClose}>
-              <Icon size={24} source="left" color={'white'} />
-            </Pressable>
-            <View style={styles.title}>
-              {state.detailSet && state.subject && (
-                <Text numberOfLines={1} style={styles.smLabel}>
-                  {state.subject}
-                </Text>
-              )}
-              {state.detailSet && state.host && !state.subject && state.subjectNames.length === 0 && (
-                <Text numberOfLines={1} style={styles.smLabel}>
-                  {state.strings.notes}
-                </Text>
-              )}
-              {state.detailSet && !state.subject && state.subjectNames.length > 0 && (
-                <Text numberOfLines={1} style={styles.smLabel}>
-                  {state.subjectNames.join(', ')}
-                </Text>
-              )}
-              {state.detailSet && !state.subject && state.unknownContacts > 0 && (
-                <Text numberOfLines={1} style={styles.smUnknown}>{`, ${state.strings.unknownContact} (${state.unknownContacts})`}</Text>
-              )}
-            </View>
-            <Pressable onPress={openDetails} style={styles.navIcon}>
-              <Icon size={24} source="cog-outline" color={'white'} />
-            </Pressable>
+          <Surface elevation={9} mode="flat" style={{ width: '100%' }}>
+            <SafeAreaView edges={['left', 'right']} style={{ width: '100%', height: 72, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16, paddingBottom: 16, paddingRight: 8, paddingLeft: 8 }}>
+              <Pressable style={styles.navIcon} onPress={onClose}>
+                <Icon size={24} source="left" color={'white'} />
+              </Pressable>
+              <View style={styles.title}>
+                {state.detailSet && state.subject && (
+                  <Text numberOfLines={1} style={styles.smLabel}>
+                    {state.subject}
+                  </Text>
+                )}
+                {state.detailSet && state.host && !state.subject && state.subjectNames.length === 0 && (
+                  <Text numberOfLines={1} style={styles.smLabel}>
+                    {state.strings.notes}
+                  </Text>
+                )}
+                {state.detailSet && !state.subject && state.subjectNames.length > 0 && (
+                  <Text numberOfLines={1} style={styles.smLabel}>
+                    {state.subjectNames.join(', ')}
+                  </Text>
+                )}
+                {state.detailSet && !state.subject && state.unknownContacts > 0 && (
+                  <Text numberOfLines={1} style={styles.smUnknown}>{`, ${state.strings.unknownContact} (${state.unknownContacts})`}</Text>
+                )}
+              </View>
+              <Pressable onPress={openDetails} style={styles.navIcon}>
+                <Icon size={24} source="cog-outline" color={'white'} />
+              </Pressable>
+            </SafeAreaView>
           </Surface>
 
-          <View style={styles.thread}>
-            <FlatList
-              style={styles.messageList}
-              inverted
-              ref={thread}
-              onScroll={onScroll}
-              data={state.topics}
-              initialNumToRender={32}
-              showsVerticalScrollIndicator={false}
-              onContentSizeChange={onContent}
-              onEndReached={loadMore}
-              onEndReachedThreshold={0}
-              contentContainerStyle={styles.smMessages}
-              renderItem={({item}) => {
-                const {host} = state;
-                const card = state.cards.get(item.guid) || null;
-                const profile = state.profile?.guid === item.guid ? state.profile : null;
-                return <Message small={true} topic={item} card={card} profile={profile} host={host} select={id => setSelected(id)} selected={selected} />;
-              }}
-              keyExtractor={topic => topic.topicId}
-            />
-            {state.loaded && state.topics.length === 0 && <Text style={styles.empty}>{state.strings.noMessages}</Text>}
-            {!state.loaded && (
-              <View style={styles.loading}>
-                <ActivityIndicator size="large" />
-              </View>
-            )}
-            {state.loaded && more && (
-              <View style={styles.more}>
-                <ActivityIndicator />
-              </View>
-            )}
-            <View style={styles.canvas}>
-              <Surface style={styles.frame} mode="flat" elevation={0}>
-                <Animated.View style={[{}, {height: scale}]}>
-                  { state.assets.length > 0 && <View style={{ width: '100%', height: 8 }}></View> }
-                  <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.carousel} contentContainerStyle={styles.assets}>
-                    {media}
-                  </ScrollView>
-                </Animated.View>
-                <View style={styles.compose}>
-                  <Menu
-                      key="actions"
-                      visible={options}
-                      onDismiss={()=>setOptions(false)}
-                      anchorPosition="top"
-                      anchor={<IconButton style={styles.options} mode="contained" iconColor={theme.colors.onSurface} icon="plus-square" size={20} onPress={()=>setOptions(true)} />}>
-                    {!disableImage && (
-                      <Pressable style={styles.option} onPress={addImage}>
-                        <Icon style={styles.button} source="camera" size={24} color={Colors.primary} />
-                        <Text>{ state.strings.attachImage }</Text>
-                      </Pressable>
-                    )}
-                    {!disableVideo && (
-                      <Pressable style={styles.option} onPress={addVideo}>
-                        <Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} />
-                        <Text>{ state.strings.attachVideo }</Text>
-                      </Pressable>
-                    )}
-                    {!disableAudio && (
-                      <Pressable style={styles.option} onPress={addAudio}>
-                        <Icon style={styles.button} source="volume-high" size={24} color={Colors.primary} />
-                        <Text>{ state.strings.attachAudio }</Text>
-                      </Pressable>
-                    )}
-                    {!disableBinary && (
-                      <Pressable style={styles.option} onPress={addBinary}>
-                        <Icon style={styles.button} source="file-outline" size={24} color={Colors.primary} />
-                        <Text>{ state.strings.attachFile }</Text>
-                      </Pressable>
-                    )}
-                    {(!disableImage || !disableVideo || !disableAudio || !disableBinary) && <Divider /> }
-                    <Pressable style={styles.option} onPress={() => { setOptions(false); setColorMenu(true)}}>
-                      <Icon style={styles.button} source="format-color-text" size={24} color={Colors.primary} />
-                      <Text>{ state.strings.textColor }</Text>
-                    </Pressable>
-                    <Pressable style={styles.option} onPress={() => { setOptions(false); setSizeModal(true)}}>
-                      <Icon style={styles.button} source="format-size" size={24} color={Colors.primary} />
-                      <Text>{ state.strings.textSize }</Text>
-                    </Pressable>
-                  </Menu>
-                  <RawInput
-                    multiline={true}
-                    mode="outlined"
-                    dense={true}
-                    style={{ color: state.textColorSet ? state.textColor : theme.colors.onSurface, paddingTop: 10, paddingBottom: 10, flexGrow: 1, flexShrink: 1, minWidth: 0, fontSize: state.textSize }}
-                    outlineColor="transparent"
-                    activeOutlineColor={Colors.placeholder}
-                    spellcheck={false}
-                    autoComplete="off"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    placeholder={state.strings.newMessage}
-                    placeholderTextColor={state.textColorSet ? state.textColor : theme.colors.tertiery}
-                    selectionColor={state.textColorSet ? state.textColor : theme.colors.onSurface}
-                    value={state.message}
-                    onChangeText={value => actions.setMessage(value)}
-                  />
-                  <IconButton style={styles.send} loading={sending} mode="contained" iconColor={ !state.access || !state.validShare || (!state.message && state.assets.length === 0) ? theme.colors.secondary : theme.colors.onSurface} icon="send" size={20} onPress={sendMessage} />
+          <SafeAreaView style={styles.thread} edges={['left', 'right']}>
+              <FlatList
+                style={styles.messageList}
+                inverted
+                ref={thread}
+                onScroll={onScroll}
+                data={state.topics}
+                initialNumToRender={32}
+                showsVerticalScrollIndicator={false}
+                onContentSizeChange={onContent}
+                onEndReached={loadMore}
+                onEndReachedThreshold={0}
+                contentContainerStyle={styles.smMessages}
+                renderItem={({item}) => {
+                  const {host} = state;
+                  const card = state.cards.get(item.guid) || null;
+                  const profile = state.profile?.guid === item.guid ? state.profile : null;
+                  return <Message small={true} topic={item} card={card} profile={profile} host={host} select={id => setSelected(id)} selected={selected} />;
+                }}
+                keyExtractor={topic => topic.topicId}
+              />
+              {state.loaded && state.topics.length === 0 && <Text style={styles.empty}>{state.strings.noMessages}</Text>}
+              {!state.loaded && (
+                <View style={styles.loading}>
+                  <ActivityIndicator size="large" />
                 </View>
-              </Surface>
-            </View>
-
-            <View style={{ width: '100%', height: keyboardHeight-96 }}></View>
-          </View>
+              )}
+              {state.loaded && more && (
+                <View style={styles.more}>
+                  <ActivityIndicator />
+                </View>
+              )}
+              <View style={styles.canvas}>
+                <Surface style={styles.frame} mode="flat" elevation={0}>
+                  <Animated.View style={[{}, {height: scale}]}>
+                    { state.assets.length > 0 && <View style={{ width: '100%', height: 8 }}></View> }
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.carousel} contentContainerStyle={styles.assets}>
+                      {media}
+                    </ScrollView>
+                  </Animated.View>
+                  <View style={styles.compose}>
+                    <Menu
+                        key="actions"
+                        visible={options}
+                        onDismiss={()=>setOptions(false)}
+                        anchorPosition="top"
+                        anchor={<IconButton style={styles.options} mode="contained" iconColor={theme.colors.onSurface} icon="plus-square" size={20} onPress={()=>setOptions(true)} />}>
+                      {!disableImage && (
+                        <Pressable style={styles.option} onPress={addImage}>
+                          <Icon style={styles.button} source="camera" size={24} color={Colors.primary} />
+                          <Text>{ state.strings.attachImage }</Text>
+                        </Pressable>
+                      )}
+                      {!disableVideo && (
+                        <Pressable style={styles.option} onPress={addVideo}>
+                          <Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} />
+                          <Text>{ state.strings.attachVideo }</Text>
+                        </Pressable>
+                      )}
+                      {!disableAudio && (
+                        <Pressable style={styles.option} onPress={addAudio}>
+                          <Icon style={styles.button} source="volume-high" size={24} color={Colors.primary} />
+                          <Text>{ state.strings.attachAudio }</Text>
+                        </Pressable>
+                      )}
+                      {!disableBinary && (
+                        <Pressable style={styles.option} onPress={addBinary}>
+                          <Icon style={styles.button} source="file-outline" size={24} color={Colors.primary} />
+                          <Text>{ state.strings.attachFile }</Text>
+                        </Pressable>
+                      )}
+                      {(!disableImage || !disableVideo || !disableAudio || !disableBinary) && <Divider /> }
+                      <Pressable style={styles.option} onPress={() => { setOptions(false); setColorMenu(true)}}>
+                        <Icon style={styles.button} source="format-color-text" size={24} color={Colors.primary} />
+                        <Text>{ state.strings.textColor }</Text>
+                      </Pressable>
+                      <Pressable style={styles.option} onPress={() => { setOptions(false); setSizeModal(true)}}>
+                        <Icon style={styles.button} source="format-size" size={24} color={Colors.primary} />
+                        <Text>{ state.strings.textSize }</Text>
+                      </Pressable>
+                    </Menu>
+                    <RawInput
+                      multiline={true}
+                      mode="outlined"
+                      dense={true}
+                      style={{ color: state.textColorSet ? state.textColor : theme.colors.onSurface, paddingTop: 10, paddingBottom: 10, flexGrow: 1, flexShrink: 1, minWidth: 0, fontSize: state.textSize }}
+                      outlineColor="transparent"
+                      activeOutlineColor={Colors.placeholder}
+                      spellcheck={false}
+                      autoComplete="off"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      placeholder={state.strings.newMessage}
+                      placeholderTextColor={state.textColorSet ? state.textColor : theme.colors.tertiery}
+                      selectionColor={state.textColorSet ? state.textColor : theme.colors.onSurface}
+                      value={state.message}
+                      onChangeText={value => actions.setMessage(value)}
+                    />
+                    <IconButton style={styles.send} loading={sending} mode="contained" iconColor={ !state.access || !state.validShare || (!state.message && state.assets.length === 0) ? theme.colors.secondary : theme.colors.onSurface} icon="send" size={20} onPress={sendMessage} />
+                  </View>
+                </Surface>
+              </View>
+              <View style={{ width: '100%', height: keyboardHeight-96 }}></View>
+            </SafeAreaView>
         </Surface>
       )}
       { state.layout === 'large' && (

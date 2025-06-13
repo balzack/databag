@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
 import {Divider, Surface, Icon, IconButton, Menu, Button, Text, TextInput, useTheme} from 'react-native-paper';
-import {SafeAreaView, Pressable, FlatList, View} from 'react-native';
+import {Pressable, FlatList, View} from 'react-native';
 import {styles} from './Contacts.styled';
 import {Colors} from '../constants/Colors';
 import {useContacts} from './useContacts.hook';
 import {Card} from '../card/Card';
 import {ContactParams} from '../profile/Profile';
 import {Confirm} from '../confirm/Confirm';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 function Action({icon, color, select}: {icon: string; color: string; select: () => Promise<void>}) {
   const [loading, setLoading] = useState(false);
@@ -114,25 +115,27 @@ export function Contacts({
     <View style={styles.component}>
       { state.layout === 'small' && (
         <View style={styles.contacts}>
-          <Surface elevation={9} mode="flat" style={styles.headerSurface}>
-            <Surface mode="flat" elevation={0} style={styles.searchSurface}>
-              <TextInput
-                dense={true}
-                style={styles.input}
-                outlineStyle={styles.inputBorder}
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect={false}
-                mode="outlined"
-                placeholder={state.strings.searchContacts}
-                left={<TextInput.Icon style={styles.icon} icon="search" />}
-                value={state.filter}
-                onChangeText={value => actions.setFilter(value)}
-              />
-            </Surface>
-            <Button icon="user-plus" mode="contained" textColor="white" style={styles.newContactButton} onPress={openRegistry}>
-              {state.strings.new}
-            </Button>
+          <Surface elevation={9} mode="flat" style={{ width: '100%' }}>
+            <SafeAreaView style={styles.headerSurface} edges={['left', 'right']}>
+              <Surface mode="flat" elevation={0} style={styles.searchSurface}>
+                <TextInput
+                  dense={true}
+                  style={styles.input}
+                  outlineStyle={styles.inputBorder}
+                  autoCapitalize="none"
+                  autoComplete="off"
+                  autoCorrect={false}
+                  mode="outlined"
+                  placeholder={state.strings.searchContacts}
+                  left={<TextInput.Icon style={styles.icon} icon="search" />}
+                  value={state.filter}
+                  onChangeText={value => actions.setFilter(value)}
+                />
+              </Surface>
+              <Button icon="user-plus" mode="contained" textColor="white" style={styles.newContactButton} onPress={openRegistry}>
+                {state.strings.new}
+              </Button>
+            </SafeAreaView>
           </Surface>
 
           <View style={{ ...styles.tabContainer, display: allTab ? 'block' : 'none' }}>

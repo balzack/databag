@@ -114,7 +114,8 @@ export function Content({
     <View style={styles.container}>
       { state.layout === 'small' && (
         <View style={styles.content}>
-          <Surface elevation={9} mode="flat" style={styles.searchContainer}>
+          <Surface elevation={9} mode="flat">
+            <SafeAreaView style={styles.searchContainer} edges={['left', 'right']}>
             <Surface mode="flat" elevation={0} style={styles.searchInputContainer}>
               <TextInput
                 style={styles.searchInput}
@@ -135,6 +136,7 @@ export function Content({
                 {state.strings.new}
               </Button>
             )}
+            </SafeAreaView>
           </Surface>
 
           <View style={styles.topics}>

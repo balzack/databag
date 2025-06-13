@@ -1,7 +1,6 @@
 import React, {useState, useRef} from 'react';
 import {useTheme, Surface, Checkbox, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
 import {TouchableOpacity, FlatList, Pressable, Modal, View, Image, ScrollView, Platform} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {styles} from './Members.styled';
 import {useMembers} from './useMembers.hook';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -9,6 +8,7 @@ import {BlurView} from '@react-native-community/blur';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Card} from '../card/Card';
 import {Confirm} from '../confirm/Confirm';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export function Members({ close }: { close: ()=>void }) {
   const { state, actions } = useMembers();
@@ -50,12 +50,14 @@ export function Members({ close }: { close: ()=>void }) {
 
   return (
     <View style={styles.request}>
-      <Surface elevation={9} mode="flat" style={{ width: '100%', height: 72, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16, paddingRight: 16, paddingLeft: 8, paddingBottom: 16 }}>
-        <Pressable style={styles.navIcon} onPress={close}>
-          <Icon size={24} source="left" color={'white'} />
-        </Pressable>
-        <Text variant="headlineSmall" style={styles.navTitle}>{ state.strings.chatMembers }</Text>
-        <View style={styles.navIcon} />
+      <Surface elevation={9} mode="flat" style={{ width: '100%' }}>
+        <SafeAreaView edges={['left', 'right']} style={{ width: '100%', height: 72, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16, paddingRight: 16, paddingLeft: 8, paddingBottom: 16 }}>
+          <Pressable style={styles.navIcon} onPress={close}>
+            <Icon size={24} source="left" color={'white'} />
+          </Pressable>
+          <Text variant="headlineSmall" style={styles.navTitle}>{ state.strings.chatMembers }</Text>
+          <View style={styles.navIcon} />
+        </SafeAreaView>
       </Surface>
 
       <Surface elevation={1} mode="flat" style={styles.scrollWrapper}>

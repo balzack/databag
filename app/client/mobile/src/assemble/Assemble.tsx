@@ -62,30 +62,32 @@ export function Assemble({ close, openConversation }: { close: ()=>void, openCon
 
   return (
     <View style={styles.request}>
-      <Surface elevation={9} mode="flat" style={{ width: '100%', height: 72, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16, paddingRight: 16, paddingLeft: 8, paddingBottom: 16 }}>
-        <Pressable style={styles.navIcon} onPress={close}>
-          <Icon size={24} source="left" color={'white'} />
-        </Pressable>
-        <Surface mode="flat" elevation={0} style={{ flexGrow: 1, flexShrink: 1, minWidth: 0, borderRadius: 8, overflow: 'hidden' }}>
-          <TextInput
-            style={styles.input}
-            mode="outlined"
-            outlineStyle={styles.inputBorder}
-            autoCapitalize="none"
-            autoComplete="off"
-            autoCorrect={false}
-            dense={true}
-            placeholder={state.strings.addSubject}
-            left={<TextInput.Icon style={styles.icon} icon="search" />}
-            value={subject}
-            onChangeText={value => setSubject(value)}
-          />
-        </Surface>
-        { (seal || state.allowUnsealed) && (
-          <Button icon="message1" mode="contained" loading={creating} textColor="white" style={styles.newButton} onPress={create}>
-            {state.strings.chat}
-          </Button>
-        )}
+      <Surface elevation={9} mode="flat" style={{ width: '100%' }}>
+        <SafeAreaView edges={['left', 'right']} style={{ width: '100%', height: 72, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16, paddingRight: 16, paddingLeft: 8, paddingBottom: 16 }}>
+          <Pressable style={styles.navIcon} onPress={close}>
+            <Icon size={24} source="left" color={'white'} />
+          </Pressable>
+          <Surface mode="flat" elevation={0} style={{ flexGrow: 1, flexShrink: 1, minWidth: 0, borderRadius: 8, overflow: 'hidden' }}>
+            <TextInput
+              style={styles.input}
+              mode="outlined"
+              outlineStyle={styles.inputBorder}
+              autoCapitalize="none"
+              autoComplete="off"
+              autoCorrect={false}
+              dense={true}
+              placeholder={state.strings.addSubject}
+              left={<TextInput.Icon style={styles.icon} icon="search" />}
+              value={subject}
+              onChangeText={value => setSubject(value)}
+            />
+          </Surface>
+          { (seal || state.allowUnsealed) && (
+            <Button icon="message1" mode="contained" loading={creating} textColor="white" style={styles.newButton} onPress={create}>
+              {state.strings.chat}
+            </Button>
+          )}
+        </SafeAreaView>
       </Surface>
 
       <Surface elevation={1} mode="flat" style={styles.scrollWrapper}>

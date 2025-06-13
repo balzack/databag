@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-import {SafeAreaView, Pressable, Platform, Modal, ScrollView, View} from 'react-native';
+import {Pressable, Platform, Modal, ScrollView, View} from 'react-native';
 import {useTheme, Switch, Surface, Icon, Divider, Button, IconButton, Text, TextInput} from 'react-native-paper';
 import {styles} from './Details.styled';
 import {useDetails} from './useDetails.hook';
 import {Confirm} from '../confirm/Confirm';
 import {Card} from '../card/Card';
 import {BlurView} from '@react-native-community/blur';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export function Details({close, edit, closeAll}: {close: () => void; edit: () => void; closeAll: () => void}) {
   const {state, actions} = useDetails();
@@ -199,171 +200,175 @@ export function Details({close, edit, closeAll}: {close: () => void; edit: () =>
     <View style={styles.component}>
       { state.layout === 'small' && (
         <Surface elevation={2} style={styles.smDetails} mode="flat">
-          <Surface elevation={9} style={styles.smHeader} mode="flat">
-            <Pressable style={styles.smIcon} onPress={close}>
-              <Icon size={24} source="left" color={'white'} />
-            </Pressable>
-            <Text style={styles.smTitle}>{ state.strings.chatSettings }</Text>
-            <View style={styles.smIcon} />
+          <Surface elevation={9} style={{ width: '100%' }} mode="flat">
+            <SafeAreaView style={styles.smHeader} edges={['left', 'right']}>
+              <Pressable style={styles.smIcon} onPress={close}>
+                <Icon size={24} source="left" color={'white'} />
+              </Pressable>
+              <Text style={styles.smTitle}>{ state.strings.chatSettings }</Text>
+              <View style={styles.smIcon} />
+            </SafeAreaView>
           </Surface>
           <Surface mode="flat" elevation={2} style={styles.scrollWrapper}>
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
-              { state.locked && (
-                <Text variant="labelLarge" style={{ ...styles.offsync, color: theme.colors.offsync }}>{ state.strings.offsync }</Text>
-              )}
-              { !state.locked && (
-                <Text variant="labelLarge" style={styles.smDate}>{ state.created }</Text>
-              )}
-              <View style={styles.smSubject}>
-                <TextInput
-                  style={styles.smInput}
-                  dense={true}
-                  underlineStyle={styles.underline}
-                  mode="flat"
-                  autoCapitalize="none"
-                  autoComplete="off"
-                  autoCorrect={false}
-                  value={state.editSubject}
-                  placeholder={state.strings.subject}
-                  placeholderTextColor={theme.colors.secondary}
-                  disabled={state.locked}
-                  editable={state.host && !state.locked}
-                  right={!editing && state.host && !state.locked ? <TextInput.Icon style={styles.icon} icon="edit" /> : undefined}
-                  onChangeText={value => actions.setEditSubject(value)}
-                  returnKeyType="done"
-                  onSubmitEditing={saveSubject}
-                  onFocus={() => setEditing(true)}
-                  onBlur={() => setEditing(false)}
-                />
-                <View style={styles.smSpace} />
-              </View>
-              <Text variant="labelLarge" style={styles.smHost}>{ state.host ? state.strings.host : state.strings.guest }</Text>
-              { state.sealed && (
-                <View style={styles.sealed}>
-                  <View style={{ ...styles.highlight, backgroundColor: theme.colors.connected }}>
-                  <Icon source="shield-outline" color="white" size={16} />
-                  <Text style={styles.e2ee}>{state.strings.e2ee}</Text>
-                  </View>
+            <SafeAreaView style={styles.scrollWrapper} edges={['left', 'right']}>
+              <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
+                { state.locked && (
+                  <Text variant="labelLarge" style={{ ...styles.offsync, color: theme.colors.offsync }}>{ state.strings.offsync }</Text>
+                )}
+                { !state.locked && (
+                  <Text variant="labelLarge" style={styles.smDate}>{ state.created }</Text>
+                )}
+                <View style={styles.smSubject}>
+                  <TextInput
+                    style={styles.smInput}
+                    dense={true}
+                    underlineStyle={styles.underline}
+                    mode="flat"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    value={state.editSubject}
+                    placeholder={state.strings.subject}
+                    placeholderTextColor={theme.colors.secondary}
+                    disabled={state.locked}
+                    editable={state.host && !state.locked}
+                    right={!editing && state.host && !state.locked ? <TextInput.Icon style={styles.icon} icon="edit" /> : undefined}
+                    onChangeText={value => actions.setEditSubject(value)}
+                    returnKeyType="done"
+                    onSubmitEditing={saveSubject}
+                    onFocus={() => setEditing(true)}
+                    onBlur={() => setEditing(false)}
+                  />
                   <View style={styles.smSpace} />
                 </View>
-              )}
-              <Text variant="headlineSmall" style={styles.smLabel}>{ state.strings.members }</Text>
-              <View style={styles.section}>
-                <Surface mode="flat" elevation={0} style={styles.content}>
-                  {state.hostCard && (
-                    <Card
-                      containerStyle={{ ...styles.smCard, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
-                      imageUrl={state.hostCard.imageUrl}
-                      name={state.hostCard.name}
-                      placeholder={state.strings.name}
-                      handle={state.hostCard.handle}
-                      node={state.hostCard.node}
-                      flair={<Icon key="host" source="award" size={18} color={theme.colors.requested} />}
-                      actions={[]}
-                    />
-                  )}
-                  {state.profile && (
-                    <Card
-                      containerStyle={{ ...styles.smCard, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
-                      imageUrl={state.profile.imageUrl}
-                      name={state.profile.name}
-                      placeholder={state.strings.name}
-                      handle={state.profile.handle}
-                      node={state.profile.node}
-                      flair={state.host ? <Icon key="host" source="award" size={18} color={theme.colors.requested} /> : <></>}
-                      actions={[]}
-                    />
-                  )}
-                  {smCards}
-                  {state.unknownContacts > 0 && (
-                    <Text style={styles.unknown}>
-                      {state.strings.unknown}: {state.unknownContacts}
-                    </Text>
-                  )}
-                </Surface>
-              </View>
-              <View style={styles.section}>
-                <Surface mode="flat" elevation={0} style={styles.content}>
-
-                  { state.host && !state.locked && (
-                    <View style={styles.option}>
-                      <TextInput
-                        style={styles.label}
-                        mode="outlined"
-                        outlineStyle={styles.border}
-                        placeholder={state.strings.editMembers}
-                        left={<TextInput.Icon style={styles.icon} size={24} icon="users" />}
-                      />
-                      <Pressable style={styles.press} onPress={edit} />
+                <Text variant="labelLarge" style={styles.smHost}>{ state.host ? state.strings.host : state.strings.guest }</Text>
+                { state.sealed && (
+                  <View style={styles.sealed}>
+                    <View style={{ ...styles.highlight, backgroundColor: theme.colors.connected }}>
+                    <Icon source="shield-outline" color="white" size={16} />
+                    <Text style={styles.e2ee}>{state.strings.e2ee}</Text>
                     </View>
-                  )}
-
-                  { state.host && !state.locked && (
-                    <Divider style={styles.split} />
-                  )}
-
-                  { state.host && (
-                    <View style={styles.option}>
-                      <TextInput
-                        style={styles.label}
-                        mode="outlined"
-                        outlineStyle={styles.border}
-                        placeholder={state.strings.deleteChat}
-                        left={<TextInput.Icon style={styles.icon} loading={removing} size={24} icon="text-box-remove-outline" />}
+                    <View style={styles.smSpace} />
+                  </View>
+                )}
+                <Text variant="headlineSmall" style={styles.smLabel}>{ state.strings.members }</Text>
+                <View style={styles.section}>
+                  <Surface mode="flat" elevation={0} style={styles.content}>
+                    {state.hostCard && (
+                      <Card
+                        containerStyle={{ ...styles.smCard, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
+                        imageUrl={state.hostCard.imageUrl}
+                        name={state.hostCard.name}
+                        placeholder={state.strings.name}
+                        handle={state.hostCard.handle}
+                        node={state.hostCard.node}
+                        flair={<Icon key="host" source="award" size={18} color={theme.colors.requested} />}
+                        actions={[]}
                       />
-                      <Pressable style={styles.press} onPress={remove} />
-                    </View>
-                  )}
-
-                  { !state.host && (
-                    <View style={styles.option}>
-                      <TextInput
-                        style={styles.label}
-                        mode="outlined"
-                        outlineStyle={styles.border}
-                        placeholder={state.strings.leaveChat}
-                        left={<TextInput.Icon style={styles.icon} loading={removing} size={24} icon="log-out" />}
+                    )}
+                    {state.profile && (
+                      <Card
+                        containerStyle={{ ...styles.smCard, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
+                        imageUrl={state.profile.imageUrl}
+                        name={state.profile.name}
+                        placeholder={state.strings.name}
+                        handle={state.profile.handle}
+                        node={state.profile.node}
+                        flair={state.host ? <Icon key="host" source="award" size={18} color={theme.colors.requested} /> : <></>}
+                        actions={[]}
                       />
-                      <Pressable style={styles.press} onPress={leave} />
-                    </View>
-                  )}
+                    )}
+                    {smCards}
+                    {state.unknownContacts > 0 && (
+                      <Text style={styles.unknown}>
+                        {state.strings.unknown}: {state.unknownContacts}
+                      </Text>
+                    )}
+                  </Surface>
+                </View>
+                <View style={styles.section}>
+                  <Surface mode="flat" elevation={0} style={styles.content}>
 
-                  { !state.host && (
-                    <Divider style={styles.split} />
-                  )}
+                    { state.host && !state.locked && (
+                      <View style={styles.option}>
+                        <TextInput
+                          style={styles.label}
+                          mode="outlined"
+                          outlineStyle={styles.border}
+                          placeholder={state.strings.editMembers}
+                          left={<TextInput.Icon style={styles.icon} size={24} icon="users" />}
+                        />
+                        <Pressable style={styles.press} onPress={edit} />
+                      </View>
+                    )}
 
-                  { !state.host && (
-                    <View style={styles.option}>
-                      <TextInput
-                        style={styles.label}
-                        mode="outlined"
-                        outlineStyle={styles.border}
-                        placeholder={state.strings.blockChat}
-                        left={<TextInput.Icon style={styles.icon} loading={blocking} size={24} icon="close-circle-outline" />}
-                      />
-                      <Pressable style={styles.press} onPress={block} />
-                    </View>
-                  )}
+                    { state.host && !state.locked && (
+                      <Divider style={styles.split} />
+                    )}
 
-                  { !state.host && (
-                    <Divider style={styles.split} />
-                  )}
+                    { state.host && (
+                      <View style={styles.option}>
+                        <TextInput
+                          style={styles.label}
+                          mode="outlined"
+                          outlineStyle={styles.border}
+                          placeholder={state.strings.deleteChat}
+                          left={<TextInput.Icon style={styles.icon} loading={removing} size={24} icon="text-box-remove-outline" />}
+                        />
+                        <Pressable style={styles.press} onPress={remove} />
+                      </View>
+                    )}
 
-                  { !state.host && (
-                    <View style={styles.option}>
-                      <TextInput
-                        style={styles.label}
-                        mode="outlined"
-                        outlineStyle={styles.border}
-                        placeholder={state.strings.report}
-                        left={<TextInput.Icon style={styles.icon} loading={reporting} size={24} icon="alert-decagram-outline" />}
-                      />
-                      <Pressable style={styles.press} onPress={report} />
-                    </View>
-                  )}
-                </Surface>
-              </View>
-            </ScrollView>
+                    { !state.host && (
+                      <View style={styles.option}>
+                        <TextInput
+                          style={styles.label}
+                          mode="outlined"
+                          outlineStyle={styles.border}
+                          placeholder={state.strings.leaveChat}
+                          left={<TextInput.Icon style={styles.icon} loading={removing} size={24} icon="log-out" />}
+                        />
+                        <Pressable style={styles.press} onPress={leave} />
+                      </View>
+                    )}
+
+                    { !state.host && (
+                      <Divider style={styles.split} />
+                    )}
+
+                    { !state.host && (
+                      <View style={styles.option}>
+                        <TextInput
+                          style={styles.label}
+                          mode="outlined"
+                          outlineStyle={styles.border}
+                          placeholder={state.strings.blockChat}
+                          left={<TextInput.Icon style={styles.icon} loading={blocking} size={24} icon="close-circle-outline" />}
+                        />
+                        <Pressable style={styles.press} onPress={block} />
+                      </View>
+                    )}
+
+                    { !state.host && (
+                      <Divider style={styles.split} />
+                    )}
+
+                    { !state.host && (
+                      <View style={styles.option}>
+                        <TextInput
+                          style={styles.label}
+                          mode="outlined"
+                          outlineStyle={styles.border}
+                          placeholder={state.strings.report}
+                          left={<TextInput.Icon style={styles.icon} loading={reporting} size={24} icon="alert-decagram-outline" />}
+                        />
+                        <Pressable style={styles.press} onPress={report} />
+                      </View>
+                    )}
+                  </Surface>
+                </View>
+              </ScrollView>
+            </SafeAreaView>
           </Surface>
         </Surface>
       )}
