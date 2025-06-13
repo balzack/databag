@@ -129,6 +129,7 @@ export function Details({close, edit, closeAll}: {close: () => void; edit: () =>
       placeholder={state.strings.name}
       handle={card.handle}
       node={card.node}
+      flair={state.host && card.status !== 'connected' ? <Icon key="host" source="link-break" size={18} color={theme.colors.offsync} /> : <></>}
       actions={[]}
     />
   ));

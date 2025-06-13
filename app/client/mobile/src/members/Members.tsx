@@ -59,15 +59,15 @@ export function Members({ close }: { close: ()=>void }) {
       </Surface>
 
       <Surface elevation={1} mode="flat" style={styles.scrollWrapper}>
-        { state.host && state.access && !state.locked && state.connected.length > 0 && (
+        { state.host && state.access && !state.locked && state.filtered.length > 0 && (
           <FlatList
             style={styles.cards}
             contentContainerStyle={{ paddingBottom: 128 }}
-            data={state.connected}
+            data={state.filtered}
             initialNumToRender={32}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
-              const member = Boolean(state.detail?.members.find(member => member.guid === item.guid));
+              const member = Boolean(state.members.find(member => member === item.guid));
               return (
                 <Card
                   containerStyle={{ ...styles.card, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
@@ -84,7 +84,7 @@ export function Members({ close }: { close: ()=>void }) {
             keyExtractor={profile => profile.guid}
           />
         )}
-        { state.connected.length === 0 && (
+        { state.filtered.length === 0 && (
           <View style={styles.empty}>
             <Text style={styles.noContacts}>{ state.strings.noContacts }</Text>
           </View>

@@ -9,12 +9,13 @@ export function useMembers() {
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
-    detail: undefined as undefined | FocusDetail,
     sealed: false,
     sealUnlocked: false,
     sealSet: false,
     strings: display.state.strings,
-    connected: [] as Card[],
+    sorted: [] as Card[],
+    filtered: [] as Card[],
+    members: [] as string[],
     host: false,
     channelId: '',
   });
@@ -39,23 +40,18 @@ export function useMembers() {
     const contact = app.state?.session?.getContact();
     const setCards = (cards: Card[]) => {
       const sorted = cards.sort(compare);
-      const connected = [] as Card[];
-      sorted.forEach(card => {
-        if (card.status === 'connected') {
-          connected.push(card);
-        }
-      });
-      updateState({connected});
+      updateState({sorted});
     };
     const setDetail = (focused: {cardId: string | null; channelId: string; detail: FocusDetail | null}) => {
-      const detail = focused ? focused.detail : null;
       const cardId = focused.cardId;
       const channelId = focused.channelId;
+      const detail = focused.detail;
       const access = Boolean(detail);
       const sealed = detail?.sealed;
       const locked = detail ? detail.locked : true;
+      const members = detail ? detail.members.map(item => item.guid) : [];
       const host = cardId == null;
-      updateState({ channelId, detail, access, sealed, locked, host });
+      updateState({ channelId, members, access, sealed, locked, host });
     };
     if (focus && contact) {
       contact.addCardListener(setCards);
@@ -67,6 +63,11 @@ export function useMembers() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [app.state.session]);
+
+  useEffect(() => {
+    const filtered = state.sorted.filter(item => item.status === 'connected' || state.members.includes(item.guid));
+    updateState({ filtered });
+  }, [state.members, state.sorted]);
 
   useEffect(() => {
     const {layout} = display.state;
