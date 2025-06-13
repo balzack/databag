@@ -10,11 +10,8 @@ type SettingsProps = {
 };
 
 export function Settings({setupNav, showLogout}: SettingsProps) {
-  const {state} = useSettings();
-
   return (
     <LayoutSelector
-      layout={state.layout}
       SmallComponent={SettingsSmall}
       LargeComponent={SettingsLarge}
       props={{setupNav, showLogout}}

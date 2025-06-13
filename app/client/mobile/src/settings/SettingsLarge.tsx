@@ -99,7 +99,7 @@ export function SettingsLarge({setupNav, showLogout}: {setupNav: { back: ()=>voi
 
   const blockedChannels = state.blockedChannels.map((blocked, index) => (
     <View key={index} style={{...styles.blockedItem, borderColor: theme.colors.outlineVariant}}>
-      <Text style={styles.blockedValue}>{blocked.subject}</Text>
+      <Text style={styles.blockedValue}> {actions.getTimestamp(blocked.timestamp)}</Text>
       <IconButton style={styles.blockedAction} icon="restore" size={16} onPress={() => unblockChannel(blocked)} />
     </View>
   ));
@@ -118,7 +118,7 @@ export function SettingsLarge({setupNav, showLogout}: {setupNav: { back: ()=>voi
   const unblockContact = async (blocked: {cardId: string | null; channelId: string; topicId: string; timestamp: number}) => {
     try {
       setBlockedError(false);
-      await actions.unblockContact(blocked.cardId);
+      await actions.unblockContact(blocked.cardId, blocked.channelId, blocked.topicId);
     } catch (err) {
       console.log(err);
       setBlockedError(true);
@@ -127,166 +127,266 @@ export function SettingsLarge({setupNav, showLogout}: {setupNav: { back: ()=>voi
 
   const blockedContacts = state.blockedContacts.map((blocked, index) => (
     <View key={index} style={{...styles.blockedItem, borderColor: theme.colors.outlineVariant}}>
-      <Text style={styles.blockedValue}>{blocked.handle ? `${blocked.handle}@${blocked.node}` : state.strings.name}</Text>
+      <Text style={styles.blockedValue}> {actions.getTimestamp(blocked.timestamp)}</Text>
       <IconButton style={styles.blockedAction} icon="restore" size={16} onPress={() => unblockContact(blocked)} />
     </View>
   ));
 
-  const selectImage = () => {
-    ImagePicker.openPicker({
-      width: 256,
-      height: 256,
-      cropping: true,
-      mediaType: 'photo',
-    }).then((response) => {
-      actions.setImageUrl(response.path);
-    }).catch((err) => {
-      console.log(err);
-    });
+  const alertParams = {
+    title: state.strings.operationFailed,
+    prompt: state.strings.tryAgain,
+    cancel: {
+      label: state.strings.close,
+      action: () => {
+        setAlert(false);
+      },
+    },
   };
 
-  const saveDetails = async () => {
-    if (!savingDetails) {
-      setSavingDetails(true);
-      try {
-        await actions.saveProfile();
-      } catch (err) {
-        console.log(err);
-        setAlert(true);
-      }
-      setSavingDetails(false);
-    }
-  };
-
-  const setSeal = () => {
-    setSealing(true);
-  };
-
-  const changeLogin = async () => {
+  const changeLogin = () => {
+    actions.setPassword('');
+    actions.setConfirm('');
     setChange(true);
   };
 
-  const changePassword = async () => {
+  const saveChange = async () => {
     if (!savingChange) {
       setSavingChange(true);
       try {
-        await actions.changePassword();
-        setChange(false);
       } catch (err) {
         console.log(err);
+        setChange(false);
         setAlert(true);
       }
       setSavingChange(false);
     }
   };
 
-  const setMfa = async (enabled: boolean) => {
-    if (!savingAuth && !confirmingAuth) {
-      if (enabled) {
-        setSavingAuth(true);
-        try {
-          await actions.enableMfa();
+  const selectImage = async () => {
+    try {
+      const img = await ImagePicker.openPicker({
+        mediaType: 'photo',
+        width: 256,
+        height: 256,
+        cropping: true,
+        cropperCircleOverlay: true,
+        includeBase64: true,
+      });
+      try {
+        await actions.setProfileImage(img.data);
+      } catch (err) {
+        console.log(err);
+        setAlert(true);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const applyRemove = async () => {
+    if (!applyingRemove) {
+      setApplyingRemove(true);
+      try {
+        await actions.remove();
+        setRemove(false);
+      } catch (err) {
+        console.log(err);
+        setRemove(false);
+        setAlert(true);
+      }
+      setApplyingRemove(false);
+    }
+  };
+
+  const applyLogout = async () => {
+    if (!applyingLogout) {
+      setApplyingLogout(true);
+      try {
+        await actions.logout();
+        setLogout(false);
+      } catch (err) {
+        console.log(err);
+        setLogout(false);
+        setAlert(true);
+      }
+      setApplyingLogout(false);
+    }
+  };
+
+  const setMfa = async (flag: boolean) => {
+    if (!savingAuth) {
+      setSavingAuth(true);
+      try {
+        if (flag) {
+          await actions.enableMFA();
+          setAuthMessage('');
+          actions.setCode('');
           setAuth(true);
-        } catch (err) {
-          console.log(err);
-          setAlert(true);
+        } else {
+          setClear(true);
         }
-        setSavingAuth(false);
-      } else {
-        setConfirmingAuth(true);
-        setAuth(true);
-      }
-    }
-  };
-
-  const confirmMfa = async () => {
-    if (!savingAuth) {
-      setSavingAuth(true);
-      try {
-        await actions.confirmMfa();
-        setAuth(false);
-        setConfirmingAuth(false);
       } catch (err) {
         console.log(err);
-        setAuthMessage(state.strings.invalidCode);
+        setAlert(true);
       }
       setSavingAuth(false);
     }
   };
 
-  const disableMfa = async () => {
-    if (!savingAuth) {
-      setSavingAuth(true);
+  const clearAuth = async () => {
+    if (!confirmingAuth) {
+      setConfirmingAuth(true);
       try {
-        await actions.disableMfa();
+        await actions.disableMFA();
+        setClear(false);
+      } catch (err) {
+        console.log(err);
+        setAlert(true);
+      }
+      setConfirmingAuth(false);
+    }
+  };
+
+  const confirmAuth = async () => {
+    if (!confirmingAuth) {
+      setConfirmingAuth(true);
+      try {
+        await actions.confirmMFA();
         setAuth(false);
-        setConfirmingAuth(false);
-        setAuthMessage('');
       } catch (err) {
-        console.log(err);
-        setAuthMessage(state.strings.invalidCode);
+        if (err.message === '401') {
+          setAuthMessage(state.strings.mfaError);
+        } else if (err.message === '429') {
+          setAuthMessage(state.strings.mfaDisabled);
+        } else {
+          setAuthMessage(`${state.strings.error}: ${state.strings.tryAgain}`);
+        }
       }
-      setSavingAuth(false);
+      setConfirmingAuth(false);
     }
   };
 
-  const setSealingKey = async () => {
+  const copySecret = async () => {
+    if (!secretCopy) {
+      setSecretCopy(true);
+      Clipboard.setString(state.secretText);
+      setTimeout(() => {
+        setSecretCopy(false);
+      }, 2000);
+    }
+  };
+
+  const setSeal = async () => {
+    if (!savingSeal) {
+      setSealDelete(false);
+      setSealReset(false);
+      setSealConfig(false);
+      actions.setSealPassword('');
+      actions.setSealConfirm('');
+      actions.setSealDelete('');
+      setSealing(true);
+    }
+  };
+
+  const sealUnlock = async () => {
     if (!savingSeal) {
       setSavingSeal(true);
       try {
-        await actions.setSealingKey();
+        await actions.unlockSeal();
         setSealing(false);
       } catch (err) {
         console.log(err);
+        setSealing(false);
         setAlert(true);
       }
       setSavingSeal(false);
     }
   };
 
-  const clearSealingKey = async () => {
-    setSealDelete(true);
-  };
-
-  const deleteSealingKey = async () => {
+  const sealForget = async () => {
     if (!savingSeal) {
       setSavingSeal(true);
       try {
-        await actions.clearSealingKey();
+        await actions.forgetSeal();
         setSealing(false);
-        setSealDelete(false);
       } catch (err) {
         console.log(err);
+        setSealing(false);
         setAlert(true);
       }
       setSavingSeal(false);
     }
   };
 
-  const resetSealingKey = async () => {
-    setSealReset(true);
-  };
-
-  const newSealingKey = async () => {
+  const sealRemove = async () => {
     if (!savingSeal) {
       setSavingSeal(true);
       try {
-        await actions.resetSealingKey();
+        await actions.clearSeal();
         setSealing(false);
-        setSealReset(false);
       } catch (err) {
         console.log(err);
+        setSealing(false);
         setAlert(true);
       }
       setSavingSeal(false);
     }
   };
 
-  const setRegistry = async (enabled: boolean) => {
+  const sealCreate = async () => {
+    if (!savingSeal) {
+      setSavingSeal(true);
+      try {
+        await actions.setSeal();
+        setSealing(false);
+      } catch (err) {
+        console.log(err);
+        setSealing(false);
+        setAlert(true);
+      }
+      setSavingSeal(false);
+    }
+  };
+
+  const sealUpdate = async () => {
+    if (!savingSeal) {
+      setSavingSeal(true);
+      try {
+        await actions.updateSeal();
+        setSealing(false);
+      } catch (err) {
+        console.log(err);
+        setSealing(false);
+        setAlert(true);
+      }
+      setSavingSeal(false);
+    }
+  };
+
+  const saveDetails = async () => {
+    if (!savingDetails) {
+      setSavingDetails(true);
+      try {
+        await actions.setDetails();
+        setDetails(false);
+      } catch (err) {
+        console.log(err);
+        setDetails(false);
+        setAlert(true);
+      }
+      setSavingDetails(false);
+    }
+  };
+
+  const setRegistry = async (flag: boolean) => {
     if (!savingRegistry) {
       setSavingRegistry(true);
       try {
-        await actions.setRegistry(enabled);
+        if (flag) {
+          await actions.enableRegistry();
+        } else {
+          await actions.disableRegistry();
+        }
       } catch (err) {
         console.log(err);
         setAlert(true);
@@ -295,11 +395,15 @@ export function SettingsLarge({setupNav, showLogout}: {setupNav: { back: ()=>voi
     }
   };
 
-  const setNotifications = async (enabled: boolean) => {
+  const setNotifications = async (flag: boolean) => {
     if (!savingNotifications) {
       setSavingNotifications(true);
       try {
-        await actions.setNotifications(enabled);
+        if (flag) {
+          await actions.enableNotifications();
+        } else {
+          await actions.disableNotifications();
+        }
       } catch (err) {
         console.log(err);
         setAlert(true);
@@ -556,6 +660,573 @@ export function SettingsLarge({setupNav, showLogout}: {setupNav: { back: ()=>voi
           </KeyboardAwareScrollView>
         </View>
       </View>
+      <Modal animationType="fade" transparent={true} visible={sealing} supportedOrientations={['portrait', 'landscape']} onRequestClose={() => setSealing(false)}>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
+            <Surface elevation={4} mode="flat" style={styles.surface}>
+              <Text style={styles.modalLabel}>{state.strings.manageTopics}</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setSealing(false)} />
+              {!sealDelete && !sealReset && state.config.sealSet && state.config.sealUnlocked && (
+                <>
+                  <Text style={styles.modalDescription}>{state.strings.sealForget}</Text>
+                  {!sealConfig && (
+                    <View style={styles.modalControls}>
+                      <View style={styles.modalOption}>
+                        <IconButton
+                          style={styles.optionIcon}
+                          iconColor={Colors.primary}
+                          icon="menu-right-outline"
+                          size={32}
+                          onPress={() => {
+                            setSealConfig(true);
+                          }}
+                        />
+                      </View>
+                      <Button mode="outlined" onPress={() => setSealing(false)}>
+                        {state.strings.cancel}
+                      </Button>
+                      <Button mode="contained" loading={savingSeal} onPress={sealForget}>
+                        {state.strings.forget}
+                      </Button>
+                    </View>
+                  )}
+                  {sealConfig && (
+                    <View style={styles.modalControls}>
+                      <Button mode="contained" onPress={() => setSealReset(true)}>
+                        {state.strings.resave}
+                      </Button>
+                      <Button mode="contained" style={styles.deleteButton} loading={savingSeal} onPress={() => setSealDelete(true)}>
+                        {state.strings.remove}
+                      </Button>
+                      <View style={styles.modalOther}>
+                        <IconButton
+                          style={styles.optionIcon}
+                          iconColor={Colors.primary}
+                          icon="menu-left-outline"
+                          size={32}
+                          onPress={() => {
+                            setSealConfig(false);
+                          }}
+                        />
+                      </View>
+                    </View>
+                  )}
+                </>
+              )}
+              {!sealDelete && sealReset && state.config.sealSet && state.config.sealUnlocked && (
+                <>
+                  <Text style={styles.modalDescription}>{state.strings.sealUpdate}</Text>
+                  <TextInput
+                    style={styles.input}
+                    mode="flat"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    value={state.sealPassword}
+                    label={Platform.OS === 'ios' ? state.strings.password : undefined}
+                    placeholder={Platform.OS !== 'ios' ? state.strings.password : undefined}
+                    secureTextEntry={!showPassword}
+                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                    right={
+                      showPassword ? (
+                        <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
+                      ) : (
+                        <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
+                      )
+                    }
+                    onChangeText={value => actions.setSealPassword(value)}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    mode="flat"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    value={state.sealConfirm}
+                    label={Platform.OS === 'ios' ? state.strings.confirmPassword : undefined}
+                    placeholder={Platform.OS !== 'ios' ? state.strings.confirmPassword : undefined}
+                    secureTextEntry={!showConfirm}
+                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                    right={
+                      showPassword ? (
+                        <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowConfirm(false)} />
+                      ) : (
+                        <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowConfirm(true)} />
+                      )
+                    }
+                    onChangeText={value => actions.setSealConfirm(value)}
+                  />
+                  <View style={styles.modalControls}>
+                    <Button mode="outlined" onPress={() => setSealing(false)}>
+                      {state.strings.cancel}
+                    </Button>
+                    <Button mode="contained" disabled={state.sealPassword.length === 0 || state.sealConfirm !== state.sealPassword} loading={savingSeal} onPress={sealUpdate}>
+                      {state.strings.save}
+                    </Button>
+                  </View>
+                </>
+              )}
+              {!sealDelete && state.config.sealSet && !state.config.sealUnlocked && (
+                <>
+                  <Text style={styles.modalDescription}>{state.strings.sealUnlock}</Text>
+                  <TextInput
+                    style={styles.input}
+                    mode="flat"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    value={state.sealPassword}
+                    label={Platform.OS === 'ios' ? state.strings.password : undefined}
+                    placeholder={Platform.OS !== 'ios' ? state.strings.password : undefined}
+                    secureTextEntry={!showPassword}
+                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                    right={
+                      showPassword ? (
+                        <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
+                      ) : (
+                        <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
+                      )
+                    }
+                    onChangeText={value => actions.setSealPassword(value)}
+                  />
+                  {!sealConfig && (
+                    <View style={styles.modalControls}>
+                      <View style={styles.modalOption}>
+                        <IconButton
+                          style={styles.optionIcon}
+                          iconColor={Colors.primary}
+                          icon="menu-right-outline"
+                          size={32}
+                          onPress={() => {
+                            setSealConfig(true);
+                          }}
+                        />
+                      </View>
+                      <Button mode="outlined" onPress={() => setSealing(false)}>
+                        {state.strings.cancel}
+                      </Button>
+                      <Button mode="contained" disabled={state.sealPassword.length === 0} loading={savingSeal} onPress={sealUnlock}>
+                        {state.strings.unlock}
+                      </Button>
+                    </View>
+                  )}
+                  {sealConfig && (
+                    <View style={styles.modalControls}>
+                      <Button mode="contained" style={styles.deleteButton} loading={savingSeal} onPress={() => setSealDelete(true)}>
+                        {state.strings.delete}
+                      </Button>
+                      <View style={styles.modalOther}>
+                        <IconButton
+                          style={styles.optionIcon}
+                          iconColor={Colors.primary}
+                          icon="menu-left-outline"
+                          size={32}
+                          onPress={() => {
+                            setSealConfig(false);
+                          }}
+                        />
+                      </View>
+                    </View>
+                  )}
+                </>
+              )}
+              {sealDelete && state.config.sealSet && (
+                <>
+                  <Text style={styles.modalDescription}>{state.strings.sealDelete}</Text>
+                  <TextInput
+                    style={styles.input}
+                    mode="flat"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    value={state.sealDelete}
+                    label={Platform.OS === 'ios' ? state.strings.deleteKey : undefined}
+                    placeholder={Platform.OS !== 'ios' ? state.strings.deleteKey : undefined}
+                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                    onChangeText={value => actions.setSealDelete(value)}
+                  />
+                  <View style={styles.modalControls}>
+                    <Button mode="contained" style={styles.deleteButton} disabled={state.sealDelete !== state.strings.deleteKey} loading={savingSeal} onPress={sealRemove}>
+                      {state.strings.delete}
+                    </Button>
+                  </View>
+                </>
+              )}
+              {!state.config.sealSet && (
+                <>
+                  <Text style={styles.modalDescription}>{state.strings.sealCreate}</Text>
+                  <Text style={styles.modalDescription}>{state.strings.delayMessage}</Text>
+                  <TextInput
+                    style={styles.input}
+                    mode="flat"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    value={state.sealPassword}
+                    label={Platform.OS === 'ios' ? state.strings.password : undefined}
+                    placeholder={Platform.OS !== 'ios' ? state.strings.password : undefined}
+                    secureTextEntry={!showPassword}
+                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                    right={
+                      showPassword ? (
+                        <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
+                      ) : (
+                        <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
+                      )
+                    }
+                    onChangeText={value => actions.setSealPassword(value)}
+                  />
+                  <View style={styles.modalControls}>
+                    <Button mode="outlined" onPress={() => setSealing(false)}>
+                      {state.strings.cancel}
+                    </Button>
+                    <Button mode="contained" disabled={state.sealPassword.length === 0} loading={savingSeal} onPress={sealCreate}>
+                      {state.strings.save}
+                    </Button>
+                  </View>
+                </>
+              )}
+            </Surface>
+          </KeyboardAwareScrollView>
+        </View>
+      </Modal>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={details} onRequestClose={() => setDetails(false)}>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
+            <Surface elevation={4} mode="flat" style={styles.surface}>
+              <Text style={styles.modalLabel}>{state.strings.profileDetails}</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setDetails(false)} />
+              <TextInput
+                style={styles.input}
+                mode="flat"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                label={Platform.OS === 'ios' ? state.strings.name : undefined}
+                placeholder={Platform.OS !== 'ios' ? state.strings.name : undefined}
+                value={state.name}
+                left={<TextInput.Icon style={styles.inputIcon} icon="account" />}
+                onChangeText={value => actions.setName(value)}
+              />
+              <TextInput
+                style={styles.input}
+                mode="flat"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                label={Platform.OS === 'ios' ? state.strings.location : undefined}
+                placeholder={Platform.OS !== 'ios' ? state.strings.location : undefined}
+                value={state.location}
+                left={<TextInput.Icon style={styles.inputIcon} icon="map-marker-outline" />}
+                onChangeText={value => actions.setLocation(value)}
+              />
+              <TextInput
+                style={styles.input}
+                mode="flat"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                label={Platform.OS === 'ios' ? state.strings.description : undefined}
+                placeholder={Platform.OS !== 'ios' ? state.strings.description : undefined}
+                value={state.description}
+                left={<TextInput.Icon style={styles.inputIcon} icon="book-open-outline" />}
+                onChangeText={value => actions.setDescription(value)}
+              />
+
+              <View style={styles.modalControls}>
+                <Button mode="outlined" onPress={() => setDetails(false)}>
+                  {state.strings.cancel}
+                </Button>
+                <Button mode="contained" loading={savingDetails} onPress={saveDetails}>
+                  {state.strings.save}
+                </Button>
+              </View>
+            </Surface>
+          </KeyboardAwareScrollView>
+        </View>
+      </Modal>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={auth} onRequestClose={() => setAuth(false)}>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
+            <Surface elevation={4} mode="flat" style={styles.surface}>
+              <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setAuth(false)} />
+              <Text style={styles.modalDescription}>{state.strings.mfaSteps}</Text>
+              <Image style={styles.secretImage} resizeMode={'contain'} source={{uri: state.secretImage}} />
+
+              <View style={styles.secretText}>
+                <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>
+                  {state.secretText}
+                </Text>
+                <TouchableOpacity onPress={copySecret}>
+                  <Icon style={styles.secretIcon} size={18} source={secretCopy ? 'check' : 'content-copy'} color={Colors.primary} />
+                </TouchableOpacity>
+              </View>
+
+              <InputCode onChangeText={actions.setCode} />
+
+              <View style={styles.authMessage}>
+                <Text style={styles.authMessageText}>{authMessage}</Text>
+              </View>
+
+              <View style={styles.modalControls}>
+                <Button mode="outlined" onPress={() => setAuth(false)}>
+                  {state.strings.cancel}
+                </Button>
+                <Button mode="contained" loading={confirmingAuth} disabled={state.code.length !== 6} onPress={confirmAuth}>
+                  {state.strings.mfaConfirm}
+                </Button>
+              </View>
+            </Surface>
+          </KeyboardAwareScrollView>
+        </View>
+      </Modal>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={clear} onRequestClose={() => setClear(false)}>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
+            <Surface elevation={4} mode="flat" style={styles.surface}>
+              <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setClear(false)} />
+              <Text style={styles.modalDescription}>{state.strings.disablePrompt}</Text>
+
+              <View style={styles.modalControls}>
+                <Button mode="outlined" onPress={() => setClear(false)}>
+                  {state.strings.cancel}
+                </Button>
+                <Button mode="contained" loading={confirmingAuth} onPress={clearAuth}>
+                  {state.strings.disable}
+                </Button>
+              </View>
+            </Surface>
+          </KeyboardAwareScrollView>
+        </View>
+      </Modal>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={change} onRequestClose={() => setChange(false)}>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
+            <Surface elevation={4} mode="flat" style={styles.surface}>
+              <Text style={styles.modalLabel}>{state.strings.changeLogin}</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setChange(false)} />
+              <TextInput
+                style={styles.input}
+                mode="flat"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                label={Platform.OS === 'ios' ? state.strings.username : undefined}
+                placeholder={Platform.OS !== 'ios' ? state.strings.username : undefined}
+                value={state.handle}
+                left={<TextInput.Icon style={styles.inputIcon} icon="account" />}
+                right={
+                  !state.checked ? (
+                    <TextInput.Icon style={styles.icon} icon="refresh" />
+                  ) : state.taken ? (
+                    <TextInput.Icon style={styles.icon} color={Colors.danger} icon="account-cancel-outline" />
+                  ) : (
+                    <></>
+                  )
+                }
+                onChangeText={value => actions.setHandle(value)}
+              />
+              <TextInput
+                style={styles.input}
+                mode="flat"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                value={state.password}
+                label={Platform.OS === 'ios' ? state.strings.password : undefined}
+                placeholder={Platform.OS !== 'ios' ? state.strings.password : undefined}
+                secureTextEntry={!showPassword}
+                left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                right={
+                  showPassword ? (
+                    <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
+                  ) : (
+                    <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
+                  )
+                }
+                onChangeText={value => actions.setPassword(value)}
+              />
+              <TextInput
+                style={styles.input}
+                mode="flat"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                value={state.confirm}
+                label={Platform.OS === 'ios' ? state.strings.confirmPassword : undefined}
+                placeholder={Platform.OS !== 'ios' ? state.strings.confirmPassword : undefined}
+                secureTextEntry={!showConfirm}
+                left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                right={
+                  showPassword ? (
+                    <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowConfirm(false)} />
+                  ) : (
+                    <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowConfirm(true)} />
+                  )
+                }
+                onChangeText={value => actions.setConfirm(value)}
+              />
+
+              <View style={styles.modalControls}>
+                <Button mode="outlined" onPress={() => setChange(false)}>
+                  {state.strings.cancel}
+                </Button>
+                <Button mode="contained" loading={savingChange} disabled={state.password === '' || state.password !== state.confirm || state.taken || !state.checked} onPress={saveChange}>
+                  {state.strings.save}
+                </Button>
+              </View>
+            </Surface>
+          </KeyboardAwareScrollView>
+        </View>
+      </Modal>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={logout} onRequestClose={() => setLogout(false)}>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
+            <Surface elevation={4} mode="flat" style={styles.surface}>
+              <Text style={styles.modalLabel}>{state.strings.loggingOut}</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setLogout(false)} />
+
+              <View style={styles.allControl}>
+                <Text style={styles.controlLabel}>{state.strings.allDevices}</Text>
+                <Switch style={styles.controlSwitch} value={state.all} onValueChange={actions.setAll} />
+              </View>
+
+              <View style={styles.modalControls}>
+                <Button mode="outlined" onPress={() => setLogout(false)}>
+                  {state.strings.cancel}
+                </Button>
+                <Button mode="contained" loading={applyingLogout} onPress={applyLogout}>
+                  {state.strings.logout}
+                </Button>
+              </View>
+            </Surface>
+          </KeyboardAwareScrollView>
+        </View>
+      </Modal>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={remove} onRequestClose={() => setRemove(false)}>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
+            <Surface elevation={4} mode="flat" style={styles.surface}>
+              <Text style={styles.modalLabel}>{state.strings.deleteAccount}</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setRemove(false)} />
+
+              <TextInput
+                style={styles.input}
+                mode="flat"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                value={state.remove}
+                label={Platform.OS === 'ios' ? state.strings.deleteKey : undefined}
+                placeholder={Platform.OS !== 'ios' ? state.strings.deleteKey : undefined}
+                left={<TextInput.Icon style={styles.icon} icon="delete-outline" />}
+                onChangeText={value => actions.setRemove(value)}
+              />
+
+              <View style={styles.modalControls}>
+                <Button mode="outlined" onPress={() => setRemove(false)}>
+                  {state.strings.cancel}
+                </Button>
+                <Button mode="contained" loading={applyingRemove} disabled={state.remove !== state.strings.delete} style={styles.remove} onPress={applyRemove}>
+                  {state.strings.remove}
+                </Button>
+              </View>
+            </Surface>
+          </KeyboardAwareScrollView>
+        </View>
+      </Modal>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedMessage} onRequestClose={() => setBlockedMessage(false)}>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <View style={styles.blockedContent}>
+            <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
+              <View style={styles.blockedHeader}>
+                <Text style={styles.blockedTitle}>{state.strings.blockedMessages}</Text>
+                <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedMessage(false)} />
+              </View>
+              <Surface style={styles.blocked} elevation={1} mode="flat">
+                {state.blockedMessages.length === 0 && (
+                  <View style={styles.blockedEmpty}>
+                    <Text style={styles.blockedLabel}>{state.strings.noMessages}</Text>
+                  </View>
+                )}
+                {state.blockedMessages.length > 0 && <View>{blockedMessages}</View>}
+              </Surface>
+              <View style={styles.blockedDone}>
+                {blockedError && <Text style={styles.blockedError}>{state.strings.operationFailed}</Text>}
+                <Button style={styles.blockedButton} mode="outlined" onPress={() => setBlockedMessage(false)}>
+                  {state.strings.close}
+                </Button>
+              </View>
+            </Surface>
+          </View>
+        </View>
+      </Modal>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedChannel} onRequestClose={() => setBlockedChannel(false)}>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <View style={styles.blockedContent}>
+            <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
+              <View style={styles.blockedHeader}>
+                <Text style={styles.blockedTitle}>{state.strings.blockedTopics}</Text>
+                <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedChannel(false)} />
+              </View>
+              <Surface style={styles.blocked} elevation={1} mode="flat">
+                {state.blockedChannels.length === 0 && (
+                  <View style={styles.blockedEmpty}>
+                    <Text style={styles.blockedLabel}>{state.strings.noTopics}</Text>
+                  </View>
+                )}
+                {state.blockedChannels.length > 0 && <View>{blockedChannels}</View>}
+              </Surface>
+              <View style={styles.blockedDone}>
+                {blockedError && <Text style={styles.blockedError}>{state.strings.operationFailed}</Text>}
+                <Button style={styles.blockedButton} mode="outlined" onPress={() => setBlockedChannel(false)}>
+                  {state.strings.close}
+                </Button>
+              </View>
+            </Surface>
+          </View>
+        </View>
+      </Modal>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedContact} onRequestClose={() => setBlockedContact(false)}>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <View style={styles.blockedContent}>
+            <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
+              <View style={styles.blockedHeader}>
+                <Text style={styles.blockedTitle}>{state.strings.blockedContacts}</Text>
+                <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedContact(false)} />
+              </View>
+              <Surface style={styles.blocked} elevation={1} mode="flat">
+                {state.blockedContacts.length === 0 && (
+                  <View style={styles.blockedEmpty}>
+                    <Text style={styles.blockedLabel}>{state.strings.noContacts}</Text>
+                  </View>
+                )}
+                {state.blockedContacts.length > 0 && <View>{blockedContacts}</View>}
+              </Surface>
+              <View style={styles.blockedDone}>
+                {blockedError && <Text style={styles.blockedError}>{state.strings.operationFailed}</Text>}
+                <Button style={styles.blockedButton} mode="outlined" onPress={() => setBlockedContact(false)}>
+                  {state.strings.close}
+                </Button>
+              </View>
+            </Surface>
+          </View>
+        </View>
+      </Modal>
+      <Confirm show={alert} params={alertParams} />
     </View>
   );
 }
+

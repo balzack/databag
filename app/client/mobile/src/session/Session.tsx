@@ -9,11 +9,8 @@ type SessionProps = {
 };
 
 export function Session({share}: SessionProps) {
-  const {state} = useSession();
-
   return (
     <LayoutSelector
-      layout={state.layout}
       SmallComponent={SessionSmall}
       LargeComponent={SessionLarge}
       props={{share}}

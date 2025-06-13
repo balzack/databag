@@ -32,15 +32,6 @@ export function ContentSmall({
   const theme = useTheme();
   const [subjectTopic, setSubjectTopic] = useState('');
   const [members, setMembers] = useState([]);
-  const [alert, setAlert] = useState(false);
-  const [alertParams] = useState({
-    title: state.strings.operationFailed,
-    prompt: state.strings.tryAgain,
-    confirm: {
-      label: state.strings.ok,
-      action: () => setAlert(false),
-    },
-  });
   const cards = state.sealSet && sealedTopic ? state.sealable : state.connected;
 
   const select = (cardId: string | null, channelId: string) => {
@@ -313,90 +304,6 @@ export function ContentSmall({
           </Pressable>
         </View>
       </View>
-
-      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={add} onRequestClose={() => setAdd(false)}>
-        <View style={styles.modal}>
-          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <View style={styles.addContainer}>
-            <Surface elevation={4} mode="flat" style={styles.addSurface}>
-              <Text style={styles.addLabel}>{state.strings.newTopic}</Text>
-              <IconButton style={styles.addClose} icon="close" size={24} onPress={() => setAdd(false)} />
-              <Surface elevation={0} style={styles.subjectContainer}>
-                <TextInput
-                  dense={true}
-                  style={styles.subjectInput}
-                  autoCapitalize={false}
-                  underlineStyle={styles.inputUnderline}
-                  placeholder={state.strings.subjectOptional}
-                  left={<TextInput.Icon style={styles.icon} icon="label-outline" />}
-                  value={subjectTopic}
-                  onChangeText={value => setSubjectTopic(value)}
-                />
-                <Divider style={styles.modalDivider} />
-              </Surface>
-              <View style={styles.membersContainer}>
-                <Divider style={styles.modalDivider} />
-                <Surface elevation={0} mode="flat" style={styles.members}>
-                  <FlatList
-                    style={styles.cards}
-                    data={cards}
-                    initialNumToRender={32}
-                    renderItem={({item}) => {
-                      const enable = (
-                        <Switch
-                          key="enable"
-                          style={styles.memberSwitch}
-                          value={Boolean(members?.find(cardId => cardId === item.cardId))}
-                          onValueChange={flag => {
-                            if (flag) {
-                              setMembers([item.cardId, ...members]);
-                            } else {
-                              setMembers(members.filter(cardId => cardId !== item.cardId));
-                            }
-                          }}
-                        />
-                      );
-                      return (
-                        <Card
-                          containerStyle={{
-                            ...styles.card,
-                            borderColor: theme.colors.outlineVariant,
-                          }}
-                          imageUrl={item.imageUrl}
-                          name={item.name}
-                          handle={item.handle}
-                          node={item.node}
-                          placeholder={state.strings.name}
-                          actions={[enable]}
-                        />
-                      );
-                    }}
-                    keyExtractor={card => card.cardId}
-                  />
-                </Surface>
-                <Divider style={styles.modalDivider} />
-              </View>
-              <View style={styles.addControls}>
-                <View style={styles.sealable}>
-                  {state.sealSet && state.allowUnsealed && (
-                    <View style={styles.sealableContent}>
-                      <Text style={styles.switchLabel}>{state.strings.sealedTopic}</Text>
-                      <Switch style={styles.sealSwitch} value={sealedTopic} onValueChange={flag => setSealedTopic(flag)} />
-                    </View>
-                  )}
-                </View>
-                <Button mode="outlined" onPress={() => setAdd(false)}>
-                  {state.strings.cancel}
-                </Button>
-                <Button mode="contained" loading={adding} onPress={addTopic}>
-                  {state.strings.create}
-                </Button>
-              </View>
-            </Surface>
-          </View>
-        </View>
-      </Modal>
-      <Confirm show={alert} params={alertParams} />
       <Selector share={share} selected={select} channels={state.channels} />
     </View>
   );

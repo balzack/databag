@@ -9,11 +9,8 @@ type AccountsProps = {
 };
 
 export function Accounts({setup}: AccountsProps) {
-  const {state} = useAccounts();
-
   return (
     <LayoutSelector
-      layout={state.layout}
       SmallComponent={AccountsSmall}
       LargeComponent={AccountsLarge}
       props={{setup}}

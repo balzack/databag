@@ -1,36 +1,30 @@
 import React from 'react';
+import {Platform} from 'react-native';
 
 interface LayoutSelectorProps<T> {
-  layout: 'small' | 'large';
   SmallComponent: React.ComponentType<T>;
   LargeComponent: React.ComponentType<T>;
   props: T;
 }
 
 export function LayoutSelector<T>({
-  layout,
   SmallComponent,
   LargeComponent,
   props,
 }: LayoutSelectorProps<T>) {
-  if (layout === 'small') {
-    return <SmallComponent {...props} />;
+  if (Platform.isPad) {
+    return <LargeComponent {...props} />;
   }
-  
-  return <LargeComponent {...props} />;
+  return <SmallComponent {...props} />;
 }
 
 export function createLayoutComponent<T>(
   SmallComponent: React.ComponentType<T>,
   LargeComponent: React.ComponentType<T>,
-  useStateHook: () => { state: { layout: 'small' | 'large' } }
 ) {
   return function LayoutComponent(props: T) {
-    const { state } = useStateHook();
-    
     return (
       <LayoutSelector
-        layout={state.layout}
         SmallComponent={SmallComponent}
         LargeComponent={LargeComponent}
         props={props}

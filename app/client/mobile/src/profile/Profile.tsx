@@ -23,11 +23,8 @@ type ProfileProps = {
 };
 
 export function Profile({close, params}: ProfileProps) {
-  const {state} = useProfile(params);
-
   return (
     <LayoutSelector
-      layout={state.layout}
       SmallComponent={ProfileSmall}
       LargeComponent={ProfileLarge}
       props={{close, params}}

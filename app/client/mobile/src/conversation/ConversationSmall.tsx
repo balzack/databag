@@ -211,13 +211,20 @@ export function ConversationSmall({close, openDetails, wide}: {close: () => void
     }
   });
 
+  const containerStyle = state.layout === 'large' ? {...styles.conversation, ...styles.largeConversation} : styles.conversation;
+  const headerStyle = state.layout === 'large' ? {...styles.header, ...styles.largeHeader, flexDirection: 'row-reverse'} : {...styles.header, flexDirection: 'row'};
+  const padStyle = state.layout === 'large' ? styles.pad : styles.nopad;
+  const inputPadStyle = state.layout === 'large' ? styles.pad : styles.indent;
+  const offset = state.layout === 'large' ? state.avoid - 64 : state.avoid - 120;
   const disableImage = !state.detailSet || !state.detail?.enableImage;
   const disableVideo = !state.detailSet || !state.detail?.enableVideo;
   const disableAudio = !state.detailSet || !state.detail?.enableAudio;
   const disableBinary = !state.detailSet || !state.detail?.enableBinary;
+  const statusStyle = state.layout === 'large' ? {...styles.status, flexDirection: 'row-reverse'} : {...styles.status, flexDirection: 'row'};
+  const borderStyle = Platform.OS === 'ios' ? { ...styles.message, fontSize: state.textSize } : { ...styles.message, fontSize: state.textSize, paddingTop: 4, paddingBottom: 4 };
 
   return (
-    <View>
+    <View style={styles.component}>
       <Surface elevation={1} mode="flat" style={styles.content}>
         <Surface elevation={9} mode="flat" style={styles.surfaceMaxWidth}>
           <SafeAreaView edges={['left', 'right']} style={styles.safeAreaNav}>
@@ -356,65 +363,32 @@ export function ConversationSmall({close, openDetails, wide}: {close: () => void
           </SafeAreaView>
       </Surface>
       <Confirm show={alert} params={alertParams} />
-      <Modal animationType="fade" transparent={true} visible={colorMenu} supportedOrientations={['portrait', 'landscape']} onRequestClose={() => setColorMenu(false)}>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={colorMenu} onRequestClose={() => setColorMenu(false)}>
         <View style={styles.modal}>
-          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <View style={styles.container}>
-            <Surface elevation={4} mode="flat" style={styles.surface}>
-              <Text style={styles.modalLabel}>{state.strings.textColor}</Text>
-              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setColorMenu(false)} />
-              <ColorPicker
-                color={state.textColorSet ? state.textColor : theme.colors.onSurface}
-                swatches={true}
-                onColorChangeComplete={color => actions.setTextColor(color)}
-                thumbSize={40}
-                sliderSize={40}
-                noSnap={true}
-                row={false}
-                gapSize={16}
-                discreteLength={0}
-                sliderHidden={false}
-                discrete={false}
-              />
-              <View style={styles.modalControls}>
-                <View style={styles.modalOption}>
-                  <IconButton mode="contained" iconColor={theme.colors.onSurface} icon="close" size={20} onPress={() => actions.clearTextColor()} />
-                  <Text style={styles.modalOptionLabel}>{state.strings.clearColor}</Text>
-                </View>
-                <View style={styles.modalOption}>
-                  <IconButton mode="contained" iconColor={theme.colors.onSurface} icon="check" size={20} onPress={() => setColorMenu(false)} />
-                  <Text style={styles.modalOptionLabel}>{state.strings.done}</Text>
-                </View>
-              </View>
-            </Surface>
-          </View>
+          <Pressable style={styles.blur} onPress={() => setColorMenu(false)}>
+            <BlurView style={styles.blur} blurType="dark" blurAmount={6} reducedTransparencyFallbackColor="dark" />
+          </Pressable>
+          <Surface elevation={2} style={styles.colorArea}>
+            <ColorPicker color={state.textColorSet ? state.textColor : undefined} onColorChange={actions.setTextColor} onColorChangeComplete={actions.setTextColor} swatched={false} />
+            <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={20} onPress={() => setColorMenu(false)} />
+          </Surface>
         </View>
       </Modal>
-      <Modal animationType="fade" transparent={true} visible={sizeModal} supportedOrientations={['portrait', 'landscape']} onRequestClose={() => setSizeModal(false)}>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={sizeModal} onRequestClose={() => setSizeModal(false)}>
         <View style={styles.modal}>
-          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <View style={styles.container}>
-            <Surface elevation={4} mode="flat" style={styles.surface}>
-              <Text style={styles.modalLabel}>{state.strings.textSize}</Text>
-              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setSizeModal(false)} />
-              <View style={styles.modalControls}>
-                <View style={styles.modalOption}>
-                  <IconButton mode="contained" iconColor={theme.colors.onSurface} icon="format-size" size={20} onPress={() => actions.setTextSize(12)} />
-                  <Text style={styles.modalOptionLabel}>{state.strings.textSmall}</Text>
-                </View>
-                <View style={styles.modalOption}>
-                  <IconButton mode="contained" iconColor={theme.colors.onSurface} icon="format-size" size={20} onPress={() => actions.setTextSize(16)} />
-                  <Text style={styles.modalOptionLabel}>{state.strings.textMedium}</Text>
-                </View>
-                <View style={styles.modalOption}>
-                  <IconButton mode="contained" iconColor={theme.colors.onSurface} icon="format-size" size={20} onPress={() => actions.setTextSize(20)} />
-                  <Text style={styles.modalOptionLabel}>{state.strings.textLarge}</Text>
-                </View>
-              </View>
-            </Surface>
-          </View>
+          <Pressable style={styles.blur} onPress={() => setSizeModal(false)}>
+            <BlurView style={styles.blur} blurType="dark" blurAmount={6} reducedTransparencyFallbackSize="dark" />
+          </Pressable>
+          <Surface elevation={2} style={styles.sizeArea}>
+            <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={20} onPress={() => setSizeModal(false)} />
+            <Pressable onPress={() => {actions.setTextSize(20); setSizeModal(false)}}><Text>{ state.strings.textLarge }</Text></Pressable>
+            <Pressable onPress={() => {actions.setTextSize(16); setSizeModal(false)}}><Text>{ state.strings.textMedium }</Text></Pressable>
+            <Pressable onPress={() => {actions.setTextSize(12); setSizeModal(false)}}><Text>{ state.strings.textSmall }</Text></Pressable>
+          </Surface>
         </View>
       </Modal>
+
     </View>
   );
 }
+
