@@ -3,16 +3,20 @@ import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {ContextType} from '../context/ContextType';
 import {Config} from 'databag-client-sdk';
+import {FocusDetail, Card, Profile} from 'databag-client-sdk';
 
 export function useMembers() {
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
+    detail: undefined as undefined | FocusDetail,
     sealed: false,
     sealUnlocked: false,
     sealSet: false,
     strings: display.state.strings,
     connected: [] as Card[],
+    host: false,
+    channelId: '',
   });
 
   const compare = (a: Card, b: Card) => {
@@ -51,7 +55,7 @@ export function useMembers() {
       const sealed = detail?.sealed;
       const locked = detail ? detail.locked : true;
       const host = cardId == null;
-      updateState({ channelId, access, sealed, locked, host });
+      updateState({ channelId, detail, access, sealed, locked, host });
     };
     if (focus && contact) {
       contact.addCardListener(setCards);
@@ -70,6 +74,14 @@ export function useMembers() {
   }, [display.state]);
 
   const actions = {
+    setMember: async (cardId: string) => {
+      const content = app.state.session.getContent();
+      await content.setChannelCard(state.channelId, cardId);
+    },
+    clearMember: async (cardId: string) => {
+      const content = app.state.session.getContent();
+      await content.clearChannelCard(state.channelId, cardId);
+    },
   };
 
   return {state, actions};

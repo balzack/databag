@@ -35,19 +35,16 @@ export function Members({ close }: { close: ()=>void }) {
     }
   }
 
-  const create = async () => {
-    if (!creating) {
-      setCreating(true);
-      try {
-        const filtered = state.connected.filter(item => (!seal || item.sealable) && selected.current.has(item.cardId));
-        const id = await actions.addTopic(seal || !state.allowUnsealed, subject, filtered.map(item => item.cardId));
-        actions.setFocus(null, id);
-        openConversation();
-      } catch (err) {
-        console.log(err);
-        setAlert(true);
+  const update = async (cardId: string, member: boolean) => {
+    try {
+      if (member) {
+        await actions.setMember(cardId);
+      } else {
+        await actions.clearMember(cardId);
       }
-      setCreating(false);
+    } catch (err) {
+      console.log(err);
+      setAlert(true);
     }
   }
 
@@ -62,7 +59,7 @@ export function Members({ close }: { close: ()=>void }) {
       </Surface>
 
       <Surface elevation={1} mode="flat" style={styles.scrollWrapper}>
-        { state.access && !state.locked && state.connected.length > 0 && (
+        { state.host && state.access && !state.locked && state.connected.length > 0 && (
           <FlatList
             style={styles.cards}
             contentContainerStyle={{ paddingBottom: 128 }}
@@ -70,6 +67,7 @@ export function Members({ close }: { close: ()=>void }) {
             initialNumToRender={32}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
+              const member = Boolean(state.detail?.members.find(member => member.guid === item.guid));
               return (
                 <Card
                   containerStyle={{ ...styles.card, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
@@ -79,7 +77,7 @@ export function Members({ close }: { close: ()=>void }) {
                   node={item.node}
                   placeholder={state.strings.name}
                   select={()=>{}}
-                  actions={[]}
+                  actions={[ <Switch key="action" style={styles.controlSwitch} value={member} onValueChange={() => update(item.cardId, !member)} /> ]}
                 />
               );
             }}

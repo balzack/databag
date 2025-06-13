@@ -25,6 +25,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  controlSwitch: {
+    transform: [{scaleX: 0.7}, {scaleY: 0.7}],
+  },
   input: {
     flexGrow: 1,
     backgroundColor: 'transparent',
