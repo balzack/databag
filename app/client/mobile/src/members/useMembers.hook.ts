@@ -8,10 +8,9 @@ export function useMembers() {
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
+    sealed: false,
     sealUnlocked: false,
     sealSet: false,
-    createSealed: false,
-    allowUnsealed: false,
     strings: display.state.strings,
     connected: [] as Card[],
   });
@@ -32,12 +31,8 @@ export function useMembers() {
   };
 
   useEffect(() => {
+    const focus = app.state.focus;
     const contact = app.state?.session?.getContact();
-    const settings = app.state?.session?.getSettings();
-    const setConfig = (config: Config) => {
-      const { sealSet, sealUnlocked, allowUnsealed } = config;
-      updateState({sealSet, sealUnlocked, allowUnsealed});
-    };
     const setCards = (cards: Card[]) => {
       const sorted = cards.sort(compare);
       const connected = [] as Card[];
@@ -48,11 +43,21 @@ export function useMembers() {
       });
       updateState({connected});
     };
-    if (settings && contact) {
+    const setDetail = (focused: {cardId: string | null; channelId: string; detail: FocusDetail | null}) => {
+      const detail = focused ? focused.detail : null;
+      const cardId = focused.cardId;
+      const channelId = focused.channelId;
+      const access = Boolean(detail);
+      const sealed = detail?.sealed;
+      const locked = detail ? detail.locked : true;
+      const host = cardId == null;
+      updateState({ channelId, access, sealed, locked, host });
+    };
+    if (focus && contact) {
       contact.addCardListener(setCards);
-      settings.addConfigListener(setConfig);
+      focus.addDetailListener(setDetail);
       return () => {
-        settings.removeConfigListener(setConfig);
+        focus.removeDetailListener(setDetail);
         contact.removeCardListener(setCards);
       };
     }
@@ -60,29 +65,11 @@ export function useMembers() {
   }, [app.state.session]);
 
   useEffect(() => {
-    const createSealed = app.state.createSealed;
-    updateState({ createSealed });
-  }, [app.state.createSealed]);
-
-  useEffect(() => {
     const {layout} = display.state;
     updateState({layout});
   }, [display.state]);
 
   const actions = {
-    setFocus: async (cardId: string | null, channelId: string) => {
-      await app.actions.setFocus(cardId, channelId);
-    },
-    addTopic: async (sealed: boolean, subject: string, contacts: string[]) => {
-      const content = app.state.session.getContent();
-      if (sealed) {
-        const topic = await content.addChannel(true, 'sealed', {subject}, contacts);
-        return topic.id;
-      } else {
-        const topic = await content.addChannel(false, 'superbasic', {subject}, contacts);
-        return topic.id;
-      }
-    },    
   };
 
   return {state, actions};

@@ -10,15 +10,6 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Card} from '../card/Card';
 import {Confirm} from '../confirm/Confirm';
 
-function Member({ enabled, toggle, placeholder }: { enabled: boolean, toggle: (checked: boolean)=>void, placeholder: string }) {
-  const [checked, setChecked] = useState(false);
-  if (enabled) {
-    return <Checkbox.Android status={checked ? 'checked' : 'unchecked'} onPress={() => { toggle(!checked); setChecked(!checked) }} />
-  } else {
-    return <Text style={{ fontSize: 12, fontWeight: 'bold' }}>{ placeholder }</Text>
-  }
-}
-
 export function Members({ close }: { close: ()=>void }) {
   const { state, actions } = useMembers();
   const selected = useRef(new Set<string>());
@@ -71,7 +62,7 @@ export function Members({ close }: { close: ()=>void }) {
       </Surface>
 
       <Surface elevation={1} mode="flat" style={styles.scrollWrapper}>
-        { state.connected.length > 0 && (
+        { state.access && !state.locked && state.connected.length > 0 && (
           <FlatList
             style={styles.cards}
             contentContainerStyle={{ paddingBottom: 128 }}
@@ -79,7 +70,6 @@ export function Members({ close }: { close: ()=>void }) {
             initialNumToRender={32}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
-              const member = <Member key="member" enabled={!seal || item.sealable} toggle={(set) => toggle(item.cardId, set)} placeholder={state.strings.noKey} />
               return (
                 <Card
                   containerStyle={{ ...styles.card, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
@@ -89,7 +79,7 @@ export function Members({ close }: { close: ()=>void }) {
                   node={item.node}
                   placeholder={state.strings.name}
                   select={()=>{}}
-                  actions={[member]}
+                  actions={[]}
                 />
               );
             }}
