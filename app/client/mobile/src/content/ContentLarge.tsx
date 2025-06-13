@@ -140,8 +140,7 @@ export function ContentLarge({
                 const choose = () => {
                   open(item.cardId, item.channelId);
                 };
-                const Wrap = state.layout === 'large' && focused ? Surface : View;
-                //const action = <IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={()=>{}} />
+                const Wrap = focused ? Surface : View;
                 return (
                   <Wrap elevation={1} mode="flat">
                     <Channel

@@ -142,7 +142,6 @@ export function ContentSmall({
                 const choose = () => {
                   open(item.cardId, item.channelId);
                 };
-                const Wrap = state.layout === 'large' && focused ? Surface : View;
                 const action = (
                   <Menu
                     visible={allTab && more === `${item.cardId}:${item.channelId}`}
@@ -163,7 +162,7 @@ export function ContentSmall({
                   </Menu>
                 );
                 return (
-                  <Wrap elevation={1} mode="flat">
+                  <View>
                     <Channel
                       containerStyle={{ ...styles.smChannel, message: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
                       select={choose}
@@ -177,7 +176,7 @@ export function ContentSmall({
                       message={message}
                       action={action}
                     />
-                  </Wrap>
+                  </View>
                 );
               }}
               keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
@@ -195,7 +194,6 @@ export function ContentSmall({
                 const choose = () => {
                   open(item.cardId, item.channelId);
                 };
-                const Wrap = state.layout === 'large' && focused ? Surface : View;
                 const action = (
                   <Menu
                     visible={unreadTab && more === `${item.cardId}:${item.channelId}`}
@@ -211,7 +209,7 @@ export function ContentSmall({
                   </Menu>
                 );
                 return (
-                  <Wrap elevation={1} mode="flat">
+                  <View>
                     <Channel
                       containerStyle={styles.smChannel}
                       select={choose}
@@ -225,7 +223,7 @@ export function ContentSmall({
                       message={message}
                       action={action}
                     />
-                  </Wrap>
+                  </View>
                 );
               }}
               keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
@@ -243,7 +241,6 @@ export function ContentSmall({
                 const choose = () => {
                   open(item.cardId, item.channelId);
                 };
-                const Wrap = state.layout === 'large' && focused ? Surface : View;
                 const action = (
                   <Menu
                     visible={favoritesTab && more === `${item.cardId}:${item.channelId}`}
@@ -260,7 +257,7 @@ export function ContentSmall({
                 );
 
                 return (
-                  <Wrap elevation={1} mode="flat">
+                  <View>
                     <Channel
                       containerStyle={styles.smChannel}
                       select={choose}
@@ -274,7 +271,7 @@ export function ContentSmall({
                       message={message}
                       action={action}
                     />
-                  </Wrap>
+                  </View>
                 );
               }}
               keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
