@@ -404,6 +404,18 @@ export const en = {
 };
 
 export const fr = {
+  adminSettings: 'Paramètres d\'administration',
+  accountKeyType: 'Type de clé de compte',
+  media: 'Médias',
+  calling: 'Appels',
+  serviceId: 'ID du service',
+  serviceToken: 'Jeton du service',
+  serviceUrl: 'URL du service',
+  idHint: 'ID / Nom d\'utilisateur',
+  tokenHint: 'Jeton / Mot de passe',
+  searchAccounts: 'Rechercher des comptes',
+  chatMembers: 'Membres du chat',
+
   addSubject: 'Ajouter un sujet',
   chat: 'Discussion',
   sealingKey: 'Gérer la clé E2EE',
@@ -785,6 +797,18 @@ export const fr = {
 };
 
 export const es = {
+  adminSettings: 'Configuración de administración',
+  accountKeyType: 'Tipo de clave de cuenta',
+  media: 'Medios',
+  calling: 'Llamadas',
+  serviceId: 'ID del servicio',
+  serviceToken: 'Token del servicio',
+  serviceUrl: 'URL del servicio',
+  idHint: 'ID / Nombre de usuario',
+  tokenHint: 'Token / Contraseña',
+  searchAccounts: 'Buscar cuentas',
+  chatMembers: 'Miembros del chat',
+
   addSubject: 'Agregar tema',
   chat: 'Chat',
   sealingKey: 'Gestionar clave E2EE',
@@ -1165,6 +1189,18 @@ export const es = {
 };
 
 export const pt = {
+  adminSettings: 'Configurações de administração',
+  accountKeyType: 'Tipo de chave da conta',
+  media: 'Mídia',
+  calling: 'Chamadas',
+  serviceId: 'ID do serviço',
+  serviceToken: 'Token do serviço',
+  serviceUrl: 'URL do serviço',
+  idHint: 'ID / Nome de usuário',
+  tokenHint: 'Token / Senha',
+  searchAccounts: 'Pesquisar contas',
+  chatMembers: 'Membros do chat',
+
   addSubject: 'Adicionar assunto',
   chat: 'Chat',
   sealingKey: 'Gerenciar chave E2EE',
@@ -1545,6 +1581,18 @@ export const pt = {
 };
 
 export const de = {
+  adminSettings: 'Admin-Einstellungen',
+  accountKeyType: 'Kontoschlüsseltyp',
+  media: 'Medien',
+  calling: 'Anrufe',
+  serviceId: 'Dienst-ID',
+  serviceToken: 'Dienst-Token',
+  serviceUrl: 'Dienst-URL',
+  idHint: 'ID / Benutzername',
+  tokenHint: 'Token / Passwort',
+  searchAccounts: 'Konten suchen',
+  chatMembers: 'Chat-Mitglieder',
+
   addSubject: 'Thema hinzufügen',
   chat: 'Chat',
   sealingKey: 'E2EE-Schlüssel verwalten',
@@ -1925,6 +1973,18 @@ export const de = {
 };
 
 export const ru = {
+  adminSettings: 'Настройки администратора',
+  accountKeyType: 'Тип ключа аккаунта',
+  media: 'Медиа',
+  calling: 'Звонки',
+  serviceId: 'ID сервиса',
+  serviceToken: 'Токен сервиса',
+  serviceUrl: 'URL сервиса',
+  idHint: 'ID / Имя пользователя',
+  tokenHint: 'Токен / Пароль',
+  searchAccounts: 'Поиск аккаунтов',
+  chatMembers: 'Участники чата',
+
   addSubject: 'Добавить тему',
   chat: 'Чат',
   sealingKey: 'Управление ключом E2EE',
@@ -2305,6 +2365,18 @@ export const ru = {
 };
 
 export const el = {
+  adminSettings: 'Ρυθμίσεις διαχειριστή',
+  accountKeyType: 'Τύπος κλειδιού λογαριασμού',
+  media: 'Πολυμέσα',
+  calling: 'Κλήσεις',
+  serviceId: 'Αναγνωριστικό υπηρεσίας',
+  serviceToken: 'Διακριτικό υπηρεσίας',
+  serviceUrl: 'URL υπηρεσίας',
+  idHint: 'ID / Όνομα χρήστη',
+  tokenHint: 'Διακριτικό / Κωδικός πρόσβασης',
+  searchAccounts: 'Αναζήτηση λογαριασμών',
+  chatMembers: 'Μέλη συνομιλίας',
+
   addSubject: 'Προσθήκη θέματος',
   chat: 'Συνομιλία',
   sealingKey: 'Διαχείριση κλειδιού E2EE',
