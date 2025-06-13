@@ -66,7 +66,7 @@ export function Assemble({ close, openConversation }: { close: ()=>void, openCon
         <Pressable style={styles.navIcon} onPress={close}>
           <Icon size={24} source="left" color={'white'} />
         </Pressable>
-        <Surface mode="flat" elevation={0} style={{ flexGrow: 1, borderRadius: 8, overflow: 'hidden' }}>
+        <Surface mode="flat" elevation={0} style={{ flexGrow: 1, flexShrink: 1, minWidth: 0, borderRadius: 8, overflow: 'hidden' }}>
           <TextInput
             style={styles.input}
             mode="outlined"

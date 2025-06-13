@@ -59,8 +59,8 @@ export function useContent() {
   };
 
   useEffect(() => {
-    const {layout} = display.state;
-    updateState({layout});
+    const {layout, strings} = display.state;
+    updateState({strings, layout});
   }, [display.state]);
 
   useEffect(() => {

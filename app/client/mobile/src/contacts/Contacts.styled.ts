@@ -22,6 +22,8 @@ export const styles = StyleSheet.create({
   },
   searchSurface: {
     flexGrow: 1,
+    flexShrink: 1,
+    minWidth: 0,
     borderRadius: 8,
     overflow: 'hidden',
   },
@@ -128,6 +130,11 @@ export const styles = StyleSheet.create({
   },
   input: {
     flexGrow: 1,
+    flexShrink: 1,
+    minWidth: 0,
+    textWrap: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
     backgroundColor: 'transparent',
     paddingTop: 0,
     paddingBottom: 0,
