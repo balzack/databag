@@ -7,7 +7,7 @@ import {Confirm} from '../confirm/Confirm';
 import {Card} from '../card/Card';
 import {BlurView} from '@react-native-community/blur';
 
-export function Details({close, closeAll}: {close: () => void; closeAll: () => void}) {
+export function Details({close, edit, closeAll}: {close: () => void; edit: () => void; closeAll: () => void}) {
   const {state, actions} = useDetails();
   const [alert, setAlert] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -293,7 +293,7 @@ export function Details({close, closeAll}: {close: () => void; closeAll: () => v
                         placeholder={state.strings.editMembers}
                         left={<TextInput.Icon style={styles.icon} size={24} icon="users" />}
                       />
-                      <Pressable style={styles.press} onPress={membership} />
+                      <Pressable style={styles.press} onPress={edit} />
                     </View>
                   )}
 

@@ -21,6 +21,7 @@ export const en = {
   idHint: 'ID / Username',
   tokenHint: 'Token / Password',
   searchAccounts: 'Search Accounts',
+  chatMembers: 'Chat Members',
 
   addSubject: 'Add Subject',
   chat: 'Chat',

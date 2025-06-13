@@ -15,6 +15,7 @@ import {Identity} from '../identity/Identity';
 import {Base} from '../base/Base';
 import {Conversation} from '../conversation/Conversation';
 import {Assemble} from '../assemble/Assemble';
+import {Members} from '../members/Members';
 import {useSession} from './useSession.hook';
 import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -283,11 +284,14 @@ function ContentTab({scheme, textCard, contentTab, share}: {scheme: string; text
         <ContentStack.Screen name="assemble" options={{ animation: 'simple_push' }}>
           {props => <Assemble close={() => props.navigation.goBack()} openConversation={() => props.navigation.replace('conversation')} />}
         </ContentStack.Screen>
+        <ContentStack.Screen name="edit" options={{ animation: 'simple_push' }}>
+          {props => <Members close={() => props.navigation.goBack()} />}
+        </ContentStack.Screen>
         <ContentStack.Screen name="conversation" options={styles.noHeader} options={{ animation: 'simple_push' }} >
           {props => (<Conversation openDetails={() => props.navigation.navigate('details')} close={() => props.navigation.goBack()} wide={false} /> )}
         </ContentStack.Screen>
         <ContentStack.Screen name="details" options={styles.noHeader} options={{ animation: 'simple_push' }}>
-          {props => <Details close={() => props.navigation.goBack()} closeAll={() => props.navigation.popToTop()} />}
+          {props => <Details close={() => props.navigation.goBack()} edit={() => props.navigation.navigate('edit')} closeAll={() => props.navigation.popToTop()} />}
         </ContentStack.Screen>
       </ContentStack.Navigator>
     </NavigationContainer>
