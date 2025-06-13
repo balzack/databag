@@ -274,4 +274,32 @@ export const styles = StyleSheet.create({
     width: 1,
     height: '100%',
   },
+  surfaceMaxWidth: {
+    width: '100%',
+  },
+  safeAreaNav: {
+    width: '100%',
+    height: 72,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+    paddingBottom: 16,
+    paddingRight: 8,
+    paddingLeft: 8,
+  },
+  assetSpacer: {
+    width: '100%',
+    height: 8,
+  },
+  textInput: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    flexGrow: 1,
+    flexShrink: 1,
+    minWidth: 0,
+  },
+  keyboardSpacer: {
+    width: '100%',
+  },
 });

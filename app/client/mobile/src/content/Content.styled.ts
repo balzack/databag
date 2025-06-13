@@ -324,4 +324,10 @@ export const styles = StyleSheet.create({
   largeFlatListContent: {
     paddingBottom: 92,
   },
+  tabVisible: {
+    display: 'flex',
+  },
+  tabHidden: {
+    display: 'none',
+  },
 });

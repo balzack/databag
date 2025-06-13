@@ -439,7 +439,7 @@ export function Settings({setupNav, showLogout}: {setupNav: { back: ()=>void, ne
           <View style={styles.scrollWrapper}>
             <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
               <View style={styles.imageSpacer} />
-              <Surface mode="flat" elevation={2} style={{ width: '100%' }}>
+              <Surface mode="flat" elevation={2} style={styles.surfaceMaxWidth}>
                 <SafeAreaView style={styles.navForm} edges={['left', 'right']}>
                   {!setupNav && (
                     <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.profile }</Text>

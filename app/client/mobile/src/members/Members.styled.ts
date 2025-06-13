@@ -134,4 +134,33 @@ export const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingTop: 16,
   },
+  safeAreaNav: {
+    width: '100%',
+    height: 72,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+    paddingRight: 16,
+    paddingLeft: 8,
+    paddingBottom: 16,
+  },
+  surface: {
+    width: '100%',
+  },
+  cardContainer: {
+    width: '100%',
+    height: 72,
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingRight: 16,
+    paddingLeft: 16,
+    handle: {
+      fontWeight: 'normal',
+    },
+    icon: {
+      borderRadius: 24,
+      overflow: 'hidden',
+    },
+  },
 });

@@ -354,4 +354,7 @@ export const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
   },
+  surfaceMaxWidth: {
+    width: '100%',
+  },
 });

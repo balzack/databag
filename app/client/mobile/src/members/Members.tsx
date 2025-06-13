@@ -50,8 +50,8 @@ export function Members({ close }: { close: ()=>void }) {
 
   return (
     <View style={styles.request}>
-      <Surface elevation={9} mode="flat" style={{ width: '100%' }}>
-        <SafeAreaView edges={['left', 'right']} style={{ width: '100%', height: 72, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16, paddingRight: 16, paddingLeft: 8, paddingBottom: 16 }}>
+      <Surface elevation={9} mode="flat" style={styles.surface}>
+        <SafeAreaView edges={['left', 'right']} style={styles.safeAreaNav}>
           <Pressable style={styles.navIcon} onPress={close}>
             <Icon size={24} source="left" color={'white'} />
           </Pressable>
@@ -72,7 +72,7 @@ export function Members({ close }: { close: ()=>void }) {
               const member = Boolean(state.members.find(member => member === item.guid));
               return (
                 <Card
-                  containerStyle={{ ...styles.card, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
+                  containerStyle={{ ...styles.cardContainer, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
                   imageUrl={item.imageUrl}
                   name={item.name}
                   handle={item.handle}

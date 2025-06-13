@@ -370,4 +370,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 32,
     color: Colors.offsync,
   },
+  surfaceMaxWidth: {
+    width: '100%',
+  },
 });

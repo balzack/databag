@@ -200,7 +200,7 @@ export function Details({close, edit, closeAll}: {close: () => void; edit: () =>
     <View style={styles.component}>
       { state.layout === 'small' && (
         <Surface elevation={2} style={styles.smDetails} mode="flat">
-          <Surface elevation={9} style={{ width: '100%' }} mode="flat">
+          <Surface elevation={9} style={styles.surfaceMaxWidth} mode="flat">
             <SafeAreaView style={styles.smHeader} edges={['left', 'right']}>
               <Pressable style={styles.smIcon} onPress={close}>
                 <Icon size={24} source="left" color={'white'} />

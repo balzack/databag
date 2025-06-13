@@ -140,7 +140,7 @@ export function Content({
           </Surface>
 
           <View style={styles.topics}>
-            <View style={{ ...styles.tabView, display: allTab ? 'flex' : 'none' }}>
+            <View style={{ ...styles.tabView, ...(allTab ? styles.tabVisible : styles.tabHidden) }}>
               <FlatList
                 style={styles.channels}
                 contentContainerStyle={styles.flatListContent}
@@ -193,7 +193,7 @@ export function Content({
                 keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
               />
             </View>
-            <View style={{ ...styles.tabView, display: unreadTab ? 'flex' : 'none' }}>
+            <View style={{ ...styles.tabView, ...(unreadTab ? styles.tabVisible : styles.tabHidden) }}>
               <FlatList
                 style={styles.channels}
                 contentContainerStyle={styles.flatListContent}
@@ -241,7 +241,7 @@ export function Content({
                 keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
               />
             </View>
-            <View style={{ ...styles.tabView, display: favoritesTab ? 'flex' : 'none' }}>
+            <View style={{ ...styles.tabView, ...(favoritesTab ? styles.tabVisible : styles.tabHidden) }}>
               <FlatList
                 style={styles.channels}
                 contentContainerStyle={styles.flatListContent}
@@ -290,7 +290,7 @@ export function Content({
                 keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
               />
             </View>
-            <View style={{...styles.tabView, display: emptyTab ? 'flex' : 'none' }}>
+            <View style={{...styles.tabView, ...(emptyTab ? styles.tabVisible : styles.tabHidden) }}>
               <View style={styles.none}>
                 <Text style={styles.noneLabel}>{state.strings.noTopics}</Text>
               </View>

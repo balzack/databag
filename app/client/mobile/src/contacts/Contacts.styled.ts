@@ -178,4 +178,13 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     borderBottomWidth: 1,
   },
+  surfaceMaxWidth: {
+    width: '100%',
+  },
+  tabVisible: {
+    display: 'block',
+  },
+  tabHidden: {
+    display: 'none',
+  },
 });

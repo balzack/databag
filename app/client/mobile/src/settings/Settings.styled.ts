@@ -571,4 +571,20 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     paddingLeft: 16,
   },
+  surfaceMaxWidth: {
+    width: '100%',
+  },
+  navFont: {
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    alignItems: 'center',
+  },
+  line: {
+    height: 2,
+  },
+  navSkip: {
+    backgroundColor: 'transparent',
+  },
 });

@@ -115,7 +115,7 @@ export function Contacts({
     <View style={styles.component}>
       { state.layout === 'small' && (
         <View style={styles.contacts}>
-          <Surface elevation={9} mode="flat" style={{ width: '100%' }}>
+          <Surface elevation={9} mode="flat" style={styles.surfaceMaxWidth}>
             <SafeAreaView style={styles.headerSurface} edges={['left', 'right']}>
               <Surface mode="flat" elevation={0} style={styles.searchSurface}>
                 <TextInput
@@ -138,7 +138,7 @@ export function Contacts({
             </SafeAreaView>
           </Surface>
 
-          <View style={{ ...styles.tabContainer, display: allTab ? 'block' : 'none' }}>
+          <View style={{ ...styles.tabContainer, ...(allTab ? styles.tabVisible : styles.tabHidden) }}>
             <FlatList
               style={styles.smCards}
               data={state.filtered}
@@ -208,7 +208,7 @@ export function Contacts({
             />
           </View>
 
-          <View style={{ ...styles.tabContainer, display: requestedTab ? 'block' : 'none' }}>
+          <View style={{ ...styles.tabContainer, ...(requestedTab ? styles.tabVisible : styles.tabHidden) }}>
             <FlatList
               style={styles.smCards}
               data={state.requested}
@@ -261,7 +261,7 @@ export function Contacts({
             />
           </View>
 
-          <View style={{ ...styles.tabContainer, display: connectedTab ? 'block' : 'none' }}>
+          <View style={{ ...styles.tabContainer, ...(connectedTab ? styles.tabVisible : styles.tabHidden) }}>
             <FlatList
               style={styles.smCards}
               data={state.connected}
@@ -322,7 +322,7 @@ export function Contacts({
             />
           </View>
 
-          <View style={{ ...styles.tabContainer, display: emptyTab ? 'block' : 'none' }}>
+          <View style={{ ...styles.tabContainer, ...(emptyTab ? styles.tabVisible : styles.tabHidden) }}>
             <View style={styles.none}>
               <Text style={styles.noneLabel}>{state.strings.noContacts}</Text>
             </View>

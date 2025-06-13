@@ -109,7 +109,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
           <View style={styles.scrollWrapper}>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
               <View style={styles.imageSpacer} />
-              <Surface elevation={2} mode="flat" style={{ width: '100%' }}>
+              <Surface elevation={2} mode="flat" style={styles.surfaceMaxWidth}>
                 <SafeAreaView style={styles.form} edges={['left', 'right']}>
                   <View style={styles.nameTag}>
                     {state.name && (
