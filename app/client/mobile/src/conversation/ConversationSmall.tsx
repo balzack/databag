@@ -3,7 +3,7 @@ import {Animated, useAnimatedValue, Keyboard, KeyboardEvent, TextInput as RawInp
 import {styles} from './Conversation.styled';
 import {useConversation} from './useConversation.hook';
 import {Message} from '../message/Message';
-import {Surface, Icon, Text, Menu, IconButton, useTheme, Divider} from 'react-native-paper';
+import {Button, Surface, Icon, Text, Menu, IconButton, useTheme, Divider} from 'react-native-paper';
 import {ActivityIndicator} from 'react-native-paper';
 import {Colors} from '../constants/Colors';
 import {Confirm} from '../confirm/Confirm';
@@ -97,7 +97,6 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
       busy.current = true;
       setSending(true);
       try {
-        setAvoid(false);
         await actions.send();
       } catch (err) {
         console.log(err);
@@ -390,27 +389,42 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
           </Pressable>
           <Surface elevation={2} style={styles.sizeArea}>
             <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={20} onPress={() => setSizeModal(false)} />
-            <Pressable
+            <Button
+              mode="contained"
+              style={({pressed}) => [
+                styles.sizeOption,
+                pressed && styles.sizeOptionPressed
+              ]}
               onPress={() => {
                 actions.setTextSize(20);
                 setSizeModal(false);
               }}>
-              <Text>{state.strings.textLarge}</Text>
-            </Pressable>
-            <Pressable
+              <Text style={[styles.sizeText, {fontSize: 20}]}>{state.strings.textLarge}</Text>
+            </Button>
+            <Button
+              mode="contained"
+              style={({pressed}) => [
+                styles.sizeOption,
+                pressed && styles.sizeOptionPressed
+              ]}
               onPress={() => {
                 actions.setTextSize(16);
                 setSizeModal(false);
               }}>
-              <Text>{state.strings.textMedium}</Text>
-            </Pressable>
-            <Pressable
+              <Text style={[styles.sizeText, {fontSize: 16}]}>{state.strings.textMedium}</Text>
+            </Button>
+            <Button
+              mode="contained"
+              style={({pressed}) => [
+                styles.sizeOption,
+                pressed && styles.sizeOptionPressed
+              ]}
               onPress={() => {
                 actions.setTextSize(12);
                 setSizeModal(false);
               }}>
-              <Text>{state.strings.textSmall}</Text>
-            </Pressable>
+              <Text style={[styles.sizeText, {fontSize: 12}]}>{state.strings.textSmall}</Text>
+            </Button>
           </Surface>
         </View>
       </Modal>

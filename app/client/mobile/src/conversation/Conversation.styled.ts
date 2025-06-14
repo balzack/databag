@@ -104,10 +104,25 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItem: 'center',
     justifyContent: 'center',
-    width: 200,
-    padding: 16,
+    width: 256,
+    padding: 32,
     borderRadius: 8,
     gap: 8,
+  },
+  sizeOption: {
+    padding: 16,
+    borderRadius: 8,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 4,
+  },
+  sizeOptionPressed: {
+  },
+  sizeText: {
+    color: 'white',
+    fontWeight: '500',
+    textAlign: 'center',
   },
   blur: {
     position: 'absolute',
