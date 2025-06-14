@@ -1,5 +1,5 @@
-import React, {useState, Platform} from 'react';
-import {Modal, ScrollView, View} from 'react-native';
+import React, {useState} from 'react';
+import {Modal, ScrollView, View, Platform} from 'react-native';
 import {useTheme, Switch, Surface, Icon, Divider, Button, IconButton, Text, TextInput} from 'react-native-paper';
 import {styles} from './Details.styled';
 import {useDetails} from './useDetails.hook';

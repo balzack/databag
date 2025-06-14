@@ -44,16 +44,6 @@ export function ConversationLarge({close, openDetails, wide}: {close: () => void
   const busy = useRef(false);
   const scale = useAnimatedValue(0);
 
-  useEffect(() => {
-    const onShow = Keyboard.addListener('keyboardDidShow', onKeyboardShow);
-    const onHide = Keyboard.addListener('keyboardDidHide', onKeyboardHide);
-
-    return () => {
-      onShow.remove();
-      onHide.remove();
-    };
-  }, []);
-
   const alertParams = {
     title: state.strings.operationFailed,
     prompt: state.strings.tryAgain,
@@ -140,7 +130,6 @@ export function ConversationLarge({close, openDetails, wide}: {close: () => void
   };
 
   const addImage = async () => {
-    setOptions(false);
     try {
       const {path, mime, size} = await ImagePicker.openPicker({mediaType: 'photo'});
       actions.addImage(path, mime, size);
@@ -150,7 +139,6 @@ export function ConversationLarge({close, openDetails, wide}: {close: () => void
   };
 
   const addVideo = async () => {
-    setOptions(false);
     try {
       const {path, mime} = await ImagePicker.openPicker({mediaType: 'video'});
       actions.addVideo(path, mime);
@@ -160,7 +148,6 @@ export function ConversationLarge({close, openDetails, wide}: {close: () => void
   };
 
   const addAudio = async () => {
-    setOptions(false);
     try {
       const audio = await DocumentPicker.pickSingle({
         presentationStyle: 'fullScreen',
@@ -174,7 +161,6 @@ export function ConversationLarge({close, openDetails, wide}: {close: () => void
   };
 
   const addBinary = async () => {
-    setOptions(false);
     try {
       const binary = await DocumentPicker.pickSingle({
         presentationStyle: 'fullScreen',
