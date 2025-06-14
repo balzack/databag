@@ -109,7 +109,8 @@ function ContactTab({scheme, textContact, callContact}: {scheme: string; textCon
 
 function Onboarding({ scheme }: { scheme: string }) {
   return (
-    <View style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0 }}>
+    <SafeAreaView edges={['top']} style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0 }}>
+              <Surface elevation={9} mode="flat" style={styles.screen}>
       <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
         <OnboardStack.Navigator initialRouteName="welcome" screenOptions={{headerShown: false}}>
           <OnboardStack.Screen name="welcome" options={{headerBackTitleVisible: false}}>
@@ -117,22 +118,12 @@ function Onboarding({ scheme }: { scheme: string }) {
           </OnboardStack.Screen>
           <OnboardStack.Screen name="identity" options={{ animation: 'fade' }}>
             {props => (
-              <Surface elevation={9} mode="flat" style={styles.screen}>
-                <SafeAreaView edges={['top']}>
-                  <Surface elevation={2} mode="flat">
                     <Settings setupNav={{ back: ()=>props.navigation.navigate('welcome'), next: ()=>props.navigation.navigate('request') }} />
-                  </Surface>
-                </SafeAreaView>
-              </Surface>
             )}
           </OnboardStack.Screen>
           <OnboardStack.Screen name="request">
             {props => (
-              <Surface elevation={9} mode="flat" style={styles.screen}>
-                <SafeAreaView edges={['top']}>
                   <Request setupNav={{ back: ()=>props.navigation.navigate('identity'), next: ()=>props.navigation.navigate('ready') }} />
-                </SafeAreaView>
-              </Surface>
             )}
           </OnboardStack.Screen>
           <OnboardStack.Screen name="ready" options={{headerBackTitleVisible: false, animation: 'fade'}}>
@@ -140,7 +131,8 @@ function Onboarding({ scheme }: { scheme: string }) {
           </OnboardStack.Screen>
         </OnboardStack.Navigator>
       </NavigationContainer>
-    </View>
+            </Surface>
+    </SafeAreaView>
   );
 }
 

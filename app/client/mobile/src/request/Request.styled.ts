@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   navHeader: {
-    height: 48,
+    height: 72,
     width: '100%',
     display: 'flex',
     flexDirection: 'row',

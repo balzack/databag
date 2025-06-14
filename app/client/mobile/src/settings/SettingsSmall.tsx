@@ -1,6 +1,6 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {useTheme, Surface, Menu, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
-import {TouchableOpacity, Pressable, Modal, View, Image, Platform, Linking} from 'react-native';
+import {TouchableOpacity, useAnimatedValue, Animated, Pressable, Modal, View, Image, Platform, Linking} from 'react-native';
 import {languages} from '../constants/Strings';
 import {styles} from './Settings.styled';
 import {useSettings} from './useSettings.hook';
@@ -47,6 +47,17 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
   const [blockedError, setBlockedError] = useState(false);
   const theme = useTheme();
   const descriptionRef = useRef();
+  const profile = useAnimatedValue(0);
+
+  useEffect(() => {
+    if (state.profileSet) {
+      Animated.timing(profile, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: false,
+      }).start();
+    }
+  }, [state.profileSet])
 
   const showBlockedMessage = async () => {
     setBlockedError(false);
@@ -445,11 +456,11 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
             </Text>
           </Surface>
         )}
-        <View style={styles.navImage}>
+        <Animated.View style={[styles.navImage, {opacity: profile}]}>
           <Image style={styles.navLogo} resizeMode={'contain'} source={{uri: state.imageUrl}} />
           <Surface style={styles.overlap} elevation={2} mode="flat" />
-        </View>
-        <View style={styles.scrollWrapper}>
+        </Animated.View>
+        <Animated.View style={[styles.scrollWrapper, {opacity: profile}]}>
           <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
             <View style={styles.imageSpacer} />
             <Surface mode="flat" elevation={2} style={styles.surfaceMaxWidth}>
@@ -852,7 +863,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
               </SafeAreaView>
             </Surface>
           </KeyboardAwareScrollView>
-        </View>
+        </Animated.View>
       </View>
       <Modal animationType="fade" transparent={true} visible={sealing} supportedOrientations={['portrait', 'landscape']} onRequestClose={() => setSealing(false)}>
         <View style={styles.modal}>

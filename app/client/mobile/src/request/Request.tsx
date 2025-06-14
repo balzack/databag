@@ -29,7 +29,7 @@ export function Request({setupNav}: {setupNav: {back: () => void; next: () => vo
 
   return (
     <View style={styles.request}>
-      <View style={styles.navHeader}>
+      <Surface elevation={9} mode="flat" style={styles.navHeader}>
         <Pressable style={styles.navIcon} onPress={setupNav?.back}>
           <Icon size={24} source="left" color={'white'} />
         </Pressable>
@@ -37,7 +37,7 @@ export function Request({setupNav}: {setupNav: {back: () => void; next: () => vo
           {state.strings.connectWith}
         </Text>
         <View style={styles.navIcon} />
-      </View>
+      </Surface>
       <Surface elevation={1} mode="flat" style={styles.scrollWrapper}>
         {state.contacts.length > 0 && (
           <FlatList
