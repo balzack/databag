@@ -117,12 +117,24 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: 4,
   },
-  sizeOptionPressed: {
-  },
-  sizeText: {
+  sizeOptionPressed: {},
+  sizeLargeText: {
     color: 'white',
     fontWeight: '500',
     textAlign: 'center',
+    fontSize: 20,
+  },
+  sizeMediumText: {
+    color: 'white',
+    fontWeight: '500',
+    textAlign: 'center',
+    fontSize: 16,
+  },
+  sizeSmallText: {
+    color: 'white',
+    fontWeight: '500',
+    textAlign: 'center',
+    fontSize: 12,
   },
   blur: {
     position: 'absolute',

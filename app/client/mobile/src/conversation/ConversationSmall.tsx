@@ -391,39 +391,30 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
             <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={20} onPress={() => setSizeModal(false)} />
             <Button
               mode="contained"
-              style={({pressed}) => [
-                styles.sizeOption,
-                pressed && styles.sizeOptionPressed
-              ]}
+              style={({pressed}) => [styles.sizeOption, pressed && styles.sizeOptionPressed]}
               onPress={() => {
                 actions.setTextSize(20);
                 setSizeModal(false);
               }}>
-              <Text style={[styles.sizeText, {fontSize: 20}]}>{state.strings.textLarge}</Text>
+              <Text style={styles.sizeLargeText}>{state.strings.textLarge}</Text>
             </Button>
             <Button
               mode="contained"
-              style={({pressed}) => [
-                styles.sizeOption,
-                pressed && styles.sizeOptionPressed
-              ]}
+              style={({pressed}) => [styles.sizeOption, pressed && styles.sizeOptionPressed]}
               onPress={() => {
                 actions.setTextSize(16);
                 setSizeModal(false);
               }}>
-              <Text style={[styles.sizeText, {fontSize: 16}]}>{state.strings.textMedium}</Text>
+              <Text style={styles.sizeMediumText}>{state.strings.textMedium}</Text>
             </Button>
             <Button
               mode="contained"
-              style={({pressed}) => [
-                styles.sizeOption,
-                pressed && styles.sizeOptionPressed
-              ]}
+              style={({pressed}) => [styles.sizeOption, pressed && styles.sizeOptionPressed]}
               onPress={() => {
                 actions.setTextSize(12);
                 setSizeModal(false);
               }}>
-              <Text style={[styles.sizeText, {fontSize: 12}]}>{state.strings.textSmall}</Text>
+              <Text style={styles.sizeSmallText}>{state.strings.textSmall}</Text>
             </Button>
           </Surface>
         </View>
