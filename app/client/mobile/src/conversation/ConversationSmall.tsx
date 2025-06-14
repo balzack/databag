@@ -283,7 +283,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
             <Surface style={styles.frame} mode="flat" elevation={0}>
               <Animated.View style={[{}, {height: scale}]}>
                 {state.assets.length > 0 && <View style={styles.assetSpacer} />}
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.carousel} contentContainerStyle={styles.assets}>
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.smCarousel} contentContainerStyle={styles.assets}>
                   {media}
                 </ScrollView>
               </Animated.View>

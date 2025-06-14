@@ -62,6 +62,12 @@ export const styles = StyleSheet.create({
     right: 0,
     backgroundColor: 'transparent',
   },
+  smCarousel: {
+    paddingLeft: 8,
+    paddingBottom: 8,
+    height: 80,
+    minWidth: 0,
+  },
   carousel: {
     paddingLeft: 16,
     paddingBottom: 8,
