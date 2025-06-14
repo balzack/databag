@@ -20,7 +20,7 @@ function Member({enabled, toggle, placeholder}: {enabled: boolean; toggle: (chec
       />
     );
   } else {
-    return <Text style={{fontSize: 12, fontWeight: 'bold'}}>{placeholder}</Text>;
+    return <Text style={styles.memberText}>{placeholder}</Text>;
   }
 }
 
@@ -71,14 +71,14 @@ export function Assemble({close, openConversation}: {close: () => void; openConv
 
   return (
     <View style={styles.request}>
-      <Surface elevation={9} mode="flat" style={{width: '100%'}}>
+      <Surface elevation={9} mode="flat" style={styles.fullWidthSurface}>
         <SafeAreaView
           edges={['left', 'right']}
-          style={{width: '100%', height: 72, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 16, paddingRight: 16, paddingLeft: 8, paddingBottom: 16}}>
+          style={styles.headerSafeArea}>
           <Pressable style={styles.navIcon} onPress={close}>
             <Icon size={24} source="left" color={'white'} />
           </Pressable>
-          <Surface mode="flat" elevation={0} style={{flexGrow: 1, flexShrink: 1, minWidth: 0, borderRadius: 8, overflow: 'hidden'}}>
+          <Surface mode="flat" elevation={0} style={styles.inputSurface}>
             <TextInput
               style={styles.input}
               mode="outlined"
@@ -105,7 +105,7 @@ export function Assemble({close, openConversation}: {close: () => void; openConv
         {state.connected.length > 0 && (
           <FlatList
             style={styles.cards}
-            contentContainerStyle={{paddingBottom: 128}}
+            contentContainerStyle={styles.listContainer}
             data={state.connected}
             initialNumToRender={32}
             showsVerticalScrollIndicator={false}
@@ -113,7 +113,7 @@ export function Assemble({close, openConversation}: {close: () => void; openConv
               const member = <Member key="member" enabled={!seal || item.sealable} toggle={set => toggle(item.cardId, set)} placeholder={state.strings.noKey} />;
               return (
                 <Card
-                  containerStyle={{...styles.card, handle: {color: theme.colors.onSecondary, fontWeight: 'normal'}}}
+                  containerStyle={{...styles.card, handle: {...styles.cardHandle, color: theme.colors.onSecondary}}}
                   imageUrl={item.imageUrl}
                   name={item.name}
                   handle={item.handle}

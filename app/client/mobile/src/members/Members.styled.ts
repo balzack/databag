@@ -162,4 +162,11 @@ export const styles = StyleSheet.create({
       overflow: 'hidden',
     },
   },
+  listContainer: {
+    paddingBottom: 128,
+  },
+  cardHandle: {
+    color: 'onSecondary',
+    fontWeight: 'normal',
+  },
 });

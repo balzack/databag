@@ -119,4 +119,33 @@ export const styles = StyleSheet.create({
   ring: {
     paddingLeft: 16,
   },
+  tabContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    backgroundColor: 'transparent',
+  },
+  tabBar: {
+    height: 96,
+  },
+  tabRow: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  fullTab: {
+    width: '100%',
+    height: '100%',
+  },
+  hiddenTab: {
+    width: '100%',
+    height: '100%',
+    display: 'none',
+  },
+  visibleTab: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+  },
 });

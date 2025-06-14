@@ -264,4 +264,13 @@ export const styles = StyleSheet.create({
   lockedText: {
     padding: 16,
   },
+  linkText: {
+    fontStyle: 'italic',
+  },
+  messageContainerReverse: {
+    flexDirection: 'row-reverse',
+  },
+  messageContainerNormal: {
+    flexDirection: 'row',
+  },
 });

@@ -121,4 +121,20 @@ export const styles = StyleSheet.create({
     height: '100%',
     position: 'absolute',
   },
+  tabContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    backgroundColor: 'transparent',
+  },
+  tabBar: {
+    height: 96,
+  },
+  hidden: {
+    display: 'none',
+  },
+  visible: {
+    display: 'flex',
+  },
 });

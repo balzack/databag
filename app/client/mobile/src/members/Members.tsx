@@ -51,7 +51,7 @@ export function Members({close}: {close: () => void}) {
         {state.host && state.access && !state.locked && state.filtered.length > 0 && (
           <FlatList
             style={styles.cards}
-            contentContainerStyle={{paddingBottom: 128}}
+            contentContainerStyle={styles.listContainer}
             data={state.filtered}
             initialNumToRender={32}
             showsVerticalScrollIndicator={false}
@@ -59,7 +59,7 @@ export function Members({close}: {close: () => void}) {
               const added = Boolean(state.members.find(member => member === item.guid));
               return (
                 <Card
-                  containerStyle={{...styles.cardContainer, handle: {color: theme.colors.onSecondary, fontWeight: 'normal'}}}
+                  containerStyle={{...styles.cardContainer, handle: {...styles.cardHandle, color: theme.colors.onSecondary}}}
                   imageUrl={item.imageUrl}
                   name={item.name}
                   handle={item.handle}

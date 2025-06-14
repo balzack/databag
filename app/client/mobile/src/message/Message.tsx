@@ -51,7 +51,7 @@ export function Message({
   const loadedCount = useRef(0);
   const [showAsset, setShowAsset] = useState(false);
   const [message, setMessage] = useState<React.ReactNode[]>([]);
-  const fontStyle = {fontStyle: 'italic' as const};
+  const fontStyle = styles.linkText;
   const [options, setOptions] = useState(false);
   const theme = useTheme();
 
@@ -262,11 +262,11 @@ export function Message({
               </Menu>
             </View>
           </View>
-          <View style={[styles.messageContainer, {flexDirection: profile ? 'row-reverse' : 'row'}]}>
+          <View style={[styles.messageContainer, profile ? styles.messageContainerReverse : styles.messageContainerNormal]}>
             <Image style={styles.image} resizeMode={'contain'} source={{uri: logoUrl}} />
             <View style={styles.messageContent}>
               <Surface style={styles.messageSurface} mode="flat" elevation={0}>
-                {!locked && status === 'confirmed' && text && <Text style={{...styles.text, ...textStyle, ...styles.messageText}}>{message}</Text>}
+                {!locked && status === 'confirmed' && text && <Text style={[styles.text, textStyle, styles.messageText]}>{message}</Text>}
                 {!locked && status !== 'confirmed' && (
                   <View style={styles.shimmerContainer}>
                     <Shimmer contentStyle={styles.longbone} />
@@ -301,7 +301,7 @@ export function Message({
                   </View>
                 </Pressable>
                 <View style={styles.padding}>
-                  {!locked && status === 'confirmed' && text && <Text style={{...styles.text, ...textStyle}}>{message}</Text>}
+                  {!locked && status === 'confirmed' && text && <Text style={[styles.text, textStyle]}>{message}</Text>}
                   {!locked && status !== 'confirmed' && (
                     <View>
                       <Shimmer contentStyle={styles.longbone} />

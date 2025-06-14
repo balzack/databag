@@ -145,11 +145,10 @@ export function AccountsSmall() {
 
   return (
     <View style={styles.component}>
-      <Surface elevation={1} mode="flat" style={{width: '100%', height: '100%'}}>
+      <Surface elevation={1} mode="flat" style={styles.fullSurface}>
         <Surface elevation={9} mode="flat">
           <SafeAreaView edges={['top']}>
-            <View
-              style={{width: '100%', display: 'flex', flexDirection: 'row', height: 72, gap: 16, justifyContent: 'center', alignItems: 'center', paddingBottom: 16, paddingRight: 16, paddingLeft: 16}}>
+            <View style={styles.headerLayout}>
               <Surface mode="flat" elevation={0} style={styles.searchSurface}>
                 <TextInput
                   dense={true}
@@ -212,7 +211,7 @@ export function AccountsSmall() {
               );
               return (
                 <Card
-                  containerStyle={{...styles.contact, handle: {color: theme.colors.onSecondary, fontWeight: 'normal'}}}
+                  containerStyle={{...styles.contact, handle: {...styles.contactHandle, color: theme.colors.onSecondary}}}
                   imageUrl={item.imageUrl}
                   name={item.name}
                   handle={item.handle}

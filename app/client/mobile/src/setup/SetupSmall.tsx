@@ -58,12 +58,12 @@ export function SetupSmall() {
   };
 
   return (
-    <View style={{width: '100%', height: '100%'}}>
-      <Surface elevation={1} mode="flat" style={{width: '100%', height: '100%'}}>
+    <View style={styles.fullContainer}>
+      <Surface elevation={1} mode="flat" style={styles.fullContainer}>
         <Surface elevation={9} mode="flat">
           <SafeAreaView edges={['top']}>
-            <View style={{width: '100%', display: 'flex', height: 72, justifyContent: 'center', alignItems: 'center', paddingBottom: 16, paddingRight: 8, paddingLeft: 8}}>
-              <Text adjustsFontSizeToFit={true} numberOfLines={1} style={{color: 'white', fontSize: 24, fontWeight: '600'}}>
+            <View style={styles.headerContainer}>
+              <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.headerText}>
                 {state.strings.adminSettings}
               </Text>
             </View>
@@ -85,7 +85,7 @@ export function SetupSmall() {
                       placeholder={state.strings.logout}
                       left={<TextInput.Icon style={styles.icon} size={22} icon="logout" />}
                     />
-                    <Pressable style={{position: 'absolute', width: '100%', height: '100%', top: 0, left: 0}} onPress={actions.logout} />
+                    <Pressable style={styles.absoluteOverlay} onPress={actions.logout} />
                   </View>
                 </Surface>
               </View>
@@ -100,9 +100,7 @@ export function SetupSmall() {
                       <Pressable style={styles.selectOption} onPress={() => actions.setKeyType('RSA2048')}>
                         <View
                           style={
-                            state.setup?.keyType === 'RSA2048'
-                              ? {...styles.checked, backgroundColor: theme.colors.primary, borderColor: theme.colors.primary}
-                              : {...styles.unchecked, borderColor: theme.colors.primary}
+                            state.setup?.keyType === 'RSA2048' ? {...styles.radioSelected, backgroundColor: theme.colors.primary, borderColor: theme.colors.primary} : {...styles.radioUnselected, borderColor: theme.colors.primary}
                           }
                         />
                         <Text style={styles.selectLabel}>RSA2048</Text>
@@ -110,9 +108,7 @@ export function SetupSmall() {
                       <Pressable style={styles.selectOption} onPress={() => actions.setKeyType('RSA4096')}>
                         <View
                           style={
-                            state.setup?.keyType === 'RSA4096'
-                              ? {...styles.checked, backgroundColor: theme.colors.primary, borderColor: theme.colors.primary}
-                              : {...styles.unchecked, borderColor: theme.colors.primary}
+                            state.setup?.keyType === 'RSA4096' ? {...styles.radioSelected, backgroundColor: theme.colors.primary, borderColor: theme.colors.primary} : {...styles.radioUnselected, borderColor: theme.colors.primary}
                           }
                         />
                         <Text style={styles.selectLabel}>RSA4094</Text>

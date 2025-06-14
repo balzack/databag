@@ -357,4 +357,42 @@ export const styles = StyleSheet.create({
   icon: {
     backgroundColor: 'transparent',
   },
+  fullContainer: {
+    width: '100%',
+    height: '100%',
+  },
+  headerContainer: {
+    width: '100%',
+    display: 'flex',
+    height: 72,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 16,
+    paddingRight: 8,
+    paddingLeft: 8,
+  },
+  headerText: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: '600',
+  },
+  absoluteOverlay: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    top: 0,
+    left: 0,
+  },
+  radioSelected: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  radioUnselected: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
 });

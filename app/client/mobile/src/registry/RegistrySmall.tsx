@@ -21,12 +21,12 @@ export function RegistrySmall({close, openContact}: RegistrySmallProps) {
         <Surface
           elevation={9}
           mode="flat"
-          style={{width: '100%', height: 72, display: 'flex', flexDirection: 'row', paddingLeft: 8, paddingBottom: 16, paddingRight: 16, alignItems: 'center', gap: 16}}>
+          style={styles.headerSurface}>
           <Pressable style={styles.navIcon} onPress={close}>
             <Icon size={24} source="left" color={'white'} />
           </Pressable>
 
-          <Surface mode="flat" elevation={0} style={{flexGrow: 1, borderRadius: 8, overflow: 'hidden'}}>
+          <Surface mode="flat" elevation={0} style={styles.inputContainer}>
             {!search && (
               <TextInput
                 dense={true}
@@ -67,7 +67,7 @@ export function RegistrySmall({close, openContact}: RegistrySmallProps) {
             style={styles.smCards}
             data={state.contacts}
             initialNumToRender={32}
-            contentContainerStyle={{paddingBottom: 128}}
+            contentContainerStyle={styles.smallListContainer}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
               const select = () => {

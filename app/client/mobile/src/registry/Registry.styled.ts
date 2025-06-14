@@ -131,4 +131,23 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     borderBottomWidth: 1,
   },
+  headerSurface: {
+    width: '100%',
+    height: 72,
+    display: 'flex',
+    flexDirection: 'row',
+    paddingLeft: 8,
+    paddingBottom: 16,
+    paddingRight: 16,
+    alignItems: 'center',
+    gap: 16,
+  },
+  inputContainer: {
+    flexGrow: 1,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  smallListContainer: {
+    paddingBottom: 128,
+  },
 });

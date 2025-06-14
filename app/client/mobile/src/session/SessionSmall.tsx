@@ -139,9 +139,9 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
     setCallCard({card});
   };
 
-  const showContent = {display: tab === 'content' ? 'flex' : 'none'};
-  const showContact = {display: tab === 'contacts' ? 'flex' : 'none'};
-  const showSettings = {display: tab === 'settings' ? 'flex' : 'none'};
+  const showContent = tab === 'content' ? styles.visible : styles.hidden;
+  const showContact = tab === 'contacts' ? styles.visible : styles.hidden;
+  const showSettings = tab === 'settings' ? styles.visible : styles.hidden;
 
   const dismiss = () => {
     setDismissed(true);
@@ -183,31 +183,31 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
             <View style={styles.screen}>
               <Ring />
               <View
-                style={{
-                  ...styles.body,
-                  ...showContent,
-                }}>
+                style={[
+                  styles.body,
+                  showContent,
+                ]}>
                 <ContentTab share={share} textCard={textCard} scheme={scheme} contentTab={contentTab} />
               </View>
               <View
-                style={{
-                  ...styles.body,
-                  ...showContact,
-                }}>
+                style={[
+                  styles.body,
+                  showContact,
+                ]}>
                 <ContactTab textContact={textContact} callContact={callContact} scheme={scheme} />
               </View>
               <View
-                style={{
-                  ...styles.body,
-                  ...showSettings,
-                }}>
+                style={[
+                  styles.body,
+                  showSettings,
+                ]}>
                 <Surface mode="flat" elevation={2}>
                   <Settings showLogout={true} />
                 </Surface>
               </View>
-              <Surface style={{position: 'absolute', bottom: 0, left: 0, width: '100%', backgroundColor: 'transparent'}} elevation={4}>
+              <Surface style={styles.tabContainer} elevation={4}>
                 <BlurView style={styles.blur} blurType="light" blurAmount={8} reducedTransparencyFallbackColor="dark" />
-                <View style={{backgroundColor: theme.colors.bar, height: 96}}>
+                <View style={[styles.tabBar, {backgroundColor: theme.colors.bar}]}>
                   <SafeAreaView edges={['bottom']}>
                     <View style={styles.tabs}>
                       {tab === 'content' && (

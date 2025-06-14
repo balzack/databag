@@ -135,4 +135,36 @@ export const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingTop: 16,
   },
+  memberText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  fullWidthSurface: {
+    width: '100%',
+  },
+  headerSafeArea: {
+    width: '100%',
+    height: 72,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+    paddingRight: 16,
+    paddingLeft: 8,
+    paddingBottom: 16,
+  },
+  inputSurface: {
+    flexGrow: 1,
+    flexShrink: 1,
+    minWidth: 0,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  listContainer: {
+    paddingBottom: 128,
+  },
+  cardHandle: {
+    color: 'onSecondary',
+    fontWeight: 'normal',
+  },
 });

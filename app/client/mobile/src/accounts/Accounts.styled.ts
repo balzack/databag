@@ -165,4 +165,32 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
+  fullSurface: {
+    width: '100%',
+    height: '100%',
+  },
+  headerLayout: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    height: 72,
+    gap: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 16,
+    paddingRight: 16,
+    paddingLeft: 16,
+  },
+  contactHandle: {
+    color: 'onSecondary',
+    fontWeight: 'normal',
+  },
+  cardWithBorder: {
+    width: '100%',
+    height: 48,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 16,
+    borderBottomWidth: 1,
+  },
 });

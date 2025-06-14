@@ -8,8 +8,8 @@ import {BlurView} from '@react-native-community/blur';
 
 export function ServiceSmall() {
   const [tab, setTab] = useState('setup');
-  const showAccounts = {width: '100%', height: '100%', display: tab === 'accounts' ? 'flex' : 'none'};
-  const showSetup = {width: '100%', height: '100%', display: tab === 'setup' ? 'flex' : 'none'};
+  const showAccounts = tab === 'accounts' ? styles.visibleTab : styles.hiddenTab;
+  const showSetup = tab === 'setup' ? styles.visibleTab : styles.hiddenTab;
   const theme = useTheme();
 
   return (
@@ -22,10 +22,10 @@ export function ServiceSmall() {
           <View style={showSetup}>
             <Setup />
           </View>
-          <Surface style={{position: 'absolute', bottom: 0, left: 0, width: '100%', backgroundColor: 'transparent'}} elevation={4}>
+          <Surface style={styles.tabContainer} elevation={4}>
             <BlurView style={styles.blur} blurType="light" blurAmount={8} reducedTransparencyFallbackColor="dark" />
-            <View style={{backgroundColor: theme.colors.bar, height: 96}}>
-              <SafeAreaView style={{width: '100%', display: 'flex', flexDirection: 'row'}} edges={['bottom']}>
+            <View style={[styles.tabBar, {backgroundColor: theme.colors.bar}]}>
+              <SafeAreaView style={styles.tabRow} edges={['bottom']}>
                 {tab === 'setup' && (
                   <IconButton
                     style={styles.activeTab}
