@@ -527,6 +527,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                       left={<TextInput.Icon style={styles.icon} size={22} icon="map-pin" />}
                       onChangeText={value => actions.setLocation(value)}
                       onSubmitEditing={saveDetails}
+                      onBlur={saveDetails}
                     />
                     <Divider style={styles.navDivider} />
                     <TextInput
