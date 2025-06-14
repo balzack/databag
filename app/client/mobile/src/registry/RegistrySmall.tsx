@@ -18,10 +18,7 @@ export function RegistrySmall({close, openContact}: RegistrySmallProps) {
   return (
     <View style={styles.component}>
       <View style={styles.registry}>
-        <Surface
-          elevation={9}
-          mode="flat"
-          style={styles.headerSurface}>
+        <Surface elevation={9} mode="flat" style={styles.headerSurface}>
           <Pressable style={styles.navIcon} onPress={close}>
             <Icon size={24} source="left" color={'white'} />
           </Pressable>

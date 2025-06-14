@@ -29,8 +29,7 @@ export function useDisplayContext() {
     updateState({strings});
   }, [app.state.language]);
 
-  const actions = {
-  };
+  const actions = {};
 
   return {state, actions};
 }

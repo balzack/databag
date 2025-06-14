@@ -117,7 +117,6 @@ export function Ring() {
     },
   };
 
-
   const sizeStyle = {marginBottom: 8, width: '100%', height: scale};
   const borderStyle = Platform.isPad ? {...styles.ring, borderRadius: 16} : {...styles.ring, borderRadius: 0};
 

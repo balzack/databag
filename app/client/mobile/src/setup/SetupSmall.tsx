@@ -100,7 +100,9 @@ export function SetupSmall() {
                       <Pressable style={styles.selectOption} onPress={() => actions.setKeyType('RSA2048')}>
                         <View
                           style={
-                            state.setup?.keyType === 'RSA2048' ? {...styles.radioSelected, backgroundColor: theme.colors.primary, borderColor: theme.colors.primary} : {...styles.radioUnselected, borderColor: theme.colors.primary}
+                            state.setup?.keyType === 'RSA2048'
+                              ? {...styles.radioSelected, backgroundColor: theme.colors.primary, borderColor: theme.colors.primary}
+                              : {...styles.radioUnselected, borderColor: theme.colors.primary}
                           }
                         />
                         <Text style={styles.selectLabel}>RSA2048</Text>
@@ -108,7 +110,9 @@ export function SetupSmall() {
                       <Pressable style={styles.selectOption} onPress={() => actions.setKeyType('RSA4096')}>
                         <View
                           style={
-                            state.setup?.keyType === 'RSA4096' ? {...styles.radioSelected, backgroundColor: theme.colors.primary, borderColor: theme.colors.primary} : {...styles.radioUnselected, borderColor: theme.colors.primary}
+                            state.setup?.keyType === 'RSA4096'
+                              ? {...styles.radioSelected, backgroundColor: theme.colors.primary, borderColor: theme.colors.primary}
+                              : {...styles.radioUnselected, borderColor: theme.colors.primary}
                           }
                         />
                         <Text style={styles.selectLabel}>RSA4094</Text>

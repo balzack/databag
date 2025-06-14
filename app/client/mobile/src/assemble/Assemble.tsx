@@ -72,9 +72,7 @@ export function Assemble({close, openConversation}: {close: () => void; openConv
   return (
     <View style={styles.request}>
       <Surface elevation={9} mode="flat" style={styles.fullWidthSurface}>
-        <SafeAreaView
-          edges={['left', 'right']}
-          style={styles.headerSafeArea}>
+        <SafeAreaView edges={['left', 'right']} style={styles.headerSafeArea}>
           <Pressable style={styles.navIcon} onPress={close}>
             <Icon size={24} source="left" color={'white'} />
           </Pressable>

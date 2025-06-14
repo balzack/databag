@@ -15,8 +15,8 @@ export function useReady() {
   };
 
   useEffect(() => {
-    const { strings } = display.state;
-    updateState({ strings });
+    const {strings} = display.state;
+    updateState({strings});
   }, [display.state]);
 
   const actions = {

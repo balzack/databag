@@ -56,7 +56,6 @@ export function useAssemble() {
         contact.removeCardListener(setCards);
       };
     }
-
   }, [app.state.session]);
 
   useEffect(() => {
