@@ -63,7 +63,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   carousel: {
-    paddingLeft: 8,
+    paddingLeft: 16,
     paddingBottom: 8,
     height: 80,
     minWidth: 0,
