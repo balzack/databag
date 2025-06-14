@@ -96,6 +96,7 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
   };
 
   const edit = () => {
+    setOptions(false);
     setEditing(true);
     select(null);
   };
@@ -113,6 +114,7 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
   };
 
   const block = () => {
+    setOptions(false);
     setConfirmParams({
       title: state.strings.blockMessage,
       prompt: state.strings.blockMessagePrompt,
@@ -141,6 +143,7 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
   };
 
   const report = () => {
+    setOptions(false);
     setConfirmParams({
       title: state.strings.flagMessage,
       prompt: state.strings.flagMessagePrompt,
@@ -169,6 +172,7 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
   };
 
   const remove = () => {
+    setOptions(false);
     setConfirmParams({
       title: state.strings.deleteMessage,
       prompt: state.strings.messageHint,
