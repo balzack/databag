@@ -109,7 +109,7 @@ function ContactTab({scheme, textContact, callContact}: {scheme: string; textCon
 
 function Onboarding({scheme}: {scheme: string}) {
   return (
-    <SafeAreaView edges={['top']} style={{position: 'absolute', width: '100%', height: '100%', top: 0, left: 0}}>
+    <SafeAreaView edges={['top']} style={styles.onboard}>
       <Surface elevation={9} mode="flat" style={styles.screen}>
         <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
           <OnboardStack.Navigator initialRouteName="welcome" screenOptions={{headerShown: false}}>

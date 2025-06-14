@@ -53,7 +53,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
     if (state.profileSet) {
       Animated.timing(profile, {
         toValue: 1,
-        duration: 500,
+        duration: 333,
         useNativeDriver: false,
       }).start();
     }
