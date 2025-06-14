@@ -12,8 +12,4 @@ type ContactsProps = {
   textContact: (cardId: null | string) => void;
 };
 
-export const Contacts = createLayoutComponent<ContactsProps>(
-  ContactsSmall,
-  ContactsLarge,
-  useContacts
-);
+export const Contacts = createLayoutComponent<ContactsProps>(ContactsSmall, ContactsLarge, useContacts);

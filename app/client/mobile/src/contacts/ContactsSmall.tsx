@@ -62,7 +62,7 @@ export function ContactsSmall({
       setAlert(true);
     }
     setMenuAction(null);
-  }
+  };
 
   const cancel = async (card: Card) => {
     setMore(null);
@@ -74,7 +74,7 @@ export function ContactsSmall({
       setAlert(true);
     }
     setMenuAction(null);
-  }
+  };
 
   const connect = async (card: Card) => {
     setMore(null);
@@ -86,7 +86,7 @@ export function ContactsSmall({
       setAlert(true);
     }
     setMenuAction(null);
-  }
+  };
 
   const accept = async (card: Card) => {
     setMore(null);
@@ -98,7 +98,7 @@ export function ContactsSmall({
       setAlert(true);
     }
     setMenuAction(null);
-  }
+  };
 
   return (
     <View style={styles.component}>
@@ -126,7 +126,7 @@ export function ContactsSmall({
           </SafeAreaView>
         </Surface>
 
-        <View style={{ ...styles.tabContainer, ...(allTab ? styles.tabVisible : styles.tabHidden) }}>
+        <View style={{...styles.tabContainer, ...(allTab ? styles.tabVisible : styles.tabHidden)}}>
           <FlatList
             style={styles.smCards}
             data={state.filtered}
@@ -135,31 +135,31 @@ export function ContactsSmall({
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
               const syncStatus = item.offsync ? 'offsync' : item.status;
-              const flair = item.status === 'connected' && item.offsync ? <Icon key="host" source="warning-circle" size={18} color={theme.colors.offsync} /> : <></>
+              const flair = item.status === 'connected' && item.offsync ? <Icon key="host" source="warning-circle" size={18} color={theme.colors.offsync} /> : <></>;
               const action = (
                 <Menu
                   key="actions"
                   visible={allTab && more === item.cardId}
-                  onDismiss={()=>setMore(null)}
-                  anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={()=>setMore(item.cardId)} />}>
-                    { syncStatus === 'offsync' && (
-                      <Menu.Item key='resync' leadingIcon="cached" title={state.strings.resyncAction} onPress={() => resync(item)} />
-                    )}
-                    { syncStatus === 'connected' && (
-                      <Menu.Item key='call' leadingIcon="phone" title={state.strings.callAction} onPress={() => call(item)} />
-                    )}
-                    { syncStatus === 'connected' && (
-                      <Menu.Item key='text' leadingIcon="chat-circle" title={state.strings.textAction} onPress={() => { setMore(null); textContact(item.cardId)}} />
-                    )}
-                    { syncStatus === 'confirmed' && (
-                      <Menu.Item key='saved' leadingIcon="link" title={state.strings.connectAction} onPress={() => connect(item)} />
-                    )}
-                    { syncStatus === 'connecting' && (
-                      <Menu.Item key='cancel' leadingIcon="cancel" title={state.strings.cancelAction} onPress={() => cancel(item)} />
-                    )}
-                    { (syncStatus === 'pending' || syncStatus === 'requested') && (
-                      <Menu.Item key='accept' leadingIcon="account-check-outline" title={state.strings.acceptAction} onPress={() => accept(item)} />
-                    )}
+                  onDismiss={() => setMore(null)}
+                  anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
+                  {syncStatus === 'offsync' && <Menu.Item key="resync" leadingIcon="cached" title={state.strings.resyncAction} onPress={() => resync(item)} />}
+                  {syncStatus === 'connected' && <Menu.Item key="call" leadingIcon="phone" title={state.strings.callAction} onPress={() => call(item)} />}
+                  {syncStatus === 'connected' && (
+                    <Menu.Item
+                      key="text"
+                      leadingIcon="chat-circle"
+                      title={state.strings.textAction}
+                      onPress={() => {
+                        setMore(null);
+                        textContact(item.cardId);
+                      }}
+                    />
+                  )}
+                  {syncStatus === 'confirmed' && <Menu.Item key="saved" leadingIcon="link" title={state.strings.connectAction} onPress={() => connect(item)} />}
+                  {syncStatus === 'connecting' && <Menu.Item key="cancel" leadingIcon="cancel" title={state.strings.cancelAction} onPress={() => cancel(item)} />}
+                  {(syncStatus === 'pending' || syncStatus === 'requested') && (
+                    <Menu.Item key="accept" leadingIcon="account-check-outline" title={state.strings.acceptAction} onPress={() => accept(item)} />
+                  )}
                 </Menu>
               );
               const select = () => {
@@ -180,7 +180,7 @@ export function ContactsSmall({
               };
               return (
                 <Card
-                  containerStyle={{ ...styles.smCard, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
+                  containerStyle={{...styles.smCard, handle: {color: theme.colors.onSecondary, fontWeight: 'normal'}}}
                   imageUrl={item.imageUrl}
                   name={item.name}
                   handle={item.handle}
@@ -196,7 +196,7 @@ export function ContactsSmall({
           />
         </View>
 
-        <View style={{ ...styles.tabContainer, ...(requestedTab ? styles.tabVisible : styles.tabHidden) }}>
+        <View style={{...styles.tabContainer, ...(requestedTab ? styles.tabVisible : styles.tabHidden)}}>
           <FlatList
             style={styles.smCards}
             data={state.requested}
@@ -205,14 +205,14 @@ export function ContactsSmall({
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
               const syncStatus = item.offsync ? 'offsync' : item.status;
-              const flair = item.status === 'connected' && item.offsync ? <Icon key="host" source="warning-circle" size={18} color={theme.colors.offsync} /> : <></>
+              const flair = item.status === 'connected' && item.offsync ? <Icon key="host" source="warning-circle" size={18} color={theme.colors.offsync} /> : <></>;
               const action = (
                 <Menu
                   key="actions"
                   visible={requestedTab && more === item.cardId}
-                  onDismiss={()=>setMore(null)}
-                  anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={()=>setMore(item.cardId)} />}>
-                    <Menu.Item key='accept' leadingIcon="account-check-outline" title={state.strings.acceptAction} onPress={() => accept(item)} />
+                  onDismiss={() => setMore(null)}
+                  anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
+                  <Menu.Item key="accept" leadingIcon="account-check-outline" title={state.strings.acceptAction} onPress={() => accept(item)} />
                 </Menu>
               );
               const select = () => {
@@ -233,7 +233,7 @@ export function ContactsSmall({
               };
               return (
                 <Card
-                  containerStyle={{ ...styles.smCard, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
+                  containerStyle={{...styles.smCard, handle: {color: theme.colors.onSecondary, fontWeight: 'normal'}}}
                   imageUrl={item.imageUrl}
                   name={item.name}
                   handle={item.handle}
@@ -249,7 +249,7 @@ export function ContactsSmall({
           />
         </View>
 
-        <View style={{ ...styles.tabContainer, ...(connectedTab ? styles.tabVisible : styles.tabHidden) }}>
+        <View style={{...styles.tabContainer, ...(connectedTab ? styles.tabVisible : styles.tabHidden)}}>
           <FlatList
             style={styles.smCards}
             data={state.connected}
@@ -258,22 +258,16 @@ export function ContactsSmall({
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
               const syncStatus = item.offsync ? 'offsync' : item.status;
-              const flair = item.status === 'connected' && item.offsync ? <Icon key="host" source="warning-circle" size={18} color={theme.colors.offsync} /> : <></>
+              const flair = item.status === 'connected' && item.offsync ? <Icon key="host" source="warning-circle" size={18} color={theme.colors.offsync} /> : <></>;
               const action = (
                 <Menu
                   key="actions"
                   visible={connectedTab && more === item.cardId}
-                  onDismiss={()=>setMore(null)}
-                  anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={()=>setMore(item.cardId)} />}>
-                    { syncStatus === 'offsync' && (
-                      <Menu.Item key='resync' leadingIcon="cached" title={state.strings.resyncAction} onPress={() => resync(item)} />
-                    )}
-                    { syncStatus === 'connected' && (
-                      <Menu.Item key='call' leadingIcon="phone" title={state.strings.callAction} onPress={() => call(item)} />
-                    )}
-                    { syncStatus === 'connected' && (
-                      <Menu.Item key='text' leadingIcon="chat-circle" title={state.strings.textAction} onPress={() => textContact(item.cardId)} />
-                    )}
+                  onDismiss={() => setMore(null)}
+                  anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
+                  {syncStatus === 'offsync' && <Menu.Item key="resync" leadingIcon="cached" title={state.strings.resyncAction} onPress={() => resync(item)} />}
+                  {syncStatus === 'connected' && <Menu.Item key="call" leadingIcon="phone" title={state.strings.callAction} onPress={() => call(item)} />}
+                  {syncStatus === 'connected' && <Menu.Item key="text" leadingIcon="chat-circle" title={state.strings.textAction} onPress={() => textContact(item.cardId)} />}
                 </Menu>
               );
               const select = () => {
@@ -294,7 +288,7 @@ export function ContactsSmall({
               };
               return (
                 <Card
-                  containerStyle={{ ...styles.smCard, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
+                  containerStyle={{...styles.smCard, handle: {color: theme.colors.onSecondary, fontWeight: 'normal'}}}
                   imageUrl={item.imageUrl}
                   name={item.name}
                   handle={item.handle}
@@ -310,7 +304,7 @@ export function ContactsSmall({
           />
         </View>
 
-        <View style={{ ...styles.tabContainer, ...(emptyTab ? styles.tabVisible : styles.tabHidden) }}>
+        <View style={{...styles.tabContainer, ...(emptyTab ? styles.tabVisible : styles.tabHidden)}}>
           <View style={styles.none}>
             <Text style={styles.noneLabel}>{state.strings.noContacts}</Text>
           </View>
@@ -319,17 +313,23 @@ export function ContactsSmall({
         <View style={styles.tabs}>
           <Pressable style={tab === 'all' ? styles.opaque : styles.opacity} onPress={() => setTab('all')}>
             <Surface style={styles.tab} elevation={tab === 'all' ? 10 : 2}>
-              <Text style={tab === 'all' ? styles.tabSet : styles.tabUnset} color="white">{ state.strings.all }</Text>
+              <Text style={tab === 'all' ? styles.tabSet : styles.tabUnset} color="white">
+                {state.strings.all}
+              </Text>
             </Surface>
           </Pressable>
           <Pressable style={tab === 'requested' ? styles.opaque : styles.opacity} onPress={() => setTab('requested')}>
             <Surface style={styles.tab} elevation={tab === 'requested' ? 10 : 2}>
-              <Text style={tab === 'requested' ? styles.tabSet : styles.tabUnset} color="white">{ `${state.strings.requestedTag}${state.requested.length > 0 ? ' (' + state.requested.length + ')' : ''}` }</Text>
+              <Text style={tab === 'requested' ? styles.tabSet : styles.tabUnset} color="white">{`${state.strings.requestedTag}${
+                state.requested.length > 0 ? ' (' + state.requested.length + ')' : ''
+              }`}</Text>
             </Surface>
           </Pressable>
           <Pressable style={tab === 'connected' ? styles.opaque : styles.opacity} onPress={() => setTab('connected')}>
             <Surface style={styles.tab} elevation={tab === 'connected' ? 10 : 2}>
-              <Text style={tab === 'connected' ? styles.tabSet : styles.tabUnset} color="white">{ state.strings.connectedTag }</Text>
+              <Text style={tab === 'connected' ? styles.tabSet : styles.tabUnset} color="white">
+                {state.strings.connectedTag}
+              </Text>
             </Surface>
           </Pressable>
         </View>

@@ -31,8 +31,8 @@ export function useProfile(params: ContactParams) {
   };
 
   useEffect(() => {
-    const { layout, strings } = display.state;
-    updateState({ layout, strings });
+    const {layout, strings} = display.state;
+    updateState({layout, strings});
   }, [display.state]);
 
   useEffect(() => {

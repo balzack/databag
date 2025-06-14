@@ -171,7 +171,7 @@ export function ContentLarge({
             </View>
           )}
         </View>
-        { (state.sealSet || state.allowUnsealed) && (
+        {(state.sealSet || state.allowUnsealed) && (
           <View style={styles.bar}>
             <Divider style={styles.divider} />
             <Button icon="comment-plus" mode="contained" style={styles.button} onPress={() => setAdd(true)}>

@@ -41,8 +41,8 @@ export function useAccounts() {
   }, [display.state]);
 
   useEffect(() => {
-    const filtered = state.members.filter(item => !state.filter || item.handle.includes(state.filter.toLowerCase()))
-    updateState({ filtered });
+    const filtered = state.members.filter(item => !state.filter || item.handle.includes(state.filter.toLowerCase()));
+    updateState({filtered});
   }, [state.members, state.filter]);
 
   const actions = {
@@ -51,7 +51,7 @@ export function useAccounts() {
       return await app.state.service.createMemberAccess();
     },
     setFilter: (filter: string) => {
-      updateState({ filter });
+      updateState({filter});
     },
     accessAccount: async (accountId: number) => {
       return await app.state.service.resetMemberAccess(accountId);

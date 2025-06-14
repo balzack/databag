@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
     icon: {
       borderRadius: 24,
       overflow: 'hidden',
-    }
+    },
   },
   inputBorder: {
     borderRadius: 12,

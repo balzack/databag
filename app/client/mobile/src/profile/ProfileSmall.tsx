@@ -85,7 +85,9 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
             <Pressable style={styles.navIcon} onPress={close}>
               <Icon size={24} source="left" color={'white'} />
             </Pressable>
-            <Text variant="headlineSmall" style={styles.navTitle}>{ state.strings.profile }</Text>
+            <Text variant="headlineSmall" style={styles.navTitle}>
+              {state.strings.profile}
+            </Text>
             <View style={styles.navIcon} />
           </SafeAreaView>
         </Surface>
@@ -100,29 +102,63 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
               <SafeAreaView style={styles.form} edges={['left', 'right']}>
                 <View style={styles.nameTag}>
                   {state.name && (
-                    <Text variant="headlineMedium" style={styles.name} numberOfLines={1} minimumFontScale={0.75} adjustsFontSizeToFit={true}>{ state.name }</Text>
+                    <Text variant="headlineMedium" style={styles.name} numberOfLines={1} minimumFontScale={0.75} adjustsFontSizeToFit={true}>
+                      {state.name}
+                    </Text>
                   )}
-                  {!state.name && <Text variant="headlineMedium" style={{ ...styles.namePlaceholder, color: theme.colors.tertiary }}>{state.strings.name}</Text>}
-                  { state.status === 'requested' && (
-                    <View style={{ ...styles.tag, backgroundColor: theme.colors.requested }}><Text variant="labelMedium" style={styles.tagLabel}>{ state.strings.requestedTag }</Text></View>
+                  {!state.name && (
+                    <Text variant="headlineMedium" style={{...styles.namePlaceholder, color: theme.colors.tertiary}}>
+                      {state.strings.name}
+                    </Text>
                   )}
-                  { state.offsync && state.status === 'connected' && (
-                    <View style={{ ...styles.tag, backgroundColor: theme.colors.offsync }}><Text variant="labelMedium" style={styles.tagLabel}>{ state.strings.offsyncTag }</Text></View>
+                  {state.status === 'requested' && (
+                    <View style={{...styles.tag, backgroundColor: theme.colors.requested}}>
+                      <Text variant="labelMedium" style={styles.tagLabel}>
+                        {state.strings.requestedTag}
+                      </Text>
+                    </View>
                   )}
-                  { !state.offsync && state.status === 'connected' && (
-                    <View style={{ ...styles.tag, backgroundColor: theme.colors.connected }}><Text variant="labelMedium" style={styles.tagLabel}>{ state.strings.connectedTag }</Text></View>
+                  {state.offsync && state.status === 'connected' && (
+                    <View style={{...styles.tag, backgroundColor: theme.colors.offsync}}>
+                      <Text variant="labelMedium" style={styles.tagLabel}>
+                        {state.strings.offsyncTag}
+                      </Text>
+                    </View>
                   )}
-                  { state.status === 'connecting' && (
-                    <View style={{ ...styles.tag, backgroundColor: theme.colors.connecting }}><Text variant="labelMedium" style={styles.tagLabel}>{ state.strings.connectingTag }</Text></View>
+                  {!state.offsync && state.status === 'connected' && (
+                    <View style={{...styles.tag, backgroundColor: theme.colors.connected}}>
+                      <Text variant="labelMedium" style={styles.tagLabel}>
+                        {state.strings.connectedTag}
+                      </Text>
+                    </View>
                   )}
-                  { state.status === 'pending' && (
-                    <View style={{ ...styles.tag, backgroundColor: theme.colors.pending }}><Text variant="labelMedium" style={styles.tagLabel}>{ state.strings.pendingTag }</Text></View>
+                  {state.status === 'connecting' && (
+                    <View style={{...styles.tag, backgroundColor: theme.colors.connecting}}>
+                      <Text variant="labelMedium" style={styles.tagLabel}>
+                        {state.strings.connectingTag}
+                      </Text>
+                    </View>
                   )}
-                  { state.status === 'confirmed' && (
-                    <View style={{ ...styles.tag, backgroundColor: theme.colors.confirmed }}><Text variant="labelMedium" style={styles.tagLabel}>{ state.strings.confirmedTag }</Text></View>
+                  {state.status === 'pending' && (
+                    <View style={{...styles.tag, backgroundColor: theme.colors.pending}}>
+                      <Text variant="labelMedium" style={styles.tagLabel}>
+                        {state.strings.pendingTag}
+                      </Text>
+                    </View>
                   )}
-                  { state.status === '' && (
-                    <View style={{ ...styles.tag, backgroundColor: theme.colors.unsaved }}><Text variant="labelMedium" style={styles.tagLabel}>{ state.strings.unsavedTag }</Text></View>
+                  {state.status === 'confirmed' && (
+                    <View style={{...styles.tag, backgroundColor: theme.colors.confirmed}}>
+                      <Text variant="labelMedium" style={styles.tagLabel}>
+                        {state.strings.confirmedTag}
+                      </Text>
+                    </View>
+                  )}
+                  {state.status === '' && (
+                    <View style={{...styles.tag, backgroundColor: theme.colors.unsaved}}>
+                      <Text variant="labelMedium" style={styles.tagLabel}>
+                        {state.strings.unsavedTag}
+                      </Text>
+                    </View>
                   )}
                 </View>
                 <Surface elevation={0} mode="flat" style={styles.data}>
@@ -153,7 +189,7 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
                     <TextInput
                       style={styles.navInput}
                       contentStyle={styles.navDescription}
-                      mode="outlined" 
+                      mode="outlined"
                       multiline={true}
                       outlineStyle={styles.navInputBorder}
                       placeholder={state.strings.description}
@@ -179,7 +215,7 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
                   )}
 
                   {state.statusLabel === 'savedStatus' && state.guid !== state.profile.guid && (
-                     <View style={styles.field}>
+                    <View style={styles.field}>
                       <Divider style={styles.navDivider} />
                       <TextInput
                         style={styles.navInput}
@@ -244,7 +280,10 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
                         value={state.strings.disconnectAction}
                         left={<TextInput.Icon style={styles.icon} loading={disconnecting} size={24} icon="link-break" />}
                       />
-                      <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.disconnecting, state.strings.confirmDisconnect, state.strings.disconnect, setDisconnecting, actions.disconnect)} />
+                      <Pressable
+                        style={styles.cover}
+                        onPress={() => confirmAction(state.strings.disconnecting, state.strings.confirmDisconnect, state.strings.disconnect, setDisconnecting, actions.disconnect)}
+                      />
                     </View>
                   )}
 
@@ -290,47 +329,66 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
                     </View>
                   )}
 
-                  {(state.statusLabel === 'connectedStatus' || state.statusLabel === 'offsyncStatus' || state.statusLabel === 'connectingStatus' || state.statusLabel === 'requestedStatus' || state.statusLabel === 'pendingStatus' || state.statusLabel === 'savedStatus') && state.guid !== state.profile.guid && (
-                    <View style={styles.field}>
-                      <Divider style={styles.navDivider} />
-                      <TextInput
-                        style={styles.navInput}
-                        mode="outlined"
-                        outlineStyle={styles.navInputBorder}
-                        value={state.strings.deleteAction}
-                        left={<TextInput.Icon style={styles.icon} loading={removing} size={24} icon="trash-2" />}
-                      />
-                      <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove)} />
-                    </View>
-                  )}
+                  {(state.statusLabel === 'connectedStatus' ||
+                    state.statusLabel === 'offsyncStatus' ||
+                    state.statusLabel === 'connectingStatus' ||
+                    state.statusLabel === 'requestedStatus' ||
+                    state.statusLabel === 'pendingStatus' ||
+                    state.statusLabel === 'savedStatus') &&
+                    state.guid !== state.profile.guid && (
+                      <View style={styles.field}>
+                        <Divider style={styles.navDivider} />
+                        <TextInput
+                          style={styles.navInput}
+                          mode="outlined"
+                          outlineStyle={styles.navInputBorder}
+                          value={state.strings.deleteAction}
+                          left={<TextInput.Icon style={styles.icon} loading={removing} size={24} icon="trash-2" />}
+                        />
+                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove)} />
+                      </View>
+                    )}
 
-                  {(state.statusLabel === 'connectedStatus' || state.statusLabel === 'offsyncStatus' || state.statusLabel === 'connectingStatus' || state.statusLabel === 'requestedStatus' || state.statusLabel === 'pendingStatus' || state.statusLabel === 'savedStatus') && state.guid !== state.profile.guid && (
-                    <View style={styles.field}>
-                      <Divider style={styles.navDivider} />
-                      <TextInput
-                        style={styles.navInput}
-                        mode="outlined"
-                        outlineStyle={styles.navInputBorder}
-                        value={state.strings.blockAction}
-                        left={<TextInput.Icon style={styles.icon} loading={blocking} size={24} icon="close-circle-outline" />}
-                      />
-                      <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block)} />
-                    </View>
-                  )}
+                  {(state.statusLabel === 'connectedStatus' ||
+                    state.statusLabel === 'offsyncStatus' ||
+                    state.statusLabel === 'connectingStatus' ||
+                    state.statusLabel === 'requestedStatus' ||
+                    state.statusLabel === 'pendingStatus' ||
+                    state.statusLabel === 'savedStatus') &&
+                    state.guid !== state.profile.guid && (
+                      <View style={styles.field}>
+                        <Divider style={styles.navDivider} />
+                        <TextInput
+                          style={styles.navInput}
+                          mode="outlined"
+                          outlineStyle={styles.navInputBorder}
+                          value={state.strings.blockAction}
+                          left={<TextInput.Icon style={styles.icon} loading={blocking} size={24} icon="close-circle-outline" />}
+                        />
+                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block)} />
+                      </View>
+                    )}
 
-                  {(state.statusLabel === 'connectedStatus' || state.statusLabel === 'offsyncStatus' || state.statusLabel === 'connectingStatus' || state.statusLabel === 'requestedStatus' || state.statusLabel === 'pendingStatus' || state.statusLabel === 'savedStatus' || state.statusLabel === 'unknownStatus') && state.guid !== state.profile.guid && (
-                    <View style={styles.field}>
-                      <Divider style={styles.navDivider} />
-                      <TextInput
-                        style={styles.navInput}
-                        mode="outlined"
-                        outlineStyle={styles.navInputBorder}
-                        value={state.strings.reportAction}
-                        left={<TextInput.Icon style={styles.icon} loading={reporting} size={24} icon="alert-decagram-outline" />}
-                      />
-                      <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report)} />
-                    </View>
-                  )}
+                  {(state.statusLabel === 'connectedStatus' ||
+                    state.statusLabel === 'offsyncStatus' ||
+                    state.statusLabel === 'connectingStatus' ||
+                    state.statusLabel === 'requestedStatus' ||
+                    state.statusLabel === 'pendingStatus' ||
+                    state.statusLabel === 'savedStatus' ||
+                    state.statusLabel === 'unknownStatus') &&
+                    state.guid !== state.profile.guid && (
+                      <View style={styles.field}>
+                        <Divider style={styles.navDivider} />
+                        <TextInput
+                          style={styles.navInput}
+                          mode="outlined"
+                          outlineStyle={styles.navInputBorder}
+                          value={state.strings.reportAction}
+                          left={<TextInput.Icon style={styles.icon} loading={reporting} size={24} icon="alert-decagram-outline" />}
+                        />
+                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report)} />
+                      </View>
+                    )}
                 </Surface>
               </SafeAreaView>
             </Surface>

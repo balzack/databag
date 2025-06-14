@@ -29,22 +29,22 @@ export function Card({
   return (
     <Pressable style={containerStyle} onPress={select ? select : () => {}}>
       <SafeAreaView style={styles.card}>
-        <Image style={{ ...styles.image, ...containerStyle.icon }} resizeMode={'contain'} source={{uri: imageUrl}} />
+        <Image style={{...styles.image, ...containerStyle.icon}} resizeMode={'contain'} source={{uri: imageUrl}} />
         <View style={styles.details}>
           <View style={styles.flair}>
-          {name && (
-            <Text numberOfLines={1} style={styles.nameSet}>
-              {name}
-            </Text>
-          )}
-          {!name && (
-            <Text numberOfLines={1} style={styles.nameUnset}>
-              {placeholder}
-            </Text>
-          )}
-          {flair}
+            {name && (
+              <Text numberOfLines={1} style={styles.nameSet}>
+                {name}
+              </Text>
+            )}
+            {!name && (
+              <Text numberOfLines={1} style={styles.nameUnset}>
+                {placeholder}
+              </Text>
+            )}
+            {flair}
           </View>
-          <Text numberOfLines={1} style={{ ...styles.handle, ...containerStyle.handle }}>
+          <Text numberOfLines={1} style={{...styles.handle, ...containerStyle.handle}}>
             {node ? `${handle}@${node}` : handle}
           </Text>
         </View>

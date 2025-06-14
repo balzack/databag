@@ -6,7 +6,7 @@ import typer from '../images/typer.png';
 import {useTheme, Surface, Button, Text, Icon} from 'react-native-paper';
 import {Colors} from '../constants/Colors';
 
-export function Welcome({ next }: { next: ()=>void }) {
+export function Welcome({next}: {next: () => void}) {
   const {state, actions} = useWelcome();
 
   return (
@@ -18,25 +18,29 @@ export function Welcome({ next }: { next: ()=>void }) {
         <SafeAreaView style={styles.wrapper} edges={['top', 'bottom']}>
           <View style={styles.form}>
             <View style={styles.header}>
-              <Text style={styles.title} variant="titleMedium">{ state.strings.welcomeTo }</Text>
+              <Text style={styles.title} variant="titleMedium">
+                {state.strings.welcomeTo}
+              </Text>
             </View>
             <View style={styles.header}>
-              <Text style={styles.headline} variant="headlineMedium">{ state.strings.communication }</Text>
+              <Text style={styles.headline} variant="headlineMedium">
+                {state.strings.communication}
+              </Text>
             </View>
           </View>
           <View style={styles.detail}>
             <View style={styles.steps}>
               <View style={styles.step}>
                 <Icon size={24} source="user" color={Colors.icon} />
-                <Text variant="labelLarge">{ state.strings.yourProfile }</Text>
+                <Text variant="labelLarge">{state.strings.yourProfile}</Text>
               </View>
               <View style={styles.step}>
                 <Icon size={24} source="rolodex" color={Colors.icon} />
-                <Text variant="labelLarge">{ state.strings.connectWith }</Text>
+                <Text variant="labelLarge">{state.strings.connectWith}</Text>
               </View>
               <View style={styles.step}>
                 <Icon size={24} source="message-circle" color={Colors.icon} />
-                <Text variant="labelLarge">{ state.strings.startTopic }</Text>
+                <Text variant="labelLarge">{state.strings.startTopic}</Text>
               </View>
               <Button mode="contained" style={styles.submit} onPress={next}>
                 {state.strings.getStarted}

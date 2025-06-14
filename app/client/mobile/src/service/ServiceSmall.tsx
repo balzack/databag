@@ -24,11 +24,11 @@ export function ServiceSmall() {
           <View style={showSetup}>
             <Setup />
           </View>
-          <Surface style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', backgroundColor: 'transparent' }} elevation={4}>
+          <Surface style={{position: 'absolute', bottom: 0, left: 0, width: '100%', backgroundColor: 'transparent'}} elevation={4}>
             <BlurView style={styles.blur} blurType="light" blurAmount={8} reducedTransparencyFallbackColor="dark" />
-            <View style={{ backgroundColor: theme.colors.bar, height: 96 }}>
-              <SafeAreaView style={{ width: '100%', display: 'flex', flexDirection: 'row' }} edges={['bottom']}>
-               {tab === 'setup' && (
+            <View style={{backgroundColor: theme.colors.bar, height: 96}}>
+              <SafeAreaView style={{width: '100%', display: 'flex', flexDirection: 'row'}} edges={['bottom']}>
+                {tab === 'setup' && (
                   <IconButton
                     style={styles.activeTab}
                     mode="contained"

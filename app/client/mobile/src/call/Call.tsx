@@ -98,14 +98,9 @@ export function Call() {
     <Animated.View style={{...viewStyle, opacity}}>
       {state.calling && (
         <View style={styles.call}>
+          {!state.remoteVideo && !state.localVideo && <Image style={styles.full} resizeMode="cover" source={{uri: caller}} />}
 
-          {!state.remoteVideo && !state.localVideo && (
-            <Image style={styles.full} resizeMode="cover" source={{ uri: caller }} />
-          )}
-
-          {state.remoteVideo && (
-            <RTCView style={styles.full} mirror={true} objectFit={'contain'} streamURL={state.remoteStream.toURL()} />
-          )}
+          {state.remoteVideo && <RTCView style={styles.full} mirror={true} objectFit={'contain'} streamURL={state.remoteStream.toURL()} />}
 
           {state.localVideo && (
             <RTCView style={state.remoteVideo ? styles.box : styles.full} mirror={true} objectFit={'contain'} streamURL={state.localStream.toURL()} zOrder={state.remoteVideo ? 2 : undefined} />
@@ -125,7 +120,7 @@ export function Call() {
 
           <View style={styles.controls}>
             <IconButton
-              style={{ backgroundColor: theme.colors.primary }}
+              style={{backgroundColor: theme.colors.primary}}
               iconColor="white"
               disabled={!state.connected}
               containerColor={Colors.primary}
@@ -138,7 +133,7 @@ export function Call() {
             />
             <IconButton style={styles.closeIcon} iconColor="white" containerColor={Colors.danger} icon="phone" compact="true" mode="contained" size={48} onPress={end} />
             <IconButton
-              style={{ backgroundColor: theme.colors.primary }}
+              style={{backgroundColor: theme.colors.primary}}
               iconColor="white"
               disabled={!state.connected}
               containerColor={Colors.primary}
@@ -151,18 +146,17 @@ export function Call() {
             />
           </View>
 
-            <IconButton
-              style={styles.collapse}
-              iconColor="white"
-              disabled={!state.connected}
-              containerColor={{ backgroundColor: 'transparent' }}
-              icon="arrows-in"
-              compact="true"
-              mode="contained"
-              size={32}
-              onPress={() => actions.setFullscreen(false)}
-            />
-
+          <IconButton
+            style={styles.collapse}
+            iconColor="white"
+            disabled={!state.connected}
+            containerColor={{backgroundColor: 'transparent'}}
+            icon="arrows-in"
+            compact="true"
+            mode="contained"
+            size={32}
+            onPress={() => actions.setFullscreen(false)}
+          />
         </View>
       )}
       <Confirm show={alert} params={alertParams} />

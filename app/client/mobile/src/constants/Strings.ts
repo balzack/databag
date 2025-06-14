@@ -1,13 +1,13 @@
 import {NativeModules, Platform} from 'react-native';
 
 export const languages = [
-  { name: 'English', value: 'en' },
-  { name: 'Français', value: 'fr' },
-  { name: 'Español', value: 'es' },
-  { name: 'Deutsch', value: 'de' },
-  { name: 'Português', value: 'pt' },
-  { name: 'Русский', value: 'ru' },
-  { name: 'ελληνικά', value: 'el' },
+  {name: 'English', value: 'en'},
+  {name: 'Français', value: 'fr'},
+  {name: 'Español', value: 'es'},
+  {name: 'Deutsch', value: 'de'},
+  {name: 'Português', value: 'pt'},
+  {name: 'Русский', value: 'ru'},
+  {name: 'ελληνικά', value: 'el'},
 ];
 
 export const en = {
@@ -28,7 +28,7 @@ export const en = {
   sealingKey: 'Manage E2EE Key',
   createSealed: 'Create E2EE Topics',
   noKey: 'No Key',
-  
+
   chatSettings: 'Chat Settings',
   host: 'Host',
   guest: 'Guest',
@@ -404,14 +404,14 @@ export const en = {
 };
 
 export const fr = {
-  adminSettings: 'Paramètres d\'administration',
+  adminSettings: "Paramètres d'administration",
   accountKeyType: 'Type de clé de compte',
   media: 'Médias',
   calling: 'Appels',
   serviceId: 'ID du service',
   serviceToken: 'Jeton du service',
   serviceUrl: 'URL du service',
-  idHint: 'ID / Nom d\'utilisateur',
+  idHint: "ID / Nom d'utilisateur",
   tokenHint: 'Jeton / Mot de passe',
   searchAccounts: 'Rechercher des comptes',
   chatMembers: 'Membres du chat',
@@ -461,13 +461,13 @@ export const fr = {
   startTopic: 'Commencez une conversation',
   getStarted: 'Commencer',
   enterName: 'Entrez votre nom',
-  uploadImage: 'Télécharger l\'image de profil',
+  uploadImage: "Télécharger l'image de profil",
   yourLocation: 'Votre emplacement',
   requestConnection: 'Demander une connexion',
   next: 'Suivant',
   skipSetup: 'Ignorer',
   allDone: 'Tout est prêt !',
-  moreContacts: 'Plus de personnes peuvent être trouvées dans l\'onglet contacts. Une fois acceptées, vous pouvez démarrer une conversation privée.',
+  moreContacts: "Plus de personnes peuvent être trouvées dans l'onglet contacts. Une fois acceptées, vous pouvez démarrer une conversation privée.",
   messaging: 'Messagerie',
   manageSealed: 'Gérer les sujets scellés',
   format: 'Format',
@@ -479,7 +479,7 @@ export const fr = {
   support: 'Support',
   requestSent: 'Demande envoyée',
   friendsNotified: 'Vos amis seront informés que vous les avez ajoutés !',
-  appLanguage: 'Langue de l\'application',
+  appLanguage: "Langue de l'application",
   languageName: 'Français',
 
   viewTerms: "Voir les conditions d'utilisation",
@@ -2727,4 +2727,3 @@ export const el = {
   confirmDisable: 'Απενεργοποίηση ελέγχου ταυτότητας πολλαπλών παραγόντων',
   disablePrompt: 'Είστε βέβαιοι ότι θέλετε να απενεργοποιήσετε τον έλεγχο ταυτότητας πολλαπλών παραγόντων',
 };
-

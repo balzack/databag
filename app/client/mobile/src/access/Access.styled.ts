@@ -67,17 +67,17 @@ export const styles = StyleSheet.create({
     gap: 16,
     paddingTop: 16,
     paddingBottom: 16,
-  },  
+  },
   linkline: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-  }, 
+  },
   linkText: {
     paddingTop: 6,
     borderBottomWidth: 1,
-  }, 
+  },
   footline: {
     display: 'flex',
     flexDirection: 'row',
@@ -103,7 +103,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     gap: 8,
-  },  
+  },
   legal: {
     padding: 16,
   },
@@ -186,7 +186,7 @@ export const styles = StyleSheet.create({
     borderRadius: 12,
   },
   textButton: {
-    textDecorationLine: 'underline'
+    textDecorationLine: 'underline',
   },
   spacer: {
     width: '100%',

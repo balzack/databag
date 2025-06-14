@@ -136,17 +136,17 @@ export function useConversation() {
   }, [display.state]);
 
   useEffect(() => {
-    unsent.current = { message: state.message, assets: state.assets };
+    unsent.current = {message: state.message, assets: state.assets};
   }, [state.message, state.assets]);
 
   useEffect(() => {
     if (app.state.focus) {
-      const { cardId, channelId } = app.state.focus.getFocused();
-      const { message, assets } = app.actions.getUnsent(cardId, channelId);
-      updateState({ message, assets });
+      const {cardId, channelId} = app.state.focus.getFocused();
+      const {message, assets} = app.actions.getUnsent(cardId, channelId);
+      updateState({message, assets});
       return () => {
-        app.actions.setUnsent(cardId, channelId, unsent.current)
-      }
+        app.actions.setUnsent(cardId, channelId, unsent.current);
+      };
     }
   }, [app.state.focus]);
 
@@ -154,7 +154,7 @@ export function useConversation() {
     display.actions.lockLayout(true);
     return () => {
       display.actions.lockLayout(false);
-    }
+    };
   }, []);
 
   useEffect(() => {

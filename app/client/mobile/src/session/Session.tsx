@@ -9,11 +9,5 @@ type SessionProps = {
 };
 
 export function Session({share}: SessionProps) {
-  return (
-    <LayoutSelector
-      SmallComponent={SessionSmall}
-      LargeComponent={SessionLarge}
-      props={{share}}
-    />
-  );
+  return <LayoutSelector SmallComponent={SessionSmall} LargeComponent={SessionLarge} props={{share}} />;
 }

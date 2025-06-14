@@ -39,7 +39,7 @@ export function useContent() {
     sealSet: false,
     allowUnsealed: false,
     focused: null as null | {cardId: null | string; channelId: string},
-    favorite: [] as { cardId: null | string, channelId: string }[],
+    favorite: [] as {cardId: null | string; channelId: string}[],
     loaded: false,
   });
 
@@ -179,7 +179,7 @@ export function useContent() {
   useEffect(() => {
     const favorite = app.state.favorite;
     const favorites = state.filtered.filter(item => favorite.find(entry => item.cardId === entry.cardId && item.channelId === entry.channelId));
-    updateState({ favorite, favorites });
+    updateState({favorite, favorites});
   }, [app.state.favorite, state.filtered]);
 
   useEffect(() => {
@@ -230,7 +230,7 @@ export function useContent() {
       updateState({sorted});
     };
     const setContentState = (loaded: boolean) => {
-      updateState({ loaded });
+      updateState({loaded});
     };
 
     if (app.state.session) {
@@ -263,7 +263,7 @@ export function useContent() {
       await app.actions.setFocus(cardId, channelId);
     },
     setFavorite: async (cardId: string | null, channelId: string) => {
-      const favorites = state.favorite.concat([{ cardId, channelId }]);
+      const favorites = state.favorite.concat([{cardId, channelId}]);
       await app.actions.setFavorite(favorites);
     },
     clearFavorite: async (cardId: string | null, channelId: string) => {

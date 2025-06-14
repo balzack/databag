@@ -92,6 +92,5 @@ export const styles = StyleSheet.create({
     width: 'auto',
     aspectRatio: 1,
   },
-  clearIcon: {
-  },
+  clearIcon: {},
 });

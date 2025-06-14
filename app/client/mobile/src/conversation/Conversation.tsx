@@ -19,11 +19,5 @@ type ConversationProps = {
 };
 
 export function Conversation({close, openDetails, wide}: ConversationProps) {
-  return (
-    <LayoutSelector
-      SmallComponent={ConversationSmall}
-      LargeComponent={ConversationLarge}
-      props={{close, openDetails, wide}}
-    />
-  );
+  return <LayoutSelector SmallComponent={ConversationSmall} LargeComponent={ConversationLarge} props={{close, openDetails, wide}} />;
 }

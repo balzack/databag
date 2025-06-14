@@ -17,8 +17,8 @@ export function useAssemble() {
   });
 
   const compare = (a: Card, b: Card) => {
-    const aval = (`${a.handle}/${a.node}`).toLowerCase();
-    const bval = (`${b.handle}/${b.node}`).toLowerCase();
+    const aval = `${a.handle}/${a.node}`.toLowerCase();
+    const bval = `${b.handle}/${b.node}`.toLowerCase();
     if (aval < bval) {
       return -1;
     } else if (aval > bval) {
@@ -35,7 +35,7 @@ export function useAssemble() {
     const contact = app.state?.session?.getContact();
     const settings = app.state?.session?.getSettings();
     const setConfig = (config: Config) => {
-      const { sealSet, sealUnlocked, allowUnsealed } = config;
+      const {sealSet, sealUnlocked, allowUnsealed} = config;
       updateState({sealSet, sealUnlocked, allowUnsealed});
     };
     const setCards = (cards: Card[]) => {
@@ -61,7 +61,7 @@ export function useAssemble() {
 
   useEffect(() => {
     const createSealed = app.state.createSealed;
-    updateState({ createSealed });
+    updateState({createSealed});
   }, [app.state.createSealed]);
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export function useAssemble() {
         const topic = await content.addChannel(false, 'superbasic', {subject}, contacts);
         return topic.id;
       }
-    },    
+    },
   };
 
   return {state, actions};

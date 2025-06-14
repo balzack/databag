@@ -5,16 +5,10 @@ import {SettingsLarge} from './SettingsLarge';
 import {LayoutSelector} from '../utils/LayoutSelector';
 
 type SettingsProps = {
-  setupNav: { back: ()=>void, next: ()=>void };
+  setupNav: {back: () => void; next: () => void};
   showLogout: boolean;
 };
 
 export function Settings({setupNav, showLogout}: SettingsProps) {
-  return (
-    <LayoutSelector
-      SmallComponent={SettingsSmall}
-      LargeComponent={SettingsLarge}
-      props={{setupNav, showLogout}}
-    />
-  );
+  return <LayoutSelector SmallComponent={SettingsSmall} LargeComponent={SettingsLarge} props={{setupNav, showLogout}} />;
 }

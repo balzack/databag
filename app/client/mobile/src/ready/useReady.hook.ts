@@ -14,8 +14,7 @@ export function useReady() {
     setState(s => ({...s, ...value}));
   };
 
-  useEffect(() => {
-  }, [app.state]);
+  useEffect(() => {}, [app.state]);
 
   const actions = {
     done: async () => {

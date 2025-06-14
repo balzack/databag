@@ -63,7 +63,7 @@ export function useSettings() {
   useEffect(() => {
     const {settings, identity} = getSession();
     const setConfig = (config: Config) => {
-      const { searchable, pushEnabled, allowUnsealed } = config;
+      const {searchable, pushEnabled, allowUnsealed} = config;
       updateState({config, searchable, pushEnabled, allowUnsealed});
     };
     settings.addConfigListener(setConfig);
@@ -122,22 +122,22 @@ export function useSettings() {
       await settings.setLogin(state.handle, state.password);
     },
     enableNotifications: async () => {
-      updateState({ pushEnabled: true });
+      updateState({pushEnabled: true});
       const {settings} = getSession();
       await settings.enableNotifications();
     },
     disableNotifications: async () => {
-      updateState({ pushEnabled: false });
+      updateState({pushEnabled: false});
       const {settings} = getSession();
       await settings.disableNotifications();
     },
     enableRegistry: async () => {
-      updateState({ searchable: true });
+      updateState({searchable: true});
       const {settings} = getSession();
       await settings.enableRegistry();
     },
     disableRegistry: async () => {
-      updateState({ searchable: false });
+      updateState({searchable: false});
       const {settings} = getSession();
       await settings.disableRegistry();
     },

@@ -14,7 +14,7 @@ import {Confirm} from '../confirm/Confirm';
 import Slider from '@react-native-community/slider';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-export function SettingsLarge({setupNav, showLogout}: {setupNav: { back: ()=>void, next: ()=>void }, showLogout: boolean}) {
+export function SettingsLarge({setupNav, showLogout}: {setupNav: {back: () => void; next: () => void}; showLogout: boolean}) {
   const {state, actions} = useSettings();
   const [alert, setAlert] = useState(false);
   const [details, setDetails] = useState(false);
@@ -412,7 +412,17 @@ export function SettingsLarge({setupNav, showLogout}: {setupNav: { back: ()=>voi
     }
   };
 
-  const languageOptions = languages.map(item => <Menu.Item key={item.value} onPress={() => { setLanguage(false); actions.setLanguage(item.value)}} trailingIcon={item.value === state.strings.code ? 'check' : undefined} title={item.name} />)
+  const languageOptions = languages.map(item => (
+    <Menu.Item
+      key={item.value}
+      onPress={() => {
+        setLanguage(false);
+        actions.setLanguage(item.value);
+      }}
+      trailingIcon={item.value === state.strings.code ? 'check' : undefined}
+      title={item.name}
+    />
+  ));
 
   return (
     <View>
@@ -1229,4 +1239,3 @@ export function SettingsLarge({setupNav, showLogout}: {setupNav: { back: ()=>voi
     </View>
   );
 }
-

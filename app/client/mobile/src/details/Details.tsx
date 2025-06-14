@@ -11,11 +11,5 @@ type DetailsProps = {
 };
 
 export function Details({close, edit, closeAll}: DetailsProps) {
-  return (
-    <LayoutSelector
-      SmallComponent={DetailsSmall}
-      LargeComponent={DetailsLarge}
-      props={{close, edit, closeAll}}
-    />
-  );
+  return <LayoutSelector SmallComponent={DetailsSmall} LargeComponent={DetailsLarge} props={{close, edit, closeAll}} />;
 }

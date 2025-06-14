@@ -24,7 +24,7 @@ export function useMessage() {
 
   useEffect(() => {
     const {monthFirstDate, fullDayTime, fontSize} = app.state;
-    updateState({ monthFirstDate, fullDayTime, fontSize });
+    updateState({monthFirstDate, fullDayTime, fontSize});
   }, [app.state]);
 
   const actions = {
@@ -95,7 +95,7 @@ export function useMessage() {
       } else {
         if (state.monthFirstDate) {
           return date.toLocaleDateString('en-US', {year: 'numeric', day: '2-digit', month: 'long', hour12: !state.fullDayTime, hour: 'numeric', minute: '2-digit'});
-        } else { 
+        } else {
           return date.toLocaleDateString('en-GB', {year: 'numeric', day: '2-digit', month: 'long', hour12: !state.fullDayTime, hour: 'numeric', minute: '2-digit'});
         }
       }

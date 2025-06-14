@@ -38,8 +38,8 @@ export const styles = StyleSheet.create({
   press: {
     position: 'absolute',
     top: 0,
-    left: 0, 
-    width: '100%', 
+    left: 0,
+    width: '100%',
     height: '100%',
     display: 'flex',
     flexDirection: 'row',
@@ -109,7 +109,7 @@ export const styles = StyleSheet.create({
     icon: {
       borderRadius: 28,
       overflow: 'hidden',
-    }
+    },
   },
   e2ee: {
     color: 'white',

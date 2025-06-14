@@ -221,7 +221,7 @@ export function ConversationLarge({close, openDetails, wide}: {close: () => void
   const disableAudio = !state.detailSet || !state.detail?.enableAudio;
   const disableBinary = !state.detailSet || !state.detail?.enableBinary;
   const statusStyle = state.layout === 'large' ? {...styles.status, flexDirection: 'row-reverse'} : {...styles.status, flexDirection: 'row'};
-  const borderStyle = Platform.OS === 'ios' ? { ...styles.message, fontSize: state.textSize } : { ...styles.message, fontSize: state.textSize, paddingTop: 4, paddingBottom: 4 };
+  const borderStyle = Platform.OS === 'ios' ? {...styles.message, fontSize: state.textSize} : {...styles.message, fontSize: state.textSize, paddingTop: 4, paddingBottom: 4};
 
   return (
     <View style={styles.component}>
@@ -434,14 +434,30 @@ export function ConversationLarge({close, openDetails, wide}: {close: () => void
           </Pressable>
           <Surface elevation={2} style={styles.sizeArea}>
             <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={20} onPress={() => setSizeModal(false)} />
-            <Pressable onPress={() => {actions.setTextSize(20); setSizeModal(false)}}><Text>{ state.strings.textLarge }</Text></Pressable>
-            <Pressable onPress={() => {actions.setTextSize(16); setSizeModal(false)}}><Text>{ state.strings.textMedium }</Text></Pressable>
-            <Pressable onPress={() => {actions.setTextSize(12); setSizeModal(false)}}><Text>{ state.strings.textSmall }</Text></Pressable>
+            <Pressable
+              onPress={() => {
+                actions.setTextSize(20);
+                setSizeModal(false);
+              }}>
+              <Text>{state.strings.textLarge}</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                actions.setTextSize(16);
+                setSizeModal(false);
+              }}>
+              <Text>{state.strings.textMedium}</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                actions.setTextSize(12);
+                setSizeModal(false);
+              }}>
+              <Text>{state.strings.textSmall}</Text>
+            </Pressable>
           </Surface>
         </View>
       </Modal>
-
     </View>
   );
 }
-

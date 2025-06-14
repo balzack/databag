@@ -21,8 +21,8 @@ export function useMembers() {
   });
 
   const compare = (a: Card, b: Card) => {
-    const aval = (`${a.handle}/${a.node}`).toLowerCase();
-    const bval = (`${b.handle}/${b.node}`).toLowerCase();
+    const aval = `${a.handle}/${a.node}`.toLowerCase();
+    const bval = `${b.handle}/${b.node}`.toLowerCase();
     if (aval < bval) {
       return -1;
     } else if (aval > bval) {
@@ -51,7 +51,7 @@ export function useMembers() {
       const locked = detail ? detail.locked : true;
       const members = detail ? detail.members.map(item => item.guid) : [];
       const host = cardId == null;
-      updateState({ channelId, members, access, sealed, locked, host });
+      updateState({channelId, members, access, sealed, locked, host});
     };
     if (focus && contact) {
       contact.addCardListener(setCards);
@@ -66,7 +66,7 @@ export function useMembers() {
 
   useEffect(() => {
     const filtered = state.sorted.filter(item => item.status === 'connected' || state.members.includes(item.guid));
-    updateState({ filtered });
+    updateState({filtered});
   }, [state.members, state.sorted]);
 
   useEffect(() => {

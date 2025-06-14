@@ -65,7 +65,7 @@ export const styles = StyleSheet.create({
     height: '100%',
     paddingLeft: 16,
     paddingRight: 16,
-    borderRadius: 4, 
+    borderRadius: 4,
   },
   data: {
     width: '100%',
@@ -133,7 +133,7 @@ export const styles = StyleSheet.create({
     top: 252,
     borderRadius: 8,
     width: '100%',
-    height: 8
+    height: 8,
   },
   imageSpacer: {
     width: '100%',

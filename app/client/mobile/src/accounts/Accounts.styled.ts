@@ -33,9 +33,9 @@ export const styles = StyleSheet.create({
     icon: {
       borderRadius: 28,
       overflow: 'hidden',
-    }
+    },
   },
-  input: { 
+  input: {
     flexGrow: 1,
     flexShrink: 1,
     minWidth: 0,

@@ -58,12 +58,12 @@ export function SetupSmall() {
   };
 
   return (
-    <View style={{ width: '100%', height: '100%' }}>
-      <Surface elevation={1} mode="flat" style={{ width: '100%', height: '100%' }}>
+    <View style={{width: '100%', height: '100%'}}>
+      <Surface elevation={1} mode="flat" style={{width: '100%', height: '100%'}}>
         <Surface elevation={9} mode="flat">
           <SafeAreaView edges={['top']}>
-            <View style={{ width: '100%', display: 'flex', height: 72, justifyContent: 'center', alignItems: 'center', paddingBottom: 16, paddingRight: 8, paddingLeft: 8 }}>
-              <Text adjustsFontSizeToFit={true} numberOfLines={1} style={{ color: 'white', fontSize: 24, fontWeight: '600' }}>
+            <View style={{width: '100%', display: 'flex', height: 72, justifyContent: 'center', alignItems: 'center', paddingBottom: 16, paddingRight: 8, paddingLeft: 8}}>
+              <Text adjustsFontSizeToFit={true} numberOfLines={1} style={{color: 'white', fontSize: 24, fontWeight: '600'}}>
                 {state.strings.adminSettings}
               </Text>
             </View>
@@ -72,7 +72,9 @@ export function SetupSmall() {
         <View style={styles.scrollWrapper}>
           <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
             <Surface mode="flat" elevation={2} style={styles.navForm}>
-              <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.logout }</Text>
+              <Text variant="headlineSmall" style={styles.sectionLabel}>
+                {state.strings.logout}
+              </Text>
               <View style={styles.navWrapper}>
                 <Surface elevation={0} mode="flat" style={styles.navData}>
                   <View>
@@ -83,33 +85,47 @@ export function SetupSmall() {
                       placeholder={state.strings.logout}
                       left={<TextInput.Icon style={styles.icon} size={22} icon="logout" />}
                     />
-                    <Pressable style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0 }} onPress={actions.logout} />
+                    <Pressable style={{position: 'absolute', width: '100%', height: '100%', top: 0, left: 0}} onPress={actions.logout} />
                   </View>
                 </Surface>
               </View>
-              <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.access }</Text>
+              <Text variant="headlineSmall" style={styles.sectionLabel}>
+                {state.strings.access}
+              </Text>
               <View style={styles.navWrapper}>
                 <Surface elevation={0} mode="flat" style={styles.navData}>
                   <View style={styles.field}>
-                    <Text style={styles.fieldLabel}>{ state.strings.accountKeyType }</Text>
+                    <Text style={styles.fieldLabel}>{state.strings.accountKeyType}</Text>
                     <View style={styles.selectOptions}>
                       <Pressable style={styles.selectOption} onPress={() => actions.setKeyType('RSA2048')}>
-                        <View style={state.setup?.keyType === 'RSA2048' ? { ...styles.checked, backgroundColor: theme.colors.primary, borderColor: theme.colors.primary } : { ...styles.unchecked, borderColor: theme.colors.primary }} />
+                        <View
+                          style={
+                            state.setup?.keyType === 'RSA2048'
+                              ? {...styles.checked, backgroundColor: theme.colors.primary, borderColor: theme.colors.primary}
+                              : {...styles.unchecked, borderColor: theme.colors.primary}
+                          }
+                        />
                         <Text style={styles.selectLabel}>RSA2048</Text>
                       </Pressable>
                       <Pressable style={styles.selectOption} onPress={() => actions.setKeyType('RSA4096')}>
-                        <View style={state.setup?.keyType === 'RSA4096' ? { ...styles.checked, backgroundColor: theme.colors.primary, borderColor: theme.colors.primary } : { ...styles.unchecked, borderColor: theme.colors.primary }} />
+                        <View
+                          style={
+                            state.setup?.keyType === 'RSA4096'
+                              ? {...styles.checked, backgroundColor: theme.colors.primary, borderColor: theme.colors.primary}
+                              : {...styles.unchecked, borderColor: theme.colors.primary}
+                          }
+                        />
                         <Text style={styles.selectLabel}>RSA4094</Text>
                       </Pressable>
                     </View>
                   </View>
                   <Divider style={styles.separator} />
                   <View style={styles.field}>
-                    <Text style={styles.fieldLabel}>{ state.strings.federatedHost }</Text>
+                    <Text style={styles.fieldLabel}>{state.strings.federatedHost}</Text>
                     <TextInput
                       style={styles.fieldInput}
                       mode="outlined"
-                      outlineStyle={{ borderColor: theme.colors.primary }}
+                      outlineStyle={{borderColor: theme.colors.primary}}
                       autoCapitalize={false}
                       disabled={state.loading}
                       placeholder={state.strings.hostHint}
@@ -120,11 +136,11 @@ export function SetupSmall() {
                   </View>
                   <Divider style={styles.separator} />
                   <View style={styles.field}>
-                    <Text style={styles.fieldLabel}>{ state.strings.storageLimit }</Text>
+                    <Text style={styles.fieldLabel}>{state.strings.storageLimit}</Text>
                     <TextInput
                       style={styles.fieldInput}
                       mode="outlined"
-                      outlineStyle={{ borderColor: theme.colors.primary }}
+                      outlineStyle={{borderColor: theme.colors.primary}}
                       autoCapitalize={false}
                       disabled={state.loading}
                       placeholder={state.strings.storageHint}
@@ -136,17 +152,22 @@ export function SetupSmall() {
                   <Divider style={styles.separator} />
                   <View style={styles.field}>
                     <View style={styles.fieldData}>
-                      <Text style={styles.fieldLabel}>{ state.strings.accountCreation }</Text>
-                      <Switch style={styles.fieldSwitch} value={state.setup?.enableOpenAccess} disabled={state.loading} onValueChange={() => actions.setEnableOpenAccess(!state.setup?.enableOpenAccess)} />
+                      <Text style={styles.fieldLabel}>{state.strings.accountCreation}</Text>
+                      <Switch
+                        style={styles.fieldSwitch}
+                        value={state.setup?.enableOpenAccess}
+                        disabled={state.loading}
+                        onValueChange={() => actions.setEnableOpenAccess(!state.setup?.enableOpenAccess)}
+                      />
                     </View>
                     <TextInput
                       type="number"
                       style={styles.fieldInput}
-                      outlineStyle={{ borderColor: theme.colors.primary }}
+                      outlineStyle={{borderColor: theme.colors.primary}}
                       keyboardType="numeric"
                       autoCapitalize={false}
                       mode="outlined"
-                      disabled={!(state.setup?.enableOpenAccess)}
+                      disabled={!state.setup?.enableOpenAccess}
                       placeholder={state.strings.storageHint}
                       value={state.openAccessLimit}
                       onChangeText={value => actions.setOpenAccessLimit(value)}
@@ -175,7 +196,9 @@ export function SetupSmall() {
                   </View>
                 </Surface>
               </View>
-              <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.access }</Text>
+              <Text variant="headlineSmall" style={styles.sectionLabel}>
+                {state.strings.access}
+              </Text>
               <View style={styles.navWrapper}>
                 <Surface elevation={0} mode="flat" style={styles.navData}>
                   <View style={styles.field}>
@@ -206,8 +229,10 @@ export function SetupSmall() {
                     </View>
                   </View>
                 </Surface>
-              </View> 
-              <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.calling }</Text>
+              </View>
+              <Text variant="headlineSmall" style={styles.sectionLabel}>
+                {state.strings.calling}
+              </Text>
               <View style={styles.navWrapper}>
                 <Surface elevation={0} mode="flat" style={styles.navData}>
                   <View style={styles.field}>
@@ -220,16 +245,21 @@ export function SetupSmall() {
                   <View style={styles.field}>
                     <View style={styles.fieldData}>
                       <Text style={styles.fieldLabel}>{state.strings.enableService}</Text>
-                      <Switch style={styles.fieldSwitch} value={state.setup?.iceService !== 'default'} disabled={state.loading || !state.setup?.enableIce} onValueChange={() => actions.setEnableService(state.setup?.iceService === 'default')} />
+                      <Switch
+                        style={styles.fieldSwitch}
+                        value={state.setup?.iceService !== 'default'}
+                        disabled={state.loading || !state.setup?.enableIce}
+                        onValueChange={() => actions.setEnableService(state.setup?.iceService === 'default')}
+                      />
                     </View>
                   </View>
                   <Divider style={styles.separator} />
                   <View style={styles.field}>
-                    <Text style={styles.fieldLabel}>{ state.strings.serviceUrl }</Text>
+                    <Text style={styles.fieldLabel}>{state.strings.serviceUrl}</Text>
                     <TextInput
                       style={styles.fieldInput}
                       mode="outlined"
-                      outlineStyle={{ borderColor: theme.colors.primary }}
+                      outlineStyle={{borderColor: theme.colors.primary}}
                       autoCapitalize={false}
                       disabled={!state.setup?.enableIce || state.setup?.iceService !== 'default' || state.loading}
                       placeholder={state.strings.urlHint}
@@ -239,11 +269,11 @@ export function SetupSmall() {
                   </View>
                   <Divider style={styles.separator} />
                   <View style={styles.field}>
-                    <Text style={styles.fieldLabel}>{ state.strings.serviceId }</Text>
+                    <Text style={styles.fieldLabel}>{state.strings.serviceId}</Text>
                     <TextInput
                       style={styles.fieldInput}
                       mode="outlined"
-                      outlineStyle={{ borderColor: theme.colors.primary }}
+                      outlineStyle={{borderColor: theme.colors.primary}}
                       autoCapitalize={false}
                       disabled={!state.setup?.enableIce || state.loading}
                       placeholder={state.strings.idHint}
@@ -253,11 +283,11 @@ export function SetupSmall() {
                   </View>
                   <Divider style={styles.separator} />
                   <View style={styles.field}>
-                    <Text style={styles.fieldLabel}>{ state.strings.serviceToken }</Text>
+                    <Text style={styles.fieldLabel}>{state.strings.serviceToken}</Text>
                     <TextInput
                       style={styles.fieldInput}
                       mode="outlined"
-                      outlineStyle={{ borderColor: theme.colors.primary }}
+                      outlineStyle={{borderColor: theme.colors.primary}}
                       autoCapitalize={false}
                       disabled={!state.setup?.enableIce || state.loading}
                       placeholder={state.strings.tokenHint}
@@ -266,7 +296,7 @@ export function SetupSmall() {
                     />
                   </View>
                 </Surface>
-              </View> 
+              </View>
             </Surface>
           </KeyboardAwareScrollView>
         </View>

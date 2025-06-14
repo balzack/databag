@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     minWidth: 0,
   },
   scrollWrapper: {
-    width: '100%', 
+    width: '100%',
     flexGrow: 1,
     height: 1,
   },
@@ -89,8 +89,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     fontWeight: 'normal',
   },
-  fieldInputBorder: {
-  },
+  fieldInputBorder: {},
   navWrapper: {
     width: '100%',
     paddingLeft: 16,
@@ -257,7 +256,7 @@ export const styles = StyleSheet.create({
   selectButton: {
     padding: 0,
     margin: 0,
-  }, 
+  },
   controlSwitch: {
     transform: [{scaleX: 0.7}, {scaleY: 0.7}],
   },

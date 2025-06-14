@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { useAnimatedValue, Animated, Modal, Platform, ScrollView, View, Image, SafeAreaView} from 'react-native';
+import {useAnimatedValue, Animated, Modal, Platform, ScrollView, View, Image, SafeAreaView} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useAccess} from './useAccess.hook';
 import {styles} from './Access.styled';
@@ -93,30 +93,30 @@ export function Access() {
         <SafeAreaView style={styles.wrapper} edges={['top', 'bottom']}>
           <View style={styles.form}>
             <View style={styles.header}>
-              <Text variant="titleLarge">
-                Databag
-              </Text>
+              <Text variant="titleLarge">Databag</Text>
             </View>
-            { state.mode === 'splash' && (
+            {state.mode === 'splash' && (
               <Animated.View style={[styles.header, {opacity: switching}]}>
-                <Text style={styles.headline} variant="titleSmall">{ state.strings.communication }</Text>
+                <Text style={styles.headline} variant="titleSmall">
+                  {state.strings.communication}
+                </Text>
               </Animated.View>
             )}
-            { state.mode === 'splash' && (
+            {state.mode === 'splash' && (
               <Animated.View style={[styles.start, {opacity: switching}]}>
                 <Button mode="contained" textColor="white" style={styles.submit} onPress={() => begin(false)}>
                   {state.strings.login}
                 </Button>
                 <View style={styles.linkline}>
-                  <Text>{ state.strings.notUser }</Text>
+                  <Text>{state.strings.notUser}</Text>
                   <Button labelStyle={styles.textButton} compact="true" mode="text" onPress={() => begin(true)}>
                     {state.strings.createAccount}
-                  </Button> 
+                  </Button>
                 </View>
               </Animated.View>
             )}
             {state.mode === 'admin' && (
-              <Animated.View style={[styles.blocks, { opacity: switching }]}>
+              <Animated.View style={[styles.blocks, {opacity: switching}]}>
                 <Text variant="headlineSmall">{state.strings.adminAccess}</Text>
                 <View style={styles.block}>
                   <TextInput
@@ -159,7 +159,7 @@ export function Access() {
                       setAccept(!accept);
                     }}
                   />
-                  <Text>{ state.strings.accept }</Text>
+                  <Text>{state.strings.accept}</Text>
                   <Button labelStyle={styles.textButton} compact="true" mode="text" onPress={() => setTerms(true)}>
                     {state.strings.terms}
                   </Button>
@@ -212,7 +212,7 @@ export function Access() {
                       setAccept(!accept);
                     }}
                   />
-                  <Text>{ state.strings.accept }</Text>
+                  <Text>{state.strings.accept}</Text>
                   <Button labelStyle={styles.textButton} compact="true" mode="text" onPress={() => setTerms(true)}>
                     {state.strings.terms}
                   </Button>
@@ -234,7 +234,7 @@ export function Access() {
               </Animated.View>
             )}
             {state.mode === 'create' && (
-              <Animated.View style={[styles.blocks, { opacity: switching }]}>
+              <Animated.View style={[styles.blocks, {opacity: switching}]}>
                 <Text variant="headlineSmall">{state.strings.createAccount}</Text>
                 <View style={styles.block}>
                   <TextInput
@@ -306,7 +306,7 @@ export function Access() {
                       setAccept(!accept);
                     }}
                   />
-                  <Text>{ state.strings.accept }</Text>
+                  <Text>{state.strings.accept}</Text>
                   <Button labelStyle={styles.textButton} compact="true" mode="text" onPress={() => setTerms(true)}>
                     {state.strings.terms}
                   </Button>
@@ -328,7 +328,7 @@ export function Access() {
               </Animated.View>
             )}
             {state.mode === 'account' && (
-              <Animated.View style={[styles.blocks, { opacity: switching }]}>
+              <Animated.View style={[styles.blocks, {opacity: switching}]}>
                 <Text variant="headlineSmall">{state.strings.login}</Text>
                 <View style={styles.block}>
                   <TextInput
@@ -383,7 +383,7 @@ export function Access() {
                       setAccept(!accept);
                     }}
                   />
-                  <Text>{ state.strings.accept }</Text>
+                  <Text>{state.strings.accept}</Text>
                   <Button labelStyle={styles.textButton} compact="true" mode="text" onPress={() => setTerms(true)}>
                     {state.strings.terms}
                   </Button>
@@ -392,7 +392,7 @@ export function Access() {
                   {state.strings.login}
                 </Button>
                 <View style={styles.linkline}>
-                  <Text>{ state.strings.notUser }</Text>
+                  <Text>{state.strings.notUser}</Text>
                   <Button labelStyle={styles.textButton} compact="true" mode="text" onPress={() => fadeOut('create')}>
                     {state.strings.createAccount}
                   </Button>

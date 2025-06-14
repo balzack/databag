@@ -9,11 +9,5 @@ type AccountsProps = {
 };
 
 export function Accounts({setup}: AccountsProps) {
-  return (
-    <LayoutSelector
-      SmallComponent={AccountsSmall}
-      LargeComponent={AccountsLarge}
-      props={{setup}}
-    />
-  );
+  return <LayoutSelector SmallComponent={AccountsSmall} LargeComponent={AccountsLarge} props={{setup}} />;
 }

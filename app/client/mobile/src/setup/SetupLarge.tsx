@@ -57,7 +57,7 @@ export function SetupLarge() {
   };
 
   return (
-    <View style={{ width: '100%', height: '100%' }}>
+    <View style={{width: '100%', height: '100%'}}>
       <View style={styles.setup}>
         <View style={styles.header}>
           <View style={styles.busy}>{(state.loading || state.updating) && <ActivityIndicator size={18} />}</View>

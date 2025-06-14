@@ -19,13 +19,16 @@ export function RegistrySmall({close, openContact}: RegistrySmallProps) {
   return (
     <View style={styles.component}>
       <View style={styles.registry}>
-        <Surface elevation={9} mode="flat" style={{ width: '100%', height: 72, display: 'flex', flexDirection: 'row', paddingLeft: 8, paddingBottom: 16, paddingRight: 16, alignItems: 'center', gap: 16 }}>
+        <Surface
+          elevation={9}
+          mode="flat"
+          style={{width: '100%', height: 72, display: 'flex', flexDirection: 'row', paddingLeft: 8, paddingBottom: 16, paddingRight: 16, alignItems: 'center', gap: 16}}>
           <Pressable style={styles.navIcon} onPress={close}>
             <Icon size={24} source="left" color={'white'} />
           </Pressable>
 
-          <Surface mode="flat" elevation={0} style={{ flexGrow: 1, borderRadius: 8, overflow: 'hidden' }}>
-            { !search && (
+          <Surface mode="flat" elevation={0} style={{flexGrow: 1, borderRadius: 8, overflow: 'hidden'}}>
+            {!search && (
               <TextInput
                 dense={true}
                 style={styles.input}
@@ -41,7 +44,7 @@ export function RegistrySmall({close, openContact}: RegistrySmallProps) {
                 onChangeText={value => actions.setServer(value)}
               />
             )}
-            { search && (
+            {search && (
               <TextInput
                 dense={true}
                 style={styles.input}
@@ -65,7 +68,7 @@ export function RegistrySmall({close, openContact}: RegistrySmallProps) {
             style={styles.smCards}
             data={state.contacts}
             initialNumToRender={32}
-            contentContainerStyle={{ paddingBottom: 128 }}
+            contentContainerStyle={{paddingBottom: 128}}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
               const select = () => {
@@ -82,16 +85,7 @@ export function RegistrySmall({close, openContact}: RegistrySmallProps) {
                 openContact(params);
               };
               return (
-                <Card
-                  containerStyle={styles.smCard}
-                  imageUrl={item.imageUrl}
-                  name={item.name}
-                  handle={item.handle}
-                  node={item.node}
-                  placeholder={state.strings.name}
-                  select={select}
-                  actions={[]}
-                />
+                <Card containerStyle={styles.smCard} imageUrl={item.imageUrl} name={item.name} handle={item.handle} node={item.node} placeholder={state.strings.name} select={select} actions={[]} />
               );
             }}
             keyExtractor={profile => profile.guid}
@@ -102,7 +96,6 @@ export function RegistrySmall({close, openContact}: RegistrySmallProps) {
             <Text style={styles.noneLabel}>{state.strings.noContacts}</Text>
           </View>
         )}
-
       </View>
     </View>
   );

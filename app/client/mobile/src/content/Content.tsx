@@ -12,8 +12,4 @@ type ContentProps = {
   textCard: {cardId: null | string};
 };
 
-export const Content = createLayoutComponent<ContentProps>(
-  ContentSmall,
-  ContentLarge,
-  useContent
-);
+export const Content = createLayoutComponent<ContentProps>(ContentSmall, ContentLarge, useContent);

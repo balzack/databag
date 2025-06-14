@@ -10,11 +10,5 @@ type RegistryProps = {
 };
 
 export function Registry({close, openContact}: RegistryProps) {
-  return (
-    <LayoutSelector
-      SmallComponent={RegistrySmall}
-      LargeComponent={RegistryLarge}
-      props={{close, openContact}}
-    />
-  );
+  return <LayoutSelector SmallComponent={RegistrySmall} LargeComponent={RegistryLarge} props={{close, openContact}} />;
 }

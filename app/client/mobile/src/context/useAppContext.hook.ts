@@ -45,7 +45,7 @@ export function useAppContext() {
     service: null as null | Service,
     session: null as null | Session,
     focus: null as null | Focus,
-    favorite: [] as { cardId: null | string, channelId: string }[],
+    favorite: [] as {cardId: null | string; channelId: string}[],
     fullDayTime: false,
     monthFirstDate: true,
     fontSize: 0,
@@ -65,11 +65,12 @@ export function useAppContext() {
     const favorite = JSON.parse(await local.current.get('favorite', JSON.stringify([])));
     const fullDayTime = (await local.current.get('time_format', '12h')) === '24h';
     const monthFirstDate = (await local.current.get('date_format', 'month_first')) === 'month_first';
-    const setLanguage = (await local.current.get('language', null));
+    const setLanguage = await local.current.get('language', null);
     const fontSize = parseInt(await local.current.get('font_size', '0')) || 0;
-    const createSealed = (await local.current.get('create_sealed', 'true') === 'true');
+    const createSealed = (await local.current.get('create_sealed', 'true')) === 'true';
 
-    const locale = Platform.OS === 'ios' ? NativeModules.SettingsManager?.settings.AppleLocale || NativeModules.SettingsManager?.settings.AppleLanguages[0] : NativeModules.I18nManager?.localeIdentifier;
+    const locale =
+      Platform.OS === 'ios' ? NativeModules.SettingsManager?.settings.AppleLocale || NativeModules.SettingsManager?.settings.AppleLanguages[0] : NativeModules.I18nManager?.localeIdentifier;
     const defaultLanguage = locale?.slice(0, 2) || '';
     const lang = setLanguage ? setLanguage : defaultLanguage;
     const language = lang === 'fr' ? 'fr' : lang === 'es' ? 'es' : lang === 'pt' ? 'pt' : lang === 'de' ? 'de' : lang === 'ru' ? 'ru' : lang === 'el' ? 'el' : 'en';
@@ -105,7 +106,7 @@ export function useAppContext() {
       if (topics.current.has(id)) {
         return topics.current.get(id);
       }
-      return { message: null, assets: [] };
+      return {message: null, assets: []};
     },
     setUnsent: (cardId: string, channelId: string, topic: UnsentTopic) => {
       const id = `${cardId}:${channelId}`;
@@ -120,19 +121,19 @@ export function useAppContext() {
       await local.current.set('time_format', fullDayTime ? '24h' : '12h');
     },
     setFontSize: async (fontSize: number) => {
-      updateState({ fontSize });
+      updateState({fontSize});
       await local.current.set('font_size', fontSize.toString());
     },
     setCreateSealed: async (createSealed: boolean) => {
-      updateState({ createSealed });
+      updateState({createSealed});
       await local.current.set('create_sealed', createSealed ? 'true' : 'false');
     },
     setLanguage: async (language: string) => {
       updateState({language});
       await local.current.set('language', language);
     },
-    setFavorite: async (favorite: { cardId: string | null, channelId: string} []) => {
-      updateState({ favorite });
+    setFavorite: async (favorite: {cardId: string | null; channelId: string}[]) => {
+      updateState({favorite});
       await local.current.set('favorite', JSON.stringify(favorite));
     },
     setShowWelcome: async (showWelcome: boolean) => {

@@ -49,7 +49,7 @@ export function useSession() {
 
   useEffect(() => {
     const showWelcome = app.state.showWelcome;
-    updateState({ showWelcome });
+    updateState({showWelcome});
   }, [app.state.showWelcome]);
 
   useEffect(() => {

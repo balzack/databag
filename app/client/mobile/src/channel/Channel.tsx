@@ -45,20 +45,20 @@ export function Channel({
   return (
     <Pressable style={containerStyle} onPress={select ? select : () => {}}>
       <SafeAreaView style={styles.channel}>
-        <Image style={{ ...styles.image, ...containerStyle.logo }} resizeMode={'contain'} source={{uri: imageUrl}} />
+        <Image style={{...styles.image, ...containerStyle.logo}} resizeMode={'contain'} source={{uri: imageUrl}} />
         <View style={styles.details}>
           <Text numberOfLines={1} style={styles.subject}>
             {title}
           </Text>
           {message != null && (
-            <Text numberOfLines={1} style={{ ...styles.messageSet, ...containerStyle.message }}>
+            <Text numberOfLines={1} style={{...styles.messageSet, ...containerStyle.message}}>
               {message}
             </Text>
           )}
           {message == null && <Text style={styles.messageUnset}>{messagePlaceholder}</Text>}
         </View>
         {unread && <View style={styles.unread} />}
-        { action }
+        {action}
       </SafeAreaView>
     </Pressable>
   );

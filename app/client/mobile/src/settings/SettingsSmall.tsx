@@ -14,7 +14,7 @@ import {Confirm} from '../confirm/Confirm';
 import Slider from '@react-native-community/slider';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>void, next: ()=>void }, showLogout: boolean}) {
+export function SettingsSmall({setupNav, showLogout}: {setupNav: {back: () => void; next: () => void}; showLogout: boolean}) {
   const {state, actions} = useSettings();
   const [alert, setAlert] = useState(false);
   const [details, setDetails] = useState(false);
@@ -412,23 +412,37 @@ export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>voi
     }
   };
 
-  const languageOptions = languages.map(item => <Menu.Item key={item.value} onPress={() => { setLanguage(false); actions.setLanguage(item.value)}} trailingIcon={item.value === state.strings.code ? 'check' : undefined} title={item.name} />)
+  const languageOptions = languages.map(item => (
+    <Menu.Item
+      key={item.value}
+      onPress={() => {
+        setLanguage(false);
+        actions.setLanguage(item.value);
+      }}
+      trailingIcon={item.value === state.strings.code ? 'check' : undefined}
+      title={item.name}
+    />
+  ));
 
   return (
     <View>
       <View style={styles.settings}>
         {setupNav && (
-        <Surface elevation={9} mode="flat" style={styles.navHeader}>
-          <Pressable style={styles.navIcon} onPress={setupNav?.back}>
-            <Icon size={24} source="left" color={'white'} />
-          </Pressable>
-          <Text variant="headlineSmall" style={styles.navTitle}>{ state.strings.yourProfile }</Text>
-          <View style={styles.navIcon} />
-        </Surface>
+          <Surface elevation={9} mode="flat" style={styles.navHeader}>
+            <Pressable style={styles.navIcon} onPress={setupNav?.back}>
+              <Icon size={24} source="left" color={'white'} />
+            </Pressable>
+            <Text variant="headlineSmall" style={styles.navTitle}>
+              {state.strings.yourProfile}
+            </Text>
+            <View style={styles.navIcon} />
+          </Surface>
         )}
         {!setupNav && (
           <Surface mode="flat" elevation={9} style={styles.navHeader}>
-            <Text variant="headlineSmall" style={styles.navTitle}>{ state.strings.settings }</Text>
+            <Text variant="headlineSmall" style={styles.navTitle}>
+              {state.strings.settings}
+            </Text>
           </Surface>
         )}
         <View style={styles.navImage}>
@@ -441,7 +455,9 @@ export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>voi
             <Surface mode="flat" elevation={2} style={styles.surfaceMaxWidth}>
               <SafeAreaView style={styles.navForm} edges={['left', 'right']}>
                 {!setupNav && (
-                  <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.profile }</Text>
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>
+                    {state.strings.profile}
+                  </Text>
                 )}
                 <View style={styles.navWrapper}>
                   <Surface elevation={0} mode="flat" style={styles.navData}>
@@ -456,9 +472,7 @@ export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>voi
                         left={<TextInput.Icon style={styles.icon} iconColor={theme.colors.tertiary} size={22} icon="user" />}
                       />
                     )}
-                    {!setupNav && (
-                      <Divider style={styles.navDivider} />
-                    )}
+                    {!setupNav && <Divider style={styles.navDivider} />}
                     <TextInput
                       style={styles.navInput}
                       mode="outlined"
@@ -548,7 +562,9 @@ export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>voi
                   </Button>
                 )}
                 {!setupNav && (
-                  <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.account }</Text>
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>
+                    {state.strings.account}
+                  </Text>
                 )}
                 {!setupNav && (
                   <View style={styles.navWrapper}>
@@ -564,7 +580,7 @@ export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>voi
                         <View style={styles.controlAlign}>
                           <Switch style={styles.controlSwitch} value={state.mfaEnabled} disabled={savingAuth} />
                         </View>
-                        <Pressable style={styles.navPress} onPress={()=>setMfa(!state.mfaEnabled)} />
+                        <Pressable style={styles.navPress} onPress={() => setMfa(!state.mfaEnabled)} />
                       </View>
                       <Divider style={styles.navDivider} />
                       <View style={styles.navUpload}>
@@ -586,7 +602,7 @@ export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>voi
                           placeholder={state.strings.logout}
                           left={<TextInput.Icon style={styles.icon} size={22} icon="logout" />}
                         />
-                        <Pressable style={styles.navPress} onPress={()=>setLogout(true)} />
+                        <Pressable style={styles.navPress} onPress={() => setLogout(true)} />
                       </View>
                       <Divider style={styles.navDivider} />
                       <View style={styles.navUpload}>
@@ -598,13 +614,15 @@ export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>voi
                           value={state.strings.deleteAccount}
                           left={<TextInput.Icon style={styles.icon} color={theme.colors.error} size={22} icon="trash-2" />}
                         />
-                        <Pressable style={styles.navPress} onPress={()=>setRemove(true)} />
+                        <Pressable style={styles.navPress} onPress={() => setRemove(true)} />
                       </View>
                     </Surface>
                   </View>
                 )}
                 {!setupNav && (
-                  <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.messaging }</Text>
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>
+                    {state.strings.messaging}
+                  </Text>
                 )}
                 {!setupNav && (
                   <View style={styles.navWrapper}>
@@ -620,7 +638,7 @@ export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>voi
                         <View style={styles.controlAlign}>
                           <Switch style={styles.controlSwitch} value={state.pushEnabled} disabled={savingNotifications} />
                         </View>
-                        <Pressable style={styles.navPress} onPress={()=>setNotifications(!state.pushEnabled)} />
+                        <Pressable style={styles.navPress} onPress={() => setNotifications(!state.pushEnabled)} />
                       </View>
                       <Divider style={styles.navDivider} />
                       <View style={styles.navUpload}>
@@ -633,10 +651,8 @@ export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>voi
                         />
                         <Pressable style={styles.navPress} onPress={setSeal} />
                       </View>
-                      { state.allowUnsealed && (
-                        <Divider style={styles.navDivider} />
-                      )}
-                      { state.allowUnsealed && (
+                      {state.allowUnsealed && <Divider style={styles.navDivider} />}
+                      {state.allowUnsealed && (
                         <View style={styles.navUpload}>
                           <TextInput
                             style={styles.navInput}
@@ -647,16 +663,27 @@ export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>voi
                             left={<TextInput.Icon style={styles.icon} size={22} icon="sort-variant-lock" />}
                           />
                           <View style={styles.controlAlign}>
-                            <Switch style={styles.controlSwitch} value={state.createSealed && state.config.sealSet && state.config.sealUnlocked} disabled={!state.config.sealSet || !state.config.sealUnlocked} />
+                            <Switch
+                              style={styles.controlSwitch}
+                              value={state.createSealed && state.config.sealSet && state.config.sealUnlocked}
+                              disabled={!state.config.sealSet || !state.config.sealUnlocked}
+                            />
                           </View>
-                          <Pressable style={styles.navPress} onPress={()=>{actions.setCreateSealed(!state.createSealed)}} />
+                          <Pressable
+                            style={styles.navPress}
+                            onPress={() => {
+                              actions.setCreateSealed(!state.createSealed);
+                            }}
+                          />
                         </View>
                       )}
                     </Surface>
                   </View>
                 )}
                 {!setupNav && (
-                  <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.appLanguage }</Text>
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>
+                    {state.strings.appLanguage}
+                  </Text>
                 )}
                 {!setupNav && (
                   <View style={styles.navWrapper}>
@@ -666,15 +693,12 @@ export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>voi
                           style={styles.navFullInput}
                           mode="outlined"
                           outlineStyle={styles.navInputBorder}
-                          placeholder={ state.strings.languageName }
+                          placeholder={state.strings.languageName}
                           right={<TextInput.Icon style={styles.icon} size={22} icon="dots-horizontal-circle-outline" />}
                         />
-                        <Pressable style={styles.navPress} onPress={()=>setLanguage(true)}>
-                          <Menu
-                            visible={language}
-                            onDismiss={()=>setLanguage(false)}
-                            anchor={<View style={styles.anchor} />}>
-                            { languageOptions }
+                        <Pressable style={styles.navPress} onPress={() => setLanguage(true)}>
+                          <Menu visible={language} onDismiss={() => setLanguage(false)} anchor={<View style={styles.anchor} />}>
+                            {languageOptions}
                           </Menu>
                         </Pressable>
                       </View>
@@ -682,7 +706,9 @@ export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>voi
                   </View>
                 )}
                 {!setupNav && (
-                  <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.format }</Text>
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>
+                    {state.strings.format}
+                  </Text>
                 )}
                 {!setupNav && (
                   <View style={styles.navWrapper}>
@@ -715,7 +741,7 @@ export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>voi
                             />
                           </View>
                         </View>
-                        <Pressable style={styles.navPress} onPress={()=>actions.setFullDayTime(!state.fullDayTime)} />
+                        <Pressable style={styles.navPress} onPress={() => actions.setFullDayTime(!state.fullDayTime)} />
                       </View>
                       <Divider style={styles.navDivider} />
                       <View style={styles.navUpload}>
@@ -746,33 +772,23 @@ export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>voi
                             />
                           </View>
                         </View>
-                        <Pressable style={styles.navPress} onPress={()=>actions.setMonthFirstDate(!state.monthFirstDate)} />
+                        <Pressable style={styles.navPress} onPress={() => actions.setMonthFirstDate(!state.monthFirstDate)} />
                       </View>
                       <Divider style={styles.navDivider} />
                       <View style={styles.navFont}>
-                        <TextInput
-                          style={styles.navInput}
-                          mode="outlined"
-                          outlineStyle={styles.navInputBorder}
-                          placeholder={state.strings.fontFormat}
-                        />
+                        <TextInput style={styles.navInput} mode="outlined" outlineStyle={styles.navInputBorder} placeholder={state.strings.fontFormat} />
                         <View style={styles.navPress} />
                       </View>
                       <View style={styles.slider}>
-                        <Slider
-                          minimumValue={-10}
-                          maximumValue={10}
-                          minimumTrackTintColor={theme.colors.primary}
-                          value={state.fontSize}
-                          onSlidingComplete={(val)=>actions.setFontSize(val)}
-                        />
+                        <Slider minimumValue={-10} maximumValue={10} minimumTrackTintColor={theme.colors.primary} value={state.fontSize} onSlidingComplete={val => actions.setFontSize(val)} />
                       </View>
                     </Surface>
-
                   </View>
                 )}
                 {!setupNav && (
-                  <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.blocked }</Text>
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>
+                    {state.strings.blocked}
+                  </Text>
                 )}
                 {!setupNav && (
                   <View style={styles.navWrapper}>
@@ -813,7 +829,9 @@ export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>voi
                   </View>
                 )}
                 {!setupNav && (
-                  <Text variant="headlineSmall" style={styles.sectionLabel}>{ state.strings.support }</Text>
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>
+                    {state.strings.support}
+                  </Text>
                 )}
                 {!setupNav && (
                   <View style={styles.navWrapper}>
@@ -826,7 +844,7 @@ export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>voi
                           placeholder="github.com/balzack/databag"
                           left={<TextInput.Icon style={styles.icon} size={22} icon="github" />}
                         />
-                        <Pressable style={styles.navPress} onPress={()=>Linking.openURL('https://github.com/balzack/databag')} />
+                        <Pressable style={styles.navPress} onPress={() => Linking.openURL('https://github.com/balzack/databag')} />
                       </View>
                     </Surface>
                   </View>
@@ -1405,4 +1423,3 @@ export function SettingsSmall({setupNav, showLogout}: {setupNav: { back: ()=>voi
     </View>
   );
 }
-

@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-backgroundColor: 'yellow'
+    backgroundColor: 'yellow',
   },
   hide: {
     display: 'none',

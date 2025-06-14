@@ -59,7 +59,7 @@ export const styles = StyleSheet.create({
     icon: {
       borderRadius: 28,
       overflow: 'hidden',
-    }
+    },
   },
   tabs: {
     position: 'absolute',

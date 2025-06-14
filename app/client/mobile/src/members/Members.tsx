@@ -10,8 +10,8 @@ import {Card} from '../card/Card';
 import {Confirm} from '../confirm/Confirm';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-export function Members({ close }: { close: ()=>void }) {
-  const { state, actions } = useMembers();
+export function Members({close}: {close: () => void}) {
+  const {state, actions} = useMembers();
   const selected = useRef(new Set<string>());
   const [subject, setSubject] = useState(null);
   const [creating, setCreating] = useState(false);
@@ -33,7 +33,7 @@ export function Members({ close }: { close: ()=>void }) {
     } else {
       selected.current.delete(cardId);
     }
-  }
+  };
 
   const update = async (cardId: string, member: boolean) => {
     try {
@@ -46,7 +46,7 @@ export function Members({ close }: { close: ()=>void }) {
       console.log(err);
       setAlert(true);
     }
-  }
+  };
 
   return (
     <View style={styles.request}>
@@ -55,16 +55,18 @@ export function Members({ close }: { close: ()=>void }) {
           <Pressable style={styles.navIcon} onPress={close}>
             <Icon size={24} source="left" color={'white'} />
           </Pressable>
-          <Text variant="headlineSmall" style={styles.navTitle}>{ state.strings.chatMembers }</Text>
+          <Text variant="headlineSmall" style={styles.navTitle}>
+            {state.strings.chatMembers}
+          </Text>
           <View style={styles.navIcon} />
         </SafeAreaView>
       </Surface>
 
       <Surface elevation={1} mode="flat" style={styles.scrollWrapper}>
-        { state.host && state.access && !state.locked && state.filtered.length > 0 && (
+        {state.host && state.access && !state.locked && state.filtered.length > 0 && (
           <FlatList
             style={styles.cards}
-            contentContainerStyle={{ paddingBottom: 128 }}
+            contentContainerStyle={{paddingBottom: 128}}
             data={state.filtered}
             initialNumToRender={32}
             showsVerticalScrollIndicator={false}
@@ -72,23 +74,23 @@ export function Members({ close }: { close: ()=>void }) {
               const member = Boolean(state.members.find(member => member === item.guid));
               return (
                 <Card
-                  containerStyle={{ ...styles.cardContainer, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
+                  containerStyle={{...styles.cardContainer, handle: {color: theme.colors.onSecondary, fontWeight: 'normal'}}}
                   imageUrl={item.imageUrl}
                   name={item.name}
                   handle={item.handle}
                   node={item.node}
                   placeholder={state.strings.name}
-                  select={()=>{}}
-                  actions={[ <Switch key="action" style={styles.controlSwitch} value={member} onValueChange={() => update(item.cardId, !member)} /> ]}
+                  select={() => {}}
+                  actions={[<Switch key="action" style={styles.controlSwitch} value={member} onValueChange={() => update(item.cardId, !member)} />]}
                 />
               );
             }}
             keyExtractor={profile => profile.guid}
           />
         )}
-        { state.filtered.length === 0 && (
+        {state.filtered.length === 0 && (
           <View style={styles.empty}>
-            <Text style={styles.noContacts}>{ state.strings.noContacts }</Text>
+            <Text style={styles.noContacts}>{state.strings.noContacts}</Text>
           </View>
         )}
       </Surface>

@@ -177,7 +177,7 @@ export function Ring() {
     return <Contact containerStyle={styles.card} placeholder={state.strings.name} imageUrl={imageUrl} name={name} node={node} handle={handle} actions={[ignoreButton, declineButton, acceptButton]} />;
   });
 
-  const sizeStyle = { marginBottom: 8, height: '100%', width: '100%', height: scale};
+  const sizeStyle = {marginBottom: 8, height: '100%', width: '100%', height: scale};
   const borderStyle = state.layout === 'large' ? {...styles.ring, borderRadius: 16} : {...styles.ring, borderRadius: 0};
 
   return (
@@ -187,34 +187,44 @@ export function Ring() {
           <Surface elevation={10} mode="flat" style={borderStyle}>
             <View style={styles.name}>
               <Text style={styles.nameSet} numberOfLines={1}>
-                { state.calls[0].card.name ? state.calls[0].card.name : `${state.calls[0].card.handle}@${state.calls[0].card.node}` }
+                {state.calls[0].card.name ? state.calls[0].card.name : `${state.calls[0].card.handle}@${state.calls[0].card.node}`}
               </Text>
               <View style={styles.status}>
                 {state.connected && <Text style={styles.duration}>{`${Math.floor(state.duration / 60)}:${(state.duration % 60).toString().padStart(2, '0')}`}</Text>}
-                {!state.connected && <Text style={styles.duration} color="white">0:00</Text>}
+                {!state.connected && (
+                  <Text style={styles.duration} color="white">
+                    0:00
+                  </Text>
+                )}
               </View>
             </View>
 
-              <IconButton
-                style={styles.clearIcon}
-                iconColor="white"
-                icon="bell-slash"
-                size={28}
-                loading={ignoring === state.calls[0].callId}
-                onPress={() => ignore(state.calls[0].callId, state.calls[0].card)}
-              />
-              <IconButton style={styles.flipIcon} iconColor="white" containerColor={Colors.offsync} icon="phone" size={28} 
-                loading={declining === state.calls[0].callId}
-                onPress={() => decline(state.calls[0].callId, state.calls[0].card)} />
-              <IconButton
-                style={styles.circleIcon}
-                iconColor="white"
-                containerColor={theme.colors.connecting}
-                icon="phone"
-                size={28}
-                loading={accepting === state.calls[0].callId}
-                onPress={() => accept(state.calls[0].callId, state.calls[0].card)}
-              />
+            <IconButton
+              style={styles.clearIcon}
+              iconColor="white"
+              icon="bell-slash"
+              size={28}
+              loading={ignoring === state.calls[0].callId}
+              onPress={() => ignore(state.calls[0].callId, state.calls[0].card)}
+            />
+            <IconButton
+              style={styles.flipIcon}
+              iconColor="white"
+              containerColor={Colors.offsync}
+              icon="phone"
+              size={28}
+              loading={declining === state.calls[0].callId}
+              onPress={() => decline(state.calls[0].callId, state.calls[0].card)}
+            />
+            <IconButton
+              style={styles.circleIcon}
+              iconColor="white"
+              containerColor={theme.colors.connecting}
+              icon="phone"
+              size={28}
+              loading={accepting === state.calls[0].callId}
+              onPress={() => accept(state.calls[0].callId, state.calls[0].card)}
+            />
           </Surface>
         )}
         {accepting && !state.calling && (
@@ -226,21 +236,18 @@ export function Ring() {
           <Surface elevation={10} mode="flat" style={borderStyle}>
             <View style={styles.name}>
               <Text style={styles.nameSet} numberOfLines={1}>
-                { state.calling.name ? state.calling.name : `${state.calling.handle}@${state.calling.node}` }
+                {state.calling.name ? state.calling.name : `${state.calling.handle}@${state.calling.node}`}
               </Text>
               <View style={styles.status}>
                 {state.connected && <Text style={styles.duration}>{`${Math.floor(state.duration / 60)}:${(state.duration % 60).toString().padStart(2, '0')}`}</Text>}
-                {!state.connected && <Text style={{ ...styles.ringing, color: theme.colors.onSurfaceDisabled }} color="white">0:00</Text>}
+                {!state.connected && (
+                  <Text style={{...styles.ringing, color: theme.colors.onSurfaceDisabled}} color="white">
+                    0:00
+                  </Text>
+                )}
               </View>
             </View>
-            <IconButton
-              style={styles.clearIcon}
-              iconColor="white"
-              disabled={!state.connected}
-              icon={state.audioEnabled ? 'microphone' : 'microphone-slash'}
-              size={28}
-              onPress={toggleAudio}
-            />
+            <IconButton style={styles.clearIcon} iconColor="white" disabled={!state.connected} icon={state.audioEnabled ? 'microphone' : 'microphone-slash'} size={28} onPress={toggleAudio} />
             <IconButton
               style={styles.clearIcon}
               iconColor="white"

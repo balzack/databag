@@ -149,10 +149,11 @@ export function AccountsSmall({setup}: AccountsSmallProps) {
 
   return (
     <View style={styles.component}>
-      <Surface elevation={1} mode="flat" style={{ width: '100%', height: '100%' }}>
+      <Surface elevation={1} mode="flat" style={{width: '100%', height: '100%'}}>
         <Surface elevation={9} mode="flat">
           <SafeAreaView edges={['top']}>
-            <View style={{ width: '100%', display: 'flex', flexDirection: 'row', height: 72, gap: 16, justifyContent: 'center', alignItems: 'center', paddingBottom: 16, paddingRight: 16, paddingLeft: 16 }}>
+            <View
+              style={{width: '100%', display: 'flex', flexDirection: 'row', height: 72, gap: 16, justifyContent: 'center', alignItems: 'center', paddingBottom: 16, paddingRight: 16, paddingLeft: 16}}>
               <Surface mode="flat" elevation={0} style={styles.searchSurface}>
                 <TextInput
                   dense={true}
@@ -186,22 +187,36 @@ export function AccountsSmall({setup}: AccountsSmallProps) {
                 <Menu
                   key="actions"
                   visible={more === item.accountId}
-                  onDismiss={()=>setMore(null)}
-                  anchor={<IconButton style={styles.action} loading={accessing === item.accountId || blocking === item.accountId || removing === item.accountId} icon="dots-horizontal-circle-outline" size={22} onPress={()=>setMore(item.accountId)} />}>
-                    <Menu.Item key='storage' leadingIcon="hard-drive" disabled={true} title={`${Math.floor(item.storageUsed / 1048576)} MB`} onPress={()=>{}} />
-                    <Menu.Item key='access' leadingIcon="lock-open" title={state.strings.accessAccount} onPress={() => accessAccount(item.accountId)} />
-                    { item.disabled && (
-                      <Menu.Item key='enable' leadingIcon="play-circle" title={state.strings.enableAccount} onPress={() => blockAccount(item.accountId, false)} />
-                    )}
-                    { !item.disabled && (
-                      <Menu.Item key='enable' leadingIcon="stop-circle" title={state.strings.disableAccount} onPress={() => { console.log(item); blockAccount(item.accountId, true)}} />
-                    )}
-                    <Menu.Item key='delete' leadingIcon="user-minus" title={state.strings.deleteAccount} onPress={() => removeAccount(item.accountId)} />
+                  onDismiss={() => setMore(null)}
+                  anchor={
+                    <IconButton
+                      style={styles.action}
+                      loading={accessing === item.accountId || blocking === item.accountId || removing === item.accountId}
+                      icon="dots-horizontal-circle-outline"
+                      size={22}
+                      onPress={() => setMore(item.accountId)}
+                    />
+                  }>
+                  <Menu.Item key="storage" leadingIcon="hard-drive" disabled={true} title={`${Math.floor(item.storageUsed / 1048576)} MB`} onPress={() => {}} />
+                  <Menu.Item key="access" leadingIcon="lock-open" title={state.strings.accessAccount} onPress={() => accessAccount(item.accountId)} />
+                  {item.disabled && <Menu.Item key="enable" leadingIcon="play-circle" title={state.strings.enableAccount} onPress={() => blockAccount(item.accountId, false)} />}
+                  {!item.disabled && (
+                    <Menu.Item
+                      key="enable"
+                      leadingIcon="stop-circle"
+                      title={state.strings.disableAccount}
+                      onPress={() => {
+                        console.log(item);
+                        blockAccount(item.accountId, true);
+                      }}
+                    />
+                  )}
+                  <Menu.Item key="delete" leadingIcon="user-minus" title={state.strings.deleteAccount} onPress={() => removeAccount(item.accountId)} />
                 </Menu>
               );
               return (
                 <Card
-                  containerStyle={{ ...styles.contact, handle: { color: theme.colors.onSecondary, fontWeight: 'normal' }}}
+                  containerStyle={{...styles.contact, handle: {color: theme.colors.onSecondary, fontWeight: 'normal'}}}
                   imageUrl={item.imageUrl}
                   name={item.name}
                   handle={item.handle}
@@ -219,7 +234,6 @@ export function AccountsSmall({setup}: AccountsSmallProps) {
             <Text style={styles.label}>{state.strings.noAccounts}</Text>
           </View>
         )}
-
       </Surface>
       <Confirm show={failed} params={failedParams} />
       <Confirm show={remove} busy={removing} params={removeParams} />

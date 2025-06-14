@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     gap: 8,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   cursor: {
     display: 'flex',

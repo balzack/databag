@@ -66,7 +66,7 @@ export function Message({
   useEffect(() => {
     const urlPattern = new RegExp('(https?:\\/\\/)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)');
     const hostPattern = new RegExp('^https?:\\/\\/', 'i');
-    const dotPattern = new RegExp('^.*\\.\\..*$')
+    const dotPattern = new RegExp('^.*\\.\\..*$');
 
     let plain = '';
     let clickable = [];
@@ -242,7 +242,7 @@ export function Message({
 
   return (
     <View style={styles.message}>
-      { small && (
+      {small && (
         <View style={styles.component}>
           <View style={styles.headerContainer}>
             {name && <Text style={styles.labelName}>{name}</Text>}
@@ -253,30 +253,20 @@ export function Message({
               <Menu
                 key="actions"
                 visible={options}
-                onDismiss={()=>setOptions(false)}
-                anchor={<IconButton style={styles.menuButton} icon="dots-horizontal-circle-outline" size={16} onPress={()=>setOptions(true)} />}>
-                  {!locked && profile && status === 'confirmed' && (
-                    <Menu.Item key='edit' leadingIcon="square-edit-outline" title={state.strings.editOption} onPress={edit} />
-                  )}
-                  {(host || profile) && (
-                    <Menu.Item key='delete' leadingIcon="trash-can-outline" title={state.strings.deleteOption} onPress={remove} />
-                  )}
-                  {!profile && (
-                    <Menu.Item key='block' leadingIcon="eye-remove-outline" title={state.strings.blockOption} onPress={block} />
-                  )}
-                  {!profile && (
-                    <Menu.Item key='report' leadingIcon="alert-octagon-outline" title={state.strings.reportOption} onPress={report} />
-                  )}
+                onDismiss={() => setOptions(false)}
+                anchor={<IconButton style={styles.menuButton} icon="dots-horizontal-circle-outline" size={16} onPress={() => setOptions(true)} />}>
+                {!locked && profile && status === 'confirmed' && <Menu.Item key="edit" leadingIcon="square-edit-outline" title={state.strings.editOption} onPress={edit} />}
+                {(host || profile) && <Menu.Item key="delete" leadingIcon="trash-can-outline" title={state.strings.deleteOption} onPress={remove} />}
+                {!profile && <Menu.Item key="block" leadingIcon="eye-remove-outline" title={state.strings.blockOption} onPress={block} />}
+                {!profile && <Menu.Item key="report" leadingIcon="alert-octagon-outline" title={state.strings.reportOption} onPress={report} />}
               </Menu>
             </View>
           </View>
-          <View style={[styles.messageContainer, { flexDirection: profile ? 'row-reverse' : 'row' }]}>
+          <View style={[styles.messageContainer, {flexDirection: profile ? 'row-reverse' : 'row'}]}>
             <Image style={styles.image} resizeMode={'contain'} source={{uri: logoUrl}} />
             <View style={styles.messageContent}>
               <Surface style={styles.messageSurface} mode="flat" elevation={0}>
-                {!locked && status === 'confirmed' && text && (
-                  <Text style={{...styles.text, ...textStyle, ...styles.messageText}}>{message}</Text>
-                )}
+                {!locked && status === 'confirmed' && text && <Text style={{...styles.text, ...textStyle, ...styles.messageText}}>{message}</Text>}
                 {!locked && status !== 'confirmed' && (
                   <View style={styles.shimmerContainer}>
                     <Shimmer contentStyle={styles.longbone} />
@@ -296,7 +286,7 @@ export function Message({
           </View>
         </View>
       )}
-      { !small && (
+      {!small && (
         <View style={styles.component}>
           <View style={styles.topic}>
             <View style={styles.content}>
@@ -305,8 +295,8 @@ export function Message({
                 <Pressable style={styles.header} onPress={() => select(topicId === selected ? null : topicId)}>
                   <View style={styles.name}>
                     {name && <Text style={styles.handle}>{name}</Text>}
-                    {!name && handle && <Text style={[styles.handle, { color: theme.colors.onSecondary }]}>{`${handle}${node ? '@' + node : ''}`}</Text>}
-                    {!name && !handle && <Text style={[styles.unknown, { color: theme.colors.tertiary }]}>{state.strings.unknownContact}</Text>}
+                    {!name && handle && <Text style={[styles.handle, {color: theme.colors.onSecondary}]}>{`${handle}${node ? '@' + node : ''}`}</Text>}
+                    {!name && !handle && <Text style={[styles.unknown, {color: theme.colors.tertiary}]}>{state.strings.unknownContact}</Text>}
                     <Text style={styles.timestamp}> {timestamp}</Text>
                   </View>
                 </Pressable>

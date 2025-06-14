@@ -42,18 +42,26 @@ function ContentTab({scheme, textCard, contentTab, share}: {scheme: string; text
     <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
       <ContentStack.Navigator initialRouteName="contacts" screenOptions={{headerShown: false}}>
         <ContentStack.Screen name="content" options={{headerBackTitleVisible: false}}>
-          {props => <Content share={share} textCard={textCard} closeAll={() => props.navigation.popToTop()} openConversation={() => openConversation(props)} createConversation={() => props.navigation.navigate('assemble')} />}
+          {props => (
+            <Content
+              share={share}
+              textCard={textCard}
+              closeAll={() => props.navigation.popToTop()}
+              openConversation={() => openConversation(props)}
+              createConversation={() => props.navigation.navigate('assemble')}
+            />
+          )}
         </ContentStack.Screen>
-        <ContentStack.Screen name="assemble" options={{ animation: 'simple_push' }}>
+        <ContentStack.Screen name="assemble" options={{animation: 'simple_push'}}>
           {props => <Assemble close={() => props.navigation.goBack()} openConversation={() => props.navigation.replace('conversation')} />}
         </ContentStack.Screen>
-        <ContentStack.Screen name="edit" options={{ animation: 'simple_push' }}>
+        <ContentStack.Screen name="edit" options={{animation: 'simple_push'}}>
           {props => <Members close={() => props.navigation.goBack()} />}
         </ContentStack.Screen>
-        <ContentStack.Screen name="conversation" options={styles.noHeader} options={{ animation: 'simple_push' }} >
-          {props => (<Conversation openDetails={() => props.navigation.navigate('details')} close={() => props.navigation.goBack()} wide={false} /> )}
+        <ContentStack.Screen name="conversation" options={styles.noHeader} options={{animation: 'simple_push'}}>
+          {props => <Conversation openDetails={() => props.navigation.navigate('details')} close={() => props.navigation.goBack()} wide={false} />}
         </ContentStack.Screen>
-        <ContentStack.Screen name="details" options={styles.noHeader} options={{ animation: 'simple_push' }}>
+        <ContentStack.Screen name="details" options={styles.noHeader} options={{animation: 'simple_push'}}>
           {props => <Details close={() => props.navigation.goBack()} edit={() => props.navigation.navigate('edit')} closeAll={() => props.navigation.popToTop()} />}
         </ContentStack.Screen>
       </ContentStack.Navigator>
@@ -203,9 +211,9 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
                   <Settings showLogout={true} />
                 </Surface>
               </View>
-              <Surface style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', backgroundColor: 'transparent' }} elevation={4}>
+              <Surface style={{position: 'absolute', bottom: 0, left: 0, width: '100%', backgroundColor: 'transparent'}} elevation={4}>
                 <BlurView style={styles.blur} blurType="light" blurAmount={8} reducedTransparencyFallbackColor="dark" />
-                <View style={{ backgroundColor: theme.colors.bar, height: 96 }}>
+                <View style={{backgroundColor: theme.colors.bar, height: 96}}>
                   <SafeAreaView edges={['bottom']}>
                     <View style={styles.tabs}>
                       {tab === 'content' && (
@@ -280,9 +288,7 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
               </Surface>
             </View>
           </SafeAreaView>
-          { state.showWelcome && (
-            <Onboarding scheme={scheme} />
-          )}
+          {state.showWelcome && <Onboarding scheme={scheme} />}
         </Surface>
         {disconnected && showDisconnected && !dismissed && (
           <View style={styles.alert}>
