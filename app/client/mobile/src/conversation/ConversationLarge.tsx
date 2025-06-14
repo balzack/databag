@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {Animated, useAnimatedValue, Keyboard, Modal, ScrollView, Pressable, View, FlatList, Platform} from 'react-native';
+import {Animated, useAnimatedValue, Modal, ScrollView, Pressable, View, FlatList, Platform} from 'react-native';
 import {styles} from './Conversation.styled';
 import {useConversation} from './useConversation.hook';
 import {Message} from '../message/Message';
@@ -251,7 +251,7 @@ export function ConversationLarge({close, openDetails, wide}: {close: () => void
               const {host} = state;
               const card = state.cards.get(item.guid) || null;
               const profile = state.profile?.guid === item.guid ? state.profile : null;
-              return <Message small={false} topic={item} card={card} profile={profile} host={host} select={id => setSelected(id)} selected={selected} />;
+              return <Message topic={item} card={card} profile={profile} host={host} select={id => setSelected(id)} selected={selected} />;
             }}
             keyExtractor={topic => topic.topicId}
           />

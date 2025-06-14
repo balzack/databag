@@ -42,11 +42,19 @@ export const styles = StyleSheet.create({
     margin: 8,
     borderRadius: 16,
   },
-  dot: {
+  lgDot: {
     width: 64,
     height: 64,
     backgroundColor: Colors.placeholder,
     marginLeft: 48,
+    borderRadius: 16,
+  },
+  dot: {
+    width: 64,
+    height: 64,
+    backgroundColor: Colors.placeholder,
+    marginLeft: 56,
+    marginBottom: 18,
     borderRadius: 16,
   },
   error: {
@@ -143,7 +151,7 @@ export const styles = StyleSheet.create({
     paddingTop: 4,
   },
   carousel: {
-    paddingLeft: 16,
+    paddingLeft: 40,
     paddingBottom: 16,
   },
   assets: {

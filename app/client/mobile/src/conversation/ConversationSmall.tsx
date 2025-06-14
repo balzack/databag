@@ -264,7 +264,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
               const {host} = state;
               const card = state.cards.get(item.guid) || null;
               const profile = state.profile?.guid === item.guid ? state.profile : null;
-              return <Message small={true} topic={item} card={card} profile={profile} host={host} select={id => setSelected(id)} selected={selected} />;
+              return <Message topic={item} card={card} profile={profile} host={host} select={id => setSelected(id)} selected={selected} />;
             }}
             keyExtractor={topic => topic.topicId}
           />
