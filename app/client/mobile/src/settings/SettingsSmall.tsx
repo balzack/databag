@@ -499,6 +499,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                       left={<TextInput.Icon style={styles.icon} size={22} icon="idcard" />}
                       onChangeText={value => actions.setName(value)}
                       onSubmitEditing={saveDetails}
+                      onBlur={saveDetails}
                     />
                     <Divider style={styles.navDivider} />
                     <View style={styles.navUpload}>
@@ -546,6 +547,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                       blurOnSubmit={true}
                       scrollEnabled={false}
                       onSubmitEditing={saveDetails}
+                      onBlur={saveDetails}
                     />
                     <Divider style={styles.navDivider} />
                     <View style={styles.navUpload}>
