@@ -57,7 +57,8 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         useNativeDriver: false,
       }).start();
     }
-  }, [state.profileSet])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.profileSet]);
 
   const showBlockedMessage = async () => {
     setBlockedError(false);

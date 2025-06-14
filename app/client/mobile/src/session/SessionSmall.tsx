@@ -107,31 +107,27 @@ function ContactTab({scheme, textContact, callContact}: {scheme: string; textCon
   );
 }
 
-function Onboarding({ scheme }: { scheme: string }) {
+function Onboarding({scheme}: {scheme: string}) {
   return (
-    <SafeAreaView edges={['top']} style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0 }}>
-              <Surface elevation={9} mode="flat" style={styles.screen}>
-      <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <OnboardStack.Navigator initialRouteName="welcome" screenOptions={{headerShown: false}}>
-          <OnboardStack.Screen name="welcome" options={{headerBackTitleVisible: false}}>
-            {props => <Welcome next={() => props.navigation.navigate('identity')} />}
-          </OnboardStack.Screen>
-          <OnboardStack.Screen name="identity" options={{ animation: 'fade' }}>
-            {props => (
-                    <Settings setupNav={{ back: ()=>props.navigation.navigate('welcome'), next: ()=>props.navigation.navigate('request') }} />
-            )}
-          </OnboardStack.Screen>
-          <OnboardStack.Screen name="request">
-            {props => (
-                  <Request setupNav={{ back: ()=>props.navigation.navigate('identity'), next: ()=>props.navigation.navigate('ready') }} />
-            )}
-          </OnboardStack.Screen>
-          <OnboardStack.Screen name="ready" options={{headerBackTitleVisible: false, animation: 'fade'}}>
-            {props => <Ready />}
-          </OnboardStack.Screen>
-        </OnboardStack.Navigator>
-      </NavigationContainer>
-            </Surface>
+    <SafeAreaView edges={['top']} style={{position: 'absolute', width: '100%', height: '100%', top: 0, left: 0}}>
+      <Surface elevation={9} mode="flat" style={styles.screen}>
+        <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <OnboardStack.Navigator initialRouteName="welcome" screenOptions={{headerShown: false}}>
+            <OnboardStack.Screen name="welcome" options={{headerBackTitleVisible: false}}>
+              {props => <Welcome next={() => props.navigation.navigate('identity')} />}
+            </OnboardStack.Screen>
+            <OnboardStack.Screen name="identity" options={{animation: 'fade'}}>
+              {props => <Settings setupNav={{back: () => props.navigation.navigate('welcome'), next: () => props.navigation.navigate('request')}} />}
+            </OnboardStack.Screen>
+            <OnboardStack.Screen name="request">
+              {props => <Request setupNav={{back: () => props.navigation.navigate('identity'), next: () => props.navigation.navigate('ready')}} />}
+            </OnboardStack.Screen>
+            <OnboardStack.Screen name="ready" options={{headerBackTitleVisible: false, animation: 'fade'}}>
+              {() => <Ready />}
+            </OnboardStack.Screen>
+          </OnboardStack.Navigator>
+        </NavigationContainer>
+      </Surface>
     </SafeAreaView>
   );
 }
