@@ -1,9 +1,8 @@
-import {useState, useContext, useEffect, useRef} from 'react';
+import {useState, useContext, useEffect} from 'react';
 import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {ContextType} from '../context/ContextType';
-import {Config} from 'databag-client-sdk';
-import {FocusDetail, Card, Profile} from 'databag-client-sdk';
+import {FocusDetail, Card} from 'databag-client-sdk';
 
 export function useMembers() {
   const app = useContext(AppContext) as ContextType;

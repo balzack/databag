@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Icon, Text, Divider, IconButton, useTheme} from 'react-native-paper';
+import {Icon, Text, Divider, IconButton} from 'react-native-paper';
 import {ScrollView, Image, View} from 'react-native';
 import {styles} from './Profile.styled';
 import {useProfile} from './useProfile.hook';
@@ -9,7 +9,6 @@ import {ContactParams} from './Profile';
 
 export function ProfileLarge({close, params}: {close: () => void; params: ContactParams}) {
   const {state, actions} = useProfile(params);
-  const theme = useTheme();
   const [confirmShow, setConfirmShow] = useState(false);
   const [busy, setBusy] = useState(false);
   const [confirmParams, setConfirmParams] = useState({});

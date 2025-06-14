@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Animated, useAnimatedValue, Image, View} from 'react-native';
 import {useCall} from './useCall.hook';
 import {styles} from './Call.styled';
-import {useTheme, Text, Surface, IconButton} from 'react-native-paper';
+import {useTheme, Text, IconButton} from 'react-native-paper';
 import {Confirm} from '../confirm/Confirm';
 import {Colors} from '../constants/Colors';
 import {RTCView} from 'react-native-webrtc';

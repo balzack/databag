@@ -1,12 +1,9 @@
 import React, {useState, useRef} from 'react';
-import {useTheme, Surface, Checkbox, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
-import {TouchableOpacity, FlatList, Pressable, Modal, View, Image, ScrollView, Platform} from 'react-native';
+import {useTheme, Surface, Checkbox, Button, Text, Icon, TextInput} from 'react-native-paper';
+import {FlatList, Pressable, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {styles} from './Assemble.styled';
 import {useAssemble} from './useAssemble.hook';
-import ImagePicker from 'react-native-image-crop-picker';
-import {BlurView} from '@react-native-community/blur';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Card} from '../card/Card';
 import {Confirm} from '../confirm/Confirm';
 

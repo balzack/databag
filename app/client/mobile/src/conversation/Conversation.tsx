@@ -1,5 +1,4 @@
 import React from 'react';
-import {useConversation} from './useConversation.hook';
 import {ConversationSmall} from './ConversationSmall';
 import {ConversationLarge} from './ConversationLarge';
 import {LayoutSelector} from '../utils/LayoutSelector';

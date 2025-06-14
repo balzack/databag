@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import {Alert, View, StatusBar} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {View, StatusBar} from 'react-native';
 import {AppContextProvider} from './src/context/AppContext';
 import {DisplayContextProvider} from './src/context/DisplayContext';
 import {Routes, Route, MemoryRouter} from 'react-router-dom';
@@ -14,7 +14,7 @@ import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {HouseSimple, HardDrive, LockOpen, UserMinus, PlayCircle, StopCircle, UsersFour, DotsThreeCircle, VideoCamera, VideoCameraSlash, ArrowsInSimple, BellSlash, Phone, Microphone, MicrophoneSlash, FrameCorners, WarningCircle, Link, LinkBreak, AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
 import {useColorScheme} from 'react-native';
-import {configureFonts, MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
+import {MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
 
 const databagColors = {
   light: {
@@ -135,6 +135,74 @@ const databagColors = {
   },
 };
 
+function FontMix(props: {name: string, color: string}) {
+  if (props.name === 'rolodex') {
+    props.name = 'contacts';
+    return <AntIcon {...props} />;
+  }
+  else if (props.name === 'left' || props.name === 'idcard' || props.name === 'picture' || props.name === 'message1') {
+    return <AntIcon {...props} />;
+  } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock' || props.name === 'user' || props.name === 'users' || props.name === 'message-circle' || props.name === 'github' || props.name === 'align-left' || props.name === 'edit' || props.name === 'log-out' || props.name === 'search' || props.name === 'star' || props.name === 'filter' || props.name === 'plus-square' || props.name === 'send') {
+    return <FeatherIcon {...props} />;
+  } else if (props.name === 'sensor-occupied') {
+    return <MaterialIcon {...props}  />;
+  } else if (props.name === 'address-book') {
+    return <AddressBook color={props.color} size={props.size} />;
+  } else if (props.name === 'address-book-filled') {
+    return <AddressBook weight="fill" color={props.color} size={props.size} />;
+  } else if (props.name === 'chat-circle') {
+    return <ChatCircle color={props.color} size={props.size} />;
+  } else if (props.name === 'chat-circle-filled') {
+    return <ChatCircle weight="fill" color={props.color} size={props.size} />;
+  } else if (props.name === 'gear-six') {
+    return <GearSix color={props.color} size={props.size} />;
+  } else if (props.name === 'gear-six-filled') {
+    return <GearSix weight="fill" color={props.color} size={props.size} />;
+  } else if (props.name === 'link') {
+    return <Link color={props.color} size={props.size} />;
+  } else if (props.name === 'link-break') {
+    return <LinkBreak color={props.color} size={props.size} />;
+  } else if (props.name === 'warning-circle') {
+    return <WarningCircle weight="fill" color={props.color} size={props.size} />;
+  } else if (props.name === 'frame-corners') {
+    return <FrameCorners color={props.color} size={props.size} />;
+  } else if (props.name === 'microphone-slash') {
+    return <MicrophoneSlash color={props.color} size={props.size} />;
+  } else if (props.name === 'microphone') {
+    return <Microphone color={props.color} size={props.size} />;
+  } else if (props.name === 'phone') {
+    return <Phone color={props.color} size={props.size} />;
+  } else if (props.name === 'bell-slash') {
+    return <BellSlash color={props.color} size={props.size} />;
+  } else if (props.name === 'arrows-in') {
+    return <ArrowsInSimple color={props.color} size={props.size} />;
+  } else if (props.name === 'video') {
+    return <VideoCamera color={props.color} size={props.size} />;
+  } else if (props.name === 'video-slash') {
+    return <VideoCameraSlash color={props.color} size={props.size} />;
+  } else if (props.name === 'dots-horizontal-circle-outline') {
+    return <DotsThreeCircle color={props.color} size={props.size} />;
+  } else if (props.name === 'users-four') {
+    return <UsersFour color={props.color} size={props.size} />;
+  } else if (props.name === 'users-four-filled') {
+    return <UsersFour weight="fill" color={props.color} size={props.size} />;
+  } else if (props.name === 'hard-drive') {
+    return <HardDrive color={props.color} size={props.size} />;
+  } else if (props.name === 'lock-open') {
+    return <LockOpen color={props.color} size={props.size} />;
+  } else if (props.name === 'user-minus') {
+    return <UserMinus color={props.color} size={props.size} />;
+  } else if (props.name === 'play-circle') {
+    return <PlayCircle color={props.color} size={props.size} />;
+  } else if (props.name === 'stop-circle') {
+    return <StopCircle color={props.color} size={props.size} />;
+  } else if (props.name === 'award') {
+    return <HouseSimple color={props.color} size={props.size} />;
+  } else {
+    return <CommunityIcon {...props} />;
+  }
+}
+
 function App(): React.JSX.Element {
   const colorScheme = useColorScheme();
   const [share, setShare] = useState(null as null | { filePath: string, mimeType: string });
@@ -145,33 +213,33 @@ function App(): React.JSX.Element {
         const { filePath, mimeType } = files[0];
         setShare({ filePath: filePath.startsWith('file') ? filePath : `file://${filePath}`, mimeType });
       }
-    }, 
+    },
     (error) =>{
       console.log(error);
-    }, 
+    },
     'databag'
     );
-    return () => {ReceiveSharingIntent.clearReceivedFiles() }
+    return () => {ReceiveSharingIntent.clearReceivedFiles(); };
   }, []);
 
   const fonts = {
-    default: {fontFamily: "Inter-Regular", fontSize: 16, fontWeight: "400", letterSpacing: 0},
-    bodyLarge: {fontFamily: "Inter-Regular", fontSize: 16, fontWeight: "400", letterSpacing: 0.15, lineHeight: 24},
-    bodyMedium: {fontFamily: "Inter-Regular", fontSize: 16, fontWeight: "400", letterSpacing: 0.25, lineHeight: 20},
-    bodySmall: {fontFamily: "Inter-Regular", fontSize: 12, fontWeight: "400", letterSpacing: 0.4, lineHeight: 16},
-    displayLarge: {fontFamily: "Inter-Regular", fontSize: 57, fontWeight: "400", letterSpacing: 0, lineHeight: 64},
-    displayMedium: {fontFamily: "Inter-Regular", fontSize: 45, fontWeight: "400", letterSpacing: 0, lineHeight: 52},
-    displaySmall: {fontFamily: "Inter-Regular", fontSize: 36, fontWeight: "400", letterSpacing: 0, lineHeight: 36},
-    headlineLarge: {fontFamily: "Inter-Regular", fontSize: 32, fontWeight: "500", letterSpacing: 0, lineHeight: 32},
-    headlineMedium: {fontFamily: "Inter-Regular", fontSize: 28, fontWeight: "500", letterSpacing: 0, lineHeight: 32},
-    headlineSmall: {fontFamily: "Inter-Regular", fontSize: 23, fontWeight: "500", letterSpacing: 0, lineHeight: 24},
-    labelLarge: {fontFamily: "Inter-Regular", fontSize: 16, fontWeight: "500", letterSpacing: 0.1, lineHeight: 20},
-    labelMedium: {fontFamily: "Inter-Regular", fontSize: 12, fontWeight: "500", letterSpacing: 0.5, lineHeight: 16},
-    labelSmall: {fontFamily: "Inter-Regular", fontSize: 11, fontWeight: "500", letterSpacing: 0.5, lineHeight: 16},
-    titleLarge: {fontFamily: "Inter-Regular", fontSize: 48, fontWeight: "900", letterSpacing: 0.25, lineHeight: 48},
-    titleMedium: {fontFamily: "Inter-Regular", fontSize: 32, fontWeight: "900", letterSpacing: 0.15, lineHeight: 32},
-    titleSmall: {fontFamily: "Inter-Regular", fontSize: 28, fontWeight: "900", letterSpacing: 0.1, lineHeight: 28}
-  }
+    default: {fontFamily: 'Inter-Regular', fontSize: 16, fontWeight: '400', letterSpacing: 0},
+    bodyLarge: {fontFamily: 'Inter-Regular', fontSize: 16, fontWeight: '400', letterSpacing: 0.15, lineHeight: 24},
+    bodyMedium: {fontFamily: 'Inter-Regular', fontSize: 16, fontWeight: '400', letterSpacing: 0.25, lineHeight: 20},
+    bodySmall: {fontFamily: 'Inter-Regular', fontSize: 12, fontWeight: '400', letterSpacing: 0.4, lineHeight: 16},
+    displayLarge: {fontFamily: 'Inter-Regular', fontSize: 57, fontWeight: '400', letterSpacing: 0, lineHeight: 64},
+    displayMedium: {fontFamily: 'Inter-Regular', fontSize: 45, fontWeight: '400', letterSpacing: 0, lineHeight: 52},
+    displaySmall: {fontFamily: 'Inter-Regular', fontSize: 36, fontWeight: '400', letterSpacing: 0, lineHeight: 36},
+    headlineLarge: {fontFamily: 'Inter-Regular', fontSize: 32, fontWeight: '500', letterSpacing: 0, lineHeight: 32},
+    headlineMedium: {fontFamily: 'Inter-Regular', fontSize: 28, fontWeight: '500', letterSpacing: 0, lineHeight: 32},
+    headlineSmall: {fontFamily: 'Inter-Regular', fontSize: 23, fontWeight: '500', letterSpacing: 0, lineHeight: 24},
+    labelLarge: {fontFamily: 'Inter-Regular', fontSize: 16, fontWeight: '500', letterSpacing: 0.1, lineHeight: 20},
+    labelMedium: {fontFamily: 'Inter-Regular', fontSize: 12, fontWeight: '500', letterSpacing: 0.5, lineHeight: 16},
+    labelSmall: {fontFamily: 'Inter-Regular', fontSize: 11, fontWeight: '500', letterSpacing: 0.5, lineHeight: 16},
+    titleLarge: {fontFamily: 'Inter-Regular', fontSize: 48, fontWeight: '900', letterSpacing: 0.25, lineHeight: 48},
+    titleMedium: {fontFamily: 'Inter-Regular', fontSize: 32, fontWeight: '900', letterSpacing: 0.15, lineHeight: 32},
+    titleSmall: {fontFamily: 'Inter-Regular', fontSize: 28, fontWeight: '900', letterSpacing: 0.1, lineHeight: 28},
+  };
 
   const theme =
     colorScheme === 'dark'
@@ -184,75 +252,7 @@ function App(): React.JSX.Element {
   return (
     <AppContextProvider>
       <DisplayContextProvider>
-        <PaperProvider settings={{icon: (props) => {
-              if (props.name === 'rolodex') {
-                props.name = 'contacts';
-                return <AntIcon {...props} />
-              }
-              else if (props.name === 'left' || props.name === 'idcard' || props.name === 'picture' || props.name === 'message1') {
-                return <AntIcon {...props} />
-              } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock' || props.name === 'user' || props.name === 'users' || props.name === 'message-circle' || props.name === 'github' || props.name === 'align-left' || props.name === 'edit' || props.name === 'log-out' || props.name === 'search' || props.name === 'star' || props.name === 'filter' || props.name === 'plus-square' || props.name === 'send') {
-                return <FeatherIcon {...props} />
-              } else if (props.name === 'sensor-occupied') {
-                return <MaterialIcon {...props}  />
-              } else if (props.name === 'address-book') {
-                return <AddressBook color={props.color} size={props.size} />
-              } else if (props.name === 'address-book-filled') {
-                return <AddressBook weight="fill" color={props.color} size={props.size} />
-              } else if (props.name === 'chat-circle') {
-                return <ChatCircle color={props.color} size={props.size} />
-              } else if (props.name === 'chat-circle-filled') {
-                return <ChatCircle weight="fill" color={props.color} size={props.size} />
-              } else if (props.name === 'gear-six') {
-                return <GearSix color={props.color} size={props.size} />
-              } else if (props.name === 'gear-six-filled') {
-                return <GearSix weight="fill" color={props.color} size={props.size} />
-              } else if (props.name === 'link') {
-                return <Link color={props.color} size={props.size} /> 
-              } else if (props.name === 'link-break') {
-                return <LinkBreak color={props.color} size={props.size} />
-              } else if (props.name === 'warning-circle') {
-                return <WarningCircle weight="fill" color={props.color} size={props.size} />
-              } else if (props.name === 'frame-corners') {
-                return <FrameCorners color={props.color} size={props.size} /> 
-              } else if (props.name === 'microphone-slash') {
-                return <MicrophoneSlash color={props.color} size={props.size} />
-              } else if (props.name === 'microphone') {
-                return <Microphone color={props.color} size={props.size} />
-              } else if (props.name === 'phone') {
-                return <Phone color={props.color} size={props.size} />
-              } else if (props.name === 'bell-slash') {
-                return <BellSlash color={props.color} size={props.size} />
-              } else if (props.name === 'arrows-in') {
-                return <ArrowsInSimple color={props.color} size={props.size} />
-              } else if (props.name === 'video') {
-                return <VideoCamera color={props.color} size={props.size} />
-              } else if (props.name === 'video-slash') {
-                return <VideoCameraSlash color={props.color} size={props.size} />
-              } else if (props.name === 'dots-horizontal-circle-outline') {
-                return <DotsThreeCircle color={props.color} size={props.size} />
-              } else if (props.name === 'users-four') {
-                return <UsersFour color={props.color} size={props.size} />
-              } else if (props.name === 'users-four-filled') {
-                return <UsersFour weight="fill" color={props.color} size={props.size} />
-              } else if (props.name === 'hard-drive') {
-                return <HardDrive color={props.color} size={props.size} />
-              } else if (props.name === 'lock-open') {
-                return <LockOpen color={props.color} size={props.size} />
-              } else if (props.name === 'user-minus') {
-                return <UserMinus color={props.color} size={props.size} />
-              } else if (props.name === 'play-circle') {
-                return <PlayCircle color={props.color} size={props.size} />
-              } else if (props.name === 'stop-circle') {
-                return <StopCircle color={props.color} size={props.size} />
-              } else if (props.name === 'award') {
-                return <HouseSimple color={props.color} size={props.size} />
-              } else {
-                return <CommunityIcon {...props} />
-              }
-            }}}
-            theme={theme}
-          >
+        <PaperProvider settings={{icon: FontMix}} theme={theme}>
           <MemoryRouter>
             <StatusBar />
             <Root />

@@ -1,4 +1,3 @@
-import React from 'react';
 import {useContent} from './useContent.hook';
 import {ContentSmall} from './ContentSmall';
 import {ContentLarge} from './ContentLarge';

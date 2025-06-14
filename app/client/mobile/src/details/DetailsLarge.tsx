@@ -8,7 +8,7 @@ import {Card} from '../card/Card';
 import {BlurView} from '@react-native-community/blur';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-export function DetailsLarge({close, edit, closeAll}: {close: () => void; edit: () => void; closeAll: () => void}) {
+export function DetailsLarge({close, closeAll}: {close: () => void; closeAll: () => void}) {
   const {state, actions} = useDetails();
   const [alert, setAlert] = useState(false);
   const [saving, setSaving] = useState(false);

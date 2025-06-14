@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
-import {useAnimatedValue, Animated, Modal, Platform, ScrollView, View, Image, SafeAreaView} from 'react-native';
+import {useAnimatedValue, Animated, Modal, ScrollView, View, Image, SafeAreaView} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useAccess} from './useAccess.hook';
 import {styles} from './Access.styled';
-import left from '../images/login.png';
 import typer from '../images/typer.png';
 import {IconButton, Divider, Surface, Text, TextInput, Button, Checkbox} from 'react-native-paper';
 import {BlurView} from '@react-native-community/blur';
@@ -13,7 +12,6 @@ import {Confirm} from '../confirm/Confirm';
 
 export function Access() {
   const {state, actions} = useAccess();
-  const [showConfirm, setShowConfirm] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [accept, setAccept] = useState(false);
   const [alert, setAlert] = useState(false);

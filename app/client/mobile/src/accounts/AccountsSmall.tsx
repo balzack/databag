@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {FlatList, View, TouchableOpacity, Modal} from 'react-native';
-import {Text, Button, TextInput, Menu, IconButton, Divider, Surface, Icon, useTheme} from 'react-native-paper';
+import {Text, Button, TextInput, Menu, IconButton, Surface, Icon, useTheme} from 'react-native-paper';
 import {useAccounts} from './useAccounts.hook';
 import {styles} from './Accounts.styled';
 import {Card} from '../card/Card';
@@ -10,11 +10,7 @@ import {BlurView} from '@react-native-community/blur';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-type AccountsSmallProps = {
-  setup: () => void;
-};
-
-export function AccountsSmall({setup}: AccountsSmallProps) {
+export function AccountsSmall() {
   const {state, actions} = useAccounts();
   const theme = useTheme();
   const [failed, setFailed] = useState(false);

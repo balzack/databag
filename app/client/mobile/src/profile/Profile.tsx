@@ -1,5 +1,4 @@
 import React from 'react';
-import {useProfile} from './useProfile.hook';
 import {ProfileSmall} from './ProfileSmall';
 import {ProfileLarge} from './ProfileLarge';
 import {LayoutSelector} from '../utils/LayoutSelector';

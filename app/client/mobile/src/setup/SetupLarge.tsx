@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {TouchableOpacity, Modal, Image, View} from 'react-native';
-import {useTheme, ActivityIndicator, Icon, Button, IconButton, RadioButton, Switch, Surface, Divider, TextInput, Text} from 'react-native-paper';
+import {ActivityIndicator, Icon, Button, IconButton, RadioButton, Switch, Surface, Divider, TextInput, Text} from 'react-native-paper';
 import {styles} from './Setup.styled';
 import {useSetup} from './useSetup.hook';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -15,7 +15,6 @@ export function SetupLarge() {
   const [updating, setUpdating] = useState(false);
   const [secretCopy, setSecretCopy] = useState(false);
   const [confirmingAuth, setConfirmingAuth] = useState(false);
-  const theme = useTheme();
 
   const errorParams = {
     title: state.strings.operationFailed,

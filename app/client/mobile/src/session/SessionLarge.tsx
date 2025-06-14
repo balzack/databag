@@ -3,8 +3,7 @@ import {Pressable, View, useColorScheme} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RingContextProvider} from '../context/RingContext';
 import {styles} from './Session.styled';
-import {IconButton, Surface, Text, Icon, useTheme} from 'react-native-paper';
-import {BlurView} from '@react-native-community/blur';
+import {Surface, Text, Icon} from 'react-native-paper';
 import {Settings} from '../settings/Settings';
 import {Contacts} from '../contacts/Contacts';
 import {Content} from '../content/Content';
@@ -14,19 +13,12 @@ import {Details} from '../details/Details';
 import {Identity} from '../identity/Identity';
 import {Base} from '../base/Base';
 import {Conversation} from '../conversation/Conversation';
-import {Assemble} from '../assemble/Assemble';
-import {Members} from '../members/Members';
 import {useSession} from './useSession.hook';
 import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Colors} from '../constants/Colors';
 import {Ring} from '../ring/Ring';
 import {Call} from '../call/Call';
-import {Onboard} from '../onboard/Onboard';
-import {Welcome} from '../welcome/Welcome';
-import {Request} from '../request/Request';
-import {Ready} from '../ready/Ready';
 
 const SettingsDrawer = createDrawerNavigator();
 const ContactsDrawer = createDrawerNavigator();
@@ -229,7 +221,6 @@ export function SessionLarge({share}: {share: {filePath: string; mimeType: strin
   const [disconnected, setDisconnected] = useState(false);
   const [showDisconnected, setShowDisconnected] = useState(false);
   const [focus, setFocus] = useState(false);
-  const theme = useTheme();
 
   const textContact = (cardId: null | string) => {
     setTextCard({cardId});

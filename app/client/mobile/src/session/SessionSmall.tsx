@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Pressable, View, useColorScheme} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RingContextProvider} from '../context/RingContext';
@@ -11,19 +11,15 @@ import {Content} from '../content/Content';
 import {Registry} from '../registry/Registry';
 import {Profile, ContactParams} from '../profile/Profile';
 import {Details} from '../details/Details';
-import {Identity} from '../identity/Identity';
-import {Base} from '../base/Base';
 import {Conversation} from '../conversation/Conversation';
 import {Assemble} from '../assemble/Assemble';
 import {Members} from '../members/Members';
 import {useSession} from './useSession.hook';
 import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
-import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Colors} from '../constants/Colors';
 import {Ring} from '../ring/Ring';
 import {Call} from '../call/Call';
-import {Onboard} from '../onboard/Onboard';
 import {Welcome} from '../welcome/Welcome';
 import {Request} from '../request/Request';
 import {Ready} from '../ready/Ready';
@@ -58,10 +54,10 @@ function ContentTab({scheme, textCard, contentTab, share}: {scheme: string; text
         <ContentStack.Screen name="edit" options={{animation: 'simple_push'}}>
           {props => <Members close={() => props.navigation.goBack()} />}
         </ContentStack.Screen>
-        <ContentStack.Screen name="conversation" options={styles.noHeader} options={{animation: 'simple_push'}}>
-          {props => <Conversation openDetails={() => props.navigation.navigate('details')} close={() => props.navigation.goBack()} wide={false} />}
+        <ContentStack.Screen name="conversation" options={{...styles.noHeader, animation: 'simple_push'}}>
+          {props => <Conversation openDetails={() => props.navigation.navigate('details')} close={() => props.navigation.goBack()} />}
         </ContentStack.Screen>
-        <ContentStack.Screen name="details" options={styles.noHeader} options={{animation: 'simple_push'}}>
+        <ContentStack.Screen name="details" options={{...styles.noHeader, animation: 'simple_push'}}>
           {props => <Details close={() => props.navigation.goBack()} edit={() => props.navigation.navigate('edit')} closeAll={() => props.navigation.popToTop()} />}
         </ContentStack.Screen>
       </ContentStack.Navigator>
@@ -129,11 +125,10 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
   const scheme = useColorScheme();
   const [tab, setTab] = useState('content');
   const [textCard, setTextCard] = useState({cardId: null} as {cardId: null | string});
-  const [callCard, setCallCard] = useState({card: null} as {card: null | Card});
+  const [, setCallCard] = useState({card: null} as {card: null | Card});
   const [dismissed, setDismissed] = useState(false);
   const [disconnected, setDisconnected] = useState(false);
   const [showDisconnected, setShowDisconnected] = useState(false);
-  const [focus, setFocus] = useState(false);
   const theme = useTheme();
 
   const textContact = (cardId: null | string) => {
@@ -144,7 +139,6 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
     setCallCard({card});
   };
 
-  const sessionNav = {strings: state.strings, callContact, callCard, textContact, textCard, focus, setFocus, share};
   const showContent = {display: tab === 'content' ? 'flex' : 'none'};
   const showContact = {display: tab === 'contacts' ? 'flex' : 'none'};
   const showSettings = {display: tab === 'settings' ? 'flex' : 'none'};

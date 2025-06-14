@@ -34,7 +34,7 @@ async function getVideoThumb(path: string, position?: number) {
 
 export function useConversation() {
   const mute = useRef(false);
-  const unsent = useRef('');
+  const unsent = useRef({message: null, assets: []} as UnsentTopic);
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
@@ -148,14 +148,8 @@ export function useConversation() {
         app.actions.setUnsent(cardId, channelId, unsent.current);
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [app.state.focus]);
-
-  useEffect(() => {
-    display.actions.lockLayout(true);
-    return () => {
-      display.actions.lockLayout(false);
-    };
-  }, []);
 
   useEffect(() => {
     const host = state.cardId == null;

@@ -1,5 +1,4 @@
 import React from 'react';
-import {useSession} from './useSession.hook';
 import {SessionSmall} from './SessionSmall';
 import {SessionLarge} from './SessionLarge';
 import {LayoutSelector} from '../utils/LayoutSelector';

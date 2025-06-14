@@ -1,5 +1,4 @@
 import React from 'react';
-import {useDetails} from './useDetails.hook';
 import {DetailsSmall} from './DetailsSmall';
 import {DetailsLarge} from './DetailsLarge';
 import {LayoutSelector} from '../utils/LayoutSelector';

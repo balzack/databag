@@ -1,14 +1,12 @@
 import React, {useState} from 'react';
-import {SafeAreaView, View, useColorScheme} from 'react-native';
+import {SafeAreaView, View} from 'react-native';
 import {styles} from './Service.styled';
 import {useTheme, IconButton, Surface} from 'react-native-paper';
 import {Accounts} from '../accounts/Accounts';
 import {Setup} from '../setup/Setup';
-import {useService} from './useService.hook';
 import {BlurView} from '@react-native-community/blur';
 
 export function ServiceSmall() {
-  const {state} = useService();
   const [tab, setTab] = useState('setup');
   const showAccounts = {width: '100%', height: '100%', display: tab === 'accounts' ? 'flex' : 'none'};
   const showSetup = {width: '100%', height: '100%', display: tab === 'setup' ? 'flex' : 'none'};

@@ -1,4 +1,4 @@
-import {useState, useContext, useEffect} from 'react';
+import {useState, useContext} from 'react';
 import {DisplayContext} from '../context/DisplayContext';
 import {AppContext} from '../context/AppContext';
 import {ContextType} from '../context/ContextType';
@@ -14,7 +14,10 @@ export function useReady() {
     setState(s => ({...s, ...value}));
   };
 
-  useEffect(() => {}, [app.state]);
+  useEffect(() => {
+    const { strings } = display.state;
+    updateState({ strings });
+  }, [display.state]);
 
   const actions = {
     done: async () => {

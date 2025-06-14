@@ -1,5 +1,3 @@
-import {NativeModules, Platform} from 'react-native';
-
 export const languages = [
   {name: 'English', value: 'en'},
   {name: 'Français', value: 'fr'},
@@ -258,7 +256,6 @@ export const en = {
   saveRequest: 'Save and Request Connection',
   ignoreRequest: 'Ignore Request',
   acceptConnection: 'Accept Connection',
-  requestConnection: 'Request Connection',
   cancelRequest: 'Cancel Request',
   resyncContact: 'Resync Contact',
 
@@ -333,10 +330,6 @@ export const en = {
 
   deleteMessage: 'Deleting Message',
   messageHint: 'Are you sure you want to delete the message?',
-  attachImage: 'Attach Image',
-  attachVideo: 'Attach Video',
-  attachAudio: 'Attach Audio',
-  attachFile: 'Attach File',
   fontColor: 'Change Font Color',
   fontSize: 'Change Font Size',
   postMessage: 'Post Message',
@@ -349,8 +342,6 @@ export const en = {
   sureLeave: 'Are you sure you want to leave this topic?',
 
   details: 'Details',
-  host: 'Host',
-  guest: 'Guest',
   edit: 'Edit',
   editSubject: 'Edit Subject',
   editMembership: 'Edit Membership',
@@ -685,7 +676,6 @@ export const fr = {
   saveRequest: 'Enregistrer et Demander la Connexion',
   ignoreRequest: 'Ignorer la Demande',
   acceptConnection: 'Accepter la Connexion',
-  requestConnection: 'Demander une Connexion',
   cancelRequest: 'Annuler la Demande',
   resyncContact: 'Resynchroniser le Contact',
 
@@ -747,10 +737,6 @@ export const fr = {
 
   deleteMessage: 'Suppression du Message',
   messageHint: 'Êtes-vous Sûr de Vouloir Supprimer le Message?',
-  attachImage: 'Joindre une Image',
-  attachVideo: 'Joindre une Vidéo',
-  attachAudio: 'Joindre un Audio',
-  attachFile: 'Joindre un Fichier',
   fontColor: 'Changer la Couleur du Text',
   fontSize: 'Changer la Taille du Text',
   postMessage: 'Publier le Message',
@@ -763,8 +749,6 @@ export const fr = {
   sureLeave: 'Êtes-Vous Sûr de Vouloir Quitter ce Sujet?',
 
   details: 'Détails',
-  host: 'Hôte',
-  guest: 'Invité',
   edit: 'Modifier',
   editSubject: 'Modifier le Sujet',
   editMembership: 'Modifier Membres du Suject',
@@ -1078,7 +1062,6 @@ export const es = {
   saveRequest: 'Guardar y solicitar la Conexión',
   ignoreRequest: 'Ignorar la Solicitud',
   acceptConnection: 'Aceptar Conexión',
-  requestConnection: 'Solicitar Conexión',
   cancelRequest: 'Cancelar Solicitud',
   resyncContact: 'Resincronizar Contacto',
 
@@ -1140,10 +1123,6 @@ export const es = {
 
   deleteMessage: 'Eliminar mensaje',
   messageHint: '¿Estás seguro de que quieres eliminar el mensaje?',
-  attachImage: 'Adjuntar Imagen',
-  attachVideo: 'Adjuntar Video',
-  attachAudio: 'Adjuntar Audio',
-  attachFile: 'Adjuntar Archivo',
   fontColor: 'Cambiar el Color de la Fuente',
   fontSize: 'Cambiar el Tamaño de la Fuente',
   postMessage: 'Publicar Mensaje',
@@ -1156,8 +1135,6 @@ export const es = {
   sureLeave: '¿Estás seguro de que quieres salir de este tema?',
 
   details: 'Detalles',
-  host: 'Anfitrión',
-  guest: 'Invitado',
   edit: 'Editar',
   editSubject: 'Editar tema',
   editMembership: 'Editar Miembros del Tema',
@@ -1248,7 +1225,6 @@ export const pt = {
   enterName: 'Digite seu nome',
   uploadImage: 'Enviar imagem de perfil',
   yourLocation: 'Sua localização',
-  requestConnection: 'Solicitar conexão',
   next: 'Próximo',
   skipSetup: 'Pular',
   allDone: 'Tudo pronto!',
@@ -1532,10 +1508,6 @@ export const pt = {
 
   deleteMessage: 'Excluir mensagem',
   messageHint: 'Tem certeza de que deseja excluir a mensagem?',
-  attachImage: 'Anexar imagem',
-  attachVideo: 'Anexar vídeo',
-  attachAudio: 'Anexar áudio',
-  attachFile: 'Anexar arquivo',
   fontColor: 'Alterar cor da fonte',
   fontSize: 'Alterar tamanho da fonte',
   postMessage: 'Publicar mensagem',
@@ -1548,8 +1520,6 @@ export const pt = {
   sureLeave: 'Tem certeza de que deseja sair deste tópico?',
 
   details: 'Detalhes',
-  host: 'Anfitrião',
-  guest: 'Convidado',
   edit: 'Editar',
   editSubject: 'Editar tópico',
   editMembership: 'Editar membros do tópico',
@@ -1862,7 +1832,6 @@ export const de = {
   saveRequest: 'Speichern und Verbindung anfordern',
   ignoreRequest: 'Anfrage ignorieren',
   acceptConnection: 'Verbindung akzeptieren',
-  requestConnection: 'Verbindung anfordern',
   cancelRequest: 'Anfrage abbrechen',
   resyncContact: 'Kontakt neu synchronisieren',
 
@@ -1924,10 +1893,6 @@ export const de = {
 
   deleteMessage: 'Nachricht löschen',
   messageHint: 'Sind Sie sicher, dass Sie die Nachricht löschen möchten?',
-  attachImage: 'Bild anhängen',
-  attachVideo: 'Video anhängen',
-  attachAudio: 'Audio anhängen',
-  attachFile: 'Datei anhängen',
   fontColor: 'Schriftfarbe ändern',
   fontSize: 'Schriftgröße ändern',
   postMessage: 'Nachricht veröffentlichen',
@@ -1940,8 +1905,6 @@ export const de = {
   sureLeave: 'Sind Sie sicher, dass Sie dieses Thema verlassen möchten?',
 
   details: 'Details',
-  host: 'Host',
-  guest: 'Gast',
   edit: 'Bearbeiten',
   editSubject: 'Thema bearbeiten',
   editMembership: 'Mitgliedschaft im Thema bearbeiten',
@@ -2254,7 +2217,6 @@ export const ru = {
   saveRequest: 'Сохранить и запросить подключение',
   ignoreRequest: 'Игнорировать запрос',
   acceptConnection: 'Принять подключение',
-  requestConnection: 'Запросить подключение',
   cancelRequest: 'Отменить запрос',
   resyncContact: 'Пересинхронизировать контакт',
 
@@ -2316,10 +2278,6 @@ export const ru = {
 
   deleteMessage: 'Удаление сообщения',
   messageHint: 'Вы уверены, что хотите удалить сообщение?',
-  attachImage: 'Прикрепить изображение',
-  attachVideo: 'Прикрепить видео',
-  attachAudio: 'Прикрепить аудио',
-  attachFile: 'Прикрепить файл',
   fontColor: 'Изменить цвет текста',
   fontSize: 'Изменить размер текста',
   postMessage: 'Опубликовать сообщение',
@@ -2332,8 +2290,6 @@ export const ru = {
   sureLeave: 'Вы уверены, что хотите покинуть эту тему?',
 
   details: 'Детали',
-  host: 'Хост',
-  guest: 'Гость',
   edit: 'Pедактировать',
   editSubject: 'Редактировать тему',
   editMembership: 'Редактировать участников темы',
@@ -2599,7 +2555,6 @@ export const el = {
   saveRequest: 'Αποθήκευση και ζητήστε σύνδεση',
   ignoreRequest: 'Αγνοήστε το αίτημα',
   acceptConnection: 'Αποδοχή σύνδεσης',
-  requestConnection: 'Ζητήστε σύνδεση',
   cancelRequest: 'Ακύρωση αιτήματος',
   resyncContact: 'Επαφή Resync',
   block: 'Φραγμός',
@@ -2668,10 +2623,6 @@ export const el = {
   limit: 'Οριο',
   deleteMessage: 'Διαγραφή μηνύματος',
   messageHint: 'Είστε βέβαιοι ότι θέλετε να διαγράψετε το μήνυμα;',
-  attachImage: 'Επισυνάψτε την εικόνα',
-  attachVideo: 'Επισυνάψτε το βίντεο',
-  attachAudio: 'Επισυνάψτε τον ήχο',
-  attachFile: 'Επισυνάψτε το αρχείο',
   fontColor: 'Αλλαγή χρώματος γραμματοσειράς',
   fontSize: 'Αλλαγή μεγέθους γραμματοσειράς',
   postMessage: 'Ταχυδρομείο',
@@ -2682,8 +2633,6 @@ export const el = {
   confirmLeave: 'Αφήνοντας θέμα',
   sureLeave: 'Είστε βέβαιοι ότι θέλετε να αφήσετε αυτό το θέμα;',
   details: 'Καθέκαστα',
-  host: 'Πλήθος',
-  guest: 'Επισκέπτης',
   edit: 'Εκδίδω',
   editSubject: 'Επεξεργασία θέματος',
   editMembership: 'Επεξεργασία μέλους',

@@ -1,6 +1,6 @@
 import React, {useState, useRef} from 'react';
 import {useTheme, Surface, Menu, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
-import {TouchableOpacity, Pressable, Modal, View, Image, ScrollView, Platform, Linking} from 'react-native';
+import {TouchableOpacity, Pressable, Modal, View, Image, Platform, Linking} from 'react-native';
 import {languages} from '../constants/Strings';
 import {styles} from './Settings.styled';
 import {useSettings} from './useSettings.hook';
@@ -14,7 +14,7 @@ import {Confirm} from '../confirm/Confirm';
 import Slider from '@react-native-community/slider';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-export function SettingsSmall({setupNav, showLogout}: {setupNav: {back: () => void; next: () => void}; showLogout: boolean}) {
+export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: () => void}}) {
   const {state, actions} = useSettings();
   const [alert, setAlert] = useState(false);
   const [details, setDetails] = useState(false);

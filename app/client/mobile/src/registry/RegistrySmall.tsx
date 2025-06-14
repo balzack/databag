@@ -1,6 +1,6 @@
-import {useState} from 'react';
-import {SafeAreaView, Pressable, View, FlatList} from 'react-native';
-import {Text, IconButton, Divider, Icon, TextInput, Surface, useTheme} from 'react-native-paper';
+import React, {useState} from 'react';
+import {Pressable, View, FlatList} from 'react-native';
+import {Text, Icon, TextInput, Surface} from 'react-native-paper';
 import {ContactParams} from '../profile/Profile';
 import {styles} from './Registry.styled';
 import {useRegistry} from './useRegistry.hook';
@@ -14,7 +14,6 @@ type RegistrySmallProps = {
 export function RegistrySmall({close, openContact}: RegistrySmallProps) {
   const [search, setSearch] = useState(true);
   const {state, actions} = useRegistry();
-  const theme = useTheme();
 
   return (
     <View style={styles.component}>

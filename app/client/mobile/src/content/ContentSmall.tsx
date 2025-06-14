@@ -1,12 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Divider, Switch, Surface, IconButton, Menu, Button, Text, TextInput, useTheme} from 'react-native-paper';
-import {Pressable, Modal, FlatList, View} from 'react-native';
+import {Surface, IconButton, Menu, Button, Text, TextInput, useTheme} from 'react-native-paper';
+import {Pressable, FlatList, View} from 'react-native';
 import {styles} from './Content.styled';
 import {useContent} from './useContent.hook';
 import {Channel} from '../channel/Channel';
-import {BlurView} from '@react-native-community/blur';
-import {Card} from '../card/Card';
-import {Confirm} from '../confirm/Confirm';
 import {Selector} from '../selector/Selector';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
@@ -25,14 +22,8 @@ export function ContentSmall({
 }) {
   const [more, setMore] = useState(null as null | string);
   const [tab, setTab] = useState('all');
-  const [add, setAdd] = useState(false);
-  const [adding, setAdding] = useState(false);
-  const [sealedTopic, setSealedTopic] = useState(false);
   const {state, actions} = useContent();
   const theme = useTheme();
-  const [subjectTopic, setSubjectTopic] = useState('');
-  const [members, setMembers] = useState([]);
-  const cards = state.sealSet && sealedTopic ? state.sealable : state.connected;
 
   const select = (cardId: string | null, channelId: string) => {
     if (share) {
@@ -69,28 +60,6 @@ export function ContentSmall({
       openConversation();
     } catch (err) {
       console.log(err);
-      setAlert(true);
-    }
-    setAdding(false);
-  };
-
-  const addTopic = async () => {
-    setAdding(true);
-    try {
-      const id = await actions.addTopic(
-        sealedTopic || !state.allowUnsealed,
-        subjectTopic,
-        members.filter(memberId => Boolean(cards.find(card => card.cardId === memberId))),
-      );
-      setAdd(false);
-      setSubjectTopic('');
-      setMembers([]);
-      setSealedTopic(false);
-      await actions.setFocus(null, id);
-      openConversation();
-    } catch (err) {
-      console.log(err);
-      setAdd(false);
       setAlert(true);
     }
     setAdding(false);
@@ -138,7 +107,7 @@ export function ContentSmall({
               initialNumToRender={10}
               showsVerticalScrollIndicator={false}
               renderItem={({item}) => {
-                const {sealed, focused, hosted, unread, imageUrl, subject, message} = item;
+                const {sealed, hosted, unread, imageUrl, subject, message} = item;
                 const choose = () => {
                   open(item.cardId, item.channelId);
                 };
@@ -147,7 +116,7 @@ export function ContentSmall({
                     visible={allTab && more === `${item.cardId}:${item.channelId}`}
                     onDismiss={() => setMore(null)}
                     anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
-                    {state.favorite.some(entry => item.cardId == entry.cardId && item.channelId === entry.channelId) && (
+                    {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
                       <Menu.Item
                         key="clearFavorite"
                         leadingIcon="star"
@@ -158,7 +127,7 @@ export function ContentSmall({
                         }}
                       />
                     )}
-                    {!state.favorite.some(entry => item.cardId == entry.cardId && item.channelId === entry.channelId) && (
+                    {!state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
                       <Menu.Item
                         key="setFavorite"
                         leadingIcon="star"
@@ -222,7 +191,7 @@ export function ContentSmall({
               initialNumToRender={10}
               showsVerticalScrollIndicator={false}
               renderItem={({item}) => {
-                const {sealed, focused, hosted, unread, imageUrl, subject, message} = item;
+                const {sealed, hosted, imageUrl, subject, message} = item;
                 const choose = () => {
                   open(item.cardId, item.channelId);
                 };
@@ -231,7 +200,7 @@ export function ContentSmall({
                     visible={unreadTab && more === `${item.cardId}:${item.channelId}`}
                     onDismiss={() => setMore(null)}
                     anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
-                    {state.favorite.some(entry => item.cardId == entry.cardId && item.channelId === entry.channelId) && (
+                    {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
                       <Menu.Item
                         key="clearFavorite"
                         leadingIcon="star"
@@ -242,7 +211,7 @@ export function ContentSmall({
                         }}
                       />
                     )}
-                    {!state.favorite.some(entry => item.cardId == entry.cardId && item.channelId === entry.channelId) && (
+                    {!state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
                       <Menu.Item
                         key="setFavorite"
                         leadingIcon="star"
@@ -293,7 +262,7 @@ export function ContentSmall({
               initialNumToRender={10}
               showsVerticalScrollIndicator={false}
               renderItem={({item}) => {
-                const {sealed, focused, hosted, unread, imageUrl, subject, message} = item;
+                const {sealed, hosted, unread, imageUrl, subject, message} = item;
                 const choose = () => {
                   open(item.cardId, item.channelId);
                 };

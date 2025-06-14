@@ -3,11 +3,11 @@ import {View, SafeAreaView, Image} from 'react-native';
 import {styles} from './Welcome.styled';
 import {useWelcome} from './useWelcome.hook';
 import typer from '../images/typer.png';
-import {useTheme, Surface, Button, Text, Icon} from 'react-native-paper';
+import {Surface, Button, Text, Icon} from 'react-native-paper';
 import {Colors} from '../constants/Colors';
 
 export function Welcome({next}: {next: () => void}) {
-  const {state, actions} = useWelcome();
+  const {state} = useWelcome();
 
   return (
     <Surface style={styles.full} elevation={9}>

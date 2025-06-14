@@ -1,4 +1,3 @@
-import React from 'react';
 import {useContacts} from './useContacts.hook';
 import {ContactParams} from '../profile/Profile';
 import {ContactsSmall} from './ContactsSmall';

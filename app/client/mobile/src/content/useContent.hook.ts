@@ -3,7 +3,7 @@ import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {ContextType} from '../context/ContextType';
 import {Channel, Card, Profile, Config} from 'databag-client-sdk';
-import {notes, unknown, iii_group, iiii_group, iiiii_group, group} from '../constants/Icons';
+import {notes, unknown, group} from '../constants/Icons';
 
 type ChannelParams = {
   cardId: string;
@@ -165,7 +165,7 @@ export function useContent() {
     const favorites = filtered.filter(item => state.favorite.find(entry => item.cardId === entry.cardId && item.channelId === entry.channelId));
 
     updateState({channels, filtered, unread, favorites});
-  }, [state.loaded, state.sorted, state.cards, state.guid, state.filter, state.focused]);
+  }, [state.loaded, state.sorted, state.cards, state.guid, state.filter, state.focused, state.favorite]);
 
   useEffect(() => {
     if (app.state.focus) {

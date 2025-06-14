@@ -202,9 +202,6 @@ export function useSettings() {
     setTimeFormat: (format: string) => {
       display.actions.setTimeFormat(format);
     },
-    setFontSize: (fontSize: number) => {
-      display.actions.setFontSize(fontSize);
-    },
     setAll: (all: boolean) => {
       updateState({all});
     },

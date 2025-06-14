@@ -1,7 +1,6 @@
-import React, {useState, useRef} from 'react';
-import {useTheme, Surface, Menu, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
-import {TouchableOpacity, Pressable, Modal, View, Image, ScrollView, Platform, Linking} from 'react-native';
-import {languages} from '../constants/Strings';
+import React, {useState} from 'react';
+import {useTheme, Surface, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
+import {TouchableOpacity, Modal, View, Image, Platform} from 'react-native';
 import {styles} from './Settings.styled';
 import {useSettings} from './useSettings.hook';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -11,10 +10,8 @@ import {Colors} from '../constants/Colors';
 import {InputCode} from '../utils/InputCode';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {Confirm} from '../confirm/Confirm';
-import Slider from '@react-native-community/slider';
-import {SafeAreaView} from 'react-native-safe-area-context';
 
-export function SettingsLarge({setupNav, showLogout}: {setupNav: {back: () => void; next: () => void}; showLogout: boolean}) {
+export function SettingsLarge({showLogout}: {showLogout: boolean}) {
   const {state, actions} = useSettings();
   const [alert, setAlert] = useState(false);
   const [details, setDetails] = useState(false);
@@ -24,7 +21,6 @@ export function SettingsLarge({setupNav, showLogout}: {setupNav: {back: () => vo
   const [change, setChange] = useState(false);
   const [logout, setLogout] = useState(false);
   const [remove, setRemove] = useState(false);
-  const [language, setLanguage] = useState(false);
   const [applyingLogout, setApplyingLogout] = useState(false);
   const [applyingRemove, setApplyingRemove] = useState(false);
   const [sealDelete, setSealDelete] = useState(false);
@@ -46,7 +42,6 @@ export function SettingsLarge({setupNav, showLogout}: {setupNav: {back: () => vo
   const [blockedContact, setBlockedContact] = useState(false);
   const [blockedError, setBlockedError] = useState(false);
   const theme = useTheme();
-  const descriptionRef = useRef();
 
   const showBlockedMessage = async () => {
     setBlockedError(false);
@@ -411,18 +406,6 @@ export function SettingsLarge({setupNav, showLogout}: {setupNav: {back: () => vo
       setSavingNotifications(false);
     }
   };
-
-  const languageOptions = languages.map(item => (
-    <Menu.Item
-      key={item.value}
-      onPress={() => {
-        setLanguage(false);
-        actions.setLanguage(item.value);
-      }}
-      trailingIcon={item.value === state.strings.code ? 'check' : undefined}
-      title={item.name}
-    />
-  ));
 
   return (
     <View>

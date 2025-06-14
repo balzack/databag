@@ -12,7 +12,6 @@ export function useRing() {
 
   const [state, setState] = useState({
     strings: display.state.strings,
-    layout: display.state.layout,
     calls: [] as {callId: string; card: Card}[],
     calling: null as null | Card,
     remoteVideo: false,
@@ -28,8 +27,8 @@ export function useRing() {
   };
 
   useEffect(() => {
-    const {layout, strings} = display.state;
-    updateState({layout, strings});
+    const {strings} = display.state;
+    updateState({strings});
   }, [display.state]);
 
   useEffect(() => {

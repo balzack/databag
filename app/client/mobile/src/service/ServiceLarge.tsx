@@ -4,14 +4,12 @@ import {styles} from './Service.styled';
 import {Surface} from 'react-native-paper';
 import {Accounts} from '../accounts/Accounts';
 import {Setup} from '../setup/Setup';
-import {useService} from './useService.hook';
 import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
 const SetupDrawer = createDrawerNavigator();
 
 export function ServiceLarge() {
-  const {state} = useService();
   const scheme = useColorScheme();
 
   return (

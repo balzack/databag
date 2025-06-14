@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {TouchableOpacity, Modal, Image, View, Pressable} from 'react-native';
-import {useTheme, ActivityIndicator, Icon, Button, IconButton, RadioButton, Switch, Surface, Divider, TextInput, Text} from 'react-native-paper';
+import {useTheme, Icon, Button, IconButton, Switch, Surface, Divider, TextInput, Text} from 'react-native-paper';
 import {styles} from './Setup.styled';
 import {useSetup} from './useSetup.hook';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';

@@ -1,5 +1,4 @@
 import React from 'react';
-import {useAccounts} from './useAccounts.hook';
 import {AccountsSmall} from './AccountsSmall';
 import {AccountsLarge} from './AccountsLarge';
 import {LayoutSelector} from '../utils/LayoutSelector';

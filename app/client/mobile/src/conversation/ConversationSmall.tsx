@@ -1,9 +1,9 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {Animated, useAnimatedValue, Keyboard, KeyboardEvent, TextInput as RawInput, Modal, ScrollView, Pressable, View, FlatList, Platform} from 'react-native';
+import {Animated, useAnimatedValue, Keyboard, KeyboardEvent, TextInput as RawInput, Modal, ScrollView, Pressable, View, FlatList} from 'react-native';
 import {styles} from './Conversation.styled';
 import {useConversation} from './useConversation.hook';
 import {Message} from '../message/Message';
-import {Surface, Icon, Text, TextInput, Menu, IconButton, useTheme, Divider} from 'react-native-paper';
+import {Surface, Icon, Text, Menu, IconButton, useTheme, Divider} from 'react-native-paper';
 import {ActivityIndicator} from 'react-native-paper';
 import {Colors} from '../constants/Colors';
 import {Confirm} from '../confirm/Confirm';
@@ -27,16 +27,14 @@ export type MediaAsset = {
   binary?: {label: string; extension: string; data: string};
 };
 
-export function ConversationSmall({close, openDetails, wide}: {close: () => void; openDetails: () => void; wide: boolean}) {
+export function ConversationSmall({close, openDetails}: {close: () => void; openDetails: () => void}) {
   const {state, actions} = useConversation();
   const [more, setMore] = useState(false);
   const [alert, setAlert] = useState(false);
   const [sending, setSending] = useState(false);
   const [selected, setSelected] = useState(null as null | string);
-  const [sizeMenu, setSizeMenu] = useState(false);
   const [colorMenu, setColorMenu] = useState(false);
   const [sizeModal, setSizeModal] = useState(false);
-  const [avoid, setAvoid] = useState(false);
   const thread = useRef();
   const scrolled = useRef(false);
   const contentHeight = useRef(0);
@@ -211,17 +209,10 @@ export function ConversationSmall({close, openDetails, wide}: {close: () => void
     }
   });
 
-  const containerStyle = state.layout === 'large' ? {...styles.conversation, ...styles.largeConversation} : styles.conversation;
-  const headerStyle = state.layout === 'large' ? {...styles.header, ...styles.largeHeader, flexDirection: 'row-reverse'} : {...styles.header, flexDirection: 'row'};
-  const padStyle = state.layout === 'large' ? styles.pad : styles.nopad;
-  const inputPadStyle = state.layout === 'large' ? styles.pad : styles.indent;
-  const offset = state.layout === 'large' ? state.avoid - 64 : state.avoid - 120;
   const disableImage = !state.detailSet || !state.detail?.enableImage;
   const disableVideo = !state.detailSet || !state.detail?.enableVideo;
   const disableAudio = !state.detailSet || !state.detail?.enableAudio;
   const disableBinary = !state.detailSet || !state.detail?.enableBinary;
-  const statusStyle = state.layout === 'large' ? {...styles.status, flexDirection: 'row-reverse'} : {...styles.status, flexDirection: 'row'};
-  const borderStyle = Platform.OS === 'ios' ? {...styles.message, fontSize: state.textSize} : {...styles.message, fontSize: state.textSize, paddingTop: 4, paddingBottom: 4};
 
   return (
     <View style={styles.component}>
@@ -292,7 +283,7 @@ export function ConversationSmall({close, openDetails, wide}: {close: () => void
           <View style={styles.canvas}>
             <Surface style={styles.frame} mode="flat" elevation={0}>
               <Animated.View style={[{}, {height: scale}]}>
-                {state.assets.length > 0 && <View style={styles.assetSpacer}></View>}
+                {state.assets.length > 0 && <View style={styles.assetSpacer} />}
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.carousel} contentContainerStyle={styles.assets}>
                   {media}
                 </ScrollView>
@@ -377,7 +368,7 @@ export function ConversationSmall({close, openDetails, wide}: {close: () => void
               </View>
             </Surface>
           </View>
-          <View style={{...styles.keyboardSpacer, height: keyboardHeight - 96}}></View>
+          <View style={{...styles.keyboardSpacer, height: keyboardHeight - 96}} />
         </SafeAreaView>
       </Surface>
       <Confirm show={alert} params={alertParams} />

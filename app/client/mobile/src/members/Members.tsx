@@ -1,20 +1,14 @@
-import React, {useState, useRef} from 'react';
-import {useTheme, Surface, Checkbox, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
-import {TouchableOpacity, FlatList, Pressable, Modal, View, Image, ScrollView, Platform} from 'react-native';
+import React, {useState} from 'react';
+import {useTheme, Surface, Text, Icon, Switch} from 'react-native-paper';
+import {FlatList, Pressable, View} from 'react-native';
 import {styles} from './Members.styled';
 import {useMembers} from './useMembers.hook';
-import ImagePicker from 'react-native-image-crop-picker';
-import {BlurView} from '@react-native-community/blur';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Card} from '../card/Card';
 import {Confirm} from '../confirm/Confirm';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 export function Members({close}: {close: () => void}) {
   const {state, actions} = useMembers();
-  const selected = useRef(new Set<string>());
-  const [subject, setSubject] = useState(null);
-  const [creating, setCreating] = useState(false);
   const theme = useTheme();
   const [alert, setAlert] = useState(false);
   const [alertParams] = useState({
@@ -25,15 +19,6 @@ export function Members({close}: {close: () => void}) {
       action: () => setAlert(false),
     },
   });
-  const seal = state.sealSet && state.sealUnlocked && state.createSealed;
-
-  const toggle = (cardId: string, set: boolean) => {
-    if (set) {
-      selected.current.add(cardId);
-    } else {
-      selected.current.delete(cardId);
-    }
-  };
 
   const update = async (cardId: string, member: boolean) => {
     try {
@@ -71,7 +56,7 @@ export function Members({close}: {close: () => void}) {
             initialNumToRender={32}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
-              const member = Boolean(state.members.find(member => member === item.guid));
+              const added = Boolean(state.members.find(member => member === item.guid));
               return (
                 <Card
                   containerStyle={{...styles.cardContainer, handle: {color: theme.colors.onSecondary, fontWeight: 'normal'}}}
@@ -81,7 +66,7 @@ export function Members({close}: {close: () => void}) {
                   node={item.node}
                   placeholder={state.strings.name}
                   select={() => {}}
-                  actions={[<Switch key="action" style={styles.controlSwitch} value={member} onValueChange={() => update(item.cardId, !member)} />]}
+                  actions={[<Switch key="action" style={styles.controlSwitch} value={added} onValueChange={() => update(item.cardId, !added)} />]}
                 />
               );
             }}

@@ -1,5 +1,4 @@
 import React from 'react';
-import {useSettings} from './useSettings.hook';
 import {SettingsSmall} from './SettingsSmall';
 import {SettingsLarge} from './SettingsLarge';
 import {LayoutSelector} from '../utils/LayoutSelector';

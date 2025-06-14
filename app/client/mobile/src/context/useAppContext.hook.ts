@@ -66,7 +66,7 @@ export function useAppContext() {
     const fullDayTime = (await local.current.get('time_format', '12h')) === '24h';
     const monthFirstDate = (await local.current.get('date_format', 'month_first')) === 'month_first';
     const setLanguage = await local.current.get('language', null);
-    const fontSize = parseInt(await local.current.get('font_size', '0')) || 0;
+    const fontSize = parseInt(await local.current.get('font_size', '0'), 10) || 0;
     const createSealed = (await local.current.get('create_sealed', 'true')) === 'true';
 
     const locale =

@@ -1,12 +1,9 @@
 import React, {useState} from 'react';
-import {useTheme, Surface, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
-import {TouchableOpacity, FlatList, Pressable, Modal, View, Image, ScrollView, Platform} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTheme, Surface, Button, Text, IconButton, Divider, Icon} from 'react-native-paper';
+import {FlatList, Pressable, Modal, View} from 'react-native';
 import {styles} from './Request.styled';
 import {useRequest} from './useRequest.hook';
-import ImagePicker from 'react-native-image-crop-picker';
 import {BlurView} from '@react-native-community/blur';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Card} from '../card/Card';
 
 export function Request({setupNav}: {setupNav: {back: () => void; next: () => void}}) {

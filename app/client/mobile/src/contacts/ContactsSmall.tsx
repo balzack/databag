@@ -204,7 +204,6 @@ export function ContactsSmall({
             contentContainerStyle={styles.cardsContainer}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
-              const syncStatus = item.offsync ? 'offsync' : item.status;
               const flair = item.status === 'connected' && item.offsync ? <Icon key="host" source="warning-circle" size={18} color={theme.colors.offsync} /> : <></>;
               const action = (
                 <Menu

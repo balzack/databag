@@ -68,7 +68,7 @@ export function useRequest() {
         contact.removeCardListener(setCards);
       };
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [app.state.session]);
 
   useEffect(() => {

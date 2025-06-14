@@ -1,9 +1,9 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {Animated, useAnimatedValue, Keyboard, KeyboardEvent, TextInput as RawInput, Modal, ScrollView, Pressable, View, FlatList, Platform} from 'react-native';
+import {Animated, useAnimatedValue, Keyboard, Modal, ScrollView, Pressable, View, FlatList, Platform} from 'react-native';
 import {styles} from './Conversation.styled';
 import {useConversation} from './useConversation.hook';
 import {Message} from '../message/Message';
-import {Surface, Icon, Text, TextInput, Menu, IconButton, useTheme, Divider} from 'react-native-paper';
+import {Surface, Icon, Text, TextInput, Menu, IconButton, Divider} from 'react-native-paper';
 import {ActivityIndicator} from 'react-native-paper';
 import {Colors} from '../constants/Colors';
 import {Confirm} from '../confirm/Confirm';
@@ -15,7 +15,6 @@ import {VideoFile} from './videoFile/VideoFile';
 import {AudioFile} from './audioFile/AudioFile';
 import {BinaryFile} from './binaryFile/BinaryFile';
 import DocumentPicker from 'react-native-document-picker';
-import {SafeAreaView} from 'react-native-safe-area-context';
 
 const SCROLL_THRESHOLD = 16;
 
@@ -44,17 +43,6 @@ export function ConversationLarge({close, openDetails, wide}: {close: () => void
   const scrollOffset = useRef(0);
   const busy = useRef(false);
   const scale = useAnimatedValue(0);
-  const [options, setOptions] = useState(false);
-  const theme = useTheme();
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-  function onKeyboardShow(event: KeyboardEvent) {
-    setKeyboardHeight(event.endCoordinates.height);
-  }
-
-  function onKeyboardHide() {
-    setKeyboardHeight(0);
-  }
 
   useEffect(() => {
     const onShow = Keyboard.addListener('keyboardDidShow', onKeyboardShow);
@@ -211,16 +199,16 @@ export function ConversationLarge({close, openDetails, wide}: {close: () => void
     }
   });
 
-  const containerStyle = state.layout === 'large' ? {...styles.conversation, ...styles.largeConversation} : styles.conversation;
-  const headerStyle = state.layout === 'large' ? {...styles.header, ...styles.largeHeader, flexDirection: 'row-reverse'} : {...styles.header, flexDirection: 'row'};
-  const padStyle = state.layout === 'large' ? styles.pad : styles.nopad;
-  const inputPadStyle = state.layout === 'large' ? styles.pad : styles.indent;
-  const offset = state.layout === 'large' ? state.avoid - 64 : state.avoid - 120;
+  const containerStyle = {...styles.conversation, ...styles.largeConversation};
+  const headerStyle = {...styles.header, ...styles.largeHeader, flexDirection: 'row-reverse'};
+  const padStyle = styles.pad;
+  const inputPadStyle = styles.pad;
+  const offset = state.avoid - 64;
   const disableImage = !state.detailSet || !state.detail?.enableImage;
   const disableVideo = !state.detailSet || !state.detail?.enableVideo;
   const disableAudio = !state.detailSet || !state.detail?.enableAudio;
   const disableBinary = !state.detailSet || !state.detail?.enableBinary;
-  const statusStyle = state.layout === 'large' ? {...styles.status, flexDirection: 'row-reverse'} : {...styles.status, flexDirection: 'row'};
+  const statusStyle = {...styles.status, flexDirection: 'row-reverse'};
   const borderStyle = Platform.OS === 'ios' ? {...styles.message, fontSize: state.textSize} : {...styles.message, fontSize: state.textSize, paddingTop: 4, paddingBottom: 4};
 
   return (
@@ -255,7 +243,7 @@ export function ConversationLarge({close, openDetails, wide}: {close: () => void
             {state.detailSet && !state.host && <Icon source="server" size={20} />}
             {state.detailSet && state.sealed && <Icon source="shield-outline" size={20} />}
           </View>
-          <IconButton style={styles.icon} mode="contained" icon={state.layout === 'large' ? 'cog-transfer-outline' : 'dots-vertical'} size={28} onPress={openDetails} />
+          <IconButton style={styles.icon} mode="contained" icon={'cog-transfer-outline'} size={28} onPress={openDetails} />
         </View>
         <View style={padStyle}>
           <Divider style={styles.topBorder} bold={true} />

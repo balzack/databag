@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Divider, Switch, Surface, IconButton, Menu, Button, Text, TextInput, useTheme} from 'react-native-paper';
-import {Pressable, Modal, FlatList, View} from 'react-native';
+import {Divider, Switch, Surface, IconButton, Button, Text, TextInput, useTheme} from 'react-native-paper';
+import {Modal, FlatList, View} from 'react-native';
 import {styles} from './Content.styled';
 import {useContent} from './useContent.hook';
 import {Channel} from '../channel/Channel';
@@ -14,13 +14,11 @@ export function ContentLarge({
   share,
   closeAll,
   openConversation,
-  createConversation,
   textCard,
 }: {
   share: {filePath: string; mimeType: string};
   closeAll: () => void;
   openConversation: () => void;
-  createConversation: () => void;
   textCard: {cardId: null | string};
 }) {
   const [add, setAdd] = useState(false);

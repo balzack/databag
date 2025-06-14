@@ -1,6 +1,6 @@
-import {useState} from 'react';
-import {SafeAreaView, Pressable, View, FlatList} from 'react-native';
-import {Text, IconButton, Divider, Icon, TextInput, Surface, useTheme} from 'react-native-paper';
+import React from 'react';
+import {SafeAreaView, View, FlatList} from 'react-native';
+import {Text, IconButton, Divider, TextInput, Surface, useTheme} from 'react-native-paper';
 import {ContactParams} from '../profile/Profile';
 import {styles} from './Registry.styled';
 import {useRegistry} from './useRegistry.hook';
@@ -12,7 +12,6 @@ type RegistryLargeProps = {
 };
 
 export function RegistryLarge({close, openContact}: RegistryLargeProps) {
-  const [search, setSearch] = useState(true);
   const {state, actions} = useRegistry();
   const theme = useTheme();
 
@@ -63,7 +62,7 @@ export function RegistryLarge({close, openContact}: RegistryLargeProps) {
             style={styles.cards}
             data={state.contacts}
             initialNumToRender={32}
-            contentContainerStyle={state.layout === 'large' ? styles.cardsContainer : {}}
+            contentContainerStyle={styles.cardsContainer}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
               const select = () => {

@@ -1,35 +1,23 @@
-import React, {useRef, useEffect, useState} from 'react';
-import {Animated, useAnimatedValue, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Animated, useAnimatedValue, View, Platform} from 'react-native';
 import {useRing} from './useRing.hook';
 import {styles} from './Ring.styled';
-import {Card as Contact} from '../card/Card';
-import {useTheme, Icon, Text, Surface, IconButton, ActivityIndicator} from 'react-native-paper';
+import {useTheme, Text, Surface, IconButton, ActivityIndicator} from 'react-native-paper';
 import {Confirm} from '../confirm/Confirm';
 import {Colors} from '../constants/Colors';
 
 const ACCEPT_DELAY_MS = 100;
-const RING_ICON_MS = 500;
 
 export function Ring() {
   const {state, actions} = useRing();
   const [alert, setAlert] = useState(false);
   const [ending, setEnding] = useState(false);
-  const counting = useRef(0);
-  const [counter, setCounter] = useState(0);
   const [applyingAudio, setApplyingAudio] = useState(false);
   const [accepting, setAccepting] = useState(null as null | string);
   const [ignoring, setIgnoring] = useState(null as null | string);
   const [declining, setDeclining] = useState(null as null | string);
   const scale = useAnimatedValue(0);
   const theme = useTheme();
-
-  useEffect(() => {
-    const ringing = setInterval(() => {
-      counting.current += 1;
-      setCounter(counting.current);
-    }, RING_ICON_MS);
-    return () => clearInterval(ringing);
-  }, []);
 
   useEffect(() => {
     if (accepting || state.calling || state.calls.length > 0) {
@@ -129,56 +117,9 @@ export function Ring() {
     },
   };
 
-  const calls = state.calls.map(contact => {
-    const {callId, card} = contact;
-    const {name, handle, node, imageUrl} = card;
-    const ignoreButton = (
-      <IconButton
-        key="ignore"
-        style={styles.circleIcon}
-        iconColor="white"
-        containerColor={Colors.pending}
-        icon="eye-off-outline"
-        compact="true"
-        mode="contained"
-        size={24}
-        loading={ignoring === callId}
-        onPress={() => ignore(callId, card)}
-      />
-    );
-    const declineButton = (
-      <IconButton
-        key="decline"
-        style={styles.circleIcon}
-        iconColor="white"
-        containerColor={Colors.offsync}
-        icon="phone-outline"
-        compact="true"
-        mode="contained"
-        size={24}
-        loading={declining === callId}
-        onPress={() => decline(callId, card)}
-      />
-    );
-    const acceptButton = (
-      <IconButton
-        key="accept"
-        style={styles.circleIcon}
-        iconColor="white"
-        containerColor={Colors.primary}
-        icon="phone-outline"
-        compact="true"
-        mode="contained"
-        size={24}
-        loading={accepting === callId}
-        onPress={() => accept(callId, card)}
-      />
-    );
-    return <Contact containerStyle={styles.card} placeholder={state.strings.name} imageUrl={imageUrl} name={name} node={node} handle={handle} actions={[ignoreButton, declineButton, acceptButton]} />;
-  });
 
-  const sizeStyle = {marginBottom: 8, height: '100%', width: '100%', height: scale};
-  const borderStyle = state.layout === 'large' ? {...styles.ring, borderRadius: 16} : {...styles.ring, borderRadius: 0};
+  const sizeStyle = {marginBottom: 8, width: '100%', height: scale};
+  const borderStyle = Platform.isPad ? {...styles.ring, borderRadius: 16} : {...styles.ring, borderRadius: 0};
 
   return (
     <Animated.View style={sizeStyle}>

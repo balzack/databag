@@ -1,10 +1,8 @@
 import React from 'react';
-import {View, SafeAreaView, Image} from 'react-native';
+import {View, SafeAreaView} from 'react-native';
 import {styles} from './Ready.styled';
 import {useReady} from './useReady.hook';
-import typer from '../images/typer.png';
-import {useTheme, Surface, Button, Text, Icon} from 'react-native-paper';
-import {Colors} from '../constants/Colors';
+import {Surface, Button, Text} from 'react-native-paper';
 
 export function Ready() {
   const {state, actions} = useReady();

@@ -7,7 +7,6 @@ import {ContextType} from './ContextType';
 export function useDisplayContext() {
   const app = useContext(AppContext) as ContextType;
   const dim = useWindowDimensions();
-  const [locked, setLocked] = useState(false);
   const [state, setState] = useState({
     strings: {},
     layout: null,
@@ -15,20 +14,14 @@ export function useDisplayContext() {
     height: 0,
   });
 
-  const SMALL_LARGE = 650;
-
   const updateState = value => {
     setState(s => ({...s, ...value}));
   };
 
   useEffect(() => {
     const layout = Platform.isPad ? 'large' : 'small';
-    if (locked) {
-      updateState({width: dim.width, height: dim.height});
-    } else {
-      updateState({layout, width: dim.width, height: dim.height});
-    }
-  }, [dim.height, dim.width, locked]);
+    updateState({layout, width: dim.width, height: dim.height});
+  }, [dim.height, dim.width]);
 
   useEffect(() => {
     const lang = app.state.language;
@@ -37,9 +30,6 @@ export function useDisplayContext() {
   }, [app.state.language]);
 
   const actions = {
-    lockLayout: (locked: boolean) => {
-      setLocked(locked);
-    },
   };
 
   return {state, actions};
