@@ -51,7 +51,7 @@ export function useAppContext() {
     fontSize: 0,
     lanaguge: null as null | string,
     initialized: false,
-    showWelcome: false,
+    showWelcome: true,
     sharing: null as null | {cardId: string; channelId: string; filePath: string; mimeType: string},
     createSealed: true,
   });

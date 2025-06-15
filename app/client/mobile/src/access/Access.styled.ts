@@ -13,6 +13,9 @@ export const styles = StyleSheet.create({
     width: 286,
     height: 257,
   },
+  mfaModal: {
+    fontSize: 20,
+  },
   full: {
     width: '100%',
     height: '100%',
@@ -83,6 +86,10 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  button: {
+    borderRadius: 8,
+    flex: 1,
+  }, 
   submit: {
     borderRadius: 8,
     paddingLeft: 32,
@@ -248,6 +255,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     gap: 16,
+    maxWidth: 400,
   },
   terms: {
     display: 'flex',

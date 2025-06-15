@@ -4,7 +4,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useAccess} from './useAccess.hook';
 import {styles} from './Access.styled';
 import typer from '../images/typer.png';
-import {IconButton, Divider, Surface, Text, TextInput, Button, Checkbox} from 'react-native-paper';
+import {IconButton, Divider, Surface, Text, TextInput, Button, Checkbox, useTheme} from 'react-native-paper';
 import {BlurView} from '@react-native-community/blur';
 import {InputCode} from '../utils/InputCode';
 import {tos} from '../constants/terms';
@@ -17,7 +17,7 @@ export function Access() {
   const [alert, setAlert] = useState(false);
   const [otp, setOtp] = useState(false);
   const [terms, setTerms] = useState(false);
-
+  const theme = useTheme();
   const switching = useAnimatedValue(1);
 
   const fadeIn = (mode: string) => {
@@ -187,6 +187,7 @@ export function Access() {
                     autoComplete="off"
                     autoCorrect={false}
                     placeholder={state.strings.token}
+                    value={state.token}
                     left={<TextInput.Icon style={styles.icon} icon="ticket-outline" />}
                     onChangeText={value => actions.setToken(value)}
                   />
@@ -215,7 +216,7 @@ export function Access() {
                     {state.strings.terms}
                   </Button>
                 </View>
-                <Button mode="contained" style={styles.submit} disabled={!state.username || !state.password || !state.node || !accept} onPress={login} loading={state.loading}>
+                <Button mode="contained" style={styles.submit} disabled={!state.token || !state.node || !accept} onPress={login} loading={state.loading}>
                   {state.strings.access}
                 </Button>
                 <Button mode="text" onPress={() => fadeOut('account')}>
@@ -254,10 +255,10 @@ export function Access() {
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
-                    error={state.taken}
                     placeholder={state.strings.username}
                     value={state.username}
                     left={<TextInput.Icon style={styles.icon} icon="user" />}
+                    right={state.taken ? <TextInput.Icon styles={styles.icon} color={theme.colors.offsync} icon="warning" /> : <></>}
                     onChangeText={value => actions.setUsername(value)}
                   />
                   <TextInput
@@ -290,7 +291,7 @@ export function Access() {
                         autoCapitalize="none"
                         autoComplete="off"
                         autoCorrect={false}
-                        placeholder={state.strings.token}
+                        placeholder={state.strings.tokenRequired}
                         left={<TextInput.Icon style={styles.icon} icon="ticket-outline" />}
                         onChangeText={value => actions.setToken(value)}
                       />
@@ -415,14 +416,14 @@ export function Access() {
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <Surface elevation={5} mode="flat" style={styles.content}>
-            <Text variant="titleLarge">{state.strings.mfaTitle}</Text>
-            <Text variant="titleSmall">{state.strings.mfaEnter}</Text>
+            <Text style={styles.mfaModal}>{state.strings.mfaTitle}</Text>
+            <Text>{state.strings.mfaEnter}</Text>
             <InputCode onChangeText={actions.setCode} />
             <View style={styles.controls}>
-              <Button mode="outlined" style={styles.submit} onPress={() => setOtp(false)}>
+              <Button mode="outlined" style={styles.button} onPress={() => setOtp(false)}>
                 {state.strings.cancel}
               </Button>
-              <Button mode="contained" style={styles.submit} onPress={login} loading={state.loading} disabled={state.code.length !== 6}>
+              <Button mode="contained" style={styles.button} onPress={login} loading={state.loading} disabled={state.code.length !== 6}>
                 {state.strings.login}
               </Button>
             </View>
