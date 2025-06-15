@@ -348,6 +348,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
   const sealCreate = async () => {
     if (!savingSeal) {
       setSavingSeal(true);
+      await new Promise(r => setTimeout(r, 1000));
       try {
         await actions.setSeal();
         setSealing(false);
@@ -363,6 +364,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
   const sealUpdate = async () => {
     if (!savingSeal) {
       setSavingSeal(true);
+      await new Promise(r => setTimeout(r, 1000));
       try {
         await actions.updateSeal();
         setSealing(false);
