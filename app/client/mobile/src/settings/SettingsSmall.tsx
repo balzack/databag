@@ -13,6 +13,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import {Confirm} from '../confirm/Confirm';
 import Slider from '@react-native-community/slider';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {activateKeepAwake, deactivateKeepAwake} from '@sayem314/react-native-keep-awake';
 
 export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: () => void}}) {
   const {state, actions} = useSettings();
@@ -349,6 +350,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
     if (!savingSeal) {
       setSavingSeal(true);
       await new Promise(r => setTimeout(r, 1000));
+      activateKeepAwake();
       try {
         await actions.setSeal();
         setSealing(false);
@@ -357,6 +359,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         setSealing(false);
         setAlert(true);
       }
+      deactivateKeepAwake();
       setSavingSeal(false);
     }
   };
