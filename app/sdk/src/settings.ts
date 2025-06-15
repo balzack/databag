@@ -237,7 +237,16 @@ export class SettingsModule implements Settings {
 
   public async clearSeal(): Promise<void> {
     const { guid, node, secure, token } = this;
-    await clearAccountSeal(node, secure, token);
+
+    //await clearAccountSeal(node, secure, token);
+    const seal = {
+      passwordSalt: '',
+      privateKeyIv: '',
+      privateKeyEncrypted: '',
+      publicKey: '',
+    };
+    await setAccountSeal(node, secure, token, seal);
+
     await this.store.clearSeal(guid);
     this.seal = null;
     this.emitter.emit('config', this.getConfig());
