@@ -348,9 +348,9 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
 
   const sealCreate = async () => {
     if (!savingSeal) {
+      activateKeepAwake();
       setSavingSeal(true);
       await new Promise(r => setTimeout(r, 1000));
-      activateKeepAwake();
       try {
         await actions.setSeal();
         setSealing(false);
@@ -359,8 +359,8 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         setSealing(false);
         setAlert(true);
       }
-      deactivateKeepAwake();
       setSavingSeal(false);
+      deactivateKeepAwake();
     }
   };
 
@@ -1028,7 +1028,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                   {sealConfig && (
                     <View style={styles.modalControls}>
                       <Button mode="contained" style={styles.deleteButton} loading={savingSeal} onPress={() => setSealDelete(true)}>
-                        {state.strings.delete}
+                        {state.strings.remove}
                       </Button>
                       <View style={styles.modalOther}>
                         <IconButton
@@ -1061,8 +1061,11 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                     onChangeText={value => actions.setSealDelete(value)}
                   />
                   <View style={styles.modalControls}>
-                    <Button mode="contained" style={styles.deleteButton} disabled={state.sealDelete !== state.strings.deleteKey} loading={savingSeal} onPress={sealRemove}>
-                      {state.strings.delete}
+                      <Button mode="outlined" onPress={() => setSealing(false)}>
+                        {state.strings.cancel}
+                      </Button>
+                    <Button mode="contained" style={styles.deleteButton} disabled={state.sealDelete !== state.strings.delete} loading={savingSeal} onPress={sealRemove}>
+                      {state.strings.remove}
                     </Button>
                   </View>
                 </>

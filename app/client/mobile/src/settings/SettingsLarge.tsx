@@ -840,8 +840,8 @@ export function SettingsLarge({showLogout}: {showLogout: boolean}) {
                     onChangeText={value => actions.setSealDelete(value)}
                   />
                   <View style={styles.modalControls}>
-                    <Button mode="contained" style={styles.deleteButton} disabled={state.sealDelete !== state.strings.deleteKey} loading={savingSeal} onPress={sealRemove}>
-                      {state.strings.delete}
+                    <Button mode="contained" style={styles.deleteButton} disabled={state.sealDelete !== state.strings.delete} loading={savingSeal} onPress={sealRemove}>
+                      {state.strings.remove}
                     </Button>
                   </View>
                 </>
