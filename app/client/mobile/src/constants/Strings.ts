@@ -20,6 +20,7 @@ export const en = {
   tokenHint: 'Token / Password',
   searchAccounts: 'Search Accounts',
   chatMembers: 'Chat Members',
+  tokenRequired: 'Token (if required)',
 
   addSubject: 'Add Subject',
   chat: 'Chat',
@@ -406,6 +407,7 @@ export const fr = {
   tokenHint: 'Jeton / Mot de passe',
   searchAccounts: 'Rechercher des comptes',
   chatMembers: 'Membres du chat',
+  tokenRequired : 'Jeton (si requis)',
 
   addSubject: 'Ajouter un sujet',
   chat: 'Discussion',
@@ -792,6 +794,7 @@ export const es = {
   tokenHint: 'Token / Contraseña',
   searchAccounts: 'Buscar cuentas',
   chatMembers: 'Miembros del chat',
+  tokenRequired: 'Token (si es necesario)',
 
   addSubject: 'Agregar tema',
   chat: 'Chat',
@@ -1177,6 +1180,7 @@ export const pt = {
   tokenHint: 'Token / Senha',
   searchAccounts: 'Pesquisar contas',
   chatMembers: 'Membros do chat',
+  tokenRequired: 'Token (se necessário)',
 
   addSubject: 'Adicionar assunto',
   chat: 'Chat',
@@ -1562,6 +1566,7 @@ export const de = {
   tokenHint: 'Token / Passwort',
   searchAccounts: 'Konten suchen',
   chatMembers: 'Chat-Mitglieder',
+  tokenRequired: 'Token (falls erforderlich)',
 
   addSubject: 'Thema hinzufügen',
   chat: 'Chat',
@@ -1947,6 +1952,7 @@ export const ru = {
   tokenHint: 'Токен / Пароль',
   searchAccounts: 'Поиск аккаунтов',
   chatMembers: 'Участники чата',
+  tokenRequired: 'Токен (если требуется)',
 
   addSubject: 'Добавить тему',
   chat: 'Чат',
@@ -2332,6 +2338,7 @@ export const el = {
   tokenHint: 'Διακριτικό / Κωδικός πρόσβασης',
   searchAccounts: 'Αναζήτηση λογαριασμών',
   chatMembers: 'Μέλη συνομιλίας',
+  tokenRequired: 'Διακριτικό (εάν απαιτείται)',
 
   addSubject: 'Προσθήκη θέματος',
   chat: 'Συνομιλία',
