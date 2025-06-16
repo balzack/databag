@@ -213,7 +213,7 @@ export function ContentSmall({
                 return (
                   <View>
                     <Channel
-                      containerStyle={styles.smChannel}
+                      containerStyle={{...styles.smChannel, message: {color: theme.colors.onSecondary, fontWeight: 'normal'}}}
                       select={choose}
                       sealed={sealed}
                       hosted={hosted}
@@ -253,18 +253,18 @@ export function ContentSmall({
                     <Surface elevation={11}>
                       <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} /> 
                       <Pressable key="clearFavorite" style={styles.menuOption} onPress={() => {setMore(null); actions.clearFavorite(item.cardId, item.channelId)}}>
-                        <Icon style={styles.button} source="star" size={24} color={theme.colors.onSecondary} />
+                        <Icon style={styles.button} source="star-filled" size={24} color={theme.colors.onSecondary} />
                         <Text>{state.strings.removeFavorites}</Text>
                       </Pressable>
                       {unread && (
                         <Pressable key="markRead" style={styles.menuOption} onPress={() => {setMore(null); actions.clearUnread(item.cardId, item.channelId)}}>
-                          <Icon style={styles.button} source="email-open-outline" size={24} color={theme.colors.onSecondary} />
+                          <Icon style={styles.button} source="mail-filled" size={24} color={theme.colors.onSecondary} />
                           <Text>{state.strings.markRead}</Text>
                         </Pressable>
                       )}
                       {!unread && (
                         <Pressable key="markUnead" style={styles.menuOption} onPress={() => {setMore(null); actions.setUnread(item.cardId, item.channelId)}}>
-                          <Icon style={styles.button} source="email-open-outline" size={24} color={theme.colors.onSecondary} />
+                          <Icon style={styles.button} source="mail" size={24} color={theme.colors.onSecondary} />
                           <Text>{state.strings.markUnread}</Text>
                         </Pressable>
                       )}
@@ -275,7 +275,7 @@ export function ContentSmall({
                 return (
                   <View>
                     <Channel
-                      containerStyle={styles.smChannel}
+                      containerStyle={{...styles.smChannel, title: { fontWeight: unread ? 'bold' : 'normal' }, message: {color: theme.colors.onSecondary, fontWeight: 'normal'}}}
                       select={choose}
                       sealed={sealed}
                       hosted={hosted}
