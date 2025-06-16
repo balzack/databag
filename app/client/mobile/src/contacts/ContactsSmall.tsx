@@ -7,6 +7,7 @@ import {Card} from '../card/Card';
 import {ContactParams} from '../profile/Profile';
 import {Confirm} from '../confirm/Confirm';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {BlurView} from '@react-native-community/blur';
 
 export function ContactsSmall({
   openRegistry,
@@ -138,28 +139,33 @@ export function ContactsSmall({
               const flair = item.status === 'connected' && item.offsync ? <Icon key="host" source="warning-circle" size={18} color={theme.colors.offsync} /> : <></>;
               const action = (
                 <Menu
+                  mode="flat"
+                  elevation={8}
                   key="actions"
                   visible={allTab && more === item.cardId}
                   onDismiss={() => setMore(null)}
                   anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
-                  {syncStatus === 'offsync' && <Menu.Item key="resync" leadingIcon="cached" title={state.strings.resyncAction} onPress={() => resync(item)} />}
-                  {syncStatus === 'connected' && <Menu.Item key="call" leadingIcon="phone" title={state.strings.callAction} onPress={() => call(item)} />}
-                  {syncStatus === 'connected' && (
-                    <Menu.Item
-                      key="text"
-                      leadingIcon="chat-circle"
-                      title={state.strings.textAction}
-                      onPress={() => {
-                        setMore(null);
-                        textContact(item.cardId);
-                      }}
-                    />
-                  )}
-                  {syncStatus === 'confirmed' && <Menu.Item key="saved" leadingIcon="link" title={state.strings.connectAction} onPress={() => connect(item)} />}
-                  {syncStatus === 'connecting' && <Menu.Item key="cancel" leadingIcon="cancel" title={state.strings.cancelAction} onPress={() => cancel(item)} />}
-                  {(syncStatus === 'pending' || syncStatus === 'requested') && (
-                    <Menu.Item key="accept" leadingIcon="account-check-outline" title={state.strings.acceptAction} onPress={() => accept(item)} />
-                  )}
+                    <Surface elevation={11}>
+                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
+                    {syncStatus === 'offsync' && <Menu.Item key="resync" leadingIcon="cached" title={state.strings.resyncAction} onPress={() => resync(item)} />}
+                    {syncStatus === 'connected' && <Menu.Item key="call" leadingIcon="phone" title={state.strings.callAction} onPress={() => call(item)} />}
+                    {syncStatus === 'connected' && (
+                      <Menu.Item
+                        key="text"
+                        leadingIcon="chat-circle"
+                        title={state.strings.textAction}
+                        onPress={() => {
+                          setMore(null);
+                          textContact(item.cardId);
+                        }}
+                      />
+                    )}
+                    {syncStatus === 'confirmed' && <Menu.Item key="saved" leadingIcon="link" title={state.strings.connectAction} onPress={() => connect(item)} />}
+                    {syncStatus === 'connecting' && <Menu.Item key="cancel" leadingIcon="cancel" title={state.strings.cancelAction} onPress={() => cancel(item)} />}
+                    {(syncStatus === 'pending' || syncStatus === 'requested') && (
+                      <Menu.Item key="accept" leadingIcon="account-check-outline" title={state.strings.acceptAction} onPress={() => accept(item)} />
+                    )}
+                  </Surface>
                 </Menu>
               );
               const select = () => {
@@ -207,11 +213,16 @@ export function ContactsSmall({
               const flair = item.status === 'connected' && item.offsync ? <Icon key="host" source="warning-circle" size={18} color={theme.colors.offsync} /> : <></>;
               const action = (
                 <Menu
+                  mode="flat"
+                  elevation={8}
                   key="actions"
                   visible={requestedTab && more === item.cardId}
                   onDismiss={() => setMore(null)}
                   anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
-                  <Menu.Item key="accept" leadingIcon="account-check-outline" title={state.strings.acceptAction} onPress={() => accept(item)} />
+                  <Surface elevation={11}>
+                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
+                    <Menu.Item key="accept" leadingIcon="account-check-outline" title={state.strings.acceptAction} onPress={() => accept(item)} />
+                  </Surface>
                 </Menu>
               );
               const select = () => {
@@ -260,13 +271,18 @@ export function ContactsSmall({
               const flair = item.status === 'connected' && item.offsync ? <Icon key="host" source="warning-circle" size={18} color={theme.colors.offsync} /> : <></>;
               const action = (
                 <Menu
+                  mode="flat"
+                  elevation={8}
                   key="actions"
                   visible={connectedTab && more === item.cardId}
                   onDismiss={() => setMore(null)}
                   anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
-                  {syncStatus === 'offsync' && <Menu.Item key="resync" leadingIcon="cached" title={state.strings.resyncAction} onPress={() => resync(item)} />}
-                  {syncStatus === 'connected' && <Menu.Item key="call" leadingIcon="phone" title={state.strings.callAction} onPress={() => call(item)} />}
-                  {syncStatus === 'connected' && <Menu.Item key="text" leadingIcon="chat-circle" title={state.strings.textAction} onPress={() => textContact(item.cardId)} />}
+                  <Surface elevation={11}>
+                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
+                    {syncStatus === 'offsync' && <Menu.Item key="resync" leadingIcon="cached" title={state.strings.resyncAction} onPress={() => resync(item)} />}
+                    {syncStatus === 'connected' && <Menu.Item key="call" leadingIcon="phone" title={state.strings.callAction} onPress={() => call(item)} />}
+                    {syncStatus === 'connected' && <Menu.Item key="text" leadingIcon="chat-circle" title={state.strings.textAction} onPress={() => textContact(item.cardId)} />}
+                  </Surface>
                 </Menu>
               );
               const select = () => {

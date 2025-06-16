@@ -30,12 +30,15 @@ export const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
+    borderWidth: 0.2,
   },
   compose: {
+    borderRadius: 8,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',
-    gap: 12,
+    gap: 2,
+    padding: 8,
   },
   componseInput: {
     borderWidth: 0,

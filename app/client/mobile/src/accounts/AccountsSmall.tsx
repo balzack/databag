@@ -180,6 +180,8 @@ export function AccountsSmall() {
             renderItem={({item}) => {
               const action = (
                 <Menu
+                  mode="flat"
+                  elevation={8}
                   key="actions"
                   visible={more === item.accountId}
                   onDismiss={() => setMore(null)}
@@ -192,21 +194,24 @@ export function AccountsSmall() {
                       onPress={() => setMore(item.accountId)}
                     />
                   }>
-                  <Menu.Item key="storage" leadingIcon="hard-drive" disabled={true} title={`${Math.floor(item.storageUsed / 1048576)} MB`} onPress={() => {}} />
-                  <Menu.Item key="access" leadingIcon="lock-open" title={state.strings.accessAccount} onPress={() => accessAccount(item.accountId)} />
-                  {item.disabled && <Menu.Item key="enable" leadingIcon="play-circle" title={state.strings.enableAccount} onPress={() => blockAccount(item.accountId, false)} />}
-                  {!item.disabled && (
-                    <Menu.Item
-                      key="enable"
-                      leadingIcon="stop-circle"
-                      title={state.strings.disableAccount}
-                      onPress={() => {
-                        console.log(item);
-                        blockAccount(item.accountId, true);
-                      }}
-                    />
-                  )}
-                  <Menu.Item key="delete" leadingIcon="user-minus" title={state.strings.deleteAccount} onPress={() => removeAccount(item.accountId)} />
+                  <Surface elevation={11}>
+                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
+                    <Menu.Item key="storage" leadingIcon="hard-drive" disabled={true} title={`${Math.floor(item.storageUsed / 1048576)} MB`} onPress={() => {}} />
+                    <Menu.Item key="access" leadingIcon="lock-open" title={state.strings.accessAccount} onPress={() => accessAccount(item.accountId)} />
+                    {item.disabled && <Menu.Item key="enable" leadingIcon="play-circle" title={state.strings.enableAccount} onPress={() => blockAccount(item.accountId, false)} />}
+                    {!item.disabled && (
+                      <Menu.Item
+                        key="enable"
+                        leadingIcon="stop-circle"
+                        title={state.strings.disableAccount}
+                        onPress={() => {
+                          console.log(item);
+                          blockAccount(item.accountId, true);
+                        }}
+                      />
+                    )}
+                    <Menu.Item key="delete" leadingIcon="user-minus" title={state.strings.deleteAccount} onPress={() => removeAccount(item.accountId)} />
+                  </Surface>
                 </Menu>
               );
               return (

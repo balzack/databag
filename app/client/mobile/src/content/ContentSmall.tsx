@@ -6,6 +6,7 @@ import {useContent} from './useContent.hook';
 import {Channel} from '../channel/Channel';
 import {Selector} from '../selector/Selector';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {BlurView} from '@react-native-community/blur';
 
 export function ContentSmall({
   share,
@@ -113,53 +114,58 @@ export function ContentSmall({
                 };
                 const action = (
                   <Menu
+                    mode="flat"
+                    elevation={8}
                     visible={allTab && more === `${item.cardId}:${item.channelId}`}
                     onDismiss={() => setMore(null)}
                     anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
-                    {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
-                      <Menu.Item
-                        key="clearFavorite"
-                        leadingIcon="star"
-                        title={state.strings.removeFavorites}
-                        onPress={() => {
-                          setMore(null);
-                          actions.clearFavorite(item.cardId, item.channelId);
-                        }}
-                      />
-                    )}
-                    {!state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
-                      <Menu.Item
-                        key="setFavorite"
-                        leadingIcon="star"
-                        title={state.strings.addFavorites}
-                        onPress={() => {
-                          setMore(null);
-                          actions.setFavorite(item.cardId, item.channelId);
-                        }}
-                      />
-                    )}
-                    {unread && (
-                      <Menu.Item
-                        key="markRead"
-                        leadingIcon="email-open-outline"
-                        title={state.strings.markRead}
-                        onPress={() => {
-                          setMore(null);
-                          actions.clearUnread(item.cardId, item.channelId);
-                        }}
-                      />
-                    )}
-                    {!unread && (
-                      <Menu.Item
-                        key="markUnread"
-                        leadingIcon="email-outline"
-                        title={state.strings.markUnread}
-                        onPress={() => {
-                          setMore(null);
-                          actions.setUnread(item.cardId, item.channelId);
-                        }}
-                      />
-                    )}
+                    <Surface elevation={11}>
+                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
+                      {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                        <Menu.Item
+                          key="clearFavorite"
+                          leadingIcon="star"
+                          title={state.strings.removeFavorites}
+                          onPress={() => {
+                            setMore(null);
+                            actions.clearFavorite(item.cardId, item.channelId);
+                          }}
+                        />
+                      )}
+                      {!state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                        <Menu.Item
+                          key="setFavorite"
+                          leadingIcon="star"
+                          title={state.strings.addFavorites}
+                          onPress={() => {
+                            setMore(null);
+                            actions.setFavorite(item.cardId, item.channelId);
+                          }}
+                        />
+                      )}
+                      {unread && (
+                        <Menu.Item
+                          key="markRead"
+                          leadingIcon="email-open-outline"
+                          title={state.strings.markRead}
+                          onPress={() => {
+                            setMore(null);
+                            actions.clearUnread(item.cardId, item.channelId);
+                          }}
+                        />
+                      )}
+                      {!unread && (
+                        <Menu.Item
+                          key="markUnread"
+                          leadingIcon="email-outline"
+                          title={state.strings.markUnread}
+                          onPress={() => {
+                            setMore(null);
+                            actions.setUnread(item.cardId, item.channelId);
+                          }}
+                        />
+                      )}
+                    </Surface>
                   </Menu>
                 );
                 return (
@@ -197,40 +203,46 @@ export function ContentSmall({
                 };
                 const action = (
                   <Menu
+                    mode="flat"
+                    elevation={8}
                     visible={unreadTab && more === `${item.cardId}:${item.channelId}`}
                     onDismiss={() => setMore(null)}
                     anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
-                    {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                    <Surface elevation={11}>
+                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
+
+                      {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                        <Menu.Item
+                          key="clearFavorite"
+                          leadingIcon="star"
+                          title={state.strings.removeFavorites}
+                          onPress={() => {
+                            setMore(null);
+                            actions.clearFavorite(item.cardId, item.channelId);
+                          }}
+                        />
+                      )}
+                      {!state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                        <Menu.Item
+                          key="setFavorite"
+                          leadingIcon="star"
+                          title={state.strings.addFavorites}
+                          onPress={() => {
+                            setMore(null);
+                            actions.setFavorite(item.cardId, item.channelId);
+                          }}
+                        />
+                      )}
                       <Menu.Item
-                        key="clearFavorite"
-                        leadingIcon="star"
-                        title={state.strings.removeFavorites}
+                        key="markRead"
+                        leadingIcon="email-open-outline"
+                        title={state.strings.markRead}
                         onPress={() => {
                           setMore(null);
-                          actions.clearFavorite(item.cardId, item.channelId);
+                          actions.clearUnread(item.cardId, item.channelId);
                         }}
                       />
-                    )}
-                    {!state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
-                      <Menu.Item
-                        key="setFavorite"
-                        leadingIcon="star"
-                        title={state.strings.addFavorites}
-                        onPress={() => {
-                          setMore(null);
-                          actions.setFavorite(item.cardId, item.channelId);
-                        }}
-                      />
-                    )}
-                    <Menu.Item
-                      key="markRead"
-                      leadingIcon="email-open-outline"
-                      title={state.strings.markRead}
-                      onPress={() => {
-                        setMore(null);
-                        actions.clearUnread(item.cardId, item.channelId);
-                      }}
-                    />
+                    </Surface>
                   </Menu>
                 );
                 return (
@@ -268,40 +280,46 @@ export function ContentSmall({
                 };
                 const action = (
                   <Menu
+                    mode="flat"
+                    elevation={8}
                     visible={favoritesTab && more === `${item.cardId}:${item.channelId}`}
                     onDismiss={() => setMore(null)}
                     anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
-                    <Menu.Item
-                      key="clearFavorite"
-                      leadingIcon="star"
-                      title={state.strings.removeFavorites}
-                      onPress={() => {
-                        setMore(null);
-                        actions.clearFavorite(item.cardId, item.channelId);
-                      }}
-                    />
-                    {unread && (
+                    <Surface elevation={11}>
+                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
+
                       <Menu.Item
-                        key="markRead"
-                        leadingIcon="email-open-outline"
-                        title={state.strings.markRead}
+                        key="clearFavorite"
+                        leadingIcon="star"
+                        title={state.strings.removeFavorites}
                         onPress={() => {
                           setMore(null);
-                          actions.clearUnread(item.cardId, item.channelId);
+                          actions.clearFavorite(item.cardId, item.channelId);
                         }}
                       />
-                    )}
-                    {!unread && (
-                      <Menu.Item
-                        key="markUnread"
-                        leadingIcon="email-outline"
-                        title={state.strings.markUnread}
-                        onPress={() => {
-                          setMore(null);
-                          actions.setUnread(item.cardId, item.channelId);
-                        }}
-                      />
-                    )}
+                      {unread && (
+                        <Menu.Item
+                          key="markRead"
+                          leadingIcon="email-open-outline"
+                          title={state.strings.markRead}
+                          onPress={() => {
+                            setMore(null);
+                            actions.clearUnread(item.cardId, item.channelId);
+                          }}
+                        />
+                      )}
+                      {!unread && (
+                        <Menu.Item
+                          key="markUnread"
+                          leadingIcon="email-outline"
+                          title={state.strings.markUnread}
+                          onPress={() => {
+                            setMore(null);
+                            actions.setUnread(item.cardId, item.channelId);
+                          }}
+                        />
+                      )}
+                    </Surface>
                   </Menu>
                 );
 

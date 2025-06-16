@@ -1,7 +1,7 @@
 import React, {useRef, useEffect, useState} from 'react';
 import {avatar} from '../constants/Icons';
 import {Pressable, Linking, ScrollView, View, Image, Modal} from 'react-native';
-import {Menu, Text, TextInput, IconButton, Button, Surface} from 'react-native-paper';
+import {Menu, Text, useTheme, TextInput, IconButton, Button, Surface} from 'react-native-paper';
 import {Topic, Card, Profile} from 'databag-client-sdk';
 import {ImageAsset} from './imageAsset/ImageAsset';
 import {AudioAsset} from './audioAsset/AudioAsset';
@@ -37,6 +37,7 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
   const [message, setMessage] = useState<React.ReactNode[]>([]);
   const fontStyle = styles.linkText;
   const [options, setOptions] = useState(false);
+  const theme = useTheme();
 
   useEffect(() => {
     setTimeout(() => setShowAsset(true), 2000);
@@ -237,14 +238,19 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
           <View style={styles.headerActions}>
             <Text style={styles.timestamp}> {timestamp}</Text>
             <Menu
+              mode="flat"
+              elevation={8}
               key="actions"
               visible={options}
               onDismiss={() => setOptions(false)}
               anchor={<IconButton style={styles.menuButton} icon="dots-horizontal-circle-outline" size={16} onPress={() => setOptions(true)} />}>
-              {!locked && profile && status === 'confirmed' && <Menu.Item key="edit" leadingIcon="square-edit-outline" title={state.strings.editOption} onPress={edit} />}
-              {(host || profile) && <Menu.Item key="delete" leadingIcon="trash-can-outline" title={state.strings.deleteOption} onPress={remove} />}
-              {!profile && <Menu.Item key="block" leadingIcon="eye-remove-outline" title={state.strings.blockOption} onPress={block} />}
-              {!profile && <Menu.Item key="report" leadingIcon="alert-octagon-outline" title={state.strings.reportOption} onPress={report} />}
+              <Surface elevation={11}>
+                <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
+                {!locked && profile && status === 'confirmed' && <Menu.Item key="edit" leadingIcon="square-edit-outline" title={state.strings.editOption} onPress={edit} />}
+                {(host || profile) && <Menu.Item key="delete" leadingIcon="trash-can-outline" title={state.strings.deleteOption} onPress={remove} />}
+                {!profile && <Menu.Item key="block" leadingIcon="eye-remove-outline" title={state.strings.blockOption} onPress={block} />}
+                {!profile && <Menu.Item key="report" leadingIcon="alert-octagon-outline" title={state.strings.reportOption} onPress={report} />}
+              </Surface>
             </Menu>
           </View>
         </View>

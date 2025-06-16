@@ -280,7 +280,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
             </View>
           )}
           <View style={styles.canvas}>
-            <Surface style={styles.frame} mode="flat" elevation={0}>
+            <Surface style={{ ...styles.frame, borderColor: theme.colors.outlineVariant }} mode="flat" elevation={0}>
               <Animated.View style={[{}, {height: scale}]}>
                 {state.assets.length > 0 && <View style={styles.assetSpacer} />}
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.smCarousel} contentContainerStyle={styles.assets}>
@@ -289,54 +289,59 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
               </Animated.View>
               <View style={styles.compose}>
                 <Menu
+                  mode="flat"
+                  elevation={8}
                   key="actions"
                   visible={options}
                   onDismiss={() => setOptions(false)}
                   anchorPosition="top"
                   anchor={<IconButton style={styles.options} mode="contained" iconColor={theme.colors.onSurface} icon="plus-square" size={20} onPress={() => setOptions(true)} />}>
-                  {!disableImage && (
-                    <Pressable style={styles.option} onPress={addImage}>
-                      <Icon style={styles.button} source="camera" size={24} color={Colors.primary} />
-                      <Text>{state.strings.attachImage}</Text>
+                  <Surface elevation={11}>
+                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} />
+                    {!disableImage && (
+                      <Pressable style={styles.option} onPress={addImage}>
+                        <Icon style={styles.button} source="camera" size={24} color={Colors.primary} />
+                        <Text>{state.strings.attachImage}</Text>
+                      </Pressable>
+                    )}
+                    {!disableVideo && (
+                      <Pressable style={styles.option} onPress={addVideo}>
+                        <Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} />
+                        <Text>{state.strings.attachVideo}</Text>
+                      </Pressable>
+                    )}
+                    {!disableAudio && (
+                      <Pressable style={styles.option} onPress={addAudio}>
+                        <Icon style={styles.button} source="volume-high" size={24} color={Colors.primary} />
+                        <Text>{state.strings.attachAudio}</Text>
+                      </Pressable>
+                    )}
+                    {!disableBinary && (
+                      <Pressable style={styles.option} onPress={addBinary}>
+                        <Icon style={styles.button} source="file-outline" size={24} color={Colors.primary} />
+                        <Text>{state.strings.attachFile}</Text>
+                      </Pressable>
+                    )}
+                    {(!disableImage || !disableVideo || !disableAudio || !disableBinary) && <Divider />}
+                    <Pressable
+                      style={styles.option}
+                      onPress={() => {
+                        setOptions(false);
+                        setColorMenu(true);
+                      }}>
+                      <Icon style={styles.button} source="format-color-text" size={24} color={Colors.primary} />
+                      <Text>{state.strings.textColor}</Text>
                     </Pressable>
-                  )}
-                  {!disableVideo && (
-                    <Pressable style={styles.option} onPress={addVideo}>
-                      <Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} />
-                      <Text>{state.strings.attachVideo}</Text>
+                    <Pressable
+                      style={styles.option}
+                      onPress={() => {
+                        setOptions(false);
+                        setSizeModal(true);
+                      }}>
+                      <Icon style={styles.button} source="format-size" size={24} color={Colors.primary} />
+                      <Text>{state.strings.textSize}</Text>
                     </Pressable>
-                  )}
-                  {!disableAudio && (
-                    <Pressable style={styles.option} onPress={addAudio}>
-                      <Icon style={styles.button} source="volume-high" size={24} color={Colors.primary} />
-                      <Text>{state.strings.attachAudio}</Text>
-                    </Pressable>
-                  )}
-                  {!disableBinary && (
-                    <Pressable style={styles.option} onPress={addBinary}>
-                      <Icon style={styles.button} source="file-outline" size={24} color={Colors.primary} />
-                      <Text>{state.strings.attachFile}</Text>
-                    </Pressable>
-                  )}
-                  {(!disableImage || !disableVideo || !disableAudio || !disableBinary) && <Divider />}
-                  <Pressable
-                    style={styles.option}
-                    onPress={() => {
-                      setOptions(false);
-                      setColorMenu(true);
-                    }}>
-                    <Icon style={styles.button} source="format-color-text" size={24} color={Colors.primary} />
-                    <Text>{state.strings.textColor}</Text>
-                  </Pressable>
-                  <Pressable
-                    style={styles.option}
-                    onPress={() => {
-                      setOptions(false);
-                      setSizeModal(true);
-                    }}>
-                    <Icon style={styles.button} source="format-size" size={24} color={Colors.primary} />
-                    <Text>{state.strings.textSize}</Text>
-                  </Pressable>
+                  </Surface>
                 </Menu>
                 <RawInput
                   multiline={true}
