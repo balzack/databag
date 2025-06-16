@@ -43,7 +43,7 @@ export const styles = StyleSheet.create({
     gap: 8,
   },
   newContactButton: {
-    height: 48,
+    height: 52,
     borderRadius: 8,
     display: 'flex',
     alignItems: 'center',
@@ -154,8 +154,7 @@ export const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 0,
     display: 'flex',
-    height: 48,
-    maxHeight: 48,
+    height: 52,
     borderRadius: 8,
   },
   inputUnderline: {

@@ -311,11 +311,11 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
   },
   searchInput: {
-    height: 48,
+    height: 52,
     backgroundColor: 'transparent',
   },
   newButton: {
-    height: 48,
+    height: 52,
     borderRadius: 8,
     display: 'flex',
     alignItems: 'center',

@@ -60,12 +60,13 @@ export const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingLeft: 8,
     paddingRight: 8,
+    gap: 8,
   },
   smTitle: {
-    color: 'white',
-    flexGrow: 1,
-    textAlign: 'center',
     fontSize: 24,
+    minWidth: 0,
+    flexShrink: 1,
+    color: 'white',
   },
   smDate: {
     paddingLeft: 16,

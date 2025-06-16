@@ -12,7 +12,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {Warning, HouseSimple, HardDrive, LockOpen, UserMinus, PlayCircle, StopCircle, UsersFour, DotsThreeCircle, VideoCamera, VideoCameraSlash, ArrowsInSimple, BellSlash, Phone, Microphone, MicrophoneSlash, FrameCorners, WarningCircle, Link, LinkBreak, AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
+import {EnvelopeSimpleOpen, EnvelopeSimple, Warning, HouseSimple, Star, HardDrive, LockOpen, UserMinus, PlayCircle, StopCircle, UsersFour, DotsThreeCircle, VideoCamera, VideoCameraSlash, ArrowsInSimple, BellSlash, Phone, Microphone, MicrophoneSlash, FrameCorners, WarningCircle, Link, LinkBreak, AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
 import {useColorScheme} from 'react-native';
 import {MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
 
@@ -144,7 +144,7 @@ function FontMix(props: {name: string, color: string}) {
   }
   else if (props.name === 'left' || props.name === 'idcard' || props.name === 'picture' || props.name === 'message1') {
     return <AntIcon {...props} />;
-  } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock' || props.name === 'user' || props.name === 'users' || props.name === 'message-circle' || props.name === 'github' || props.name === 'align-left' || props.name === 'edit' || props.name === 'log-out' || props.name === 'search' || props.name === 'star' || props.name === 'filter' || props.name === 'plus-square' || props.name === 'send') {
+  } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock' || props.name === 'user' || props.name === 'users' || props.name === 'message-circle' || props.name === 'github' || props.name === 'align-left' || props.name === 'edit' || props.name === 'log-out' || props.name === 'search' || props.name === 'filter' || props.name === 'plus-square' || props.name === 'send') {
     return <FeatherIcon {...props} />;
   } else if (props.name === 'sensor-occupied') {
     return <MaterialIcon {...props}  />;
@@ -201,7 +201,15 @@ function FontMix(props: {name: string, color: string}) {
   } else if (props.name === 'award') {
     return <HouseSimple color={props.color} size={props.size} />;
   } else if (props.name === 'warning') {
-    return <Warning color={props.color} size={props.ize} />
+    return <Warning color={props.color} size={props.size} />
+  } else if (props.name === 'star') {
+    return <Star color={props.color} size={props.size} />
+  } else if (props.name === 'star-filled') {
+    return <Star weight="fill" color={props.color} size={props.size} />
+  } else if (props.name === 'mail-filled') {
+    return <EnvelopeSimple weight="fill" color={props.color} size={props.size} />
+  } else if (props.name === 'mail') {
+    return <EnvelopeSimple color={props.color} size={props.size} />
   } else {
     return <CommunityIcon {...props} />;
   }

@@ -124,7 +124,7 @@ export function ContentSmall({
                       <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} /> 
                       {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
                         <Pressable key="clearFavorite" style={styles.menuOption} onPress={() => {setMore(null); actions.clearFavorite(item.cardId, item.channelId)}}>
-                          <Icon style={styles.button} source="star" size={24} color={theme.colors.onSecondary} />
+                          <Icon style={styles.button} source="star-filled" size={24} color={theme.colors.onSecondary} />
                           <Text>{state.strings.removeFavorites}</Text>
                         </Pressable>
                       )}
@@ -136,13 +136,13 @@ export function ContentSmall({
                       )}
                       {unread && (
                         <Pressable key="markRead" style={styles.menuOption} onPress={() => {setMore(null); actions.clearUnread(item.cardId, item.channelId)}}>
-                          <Icon style={styles.button} source="email-open-outline" size={24} color={theme.colors.onSecondary} />
+                          <Icon style={styles.button} source="mail-filled" size={24} color={theme.colors.onSecondary} />
                           <Text>{state.strings.markRead}</Text>
                         </Pressable>
                       )}
                       {!unread && (
                         <Pressable key="markUnead" style={styles.menuOption} onPress={() => {setMore(null); actions.setUnread(item.cardId, item.channelId)}}>
-                          <Icon style={styles.button} source="email-open-outline" size={24} color={theme.colors.onSecondary} />
+                          <Icon style={styles.button} source="mail" size={24} color={theme.colors.onSecondary} />
                           <Text>{state.strings.markUnread}</Text>
                         </Pressable>
                       )}

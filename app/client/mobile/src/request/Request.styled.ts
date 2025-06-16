@@ -37,11 +37,14 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    paddingBottom: 16,
+    gap: 8,
   },
-  navTitle: {
+  smLabel: {
+    fontSize: 24,
+    minWidth: 0,
+    flexShrink: 1,
     color: 'white',
-    flexGrow: 1,
-    textAlign: 'center',
   },
   navIcon: {
     color: 'white',

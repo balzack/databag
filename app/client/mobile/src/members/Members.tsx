@@ -40,7 +40,7 @@ export function Members({close}: {close: () => void}) {
           <Pressable style={styles.navIcon} onPress={close}>
             <Icon size={24} source="left" color={'white'} />
           </Pressable>
-          <Text variant="headlineSmall" style={styles.navTitle}>
+          <Text style={styles.navTitle}>
             {state.strings.chatMembers}
           </Text>
           <View style={styles.navIcon} />

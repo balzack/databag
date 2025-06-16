@@ -85,9 +85,9 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
             <Pressable style={styles.navIcon} onPress={close}>
               <Icon size={24} source="left" color={'white'} />
             </Pressable>
-            <Text variant="headlineSmall" style={styles.navTitle}>
-              {state.strings.profile}
-            </Text>
+            <View style={styles.title}>
+              <Text style={styles.smLabel}>{state.strings.profile}</Text>
+            </View>
             <View style={styles.navIcon} />
           </SafeAreaView>
         </Surface>

@@ -70,9 +70,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   navTitle: {
+    fontSize: 24,
+    minWidth: 0,
+    flexShrink: 1,
     color: 'white',
-    flexGrow: 1,
-    textAlign: 'center',
   },
   scrollWrapper: {
     width: '100%',
@@ -139,7 +140,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 16,
+    gap: 8,
     paddingRight: 16,
     paddingLeft: 8,
     paddingBottom: 16,

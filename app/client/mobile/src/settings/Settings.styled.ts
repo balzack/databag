@@ -25,6 +25,13 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingBottom: 16,
+    gap: 8,
+  },
+  smLabel: {
+    fontSize: 24,
+    minWidth: 0,
+    flexShrink: 1,
+    color: 'white',
   },
   slider: {
     paddingLeft: 16,

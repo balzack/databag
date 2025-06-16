@@ -449,7 +449,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
             <Pressable style={styles.navIcon} onPress={setupNav?.back}>
               <Icon size={24} source="left" color={'white'} />
             </Pressable>
-            <Text variant="headlineSmall" style={styles.navTitle}>
+            <Text style={styles.smLabel}>
               {state.strings.yourProfile}
             </Text>
             <View style={styles.navIcon} />
@@ -457,7 +457,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         )}
         {!setupNav && (
           <Surface mode="flat" elevation={9} style={styles.navHeader}>
-            <Text variant="headlineSmall" style={styles.navTitle}>
+            <Text style={styles.smLabel}>
               {state.strings.settings}
             </Text>
           </Surface>

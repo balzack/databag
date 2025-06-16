@@ -20,9 +20,16 @@ export const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingLeft: 8,
     paddingRight: 8,
+    gap: 8,
   },
   field: {
     position: 'relative',
+  },
+  smLabel: {
+    fontSize: 24,
+    minWidth: 0,
+    flexShrink: 1,
+    color: 'white',
   },
   cover: {
     position: 'absolute',
