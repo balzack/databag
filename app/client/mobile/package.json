@@ -27,7 +27,7 @@
     "@types/react-native": "^0.73.0",
     "@types/react-native-video": "^5.0.20",
     "crypto-js": "^3.3.0",
-    "databag-client-sdk": "^0.0.32",
+    "databag-client-sdk": "^0.0.33",
     "jsencrypt": "^3.3.2",
     "phosphor-react-native": "^2.3.1",
     "react": "18.3.1",

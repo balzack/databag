@@ -152,7 +152,7 @@ export function ContentSmall({
                 return (
                   <View>
                     <Channel
-                      containerStyle={{...styles.smChannel, message: {color: theme.colors.onSecondary, fontWeight: 'normal'}}}
+                      containerStyle={{...styles.smChannel, title: { fontWeight: unread ? 'bold' : 'normal' }, message: {color: theme.colors.onSecondary, fontWeight: 'normal'}}}
                       select={choose}
                       sealed={sealed}
                       hosted={hosted}
