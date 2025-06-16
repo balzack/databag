@@ -168,7 +168,7 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
                     outlineStyle={styles.navInputBorder}
                     textColor={theme.colors.tertiary}
                     disabled={true}
-                    value={`${state.handle}${state.node ? '/' + state.node : ''}`}
+                    value={`${state.handle}${state.node ? '@' + state.node : ''}`}
                     left={<TextInput.Icon style={styles.icon} iconColor={theme.colors.tertiary} size={22} icon="user" />}
                   />
                   <Divider style={styles.navDivider} />

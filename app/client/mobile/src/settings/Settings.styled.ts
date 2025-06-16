@@ -27,6 +27,21 @@ export const styles = StyleSheet.create({
     paddingBottom: 16,
     gap: 8,
   },
+  logoutSpace: {
+    marginTop: 8,
+  },
+  smHeader: {
+    fontSize: 24,
+    minWidth: 0,
+    flexShrink: 1,
+    color: 'white',
+    paddingLeft: 24,
+  },
+  modalPrompt: {
+    paddingTop: 16,
+    fontSize: 15,
+    textAlign: 'center',
+  },
   smLabel: {
     fontSize: 24,
     minWidth: 0,
@@ -183,7 +198,7 @@ export const styles = StyleSheet.create({
     height: '100%',
   },
   container: {
-    width: 600,
+    width: 500,
     maxWidth: '80%',
   },
   content: {
@@ -198,6 +213,7 @@ export const styles = StyleSheet.create({
   surface: {
     padding: 16,
     borderRadius: 8,
+    gap: 16,
   },
   close: {
     paddingTop: 8,
@@ -229,6 +245,10 @@ export const styles = StyleSheet.create({
   },
   modalLabel: {
     fontSize: 20,
+    fontWeight: 600,
+    paddingLeft: 32,
+    paddingRight: 32,
+    textAlign: 'center',
   },
   modalClose: {
     position: 'absolute',
@@ -240,9 +260,13 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     gap: 16,
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 16,
+  },
+  modalControl: {
+    flex: 1,
+    borderRadius: 8,
   },
   modalDescription: {
     paddingTop: 16,
@@ -413,6 +437,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingTop: 16,
   },
   control: {

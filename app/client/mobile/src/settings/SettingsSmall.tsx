@@ -166,6 +166,8 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
     if (!savingChange) {
       setSavingChange(true);
       try {
+        actions.setLogin();
+        setChange(false);
       } catch (err) {
         console.log(err);
         setChange(false);
@@ -457,7 +459,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         )}
         {!setupNav && (
           <Surface mode="flat" elevation={9} style={styles.navHeader}>
-            <Text style={styles.smLabel}>
+            <Text style={styles.smHeader}>
               {state.strings.settings}
             </Text>
           </Surface>
@@ -485,7 +487,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                         outlineStyle={styles.navInputBorder}
                         textColor={theme.colors.tertiary}
                         disabled={true}
-                        value={`${state.profile.handle}${state.profile.node ? '/' + state.profile.node : ''}`}
+                        value={`${state.profile.handle}${state.profile.node ? '@' + state.profile.node : ''}`}
                         left={<TextInput.Icon style={styles.icon} iconColor={theme.colors.tertiary} size={22} icon="user" />}
                       />
                     )}
@@ -1228,37 +1230,29 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={4} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.changeLogin}</Text>
-              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setChange(false)} />
+              <Text style={styles.modalPrompt}>{state.strings.changePrompt}</Text>
               <TextInput
                 style={styles.input}
-                mode="flat"
+                mode="outlined"
+                outlineStyle={styles.inputBorder}
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label={Platform.OS === 'ios' ? state.strings.username : undefined}
-                placeholder={Platform.OS !== 'ios' ? state.strings.username : undefined}
+                placeholder={state.strings.username}
                 value={state.handle}
-                left={<TextInput.Icon style={styles.inputIcon} icon="account" />}
-                right={
-                  !state.checked ? (
-                    <TextInput.Icon style={styles.icon} icon="refresh" />
-                  ) : state.taken ? (
-                    <TextInput.Icon style={styles.icon} color={Colors.danger} icon="account-cancel-outline" />
-                  ) : (
-                    <></>
-                  )
-                }
+                left={<TextInput.Icon style={styles.icon} icon="user" />}
+                right={state.taken ? <TextInput.Icon styles={styles.icon} color={theme.colors.offsync} icon="warning" /> : <></>}
                 onChangeText={value => actions.setHandle(value)}
               />
               <TextInput
                 style={styles.input}
-                mode="flat"
+                mode="outlined"
+                outlineStyle={styles.inputBorder}
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
                 value={state.password}
-                label={Platform.OS === 'ios' ? state.strings.password : undefined}
-                placeholder={Platform.OS !== 'ios' ? state.strings.password : undefined}
+                placeholder={state.strings.password}
                 secureTextEntry={!showPassword}
                 left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
@@ -1270,32 +1264,11 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                 }
                 onChangeText={value => actions.setPassword(value)}
               />
-              <TextInput
-                style={styles.input}
-                mode="flat"
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect={false}
-                value={state.confirm}
-                label={Platform.OS === 'ios' ? state.strings.confirmPassword : undefined}
-                placeholder={Platform.OS !== 'ios' ? state.strings.confirmPassword : undefined}
-                secureTextEntry={!showConfirm}
-                left={<TextInput.Icon style={styles.icon} icon="lock" />}
-                right={
-                  showPassword ? (
-                    <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowConfirm(false)} />
-                  ) : (
-                    <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowConfirm(true)} />
-                  )
-                }
-                onChangeText={value => actions.setConfirm(value)}
-              />
-
               <View style={styles.modalControls}>
-                <Button mode="outlined" onPress={() => setChange(false)}>
+                <Button mode="outlined" style={styles.modalControl} onPress={() => setChange(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button mode="contained" loading={savingChange} disabled={state.password === '' || state.password !== state.confirm || state.taken || !state.checked} onPress={saveChange}>
+                <Button mode="contained" style={styles.modalControl} loading={savingChange} disabled={state.password === '' || state.taken || !state.checked} onPress={saveChange}>
                   {state.strings.save}
                 </Button>
               </View>
@@ -1308,19 +1281,20 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={4} mode="flat" style={styles.surface}>
-              <Text style={styles.modalLabel}>{state.strings.loggingOut}</Text>
-              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setLogout(false)} />
+              <Text style={styles.modalLabel}>{state.strings.sureLogout}</Text>
 
               <View style={styles.allControl}>
                 <Text style={styles.controlLabel}>{state.strings.allDevices}</Text>
                 <Switch style={styles.controlSwitch} value={state.all} onValueChange={actions.setAll} />
               </View>
 
+              <Divider style={styles.logoutSpace} />
+
               <View style={styles.modalControls}>
-                <Button mode="outlined" onPress={() => setLogout(false)}>
+                <Button mode="outlined" style={styles.modalControl} onPress={() => setLogout(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button mode="contained" loading={applyingLogout} onPress={applyLogout}>
+                <Button mode="contained" style={styles.modalControl} loading={applyingLogout} onPress={applyLogout}>
                   {state.strings.logout}
                 </Button>
               </View>

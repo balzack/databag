@@ -40,7 +40,7 @@ export function Identity({openSettings, openContacts}) {
                 {state.profile.name}
               </Text>
             )}
-            <Text style={styles.username} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.profile.handle}${state.profile.node ? '/' + state.profile.node : ''}`}</Text>
+            <Text style={styles.username} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.profile.handle}${state.profile.node ? '@' + state.profile.node : ''}`}</Text>
           </View>
           <Icon size={18} source="chevron-right" />
         </TouchableOpacity>
