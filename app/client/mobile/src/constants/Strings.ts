@@ -23,6 +23,7 @@ export const en = {
   tokenRequired: 'Token (if required)',
   sureLogout: 'Are you sure you want to logout?',
   changePrompt: 'Here you can change the username and/or password for your account',
+  typeDelete: 'Type [delete]',
 
   addSubject: 'Add Subject',
   chat: 'Chat',

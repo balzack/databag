@@ -1308,26 +1308,24 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={4} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.deleteAccount}</Text>
-              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setRemove(false)} />
 
               <TextInput
                 style={styles.input}
-                mode="flat"
+                mode="outlined"
+                outlineStyle={styles.inputBorder}
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
                 value={state.remove}
-                label={Platform.OS === 'ios' ? state.strings.deleteKey : undefined}
-                placeholder={Platform.OS !== 'ios' ? state.strings.deleteKey : undefined}
-                left={<TextInput.Icon style={styles.icon} icon="delete-outline" />}
+                placeholder={state.strings.typeDelete}
                 onChangeText={value => actions.setRemove(value)}
               />
 
               <View style={styles.modalControls}>
-                <Button mode="outlined" onPress={() => setRemove(false)}>
+                <Button style={styles.modalControl} mode="outlined" onPress={() => setRemove(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button mode="contained" loading={applyingRemove} disabled={state.remove !== state.strings.delete} style={styles.remove} onPress={applyRemove}>
+                <Button style={{ ...styles.modalControl, backgroundColor: theme.colors.offsync }} mode="contained" loading={applyingRemove} icon="trash-2" disabled={state.remove !== state.strings.delete} onPress={applyRemove}>
                   {state.strings.remove}
                 </Button>
               </View>
@@ -1341,8 +1339,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           <View style={styles.blockedContent}>
             <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
               <View style={styles.blockedHeader}>
-                <Text style={styles.blockedTitle}>{state.strings.blockedMessages}</Text>
-                <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedMessage(false)} />
+                <Text style={styles.modalLabel}>{state.strings.blockedMessages}</Text>
               </View>
               <Surface style={styles.blocked} elevation={1} mode="flat">
                 {state.blockedMessages.length === 0 && (
@@ -1368,8 +1365,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           <View style={styles.blockedContent}>
             <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
               <View style={styles.blockedHeader}>
-                <Text style={styles.blockedTitle}>{state.strings.blockedTopics}</Text>
-                <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedChannel(false)} />
+                <Text style={styles.modalLabel}>{state.strings.blockedTopics}</Text>
               </View>
               <Surface style={styles.blocked} elevation={1} mode="flat">
                 {state.blockedChannels.length === 0 && (
@@ -1395,8 +1391,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           <View style={styles.blockedContent}>
             <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
               <View style={styles.blockedHeader}>
-                <Text style={styles.blockedTitle}>{state.strings.blockedContacts}</Text>
-                <IconButton style={styles.blockedClose} icon="close" size={24} onPress={() => setBlockedContact(false)} />
+                <Text style={styles.modalLabel}>{state.strings.blockedContacts}</Text>
               </View>
               <Surface style={styles.blocked} elevation={1} mode="flat">
                 {state.blockedContacts.length === 0 && (

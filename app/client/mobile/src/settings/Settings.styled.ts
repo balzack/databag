@@ -207,9 +207,6 @@ export const styles = StyleSheet.create({
     height: '100%',
     gap: 8,
   },
-  remove: {
-    backgroundColor: Colors.danger,
-  },
   surface: {
     padding: 16,
     borderRadius: 8,
@@ -545,8 +542,9 @@ export const styles = StyleSheet.create({
   blockedHeader: {
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 8,
+    padding: 12,
   },
   blockedTitle: {
     flexGrow: 1,
@@ -562,7 +560,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 16,
     paddingBottom: 16,
