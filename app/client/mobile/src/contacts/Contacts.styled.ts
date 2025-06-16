@@ -34,6 +34,14 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     overflow: 'hidden',
   },
+  menuOption: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    margin: 16,
+    gap: 8,
+  },
   newContactButton: {
     height: 48,
     borderRadius: 8,

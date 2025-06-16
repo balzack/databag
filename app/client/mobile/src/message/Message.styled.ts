@@ -35,6 +35,14 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.placeholder,
     marginTop: 8,
   },
+  menuOption: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    margin: 16,
+    gap: 8,
+  },
   smDot: {
     width: 64,
     height: 64,

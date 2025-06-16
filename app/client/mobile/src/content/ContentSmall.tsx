@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Surface, IconButton, Menu, Button, Text, TextInput, useTheme} from 'react-native-paper';
+import {Surface, IconButton, Icon, Menu, Button, Text, TextInput, useTheme} from 'react-native-paper';
 import {Pressable, FlatList, View} from 'react-native';
 import {styles} from './Content.styled';
 import {useContent} from './useContent.hook';
@@ -24,6 +24,7 @@ export function ContentSmall({
   const [more, setMore] = useState(null as null | string);
   const [tab, setTab] = useState('all');
   const {state, actions} = useContent();
+  const [adding, setAdding] = useState(false);
   const theme = useTheme();
 
   const select = (cardId: string | null, channelId: string) => {
@@ -120,50 +121,30 @@ export function ContentSmall({
                     onDismiss={() => setMore(null)}
                     anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
                     <Surface elevation={11}>
-                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
+                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} /> 
                       {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
-                        <Menu.Item
-                          key="clearFavorite"
-                          leadingIcon="star"
-                          title={state.strings.removeFavorites}
-                          onPress={() => {
-                            setMore(null);
-                            actions.clearFavorite(item.cardId, item.channelId);
-                          }}
-                        />
+                        <Pressable key="clearFavorite" style={styles.menuOption} onPress={() => {setMore(null); actions.clearFavorite(item.cardId, item.channelId)}}>
+                          <Icon style={styles.button} source="star" size={24} color={theme.colors.onSecondary} />
+                          <Text>{state.strings.removeFavorites}</Text>
+                        </Pressable>
                       )}
                       {!state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
-                        <Menu.Item
-                          key="setFavorite"
-                          leadingIcon="star"
-                          title={state.strings.addFavorites}
-                          onPress={() => {
-                            setMore(null);
-                            actions.setFavorite(item.cardId, item.channelId);
-                          }}
-                        />
+                        <Pressable key="setFavorite" style={styles.menuOption} onPress={() => {setMore(null); actions.setFavorite(item.cardId, item.channelId)}}>
+                          <Icon style={styles.button} source="star" size={24} color={theme.colors.onSecondary} />
+                          <Text>{state.strings.addFavorites}</Text>
+                        </Pressable>
                       )}
                       {unread && (
-                        <Menu.Item
-                          key="markRead"
-                          leadingIcon="email-open-outline"
-                          title={state.strings.markRead}
-                          onPress={() => {
-                            setMore(null);
-                            actions.clearUnread(item.cardId, item.channelId);
-                          }}
-                        />
+                        <Pressable key="markRead" style={styles.menuOption} onPress={() => {setMore(null); actions.clearUnread(item.cardId, item.channelId)}}>
+                          <Icon style={styles.button} source="email-open-outline" size={24} color={theme.colors.onSecondary} />
+                          <Text>{state.strings.markRead}</Text>
+                        </Pressable>
                       )}
                       {!unread && (
-                        <Menu.Item
-                          key="markUnread"
-                          leadingIcon="email-outline"
-                          title={state.strings.markUnread}
-                          onPress={() => {
-                            setMore(null);
-                            actions.setUnread(item.cardId, item.channelId);
-                          }}
-                        />
+                        <Pressable key="markUnead" style={styles.menuOption} onPress={() => {setMore(null); actions.setUnread(item.cardId, item.channelId)}}>
+                          <Icon style={styles.button} source="email-open-outline" size={24} color={theme.colors.onSecondary} />
+                          <Text>{state.strings.markUnread}</Text>
+                        </Pressable>
                       )}
                     </Surface>
                   </Menu>
@@ -209,39 +190,23 @@ export function ContentSmall({
                     onDismiss={() => setMore(null)}
                     anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
                     <Surface elevation={11}>
-                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
-
+                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} /> 
                       {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
-                        <Menu.Item
-                          key="clearFavorite"
-                          leadingIcon="star"
-                          title={state.strings.removeFavorites}
-                          onPress={() => {
-                            setMore(null);
-                            actions.clearFavorite(item.cardId, item.channelId);
-                          }}
-                        />
+                        <Pressable key="clearFavorite" style={styles.menuOption} onPress={() => {setMore(null); actions.clearFavorite(item.cardId, item.channelId)}}>
+                          <Icon style={styles.button} source="star" size={24} color={theme.colors.onSecondary} />
+                          <Text>{state.strings.removeFavorites}</Text>
+                        </Pressable>
                       )}
                       {!state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
-                        <Menu.Item
-                          key="setFavorite"
-                          leadingIcon="star"
-                          title={state.strings.addFavorites}
-                          onPress={() => {
-                            setMore(null);
-                            actions.setFavorite(item.cardId, item.channelId);
-                          }}
-                        />
+                        <Pressable key="setFavorite" style={styles.menuOption} onPress={() => {setMore(null); actions.setFavorite(item.cardId, item.channelId)}}>
+                          <Icon style={styles.button} source="star" size={24} color={theme.colors.onSecondary} />
+                          <Text>{state.strings.addFavorites}</Text>
+                        </Pressable>
                       )}
-                      <Menu.Item
-                        key="markRead"
-                        leadingIcon="email-open-outline"
-                        title={state.strings.markRead}
-                        onPress={() => {
-                          setMore(null);
-                          actions.clearUnread(item.cardId, item.channelId);
-                        }}
-                      />
+                      <Pressable key="markRead" style={styles.menuOption} onPress={() => {setMore(null); actions.clearUnread(item.cardId, item.channelId)}}>
+                        <Icon style={styles.button} source="email-open-outline" size={24} color={theme.colors.onSecondary} />
+                        <Text>{state.strings.markRead}</Text>
+                      </Pressable>
                     </Surface>
                   </Menu>
                 );
@@ -286,38 +251,22 @@ export function ContentSmall({
                     onDismiss={() => setMore(null)}
                     anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
                     <Surface elevation={11}>
-                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
-
-                      <Menu.Item
-                        key="clearFavorite"
-                        leadingIcon="star"
-                        title={state.strings.removeFavorites}
-                        onPress={() => {
-                          setMore(null);
-                          actions.clearFavorite(item.cardId, item.channelId);
-                        }}
-                      />
+                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} /> 
+                      <Pressable key="clearFavorite" style={styles.menuOption} onPress={() => {setMore(null); actions.clearFavorite(item.cardId, item.channelId)}}>
+                        <Icon style={styles.button} source="star" size={24} color={theme.colors.onSecondary} />
+                        <Text>{state.strings.removeFavorites}</Text>
+                      </Pressable>
                       {unread && (
-                        <Menu.Item
-                          key="markRead"
-                          leadingIcon="email-open-outline"
-                          title={state.strings.markRead}
-                          onPress={() => {
-                            setMore(null);
-                            actions.clearUnread(item.cardId, item.channelId);
-                          }}
-                        />
+                        <Pressable key="markRead" style={styles.menuOption} onPress={() => {setMore(null); actions.clearUnread(item.cardId, item.channelId)}}>
+                          <Icon style={styles.button} source="email-open-outline" size={24} color={theme.colors.onSecondary} />
+                          <Text>{state.strings.markRead}</Text>
+                        </Pressable>
                       )}
                       {!unread && (
-                        <Menu.Item
-                          key="markUnread"
-                          leadingIcon="email-outline"
-                          title={state.strings.markUnread}
-                          onPress={() => {
-                            setMore(null);
-                            actions.setUnread(item.cardId, item.channelId);
-                          }}
-                        />
+                        <Pressable key="markUnead" style={styles.menuOption} onPress={() => {setMore(null); actions.setUnread(item.cardId, item.channelId)}}>
+                          <Icon style={styles.button} source="email-open-outline" size={24} color={theme.colors.onSecondary} />
+                          <Text>{state.strings.markUnread}</Text>
+                        </Pressable>
                       )}
                     </Surface>
                   </Menu>

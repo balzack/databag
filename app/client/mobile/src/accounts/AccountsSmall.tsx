@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, View, TouchableOpacity, Modal} from 'react-native';
+import {FlatList, View, Pressable, TouchableOpacity, Modal} from 'react-native';
 import {Text, Button, TextInput, Menu, IconButton, Surface, Icon, useTheme} from 'react-native-paper';
 import {useAccounts} from './useAccounts.hook';
 import {styles} from './Accounts.styled';
@@ -196,21 +196,30 @@ export function AccountsSmall() {
                   }>
                   <Surface elevation={11}>
                     <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
-                    <Menu.Item key="storage" leadingIcon="hard-drive" disabled={true} title={`${Math.floor(item.storageUsed / 1048576)} MB`} onPress={() => {}} />
-                    <Menu.Item key="access" leadingIcon="lock-open" title={state.strings.accessAccount} onPress={() => accessAccount(item.accountId)} />
-                    {item.disabled && <Menu.Item key="enable" leadingIcon="play-circle" title={state.strings.enableAccount} onPress={() => blockAccount(item.accountId, false)} />}
-                    {!item.disabled && (
-                      <Menu.Item
-                        key="enable"
-                        leadingIcon="stop-circle"
-                        title={state.strings.disableAccount}
-                        onPress={() => {
-                          console.log(item);
-                          blockAccount(item.accountId, true);
-                        }}
-                      />
+                    <Pressable key="storage" style={styles.menuOption}>
+                      <Icon style={styles.button} source="hard-drive" size={24} color={theme.colors.secondary} />
+                      <Text style={{ color: theme.colors.secondary}}>{`${Math.floor(item.storageUsed / 1048576)} MB`}</Text>
+                    </Pressable>
+                    <Pressable key="access" style={styles.menuOption} onPress={() => accessAccount(item.accountId)}>
+                      <Icon style={styles.button} source="lock-open" size={24} color={theme.colors.onSecondary} />
+                      <Text>{state.strings.accessAccount}</Text>
+                    </Pressable>
+                    {item.disabled && (
+                      <Pressable key="enable" style={styles.menuOption} onPress={() => blockAccount(item.accountId, false)}>
+                        <Icon style={styles.button} source="play-circle" size={24} color={theme.colors.onSecondary} />
+                        <Text>{state.strings.enableAccount}</Text>
+                      </Pressable>
                     )}
-                    <Menu.Item key="delete" leadingIcon="user-minus" title={state.strings.deleteAccount} onPress={() => removeAccount(item.accountId)} />
+                    {!item.disabled && (
+                      <Pressable key="disable" style={styles.menuOption} onPress={() => blockAccount(item.accountId, true)}>
+                        <Icon style={styles.button} source="stop-circle" size={24} color={theme.colors.onSecondary} />
+                        <Text>{state.strings.disableAccount}</Text>
+                      </Pressable>
+                    )}
+                    <Pressable key="delete" style={styles.menuOption} onPress={() => removeAccount(item.accountId)}>
+                      <Icon style={styles.button} source="user-minus" size={24} color={theme.colors.onSecondary} />
+                      <Text>{state.strings.deleteAccount}</Text>
+                    </Pressable>
                   </Surface>
                 </Menu>
               );

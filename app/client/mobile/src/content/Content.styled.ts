@@ -29,6 +29,14 @@ export const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 0,
   },
+  menuOption: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    margin: 16,
+    gap: 8,
+  },
   tab: {
     width: 108,
     height: '100%',

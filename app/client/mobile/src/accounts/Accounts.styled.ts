@@ -35,6 +35,14 @@ export const styles = StyleSheet.create({
       overflow: 'hidden',
     },
   },
+  menuOption: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    margin: 16,
+    gap: 8,
+  },
   input: {
     flexGrow: 1,
     flexShrink: 1,

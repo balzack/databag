@@ -53,6 +53,20 @@ export function ContactsSmall({
     setMenuAction(null);
   };
 
+  const text = async (card: Card) => {
+    setMore(null);
+    setMenuAction(card.cardId);
+    try {
+      await new Promise(r => setTimeout(r, 100))
+      textContact(card.cardId);
+      await new Promise(r => setTimeout(r, 1000))
+    } catch (err) {
+      console.log(err);
+      setAlert(true);
+    }
+    setMenuAction(null);
+  };
+
   const resync = async (card: Card) => {
     setMore(null);
     setMenuAction(card.cardId);
@@ -135,7 +149,7 @@ export function ContactsSmall({
             contentContainerStyle={styles.cardsContainer}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
-              const syncStatus = item.offsync ? 'offsync' : item.status;
+              const syncStatus = item.status === 'connected' && item.offsync ? 'offsync' : item.status;
               const flair = item.status === 'connected' && item.offsync ? <Icon key="host" source="warning-circle" size={18} color={theme.colors.offsync} /> : <></>;
               const action = (
                 <Menu
@@ -146,24 +160,42 @@ export function ContactsSmall({
                   onDismiss={() => setMore(null)}
                   anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
                     <Surface elevation={11}>
-                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
-                    {syncStatus === 'offsync' && <Menu.Item key="resync" leadingIcon="cached" title={state.strings.resyncAction} onPress={() => resync(item)} />}
-                    {syncStatus === 'connected' && <Menu.Item key="call" leadingIcon="phone" title={state.strings.callAction} onPress={() => call(item)} />}
-                    {syncStatus === 'connected' && (
-                      <Menu.Item
-                        key="text"
-                        leadingIcon="chat-circle"
-                        title={state.strings.textAction}
-                        onPress={() => {
-                          setMore(null);
-                          textContact(item.cardId);
-                        }}
-                      />
+                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} /> 
+                    {syncStatus === 'offsync' && (
+                      <Pressable key="resync" style={styles.menuOption} onPress={() => resync(item)}>
+                        <Icon style={styles.button} source="cached" size={24} color={theme.colors.onSecondary} />
+                        <Text>{state.strings.resyncAction}</Text>
+                      </Pressable>
                     )}
-                    {syncStatus === 'confirmed' && <Menu.Item key="saved" leadingIcon="link" title={state.strings.connectAction} onPress={() => connect(item)} />}
-                    {syncStatus === 'connecting' && <Menu.Item key="cancel" leadingIcon="cancel" title={state.strings.cancelAction} onPress={() => cancel(item)} />}
+                    {syncStatus === 'connected' && (
+                      <Pressable key="call" style={styles.menuOption} onPress={() => call(item)}>
+                        <Icon style={styles.button} source="phone" size={24} color={theme.colors.onSecondary} />
+                        <Text>{state.strings.callAction}</Text>
+                      </Pressable>
+                    )}
+                    {syncStatus === 'connected' && (
+                      <Pressable key="text" style={styles.menuOption} onPress={() => text(item)}>
+                        <Icon style={styles.button} source="chat-circle" size={24} color={theme.colors.onSecondary} />
+                        <Text>{state.strings.textAction}</Text>
+                      </Pressable>
+                    )}
+                    {syncStatus === 'confirmed' && (
+                      <Pressable key="saved" style={styles.menuOption} onPress={() => connect(item)}>
+                        <Icon style={styles.button} source="chat-circle" size={24} color={theme.colors.onSecondary} />
+                        <Text>{state.strings.textAction}</Text>
+                      </Pressable>
+                    )}
+                    {syncStatus === 'connecting' && (
+                      <Pressable key="cancel" style={styles.menuOption} onPress={() => cancel(item)}>
+                        <Icon style={styles.button} source="cancel" size={24} color={theme.colors.onSecondary} />
+                        <Text>{state.strings.cancelAction}</Text>
+                      </Pressable>
+                    )}
                     {(syncStatus === 'pending' || syncStatus === 'requested') && (
-                      <Menu.Item key="accept" leadingIcon="account-check-outline" title={state.strings.acceptAction} onPress={() => accept(item)} />
+                      <Pressable key="accept" style={styles.menuOption} onPress={() => accept(item)}>
+                        <Icon style={styles.button} source="account-check-outline" size={24} color={theme.colors.onSecondary} />
+                        <Text>{state.strings.acceptAction}</Text>
+                      </Pressable>
                     )}
                   </Surface>
                 </Menu>
@@ -220,8 +252,11 @@ export function ContactsSmall({
                   onDismiss={() => setMore(null)}
                   anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
                   <Surface elevation={11}>
-                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
-                    <Menu.Item key="accept" leadingIcon="account-check-outline" title={state.strings.acceptAction} onPress={() => accept(item)} />
+                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} /> 
+                    <Pressable key="accept" style={styles.menuOption} onPress={() => accept(item)}>
+                      <Icon style={styles.button} source="account-check-outline" size={24} color={theme.colors.onSecondary} />
+                      <Text>{state.strings.acceptAction}</Text>
+                    </Pressable>
                   </Surface>
                 </Menu>
               );
@@ -278,10 +313,21 @@ export function ContactsSmall({
                   onDismiss={() => setMore(null)}
                   anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
                   <Surface elevation={11}>
-                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
-                    {syncStatus === 'offsync' && <Menu.Item key="resync" leadingIcon="cached" title={state.strings.resyncAction} onPress={() => resync(item)} />}
-                    {syncStatus === 'connected' && <Menu.Item key="call" leadingIcon="phone" title={state.strings.callAction} onPress={() => call(item)} />}
-                    {syncStatus === 'connected' && <Menu.Item key="text" leadingIcon="chat-circle" title={state.strings.textAction} onPress={() => textContact(item.cardId)} />}
+                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} /> 
+                    {syncStatus === 'offsync' && (
+                      <Pressable key="resync" style={styles.menuOption} onPress={() => resync(item)}>
+                        <Icon style={styles.button} source="cached" size={24} color={theme.colors.onSecondary} />
+                        <Text>{state.strings.resyncAction}</Text>
+                      </Pressable>
+                    )}
+                    <Pressable key="call" style={styles.menuOption} onPress={() => call(item)}>
+                      <Icon style={styles.button} source="phone" size={24} color={theme.colors.onSecondary} />
+                      <Text>{state.strings.callAction}</Text>
+                    </Pressable>
+                    <Pressable key="text" style={styles.menuOption} onPress={() => text(item)}>
+                      <Icon style={styles.button} source="chat-circle" size={24} color={theme.colors.onSecondary} />
+                      <Text>{state.strings.textAction}</Text>
+                    </Pressable>
                   </Surface>
                 </Menu>
               );

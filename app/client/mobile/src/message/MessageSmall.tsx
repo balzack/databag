@@ -1,7 +1,7 @@
 import React, {useRef, useEffect, useState} from 'react';
 import {avatar} from '../constants/Icons';
 import {Pressable, Linking, ScrollView, View, Image, Modal} from 'react-native';
-import {Menu, Text, useTheme, TextInput, IconButton, Button, Surface} from 'react-native-paper';
+import {Menu, Icon, Text, useTheme, TextInput, IconButton, Button, Surface} from 'react-native-paper';
 import {Topic, Card, Profile} from 'databag-client-sdk';
 import {ImageAsset} from './imageAsset/ImageAsset';
 import {AudioAsset} from './audioAsset/AudioAsset';
@@ -246,10 +246,30 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
               anchor={<IconButton style={styles.menuButton} icon="dots-horizontal-circle-outline" size={16} onPress={() => setOptions(true)} />}>
               <Surface elevation={11}>
                 <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
-                {!locked && profile && status === 'confirmed' && <Menu.Item key="edit" leadingIcon="square-edit-outline" title={state.strings.editOption} onPress={edit} />}
-                {(host || profile) && <Menu.Item key="delete" leadingIcon="trash-can-outline" title={state.strings.deleteOption} onPress={remove} />}
-                {!profile && <Menu.Item key="block" leadingIcon="eye-remove-outline" title={state.strings.blockOption} onPress={block} />}
-                {!profile && <Menu.Item key="report" leadingIcon="alert-octagon-outline" title={state.strings.reportOption} onPress={report} />}
+                {!locked && profile && status === 'confirmed' && (
+                  <Pressable key="edit" style={styles.menuOption} onPress={edit}>
+                    <Icon style={styles.button} source="square-edit-outline" size={24} color={theme.colors.onSecondary} />
+                    <Text>{state.strings.editOption}</Text>
+                  </Pressable>
+                )}
+                {(host || profile) && (
+                  <Pressable key="remove" style={styles.menuOption} onPress={remove}>
+                    <Icon style={styles.button} source="trash-can-outline" size={24} color={theme.colors.onSecondary} />
+                    <Text>{state.strings.deleteOption}</Text>
+                  </Pressable>
+                )}
+                {!profile && (
+                  <Pressable key="block" style={styles.menuOption} onPress={block}>
+                    <Icon style={styles.button} source="eye-remove-outline" size={24} color={theme.colors.onSecondary} />
+                    <Text>{state.strings.blockOption}</Text>
+                  </Pressable>
+                )}
+                {!profile && (
+                  <Pressable key="report" style={styles.menuOption} onPress={report}>
+                    <Icon style={styles.button} source="alert-octagon-outline" size={24} color={theme.colors.onSecondary} />
+                    <Text>{state.strings.reportOption}</Text>
+                  </Pressable>
+                )}
               </Surface>
             </Menu>
           </View>

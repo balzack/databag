@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     color: 'white',
   },
   option: {
-    padding: 8,
+    padding: 16,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
