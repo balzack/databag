@@ -25,7 +25,7 @@ export function DetailsSmall({close, edit, closeAll}: {close: () => void; edit: 
       await actions.remove();
       closeAll();
     };
-    confirmAction(state.strings.confirmTopic, '', state.strings.remove, setRemoving, apply);
+    confirmAction(state.strings.deleteChat, '', state.strings.remove, setRemoving, apply);
   };
 
   const leave = () => {
