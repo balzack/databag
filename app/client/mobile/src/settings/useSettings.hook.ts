@@ -25,6 +25,7 @@ export function useSettings() {
     checked: true,
     searchable: null as null | boolean,
     pushEnabled: null as null | boolean,
+    mfaEnabled: null as null | boolean,
     name: '',
     description: '',
     location: '',
@@ -63,8 +64,8 @@ export function useSettings() {
   useEffect(() => {
     const {settings, identity} = getSession();
     const setConfig = (config: Config) => {
-      const {searchable, pushEnabled, allowUnsealed} = config;
-      updateState({config, searchable, pushEnabled, allowUnsealed});
+      const {searchable, pushEnabled, allowUnsealed, mfaEnabled} = config;
+      updateState({config, searchable, pushEnabled, allowUnsealed, mfaEnabled});
     };
     settings.addConfigListener(setConfig);
     const setProfile = (profile: Profile) => {

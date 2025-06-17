@@ -1092,10 +1092,10 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
               </View>
 
               <View style={styles.modalControls}>
-                <Button style={styles.modalControl} mode="outlined" onPress={() => setAuth(false)}>
+                <Button style={{ ...styles.modalControl, borderColor: theme.colors.primary }} mode="outlined" onPress={() => setAuth(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button style={styles.modalControl} mode="contained" loading={confirmingAuth} disabled={state.code.length !== 6} onPress={confirmAuth}>
+                <Button style={styles.modalControl} mode="contained" textColor="white" loading={confirmingAuth} disabled={state.code.length !== 6} onPress={confirmAuth}>
                   {state.strings.mfaConfirm}
                 </Button>
               </View>
@@ -1109,14 +1109,13 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={4} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
-              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setClear(false)} />
               <Text style={styles.modalDescription}>{state.strings.disablePrompt}</Text>
 
               <View style={styles.modalControls}>
-                <Button mode="outlined" onPress={() => setClear(false)}>
+                <Button style={{ ...styles.modalControl, borderColor: theme.colors.primary }} mode="outlined" onPress={() => setClear(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button mode="contained" loading={confirmingAuth} onPress={clearAuth}>
+                <Button style={styles.modalControl} textColor="white" mode="contained" loading={confirmingAuth} onPress={clearAuth}>
                   {state.strings.disable}
                 </Button>
               </View>
@@ -1165,10 +1164,10 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                 onChangeText={value => actions.setPassword(value)}
               />
               <View style={styles.modalControls}>
-                <Button mode="outlined" style={styles.modalControl} onPress={() => setChange(false)}>
+                <Button mode="outlined" style={{ ...styles.modalControl, borderColor: theme.colors.primary }} onPress={() => setChange(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button mode="contained" style={styles.modalControl} loading={savingChange} disabled={state.password === '' || state.taken || !state.checked} onPress={saveChange}>
+                <Button mode="contained" style={styles.modalControl} loading={savingChange} textColor="white" disabled={state.password === '' || state.taken || !state.checked} onPress={saveChange}>
                   {state.strings.save}
                 </Button>
               </View>
@@ -1191,10 +1190,10 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
               <Divider style={styles.logoutSpace} />
 
               <View style={styles.modalControls}>
-                <Button mode="outlined" style={styles.modalControl} onPress={() => setLogout(false)}>
+                <Button mode="outlined" style={{ ...styles.modalControl, borderColor: theme.colors.primary }} onPress={() => setLogout(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button mode="contained" style={styles.modalControl} loading={applyingLogout} onPress={applyLogout}>
+                <Button mode="contained" style={styles.modalControl} textColor="white" loading={applyingLogout} onPress={applyLogout}>
                   {state.strings.logout}
                 </Button>
               </View>
@@ -1222,13 +1221,14 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
               />
 
               <View style={styles.modalControls}>
-                <Button style={styles.modalControl} mode="outlined" onPress={() => setRemove(false)}>
+                <Button style={{ ...styles.modalControl, borderColor: theme.colors.primary }} mode="outlined" onPress={() => setRemove(false)}>
                   {state.strings.cancel}
                 </Button>
                 <Button
                   style={{...styles.modalControl, backgroundColor: theme.colors.offsync}}
                   mode="contained"
                   loading={applyingRemove}
+                  textColor="white"
                   icon="trash-2"
                   disabled={state.remove !== state.strings.delete}
                   onPress={applyRemove}>
