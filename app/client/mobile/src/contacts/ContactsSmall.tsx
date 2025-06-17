@@ -181,8 +181,8 @@ export function ContactsSmall({
                     )}
                     {syncStatus === 'confirmed' && (
                       <Pressable key="saved" style={styles.menuOption} onPress={() => connect(item)}>
-                        <Icon style={styles.button} source="chat-circle" size={24} color={theme.colors.onSecondary} />
-                        <Text>{state.strings.textAction}</Text>
+                        <Icon style={styles.button} source="link" size={24} color={theme.colors.onSecondary} />
+                        <Text>{state.strings.connectAction}</Text>
                       </Pressable>
                     )}
                     {syncStatus === 'connecting' && (
