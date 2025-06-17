@@ -18,6 +18,15 @@ export const styles = StyleSheet.create({
     paddingBottom: 8,
     paddingTop: 16,
   },
+  inputBorder: {
+    borderWidth: 0,
+    borderRadius: 12,
+  },
+  modalWarn: {
+    marginTop: 8,
+    textAlign: 'center',
+    fontSize: 14,
+  },
   navHeader: {
     height: 72,
     width: '100%',
@@ -267,6 +276,7 @@ export const styles = StyleSheet.create({
   },
   modalDescription: {
     paddingTop: 16,
+    textAlign: 'center',
   },
   title: {
     width: '100%',

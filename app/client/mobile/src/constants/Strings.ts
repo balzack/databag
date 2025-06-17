@@ -24,6 +24,10 @@ export const en = {
   sureLogout: 'Are you sure you want to logout?',
   changePrompt: 'Here you can change the username and/or password for your account',
   typeDelete: 'Type [delete]',
+  encryptionKey: 'Encryption Key',
+  generateKey: 'Generate a key to enable end-to-end encrypted topics.',
+  moreOptions: 'More Options',
+  saveDelete: 'Save the key with a different password or delete the key',
 
   addSubject: 'Add Subject',
   chat: 'Chat',
