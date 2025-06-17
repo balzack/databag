@@ -18,6 +18,7 @@ import {activateKeepAwake, deactivateKeepAwake} from '@sayem314/react-native-kee
 export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: () => void}}) {
   const {state, actions} = useSettings();
   const [alert, setAlert] = useState(false);
+  const [mediaError, setMediaError] = useState(false);
   const [sealing, setSealing] = useState(false);
   const [auth, setAuth] = useState(false);
   const [clear, setClear] = useState(false);
@@ -143,6 +144,17 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
     </View>
   ));
 
+  const errParams = {
+    title: state.strings.operationFailed,
+    prompt: state.strings.appPermission,
+    close: {
+      label: state.strings.close,
+      action: () => {
+        setMediaError(false);
+      },
+    },
+  };
+
   const alertParams = {
     title: state.strings.operationFailed,
     prompt: state.strings.tryAgain,
@@ -193,6 +205,9 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
       }
     } catch (err) {
       console.log(err);
+      if (err.message === 'User did not grant library permission.') {
+        setMediaError(true);
+      }
     }
   };
 
@@ -1303,6 +1318,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         </View>
       </Modal>
       <Confirm show={alert} params={alertParams} />
+      <Confirm show={mediaError} params={errParams} />
     </View>
   );
 }

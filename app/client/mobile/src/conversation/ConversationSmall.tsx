@@ -31,6 +31,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
   const {state, actions} = useConversation();
   const [more, setMore] = useState(false);
   const [alert, setAlert] = useState(false);
+  const [mediaError, setMediaError] = useState(false);
   const [sending, setSending] = useState(false);
   const [selected, setSelected] = useState(null as null | string);
   const [colorMenu, setColorMenu] = useState(false);
@@ -71,6 +72,17 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
       label: state.strings.close,
       action: () => {
         setAlert(false);
+      },
+    },
+  };
+
+  const errParams = {
+    title: state.strings.operationFailed,
+    prompt: state.strings.appPermission,
+    close: {
+      label: state.strings.close,
+      action: () => {
+        setMediaError(false);
       },
     },
   };
@@ -155,6 +167,9 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
       actions.addImage(path, mime, size);
     } catch (err) {
       console.log(err);
+      if (err.message === 'User did not grant library permission.') {
+        setMediaError(true);
+      }
     }
   };
 
@@ -165,6 +180,9 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
       actions.addVideo(path, mime);
     } catch (err) {
       console.log(err);
+      if (err.message === 'User did not grant library permission.') {
+        setMediaError(true);
+      }
     }
   };
 
@@ -179,6 +197,9 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
       actions.addAudio(audio.fileCopyUri, audio.name);
     } catch (err) {
       console.log(err);
+      if (err.message === 'User did not grant library permission.') {
+        setMediaError(true);
+      }
     }
   };
 
@@ -193,6 +214,9 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
       actions.addBinary(binary.fileCopyUri, binary.name);
     } catch (err) {
       console.log(err);
+      if (err.message === 'User did not grant library permission.') {
+        setMediaError(true);
+      }
     }
   };
 
@@ -376,6 +400,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
         </SafeAreaView>
       </Surface>
       <Confirm show={alert} params={alertParams} />
+      <Confirm show={mediaError} params={errParams} />
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={colorMenu} onRequestClose={() => setColorMenu(false)}>
         <View style={styles.modal}>
           <Pressable style={styles.blur} onPress={() => setColorMenu(false)}>

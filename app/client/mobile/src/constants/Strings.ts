@@ -22,6 +22,8 @@ export const en = {
   chatMembers: 'Chat Members',
   tokenRequired: 'Token (if required)',
 
+  appPermission: 'App does not have media access',
+
   sureLogout: 'Are you sure you want to logout?',
   changePrompt: 'Here you can change the username and/or password for your account',
   typeDelete: 'Type [delete]',
@@ -419,6 +421,8 @@ export const fr = {
   searchAccounts: 'Rechercher des comptes',
   chatMembers: 'Membres du chat',
   tokenRequired: 'Jeton (si requis)',
+
+  appPermission: 'L\'application n\'a pas accès aux médias.',
 
   sureLogout: 'Êtes-vous sûr de vouloir vous déconnecter ?',
   changePrompt: "Vous pouvez ici changer le nom d'utilisateur et/ou le mot de passe de votre compte",
@@ -818,6 +822,8 @@ export const es = {
   chatMembers: 'Miembros del chat',
   tokenRequired: 'Token (si es necesario)',
 
+  appPermission: 'La aplicación no tiene acceso a medios.',
+
   sureLogout: '¿Estás seguro de que quieres cerrar sesión?',
   changePrompt: 'Aquí puedes cambiar el nombre de usuario y/o la contraseña de tu cuenta',
   typeDelete: 'Escribe [borrar]',
@@ -1214,6 +1220,8 @@ export const pt = {
   searchAccounts: 'Pesquisar contas',
   chatMembers: 'Membros do chat',
   tokenRequired: 'Token (se necessário)',
+
+  appPermission: 'O aplicativo não tem acesso à mídia.',
 
   sureLogout: 'Tem certeza de que deseja sair?',
   changePrompt: 'Aqui você pode alterar o nome de usuário e/ou a senha da sua conta',
@@ -1612,6 +1620,8 @@ export const de = {
   chatMembers: 'Chat-Mitglieder',
   tokenRequired: 'Token (falls erforderlich)',
 
+  appPermission: 'Die App hat keinen Medienzugriff.',
+
   sureLogout: 'Tem certeza de que deseja sair?',
   changePrompt: 'Aqui você pode alterar o nome de usuário e/ou a senha da sua conta',
   typeDelete: 'Digite [löschen]',
@@ -2009,6 +2019,8 @@ export const ru = {
   chatMembers: 'Участники чата',
   tokenRequired: 'Токен (если требуется)',
 
+  appPermission: 'У приложения нет доступа к мультимедиа.',
+
   sureLogout: 'Вы уверены, что хотите выйти из системы?',
   changePrompt: 'Здесь вы можете изменить имя пользователя и/или пароль вашей учётной записи',
   typeDelete: 'Введите [удалить]',
@@ -2405,6 +2417,8 @@ export const el = {
   searchAccounts: 'Αναζήτηση λογαριασμών',
   chatMembers: 'Μέλη συνομιλίας',
   tokenRequired: 'Διακριτικό (εάν απαιτείται)',
+
+  appPermission: 'Η εφαρμογή δεν έχει πρόσβαση σε πολυμέσα.',
 
   sureLogout: 'Είστε σίγουροι ότι θέλετε να αποσυνδεθείτε;',
   changePrompt: 'Εδώ μπορείτε να αλλάξετε το όνομα χρήστη και/ή τον κωδικό πρόσβασης του λογαριασμού σας',
