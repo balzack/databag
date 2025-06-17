@@ -42,6 +42,12 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Can be used to send captured photos to contacts</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Can be used to find nearby contacts</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Can be used to send audio messages to contacts</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Used to set profile image and post photos</string>
 	<key>UIAppFonts</key>
