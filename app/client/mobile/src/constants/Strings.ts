@@ -422,7 +422,7 @@ export const fr = {
   chatMembers: 'Membres du chat',
   tokenRequired: 'Jeton (si requis)',
 
-  appPermission: 'L\'application n\'a pas accès aux médias.',
+  appPermission: "L'application n'a pas accès aux médias.",
 
   sureLogout: 'Êtes-vous sûr de vouloir vous déconnecter ?',
   changePrompt: "Vous pouvez ici changer le nom d'utilisateur et/ou le mot de passe de votre compte",
