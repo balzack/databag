@@ -29,7 +29,7 @@ export function Channel({
   const title = subject.length ? (
     subject.map((part, index) =>
       part ? (
-        <Text key={index} style={{ ...styles.known, ...containerStyle.title }}>
+        <Text key={index} style={{...styles.known, ...containerStyle.title}}>
           {part + (index + 1 < subject.length ? ', ' : '')}
         </Text>
       ) : (

@@ -57,9 +57,9 @@ export function ContactsSmall({
     setMore(null);
     setMenuAction(card.cardId);
     try {
-      await new Promise(r => setTimeout(r, 100))
+      await new Promise(r => setTimeout(r, 100));
       textContact(card.cardId);
-      await new Promise(r => setTimeout(r, 1000))
+      await new Promise(r => setTimeout(r, 1000));
     } catch (err) {
       console.log(err);
       setAlert(true);
@@ -159,8 +159,8 @@ export function ContactsSmall({
                   visible={allTab && more === item.cardId}
                   onDismiss={() => setMore(null)}
                   anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
-                    <Surface elevation={11}>
-                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} /> 
+                  <Surface elevation={11}>
+                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
                     {syncStatus === 'offsync' && (
                       <Pressable key="resync" style={styles.menuOption} onPress={() => resync(item)}>
                         <Icon style={styles.button} source="cached" size={24} color={theme.colors.onSecondary} />
@@ -252,7 +252,7 @@ export function ContactsSmall({
                   onDismiss={() => setMore(null)}
                   anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
                   <Surface elevation={11}>
-                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} /> 
+                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
                     <Pressable key="accept" style={styles.menuOption} onPress={() => accept(item)}>
                       <Icon style={styles.button} source="account-check-outline" size={24} color={theme.colors.onSecondary} />
                       <Text>{state.strings.acceptAction}</Text>
@@ -313,7 +313,7 @@ export function ContactsSmall({
                   onDismiss={() => setMore(null)}
                   anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
                   <Surface elevation={11}>
-                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} /> 
+                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
                     {syncStatus === 'offsync' && (
                       <Pressable key="resync" style={styles.menuOption} onPress={() => resync(item)}>
                         <Icon style={styles.button} source="cached" size={24} color={theme.colors.onSecondary} />

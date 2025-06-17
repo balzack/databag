@@ -280,7 +280,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
             </View>
           )}
           <View style={styles.canvas}>
-            <Surface style={{ ...styles.frame, borderColor: theme.colors.outlineVariant }} mode="flat" elevation={0}>
+            <Surface style={{...styles.frame, borderColor: theme.colors.outlineVariant}} mode="flat" elevation={0}>
               <Animated.View style={[{}, {height: scale}]}>
                 {state.assets.length > 0 && <View style={styles.assetSpacer} />}
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.smCarousel} contentContainerStyle={styles.assets}>

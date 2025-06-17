@@ -22,7 +22,6 @@ export const en = {
   chatMembers: 'Chat Members',
   tokenRequired: 'Token (if required)',
 
-
   sureLogout: 'Are you sure you want to logout?',
   changePrompt: 'Here you can change the username and/or password for your account',
   typeDelete: 'Type [delete]',
@@ -419,14 +418,14 @@ export const fr = {
   tokenHint: 'Jeton / Mot de passe',
   searchAccounts: 'Rechercher des comptes',
   chatMembers: 'Membres du chat',
-  tokenRequired : 'Jeton (si requis)',
+  tokenRequired: 'Jeton (si requis)',
 
   sureLogout: 'Êtes-vous sûr de vouloir vous déconnecter ?',
-  changePrompt: 'Vous pouvez ici changer le nom d\'utilisateur et/ou le mot de passe de votre compte',
+  changePrompt: "Vous pouvez ici changer le nom d'utilisateur et/ou le mot de passe de votre compte",
   typeDelete: 'Tapez [supprimer]',
   encryptionKey: 'Clé de chiffrement',
   generateKey: 'Générez une clé pour activer le chiffrement de bout en bout des sujets.',
-  moreOptions: 'Plus d\'options',
+  moreOptions: "Plus d'options",
   saveDelete: 'Enregistrez la clé avec un mot de passe différent ou supprimez la clé',
   removeMessage: 'Supprimer le message',
   reportMessage: 'Signaler le message',

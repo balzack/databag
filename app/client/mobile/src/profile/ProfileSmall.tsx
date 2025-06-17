@@ -280,10 +280,7 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
                         value={state.strings.disconnectAction}
                         left={<TextInput.Icon style={styles.icon} loading={disconnecting} size={24} icon="link-break" />}
                       />
-                      <Pressable
-                        style={styles.cover}
-                        onPress={() => confirmAction(state.strings.disconnectAction, '', state.strings.disconnect, setDisconnecting, actions.disconnect)}
-                      />
+                      <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.disconnectAction, '', state.strings.disconnect, setDisconnecting, actions.disconnect)} />
                     </View>
                   )}
 

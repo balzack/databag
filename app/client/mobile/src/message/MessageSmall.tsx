@@ -242,7 +242,7 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
               onDismiss={() => setOptions(false)}
               anchor={<IconButton style={styles.menuButton} icon="dots-horizontal-circle-outline" size={16} onPress={() => setOptions(true)} />}>
               <Surface elevation={11}>
-                <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
+                <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} />
                 {!locked && profile && status === 'confirmed' && (
                   <Pressable key="edit" style={styles.menuOption} onPress={edit}>
                     <Icon style={styles.button} source="square-edit-outline" size={24} color={theme.colors.onSecondary} />

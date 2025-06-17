@@ -12,7 +12,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {EnvelopeSimpleOpen, EnvelopeSimple, Warning, HouseSimple, Star, HardDrive, LockOpen, UserMinus, PlayCircle, StopCircle, UsersFour, DotsThreeCircle, VideoCamera, VideoCameraSlash, ArrowsInSimple, BellSlash, Phone, Microphone, MicrophoneSlash, FrameCorners, WarningCircle, Link, LinkBreak, AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
+import {EnvelopeSimple, Warning, HouseSimple, Star, HardDrive, LockOpen, UserMinus, PlayCircle, StopCircle, UsersFour, DotsThreeCircle, VideoCamera, VideoCameraSlash, ArrowsInSimple, BellSlash, Phone, Microphone, MicrophoneSlash, FrameCorners, WarningCircle, Link, LinkBreak, AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
 import {useColorScheme} from 'react-native';
 import {MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
 
@@ -60,7 +60,7 @@ const databagColors = {
       level8: 'transparent',
       level9: '#8FBEA7',
       level10: '#377753',
-      level11: 'rgba(255, 255, 255, 0.4)'
+      level11: 'rgba(255, 255, 255, 0.4)',
     },
     surfaceDisabled: 'rgba(25, 28, 26, 0.12)',
     onSurfaceDisabled: 'rgba(25, 28, 26, 0.38)',
@@ -119,7 +119,7 @@ const databagColors = {
       level8: 'transparent',
       level9: '#191919',
       level10: '#224433',
-      level11: 'rgba(80, 80, 80, 0.5)'
+      level11: 'rgba(80, 80, 80, 0.5)',
     },
     surfaceDisabled: 'rgba(225, 227, 223, 0.12)',
     onSurfaceDisabled: 'rgba(225, 227, 223, 0.38)',
@@ -201,15 +201,15 @@ function FontMix(props: {name: string, color: string}) {
   } else if (props.name === 'award') {
     return <HouseSimple color={props.color} size={props.size} />;
   } else if (props.name === 'warning') {
-    return <Warning color={props.color} size={props.size} />
+    return <Warning color={props.color} size={props.size} />;
   } else if (props.name === 'star') {
-    return <Star color={props.color} size={props.size} />
+    return <Star color={props.color} size={props.size} />;
   } else if (props.name === 'star-filled') {
-    return <Star weight="fill" color={props.color} size={props.size} />
+    return <Star weight="fill" color={props.color} size={props.size} />;
   } else if (props.name === 'mail-filled') {
-    return <EnvelopeSimple weight="fill" color={props.color} size={props.size} />
+    return <EnvelopeSimple weight="fill" color={props.color} size={props.size} />;
   } else if (props.name === 'mail') {
-    return <EnvelopeSimple color={props.color} size={props.size} />
+    return <EnvelopeSimple color={props.color} size={props.size} />;
   } else {
     return <CommunityIcon {...props} />;
   }

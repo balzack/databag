@@ -89,7 +89,7 @@ export const styles = StyleSheet.create({
   button: {
     borderRadius: 8,
     flex: 1,
-  }, 
+  },
   submit: {
     borderRadius: 8,
     paddingLeft: 32,

@@ -195,10 +195,10 @@ export function AccountsSmall() {
                     />
                   }>
                   <Surface elevation={11}>
-                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} /> 
+                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} />
                     <Pressable key="storage" style={styles.menuOption}>
                       <Icon style={styles.button} source="hard-drive" size={24} color={theme.colors.secondary} />
-                      <Text style={{ color: theme.colors.secondary}}>{`${Math.floor(item.storageUsed / 1048576)} MB`}</Text>
+                      <Text style={{color: theme.colors.secondary}}>{`${Math.floor(item.storageUsed / 1048576)} MB`}</Text>
                     </Pressable>
                     <Pressable key="access" style={styles.menuOption} onPress={() => accessAccount(item.accountId)}>
                       <Icon style={styles.button} source="lock-open" size={24} color={theme.colors.onSecondary} />
