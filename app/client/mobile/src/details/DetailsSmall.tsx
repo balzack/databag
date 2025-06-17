@@ -25,7 +25,7 @@ export function DetailsSmall({close, edit, closeAll}: {close: () => void; edit: 
       await actions.remove();
       closeAll();
     };
-    confirmAction(state.strings.confirmTopic, state.strings.sureTopic, state.strings.remove, setRemoving, apply);
+    confirmAction(state.strings.confirmTopic, '', state.strings.remove, setRemoving, apply);
   };
 
   const leave = () => {
@@ -33,18 +33,18 @@ export function DetailsSmall({close, edit, closeAll}: {close: () => void; edit: 
       await actions.leave();
       closeAll();
     };
-    confirmAction(state.strings.confirmLeave, state.strings.sureLeave, state.strings.leave, setRemoving, apply);
+    confirmAction(state.strings.confirmLeave, '', state.strings.leave, setRemoving, apply);
   };
 
   const block = () => {
     const apply = async () => {
       await actions.block();
     };
-    confirmAction(state.strings.blockTopic, state.strings.blockTopicPrompt, state.strings.block, setBlocking, apply);
+    confirmAction(state.strings.blockTopic, '', state.strings.block, setBlocking, apply);
   };
 
   const report = () => {
-    confirmAction(state.strings.reportTopic, state.strings.reportTopicPrompt, state.strings.report, setReporting, actions.report);
+    confirmAction(state.strings.reportChat, '', state.strings.report, setReporting, actions.report);
   };
 
   const confirmAction = (title: string, prompt: string, label: string, loading: (boolean) => void, action: () => Promise<void>) => {
@@ -80,8 +80,8 @@ export function DetailsSmall({close, edit, closeAll}: {close: () => void; edit: 
       setConfirmParams({
         title: state.strings.operationFailed,
         prompt: state.strings.tryAgain,
-        cancel: {
-          label: state.strings.cancel,
+        close: {
+          label: state.strings.close,
           action: () => setConfirm(false),
         },
       });
@@ -92,7 +92,7 @@ export function DetailsSmall({close, edit, closeAll}: {close: () => void; edit: 
   const alertParams = {
     title: state.strings.operationFailer,
     prompt: state.strings.tryAgain,
-    cancel: {
+    close: {
       label: state.strings.close,
       action: () => {
         setAlert(false);
@@ -290,7 +290,7 @@ export function DetailsSmall({close, edit, closeAll}: {close: () => void; edit: 
                         style={styles.label}
                         mode="outlined"
                         outlineStyle={styles.border}
-                        placeholder={state.strings.report}
+                        placeholder={state.strings.reportChat}
                         left={<TextInput.Icon style={styles.icon} loading={reporting} size={24} icon="alert-decagram-outline" />}
                       />
                       <Pressable style={styles.press} onPress={report} />

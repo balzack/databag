@@ -8,6 +8,7 @@ export type ConfirmParams = {
   title?: string;
   prompt?: string;
   cancel?: {label: string; action: () => void};
+  close?: {label: string; action: () => void};
   confirm?: {label: string; action: () => Promise<void>};
 };
 
@@ -29,6 +30,11 @@ export function Confirm({show, busy, params}) {
               {params.confirm && (
                 <Button mode="contained" style={styles.control} loading={busy} onPress={params.confirm.action}>
                   {params.confirm.label}
+                </Button>
+              )}
+              {params.close && (
+                <Button mode="text" style={styles.control} loading={busy} onPress={params.close.action}>
+                  {params.close.label}
                 </Button>
               )}
             </View>

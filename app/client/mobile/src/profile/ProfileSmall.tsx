@@ -68,8 +68,8 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
       setConfirmParams({
         title: state.strings.operationFailed,
         prompt: state.strings.tryAgain,
-        cancel: {
-          label: state.strings.cancel,
+        close: {
+          label: state.strings.close,
           action: () => setConfirmShow(false),
         },
       });

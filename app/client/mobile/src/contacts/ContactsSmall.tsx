@@ -29,8 +29,8 @@ export function ContactsSmall({
   const [alertParams] = useState({
     title: state.strings.operationFailed,
     prompt: state.strings.tryAgain,
-    confirm: {
-      label: state.strings.ok,
+    close: {
+      label: state.strings.close,
       action: () => setAlert(false),
     },
   });

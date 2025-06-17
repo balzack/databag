@@ -118,7 +118,6 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
     setOptions(false);
     setConfirmParams({
       title: state.strings.blockMessage,
-      prompt: state.strings.blockMessagePrompt,
       cancel: {
         label: state.strings.cancel,
         action: () => setConfirmShow(false),
@@ -146,14 +145,13 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
   const report = () => {
     setOptions(false);
     setConfirmParams({
-      title: state.strings.flagMessage,
-      prompt: state.strings.flagMessagePrompt,
+      title: state.strings.reportMessage,
       cancel: {
         label: state.strings.cancel,
         action: () => setConfirmShow(false),
       },
       confirm: {
-        label: state.strings.flag,
+        label: state.strings.report,
         action: async () => {
           if (!reporting) {
             setReporting(true);
@@ -175,8 +173,7 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
   const remove = () => {
     setOptions(false);
     setConfirmParams({
-      title: state.strings.deleteMessage,
-      prompt: state.strings.messageHint,
+      title: state.strings.removeMessage,
       cancel: {
         label: state.strings.cancel,
         action: () => setConfirmShow(false),
@@ -204,8 +201,8 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
     setConfirmParams({
       title: state.strings.operationFailed,
       prompt: state.strings.tryAgain,
-      cancel: {
-        label: state.strings.cancel,
+      close: {
+        label: state.strings.close,
         action: () => setConfirmShow(false),
       },
     });
@@ -304,14 +301,13 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
             <BlurView style={styles.blur} blurType="dark" blurAmount={6} reducedTransparencyFallbackColor="dark" />
           </Pressable>
           <View style={styles.editArea}>
-            <Surface elevation={2} style={styles.editContent}>
-              <Text style={styles.title}>{state.strings.edit}</Text>
+            <Surface elevation={4} style={styles.editContent}>
+              <Text style={styles.title}>{state.strings.editOption}</Text>
               <TextInput
                 multiline={true}
                 mode="outlined"
+                outlineStyle={styles.inputBorder}
                 style={styles.message}
-                outlineColor="transparent"
-                activeOutlineColor="transparent"
                 spellCheck={false}
                 autoComplete="off"
                 autoCapitalize="none"
@@ -321,14 +317,13 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
                 onChangeText={value => setEditText(value)}
               />
               <View style={styles.controls}>
-                <Button mode="outlined" onPress={() => setEditing(false)}>
+                <Button style={styles.control} mode="outlined" onPress={() => setEditing(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button mode="contained" loading={saving} onPress={save}>
+                <Button style={styles.control} mode="contained" loading={saving} onPress={save}>
                   {state.strings.save}
                 </Button>
               </View>
-              <IconButton style={styles.closeIcon} icon="close" size={24} onPress={() => setEditing(false)} />
             </Surface>
           </View>
         </View>

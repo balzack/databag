@@ -147,7 +147,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
   const alertParams = {
     title: state.strings.operationFailed,
     prompt: state.strings.tryAgain,
-    cancel: {
+    close: {
       label: state.strings.close,
       action: () => {
         setAlert(false);

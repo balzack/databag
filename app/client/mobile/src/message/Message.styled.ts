@@ -10,6 +10,10 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
   },
+  inputBorder: {
+    borderRadius: 12,
+    borderWidth: 0,
+  },
   topic: {
     paddingTop: 8,
     display: 'flex',
@@ -195,6 +199,8 @@ export const styles = StyleSheet.create({
   editContent: {
     width: '100%',
     padding: 16,
+    borderRadius: 8,
+    gap: 16,
   },
   blur: {
     position: 'absolute',
@@ -211,8 +217,7 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    paddingLeft: 4,
-    paddingBottom: 4,
+    paddingLeft: 8,
   },
   controls: {
     display: 'flex',
@@ -220,6 +225,10 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingTop: 16,
     gap: 8,
+  },
+  control: {
+    flex: 1,
+    borderRadius: 8,
   },
   border: {
     width: '100%',
