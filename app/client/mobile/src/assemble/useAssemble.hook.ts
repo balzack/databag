@@ -64,8 +64,8 @@ export function useAssemble() {
   }, [app.state.createSealed]);
 
   useEffect(() => {
-    const {layout} = display.state;
-    updateState({layout});
+    const {strings, layout} = display.state;
+    updateState({strings, layout});
   }, [display.state]);
 
   const actions = {

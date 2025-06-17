@@ -1,7 +1,7 @@
 import React from 'react';
 import {Modal, View} from 'react-native';
 import {BlurView} from '@react-native-community/blur';
-import {Surface, Text, Button} from 'react-native-paper';
+import {useTheme, Surface, Text, Button} from 'react-native-paper';
 import {styles} from './Confirm.styled';
 
 export type ConfirmParams = {
@@ -13,6 +13,8 @@ export type ConfirmParams = {
 };
 
 export function Confirm({show, busy, params}) {
+  const theme = useTheme();
+
   return (
     <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={show} onRequestClose={params.cancel ? params.cancel.action : () => {}}>
       <View style={styles.modal}>
@@ -23,12 +25,12 @@ export function Confirm({show, busy, params}) {
             {params.prompt && <Text style={styles.prompt}>{params.prompt}</Text>}
             <View style={styles.controls}>
               {params.cancel && (
-                <Button mode="outlined" style={styles.control} disabled={busy} onPress={params.cancel.action}>
+                <Button mode="outlined" style={{ ...styles.control, borderColor: theme.colors.primary }} disabled={busy} onPress={params.cancel.action}>
                   {params.cancel.label}
                 </Button>
               )}
               {params.confirm && (
-                <Button mode="contained" style={styles.control} loading={busy} onPress={params.confirm.action}>
+                <Button mode="contained" style={styles.control} textColor="white" loading={busy} onPress={params.confirm.action}>
                   {params.confirm.label}
                 </Button>
               )}

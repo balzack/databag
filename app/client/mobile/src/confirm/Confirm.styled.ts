@@ -29,6 +29,7 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     width: '100%',
+    fontWeight: 'bold',
   },
   prompt: {
     fontSize: 16,

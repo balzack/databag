@@ -218,6 +218,7 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     paddingLeft: 8,
+    fontWeight: 'bold',
   },
   controls: {
     display: 'flex',

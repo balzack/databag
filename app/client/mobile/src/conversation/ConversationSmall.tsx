@@ -417,7 +417,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
           <Pressable style={styles.blur} onPress={() => setSizeModal(false)}>
             <BlurView style={styles.blur} blurType="dark" blurAmount={6} reducedTransparencyFallbackSize="dark" />
           </Pressable>
-          <Surface elevation={2} style={styles.sizeArea}>
+          <Surface elevation={4} style={styles.sizeArea}>
             <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={20} onPress={() => setSizeModal(false)} />
             <Button
               mode="contained"
