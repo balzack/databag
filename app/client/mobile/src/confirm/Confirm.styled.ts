@@ -18,12 +18,13 @@ export const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     height: '100%',
+    maxWidth: 500,
+    width: '80%',
     gap: 8,
   },
   surface: {
     padding: 16,
     borderRadius: 8,
-    maxWidth: 300,
   },
   title: {
     fontSize: 20,
@@ -40,8 +41,13 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     gap: 16,
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 16,
+    width: '100%',
+  },
+  control: {
+    flex: 1,
+    borderRadius: 8,
   },
 });

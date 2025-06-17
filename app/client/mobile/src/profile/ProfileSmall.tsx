@@ -282,7 +282,7 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
                       />
                       <Pressable
                         style={styles.cover}
-                        onPress={() => confirmAction(state.strings.disconnecting, state.strings.confirmDisconnect, state.strings.disconnect, setDisconnecting, actions.disconnect)}
+                        onPress={() => confirmAction(state.strings.disconnectAction, '', state.strings.disconnect, setDisconnecting, actions.disconnect)}
                       />
                     </View>
                   )}
@@ -345,7 +345,7 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
                           value={state.strings.deleteAction}
                           left={<TextInput.Icon style={styles.icon} loading={removing} size={24} icon="trash-2" />}
                         />
-                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove)} />
+                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.deleteAction, '', state.strings.remove, setRemoving, actions.remove)} />
                       </View>
                     )}
 
@@ -365,7 +365,7 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
                           value={state.strings.blockAction}
                           left={<TextInput.Icon style={styles.icon} loading={blocking} size={24} icon="close-circle-outline" />}
                         />
-                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block)} />
+                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.blockAction, '', state.strings.block, setBlocking, actions.block)} />
                       </View>
                     )}
 
@@ -386,7 +386,7 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
                           value={state.strings.reportAction}
                           left={<TextInput.Icon style={styles.icon} loading={reporting} size={24} icon="alert-decagram-outline" />}
                         />
-                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report)} />
+                        <Pressable style={styles.cover} onPress={() => confirmAction(state.strings.reportAction, '', state.strings.report, setReporting, actions.report)} />
                       </View>
                     )}
                 </Surface>
