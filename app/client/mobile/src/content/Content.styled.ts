@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
   },
   tabs: {
     position: 'absolute',
-    top: 64,
+    top: 68,
     height: 28,
     width: '100%',
     display: 'flex',
@@ -327,7 +327,7 @@ export const styles = StyleSheet.create({
   },
   flatListContent: {
     paddingBottom: 92,
-    paddingTop: 24,
+    paddingTop: 26,
   },
   largeFlatListContent: {
     paddingBottom: 92,

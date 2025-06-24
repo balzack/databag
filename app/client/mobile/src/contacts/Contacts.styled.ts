@@ -62,7 +62,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     overscrollBehavior: 'none',
-    paddingTop: 24,
+    paddingTop: 26,
     paddingBottom: 64,
   },
   smCard: {
@@ -78,7 +78,7 @@ export const styles = StyleSheet.create({
   },
   tabs: {
     position: 'absolute',
-    top: 64,
+    top: 68,
     height: 28,
     width: '100%',
     display: 'flex',
