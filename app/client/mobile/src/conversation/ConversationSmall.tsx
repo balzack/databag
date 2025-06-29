@@ -62,6 +62,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
     return () => {
       onShow.remove();
       onHide.remove();
+      actions.close();
     };
   }, []);
 
