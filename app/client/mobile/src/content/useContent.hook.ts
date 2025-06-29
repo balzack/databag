@@ -183,7 +183,7 @@ export function useContent() {
   }, [app.state.favorite, state.filtered]);
 
   useEffect(() => {
-   const setConfig = (config: Config) => {
+    const setConfig = (config: Config) => {
       const {sealSet, sealUnlocked, allowUnsealed} = config;
       updateState({sealSet: sealSet && sealUnlocked, allowUnsealed});
     };

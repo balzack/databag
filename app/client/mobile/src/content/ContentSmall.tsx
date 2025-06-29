@@ -28,7 +28,7 @@ export function ContentSmall({
   const [, setAdding] = useState(false);
   const theme = useTheme();
   const [alert, setAlert] = useState(false);
-  const [leave, setLeave] = useState(null as null | {cardId: string | null, channelId: string});
+  const [leave, setLeave] = useState(null as null | {cardId: string | null; channelId: string});
   const [leaving, setLeaving] = useState(false);
   const [remove, setRemove] = useState(null as null | {channelId: string});
   const [removing, setRemoving] = useState(false);
@@ -66,7 +66,7 @@ export function ContentSmall({
         }
         setLeaving(false);
         setLeave(null);
-      }
+      },
     },
   };
 
@@ -92,7 +92,7 @@ export function ContentSmall({
         }
         setRemoving(false);
         setRemove(null);
-      }
+      },
     },
   };
 
@@ -259,7 +259,7 @@ export function ContentSmall({
                 return (
                   <View>
                     <Channel
-                      containerStyle={{...styles.smChannel, title: {fontWeight: unread ? 'bold' : 'normal'}, message: {color: theme.colors.onSecondary, fontWeight: unread ? 700 : 'normal' }}}
+                      containerStyle={{...styles.smChannel, title: {fontWeight: unread ? 'bold' : 'normal'}, message: {color: theme.colors.onSecondary, fontWeight: unread ? 700 : 'normal'}}}
                       select={choose}
                       sealed={sealed}
                       hosted={hosted}
@@ -418,7 +418,7 @@ export function ContentSmall({
                 return (
                   <View>
                     <Channel
-                      containerStyle={{...styles.smChannel, title: {fontWeight: unread ? 'bold' : 'normal'}, message: {color: theme.colors.onSecondary, fontWeight: 'normal', fontWeight: unread ? 700 : 'normal' }}}
+                      containerStyle={{...styles.smChannel, title: {fontWeight: unread ? 'bold' : 'normal'}, message: {color: theme.colors.onSecondary, fontWeight: unread ? 700 : 'normal'}}}
                       select={choose}
                       sealed={sealed}
                       hosted={hosted}
