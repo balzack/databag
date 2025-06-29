@@ -241,29 +241,29 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
               visible={options}
               onDismiss={() => setOptions(false)}
               anchor={<IconButton style={styles.menuButton} icon="dots-horizontal-circle-outline" size={16} onPress={() => setOptions(true)} />}>
-              <Surface elevation={11}>
+              <Surface elevation={11} style={styles.menu}>
                 <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} />
                 {!locked && profile && status === 'confirmed' && (
                   <Pressable key="edit" style={styles.menuOption} onPress={edit}>
-                    <Icon style={styles.button} source="square-edit-outline" size={24} color={theme.colors.onSecondary} />
+                    <Icon style={styles.button} source="square-edit-outline" size={28} color={theme.colors.primary} />
                     <Text>{state.strings.editOption}</Text>
                   </Pressable>
                 )}
                 {(host || profile) && (
                   <Pressable key="remove" style={styles.menuOption} onPress={remove}>
-                    <Icon style={styles.button} source="trash-can-outline" size={24} color={theme.colors.onSecondary} />
+                    <Icon style={styles.button} source="trash-can-outline" size={28} color={theme.colors.primary} />
                     <Text>{state.strings.deleteOption}</Text>
                   </Pressable>
                 )}
                 {!profile && (
                   <Pressable key="block" style={styles.menuOption} onPress={block}>
-                    <Icon style={styles.button} source="eye-remove-outline" size={24} color={theme.colors.onSecondary} />
+                    <Icon style={styles.button} source="eye-remove-outline" size={28} color={theme.colors.primary} />
                     <Text>{state.strings.blockOption}</Text>
                   </Pressable>
                 )}
                 {!profile && (
                   <Pressable key="report" style={styles.menuOption} onPress={report}>
-                    <Icon style={styles.button} source="alert-octagon-outline" size={24} color={theme.colors.onSecondary} />
+                    <Icon style={styles.button} source="alert-octagon-outline" size={28} color={theme.colors.primary} />
                     <Text>{state.strings.reportOption}</Text>
                   </Pressable>
                 )}

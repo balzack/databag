@@ -202,12 +202,16 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     gap: 16,
   },
+  menu: {
+    borderRadius: 8,
+  },
   blur: {
     position: 'absolute',
     top: 0,
     left: 0,
     width: '100%',
     height: '100%',
+    borderRadius: 8,
   },
   closeIcon: {
     position: 'absolute',

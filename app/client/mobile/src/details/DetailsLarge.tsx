@@ -97,7 +97,7 @@ export function DetailsLarge({close, closeAll}: {close: () => void; closeAll: ()
   };
 
   const alertParams = {
-    title: state.strings.operationFailer,
+    title: state.strings.operationFailed,
     prompt: state.strings.tryAgain,
     cancel: {
       label: state.strings.close,

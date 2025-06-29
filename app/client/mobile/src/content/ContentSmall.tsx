@@ -7,6 +7,7 @@ import {Channel} from '../channel/Channel';
 import {Selector} from '../selector/Selector';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {BlurView} from '@react-native-community/blur';
+import {Confirm} from '../confirm/Confirm';
 
 export function ContentSmall({
   share,
@@ -26,6 +27,74 @@ export function ContentSmall({
   const {state, actions} = useContent();
   const [, setAdding] = useState(false);
   const theme = useTheme();
+  const [alert, setAlert] = useState(false);
+  const [leave, setLeave] = useState(null as null | {cardId: string | null, channelId: string});
+  const [leaving, setLeaving] = useState(false);
+  const [remove, setRemove] = useState(null as null | {channelId: string});
+  const [removing, setRemoving] = useState(false);
+
+  const alertParams = {
+    title: state.strings.operationFailed,
+    prompt: state.strings.tryAgain,
+    close: {
+      label: state.strings.close,
+      action: () => {
+        setAlert(false);
+      },
+    },
+  };
+
+  const leaveParams = {
+    title: state.strings.leaveChat,
+    cancel: {
+      label: state.strings.cancel,
+      action: () => {
+        setLeave(null);
+      },
+    },
+    confirm: {
+      label: state.strings.leave,
+      action: async () => {
+        setLeaving(true);
+        try {
+          if (leave) {
+            await actions.leaveChat(leave.cardId, leave.channelId);
+          }
+        } catch (err) {
+          console.log(err);
+          setAlert(true);
+        }
+        setLeaving(false);
+        setLeave(null);
+      }
+    },
+  };
+
+  const removeParams = {
+    title: state.strings.deleteChat,
+    cancel: {
+      label: state.strings.cancel,
+      action: () => {
+        setRemove(false);
+      },
+    },
+    confirm: {
+      label: state.strings.remove,
+      action: async () => {
+        setRemoving(true);
+        try {
+          if (remove) {
+            await actions.removeChat(remove.channelId);
+          }
+        } catch (err) {
+          console.log(err);
+          setAlert(true);
+        }
+        setRemoving(false);
+        setRemove(null);
+      }
+    },
+  };
 
   const select = (cardId: string | null, channelId: string) => {
     if (share) {
@@ -120,7 +189,7 @@ export function ContentSmall({
                     visible={allTab && more === `${item.cardId}:${item.channelId}`}
                     onDismiss={() => setMore(null)}
                     anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
-                    <Surface elevation={11}>
+                    <Surface elevation={11} style={styles.menu}>
                       <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
                       {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
                         <Pressable
@@ -130,7 +199,7 @@ export function ContentSmall({
                             setMore(null);
                             actions.clearFavorite(item.cardId, item.channelId);
                           }}>
-                          <Icon style={styles.button} source="star-filled" size={24} color={theme.colors.onSecondary} />
+                          <Icon style={styles.button} source="star-filled" size={24} color={theme.colors.primary} />
                           <Text>{state.strings.removeFavorites}</Text>
                         </Pressable>
                       )}
@@ -142,7 +211,7 @@ export function ContentSmall({
                             setMore(null);
                             actions.setFavorite(item.cardId, item.channelId);
                           }}>
-                          <Icon style={styles.button} source="star" size={24} color={theme.colors.onSecondary} />
+                          <Icon style={styles.button} source="star" size={24} color={theme.colors.primary} />
                           <Text>{state.strings.addFavorites}</Text>
                         </Pressable>
                       )}
@@ -154,7 +223,7 @@ export function ContentSmall({
                             setMore(null);
                             actions.clearUnread(item.cardId, item.channelId);
                           }}>
-                          <Icon style={styles.button} source="mail-filled" size={24} color={theme.colors.onSecondary} />
+                          <Icon style={styles.button} source="mail-filled" size={24} color={theme.colors.primary} />
                           <Text>{state.strings.markRead}</Text>
                         </Pressable>
                       )}
@@ -166,17 +235,31 @@ export function ContentSmall({
                             setMore(null);
                             actions.setUnread(item.cardId, item.channelId);
                           }}>
-                          <Icon style={styles.button} source="mail" size={24} color={theme.colors.onSecondary} />
+                          <Icon style={styles.button} source="mail" size={24} color={theme.colors.primary} />
                           <Text>{state.strings.markUnread}</Text>
                         </Pressable>
                       )}
+                      <Pressable
+                        key="delete"
+                        style={styles.menuOption}
+                        onPress={() => {
+                          setMore(null);
+                          if (item.cardId) {
+                            setLeave({cardId: item.cardId, channelId: item.channelId});
+                          } else {
+                            setRemove({channelId: item.channelId});
+                          }
+                        }}>
+                        <Icon style={styles.button} source="trash-2" size={24} color={theme.colors.primary} />
+                        <Text>{hosted ? state.strings.deleteChat : state.strings.leaveChat}</Text>
+                      </Pressable>
                     </Surface>
                   </Menu>
                 );
                 return (
                   <View>
                     <Channel
-                      containerStyle={{...styles.smChannel, title: {fontWeight: unread ? 'bold' : 'normal'}, message: {color: theme.colors.onSecondary, fontWeight: 'normal'}}}
+                      containerStyle={{...styles.smChannel, title: {fontWeight: unread ? 'bold' : 'normal'}, message: {color: theme.colors.onSecondary, fontWeight: unread ? 700 : 'normal' }}}
                       select={choose}
                       sealed={sealed}
                       hosted={hosted}
@@ -213,7 +296,7 @@ export function ContentSmall({
                     visible={unreadTab && more === `${item.cardId}:${item.channelId}`}
                     onDismiss={() => setMore(null)}
                     anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
-                    <Surface elevation={11}>
+                    <Surface elevation={11} style={styles.menu}>
                       <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
                       {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
                         <Pressable
@@ -223,7 +306,7 @@ export function ContentSmall({
                             setMore(null);
                             actions.clearFavorite(item.cardId, item.channelId);
                           }}>
-                          <Icon style={styles.button} source="star" size={24} color={theme.colors.onSecondary} />
+                          <Icon style={styles.button} source="star" size={24} color={theme.colors.primary} />
                           <Text>{state.strings.removeFavorites}</Text>
                         </Pressable>
                       )}
@@ -235,7 +318,7 @@ export function ContentSmall({
                             setMore(null);
                             actions.setFavorite(item.cardId, item.channelId);
                           }}>
-                          <Icon style={styles.button} source="star" size={24} color={theme.colors.onSecondary} />
+                          <Icon style={styles.button} source="star" size={24} color={theme.colors.primary} />
                           <Text>{state.strings.addFavorites}</Text>
                         </Pressable>
                       )}
@@ -246,7 +329,7 @@ export function ContentSmall({
                           setMore(null);
                           actions.clearUnread(item.cardId, item.channelId);
                         }}>
-                        <Icon style={styles.button} source="email-open-outline" size={24} color={theme.colors.onSecondary} />
+                        <Icon style={styles.button} source="email-open-outline" size={24} color={theme.colors.primary} />
                         <Text>{state.strings.markRead}</Text>
                       </Pressable>
                     </Surface>
@@ -255,7 +338,7 @@ export function ContentSmall({
                 return (
                   <View>
                     <Channel
-                      containerStyle={{...styles.smChannel, message: {color: theme.colors.onSecondary, fontWeight: 'normal'}}}
+                      containerStyle={{...styles.smChannel, message: {color: theme.colors.onSecondary, fontWeight: 700}}}
                       select={choose}
                       sealed={sealed}
                       hosted={hosted}
@@ -292,7 +375,7 @@ export function ContentSmall({
                     visible={favoritesTab && more === `${item.cardId}:${item.channelId}`}
                     onDismiss={() => setMore(null)}
                     anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
-                    <Surface elevation={11}>
+                    <Surface elevation={11} style={styles.menu}>
                       <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
                       <Pressable
                         key="clearFavorite"
@@ -301,7 +384,7 @@ export function ContentSmall({
                           setMore(null);
                           actions.clearFavorite(item.cardId, item.channelId);
                         }}>
-                        <Icon style={styles.button} source="star-filled" size={24} color={theme.colors.onSecondary} />
+                        <Icon style={styles.button} source="star-filled" size={24} color={theme.colors.primary} />
                         <Text>{state.strings.removeFavorites}</Text>
                       </Pressable>
                       {unread && (
@@ -312,7 +395,7 @@ export function ContentSmall({
                             setMore(null);
                             actions.clearUnread(item.cardId, item.channelId);
                           }}>
-                          <Icon style={styles.button} source="mail-filled" size={24} color={theme.colors.onSecondary} />
+                          <Icon style={styles.button} source="mail-filled" size={24} color={theme.colors.primary} />
                           <Text>{state.strings.markRead}</Text>
                         </Pressable>
                       )}
@@ -324,7 +407,7 @@ export function ContentSmall({
                             setMore(null);
                             actions.setUnread(item.cardId, item.channelId);
                           }}>
-                          <Icon style={styles.button} source="mail" size={24} color={theme.colors.onSecondary} />
+                          <Icon style={styles.button} source="mail" size={24} color={theme.colors.primary} />
                           <Text>{state.strings.markUnread}</Text>
                         </Pressable>
                       )}
@@ -335,7 +418,7 @@ export function ContentSmall({
                 return (
                   <View>
                     <Channel
-                      containerStyle={{...styles.smChannel, title: {fontWeight: unread ? 'bold' : 'normal'}, message: {color: theme.colors.onSecondary, fontWeight: 'normal'}}}
+                      containerStyle={{...styles.smChannel, title: {fontWeight: unread ? 'bold' : 'normal'}, message: {color: theme.colors.onSecondary, fontWeight: 'normal', fontWeight: unread ? 700 : 'normal' }}}
                       select={choose}
                       sealed={sealed}
                       hosted={hosted}
@@ -382,6 +465,9 @@ export function ContentSmall({
         </View>
       </View>
       <Selector share={share} selected={select} channels={state.channels} />
+      <Confirm show={alert} params={alertParams} />
+      <Confirm show={Boolean(remove)} busy={removing} params={removeParams} />
+      <Confirm show={Boolean(leave)} busy={leaving} params={leaveParams} />
     </View>
   );
 }

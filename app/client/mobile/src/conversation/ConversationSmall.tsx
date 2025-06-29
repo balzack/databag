@@ -320,29 +320,29 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
                   onDismiss={() => setOptions(false)}
                   anchorPosition="top"
                   anchor={<IconButton style={styles.options} mode="contained" iconColor={theme.colors.onSurface} icon="plus-square" size={20} onPress={() => setOptions(true)} />}>
-                  <Surface elevation={11}>
+                  <Surface elevation={11} style={styles.menu}>
                     <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} />
                     {!disableImage && (
                       <Pressable style={styles.option} onPress={addImage}>
-                        <Icon style={styles.button} source="camera" size={24} color={Colors.primary} />
+                        <Icon style={styles.button} source="camera" size={28} color={theme.colors.primary} />
                         <Text>{state.strings.attachImage}</Text>
                       </Pressable>
                     )}
                     {!disableVideo && (
                       <Pressable style={styles.option} onPress={addVideo}>
-                        <Icon style={styles.button} source="video-outline" size={24} color={Colors.primary} />
+                        <Icon style={styles.button} source="video-outline" size={28} color={theme.colors.primary} />
                         <Text>{state.strings.attachVideo}</Text>
                       </Pressable>
                     )}
                     {!disableAudio && (
                       <Pressable style={styles.option} onPress={addAudio}>
-                        <Icon style={styles.button} source="volume-high" size={24} color={Colors.primary} />
+                        <Icon style={styles.button} source="volume-high" size={28} color={theme.colors.primary} />
                         <Text>{state.strings.attachAudio}</Text>
                       </Pressable>
                     )}
                     {!disableBinary && (
                       <Pressable style={styles.option} onPress={addBinary}>
-                        <Icon style={styles.button} source="file-outline" size={24} color={Colors.primary} />
+                        <Icon style={styles.button} source="file-outline" size={28} color={theme.colors.primary} />
                         <Text>{state.strings.attachFile}</Text>
                       </Pressable>
                     )}
@@ -353,7 +353,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
                         setOptions(false);
                         setColorMenu(true);
                       }}>
-                      <Icon style={styles.button} source="format-color-text" size={24} color={Colors.primary} />
+                      <Icon style={styles.button} source="format-color-text" size={28} color={theme.colors.primary} />
                       <Text>{state.strings.textColor}</Text>
                     </Pressable>
                     <Pressable
@@ -362,7 +362,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
                         setOptions(false);
                         setSizeModal(true);
                       }}>
-                      <Icon style={styles.button} source="format-size" size={24} color={Colors.primary} />
+                      <Icon style={styles.button} source="format-size" size={28} color={theme.colors.primary} />
                       <Text>{state.strings.textSize}</Text>
                     </Pressable>
                   </Surface>

@@ -159,41 +159,41 @@ export function ContactsSmall({
                   visible={allTab && more === item.cardId}
                   onDismiss={() => setMore(null)}
                   anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
-                  <Surface elevation={11}>
+                  <Surface elevation={11} style={styles.menu}>
                     <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
                     {syncStatus === 'offsync' && (
                       <Pressable key="resync" style={styles.menuOption} onPress={() => resync(item)}>
-                        <Icon style={styles.button} source="cached" size={24} color={theme.colors.onSecondary} />
+                        <Icon style={styles.button} source="cached" size={28} color={theme.colors.primary} />
                         <Text>{state.strings.resyncAction}</Text>
                       </Pressable>
                     )}
                     {syncStatus === 'connected' && (
                       <Pressable key="call" style={styles.menuOption} onPress={() => call(item)}>
-                        <Icon style={styles.button} source="phone" size={24} color={theme.colors.onSecondary} />
+                        <Icon style={styles.button} source="phone" size={28} color={theme.colors.primary} />
                         <Text>{state.strings.callAction}</Text>
                       </Pressable>
                     )}
                     {syncStatus === 'connected' && (
                       <Pressable key="text" style={styles.menuOption} onPress={() => text(item)}>
-                        <Icon style={styles.button} source="chat-circle" size={24} color={theme.colors.onSecondary} />
+                        <Icon style={styles.button} source="chat-circle" size={28} color={theme.colors.primary} />
                         <Text>{state.strings.textAction}</Text>
                       </Pressable>
                     )}
                     {syncStatus === 'confirmed' && (
                       <Pressable key="saved" style={styles.menuOption} onPress={() => connect(item)}>
-                        <Icon style={styles.button} source="link" size={24} color={theme.colors.onSecondary} />
+                        <Icon style={styles.button} source="link" size={28} color={theme.colors.primary} />
                         <Text>{state.strings.connectAction}</Text>
                       </Pressable>
                     )}
                     {syncStatus === 'connecting' && (
                       <Pressable key="cancel" style={styles.menuOption} onPress={() => cancel(item)}>
-                        <Icon style={styles.button} source="cancel" size={24} color={theme.colors.onSecondary} />
+                        <Icon style={styles.button} source="cancel" size={28} color={theme.colors.primary} />
                         <Text>{state.strings.cancelAction}</Text>
                       </Pressable>
                     )}
                     {(syncStatus === 'pending' || syncStatus === 'requested') && (
                       <Pressable key="accept" style={styles.menuOption} onPress={() => accept(item)}>
-                        <Icon style={styles.button} source="account-check-outline" size={24} color={theme.colors.onSecondary} />
+                        <Icon style={styles.button} source="account-check-outline" size={28} color={theme.colors.primary} />
                         <Text>{state.strings.acceptAction}</Text>
                       </Pressable>
                     )}
@@ -251,10 +251,10 @@ export function ContactsSmall({
                   visible={requestedTab && more === item.cardId}
                   onDismiss={() => setMore(null)}
                   anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
-                  <Surface elevation={11}>
+                  <Surface elevation={11} style={styles.menu}>
                     <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
                     <Pressable key="accept" style={styles.menuOption} onPress={() => accept(item)}>
-                      <Icon style={styles.button} source="account-check-outline" size={24} color={theme.colors.onSecondary} />
+                      <Icon style={styles.button} source="account-check-outline" size={28} color={theme.colors.primary} />
                       <Text>{state.strings.acceptAction}</Text>
                     </Pressable>
                   </Surface>
@@ -312,20 +312,20 @@ export function ContactsSmall({
                   visible={connectedTab && more === item.cardId}
                   onDismiss={() => setMore(null)}
                   anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
-                  <Surface elevation={11}>
+                  <Surface elevation={11} style={styles.menu}>
                     <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
                     {syncStatus === 'offsync' && (
                       <Pressable key="resync" style={styles.menuOption} onPress={() => resync(item)}>
-                        <Icon style={styles.button} source="cached" size={24} color={theme.colors.onSecondary} />
+                        <Icon style={styles.button} source="cached" size={28} color={theme.colors.primary} />
                         <Text>{state.strings.resyncAction}</Text>
                       </Pressable>
                     )}
                     <Pressable key="call" style={styles.menuOption} onPress={() => call(item)}>
-                      <Icon style={styles.button} source="phone" size={24} color={theme.colors.onSecondary} />
+                      <Icon style={styles.button} source="phone" size={28} color={theme.colors.primary} />
                       <Text>{state.strings.callAction}</Text>
                     </Pressable>
                     <Pressable key="text" style={styles.menuOption} onPress={() => text(item)}>
-                      <Icon style={styles.button} source="chat-circle" size={24} color={theme.colors.onSecondary} />
+                      <Icon style={styles.button} source="chat-circle" size={28} color={theme.colors.primary} />
                       <Text>{state.strings.textAction}</Text>
                     </Pressable>
                   </Surface>

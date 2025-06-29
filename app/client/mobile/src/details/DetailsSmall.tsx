@@ -33,7 +33,7 @@ export function DetailsSmall({close, edit, closeAll}: {close: () => void; edit: 
       await actions.leave();
       closeAll();
     };
-    confirmAction(state.strings.confirmLeave, '', state.strings.leave, setRemoving, apply);
+    confirmAction(state.strings.leaveChat, '', state.strings.leave, setRemoving, apply);
   };
 
   const block = () => {
@@ -90,7 +90,7 @@ export function DetailsSmall({close, edit, closeAll}: {close: () => void; edit: 
   };
 
   const alertParams = {
-    title: state.strings.operationFailer,
+    title: state.strings.operationFailed,
     prompt: state.strings.tryAgain,
     close: {
       label: state.strings.close,

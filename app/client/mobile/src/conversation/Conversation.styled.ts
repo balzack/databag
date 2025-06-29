@@ -145,12 +145,16 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 12,
   },
+  menu: {
+    borderRadius: 8,
+  },
   blur: {
     position: 'absolute',
     top: 0,
     left: 0,
     width: '100%',
     height: '100%',
+    borderRadius: 8,
   },
   messageList: {
     width: '100%',

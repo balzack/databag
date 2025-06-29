@@ -183,7 +183,7 @@ export function useContent() {
   }, [app.state.favorite, state.filtered]);
 
   useEffect(() => {
-    const setConfig = (config: Config) => {
+   const setConfig = (config: Config) => {
       const {sealSet, sealUnlocked, allowUnsealed} = config;
       updateState({sealSet: sealSet && sealUnlocked, allowUnsealed});
     };
@@ -265,6 +265,14 @@ export function useContent() {
     setFavorite: async (cardId: string | null, channelId: string) => {
       const favorites = state.favorite.concat([{cardId, channelId}]);
       await app.actions.setFavorite(favorites);
+    },
+    leaveChat: async (cardId: string, channelId: string) => {
+      const content = app.state.session.getContent();
+      await content.leaveChannel(cardId, channelId);
+    },
+    removeChat: async (channelId: string) => {
+      const content = app.state.session.getContent();
+      await content.removeChannel(channelId);
     },
     clearFavorite: async (cardId: string | null, channelId: string) => {
       const favorites = state.favorite.filter(item => item.cardId !== cardId || item.channelId !== channelId);
