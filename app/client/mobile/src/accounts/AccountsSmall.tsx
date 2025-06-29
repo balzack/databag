@@ -174,6 +174,7 @@ export function AccountsSmall() {
         {state.members.length !== 0 && (
           <FlatList
             style={styles.contacts}
+            contentContainerStyle={styles.listPad}
             data={state.filtered}
             initialNumToRender={32}
             showsVerticalScrollIndicator={false}

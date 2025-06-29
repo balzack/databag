@@ -16,6 +16,9 @@ export const styles = StyleSheet.create({
   action: {
     backgroundColor: 'transparent',
   },
+  listPad: {
+    paddingBottom: 128,
+  },
   contacts: {
     display: 'flex',
     flexDirection: 'column',
