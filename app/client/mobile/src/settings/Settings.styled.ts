@@ -215,6 +215,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     height: '100%',
     gap: 8,
+    paddingLeft: 6,
+    paddingRight: 6,
   },
   surface: {
     padding: 16,
@@ -591,7 +593,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   blockedLabel: {
-    fontSize: 20,
+    fontSize: 16,
     color: Colors.placeholder,
   },
   blockedItems: {

@@ -17,10 +17,10 @@ export function Confirm({show, busy, params}) {
 
   return (
     <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={show} onRequestClose={params.cancel ? params.cancel.action : () => {}}>
-      <View style={styles.modal}>
-        <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+      <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
+        <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
         <View style={styles.content}>
-          <Surface elevation={5} mode="flat" style={styles.surface}>
+          <Surface elevation={2} style={styles.surface}>
             {params.title && <Text style={styles.title}>{params.title}</Text>}
             {params.prompt && <Text style={styles.prompt}>{params.prompt}</Text>}
             <View style={styles.controls}>

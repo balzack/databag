@@ -884,10 +884,10 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         </Animated.View>
       </View>
       <Modal animationType="fade" transparent={true} visible={sealing} supportedOrientations={['portrait', 'landscape']} onRequestClose={() => setSealing(false)}>
-        <View style={styles.modal}>
-          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={4} mode="flat" style={styles.surface}>
+            <Surface elevation={2} style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.encryptionKey}</Text>
               {sealConfig && !sealDelete && !sealReset && state.config.sealSet && state.config.sealUnlocked && (
                 <>
@@ -1075,10 +1075,10 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={auth} onRequestClose={() => setAuth(false)}>
-        <View style={styles.modal}>
-          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
+          <BlurView style={styles.blur} blurType="light" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={4} mode="flat" style={styles.surface}>
+            <Surface elevation={2} style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
               <Text style={styles.modalDescription}>{state.strings.mfaSteps}</Text>
               <Image style={styles.secretImage} resizeMode={'contain'} source={{uri: state.secretImage}} />
@@ -1111,10 +1111,10 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={clear} onRequestClose={() => setClear(false)}>
-        <View style={styles.modal}>
-          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
+          <BlurView style={styles.blur} blurType="ligth" blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={4} mode="flat" style={styles.surface}>
+            <Surface elevation={2} style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
               <Text style={styles.modalDescription}>{state.strings.disablePrompt}</Text>
 
@@ -1131,10 +1131,10 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={change} onRequestClose={() => setChange(false)}>
-        <View style={styles.modal}>
-          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={4} mode="flat" style={styles.surface}>
+            <Surface elevation={2} style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.changeLogin}</Text>
               <Text style={styles.modalPrompt}>{state.strings.changePrompt}</Text>
               <TextInput
@@ -1183,10 +1183,10 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={logout} onRequestClose={() => setLogout(false)}>
-        <View style={styles.modal}>
-          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={4} mode="flat" style={styles.surface}>
+            <Surface elevation={2} style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.sureLogout}</Text>
 
               <View style={styles.allControl}>
@@ -1209,10 +1209,10 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={remove} onRequestClose={() => setRemove(false)}>
-        <View style={styles.modal}>
-          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={4} mode="flat" style={styles.surface}>
+            <Surface elevation={2} style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.deleteAccount}</Text>
 
               <TextInput
@@ -1247,14 +1247,14 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedMessage} onRequestClose={() => setBlockedMessage(false)}>
-        <View style={styles.modal}>
-          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <View style={styles.blockedContent}>
-            <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
+            <Surface elevation={2} style={styles.blockedSurface}>
               <View style={styles.blockedHeader}>
                 <Text style={styles.modalLabel}>{state.strings.blockedMessages}</Text>
               </View>
-              <Surface style={styles.blocked} elevation={1} mode="flat">
+              <Surface style={styles.blocked} elevation={0} mode="flat">
                 {state.blockedMessages.length === 0 && (
                   <View style={styles.blockedEmpty}>
                     <Text style={styles.blockedLabel}>{state.strings.noMessages}</Text>
@@ -1273,14 +1273,14 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedChannel} onRequestClose={() => setBlockedChannel(false)}>
-        <View style={styles.modal}>
-          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <View style={styles.blockedContent}>
-            <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
+            <Surface elevation={2} style={styles.blockedSurface}>
               <View style={styles.blockedHeader}>
                 <Text style={styles.modalLabel}>{state.strings.blockedTopics}</Text>
               </View>
-              <Surface style={styles.blocked} elevation={1} mode="flat">
+              <Surface style={styles.blocked} elevation={0} mode="flat">
                 {state.blockedChannels.length === 0 && (
                   <View style={styles.blockedEmpty}>
                     <Text style={styles.blockedLabel}>{state.strings.noTopics}</Text>
@@ -1299,14 +1299,14 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedContact} onRequestClose={() => setBlockedContact(false)}>
-        <View style={styles.modal}>
-          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <View style={styles.blockedContent}>
-            <Surface elevation={4} mode="flat" style={styles.blockedSurface}>
+            <Surface elevation={2} style={styles.blockedSurface}>
               <View style={styles.blockedHeader}>
                 <Text style={styles.modalLabel}>{state.strings.blockedContacts}</Text>
               </View>
-              <Surface style={styles.blocked} elevation={1} mode="flat">
+              <Surface style={styles.blocked} elevation={0} mode="flat">
                 {state.blockedContacts.length === 0 && (
                   <View style={styles.blockedEmpty}>
                     <Text style={styles.blockedLabel}>{state.strings.noContacts}</Text>

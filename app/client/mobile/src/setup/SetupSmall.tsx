@@ -69,7 +69,7 @@ export function SetupSmall() {
             </View>
           </SafeAreaView>
         </Surface>
-        <View style={styles.scrollWrapper}>
+        <SafeAreaView style={styles.scrollWrapper} edges={['left', 'right']}>
           <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
             <Surface mode="flat" elevation={2} style={styles.navForm}>
               <Text variant="headlineSmall" style={styles.sectionLabel}>
@@ -299,14 +299,14 @@ export function SetupSmall() {
               </View>
             </Surface>
           </KeyboardAwareScrollView>
-        </View>
+        </SafeAreaView>
       </Surface>
       <Confirm show={state.error} params={errorParams} />
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={state.confirmingMFAuth} onRequestClose={actions.cancelMFAuth}>
-        <View style={styles.modal}>
-          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.modalContent}>
-            <Surface elevation={4} mode="flat" style={styles.modalSurface}>
+            <Surface elevation={2} style={styles.modalSurface}>
               <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={actions.cancelMFAuth} />
               <Text style={styles.modalDescription}>{state.strings.mfaSteps}</Text>

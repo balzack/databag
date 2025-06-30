@@ -78,7 +78,7 @@ export function AccountsSmall() {
   const failedParams = {
     title: state.strings.operationFailed,
     prompt: state.strings.tryAgain,
-    cancel: {
+    close: {
       label: state.strings.close,
       action: () => {
         setFailed(false);
@@ -147,7 +147,7 @@ export function AccountsSmall() {
     <View style={styles.component}>
       <Surface elevation={1} mode="flat" style={styles.fullSurface}>
         <Surface elevation={9} mode="flat">
-          <SafeAreaView edges={['top']}>
+          <SafeAreaView edges={['top', 'left', 'right']}>
             <View style={styles.headerLayout}>
               <Surface mode="flat" elevation={0} style={styles.searchSurface}>
                 <TextInput
@@ -164,7 +164,7 @@ export function AccountsSmall() {
                   onChangeText={value => actions.setFilter(value)}
                 />
               </Surface>
-              <Button icon="user-plus" mode="contained" textColor="white" style={styles.newContactButton} onPress={addAccount}>
+              <Button icon="user-plus" loading={adding} mode="contained" textColor="white" style={styles.newContactButton} onPress={addAccount}>
                 {state.strings.new}
               </Button>
             </View>
@@ -248,11 +248,10 @@ export function AccountsSmall() {
       <Confirm show={failed} params={failedParams} />
       <Confirm show={remove} busy={removing} params={removeParams} />
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={showAccessModal} onRequestClose={() => setShowAccessModal(false)}>
-        <View style={styles.modal}>
-          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <Surface elevation={4} mode="flat" style={styles.modalSurface}>
+        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <Surface elevation={2} style={styles.modalSurface}>
             <Text style={styles.modalLabel}>{state.strings.accessingTitle}</Text>
-            <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setShowAccessModal(false)} />
             <Text style={styles.modalDescription}>{state.strings.accessingToken}</Text>
             <View style={styles.secretText}>
               <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>
@@ -263,7 +262,7 @@ export function AccountsSmall() {
               </TouchableOpacity>
             </View>
             <View style={styles.modalControls}>
-              <Button mode="outlined" onPress={() => setShowAccessModal(false)}>
+              <Button mode="text" onPress={() => setShowAccessModal(false)}>
                 {state.strings.close}
               </Button>
             </View>
@@ -271,11 +270,10 @@ export function AccountsSmall() {
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={showAddModal} onRequestClose={() => setShowAddModal(false)}>
-        <View style={styles.modal}>
-          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <Surface elevation={4} mode="flat" style={styles.modalSurface}>
+        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <Surface elevation={2} style={styles.modalSurface}>
             <Text style={styles.modalLabel}>{state.strings.addingTitle}</Text>
-            <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setShowAddModal(false)} />
             <Text style={styles.modalDescription}>{state.strings.addingToken}</Text>
             <View style={styles.secretText}>
               <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>
@@ -286,7 +284,7 @@ export function AccountsSmall() {
               </TouchableOpacity>
             </View>
             <View style={styles.modalControls}>
-              <Button mode="outlined" onPress={() => setShowAddModal(false)}>
+              <Button mode="text" onPress={() => setShowAddModal(false)}>
                 {state.strings.close}
               </Button>
             </View>

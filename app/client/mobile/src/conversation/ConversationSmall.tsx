@@ -403,9 +403,9 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
       <Confirm show={alert} params={alertParams} />
       <Confirm show={mediaError} params={errParams} />
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={colorMenu} onRequestClose={() => setColorMenu(false)}>
-        <View style={styles.modal}>
+        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
           <Pressable style={styles.blur} onPress={() => setColorMenu(false)}>
-            <BlurView style={styles.blur} blurType="dark" blurAmount={6} reducedTransparencyFallbackColor="dark" />
+            <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
           </Pressable>
           <Surface elevation={2} style={styles.colorArea}>
             <ColorPicker color={state.textColorSet ? state.textColor : undefined} onColorChange={actions.setTextColor} onColorChangeComplete={actions.setTextColor} swatched={false} />
@@ -414,11 +414,11 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={sizeModal} onRequestClose={() => setSizeModal(false)}>
-        <View style={styles.modal}>
+        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
           <Pressable style={styles.blur} onPress={() => setSizeModal(false)}>
-            <BlurView style={styles.blur} blurType="dark" blurAmount={6} reducedTransparencyFallbackSize="dark" />
+            <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackSize="dark" />
           </Pressable>
-          <Surface elevation={4} style={styles.sizeArea}>
+          <Surface elevation={2} style={styles.sizeArea}>
             <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={20} onPress={() => setSizeModal(false)} />
             <Button
               mode="contained"

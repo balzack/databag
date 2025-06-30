@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     overscrollBehavior: 'none',
-    paddingTop: 24,
+    paddingTop: 8,
     paddingBottom: 64,
   },
   contact: {
@@ -128,7 +128,7 @@ export const styles = StyleSheet.create({
   modalSurface: {
     padding: 16,
     borderRadius: 8,
-    maxWidth: 400,
+    maxWidth: '80%',
   },
   modal: {
     display: 'flex',

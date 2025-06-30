@@ -75,6 +75,7 @@ const databagColors = {
     connecting: '#2288dd',
     confirmed: '#6688cc',
     textColor: '#224433',
+    modalBack: 'rgba(0,0,0,0.4)',
   },
   dark: {
     name: 'dark',
@@ -134,6 +135,7 @@ const databagColors = {
     connecting: '#2288dd',
     confirmed: '#6688cc',
     textColor: '#224433',
+    modalBack: 'rgba(0,0,0,0.4)',
   },
 };
 

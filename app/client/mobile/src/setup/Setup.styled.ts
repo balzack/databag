@@ -327,6 +327,8 @@ export const styles = StyleSheet.create({
     height: '100%',
     maxWidth: 300,
     gap: 8,
+    paddingLeft: 6,
+    paddingRight: 6,
   },
   modalSurface: {
     padding: 16,
