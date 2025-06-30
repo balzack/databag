@@ -33,7 +33,7 @@ export function RegistrySmall({close, openContact}: RegistrySmallProps) {
                 autoComplete="off"
                 autoCorrect={false}
                 mode="outlined"
-                placeholder={state.strings.node}
+                placeholder={state.strings.server}
                 left={<TextInput.Icon style={styles.icon} icon="server" />}
                 right={<TextInput.Icon style={styles.icon} icon="filter" onPress={() => setSearch(true)} />}
                 value={state.server}

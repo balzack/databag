@@ -28,7 +28,11 @@ export function useSession() {
       }
     };
     const setSdkState = (sdkState: string) => {
-      updateState({sdkState: sdkState === 'connected'});
+      if (sdkState === 'closed') {
+        app.actions.accountLogout();
+      } else {
+        updateState({sdkState: sdkState === 'connected'});
+      }
     };
     const setAppState = (appState: string) => {
       updateState({appState: appState === 'active'});
