@@ -70,7 +70,8 @@ export class Connection {
     ws.onmessage = (e) => {
       try {
         if (e.data === '') {
-          this.close();
+          this.emitter.emit('status', 'closed');
+          return
         }
         const activity = JSON.parse(e.data);
         this.emitter.emit('status', 'connected');
