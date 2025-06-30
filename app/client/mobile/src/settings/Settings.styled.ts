@@ -9,6 +9,9 @@ export const styles = StyleSheet.create({
   handle: {
     marginTop: 8,
   },
+  more: {
+    paddingTop: 16,
+  },
   username: {
     fontWeight: 'bold',
   },
@@ -22,10 +25,23 @@ export const styles = StyleSheet.create({
     borderWidth: 0,
     borderRadius: 12,
   },
+  modalInputBorder: {
+    borderRadius: 8,
+  },
   modalWarn: {
     marginTop: 8,
     textAlign: 'center',
     fontSize: 14,
+  },
+  modalSurface: {
+    borderRadius: 8,
+  },
+  modalContent: {
+    borderRadius: 8,
+    paddingTop: 32,
+    paddingBottom: 32,
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   navHeader: {
     height: 72,
@@ -37,7 +53,8 @@ export const styles = StyleSheet.create({
     gap: 8,
   },
   logoutSpace: {
-    marginTop: 8,
+    marginTop: 28,
+    marginBottom: 20,
   },
   smHeader: {
     fontSize: 24,
@@ -47,7 +64,8 @@ export const styles = StyleSheet.create({
     paddingLeft: 24,
   },
   modalPrompt: {
-    paddingTop: 16,
+    paddingTop: 32,
+    paddingBottom: 16,
     fontSize: 15,
     textAlign: 'center',
   },
@@ -198,6 +216,7 @@ export const styles = StyleSheet.create({
     left: 0,
     width: '100%',
     height: '100%',
+    borderRadius: 8,
   },
   inputIcon: {
     backgroundColor: 'transparent',
@@ -208,7 +227,7 @@ export const styles = StyleSheet.create({
   },
   container: {
     width: 500,
-    maxWidth: '80%',
+    maxWidth: '95%',
   },
   content: {
     display: 'flex',
@@ -257,6 +276,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 32,
     paddingRight: 32,
     textAlign: 'center',
+    paddingBottom: 8,
   },
   modalClose: {
     position: 'absolute',
@@ -267,17 +287,19 @@ export const styles = StyleSheet.create({
   modalControls: {
     display: 'flex',
     flexDirection: 'row',
-    gap: 16,
-    justifyContent: 'space-between',
+    gap: 32,
+    justifyContent: 'center',
     alignItems: 'center',
     marginTop: 16,
   },
   modalControl: {
-    flex: 1,
     borderRadius: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   modalDescription: {
-    paddingTop: 16,
+    paddingTop: 32,
+    paddingBottom: 16,
     textAlign: 'center',
   },
   title: {
@@ -447,7 +469,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: 16,
+    paddingTop: 32,
   },
   control: {
     flexShrink: 1,
@@ -478,8 +500,8 @@ export const styles = StyleSheet.create({
     width: 32,
   },
   controlLabel: {
+    fontWeight: 500,
     fontSize: 16,
-    color: Colors.primary,
   },
   dangerLabel: {
     fontSize: 16,
@@ -498,6 +520,7 @@ export const styles = StyleSheet.create({
   input: {
     width: '100%',
     marginTop: 16,
+    marginBottom: 16,
   },
   secretImage: {
     width: 192,
@@ -556,7 +579,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 12,
+    paddingBottom: 16,
   },
   blockedTitle: {
     flexGrow: 1,
@@ -575,7 +598,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 16,
-    paddingBottom: 16,
   },
   blockedButton: {
     borderRadius: 8,

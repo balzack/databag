@@ -126,9 +126,15 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   modalSurface: {
-    padding: 16,
     borderRadius: 8,
-    maxWidth: '80%',
+    maxWidth: '95%',
+  },
+  modalContent: {
+    borderRadius: 8,
+    paddingTop: 32,
+    paddingBottom: 32,
+    paddingLeft: 32,
+    paddingRight: 32,
   },
   modal: {
     display: 'flex',
@@ -143,9 +149,13 @@ export const styles = StyleSheet.create({
     left: 0,
     width: '100%',
     height: '100%',
+    borderRadius: 8,
   },
   modalLabel: {
     fontSize: 20,
+    fontWeight: 600,
+    textAlign: 'center',
+    paddingBottom: 16,
   },
   modalClose: {
     position: 'absolute',
@@ -155,6 +165,7 @@ export const styles = StyleSheet.create({
   },
   modalDescription: {
     paddingTop: 16,
+    textAlign: 'center',
   },
   secretText: {
     display: 'flex',

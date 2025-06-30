@@ -12,7 +12,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {Camera, EnvelopeSimple, Warning, HouseSimple, Star, HardDrive, LockOpen, UserMinus, PlayCircle, StopCircle, UsersFour, DotsThreeCircle, VideoCamera, VideoCameraSlash, ArrowsInSimple, BellSlash, Phone, Microphone, MicrophoneSlash, FrameCorners, WarningCircle, Link, LinkBreak, AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
+import {ArrowCounterClockwise, Camera, EnvelopeSimple, Warning, HouseSimple, Star, HardDrive, LockOpen, UserMinus, PlayCircle, StopCircle, UsersFour, DotsThreeCircle, VideoCamera, VideoCameraSlash, ArrowsInSimple, BellSlash, Phone, Microphone, MicrophoneSlash, FrameCorners, WarningCircle, Link, LinkBreak, AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
 import {useColorScheme} from 'react-native';
 import {MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
 
@@ -61,6 +61,7 @@ const databagColors = {
       level9: '#8FBEA7',
       level10: '#377753',
       level11: 'rgba(255, 255, 255, 0.4)',
+      level12: 'rgba(233,235, 243,0.4)',
     },
     surfaceDisabled: 'rgba(25, 28, 26, 0.12)',
     onSurfaceDisabled: 'rgba(25, 28, 26, 0.38)',
@@ -121,6 +122,7 @@ const databagColors = {
       level9: '#191919',
       level10: '#224433',
       level11: 'rgba(80, 80, 80, 0.5)',
+      level12: 'rgba(32, 32, 32, 0.5)',
     },
     surfaceDisabled: 'rgba(225, 227, 223, 0.12)',
     onSurfaceDisabled: 'rgba(225, 227, 223, 0.38)',
@@ -214,6 +216,8 @@ function FontMix(props: {name: string, color: string}) {
     return <Camera color={props.color} size={props.size} />;
   } else if (props.name === 'mail') {
     return <EnvelopeSimple color={props.color} size={props.size} />;
+  } else if (props.name === 'reset') {
+    return <ArrowCounterClockwise color={props.color} size={props.size} />;
   } else {
     return <CommunityIcon {...props} />;
   }
@@ -249,9 +253,9 @@ function App(): React.JSX.Element {
     headlineLarge: {fontFamily: 'Inter-Regular', fontSize: 32, fontWeight: '500', letterSpacing: 0, lineHeight: 32},
     headlineMedium: {fontFamily: 'Inter-Regular', fontSize: 28, fontWeight: '500', letterSpacing: 0, lineHeight: 32},
     headlineSmall: {fontFamily: 'Inter-Regular', fontSize: 23, fontWeight: '500', letterSpacing: 0, lineHeight: 24},
-    labelLarge: {fontFamily: 'Inter-Regular', fontSize: 16, fontWeight: '500', letterSpacing: 0.1, lineHeight: 20},
-    labelMedium: {fontFamily: 'Inter-Regular', fontSize: 12, fontWeight: '500', letterSpacing: 0.5, lineHeight: 16},
-    labelSmall: {fontFamily: 'Inter-Regular', fontSize: 11, fontWeight: '500', letterSpacing: 0.5, lineHeight: 16},
+    labelLarge: {fontFamily: 'Inter-Regular', fontSize: 16, fontWeight: '600', letterSpacing: 0.1, lineHeight: 20},
+    labelMedium: {fontFamily: 'Inter-Regular', fontSize: 12, fontWeight: '600', letterSpacing: 0.5, lineHeight: 16},
+    labelSmall: {fontFamily: 'Inter-Regular', fontSize: 11, fontWeight: '600', letterSpacing: 0.5, lineHeight: 16},
     titleLarge: {fontFamily: 'Inter-Regular', fontSize: 48, fontWeight: '900', letterSpacing: 0.25, lineHeight: 48},
     titleMedium: {fontFamily: 'Inter-Regular', fontSize: 32, fontWeight: '900', letterSpacing: 0.15, lineHeight: 32},
     titleSmall: {fontFamily: 'Inter-Regular', fontSize: 28, fontWeight: '900', letterSpacing: 0.1, lineHeight: 28},

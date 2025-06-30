@@ -884,441 +884,468 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         </Animated.View>
       </View>
       <Modal animationType="fade" transparent={true} visible={sealing} supportedOrientations={['portrait', 'landscape']} onRequestClose={() => setSealing(false)}>
-        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
-          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={2} style={styles.surface}>
-              <Text style={styles.modalLabel}>{state.strings.encryptionKey}</Text>
-              {sealConfig && !sealDelete && !sealReset && state.config.sealSet && state.config.sealUnlocked && (
-                <>
-                  <Text style={styles.modalDescription}>{state.strings.saveDelete}</Text>
-                  <View style={styles.modalControls}>
-                    <Button style={styles.modalControl} textColor="white" mode="contained" onPress={() => setSealReset(true)}>
-                      {state.strings.resave}
-                    </Button>
-                    <Button
-                      style={{...styles.modalControl, backgroundColor: theme.colors.offsync}}
-                      textColor="white"
-                      icon="trash-2"
-                      mode="contained"
-                      loading={savingSeal}
-                      onPress={() => setSealDelete(true)}>
-                      {state.strings.remove}
-                    </Button>
-                  </View>
-                  <View style={styles.more}>
-                    <Button mode="text" onPress={() => setSealConfig(false)}>
-                      {state.strings.moreOptions}
-                    </Button>
-                  </View>
-                </>
-              )}
-              {!sealConfig && !sealDelete && !sealReset && state.config.sealSet && state.config.sealUnlocked && (
-                <>
-                  <Text style={styles.modalDescription}>{state.strings.sealForget}</Text>
-                  <View style={styles.modalControls}>
-                    <Button style={{...styles.modalControl, borderColor: theme.colors.primary}} mode="outlined" onPress={() => setSealing(false)}>
-                      {state.strings.cancel}
-                    </Button>
-                    <Button style={styles.modalControl} textColor="white" mode="contained" loading={savingSeal} onPress={sealForget}>
-                      {state.strings.forget}
-                    </Button>
-                  </View>
-                  <View style={styles.more}>
-                    <Button mode="text" onPress={() => setSealConfig(true)}>
-                      {state.strings.moreOptions}
-                    </Button>
-                  </View>
-                </>
-              )}
-              {!sealDelete && sealReset && state.config.sealSet && state.config.sealUnlocked && (
-                <>
-                  <Text style={styles.modalDescription}>{state.strings.sealUpdate}</Text>
-                  <TextInput
-                    style={styles.input}
-                    mode="outlined"
-                    outlineStyle={styles.inputBorder}
-                    autoCapitalize="none"
-                    autoComplete="off"
-                    autoCorrect={false}
-                    value={state.sealPassword}
-                    placeholder={state.strings.password}
-                    secureTextEntry={!showPassword}
-                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
-                    right={
-                      showPassword ? (
-                        <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
-                      ) : (
-                        <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
-                      )
-                    }
-                    onChangeText={value => actions.setSealPassword(value)}
-                  />
-                  <View style={styles.modalControls}>
-                    <Button style={{...styles.modalControl, borderColor: theme.colors.primary}} mode="outlined" onPress={() => setSealing(false)}>
-                      {state.strings.cancel}
-                    </Button>
-                    <Button style={styles.modalControl} textColor="white" mode="contained" disabled={!state.sealPassword} loading={savingSeal} onPress={sealUpdate}>
-                      {state.strings.save}
-                    </Button>
-                  </View>
-                </>
-              )}
-              {!sealDelete && state.config.sealSet && !state.config.sealUnlocked && (
-                <>
-                  <Text style={styles.modalDescription}>{state.strings.sealUnlock}</Text>
+            <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
+              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
+              <View style={styles.modalContent}>
+                <Text style={styles.modalLabel}>{state.strings.encryptionKey}</Text>
+                {sealConfig && !sealDelete && !sealReset && state.config.sealSet && state.config.sealUnlocked && (
+                  <>
+                    <Text style={styles.modalDescription}>{state.strings.saveDelete}</Text>
+                    <View style={styles.modalControls}>
+                      <Button style={styles.modalControl} textColor="white" mode="contained" onPress={() => setSealReset(true)}>
+                        {state.strings.resave}
+                      </Button>
+                      <Button
+                        style={{...styles.modalControl, backgroundColor: theme.colors.offsync}}
+                        textColor="white"
+                        icon="trash-2"
+                        mode="contained"
+                        loading={savingSeal}
+                        onPress={() => setSealDelete(true)}>
+                        {state.strings.remove}
+                      </Button>
+                    </View>
+                    <View style={styles.more}>
+                      <Button mode="text" onPress={() => setSealConfig(false)}>
+                        {state.strings.moreOptions}
+                      </Button>
+                    </View>
+                  </>
+                )}
+                {!sealConfig && !sealDelete && !sealReset && state.config.sealSet && state.config.sealUnlocked && (
+                  <>
+                    <Text style={styles.modalDescription}>{state.strings.sealForget}</Text>
+                    <View style={styles.modalControls}>
+                      <Button style={{...styles.modalControl, borderColor: theme.colors.onSecondary}} textColor={theme.colors.onSecondary} mode="outlined" onPress={() => setSealing(false)}>
+                        {state.strings.cancel}
+                      </Button>
+                      <Button style={styles.modalControl} textColor="white" mode="contained" loading={savingSeal} onPress={sealForget}>
+                        {state.strings.forget}
+                      </Button>
+                    </View>
+                    <View style={styles.more}>
+                      <Button mode="text" onPress={() => setSealConfig(true)}>
+                        {state.strings.moreOptions}
+                      </Button>
+                    </View>
+                  </>
+                )}
+                {!sealDelete && sealReset && state.config.sealSet && state.config.sealUnlocked && (
+                  <>
+                    <Text style={styles.modalDescription}>{state.strings.sealUpdate}</Text>
+                    <TextInput
+                      style={styles.input}
+                      mode="outlined"
+                      outlineStyle={styles.modalInputBorder}
+                      autoCapitalize="none"
+                      autoComplete="off"
+                      autoCorrect={false}
+                      value={state.sealPassword}
+                      placeholder={state.strings.password}
+                      secureTextEntry={!showPassword}
+                      left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                      right={
+                        showPassword ? (
+                          <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
+                        ) : (
+                          <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
+                        )
+                      }
+                      onChangeText={value => actions.setSealPassword(value)}
+                    />
+                    <View style={styles.modalControls}>
+                      <Button style={{...styles.modalControl, borderColor: theme.colors.onSecondary}} textColor={theme.colors.onSecondary} mode="outlined" onPress={() => setSealing(false)}>
+                        {state.strings.cancel}
+                      </Button>
+                      <Button style={styles.modalControl} textColor="white" mode="contained" disabled={!state.sealPassword} loading={savingSeal} onPress={sealUpdate}>
+                        {state.strings.save}
+                      </Button>
+                    </View>
+                  </>
+                )}
+                {!sealDelete && state.config.sealSet && !state.config.sealUnlocked && (
+                  <>
+                    <Text style={styles.modalDescription}>{state.strings.sealUnlock}</Text>
 
-                  <TextInput
-                    style={styles.input}
-                    mode="outlined"
-                    outlineStyle={styles.inputBorder}
-                    autoCapitalize="none"
-                    autoComplete="off"
-                    autoCorrect={false}
-                    value={state.sealPassword}
-                    placeholder={state.strings.password}
-                    secureTextEntry={!showPassword}
-                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
-                    onChangeText={value => actions.setSealPassword(value)}
-                    right={
-                      showPassword ? (
-                        <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
-                      ) : (
-                        <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
-                      )
-                    }
-                  />
-                  <View style={styles.modalControls}>
-                    <Button style={{...styles.modalControl, borderColor: theme.colors.primary}} mode="outlined" onPress={() => setSealing(false)}>
-                      {state.strings.cancel}
-                    </Button>
-                    <Button style={styles.modalControl} textColor="white" mode="contained" disabled={state.sealPassword.length === 0} loading={savingSeal} onPress={sealUnlock}>
-                      {state.strings.unlock}
-                    </Button>
-                  </View>
-                  <View style={styles.more}>
-                    <Button mode="text" onPress={() => setSealDelete(true)}>
-                      {state.strings.moreOptions}
-                    </Button>
-                  </View>
-                </>
-              )}
-              {sealDelete && state.config.sealSet && (
-                <>
-                  <Text style={styles.modalDescription}>{state.strings.sealDelete}</Text>
+                    <TextInput
+                      style={styles.input}
+                      mode="outlined"
+                      outlineStyle={styles.modalInputBorder}
+                      autoCapitalize="none"
+                      autoComplete="off"
+                      autoCorrect={false}
+                      value={state.sealPassword}
+                      placeholder={state.strings.password}
+                      secureTextEntry={!showPassword}
+                      left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                      onChangeText={value => actions.setSealPassword(value)}
+                      right={
+                        showPassword ? (
+                          <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
+                        ) : (
+                          <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
+                        )
+                      }
+                    />
+                    <View style={styles.modalControls}>
+                      <Button style={{...styles.modalControl, borderColor: theme.colors.onSecondary}} textColor={theme.colors.onSecondary} mode="outlined" onPress={() => setSealing(false)}>
+                        {state.strings.cancel}
+                      </Button>
+                      <Button style={styles.modalControl} textColor="white" mode="contained" disabled={state.sealPassword.length === 0} loading={savingSeal} onPress={sealUnlock}>
+                        {state.strings.unlock}
+                      </Button>
+                    </View>
+                    <View style={styles.more}>
+                      <Button mode="text" onPress={() => setSealDelete(true)}>
+                        {state.strings.moreOptions}
+                      </Button>
+                    </View>
+                  </>
+                )}
+                {sealDelete && state.config.sealSet && (
+                  <>
+                    <Text style={styles.modalDescription}>{state.strings.sealDelete}</Text>
 
-                  <TextInput
-                    style={styles.input}
-                    mode="outlined"
-                    outlineStyle={styles.inputBorder}
-                    autoCapitalize="none"
-                    autoComplete="off"
-                    autoCorrect={false}
-                    value={state.sealDelete}
-                    placeholder={state.strings.typeDelete}
-                    onChangeText={value => actions.setSealDelete(value)}
-                  />
-                  <View style={styles.modalControls}>
-                    <Button style={{...styles.modalControl, borderColor: theme.colors.primary}} mode="outlined" onPress={() => setSealing(false)}>
-                      {state.strings.cancel}
-                    </Button>
-                    <Button
-                      style={{...styles.modalControl, backgroundColor: theme.colors.offsync}}
-                      mode="contained"
-                      textColor="white"
-                      icon="trash-2"
-                      disabled={state.sealDelete !== state.strings.delete}
-                      loading={savingSeal}
-                      onPress={sealRemove}>
-                      {state.strings.remove}
-                    </Button>
-                  </View>
-                </>
-              )}
-              {!state.config.sealSet && (
-                <>
-                  <Text style={styles.modalDescription}>{state.strings.generateKey}</Text>
+                    <TextInput
+                      style={styles.input}
+                      mode="outlined"
+                      outlineStyle={styles.modalInputBorder}
+                      autoCapitalize="none"
+                      autoComplete="off"
+                      autoCorrect={false}
+                      value={state.sealDelete}
+                      placeholder={state.strings.typeDelete}
+                      onChangeText={value => actions.setSealDelete(value)}
+                    />
+                    <View style={styles.modalControls}>
+                      <Button style={{...styles.modalControl, borderColor: theme.colors.onSecondary}} textColor={theme.colors.onSecondary} mode="outlined" onPress={() => setSealing(false)}>
+                        {state.strings.cancel}
+                      </Button>
+                      <Button
+                        style={{...styles.modalControl, backgroundColor: theme.colors.offsync}}
+                        mode="contained"
+                        textColor="white"
+                        icon="trash-2"
+                        disabled={state.sealDelete !== state.strings.delete}
+                        loading={savingSeal}
+                        onPress={sealRemove}>
+                        {state.strings.remove}
+                      </Button>
+                    </View>
+                  </>
+                )}
+                {!state.config.sealSet && (
+                  <>
+                    <Text style={styles.modalDescription}>{state.strings.generateKey}</Text>
 
-                  <TextInput
-                    style={styles.input}
-                    mode="outlined"
-                    outlineStyle={styles.inputBorder}
-                    autoCapitalize="none"
-                    autoComplete="off"
-                    autoCorrect={false}
-                    value={state.sealPassword}
-                    placeholder={state.strings.password}
-                    secureTextEntry={!showPassword}
-                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
-                    right={
-                      showPassword ? (
-                        <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
-                      ) : (
-                        <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
-                      )
-                    }
-                    onChangeText={value => actions.setSealPassword(value)}
-                  />
-                  <View style={styles.modalControls}>
-                    <Button style={{...styles.modalControl, borderColor: theme.colors.primary}} mode="outlined" onPress={() => setSealing(false)}>
-                      {state.strings.cancel}
-                    </Button>
-                    <Button style={styles.modalControl} textColor="white" mode="contained" disabled={state.sealPassword.length === 0} loading={savingSeal} onPress={sealCreate}>
-                      {state.strings.save}
-                    </Button>
-                  </View>
-                  <Text style={styles.modalWarn}>{state.strings.delayMessage}</Text>
-                </>
-              )}
+                    <TextInput
+                      style={styles.input}
+                      mode="outlined"
+                      outlineStyle={styles.modalInputBorder}
+                      autoCapitalize="none"
+                      autoComplete="off"
+                      autoCorrect={false}
+                      value={state.sealPassword}
+                      placeholder={state.strings.password}
+                      secureTextEntry={!showPassword}
+                      left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                      right={
+                        showPassword ? (
+                          <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
+                        ) : (
+                          <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
+                        )
+                      }
+                      onChangeText={value => actions.setSealPassword(value)}
+                    />
+                    <View style={styles.modalControls}>
+                      <Button style={{...styles.modalControl, borderColor: theme.colors.onSecondary}} textColor={theme.colors.onSecondary} mode="outlined" onPress={() => setSealing(false)}>
+                        {state.strings.cancel}
+                      </Button>
+                      <Button style={styles.modalControl} textColor="white" mode="contained" disabled={state.sealPassword.length === 0} loading={savingSeal} onPress={sealCreate}>
+                        {state.strings.save}
+                      </Button>
+                    </View>
+                    <Text style={styles.modalWarn}>{state.strings.delayMessage}</Text>
+                  </>
+                )}
+              </View>
             </Surface>
           </KeyboardAwareScrollView>
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={auth} onRequestClose={() => setAuth(false)}>
-        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
-          <BlurView style={styles.blur} blurType="light" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={2} style={styles.surface}>
-              <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
-              <Text style={styles.modalDescription}>{state.strings.mfaSteps}</Text>
-              <Image style={styles.secretImage} resizeMode={'contain'} source={{uri: state.secretImage}} />
+            <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12 }}>
+              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
+              <View style={styles.modalContent}>
+                <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
+                <Text style={styles.modalDescription}>{state.strings.mfaSteps}</Text>
+                <Image style={styles.secretImage} resizeMode={'contain'} source={{uri: state.secretImage}} />
 
-              <View style={styles.secretText}>
-                <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>
-                  {state.secretText}
-                </Text>
-                <TouchableOpacity onPress={copySecret}>
-                  <Icon style={styles.secretIcon} size={18} source={secretCopy ? 'check' : 'content-copy'} color={Colors.primary} />
-                </TouchableOpacity>
-              </View>
+                <View style={styles.secretText}>
+                  <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>
+                    {state.secretText}
+                  </Text>
+                  <TouchableOpacity onPress={copySecret}>
+                    <Icon style={styles.secretIcon} size={18} source={secretCopy ? 'check' : 'content-copy'} color={Colors.primary} />
+                  </TouchableOpacity>
+                </View>
 
-              <InputCode onChangeText={actions.setCode} />
+                <InputCode onChangeText={actions.setCode} />
 
-              <View style={styles.authMessage}>
-                <Text style={styles.authMessageText}>{authMessage}</Text>
-              </View>
+                <View style={styles.authMessage}>
+                  <Text style={styles.authMessageText}>{authMessage}</Text>
+                </View>
 
-              <View style={styles.modalControls}>
-                <Button style={{...styles.modalControl, borderColor: theme.colors.primary}} mode="outlined" onPress={() => setAuth(false)}>
-                  {state.strings.cancel}
-                </Button>
-                <Button style={styles.modalControl} mode="contained" textColor="white" loading={confirmingAuth} disabled={state.code.length !== 6} onPress={confirmAuth}>
-                  {state.strings.mfaConfirm}
-                </Button>
+                <View style={styles.modalControls}>
+                  <Button style={{...styles.modalControl, borderColor: theme.colors.outlineVariant}} textColor={theme.colors.onSecondary} mode="outlined" onPress={() => setAuth(false)}>
+                    {state.strings.cancel}
+                  </Button>
+                  <Button style={styles.modalControl} mode="contained" textColor="white" loading={confirmingAuth} disabled={state.code.length !== 6} onPress={confirmAuth}>
+                    {state.strings.mfaConfirm}
+                  </Button>
+                </View>
               </View>
             </Surface>
           </KeyboardAwareScrollView>
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={clear} onRequestClose={() => setClear(false)}>
-        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
-          <BlurView style={styles.blur} blurType="ligth" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={2} style={styles.surface}>
-              <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
-              <Text style={styles.modalDescription}>{state.strings.disablePrompt}</Text>
+            <Surface elevation={1} style={{ ...styles.modalSurface, backgroundColor: theme.colors.elevation.level12 }}>
+              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
+              <View style={styles.modalContent}>
+                <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
+                <Text style={styles.modalDescription}>{state.strings.disablePrompt}</Text>
 
-              <View style={styles.modalControls}>
-                <Button style={{...styles.modalControl, borderColor: theme.colors.primary}} mode="outlined" onPress={() => setClear(false)}>
-                  {state.strings.cancel}
-                </Button>
-                <Button style={styles.modalControl} textColor="white" mode="contained" loading={confirmingAuth} onPress={clearAuth}>
-                  {state.strings.disable}
-                </Button>
+                <View style={styles.modalControls}>
+                  <Button style={{...styles.modalControl, borderColor: theme.colors.outlineVariant}} textColor={theme.colors.onSecondary} mode="outlined" onPress={() => setClear(false)}>
+                    {state.strings.cancel}
+                  </Button>
+                  <Button style={styles.modalControl} textColor="white" mode="contained" loading={confirmingAuth} onPress={clearAuth}>
+                    {state.strings.disable}
+                  </Button>
+                </View>
               </View>
             </Surface>
           </KeyboardAwareScrollView>
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={change} onRequestClose={() => setChange(false)}>
-        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
-          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={2} style={styles.surface}>
-              <Text style={styles.modalLabel}>{state.strings.changeLogin}</Text>
-              <Text style={styles.modalPrompt}>{state.strings.changePrompt}</Text>
-              <TextInput
-                style={styles.input}
-                mode="outlined"
-                outlineStyle={styles.inputBorder}
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect={false}
-                placeholder={state.strings.username}
-                value={state.handle}
-                left={<TextInput.Icon style={styles.icon} icon="user" />}
-                right={state.taken ? <TextInput.Icon styles={styles.icon} color={theme.colors.offsync} icon="warning" /> : <></>}
-                onChangeText={value => actions.setHandle(value)}
-              />
-              <TextInput
-                style={styles.input}
-                mode="outlined"
-                outlineStyle={styles.inputBorder}
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect={false}
-                value={state.password}
-                placeholder={state.strings.password}
-                secureTextEntry={!showPassword}
-                left={<TextInput.Icon style={styles.icon} icon="lock" />}
-                right={
-                  showPassword ? (
-                    <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
-                  ) : (
-                    <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
-                  )
-                }
-                onChangeText={value => actions.setPassword(value)}
-              />
-              <View style={styles.modalControls}>
-                <Button mode="outlined" style={{...styles.modalControl, borderColor: theme.colors.primary}} onPress={() => setChange(false)}>
-                  {state.strings.cancel}
-                </Button>
-                <Button mode="contained" style={styles.modalControl} loading={savingChange} textColor="white" disabled={state.password === '' || state.taken || !state.checked} onPress={saveChange}>
-                  {state.strings.save}
-                </Button>
+            <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12 }}>
+              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
+              <View style={styles.modalContent}>
+                <Text style={styles.modalLabel}>{state.strings.changeLogin}</Text>
+                <Text style={styles.modalPrompt}>{state.strings.changePrompt}</Text>
+                <TextInput
+                  style={styles.input}
+                  mode="outlined"
+                  outlineStyle={{ ...styles.modalInputBorder, borderColor: theme.colors.outlineVariant }}
+                  autoCapitalize="none"
+                  autoComplete="off"
+                  autoCorrect={false}
+                  placeholder={state.strings.username}
+                  value={state.handle}
+                  left={<TextInput.Icon style={styles.icon} icon="user" />}
+                  right={state.taken ? <TextInput.Icon styles={styles.icon} color={theme.colors.offsync} icon="warning" /> : <></>}
+                  onChangeText={value => actions.setHandle(value)}
+                />
+                <TextInput
+                  style={styles.input}
+                  mode="outlined"
+                  outlineStyle={{ ...styles.modalInputBorder, borderColor: theme.colors.outlineVariant }}
+                  autoCapitalize="none"
+                  autoComplete="off"
+                  autoCorrect={false}
+                  value={state.password}
+                  placeholder={state.strings.password}
+                  secureTextEntry={!showPassword}
+                  left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                  right={
+                    showPassword ? (
+                      <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
+                    ) : (
+                      <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
+                    )
+                  }
+                  onChangeText={value => actions.setPassword(value)}
+                />
+                <View style={styles.modalControls}>
+                  <Button mode="outlined" style={{...styles.modalControl, borderColor: theme.colors.primary}} onPress={() => setChange(false)}>
+                    {state.strings.cancel}
+                  </Button>
+                  <Button mode="contained" style={styles.modalControl} loading={savingChange} textColor="white" disabled={state.password === '' || state.taken || !state.checked} onPress={saveChange}>
+                    {state.strings.change}
+                  </Button>
+                </View>
               </View>
             </Surface>
           </KeyboardAwareScrollView>
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={logout} onRequestClose={() => setLogout(false)}>
-        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
-          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={2} style={styles.surface}>
-              <Text style={styles.modalLabel}>{state.strings.sureLogout}</Text>
+            <Surface elevation={1} style={{ ...styles.modalSurface, backgroundColor: theme.colors.elevation.level12 }}>
+              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
+              <View style={styles.modalContent}>
+                <Text style={styles.modalLabel}>{state.strings.sureLogout}</Text>
 
-              <View style={styles.allControl}>
-                <Text style={styles.controlLabel}>{state.strings.allDevices}</Text>
-                <Switch style={styles.controlSwitch} value={state.all} onValueChange={actions.setAll} />
-              </View>
+                <View style={styles.allControl}>
+                  <Text style={styles.controlLabel}>{state.strings.allDevices}</Text>
+                  <Switch style={styles.controlSwitch} value={state.all} onValueChange={actions.setAll} />
+                </View>
 
-              <Divider style={styles.logoutSpace} />
+                <Divider style={styles.logoutSpace} />
 
-              <View style={styles.modalControls}>
-                <Button mode="outlined" style={{...styles.modalControl, borderColor: theme.colors.primary}} onPress={() => setLogout(false)}>
-                  {state.strings.cancel}
-                </Button>
-                <Button mode="contained" style={styles.modalControl} textColor="white" loading={applyingLogout} onPress={applyLogout}>
-                  {state.strings.logout}
-                </Button>
+                <View style={styles.modalControls}>
+                  <Button mode="outlined" style={{...styles.modalControl, borderColor: theme.colors.outlineVariant}} textColor={theme.colors.onSecondary} onPress={() => setLogout(false)}>
+                    {state.strings.cancel}
+                  </Button>
+                  <Button mode="contained" style={styles.modalControl} textColor="white" loading={applyingLogout} onPress={applyLogout}>
+                    {state.strings.logout}
+                  </Button>
+                </View>
               </View>
             </Surface>
           </KeyboardAwareScrollView>
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={remove} onRequestClose={() => setRemove(false)}>
-        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
-          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={2} style={styles.surface}>
-              <Text style={styles.modalLabel}>{state.strings.deleteAccount}</Text>
+            <Surface elevation={1} style={{ ...styles.modalSurface, backgroundColor: theme.colors.elevation.level12 }}>
+              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
+              <View style={styles.modalContent}>
+                <Text style={styles.modalLabel}>{state.strings.deleteAccount}</Text>
 
-              <TextInput
-                style={styles.input}
-                mode="outlined"
-                outlineStyle={styles.inputBorder}
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect={false}
-                value={state.remove}
-                placeholder={state.strings.typeDelete}
-                onChangeText={value => actions.setRemove(value)}
-              />
+                <TextInput
+                  style={styles.input}
+                  mode="outlined"
+                  outlineStyle={styles.inputBorder}
+                  autoCapitalize="none"
+                  autoComplete="off"
+                  autoCorrect={false}
+                  value={state.remove}
+                  placeholder={state.strings.typeDelete}
+                  onChangeText={value => actions.setRemove(value)}
+                />
 
-              <View style={styles.modalControls}>
-                <Button style={{...styles.modalControl, borderColor: theme.colors.primary}} mode="outlined" onPress={() => setRemove(false)}>
-                  {state.strings.cancel}
-                </Button>
-                <Button
-                  style={{...styles.modalControl, backgroundColor: theme.colors.offsync}}
-                  mode="contained"
-                  loading={applyingRemove}
-                  textColor="white"
-                  icon="trash-2"
-                  disabled={state.remove !== state.strings.delete}
-                  onPress={applyRemove}>
-                  {state.strings.remove}
-                </Button>
+                <View style={styles.modalControls}>
+                  <Button style={{...styles.modalControl, borderColor: theme.colors.outlineVariant}} textColor={theme.colors.onSecondary} mode="outlined" onPress={() => setRemove(false)}>
+                    {state.strings.cancel}
+                  </Button>
+                  <Button
+                    style={{...styles.modalControl, backgroundColor: theme.colors.offsync}}
+                    mode="contained"
+                    loading={applyingRemove}
+                    textColor="white"
+                    icon="trash-2"
+                    disabled={state.remove !== state.strings.delete}
+                    onPress={applyRemove}>
+                    {state.strings.remove}
+                  </Button>
+                </View>
               </View>
             </Surface>
           </KeyboardAwareScrollView>
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedMessage} onRequestClose={() => setBlockedMessage(false)}>
-        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
-          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <View style={styles.blockedContent}>
-            <Surface elevation={2} style={styles.blockedSurface}>
-              <View style={styles.blockedHeader}>
-                <Text style={styles.modalLabel}>{state.strings.blockedMessages}</Text>
-              </View>
-              <Surface style={styles.blocked} elevation={0} mode="flat">
-                {state.blockedMessages.length === 0 && (
-                  <View style={styles.blockedEmpty}>
-                    <Text style={styles.blockedLabel}>{state.strings.noMessages}</Text>
-                  </View>
-                )}
-                {state.blockedMessages.length > 0 && <View>{blockedMessages}</View>}
-              </Surface>
-              <View style={styles.blockedDone}>
-                {blockedError && <Text style={styles.blockedError}>{state.strings.operationFailed}</Text>}
-                <Button style={{...styles.blockedButton, borderColor: theme.colors.primary}} mode="outlined" onPress={() => setBlockedMessage(false)}>
-                  {state.strings.close}
-                </Button>
+            <Surface elevation={1} style={{ ...styles.modalSurface, backgroundColor: theme.colors.elevation.level12 }}>
+              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
+              <View style={styles.modalContent}>
+                <View style={styles.blockedHeader}>
+                  <Text style={styles.modalLabel}>{state.strings.blockedMessages}</Text>
+                </View>
+                <Surface style={styles.blocked} elevation={0} mode="flat">
+                  {state.blockedMessages.length === 0 && (
+                    <View style={styles.blockedEmpty}>
+                      <Text style={styles.blockedLabel}>{state.strings.noMessages}</Text>
+                    </View>
+                  )}
+                  {state.blockedMessages.length > 0 && <View>{blockedMessages}</View>}
+                </Surface>
+                <View style={styles.blockedDone}>
+                  {blockedError && <Text style={styles.blockedError}>{state.strings.operationFailed}</Text>}
+                  <Button style={{...styles.blockedButton, borderColor: theme.colors.onSecondary}} mode="text" onPress={() => setBlockedMessage(false)}>
+                    {state.strings.close}
+                  </Button>
+                </View>
               </View>
             </Surface>
           </View>
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedChannel} onRequestClose={() => setBlockedChannel(false)}>
-        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
-          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <View style={styles.blockedContent}>
-            <Surface elevation={2} style={styles.blockedSurface}>
-              <View style={styles.blockedHeader}>
-                <Text style={styles.modalLabel}>{state.strings.blockedTopics}</Text>
-              </View>
-              <Surface style={styles.blocked} elevation={0} mode="flat">
-                {state.blockedChannels.length === 0 && (
-                  <View style={styles.blockedEmpty}>
-                    <Text style={styles.blockedLabel}>{state.strings.noTopics}</Text>
-                  </View>
-                )}
-                {state.blockedChannels.length > 0 && <View>{blockedChannels}</View>}
-              </Surface>
-              <View style={styles.blockedDone}>
-                {blockedError && <Text style={styles.blockedError}>{state.strings.operationFailed}</Text>}
-                <Button style={{...styles.blockedButton, borderColor: theme.colors.primary}} mode="outlined" onPress={() => setBlockedChannel(false)}>
-                  {state.strings.close}
-                </Button>
+            <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
+              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
+              <View style={styles.modalContent}>
+                <View style={styles.blockedHeader}>
+                  <Text style={styles.modalLabel}>{state.strings.blockedTopics}</Text>
+                </View>
+                <Surface style={styles.blocked} elevation={0} mode="flat">
+                  {state.blockedChannels.length === 0 && (
+                    <View style={styles.blockedEmpty}>
+                      <Text style={styles.blockedLabel}>{state.strings.noTopics}</Text>
+                    </View>
+                  )}
+                  {state.blockedChannels.length > 0 && <View>{blockedChannels}</View>}
+                </Surface>
+                <View style={styles.blockedDone}>
+                  {blockedError && <Text style={styles.blockedError}>{state.strings.operationFailed}</Text>}
+                  <Button style={{...styles.blockedButton, borderColor: theme.colors.onSecondary}} mode="text" onPress={() => setBlockedChannel(false)}>
+                    {state.strings.close}
+                  </Button>
+                </View>
               </View>
             </Surface>
           </View>
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={blockedContact} onRequestClose={() => setBlockedContact(false)}>
-        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
-          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <View style={styles.blockedContent}>
-            <Surface elevation={2} style={styles.blockedSurface}>
-              <View style={styles.blockedHeader}>
-                <Text style={styles.modalLabel}>{state.strings.blockedContacts}</Text>
-              </View>
-              <Surface style={styles.blocked} elevation={0} mode="flat">
-                {state.blockedContacts.length === 0 && (
-                  <View style={styles.blockedEmpty}>
-                    <Text style={styles.blockedLabel}>{state.strings.noContacts}</Text>
-                  </View>
-                )}
-                {state.blockedContacts.length > 0 && <View>{blockedContacts}</View>}
-              </Surface>
-              <View style={styles.blockedDone}>
-                {blockedError && <Text style={styles.blockedError}>{state.strings.operationFailed}</Text>}
-                <Button style={{...styles.blockedButton, borderColor: theme.colors.primary}} mode="outlined" onPress={() => setBlockedContact(false)}>
-                  {state.strings.close}
-                </Button>
+            <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
+              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
+              <View style={styles.modalContent}>
+                <View style={styles.blockedHeader}>
+                  <Text style={styles.modalLabel}>{state.strings.blockedContacts}</Text>
+                </View>
+                <Surface style={styles.blocked} elevation={0} mode="flat">
+                  {state.blockedContacts.length === 0 && (
+                    <View style={styles.blockedEmpty}>
+                      <Text style={styles.blockedLabel}>{state.strings.noContacts}</Text>
+                    </View>
+                  )}
+                  {state.blockedContacts.length > 0 && <View>{blockedContacts}</View>}
+                </Surface>
+                <View style={styles.blockedDone}>
+                  {blockedError && <Text style={styles.blockedError}>{state.strings.operationFailed}</Text>}
+                  <Button style={{...styles.blockedButton, borderColor: theme.colors.onSecondary}} mode="text" onPress={() => setBlockedContact(false)}>
+                    {state.strings.close}
+                  </Button>
+                </View>
               </View>
             </Surface>
           </View>

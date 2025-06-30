@@ -403,50 +403,54 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
       <Confirm show={alert} params={alertParams} />
       <Confirm show={mediaError} params={errParams} />
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={colorMenu} onRequestClose={() => setColorMenu(false)}>
-        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
-          <Pressable style={styles.blur} onPress={() => setColorMenu(false)}>
-            <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          </Pressable>
-          <Surface elevation={2} style={styles.colorArea}>
-            <ColorPicker color={state.textColorSet ? state.textColor : undefined} onColorChange={actions.setTextColor} onColorChangeComplete={actions.setTextColor} swatched={false} />
-            <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={20} onPress={() => setColorMenu(false)} />
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
+          <Surface elevation={1} style={{...styles.colorSurface, backgroundColor: theme.colors.elevation.level12}}>
+            <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
+            <View style={styles.modalContent}>
+              <View style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+                <ColorPicker color={state.textColorSet ? state.textColor : undefined} onColorChange={actions.setTextColor} onColorChangeComplete={actions.setTextColor} swatched={false} />
+                <Button style={styles.close} mode="text" textColor={theme.colors.onSecondary} onPress={()=>setColorMenu(false)}>{ state.strings.close }</Button>
+              </View>
+            </View>
           </Surface>
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={sizeModal} onRequestClose={() => setSizeModal(false)}>
-        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
-          <Pressable style={styles.blur} onPress={() => setSizeModal(false)}>
-            <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackSize="dark" />
-          </Pressable>
-          <Surface elevation={2} style={styles.sizeArea}>
-            <IconButton style={styles.closeIcon} icon="close" compact="true" mode="contained" size={20} onPress={() => setSizeModal(false)} />
-            <Button
-              mode="contained"
-              style={({pressed}) => [styles.sizeOption, pressed && styles.sizeOptionPressed]}
-              onPress={() => {
-                actions.setTextSize(20);
-                setSizeModal(false);
-              }}>
-              <Text style={styles.sizeLargeText}>{state.strings.textLarge}</Text>
-            </Button>
-            <Button
-              mode="contained"
-              style={({pressed}) => [styles.sizeOption, pressed && styles.sizeOptionPressed]}
-              onPress={() => {
-                actions.setTextSize(16);
-                setSizeModal(false);
-              }}>
-              <Text style={styles.sizeMediumText}>{state.strings.textMedium}</Text>
-            </Button>
-            <Button
-              mode="contained"
-              style={({pressed}) => [styles.sizeOption, pressed && styles.sizeOptionPressed]}
-              onPress={() => {
-                actions.setTextSize(12);
-                setSizeModal(false);
-              }}>
-              <Text style={styles.sizeSmallText}>{state.strings.textSmall}</Text>
-            </Button>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize="dark" />
+          <Surface elevation={1} style={{ ...styles.sizeSurface, backgroundColor: theme.colors.elevation.level12 }}>
+            <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackSize="dark" />
+            <View style={styles.modalContent}>
+              <Button
+                mode="contained"
+                style={({pressed}) => [styles.sizeOption, pressed && styles.sizeOptionPressed]}
+                onPress={() => {
+                  actions.setTextSize(20);
+                  setSizeModal(false);
+                }}>
+                <Text style={styles.sizeLargeText}>{state.strings.textLarge}</Text>
+              </Button>
+              <Button
+                mode="contained"
+                style={({pressed}) => [styles.sizeOption, pressed && styles.sizeOptionPressed]}
+                onPress={() => {
+                  actions.setTextSize(16);
+                  setSizeModal(false);
+                }}>
+                <Text style={styles.sizeMediumText}>{state.strings.textMedium}</Text>
+              </Button>
+              <Button
+                mode="contained"
+                style={({pressed}) => [styles.sizeOption, pressed && styles.sizeOptionPressed]}
+                onPress={() => {
+                  actions.setTextSize(12);
+                  setSizeModal(false);
+                }}>
+                <Text style={styles.sizeSmallText}>{state.strings.textSmall}</Text>
+              </Button>
+              <Button style={styles.close} mode="text" textColor={theme.colors.onSecondary} onPress={()=>setSizeModal(false)}>{ state.strings.close }</Button>
+            </View>
           </Surface>
         </View>
       </Modal>

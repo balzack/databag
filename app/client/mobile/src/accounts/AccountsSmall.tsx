@@ -202,8 +202,8 @@ export function AccountsSmall() {
                       <Text style={{color: theme.colors.secondary}}>{`${Math.floor(item.storageUsed / 1048576)} MB`}</Text>
                     </Pressable>
                     <Pressable key="access" style={styles.menuOption} onPress={() => accessAccount(item.accountId)}>
-                      <Icon style={styles.button} source="lock-open" size={24} color={theme.colors.onSecondary} />
-                      <Text>{state.strings.accessAccount}</Text>
+                      <Icon style={styles.button} source="reset" size={24} color={theme.colors.onSecondary} />
+                      <Text>{state.strings.resetAccount}</Text>
                     </Pressable>
                     {item.disabled && (
                       <Pressable key="enable" style={styles.menuOption} onPress={() => blockAccount(item.accountId, false)}>
@@ -218,7 +218,7 @@ export function AccountsSmall() {
                       </Pressable>
                     )}
                     <Pressable key="delete" style={styles.menuOption} onPress={() => removeAccount(item.accountId)}>
-                      <Icon style={styles.button} source="user-minus" size={24} color={theme.colors.onSecondary} />
+                      <Icon style={styles.button} source="trash-2" size={24} color={theme.colors.onSecondary} />
                       <Text>{state.strings.deleteAccount}</Text>
                     </Pressable>
                   </Surface>
@@ -248,45 +248,51 @@ export function AccountsSmall() {
       <Confirm show={failed} params={failedParams} />
       <Confirm show={remove} busy={removing} params={removeParams} />
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={showAccessModal} onRequestClose={() => setShowAccessModal(false)}>
-        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
+        <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <Surface elevation={2} style={styles.modalSurface}>
-            <Text style={styles.modalLabel}>{state.strings.accessingTitle}</Text>
-            <Text style={styles.modalDescription}>{state.strings.accessingToken}</Text>
-            <View style={styles.secretText}>
-              <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>
-                {token}
-              </Text>
-              <TouchableOpacity onPress={copyToken}>
-                <Icon style={styles.secretIcon} size={18} source={tokenCopy ? 'check' : 'content-copy'} color={Colors.primary} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.modalControls}>
-              <Button mode="text" onPress={() => setShowAccessModal(false)}>
-                {state.strings.close}
-              </Button>
+          <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
+            <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
+            <View style={styles.modalContent}>
+              <Text style={styles.modalLabel}>{state.strings.accessingTitle}</Text>
+              <Text style={styles.modalDescription}>{state.strings.accessingToken}</Text>
+              <View style={styles.secretText}>
+                <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>
+                  {token}
+                </Text>
+                <TouchableOpacity onPress={copyToken}>
+                  <Icon style={styles.secretIcon} size={18} source={tokenCopy ? 'check' : 'content-copy'} color={Colors.primary} />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.modalControls}>
+                <Button mode="text" onPress={() => setShowAccessModal(false)}>
+                  {state.strings.close}
+                </Button>
+              </View>
             </View>
           </Surface>
         </View>
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={showAddModal} onRequestClose={() => setShowAddModal(false)}>
-        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
-          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
-          <Surface elevation={2} style={styles.modalSurface}>
-            <Text style={styles.modalLabel}>{state.strings.addingTitle}</Text>
-            <Text style={styles.modalDescription}>{state.strings.addingToken}</Text>
-            <View style={styles.secretText}>
-              <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>
-                {token}
-              </Text>
-              <TouchableOpacity onPress={copyToken}>
-                <Icon style={styles.secretIcon} size={18} source={tokenCopy ? 'check' : 'content-copy'} color={Colors.primary} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.modalControls}>
-              <Button mode="text" onPress={() => setShowAddModal(false)}>
-                {state.strings.close}
-              </Button>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
+          <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
+            <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
+            <View style={styles.modalContent}>
+              <Text style={styles.modalLabel}>{state.strings.addingTitle}</Text>
+              <Text style={styles.modalDescription}>{state.strings.addingToken}</Text>
+              <View style={styles.secretText}>
+                <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>
+                  {token}
+                </Text>
+                <TouchableOpacity onPress={copyToken}>
+                  <Icon style={styles.secretIcon} size={18} source={tokenCopy ? 'check' : 'content-copy'} color={Colors.primary} />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.modalControls}>
+                <Button mode="text" onPress={() => setShowAddModal(false)}>
+                  {state.strings.close}
+                </Button>
+              </View>
             </View>
           </Surface>
         </View>

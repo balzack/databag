@@ -59,6 +59,9 @@ export const styles = StyleSheet.create({
     width: '100%',
     flexShrink: 0,
   },
+  close: {
+    paddingTop: 16,
+  },
   closeIcon: {
     position: 'absolute',
     top: 0,
@@ -97,6 +100,27 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  colorSurface: {
+    maxHeight: 400,
+    maxWidth: '80%',
+    borderRadius: 8,
+  },
+  sizeSurface: {
+    maxHeight: 272,
+    maxWidth: '80%',
+    borderRadius: 8,
+  },
+  modalContent: {
+    borderRadius: 8,
+    paddingTop: 32,
+    paddingBottom: 16,
+    paddingLeft: 16,
+    paddingRight: 16,
+    gap: 16,
+    minWidth: 256,
+    display: 'flex',
+    height: '100%',
   },
   colorArea: {
     position: 'relative',

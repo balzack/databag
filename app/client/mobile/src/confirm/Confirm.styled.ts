@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
     left: 0,
     width: '100%',
     height: '100%',
+    borderRadius: 8,
   },
   content: {
     display: 'flex',
@@ -23,8 +24,10 @@ export const styles = StyleSheet.create({
     gap: 8,
   },
   surface: {
-    padding: 16,
     borderRadius: 8,
+  },
+  surfaceContent: {
+    padding: 16,
   },
   title: {
     fontSize: 20,

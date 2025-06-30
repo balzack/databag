@@ -21,6 +21,8 @@ export const en = {
   searchAccounts: 'Search Accounts',
   chatMembers: 'Chat Members',
   tokenRequired: 'Token (if required)',
+  change: 'Change',
+  resetAccount: 'Reset Account',
 
   appPermission: 'App does not have media access',
 
@@ -405,7 +407,7 @@ export const en = {
 
   disable: 'Disable',
   confirmDisable: 'Disabling Multi-Factor Authentication',
-  disablePrompt: 'Are you sure you want to disable multi-factor authentication',
+  disablePrompt: 'Are you sure you want to disable multi-factor authentication?',
 };
 
 export const fr = {
@@ -421,6 +423,8 @@ export const fr = {
   searchAccounts: 'Rechercher des comptes',
   chatMembers: 'Membres du chat',
   tokenRequired: 'Jeton (si requis)',
+  change: 'Changer',
+  resetAccount: 'Réinitialiser le Compte',
 
   appPermission: "L'application n'a pas accès aux médias.",
 
@@ -821,6 +825,8 @@ export const es = {
   searchAccounts: 'Buscar cuentas',
   chatMembers: 'Miembros del chat',
   tokenRequired: 'Token (si es necesario)',
+  change: 'Cambiar',
+  resetAccount: 'Restablecer Cuenta',
 
   appPermission: 'La aplicación no tiene acceso a medios.',
 
@@ -1220,6 +1226,8 @@ export const pt = {
   searchAccounts: 'Pesquisar contas',
   chatMembers: 'Membros do chat',
   tokenRequired: 'Token (se necessário)',
+  change: 'Mudar',
+  resetAccount: 'Redefinir Conta',
 
   appPermission: 'O aplicativo não tem acesso à mídia.',
 
@@ -1619,6 +1627,8 @@ export const de = {
   searchAccounts: 'Konten suchen',
   chatMembers: 'Chat-Mitglieder',
   tokenRequired: 'Token (falls erforderlich)',
+  change: 'Ändern',
+  resetAccount: 'Konto Zurücksetzen',
 
   appPermission: 'Die App hat keinen Medienzugriff.',
 
@@ -2018,6 +2028,8 @@ export const ru = {
   searchAccounts: 'Поиск аккаунтов',
   chatMembers: 'Участники чата',
   tokenRequired: 'Токен (если требуется)',
+  change: 'Изменять',
+  resetAccount: 'Сбросить учетную запись',
 
   appPermission: 'У приложения нет доступа к мультимедиа.',
 
@@ -2417,6 +2429,8 @@ export const el = {
   searchAccounts: 'Αναζήτηση λογαριασμών',
   chatMembers: 'Μέλη συνομιλίας',
   tokenRequired: 'Διακριτικό (εάν απαιτείται)',
+  change: 'Αλλαγή',
+  resetAccount: 'Επαναφορά λογαριασμού',
 
   appPermission: 'Η εφαρμογή δεν έχει πρόσβαση σε πολυμέσα.',
 
