@@ -122,7 +122,7 @@ export function Assemble({close, openConversation}: {close: () => void; openConv
                 />
               );
             }}
-            keyExtractor={profile => profile.guid}
+            keyExtractor={profile => profile.cardId}
           />
         )}
         {state.connected.length === 0 && (

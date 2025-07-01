@@ -294,6 +294,8 @@ export const styles = StyleSheet.create({
   },
   modalControl: {
     borderRadius: 8,
+  },
+  modalControlContent: {
     paddingLeft: 16,
     paddingRight: 16,
   },
@@ -563,6 +565,7 @@ export const styles = StyleSheet.create({
     maxHeight: 256,
     width: '100%',
     borderRadius: 4,
+    borderWidth: 1,
   },
   blockedContent: {
     width: '80%',
@@ -625,7 +628,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.2,
   },
   blockedAction: {
     backgroundColor: 'transparent',

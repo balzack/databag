@@ -32,7 +32,9 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     width: '100%',
-    fontWeight: 'bold',
+    fontWeight: 600,
+    textAlign: 'center',
+    paddingBottom: 16,
   },
   prompt: {
     fontSize: 16,
@@ -48,6 +50,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 16,
+    paddingBottom: 16,
     width: '100%',
   },
   control: {

@@ -28,7 +28,7 @@ export const en = {
   appPermission: 'App does not have media access',
 
   sureLogout: 'Are you sure you want to logout?',
-  changePrompt: 'Here you can change the username and/or password for your account',
+  changePrompt: 'Here you can change the username and/or the password for your account',
   typeDelete: 'Type [delete]',
   encryptionKey: 'Encryption Key',
   generateKey: 'Generate a key to enable end-to-end encrypted topics.',

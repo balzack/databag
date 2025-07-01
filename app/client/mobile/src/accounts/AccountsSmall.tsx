@@ -14,7 +14,7 @@ export function AccountsSmall() {
   const {state, actions} = useAccounts();
   const theme = useTheme();
   const [failed, setFailed] = useState(false);
-  const [remove, setRemove] = useState(null);
+  const [remove, setRemove] = useState(null as null | number);
   const [removeParams, setRemoveParams] = useState({});
   const [removing, setRemoving] = useState(null);
   const [blocking, setBlocking] = useState(null);
@@ -100,36 +100,23 @@ export function AccountsSmall() {
     }
   };
 
-  const removeAccount = (accountId: number) => {
+  const showRemove = (accountId: number) => {
     setMore(null);
-    if (!remove) {
-      setRemoveParams({
-        title: state.strings.confirmDelete,
-        prompt: state.strings.areSure,
-        confirm: {
-          label: state.strings.remove,
-          action: async () => {
-            if (!removing) {
-              setRemoving(accountId);
-              try {
-                await actions.removeAccount(accountId);
-              } catch (err) {
-                console.log(err);
-                setFailed(true);
-              }
-              setRemoving(false);
-              setRemove(false);
-            }
-          },
-        },
-        cancel: {
-          label: state.strings.cancel,
-          action: () => {
-            setRemove(false);
-          },
-        },
-      });
-      setRemove(true);
+    actions.setRemove('');
+    setRemove(accountId);
+  }
+
+  const removeAccount = async (accountId: number) => {
+    if (!removing) {
+      setRemoving(true);
+      try {
+        await actions.removeAccount(accountId);
+      } catch (err) {
+        console.log(err);
+        setFailed(true);
+      }
+      setRemoving(false);
+      setRemove(null);
     }
   };
 
@@ -217,7 +204,7 @@ export function AccountsSmall() {
                         <Text>{state.strings.disableAccount}</Text>
                       </Pressable>
                     )}
-                    <Pressable key="delete" style={styles.menuOption} onPress={() => removeAccount(item.accountId)}>
+                    <Pressable key="delete" style={styles.menuOption} onPress={() => showRemove(item.accountId)}>
                       <Icon style={styles.button} source="trash-2" size={24} color={theme.colors.onSecondary} />
                       <Text>{state.strings.deleteAccount}</Text>
                     </Pressable>
@@ -246,7 +233,6 @@ export function AccountsSmall() {
         )}
       </Surface>
       <Confirm show={failed} params={failedParams} />
-      <Confirm show={remove} busy={removing} params={removeParams} />
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={showAccessModal} onRequestClose={() => setShowAccessModal(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
@@ -303,6 +289,50 @@ export function AccountsSmall() {
           </View>
         </View>
       </Modal>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={Boolean(remove)} onRequestClose={() => setRemove(false)}>
+        <View style={styles.modal}>
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
+          <View style={styles.modalArea}>
+            <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
+              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
+              <View style={styles.modalContent}>
+
+                <Text style={styles.modalLabel}>{state.strings.deleteAccount}</Text>
+
+                <TextInput 
+                  style={{ ...styles.input, backgroundColor: theme.colors.elevation.level1 }}
+                  mode="outlined"
+                  outlineStyle={{ ...styles.modalInputBorder, borderColor: theme.colors.outlineVariant }}
+                  autoCapitalize="none"
+                  autoComplete="off"
+                  autoCorrect={false}
+                  value={state.remove}
+                  placeholder={state.strings.typeDelete}
+                  onChangeText={value => actions.setRemove(value)}
+                />
+
+                <View style={styles.modalControls}>
+                  <Button style={{...styles.modalControl, borderColor: theme.colors.outlineVariant}} textColor={theme.colors.onSecondary} mode="outlined" onPress={() => setRemove(null)}>
+                    {state.strings.cancel}
+                  </Button>
+                  <Button
+                    style={{...styles.modalControl, backgroundColor: theme.colors.offsync}}
+                    mode="contained"
+                    loading={removing}
+                    textColor="white"
+                    icon="trash-2"
+                    disabled={state.remove !== state.strings.delete}
+                    onPress={() => removeAccount(remove)}>
+                    {state.strings.remove}
+                  </Button>
+                </View>
+
+              </View>
+            </Surface>
+          </View>
+        </View>
+      </Modal>
+
     </View>
   );
 }

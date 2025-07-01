@@ -63,6 +63,9 @@ export const styles = StyleSheet.create({
     height: 52,
     borderRadius: 8,
   },
+  modalInputBorder: {
+    borderRadius: 8,
+  },
   searchSurface: {
     flexGrow: 1,
     flexShrink: 1,
@@ -129,11 +132,12 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   modalArea: {
-    width: 300,
+    width: 500,
     maxWidth: '95%',
   },
   modalSurface: {
     borderRadius: 8,
+    width: '100%',
   },
   modalContent: {
     borderRadius: 8,
@@ -141,6 +145,9 @@ export const styles = StyleSheet.create({
     paddingBottom: 32,
     paddingLeft: 16,
     paddingRight: 16,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 16,
   },
   modal: {
     display: 'flex',
@@ -192,14 +199,15 @@ export const styles = StyleSheet.create({
   modalControls: {
     display: 'flex',
     flexDirection: 'row',
+    gap: 32,
     justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 16,
   },
   modalControl: {
     borderRadius: 8,
     paddingLeft: 16,
     paddingRight: 16,
-    paddingTop: 2,
-    paddingBottom: 2,
   },
   fullSurface: {
     width: '100%',
