@@ -24,6 +24,7 @@ export const en = {
   change: 'Change',
   resetAccount: 'Reset Account',
   addAccount: 'Add Account',
+  generate: 'Generate',
 
   appPermission: 'App does not have media access',
 
@@ -427,6 +428,7 @@ export const fr = {
   change: 'Changer',
   resetAccount: 'Réinitialiser le Compte',
   addAccount: 'Ajouter un Compte',
+  generate: 'Générer',
 
   appPermission: "L'application n'a pas accès aux médias.",
 
@@ -830,6 +832,7 @@ export const es = {
   change: 'Cambiar',
   resetAccount: 'Restablecer Cuenta',
   addAccount: 'Agregar Cuenta',
+  generate: 'Generar',
 
   appPermission: 'La aplicación no tiene acceso a medios.',
 
@@ -1232,6 +1235,7 @@ export const pt = {
   change: 'Mudar',
   resetAccount: 'Redefinir Conta',
   addAccount: 'Adicionar Conta',
+  generate: 'Gerar',
 
   appPermission: 'O aplicativo não tem acesso à mídia.',
 
@@ -1634,6 +1638,7 @@ export const de = {
   change: 'Ändern',
   resetAccount: 'Konto Zurücksetzen',
   addAccount: 'Konto Hinzufügen',
+  generate: 'Erzeugen',
 
   appPermission: 'Die App hat keinen Medienzugriff.',
 
@@ -2036,6 +2041,7 @@ export const ru = {
   change: 'Изменять',
   resetAccount: 'Сбросить учетную запись',
   addAccount: 'Добавить аккаунт',
+  generate: 'Генерировать',
 
   appPermission: 'У приложения нет доступа к мультимедиа.',
 
@@ -2438,6 +2444,7 @@ export const el = {
   change: 'Αλλαγή',
   resetAccount: 'Επαναφορά λογαριασμού',
   addAccount: 'Προσθήκη λογαριασμού',
+  generate: 'Παράγω',
 
   appPermission: 'Η εφαρμογή δεν έχει πρόσβαση σε πολυμέσα.',
 

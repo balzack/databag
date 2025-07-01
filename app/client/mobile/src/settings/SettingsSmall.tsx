@@ -1112,7 +1112,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                         disabled={state.sealPassword.length === 0}
                         loading={savingSeal}
                         onPress={sealCreate}>
-                        {state.strings.save}
+                        {state.strings.generate}
                       </Button>
                     </View>
                     <Text style={styles.modalWarn}>{state.strings.delayMessage}</Text>
@@ -1268,7 +1268,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
+            <Surface elevation={3} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
               <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <Text style={styles.modalLabel}>{state.strings.sureLogout}</Text>
@@ -1321,6 +1321,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
 
                 <View style={styles.modalControls}>
                   <Button
+                    compact={true}
                     style={{...styles.modalControl, borderColor: theme.colors.outlineVariant}}
                     textColor={theme.colors.onSecondary}
                     mode="outlined"
@@ -1329,14 +1330,15 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                     {state.strings.cancel}
                   </Button>
                   <Button
-                    style={{...styles.modalControl, backgroundColor: theme.colors.offsync}}
+                    style={{...styles.modalControl, backgroundColor: theme.colors.offsync, ...styles.modalControlLarge}}
+                    contentStyle={styles.modalControlContent}
                     mode="contained"
                     loading={applyingRemove}
                     textColor="white"
                     icon="trash-2"
                     disabled={state.remove !== state.strings.delete}
                     onPress={applyRemove}>
-                    {state.strings.remove}
+                    {state.strings.deleteAccount}
                   </Button>
                 </View>
               </View>
@@ -1364,7 +1366,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                 </Surface>
                 <View style={styles.blockedDone}>
                   {blockedError && <Text style={styles.blockedError}>{state.strings.operationFailed}</Text>}
-                  <Button style={styles.blockedButton} mode="contained" onPress={() => setBlockedMessage(false)}>
+                  <Button style={styles.blockedButton} textColor="white" mode="contained" onPress={() => setBlockedMessage(false)}>
                     {state.strings.close}
                   </Button>
                 </View>
@@ -1393,7 +1395,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                 </Surface>
                 <View style={styles.blockedDone}>
                   {blockedError && <Text style={styles.blockedError}>{state.strings.operationFailed}</Text>}
-                  <Button style={styles.blockedButton} mode="contained" onPress={() => setBlockedChannel(false)}>
+                  <Button style={styles.blockedButton} textColor="white" mode="contained" onPress={() => setBlockedChannel(false)}>
                     {state.strings.close}
                   </Button>
                 </View>
@@ -1422,7 +1424,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                 </Surface>
                 <View style={styles.blockedDone}>
                   {blockedError && <Text style={styles.blockedError}>{state.strings.operationFailed}</Text>}
-                  <Button style={styles.blockedButton} mode="contained" onPress={() => setBlockedContact(false)}>
+                  <Button style={styles.blockedButton} textColor="white" mode="contained" onPress={() => setBlockedContact(false)}>
                     {state.strings.close}
                   </Button>
                 </View>

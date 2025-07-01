@@ -278,7 +278,7 @@ export function AccountsSmall() {
                   </TouchableOpacity>
                 </View>
                 <View style={styles.modalControls}>
-                  <Button style={styles.modalControl} mode="contained" onPress={() => setShowAddModal(false)}>
+                  <Button style={styles.modalControl} textColor="white" mode="contained" onPress={() => setShowAddModal(false)}>
                     {state.strings.close}
                   </Button>
                 </View>
@@ -313,14 +313,14 @@ export function AccountsSmall() {
                     {state.strings.cancel}
                   </Button>
                   <Button
-                    style={{...styles.modalControl, backgroundColor: theme.colors.offsync}}
+                    style={{...styles.modalControl, ...styles.modalControlLarge, backgroundColor: theme.colors.offsync}}
+                    textColor="white"
                     mode="contained"
                     loading={removing}
-                    textColor="white"
                     icon="trash-2"
                     disabled={state.remove !== state.strings.delete}
                     onPress={() => removeAccount(remove)}>
-                    {state.strings.remove}
+                    {state.strings.deleteAccount}
                   </Button>
                 </View>
               </View>

@@ -206,8 +206,9 @@ export const styles = StyleSheet.create({
   },
   modalControl: {
     borderRadius: 8,
-    paddingLeft: 16,
-    paddingRight: 16,
+  },
+  modalControlLarge: {
+    flex: 2,
   },
   fullSurface: {
     width: '100%',
