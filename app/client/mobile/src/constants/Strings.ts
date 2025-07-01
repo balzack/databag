@@ -23,6 +23,7 @@ export const en = {
   tokenRequired: 'Token (if required)',
   change: 'Change',
   resetAccount: 'Reset Account',
+  addAccount: 'Add Account',
 
   appPermission: 'App does not have media access',
 
@@ -425,6 +426,7 @@ export const fr = {
   tokenRequired: 'Jeton (si requis)',
   change: 'Changer',
   resetAccount: 'Réinitialiser le Compte',
+  addAccount: 'Ajouter un Compte',
 
   appPermission: "L'application n'a pas accès aux médias.",
 
@@ -827,6 +829,7 @@ export const es = {
   tokenRequired: 'Token (si es necesario)',
   change: 'Cambiar',
   resetAccount: 'Restablecer Cuenta',
+  addAccount: 'Agregar Cuenta',
 
   appPermission: 'La aplicación no tiene acceso a medios.',
 
@@ -1228,6 +1231,7 @@ export const pt = {
   tokenRequired: 'Token (se necessário)',
   change: 'Mudar',
   resetAccount: 'Redefinir Conta',
+  addAccount: 'Adicionar Conta',
 
   appPermission: 'O aplicativo não tem acesso à mídia.',
 
@@ -1629,6 +1633,7 @@ export const de = {
   tokenRequired: 'Token (falls erforderlich)',
   change: 'Ändern',
   resetAccount: 'Konto Zurücksetzen',
+  addAccount: 'Konto Hinzufügen',
 
   appPermission: 'Die App hat keinen Medienzugriff.',
 
@@ -2030,6 +2035,7 @@ export const ru = {
   tokenRequired: 'Токен (если требуется)',
   change: 'Изменять',
   resetAccount: 'Сбросить учетную запись',
+  addAccount: 'Добавить аккаунт',
 
   appPermission: 'У приложения нет доступа к мультимедиа.',
 
@@ -2431,6 +2437,7 @@ export const el = {
   tokenRequired: 'Διακριτικό (εάν απαιτείται)',
   change: 'Αλλαγή',
   resetAccount: 'Επαναφορά λογαριασμού',
+  addAccount: 'Προσθήκη λογαριασμού',
 
   appPermission: 'Η εφαρμογή δεν έχει πρόσβαση σε πολυμέσα.',
 

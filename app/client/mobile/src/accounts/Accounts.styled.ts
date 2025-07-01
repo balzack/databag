@@ -13,6 +13,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     minHeight: 0,
   },
+  divider: {
+    marginTop: 32,
+  },
   action: {
     backgroundColor: 'transparent',
   },
@@ -125,16 +128,19 @@ export const styles = StyleSheet.create({
   icon: {
     backgroundColor: 'transparent',
   },
+  modalArea: {
+    width: 300,
+    maxWidth: '95%',
+  },
   modalSurface: {
     borderRadius: 8,
-    maxWidth: '95%',
   },
   modalContent: {
     borderRadius: 8,
     paddingTop: 32,
     paddingBottom: 32,
-    paddingLeft: 32,
-    paddingRight: 32,
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   modal: {
     display: 'flex',
@@ -165,6 +171,7 @@ export const styles = StyleSheet.create({
   },
   modalDescription: {
     paddingTop: 16,
+    fontWeight: 500,
     textAlign: 'center',
   },
   secretText: {
@@ -177,6 +184,7 @@ export const styles = StyleSheet.create({
   secret: {
     paddingRight: 16,
     fontSize: 20,
+    fontWeight: 500,
   },
   secretIcon: {
     marginLeft: 8,
@@ -185,6 +193,13 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
+  },
+  modalControl: {
+    borderRadius: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
+    paddingTop: 2,
+    paddingBottom: 2,
   },
   fullSurface: {
     width: '100%',

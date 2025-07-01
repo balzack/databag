@@ -15,6 +15,7 @@ export function useAccounts() {
     loading: false,
     secretText: '',
     filter: '',
+    remove: '',
   });
 
   const updateState = (value: any) => {
@@ -59,6 +60,9 @@ export function useAccounts() {
     blockAccount: async (accountId: number, flag: boolean) => {
       await app.state.service.blockMember(accountId, flag);
       await sync();
+    },
+    setRemove: (remove: string) => {
+      updateState({ remove });
     },
     removeAccount: async (accountId: number) => {
       await app.state.service.removeMember(accountId);
