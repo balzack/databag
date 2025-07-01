@@ -919,7 +919,12 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                   <>
                     <Text style={styles.modalDescription}>{state.strings.sealForget}</Text>
                     <View style={styles.modalControls}>
-                      <Button style={{...styles.modalControl, borderColor: theme.colors.onSecondary}} textColor={theme.colors.onSecondary} mode="outlined" contentStyle={styles.modalControlContent} onPress={() => setSealing(false)}>
+                      <Button
+                        style={{...styles.modalControl, borderColor: theme.colors.onSecondary}}
+                        textColor={theme.colors.onSecondary}
+                        mode="outlined"
+                        contentStyle={styles.modalControlContent}
+                        onPress={() => setSealing(false)}>
                         {state.strings.cancel}
                       </Button>
                       <Button style={styles.modalControl} contentStyle={styles.modalControlContent} textColor="white" mode="contained" loading={savingSeal} onPress={sealForget}>
@@ -939,7 +944,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                     <TextInput
                       style={styles.input}
                       mode="outlined"
-                      outlineStyle={{ ...styles.modalInputBorder, borderColor: theme.colors.outlineVariant }}
+                      outlineStyle={{...styles.modalInputBorder, borderColor: theme.colors.outlineVariant}}
                       autoCapitalize="none"
                       autoComplete="off"
                       autoCorrect={false}
@@ -957,10 +962,22 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                       onChangeText={value => actions.setSealPassword(value)}
                     />
                     <View style={styles.modalControls}>
-                      <Button style={{...styles.modalControl, borderColor: theme.colors.onSecondary}} textColor={theme.colors.onSecondary} mode="outlined" contentStyle={styles.modalControlContent} onPress={() => setSealing(false)}>
+                      <Button
+                        style={{...styles.modalControl, borderColor: theme.colors.onSecondary}}
+                        textColor={theme.colors.onSecondary}
+                        mode="outlined"
+                        contentStyle={styles.modalControlContent}
+                        onPress={() => setSealing(false)}>
                         {state.strings.cancel}
                       </Button>
-                      <Button style={styles.modalControl} contentStyle={styles.modalControlContent} textColor="white" mode="contained" disabled={!state.sealPassword} loading={savingSeal} onPress={sealUpdate}>
+                      <Button
+                        style={styles.modalControl}
+                        contentStyle={styles.modalControlContent}
+                        textColor="white"
+                        mode="contained"
+                        disabled={!state.sealPassword}
+                        loading={savingSeal}
+                        onPress={sealUpdate}>
                         {state.strings.save}
                       </Button>
                     </View>
@@ -973,7 +990,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                     <TextInput
                       style={styles.input}
                       mode="outlined"
-                      outlineStyle={{ ...styles.modalInputBorder, borderColor: theme.colors.outlineVariant }}
+                      outlineStyle={{...styles.modalInputBorder, borderColor: theme.colors.outlineVariant}}
                       autoCapitalize="none"
                       autoComplete="off"
                       autoCorrect={false}
@@ -991,10 +1008,22 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                       }
                     />
                     <View style={styles.modalControls}>
-                      <Button style={{...styles.modalControl, borderColor: theme.colors.onSecondary}} textColor={theme.colors.onSecondary} mode="outlined" contentStyle={styles.modalControlContent} onPress={() => setSealing(false)}>
+                      <Button
+                        style={{...styles.modalControl, borderColor: theme.colors.onSecondary}}
+                        textColor={theme.colors.onSecondary}
+                        mode="outlined"
+                        contentStyle={styles.modalControlContent}
+                        onPress={() => setSealing(false)}>
                         {state.strings.cancel}
                       </Button>
-                      <Button style={styles.modalControl} contentStyle={styles.modalControlContent} textColor="white" mode="contained" disabled={state.sealPassword.length === 0} loading={savingSeal} onPress={sealUnlock}>
+                      <Button
+                        style={styles.modalControl}
+                        contentStyle={styles.modalControlContent}
+                        textColor="white"
+                        mode="contained"
+                        disabled={state.sealPassword.length === 0}
+                        loading={savingSeal}
+                        onPress={sealUnlock}>
                         {state.strings.unlock}
                       </Button>
                     </View>
@@ -1012,7 +1041,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                     <TextInput
                       style={styles.input}
                       mode="outlined"
-                      outlineStyle={{ ...styles.modalInputBorder, borderColor: theme.colors.outlineVariant }}
+                      outlineStyle={{...styles.modalInputBorder, borderColor: theme.colors.outlineVariant}}
                       autoCapitalize="none"
                       autoComplete="off"
                       autoCorrect={false}
@@ -1021,7 +1050,12 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                       onChangeText={value => actions.setSealDelete(value)}
                     />
                     <View style={styles.modalControls}>
-                      <Button style={{...styles.modalControl, borderColor: theme.colors.onSecondary}} textColor={theme.colors.onSecondary} mode="outlined" contentStyle={styles.modalControlContent} onPress={() => setSealing(false)}>
+                      <Button
+                        style={{...styles.modalControl, borderColor: theme.colors.onSecondary}}
+                        textColor={theme.colors.onSecondary}
+                        mode="outlined"
+                        contentStyle={styles.modalControlContent}
+                        onPress={() => setSealing(false)}>
                         {state.strings.cancel}
                       </Button>
                       <Button
@@ -1044,7 +1078,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                     <TextInput
                       style={styles.input}
                       mode="outlined"
-                      outlineStyle={{ ...styles.modalInputBorder, borderColor: theme.colors.outlineVariant }}
+                      outlineStyle={{...styles.modalInputBorder, borderColor: theme.colors.outlineVariant}}
                       autoCapitalize="none"
                       autoComplete="off"
                       autoCorrect={false}
@@ -1062,10 +1096,22 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                       onChangeText={value => actions.setSealPassword(value)}
                     />
                     <View style={styles.modalControls}>
-                      <Button style={{...styles.modalControl, borderColor: theme.colors.onSecondary}} textColor={theme.colors.onSecondary} mode="outlined" contentStyle={styles.modalControlContent} onPress={() => setSealing(false)}>
+                      <Button
+                        style={{...styles.modalControl, borderColor: theme.colors.onSecondary}}
+                        textColor={theme.colors.onSecondary}
+                        mode="outlined"
+                        contentStyle={styles.modalControlContent}
+                        onPress={() => setSealing(false)}>
                         {state.strings.cancel}
                       </Button>
-                      <Button style={styles.modalControl} contentStyle={styles.modalControlContent} textColor="white" mode="contained" disabled={state.sealPassword.length === 0} loading={savingSeal} onPress={sealCreate}>
+                      <Button
+                        style={styles.modalControl}
+                        contentStyle={styles.modalControlContent}
+                        textColor="white"
+                        mode="contained"
+                        disabled={state.sealPassword.length === 0}
+                        loading={savingSeal}
+                        onPress={sealCreate}>
                         {state.strings.save}
                       </Button>
                     </View>
@@ -1081,7 +1127,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12 }}>
+            <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
               <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
@@ -1104,10 +1150,22 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                 </View>
 
                 <View style={styles.modalControls}>
-                  <Button style={{...styles.modalControl, borderColor: theme.colors.outlineVariant}} textColor={theme.colors.onSecondary} mode="outlined" contentStyle={styles.modalControlContent} onPress={() => setAuth(false)}>
+                  <Button
+                    style={{...styles.modalControl, borderColor: theme.colors.outlineVariant}}
+                    textColor={theme.colors.onSecondary}
+                    mode="outlined"
+                    contentStyle={styles.modalControlContent}
+                    onPress={() => setAuth(false)}>
                     {state.strings.cancel}
                   </Button>
-                  <Button style={styles.modalControl} contentStyle={styles.modalControlContent} mode="contained" textColor="white" loading={confirmingAuth} disabled={state.code.length !== 6} onPress={confirmAuth}>
+                  <Button
+                    style={styles.modalControl}
+                    contentStyle={styles.modalControlContent}
+                    mode="contained"
+                    textColor="white"
+                    loading={confirmingAuth}
+                    disabled={state.code.length !== 6}
+                    onPress={confirmAuth}>
                     {state.strings.mfaConfirm}
                   </Button>
                 </View>
@@ -1120,14 +1178,19 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={1} style={{ ...styles.modalSurface, backgroundColor: theme.colors.elevation.level12 }}>
+            <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
               <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
                 <Text style={styles.modalDescription}>{state.strings.disablePrompt}</Text>
 
                 <View style={styles.modalControls}>
-                  <Button style={{...styles.modalControl, borderColor: theme.colors.outlineVariant}} textColor={theme.colors.onSecondary} mode="outlined" contentStyle={styles.modalControlContent} onPress={() => setClear(false)}>
+                  <Button
+                    style={{...styles.modalControl, borderColor: theme.colors.outlineVariant}}
+                    textColor={theme.colors.onSecondary}
+                    mode="outlined"
+                    contentStyle={styles.modalControlContent}
+                    onPress={() => setClear(false)}>
                     {state.strings.cancel}
                   </Button>
                   <Button style={styles.modalControl} contentStyle={styles.modalControlContent} textColor="white" mode="contained" loading={confirmingAuth} onPress={clearAuth}>
@@ -1143,7 +1206,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12 }}>
+            <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
               <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <Text style={styles.modalLabel}>{state.strings.changeLogin}</Text>
@@ -1151,7 +1214,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                 <TextInput
                   style={styles.input}
                   mode="outlined"
-                  outlineStyle={{ ...styles.modalInputBorder, borderColor: theme.colors.outlineVariant }}
+                  outlineStyle={{...styles.modalInputBorder, borderColor: theme.colors.outlineVariant}}
                   autoCapitalize="none"
                   autoComplete="off"
                   autoCorrect={false}
@@ -1164,7 +1227,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                 <TextInput
                   style={styles.input}
                   mode="outlined"
-                  outlineStyle={{ ...styles.modalInputBorder, borderColor: theme.colors.outlineVariant }}
+                  outlineStyle={{...styles.modalInputBorder, borderColor: theme.colors.outlineVariant}}
                   autoCapitalize="none"
                   autoComplete="off"
                   autoCorrect={false}
@@ -1185,7 +1248,14 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                   <Button mode="outlined" contentStyle={styles.modalControlContent} style={{...styles.modalControl, borderColor: theme.colors.primary}} onPress={() => setChange(false)}>
                     {state.strings.cancel}
                   </Button>
-                  <Button mode="contained" style={styles.modalControl} contentStyle={styles.modalControlContent} loading={savingChange} textColor="white" disabled={state.password === '' || state.taken || !state.checked} onPress={saveChange}>
+                  <Button
+                    mode="contained"
+                    style={styles.modalControl}
+                    contentStyle={styles.modalControlContent}
+                    loading={savingChange}
+                    textColor="white"
+                    disabled={state.password === '' || state.taken || !state.checked}
+                    onPress={saveChange}>
                     {state.strings.change}
                   </Button>
                 </View>
@@ -1198,7 +1268,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={1} style={{ ...styles.modalSurface, backgroundColor: theme.colors.elevation.level12 }}>
+            <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
               <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <Text style={styles.modalLabel}>{state.strings.sureLogout}</Text>
@@ -1211,7 +1281,12 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                 <Divider style={styles.logoutSpace} />
 
                 <View style={styles.modalControls}>
-                  <Button mode="outlined" contentStyle={styles.modalControlContent} style={{...styles.modalControl, borderColor: theme.colors.outlineVariant}} textColor={theme.colors.onSecondary} onPress={() => setLogout(false)}>
+                  <Button
+                    mode="outlined"
+                    contentStyle={styles.modalControlContent}
+                    style={{...styles.modalControl, borderColor: theme.colors.outlineVariant}}
+                    textColor={theme.colors.onSecondary}
+                    onPress={() => setLogout(false)}>
                     {state.strings.cancel}
                   </Button>
                   <Button mode="contained" style={styles.modalControl} contentStyle={styles.modalControlContent} textColor="white" loading={applyingLogout} onPress={applyLogout}>
@@ -1227,7 +1302,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={1} style={{ ...styles.modalSurface, backgroundColor: theme.colors.elevation.level12 }}>
+            <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
               <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <Text style={styles.modalLabel}>{state.strings.deleteAccount}</Text>
@@ -1235,7 +1310,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                 <TextInput
                   style={styles.input}
                   mode="outlined"
-                  outlineStyle={{ ...styles.modalInputBorder, borderColor: theme.colors.outlineVariant }}
+                  outlineStyle={{...styles.modalInputBorder, borderColor: theme.colors.outlineVariant}}
                   autoCapitalize="none"
                   autoComplete="off"
                   autoCorrect={false}
@@ -1245,7 +1320,12 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                 />
 
                 <View style={styles.modalControls}>
-                  <Button style={{...styles.modalControl, borderColor: theme.colors.outlineVariant}} textColor={theme.colors.onSecondary} mode="outlined" contentStyle={styles.modalControlContent} onPress={() => setRemove(false)}>
+                  <Button
+                    style={{...styles.modalControl, borderColor: theme.colors.outlineVariant}}
+                    textColor={theme.colors.onSecondary}
+                    mode="outlined"
+                    contentStyle={styles.modalControlContent}
+                    onPress={() => setRemove(false)}>
                     {state.strings.cancel}
                   </Button>
                   <Button
@@ -1268,7 +1348,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <View style={styles.blockedContent}>
-            <Surface elevation={1} style={{ ...styles.modalSurface, backgroundColor: theme.colors.elevation.level12 }}>
+            <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
               <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <View style={styles.blockedHeader}>
@@ -1332,7 +1412,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                 <View style={styles.blockedHeader}>
                   <Text style={styles.modalLabel}>{state.strings.blockedContacts}</Text>
                 </View>
-                <Surface style={{ ...styles.blocked, borderColor: theme.colors.onSecondary }} elevation={0} mode="flat">
+                <Surface style={{...styles.blocked, borderColor: theme.colors.onSecondary}} elevation={0} mode="flat">
                   {state.blockedContacts.length === 0 && (
                     <View style={styles.blockedEmpty}>
                       <Text style={styles.blockedLabel}>{state.strings.noContacts}</Text>

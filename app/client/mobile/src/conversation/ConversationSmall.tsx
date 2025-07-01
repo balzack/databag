@@ -64,6 +64,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
       onHide.remove();
       actions.close();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const alertParams = {
@@ -408,9 +409,11 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
           <Surface elevation={1} style={{...styles.colorSurface, backgroundColor: theme.colors.elevation.level12}}>
             <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
             <View style={styles.modalContent}>
-              <View style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+              <View style={styles.modalArea}>
                 <ColorPicker color={state.textColorSet ? state.textColor : undefined} onColorChange={actions.setTextColor} onColorChangeComplete={actions.setTextColor} swatched={false} />
-                <Button style={styles.close} mode="text" textColor={theme.colors.onSecondary} onPress={()=>setColorMenu(false)}>{ state.strings.close }</Button>
+                <Button style={styles.close} mode="text" textColor={theme.colors.onSecondary} onPress={() => setColorMenu(false)}>
+                  {state.strings.close}
+                </Button>
               </View>
             </View>
           </Surface>
@@ -419,7 +422,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={sizeModal} onRequestClose={() => setSizeModal(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize="dark" />
-          <Surface elevation={1} style={{ ...styles.sizeSurface, backgroundColor: theme.colors.elevation.level12 }}>
+          <Surface elevation={1} style={{...styles.sizeSurface, backgroundColor: theme.colors.elevation.level12}}>
             <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackSize="dark" />
             <View style={styles.modalContent}>
               <Button
@@ -449,7 +452,9 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
                 }}>
                 <Text style={styles.sizeSmallText}>{state.strings.textSmall}</Text>
               </Button>
-              <Button style={styles.close} mode="text" textColor={theme.colors.onSecondary} onPress={()=>setSizeModal(false)}>{ state.strings.close }</Button>
+              <Button style={styles.close} mode="text" textColor={theme.colors.onSecondary} onPress={() => setSizeModal(false)}>
+                {state.strings.close}
+              </Button>
             </View>
           </Surface>
         </View>

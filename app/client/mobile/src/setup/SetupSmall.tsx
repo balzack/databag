@@ -303,7 +303,7 @@ export function SetupSmall() {
       </Surface>
       <Confirm show={state.error} params={errorParams} />
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={state.confirmingMFAuth} onRequestClose={actions.cancelMFAuth}>
-        <View style={{ ...styles.modal, backgroundColor: theme.colors.modalBack }}>
+        <View style={{...styles.modal, backgroundColor: theme.colors.modalBack}}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.modalContent}>
             <Surface elevation={2} style={styles.modalSurface}>

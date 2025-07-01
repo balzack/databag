@@ -101,6 +101,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  modalArea: {
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+  },
   colorSurface: {
     maxHeight: 400,
     maxWidth: '80%',

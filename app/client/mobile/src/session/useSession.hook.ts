@@ -49,6 +49,7 @@ export function useSession() {
         sub.remove();
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [app.state.session]);
 
   useEffect(() => {

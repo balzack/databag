@@ -4,7 +4,6 @@ import {Text, Button, TextInput, Menu, IconButton, Divider, Surface, Icon, useTh
 import {useAccounts} from './useAccounts.hook';
 import {styles} from './Accounts.styled';
 import {Card} from '../card/Card';
-import {Colors} from '../constants/Colors';
 import {Confirm} from '../confirm/Confirm';
 import {BlurView} from '@react-native-community/blur';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -15,7 +14,6 @@ export function AccountsSmall() {
   const theme = useTheme();
   const [failed, setFailed] = useState(false);
   const [remove, setRemove] = useState(null as null | number);
-  const [removeParams, setRemoveParams] = useState({});
   const [removing, setRemoving] = useState(null);
   const [blocking, setBlocking] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -104,7 +102,7 @@ export function AccountsSmall() {
     setMore(null);
     actions.setRemove('');
     setRemove(accountId);
-  }
+  };
 
   const removeAccount = async (accountId: number) => {
     if (!removing) {
@@ -296,13 +294,12 @@ export function AccountsSmall() {
             <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
               <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
-
                 <Text style={styles.modalLabel}>{state.strings.deleteAccount}</Text>
 
-                <TextInput 
-                  style={{ ...styles.input, backgroundColor: theme.colors.elevation.level1 }}
+                <TextInput
+                  style={{...styles.input, backgroundColor: theme.colors.elevation.level1}}
                   mode="outlined"
-                  outlineStyle={{ ...styles.modalInputBorder, borderColor: theme.colors.outlineVariant }}
+                  outlineStyle={{...styles.modalInputBorder, borderColor: theme.colors.outlineVariant}}
                   autoCapitalize="none"
                   autoComplete="off"
                   autoCorrect={false}
@@ -326,13 +323,11 @@ export function AccountsSmall() {
                     {state.strings.remove}
                   </Button>
                 </View>
-
               </View>
             </Surface>
           </View>
         </View>
       </Modal>
-
     </View>
   );
 }

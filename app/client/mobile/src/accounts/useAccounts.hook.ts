@@ -62,7 +62,7 @@ export function useAccounts() {
       await sync();
     },
     setRemove: (remove: string) => {
-      updateState({ remove });
+      updateState({remove});
     },
     removeAccount: async (accountId: number) => {
       await app.state.service.removeMember(accountId);
