@@ -900,6 +900,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                       </Button>
                       <Button
                         style={{...styles.modalControl, backgroundColor: theme.colors.offsync}}
+                        contentStyle={styles.modalControlContent}
                         textColor="white"
                         icon="trash-2"
                         mode="contained"
@@ -1060,6 +1061,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                       </Button>
                       <Button
                         style={{...styles.modalControl, backgroundColor: theme.colors.offsync}}
+                        contentStyle={styles.modalControlContent}
                         mode="contained"
                         textColor="white"
                         icon="trash-2"
