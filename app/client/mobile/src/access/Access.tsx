@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useAnimatedValue, Animated, Modal, ScrollView, View, Image, SafeAreaView} from 'react-native';
+import {useAnimatedValue, Platform, Animated, Modal, ScrollView, View, Image, SafeAreaView} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useAccess} from './useAccess.hook';
 import {styles} from './Access.styled';
@@ -35,11 +35,15 @@ export function Access() {
   };
 
   const fadeOut = (mode: string) => {
-    Animated.timing(switching, {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: false,
-    }).start(() => fadeIn(mode));
+    if (Platform.OS === 'ios') {
+      Animated.timing(switching, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: false,
+      }).start(() => fadeIn(mode));
+    } else {
+      actions.setMode(mode);
+    }
   };
 
   const alertParams = {
