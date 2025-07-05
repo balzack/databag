@@ -129,11 +129,18 @@ export const styles = StyleSheet.create({
     position: 'absolute',
   },
   tabContainer: {
+    overflow: 'hidden',
     position: 'absolute',
     bottom: 0,
     left: 0,
     width: '100%',
     backgroundColor: 'transparent',
+  },
+  tabWrapper: {
+    overflow: 'hidden',
+    position: 'relative',
+    height: 96,
+    width: '100%',
   },
   tabBar: {
     height: 96,
