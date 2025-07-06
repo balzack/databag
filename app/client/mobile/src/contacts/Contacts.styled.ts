@@ -36,7 +36,6 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
     minWidth: 0,
     borderRadius: 8,
-    overflow: 'hidden',
   },
   menuOption: {
     display: 'flex',
@@ -148,18 +147,8 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
   },
   input: {
-    flexGrow: 1,
-    flexShrink: 1,
-    minWidth: 0,
-    textWrap: 'nowrap',
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
     backgroundColor: 'transparent',
-    paddingTop: 0,
-    paddingBottom: 0,
-    display: 'flex',
     height: 52,
-    borderRadius: 8,
   },
   inputUnderline: {
     display: 'none',
