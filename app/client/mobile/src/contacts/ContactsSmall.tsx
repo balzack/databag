@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Surface, Icon, IconButton, Menu, Button, Text, TextInput, useTheme} from 'react-native-paper';
-import {Pressable, FlatList, View} from 'react-native';
+import {Pressable, FlatList, View, Platform} from 'react-native';
 import {styles} from './Contacts.styled';
 import {useContacts} from './useContacts.hook';
 import {Card} from '../card/Card';
@@ -153,51 +153,71 @@ export function ContactsSmall({
               const flair = item.status === 'connected' && item.offsync ? <Icon key="host" source="warning-circle" size={18} color={theme.colors.offsync} /> : <></>;
               const action = (
                 <Menu
-                  mode="flat"
-                  elevation={8}
+                  mode={Platform.OS === 'ios' ? 'flat' : 'elevated'}
+                  elevation={Platform.OS === 'ios' ? 8 : 2}
                   key="actions"
                   visible={allTab && more === item.cardId}
                   onDismiss={() => setMore(null)}
                   anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
-                  <Surface elevation={11} style={styles.menu}>
-                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
-                    {syncStatus === 'offsync' && (
-                      <Pressable key="resync" style={styles.menuOption} onPress={() => resync(item)}>
-                        <Icon style={styles.button} source="cached" size={28} color={theme.colors.primary} />
-                        <Text>{state.strings.resyncAction}</Text>
-                      </Pressable>
-                    )}
-                    {syncStatus === 'connected' && (
-                      <Pressable key="call" style={styles.menuOption} onPress={() => call(item)}>
-                        <Icon style={styles.button} source="phone" size={28} color={theme.colors.primary} />
-                        <Text>{state.strings.callAction}</Text>
-                      </Pressable>
-                    )}
-                    {syncStatus === 'connected' && (
-                      <Pressable key="text" style={styles.menuOption} onPress={() => text(item)}>
-                        <Icon style={styles.button} source="chat-circle" size={28} color={theme.colors.primary} />
-                        <Text>{state.strings.textAction}</Text>
-                      </Pressable>
-                    )}
-                    {syncStatus === 'confirmed' && (
-                      <Pressable key="saved" style={styles.menuOption} onPress={() => connect(item)}>
-                        <Icon style={styles.button} source="link" size={28} color={theme.colors.primary} />
-                        <Text>{state.strings.connectAction}</Text>
-                      </Pressable>
-                    )}
-                    {syncStatus === 'connecting' && (
-                      <Pressable key="cancel" style={styles.menuOption} onPress={() => cancel(item)}>
-                        <Icon style={styles.button} source="cancel" size={28} color={theme.colors.primary} />
-                        <Text>{state.strings.cancelAction}</Text>
-                      </Pressable>
-                    )}
-                    {(syncStatus === 'pending' || syncStatus === 'requested') && (
-                      <Pressable key="accept" style={styles.menuOption} onPress={() => accept(item)}>
-                        <Icon style={styles.button} source="account-check-outline" size={28} color={theme.colors.primary} />
-                        <Text>{state.strings.acceptAction}</Text>
-                      </Pressable>
-                    )}
-                  </Surface>
+                  { Platform.OS === 'ios' && (
+                    <Surface elevation={11} style={styles.menu}>
+                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
+                      {syncStatus === 'offsync' && (
+                        <Pressable key="resync" style={styles.menuOption} onPress={() => resync(item)}>
+                          <Icon style={styles.button} source="cached" size={28} color={theme.colors.primary} />
+                          <Text>{state.strings.resyncAction}</Text>
+                        </Pressable>
+                      )}
+                      {syncStatus === 'connected' && (
+                        <Pressable key="call" style={styles.menuOption} onPress={() => call(item)}>
+                          <Icon style={styles.button} source="phone" size={28} color={theme.colors.primary} />
+                          <Text>{state.strings.callAction}</Text>
+                        </Pressable>
+                      )}
+                      {syncStatus === 'connected' && (
+                        <Pressable key="text" style={styles.menuOption} onPress={() => text(item)}>
+                          <Icon style={styles.button} source="chat-circle" size={28} color={theme.colors.primary} />
+                          <Text>{state.strings.textAction}</Text>
+                        </Pressable>
+                      )}
+                      {syncStatus === 'confirmed' && (
+                        <Pressable key="saved" style={styles.menuOption} onPress={() => connect(item)}>
+                          <Icon style={styles.button} source="link" size={28} color={theme.colors.primary} />
+                          <Text>{state.strings.connectAction}</Text>
+                        </Pressable>
+                      )}
+                      {syncStatus === 'connecting' && (
+                        <Pressable key="cancel" style={styles.menuOption} onPress={() => cancel(item)}>
+                          <Icon style={styles.button} source="cancel" size={28} color={theme.colors.primary} />
+                          <Text>{state.strings.cancelAction}</Text>
+                        </Pressable>
+                      )}
+                      {(syncStatus === 'pending' || syncStatus === 'requested') && (
+                        <Pressable key="accept" style={styles.menuOption} onPress={() => accept(item)}>
+                          <Icon style={styles.button} source="account-check-outline" size={28} color={theme.colors.primary} />
+                          <Text>{state.strings.acceptAction}</Text>
+                        </Pressable>
+                      )}
+                    </Surface>
+                  )}
+                  { Platform.OS !== 'ios' && syncStatus === 'offsync' && (
+                    <Menu.Item key="resync" leadingIcon="cached" onPress={() => resync(item)} title={state.strings.resyncAction} />
+                  )}
+                  { Platform.OS !== 'ios' && syncStatus === 'connected' && (
+                    <Menu.Item key="call" leadingIcon="phone" onPress={() => call(item)} title={state.strings.callAction} />
+                  )}
+                  { Platform.OS !== 'ios' && syncStatus === 'connceted' && (
+                    <Menu.Item key="text" leadingIcon="chat-circle" onPress={() => text(item)} title={state.strings.textAction} />
+                  )}
+                  { Platform.OS !== 'ios' && syncStatus === 'confirmed' && (
+                    <Menu.Item key="saved" leadingIcon="link" onPress={() => connect(item)} title={state.strings.connectAction} />
+                  )}
+                  { Platform.OS !== 'ios' && syncStatus === 'connecting' && (
+                    <Menu.Item key="cancel" leadingIcon="cancel" onPress={() => cancel(item)} title={state.strings.cancelAction} />
+                  )}
+                  { Platform.OS !== 'ios' && syncStatus === 'pending' && (
+                    <Menu.Item key="pending" leadingIcon="account-check-outline" onPress={() => accept(item)} title={state.strings.acceptAction} />
+                  )}
                 </Menu>
               );
               const select = () => {
@@ -245,19 +265,24 @@ export function ContactsSmall({
               const flair = item.status === 'connected' && item.offsync ? <Icon key="host" source="warning-circle" size={18} color={theme.colors.offsync} /> : <></>;
               const action = (
                 <Menu
-                  mode="flat"
-                  elevation={8}
+                  mode={Platform.OS === 'ios' ? 'flat' : 'elevated'}
+                  elevation={Platform.OS === 'ios' ? 8 : 2}
                   key="actions"
                   visible={requestedTab && more === item.cardId}
                   onDismiss={() => setMore(null)}
                   anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
-                  <Surface elevation={11} style={styles.menu}>
-                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
-                    <Pressable key="accept" style={styles.menuOption} onPress={() => accept(item)}>
-                      <Icon style={styles.button} source="account-check-outline" size={28} color={theme.colors.primary} />
-                      <Text>{state.strings.acceptAction}</Text>
-                    </Pressable>
-                  </Surface>
+                  {Platform.OS === 'ios' && (
+                    <Surface elevation={11} style={styles.menu}>
+                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
+                      <Pressable key="accept" style={styles.menuOption} onPress={() => accept(item)}>
+                        <Icon style={styles.button} source="account-check-outline" size={28} color={theme.colors.primary} />
+                        <Text>{state.strings.acceptAction}</Text>
+                      </Pressable>
+                    </Surface>
+                  )}
+                  { Platform.OS !== 'ios' && (
+                    <Menu.Item key="pending" leadingIcon="account-check-outline" onPress={() => accept(item)} title={state.strings.acceptAction} />
+                  )}
                 </Menu>
               );
               const select = () => {
@@ -306,29 +331,40 @@ export function ContactsSmall({
               const flair = item.status === 'connected' && item.offsync ? <Icon key="host" source="warning-circle" size={18} color={theme.colors.offsync} /> : <></>;
               const action = (
                 <Menu
-                  mode="flat"
-                  elevation={8}
+                  mode={Platform.OS === 'ios' ? 'flat' : 'elevated'}
+                  elevation={Platform.OS === 'ios' ? 8 : 2}
                   key="actions"
                   visible={connectedTab && more === item.cardId}
                   onDismiss={() => setMore(null)}
                   anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
-                  <Surface elevation={11} style={styles.menu}>
-                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
-                    {syncStatus === 'offsync' && (
-                      <Pressable key="resync" style={styles.menuOption} onPress={() => resync(item)}>
-                        <Icon style={styles.button} source="cached" size={28} color={theme.colors.primary} />
-                        <Text>{state.strings.resyncAction}</Text>
+                  { Platform.OS === 'ios' && (
+                    <Surface elevation={11} style={styles.menu}>
+                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
+                      {syncStatus === 'offsync' && (
+                        <Pressable key="resync" style={styles.menuOption} onPress={() => resync(item)}>
+                          <Icon style={styles.button} source="cached" size={28} color={theme.colors.primary} />
+                          <Text>{state.strings.resyncAction}</Text>
+                        </Pressable>
+                      )}
+                      <Pressable key="call" style={styles.menuOption} onPress={() => call(item)}>
+                        <Icon style={styles.button} source="phone" size={28} color={theme.colors.primary} />
+                        <Text>{state.strings.callAction}</Text>
                       </Pressable>
-                    )}
-                    <Pressable key="call" style={styles.menuOption} onPress={() => call(item)}>
-                      <Icon style={styles.button} source="phone" size={28} color={theme.colors.primary} />
-                      <Text>{state.strings.callAction}</Text>
-                    </Pressable>
-                    <Pressable key="text" style={styles.menuOption} onPress={() => text(item)}>
-                      <Icon style={styles.button} source="chat-circle" size={28} color={theme.colors.primary} />
-                      <Text>{state.strings.textAction}</Text>
-                    </Pressable>
-                  </Surface>
+                      <Pressable key="text" style={styles.menuOption} onPress={() => text(item)}>
+                        <Icon style={styles.button} source="chat-circle" size={28} color={theme.colors.primary} />
+                        <Text>{state.strings.textAction}</Text>
+                      </Pressable>
+                    </Surface>
+                  )}
+                  { Platform.OS !== 'ios' && syncStatus === 'offsync' && (
+                    <Menu.Item key="resync" leadingIcon="cached" onPress={() => resync(item)} title={state.strings.resyncAction} />
+                  )}
+                  { Platform.OS !== 'ios' && (
+                    <Menu.Item key="call" leadingIcon="phone" onPress={() => call(item)} title={state.strings.callAction} />
+                  )}
+                  { Platform.OS !== 'ios' && (
+                    <Menu.Item key="text" leadingIcon="chat-circle" onPress={() => text(item)} title={state.strings.textAction} />
+                  )}
                 </Menu>
               );
               const select = () => {

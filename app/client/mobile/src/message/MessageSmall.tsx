@@ -1,6 +1,6 @@
 import React, {useRef, useEffect, useState} from 'react';
 import {avatar} from '../constants/Icons';
-import {Pressable, Linking, ScrollView, View, Image, Modal} from 'react-native';
+import {Pressable, Platform, Linking, ScrollView, View, Image, Modal} from 'react-native';
 import {Menu, Icon, Text, useTheme, TextInput, IconButton, Button, Surface} from 'react-native-paper';
 import {Topic, Card, Profile} from 'databag-client-sdk';
 import {ImageAsset} from './imageAsset/ImageAsset';
@@ -235,39 +235,53 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
           <View style={styles.headerActions}>
             <Text style={styles.timestamp}> {timestamp}</Text>
             <Menu
-              mode="flat"
-              elevation={8}
+              mode={Platform.OS === 'ios' ? 'flat' : 'elevated'}
+              elevation={Platform.OS === 'ios' ? 8 : 2}
               key="actions"
               visible={options}
               onDismiss={() => setOptions(false)}
               anchor={<IconButton style={styles.menuButton} icon="dots-horizontal-circle-outline" size={16} onPress={() => setOptions(true)} />}>
-              <Surface elevation={11} style={styles.menu}>
-                <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} />
-                {!locked && profile && status === 'confirmed' && (
-                  <Pressable key="edit" style={styles.menuOption} onPress={edit}>
-                    <Icon style={styles.button} source="square-edit-outline" size={28} color={theme.colors.primary} />
-                    <Text>{state.strings.editOption}</Text>
-                  </Pressable>
-                )}
-                {(host || profile) && (
-                  <Pressable key="remove" style={styles.menuOption} onPress={remove}>
-                    <Icon style={styles.button} source="trash-can-outline" size={28} color={theme.colors.primary} />
-                    <Text>{state.strings.deleteOption}</Text>
-                  </Pressable>
-                )}
-                {!profile && (
-                  <Pressable key="block" style={styles.menuOption} onPress={block}>
-                    <Icon style={styles.button} source="eye-remove-outline" size={28} color={theme.colors.primary} />
-                    <Text>{state.strings.blockOption}</Text>
-                  </Pressable>
-                )}
-                {!profile && (
-                  <Pressable key="report" style={styles.menuOption} onPress={report}>
-                    <Icon style={styles.button} source="alert-octagon-outline" size={28} color={theme.colors.primary} />
-                    <Text>{state.strings.reportOption}</Text>
-                  </Pressable>
-                )}
-              </Surface>
+              { Platform.OS === 'ios' && (
+                <Surface elevation={11} style={styles.menu}>
+                  <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} />
+                  {!locked && profile && status === 'confirmed' && (
+                    <Pressable key="edit" style={styles.menuOption} onPress={edit}>
+                      <Icon style={styles.button} source="square-edit-outline" size={28} color={theme.colors.primary} />
+                      <Text>{state.strings.editOption}</Text>
+                    </Pressable>
+                  )}
+                  {(host || profile) && (
+                    <Pressable key="remove" style={styles.menuOption} onPress={remove}>
+                      <Icon style={styles.button} source="trash-can-outline" size={28} color={theme.colors.primary} />
+                      <Text>{state.strings.deleteOption}</Text>
+                    </Pressable>
+                  )}
+                  {!profile && (
+                    <Pressable key="block" style={styles.menuOption} onPress={block}>
+                      <Icon style={styles.button} source="eye-remove-outline" size={28} color={theme.colors.primary} />
+                      <Text>{state.strings.blockOption}</Text>
+                    </Pressable>
+                  )}
+                  {!profile && (
+                    <Pressable key="report" style={styles.menuOption} onPress={report}>
+                      <Icon style={styles.button} source="alert-octagon-outline" size={28} color={theme.colors.primary} />
+                      <Text>{state.strings.reportOption}</Text>
+                    </Pressable>
+                  )}
+                </Surface>
+              )}
+              { Platform.OS !== 'ios' && !locked && profile && status === 'confirmed' && (
+                <Menu.Item key="edit" onPress={edit} leadingIcon="square-edit-outline" title={state.strings.editOption} />
+              )}
+              { Platform.OS !== 'ios' && (host || profile) && (
+                <Menu.Item key="remove" onPress={remove} leadingIcon="trash-can-outline" title={state.strings.deleteOption} />
+              )}
+              { Platform.OS !== 'ios' && !profile && (
+                <Menu.Item key="block" onPress={block} leadingIcon="eye-remove-outline" title={state.strings.blockOption} />
+              )}
+              { Platform.OS !== 'ios' && !profile && (
+                <Menu.Item key="edit" onPress={report} leadingIcon="alert-octagon-outline" title={state.strings.reportOption} />
+              )}
             </Menu>
           </View>
         </View>
@@ -301,7 +315,7 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
             <BlurView style={styles.blur} blurType="dark" blurAmount={6} reducedTransparencyFallbackColor="dark" />
           </Pressable>
           <View style={styles.editArea}>
-            <Surface elevation={4} style={styles.editContent}>
+            <Surface elevation={2} style={styles.editContent}>
               <Text style={styles.title}>{state.strings.editOption}</Text>
               <TextInput
                 multiline={true}

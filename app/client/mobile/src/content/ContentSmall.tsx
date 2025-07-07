@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Surface, IconButton, Icon, Menu, Button, Text, TextInput, useTheme} from 'react-native-paper';
-import {Pressable, FlatList, View} from 'react-native';
+import {Pressable, Platform, FlatList, View} from 'react-native';
 import {styles} from './Content.styled';
 import {useContent} from './useContent.hook';
 import {Channel} from '../channel/Channel';
@@ -184,76 +184,93 @@ export function ContentSmall({
                 };
                 const action = (
                   <Menu
-                    mode="flat"
-                    elevation={8}
+                    mode={Platform.OS === 'ios' ? 'flat' : 'elevated'}
+                    elevation={Platform.OS === 'ios' ? 8 :  2}
                     visible={allTab && more === `${item.cardId}:${item.channelId}`}
                     onDismiss={() => setMore(null)}
                     anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
-                    <Surface elevation={11} style={styles.menu}>
-                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
-                      {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                    {  Platform.OS === 'ios' && (
+                      <Surface elevation={11} style={styles.menu}>
+                        <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
+                        {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                          <Pressable
+                            key="clearFavorite"
+                            style={styles.menuOption}
+                            onPress={() => {
+                              setMore(null);
+                              actions.clearFavorite(item.cardId, item.channelId);
+                            }}>
+                            <Icon style={styles.button} source="star-filled" size={24} color={theme.colors.primary} />
+                            <Text>{state.strings.removeFavorites}</Text>
+                          </Pressable>
+                        )}
+                        {!state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                          <Pressable
+                            key="setFavorite"
+                            style={styles.menuOption}
+                            onPress={() => {
+                              setMore(null);
+                              actions.setFavorite(item.cardId, item.channelId);
+                            }}>
+                            <Icon style={styles.button} source="star" size={24} color={theme.colors.primary} />
+                            <Text>{state.strings.addFavorites}</Text>
+                          </Pressable>
+                        )}
+                        {unread && (
+                          <Pressable
+                            key="markRead"
+                            style={styles.menuOption}
+                            onPress={() => {
+                              setMore(null);
+                              actions.clearUnread(item.cardId, item.channelId);
+                            }}>
+                            <Icon style={styles.button} source="mail-filled" size={24} color={theme.colors.primary} />
+                            <Text>{state.strings.markRead}</Text>
+                          </Pressable>
+                        )}
+                        {!unread && (
+                          <Pressable
+                            key="markUnead"
+                            style={styles.menuOption}
+                            onPress={() => {
+                              setMore(null);
+                              actions.setUnread(item.cardId, item.channelId);
+                            }}>
+                            <Icon style={styles.button} source="mail" size={24} color={theme.colors.primary} />
+                            <Text>{state.strings.markUnread}</Text>
+                          </Pressable>
+                        )}
                         <Pressable
-                          key="clearFavorite"
+                          key="delete"
                           style={styles.menuOption}
                           onPress={() => {
                             setMore(null);
-                            actions.clearFavorite(item.cardId, item.channelId);
+                            if (item.cardId) {
+                              setLeave({cardId: item.cardId, channelId: item.channelId});
+                            } else {
+                              setRemove({channelId: item.channelId});
+                            }
                           }}>
-                          <Icon style={styles.button} source="star-filled" size={24} color={theme.colors.primary} />
-                          <Text>{state.strings.removeFavorites}</Text>
+                          <Icon style={styles.button} source="trash-2" size={24} color={theme.colors.primary} />
+                          <Text>{hosted ? state.strings.deleteChat : state.strings.leaveChat}</Text>
                         </Pressable>
-                      )}
-                      {!state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
-                        <Pressable
-                          key="setFavorite"
-                          style={styles.menuOption}
-                          onPress={() => {
-                            setMore(null);
-                            actions.setFavorite(item.cardId, item.channelId);
-                          }}>
-                          <Icon style={styles.button} source="star" size={24} color={theme.colors.primary} />
-                          <Text>{state.strings.addFavorites}</Text>
-                        </Pressable>
-                      )}
-                      {unread && (
-                        <Pressable
-                          key="markRead"
-                          style={styles.menuOption}
-                          onPress={() => {
-                            setMore(null);
-                            actions.clearUnread(item.cardId, item.channelId);
-                          }}>
-                          <Icon style={styles.button} source="mail-filled" size={24} color={theme.colors.primary} />
-                          <Text>{state.strings.markRead}</Text>
-                        </Pressable>
-                      )}
-                      {!unread && (
-                        <Pressable
-                          key="markUnead"
-                          style={styles.menuOption}
-                          onPress={() => {
-                            setMore(null);
-                            actions.setUnread(item.cardId, item.channelId);
-                          }}>
-                          <Icon style={styles.button} source="mail" size={24} color={theme.colors.primary} />
-                          <Text>{state.strings.markUnread}</Text>
-                        </Pressable>
-                      )}
-                      <Pressable
-                        key="delete"
-                        style={styles.menuOption}
-                        onPress={() => {
-                          setMore(null);
-                          if (item.cardId) {
-                            setLeave({cardId: item.cardId, channelId: item.channelId});
-                          } else {
-                            setRemove({channelId: item.channelId});
-                          }
-                        }}>
-                        <Icon style={styles.button} source="trash-2" size={24} color={theme.colors.primary} />
-                        <Text>{hosted ? state.strings.deleteChat : state.strings.leaveChat}</Text>
-                      </Pressable>
-                    </Surface>
+                      </Surface>
+                    )}
+                    { Platform.OS !== 'ios' && state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                      <Menu.Item leadingIcon="star-filled" onPress={() => { setMore(null); actions.clearFavorite(item.cardId, item.channelId) }} title={state.strings.removeFavorites} />
+                    )}
+                    { Platform.OS !== 'ios' && !state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                      <Menu.Item leadingIcon="star" onPress={() => { setMore(null); actions.setFavorite(item.cardId, item.channelId) }} title={state.strings.addFavorites} />
+                    )}
+                    { Platform.OS !== 'ios' && unread && (
+                      <Menu.Item leadingIcon="mail-filled" onPress={() => { setMore(null); actions.clearUnread(item.cardId, item.channelId) }} title={state.strings.markRead} />
+                    )}
+                    { Platform.OS !== 'ios' && !unread && (
+                      <Menu.Item leadingIcon="mail" onPress={() => { setMore(null); actions.setUnread(item.cardId, item.channelId) }} title={state.strings.markUnread} />
+                    )}
+                    { Platform.OS !== 'ios' && (
+                      <Menu.Item leadingIcon="trash-2" onPress={() => { setMore(null); if(item.cardId) { setLeave({cardId: item.cardId, channelId: item.channelId}) } else { setRemove({ channelId: item.channelId }) } }} title={hosted ? state.strings.deleteChat : state.strings.leaveChat} />
+                    )}
                   </Menu>
                 );
                 return (
@@ -291,48 +308,76 @@ export function ContentSmall({
                 };
                 const action = (
                   <Menu
-                    mode="flat"
-                    elevation={8}
+                    mode={Platform.OS === 'ios' ? 'flat' : 'elevated'}
+                    elevation={Platform.OS === 'ios' ? 8 : 2}
                     visible={unreadTab && more === `${item.cardId}:${item.channelId}`}
                     onDismiss={() => setMore(null)}
                     anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
-                    <Surface elevation={11} style={styles.menu}>
-                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
-                      {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                    { Platform.OS === 'ios' && (
+                      <Surface elevation={11} style={styles.menu}>
+                        <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
+                        {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                          <Pressable
+                            key="clearFavorite"
+                            style={styles.menuOption}
+                            onPress={() => {
+                              setMore(null);
+                              actions.clearFavorite(item.cardId, item.channelId);
+                            }}>
+                            <Icon style={styles.button} source="star-filled" size={24} color={theme.colors.primary} />
+                            <Text>{state.strings.removeFavorites}</Text>
+                          </Pressable>
+                        )}
+                        {!state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                          <Pressable
+                            key="setFavorite"
+                            style={styles.menuOption}
+                            onPress={() => {
+                              setMore(null);
+                              actions.setFavorite(item.cardId, item.channelId);
+                            }}>
+                            <Icon style={styles.button} source="star" size={24} color={theme.colors.primary} />
+                            <Text>{state.strings.addFavorites}</Text>
+                          </Pressable>
+                        )}
                         <Pressable
-                          key="clearFavorite"
+                          key="markRead"
                           style={styles.menuOption}
                           onPress={() => {
                             setMore(null);
-                            actions.clearFavorite(item.cardId, item.channelId);
+                            actions.clearUnread(item.cardId, item.channelId);
                           }}>
-                          <Icon style={styles.button} source="star" size={24} color={theme.colors.primary} />
-                          <Text>{state.strings.removeFavorites}</Text>
+                          <Icon style={styles.button} source="mail-filled" size={24} color={theme.colors.primary} />
+                          <Text>{state.strings.markRead}</Text>
                         </Pressable>
-                      )}
-                      {!state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
                         <Pressable
-                          key="setFavorite"
+                          key="delete"
                           style={styles.menuOption}
                           onPress={() => {
                             setMore(null);
-                            actions.setFavorite(item.cardId, item.channelId);
+                            if (item.cardId) {
+                              setLeave({cardId: item.cardId, channelId: item.channelId});
+                            } else {
+                              setRemove({channelId: item.channelId});
+                            }
                           }}>
-                          <Icon style={styles.button} source="star" size={24} color={theme.colors.primary} />
-                          <Text>{state.strings.addFavorites}</Text>
+                          <Icon style={styles.button} source="trash-2" size={24} color={theme.colors.primary} />
+                          <Text>{hosted ? state.strings.deleteChat : state.strings.leaveChat}</Text>
                         </Pressable>
-                      )}
-                      <Pressable
-                        key="markRead"
-                        style={styles.menuOption}
-                        onPress={() => {
-                          setMore(null);
-                          actions.clearUnread(item.cardId, item.channelId);
-                        }}>
-                        <Icon style={styles.button} source="email-open-outline" size={24} color={theme.colors.primary} />
-                        <Text>{state.strings.markRead}</Text>
-                      </Pressable>
-                    </Surface>
+                      </Surface>
+                    )}
+                    { Platform.OS !== 'ios' && state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                      <Menu.Item leadingIcon="star-filled" onPress={() => { setMore(null); actions.clearFavorite(item.cardId, item.channelId) }} title={state.strings.removeFavorites} />
+                    )}
+                    { Platform.OS !== 'ios' && !state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                      <Menu.Item leadingIcon="star" onPress={() => { setMore(null); actions.setFavorite(item.cardId, item.channelId) }} title={state.strings.addFavorites} />
+                    )}
+                    { Platform.OS !== 'ios' && (
+                      <Menu.Item leadingIcon="mail-filled" onPress={() => { setMore(null); actions.clearUnread(item.cardId, item.channelId) }} title={state.strings.markRead} />
+                    )}
+                    { Platform.OS !== 'ios' && (
+                      <Menu.Item leadingIcon="trash-2" onPress={() => { setMore(null); if(item.cardId) { setLeave({cardId: item.cardId, channelId: item.channelId}) } else { setRemove({ channelId: item.channelId }) } }} title={hosted ? state.strings.deleteChat : state.strings.leaveChat} />
+                    )}
                   </Menu>
                 );
                 return (
@@ -370,48 +415,90 @@ export function ContentSmall({
                 };
                 const action = (
                   <Menu
-                    mode="flat"
-                    elevation={8}
+                    mode={Platform.OS === 'ios' ? 'flat' : 'elevated'}
+                    elevation={Platform.OS === 'ios' ? 8 : 2}
                     visible={favoritesTab && more === `${item.cardId}:${item.channelId}`}
                     onDismiss={() => setMore(null)}
                     anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
-                    <Surface elevation={11} style={styles.menu}>
-                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
-                      <Pressable
-                        key="clearFavorite"
-                        style={styles.menuOption}
-                        onPress={() => {
-                          setMore(null);
-                          actions.clearFavorite(item.cardId, item.channelId);
-                        }}>
-                        <Icon style={styles.button} source="star-filled" size={24} color={theme.colors.primary} />
-                        <Text>{state.strings.removeFavorites}</Text>
-                      </Pressable>
-                      {unread && (
+                    { Platform.OS === 'ios' && (
+                      <Surface elevation={11} style={styles.menu}>
+                        <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
+                        {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                          <Pressable
+                            key="clearFavorite"
+                            style={styles.menuOption}
+                            onPress={() => {
+                              setMore(null);
+                              actions.clearFavorite(item.cardId, item.channelId);
+                            }}>
+                            <Icon style={styles.button} source="star-filled" size={24} color={theme.colors.primary} />
+                            <Text>{state.strings.removeFavorites}</Text>
+                          </Pressable>
+                        )}
+                        {!state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                          <Pressable
+                            key="setFavorite"
+                            style={styles.menuOption}
+                            onPress={() => {
+                              setMore(null);
+                              actions.setFavorite(item.cardId, item.channelId);
+                            }}>
+                            <Icon style={styles.button} source="star" size={24} color={theme.colors.primary} />
+                            <Text>{state.strings.addFavorites}</Text>
+                          </Pressable>
+                        )}
+                        {unread && (
+                          <Pressable
+                            key="markRead"
+                            style={styles.menuOption}
+                            onPress={() => {
+                              setMore(null);
+                              actions.clearUnread(item.cardId, item.channelId);
+                            }}>
+                            <Icon style={styles.button} source="mail-filled" size={24} color={theme.colors.primary} />
+                            <Text>{state.strings.markRead}</Text>
+                          </Pressable>
+                        )}
+                        {!unread && (
+                          <Pressable
+                            key="markUnead"
+                            style={styles.menuOption}
+                            onPress={() => {
+                              setMore(null);
+                              actions.setUnread(item.cardId, item.channelId);
+                            }}>
+                            <Icon style={styles.button} source="mail" size={24} color={theme.colors.primary} />
+                            <Text>{state.strings.markUnread}</Text>
+                          </Pressable>
+                        )}
                         <Pressable
-                          key="markRead"
+                          key="delete"
                           style={styles.menuOption}
                           onPress={() => {
                             setMore(null);
-                            actions.clearUnread(item.cardId, item.channelId);
+                            if (item.cardId) {
+                              setLeave({cardId: item.cardId, channelId: item.channelId});
+                            } else {
+                              setRemove({channelId: item.channelId});
+                            }
                           }}>
-                          <Icon style={styles.button} source="mail-filled" size={24} color={theme.colors.primary} />
-                          <Text>{state.strings.markRead}</Text>
+                          <Icon style={styles.button} source="trash-2" size={24} color={theme.colors.primary} />
+                          <Text>{hosted ? state.strings.deleteChat : state.strings.leaveChat}</Text>
                         </Pressable>
-                      )}
-                      {!unread && (
-                        <Pressable
-                          key="markUnead"
-                          style={styles.menuOption}
-                          onPress={() => {
-                            setMore(null);
-                            actions.setUnread(item.cardId, item.channelId);
-                          }}>
-                          <Icon style={styles.button} source="mail" size={24} color={theme.colors.primary} />
-                          <Text>{state.strings.markUnread}</Text>
-                        </Pressable>
-                      )}
-                    </Surface>
+                      </Surface>
+                    )}
+                    { Platform.OS !== 'ios' && (
+                      <Menu.Item leadingIcon="star-filled" onPress={() => { setMore(null); actions.clearFavorite(item.cardId, item.channelId) }} title={state.strings.removeFavorites} />
+                    )}
+                    { Platform.OS !== 'ios' && unread && (
+                      <Menu.Item leadingIcon="mail-filled" onPress={() => { setMore(null); actions.clearUnread(item.cardId, item.channelId) }} title={state.strings.markRead} />
+                    )}
+                    { Platform.OS !== 'ios' && !unread && (
+                      <Menu.Item leadingIcon="mail" onPress={() => { setMore(null); actions.setUnread(item.cardId, item.channelId) }} title={state.strings.markUnread} />
+                    )}
+                    { Platform.OS !== 'ios' && (
+                      <Menu.Item leadingIcon="trash-2" onPress={() => { setMore(null); if(item.cardId) { setLeave({cardId: item.cardId, channelId: item.channelId}) } else { setRemove({ channelId: item.channelId }) } }} title={hosted ? state.strings.deleteChat : state.strings.leaveChat} />
+                    )}
                   </Menu>
                 );
 

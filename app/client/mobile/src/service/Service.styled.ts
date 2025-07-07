@@ -125,6 +125,7 @@ export const styles = StyleSheet.create({
     left: 0,
     width: '100%',
     backgroundColor: 'transparent',
+    overflow: 'hidden',
   },
   tabBar: {
     height: 96,

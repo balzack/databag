@@ -888,7 +888,6 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
-              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <Text style={styles.modalLabel}>{state.strings.encryptionKey}</Text>
                 {sealConfig && !sealDelete && !sealReset && state.config.sealSet && state.config.sealUnlocked && (
@@ -1130,7 +1129,6 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
-              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
                 <Text style={styles.modalDescription}>{state.strings.mfaSteps}</Text>
@@ -1181,7 +1179,6 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
-              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
                 <Text style={styles.modalDescription}>{state.strings.disablePrompt}</Text>
@@ -1209,7 +1206,6 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
-              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <Text style={styles.modalLabel}>{state.strings.changeLogin}</Text>
                 <Text style={styles.modalPrompt}>{state.strings.changePrompt}</Text>
@@ -1271,7 +1267,6 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={3} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
-              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <Text style={styles.modalLabel}>{state.strings.sureLogout}</Text>
 
@@ -1305,7 +1300,6 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
-              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <Text style={styles.modalLabel}>{state.strings.deleteAccount}</Text>
 
@@ -1353,7 +1347,6 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <View style={styles.blockedContent}>
             <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
-              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <View style={styles.blockedHeader}>
                   <Text style={styles.modalLabel}>{state.strings.blockedMessages}</Text>
@@ -1382,7 +1375,6 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <View style={styles.blockedContent}>
             <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
-              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <View style={styles.blockedHeader}>
                   <Text style={styles.modalLabel}>{state.strings.blockedTopics}</Text>
@@ -1411,7 +1403,6 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <View style={styles.blockedContent}>
             <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
-              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <View style={styles.blockedHeader}>
                   <Text style={styles.modalLabel}>{state.strings.blockedContacts}</Text>

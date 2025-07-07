@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {Animated, useAnimatedValue, Keyboard, KeyboardEvent, TextInput as RawInput, Modal, ScrollView, Pressable, View, FlatList} from 'react-native';
+import {Animated, useAnimatedValue, Platform, Keyboard, KeyboardEvent, TextInput as RawInput, Modal, ScrollView, Pressable, View, FlatList} from 'react-native';
 import {styles} from './Conversation.styled';
 import {useConversation} from './useConversation.hook';
 import {Message} from '../message/Message';
@@ -315,59 +315,79 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
               </Animated.View>
               <View style={styles.compose}>
                 <Menu
-                  mode="flat"
-                  elevation={8}
-                  key="actions"
+                  mode={Platform.OS === 'ios' ? 'flat' : 'elevated'}
+                  elevation={Platform.OS === 'ios' ? 8 : 2}
                   visible={options}
                   onDismiss={() => setOptions(false)}
                   anchorPosition="top"
                   anchor={<IconButton style={styles.options} mode="contained" iconColor={theme.colors.onSurface} icon="plus-square" size={20} onPress={() => setOptions(true)} />}>
-                  <Surface elevation={11} style={styles.menu}>
-                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} />
-                    {!disableImage && (
-                      <Pressable style={styles.option} onPress={addImage}>
-                        <Icon style={styles.button} source="camera" size={28} color={theme.colors.primary} />
-                        <Text>{state.strings.attachImage}</Text>
+                    { Platform.OS === 'ios' && (
+                      <Surface elevation={11} style={styles.menu}>
+                        <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} />
+                      {!disableImage && (
+                        <Pressable style={styles.option} onPress={addImage}>
+                          <Icon style={styles.button} source="camera" size={28} color={theme.colors.primary} />
+                          <Text>{state.strings.attachImage}</Text>
+                        </Pressable>
+                      )}
+                      {!disableVideo && (
+                        <Pressable style={styles.option} onPress={addVideo}>
+                          <Icon style={styles.button} source="video-outline" size={28} color={theme.colors.primary} />
+                          <Text>{state.strings.attachVideo}</Text>
+                        </Pressable>
+                      )}
+                      {!disableAudio && (
+                        <Pressable style={styles.option} onPress={addAudio}>
+                          <Icon style={styles.button} source="volume-high" size={28} color={theme.colors.primary} />
+                          <Text>{state.strings.attachAudio}</Text>
+                        </Pressable>
+                      )}
+                      {!disableBinary && (
+                        <Pressable style={styles.option} onPress={addBinary}>
+                          <Icon style={styles.button} source="file-outline" size={28} color={theme.colors.primary} />
+                          <Text>{state.strings.attachFile}</Text>
+                        </Pressable>
+                      )}
+                      {(!disableImage || !disableVideo || !disableAudio || !disableBinary) && <Divider />}
+                      <Pressable
+                        style={styles.option}
+                        onPress={() => {
+                          setOptions(false);
+                          setColorMenu(true);
+                        }}>
+                        <Icon style={styles.button} source="format-color-text" size={28} color={theme.colors.primary} />
+                        <Text>{state.strings.textColor}</Text>
                       </Pressable>
-                    )}
-                    {!disableVideo && (
-                      <Pressable style={styles.option} onPress={addVideo}>
-                        <Icon style={styles.button} source="video-outline" size={28} color={theme.colors.primary} />
-                        <Text>{state.strings.attachVideo}</Text>
+                      <Pressable
+                        style={styles.option}
+                        onPress={() => {
+                          setOptions(false);
+                          setSizeModal(true);
+                        }}>
+                        <Icon style={styles.button} source="format-size" size={28} color={theme.colors.primary} />
+                        <Text>{state.strings.textSize}</Text>
                       </Pressable>
-                    )}
-                    {!disableAudio && (
-                      <Pressable style={styles.option} onPress={addAudio}>
-                        <Icon style={styles.button} source="volume-high" size={28} color={theme.colors.primary} />
-                        <Text>{state.strings.attachAudio}</Text>
-                      </Pressable>
-                    )}
-                    {!disableBinary && (
-                      <Pressable style={styles.option} onPress={addBinary}>
-                        <Icon style={styles.button} source="file-outline" size={28} color={theme.colors.primary} />
-                        <Text>{state.strings.attachFile}</Text>
-                      </Pressable>
-                    )}
-                    {(!disableImage || !disableVideo || !disableAudio || !disableBinary) && <Divider />}
-                    <Pressable
-                      style={styles.option}
-                      onPress={() => {
-                        setOptions(false);
-                        setColorMenu(true);
-                      }}>
-                      <Icon style={styles.button} source="format-color-text" size={28} color={theme.colors.primary} />
-                      <Text>{state.strings.textColor}</Text>
-                    </Pressable>
-                    <Pressable
-                      style={styles.option}
-                      onPress={() => {
-                        setOptions(false);
-                        setSizeModal(true);
-                      }}>
-                      <Icon style={styles.button} source="format-size" size={28} color={theme.colors.primary} />
-                      <Text>{state.strings.textSize}</Text>
-                    </Pressable>
-                  </Surface>
+                    </Surface>
+                  )}
+                  { Platform.OS !== 'ios' && !disableImage && (
+                    <Menu.Item key="image" onPress={addImage} leadingIcon="camera" title={state.strings.attachImage} />    
+                  )}
+                  { Platform.OS !== 'ios' && !disableVideo && (
+                    <Menu.Item key="video" onPress={addVideo} leadingIcon="video-outline" title={state.strings.attachVideo} />    
+                  )}
+                  { Platform.OS !== 'ios' && !disableAudio && (
+                    <Menu.Item key="audio" onPress={addAudio} leadingIcon="volume-high" title={state.strings.attachAudio} />    
+                  )}
+                  { Platform.OS !== 'ios' && !disableBinary && (
+                    <Menu.Item key="binary" onPress={addBinary} leadingIcon="file-outline" title={state.strings.attachFile} />    
+                  )}
+                  { Platform.OS !== 'ios' && (!disableImage || !disableVideo || !disableAudio || !disableBinary) && <Divider />}
+                  { Platform.OS !== 'ios' && (
+                    <Menu.Item key="color" onPress={() => {setOptions(false); setColorMenu(true)}} leadingIcon="format-color-text" title={state.strings.textColor} />  
+                  )}  
+                  { Platform.OS !== 'ios' && (
+                    <Menu.Item key="size" onPress={() => {setOptions(false); setSizeModal(true)}} leadingIcon="format-size" title={state.strings.textSize} /> 
+                  )} 
                 </Menu>
                 <RawInput
                   multiline={true}
@@ -421,7 +441,9 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={sizeModal} onRequestClose={() => setSizeModal(false)}>
         <View style={styles.modal}>
-          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize="dark" />
+          { Platform.OS === 'ios' && (
+            <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize="dark" />
+          )}
           <Surface elevation={1} style={{...styles.sizeSurface, backgroundColor: theme.colors.elevation.level12}}>
             <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackSize="dark" />
             <View style={styles.modalContent}>

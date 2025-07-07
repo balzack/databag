@@ -21,7 +21,6 @@ export function Confirm({show, busy, params}) {
         <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
         <View style={styles.content}>
           <Surface elevation={1} style={{...styles.surface, backgroundColor: theme.colors.elevation.level12}}>
-            <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
             <View style={styles.surfaceContent}>
               {params.title && <Text style={styles.title}>{params.title}</Text>}
               {params.prompt && <Text style={styles.prompt}>{params.prompt}</Text>}

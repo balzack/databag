@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, View, Pressable, TouchableOpacity, Modal} from 'react-native';
+import {FlatList, View, Pressable, TouchableOpacity, Platform, Modal} from 'react-native';
 import {Text, Button, TextInput, Menu, IconButton, Divider, Surface, Icon, useTheme} from 'react-native-paper';
 import {useAccounts} from './useAccounts.hook';
 import {styles} from './Accounts.styled';
@@ -166,8 +166,8 @@ export function AccountsSmall() {
             renderItem={({item}) => {
               const action = (
                 <Menu
-                  mode="flat"
-                  elevation={8}
+                  mode={Platform.OS === 'ios' ? 'flat' : 'elevated'}
+                  elevation={Platform.OS === 'ios' ? 8 : 2}
                   key="actions"
                   visible={more === item.accountId}
                   onDismiss={() => setMore(null)}
@@ -180,33 +180,50 @@ export function AccountsSmall() {
                       onPress={() => setMore(item.accountId)}
                     />
                   }>
-                  <Surface elevation={11}>
-                    <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} />
-                    <Pressable key="storage" style={styles.menuOption}>
-                      <Icon style={styles.button} source="hard-drive" size={24} color={theme.colors.secondary} />
-                      <Text style={{color: theme.colors.secondary}}>{`${Math.floor(item.storageUsed / 1048576)} MB`}</Text>
-                    </Pressable>
-                    <Pressable key="access" style={styles.menuOption} onPress={() => accessAccount(item.accountId)}>
-                      <Icon style={styles.button} source="reset" size={24} color={theme.colors.onSecondary} />
-                      <Text>{state.strings.resetAccount}</Text>
-                    </Pressable>
-                    {item.disabled && (
-                      <Pressable key="enable" style={styles.menuOption} onPress={() => blockAccount(item.accountId, false)}>
-                        <Icon style={styles.button} source="enable-chat" size={24} color={theme.colors.onSecondary} />
-                        <Text>{state.strings.enableAccount}</Text>
+                  { Platform.OS === 'ios' && (
+                    <Surface elevation={11}>
+                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} />
+                      <Pressable key="storage" style={styles.menuOption}>
+                        <Icon style={styles.button} source="hard-drive" size={24} color={theme.colors.secondary} />
+                        <Text style={{color: theme.colors.secondary}}>{`${Math.floor(item.storageUsed / 1048576)} MB`}</Text>
                       </Pressable>
-                    )}
-                    {!item.disabled && (
-                      <Pressable key="disable" style={styles.menuOption} onPress={() => blockAccount(item.accountId, true)}>
-                        <Icon style={styles.button} source="disable-chat" size={24} color={theme.colors.onSecondary} />
-                        <Text>{state.strings.disableAccount}</Text>
+                      <Pressable key="access" style={styles.menuOption} onPress={() => accessAccount(item.accountId)}>
+                        <Icon style={styles.button} source="reset" size={24} color={theme.colors.onSecondary} />
+                        <Text>{state.strings.resetAccount}</Text>
                       </Pressable>
-                    )}
-                    <Pressable key="delete" style={styles.menuOption} onPress={() => showRemove(item.accountId)}>
-                      <Icon style={styles.button} source="trash-2" size={24} color={theme.colors.onSecondary} />
-                      <Text>{state.strings.deleteAccount}</Text>
-                    </Pressable>
-                  </Surface>
+                      {item.disabled && (
+                        <Pressable key="enable" style={styles.menuOption} onPress={() => blockAccount(item.accountId, false)}>
+                          <Icon style={styles.button} source="enable-chat" size={24} color={theme.colors.onSecondary} />
+                          <Text>{state.strings.enableAccount}</Text>
+                        </Pressable>
+                      )}
+                      {!item.disabled && (
+                        <Pressable key="disable" style={styles.menuOption} onPress={() => blockAccount(item.accountId, true)}>
+                          <Icon style={styles.button} source="disable-chat" size={24} color={theme.colors.onSecondary} />
+                          <Text>{state.strings.disableAccount}</Text>
+                        </Pressable>
+                      )}
+                      <Pressable key="delete" style={styles.menuOption} onPress={() => showRemove(item.accountId)}>
+                        <Icon style={styles.button} source="trash-2" size={24} color={theme.colors.onSecondary} />
+                        <Text>{state.strings.deleteAccount}</Text>
+                      </Pressable>
+                    </Surface>
+                  )}
+                  { Platform.OS !== 'ios' && (
+                    <Menu.Item key="storage" disabled={true} leadingIcon="hard-drive" title={`${Math.floor(item.storageUsed / 1048576)} MB`} />
+                  )}
+                  { Platform.OS !== 'ios' && (
+                    <Menu.Item key="access" leadingIcon="reset" onPress={() => accessAccount(item.accountId)} title={state.strings.resetAccount} />
+                  )}
+                  { Platform.OS !== 'ios' && item.disabled && (
+                    <Menu.Item key="enable" leadingIcon="enable-chat" onPress={() => blockAccount(item.accountId, false)} title={state.strings.enableAccount} />
+                  )}
+                  { Platform.OS !== 'ios' && !item.disabled && (
+                    <Menu.Item key="disable" leadingIcon="disable-chat" onPress={() => blockAccount(item.accountId, true)} title={state.strings.disableAccount} />
+                  )}
+                  { Platform.OS !== 'ios' && (
+                    <Menu.Item key="delete" leadingIcon="trash-2" onPress={() => showRemove(item.accountId)} title={state.strings.deleteAccount} />
+                  )}
                 </Menu>
               );
               return (
@@ -236,7 +253,6 @@ export function AccountsSmall() {
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
           <View style={styles.modalArea}>
             <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
-              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={2} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <Text style={styles.modalLabel}>{state.strings.resetAccount}</Text>
                 <Text style={styles.modalDescription}>{state.strings.accessingToken}</Text>
@@ -264,7 +280,6 @@ export function AccountsSmall() {
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <View style={styles.modalArea}>
             <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
-              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
               <View style={styles.modalContent}>
                 <Text style={styles.modalLabel}>{state.strings.addAccount}</Text>
                 <Text style={styles.modalDescription}>{state.strings.addingToken}</Text>
@@ -291,8 +306,7 @@ export function AccountsSmall() {
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <View style={styles.modalArea}>
-            <Surface elevation={1} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
-              <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
+            <Surface elevation={2} style={{...styles.modalSurface, backgroundColor: theme.colors.elevation.level12}}>
               <View style={styles.modalContent}>
                 <Text style={styles.modalLabel}>{state.strings.deleteAccount}</Text>
 
