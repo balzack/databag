@@ -323,7 +323,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
                   anchor={<IconButton style={styles.options} mode="contained" iconColor={theme.colors.onSurface} icon="plus-square" size={20} onPress={() => setOptions(true)} />}>
                     { Platform.OS === 'ios' && (
                       <Surface elevation={11} style={styles.menu}>
-                        <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} />
+                        <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackColor={theme.colors.name} />
                       {!disableImage && (
                         <Pressable style={styles.option} onPress={addImage}>
                           <Icon style={styles.button} source="camera" size={28} color={theme.colors.primary} />
@@ -420,7 +420,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
               </View>
             </Surface>
           </View>
-          <View style={{...styles.keyboardSpacer, height: keyboardHeight - 96}} />
+          <View style={{...styles.keyboardSpacer, height: keyboardHeight - (Platform.OS === 'ios' ? 96 : 80)}} />
         </SafeAreaView>
       </Surface>
       <Confirm show={alert} params={alertParams} />
@@ -428,8 +428,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={colorMenu} onRequestClose={() => setColorMenu(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
-          <Surface elevation={1} style={{...styles.colorSurface, backgroundColor: theme.colors.elevation.level12}}>
-            <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackColor="dark" />
+          <Surface elevation={2} style={{...styles.colorSurface, backgroundColor: theme.colors.elevation.level12}}>
             <View style={styles.modalContent}>
               <View style={styles.modalArea}>
                 <ColorPicker color={state.textColorSet ? state.textColor : undefined} onColorChange={actions.setTextColor} onColorChangeComplete={actions.setTextColor} swatched={false} />
@@ -443,11 +442,8 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
       </Modal>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={sizeModal} onRequestClose={() => setSizeModal(false)}>
         <View style={styles.modal}>
-          { Platform.OS === 'ios' && (
-            <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize="dark" />
-          )}
-          <Surface elevation={1} style={{...styles.sizeSurface, backgroundColor: theme.colors.elevation.level12}}>
-            <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={1} reducedTransparencyFallbackSize="dark" />
+          <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
+          <Surface elevation={2} style={{...styles.sizeSurface, backgroundColor: theme.colors.elevation.level12}}>
             <View style={styles.modalContent}>
               <Button
                 mode="contained"

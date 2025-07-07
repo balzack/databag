@@ -278,7 +278,7 @@ function App(): React.JSX.Element {
       <DisplayContextProvider>
         <PaperProvider settings={{icon: FontMix}} theme={theme}>
           <MemoryRouter>
-            <StatusBar backgroundColor="#8FBEA7" />
+            <StatusBar backgroundColor={colorScheme === 'dark' ? '#191919' : '#8FBEA7'} />
             <Root />
             <Routes>
               <Route path="/" element={<View />} />
