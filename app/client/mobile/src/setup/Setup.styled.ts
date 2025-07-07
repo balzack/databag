@@ -368,10 +368,10 @@ export const styles = StyleSheet.create({
     display: 'flex',
     height: 72,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-begin',
     paddingBottom: 16,
-    paddingRight: 8,
-    paddingLeft: 8,
+    paddingRight: 32,
+    paddingLeft: 32,
   },
   headerText: {
     color: 'white',
