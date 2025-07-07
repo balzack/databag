@@ -389,23 +389,25 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
                     <Menu.Item key="size" onPress={() => {setOptions(false); setSizeModal(true)}} leadingIcon="format-size" title={state.strings.textSize} /> 
                   )} 
                 </Menu>
-                <RawInput
-                  multiline={true}
-                  mode="outlined"
-                  dense={true}
-                  style={{color: state.textColorSet ? state.textColor : theme.colors.onSurface, fontSize: state.textSize, ...styles.textInput}}
-                  outlineColor="transparent"
-                  activeOutlineColor={Colors.placeholder}
-                  spellcheck={false}
-                  autoComplete="off"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  placeholder={state.strings.newMessage}
-                  placeholderTextColor={state.textColorSet ? state.textColor : theme.colors.tertiery}
-                  selectionColor={state.textColorSet ? state.textColor : theme.colors.onSurface}
-                  value={state.message}
-                  onChangeText={value => actions.setMessage(value)}
-                />
+                <View style={styles.textInput}>
+                  <RawInput
+                    multiline={true}
+                    mode="outlined"
+                    dense={true}
+                    style={{color: state.textColorSet ? state.textColor : theme.colors.onSurface, fontSize: state.textSize}}
+                    outlineColor="transparent"
+                    activeOutlineColor={Colors.placeholder}
+                    spellcheck={false}
+                    autoComplete="off"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    placeholder={state.strings.newMessage}
+                    placeholderTextColor={state.textColorSet ? state.textColor : theme.colors.tertiery}
+                    selectionColor={state.textColorSet ? state.textColor : theme.colors.onSurface}
+                    value={state.message}
+                    onChangeText={value => actions.setMessage(value)}
+                  />
+                </View>
                 <IconButton
                   style={styles.send}
                   loading={sending}
