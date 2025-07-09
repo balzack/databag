@@ -284,7 +284,7 @@ export function ContentSmall({
                       notesPlaceholder={state.strings.notes}
                       subjectPlaceholder={state.strings.unknown}
                       subject={subject}
-                      messagePlaceholder={`[${state.strings.sealed}]`}
+                      messagePlaceholder={`${state.strings.encrypted}`}
                       message={message}
                       action={action}
                     />
