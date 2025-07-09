@@ -206,7 +206,7 @@ export function ContactsSmall({
                   { Platform.OS !== 'ios' && syncStatus === 'connected' && (
                     <Menu.Item key="call" leadingIcon="phone" onPress={() => call(item)} title={state.strings.callAction} />
                   )}
-                  { Platform.OS !== 'ios' && syncStatus === 'connceted' && (
+                  { Platform.OS !== 'ios' && syncStatus === 'connected' && (
                     <Menu.Item key="text" leadingIcon="chat-circle" onPress={() => text(item)} title={state.strings.textAction} />
                   )}
                   { Platform.OS !== 'ios' && syncStatus === 'confirmed' && (
@@ -346,23 +346,27 @@ export function ContactsSmall({
                           <Text>{state.strings.resyncAction}</Text>
                         </Pressable>
                       )}
-                      <Pressable key="call" style={styles.menuOption} onPress={() => call(item)}>
-                        <Icon style={styles.button} source="phone" size={28} color={theme.colors.primary} />
-                        <Text>{state.strings.callAction}</Text>
-                      </Pressable>
-                      <Pressable key="text" style={styles.menuOption} onPress={() => text(item)}>
-                        <Icon style={styles.button} source="chat-circle" size={28} color={theme.colors.primary} />
-                        <Text>{state.strings.textAction}</Text>
-                      </Pressable>
+                      {syncStatus !== 'offsync' && (
+                        <Pressable key="call" style={styles.menuOption} onPress={() => call(item)}>
+                          <Icon style={styles.button} source="phone" size={28} color={theme.colors.primary} />
+                          <Text>{state.strings.callAction}</Text>
+                        </Pressable>
+                      )}
+                      {syncStatus !== 'offsync' && (
+                        <Pressable key="text" style={styles.menuOption} onPress={() => text(item)}>
+                          <Icon style={styles.button} source="chat-circle" size={28} color={theme.colors.primary} />
+                          <Text>{state.strings.textAction}</Text>
+                        </Pressable>
+                      )}
                     </Surface>
                   )}
                   { Platform.OS !== 'ios' && syncStatus === 'offsync' && (
                     <Menu.Item key="resync" leadingIcon="cached" onPress={() => resync(item)} title={state.strings.resyncAction} />
                   )}
-                  { Platform.OS !== 'ios' && (
+                  { Platform.OS !== 'ios' && syncStatus !== 'offsync' && (
                     <Menu.Item key="call" leadingIcon="phone" onPress={() => call(item)} title={state.strings.callAction} />
                   )}
-                  { Platform.OS !== 'ios' && (
+                  { Platform.OS !== 'ios' && syncStatus !== 'offsync' && (
                     <Menu.Item key="text" leadingIcon="chat-circle" onPress={() => text(item)} title={state.strings.textAction} />
                   )}
                 </Menu>
