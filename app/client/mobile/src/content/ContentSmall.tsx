@@ -162,7 +162,7 @@ export function ContentSmall({
               />
             </Surface>
             {(state.sealSet || state.allowUnsealed) && (
-              <Button icon="message1" mode="contained" textColor="white" style={styles.newButton} onPress={createConversation}>
+              <Button icon="message1" mode="contained" textColor="white" style={styles.newButton} contentStyle={styles.newContent} onPress={createConversation}>
                 {state.strings.new}
               </Button>
             )}

@@ -92,7 +92,7 @@ export function Assemble({close, openConversation}: {close: () => void; openConv
             />
           </Surface>
           {(seal || state.allowUnsealed) && (
-            <Button icon="message1" mode="contained" loading={creating} textColor="white" style={styles.newButton} onPress={create}>
+            <Button icon="message1" mode="contained" loading={creating} textColor="white" style={styles.newButton} contentStyle={styles.newContent} onPress={create}>
               {state.strings.chat}
             </Button>
           )}

@@ -135,7 +135,7 @@ export function ContactsSmall({
                 onChangeText={value => actions.setFilter(value)}
               />
             </Surface>
-            <Button icon="user-plus" mode="contained" textColor="white" style={styles.newContactButton} onPress={openRegistry}>
+            <Button icon="user-plus" mode="contained" textColor="white" style={styles.newContactButton} contentStyle={styles.newContactContent} onPress={openRegistry}>
               {state.strings.new}
             </Button>
           </SafeAreaView>

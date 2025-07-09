@@ -92,6 +92,8 @@ export const styles = StyleSheet.create({
   },
   submit: {
     borderRadius: 8,
+  },
+  submitContent: {
     paddingLeft: 32,
     paddingRight: 32,
   },

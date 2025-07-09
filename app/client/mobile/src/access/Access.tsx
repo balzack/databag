@@ -106,7 +106,7 @@ export function Access() {
             )}
             {state.mode === 'splash' && (
               <Animated.View style={[styles.start, {opacity: switching}]}>
-                <Button mode="contained" textColor="white" style={styles.submit} onPress={() => begin(false)}>
+                <Button mode="contained" textColor="white" style={styles.submit} contentStyle={styles.submitContent} onPress={() => begin(false)}>
                   {state.strings.login}
                 </Button>
                 <View style={styles.linkline}>

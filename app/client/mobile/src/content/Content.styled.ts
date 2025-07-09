@@ -319,11 +319,13 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   newButton: {
-    height: 52,
     borderRadius: 8,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  newContent: {
+    height: 52
   },
   tabView: {
     width: '100%',

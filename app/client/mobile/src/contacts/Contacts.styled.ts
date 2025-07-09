@@ -46,11 +46,13 @@ export const styles = StyleSheet.create({
     gap: 8,
   },
   newContactButton: {
-    height: 52,
     borderRadius: 8,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  newContactContent: { 
+    height: 52,
   },
   tabContainer: {
     width: '100%',
