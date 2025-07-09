@@ -13,6 +13,9 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     width: '100%',
   },
+  menuContent: {
+    borderRadius: 8,
+  },
   tabs: {
     position: 'absolute',
     top: 68,
@@ -325,7 +328,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   newContent: {
-    height: 52
+    height: 52,
   },
   tabView: {
     width: '100%',

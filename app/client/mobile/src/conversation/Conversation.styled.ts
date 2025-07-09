@@ -12,6 +12,9 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
     color: 'white',
   },
+  menuContent: {
+    borderRadius: 8,
+  },
   option: {
     padding: 16,
     display: 'flex',

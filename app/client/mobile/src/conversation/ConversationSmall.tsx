@@ -317,13 +317,14 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
                 <Menu
                   mode={Platform.OS === 'ios' ? 'flat' : 'elevated'}
                   elevation={Platform.OS === 'ios' ? 8 : 2}
+                  contentStyle={styles.menuContent}
                   visible={options}
                   onDismiss={() => setOptions(false)}
                   anchorPosition="top"
                   anchor={<IconButton style={styles.options} mode="contained" iconColor={theme.colors.onSurface} icon="plus-square" size={20} onPress={() => setOptions(true)} />}>
-                    { Platform.OS === 'ios' && (
-                      <Surface elevation={11} style={styles.menu}>
-                        <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackColor={theme.colors.name} />
+                  {Platform.OS === 'ios' && (
+                    <Surface elevation={11} style={styles.menu}>
+                      <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackColor={theme.colors.name} />
                       {!disableImage && (
                         <Pressable style={styles.option} onPress={addImage}>
                           <Icon style={styles.button} source="camera" size={28} color={theme.colors.primary} />
@@ -369,25 +370,33 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
                       </Pressable>
                     </Surface>
                   )}
-                  { Platform.OS !== 'ios' && !disableImage && (
-                    <Menu.Item key="image" onPress={addImage} leadingIcon="camera" title={state.strings.attachImage} />    
+                  {Platform.OS !== 'ios' && !disableImage && <Menu.Item key="image" onPress={addImage} leadingIcon="camera" title={state.strings.attachImage} />}
+                  {Platform.OS !== 'ios' && !disableVideo && <Menu.Item key="video" onPress={addVideo} leadingIcon="video-outline" title={state.strings.attachVideo} />}
+                  {Platform.OS !== 'ios' && !disableAudio && <Menu.Item key="audio" onPress={addAudio} leadingIcon="volume-high" title={state.strings.attachAudio} />}
+                  {Platform.OS !== 'ios' && !disableBinary && <Menu.Item key="binary" onPress={addBinary} leadingIcon="file-outline" title={state.strings.attachFile} />}
+                  {Platform.OS !== 'ios' && (!disableImage || !disableVideo || !disableAudio || !disableBinary) && <Divider />}
+                  {Platform.OS !== 'ios' && (
+                    <Menu.Item
+                      key="color"
+                      onPress={() => {
+                        setOptions(false);
+                        setColorMenu(true);
+                      }}
+                      leadingIcon="format-color-text"
+                      title={state.strings.textColor}
+                    />
                   )}
-                  { Platform.OS !== 'ios' && !disableVideo && (
-                    <Menu.Item key="video" onPress={addVideo} leadingIcon="video-outline" title={state.strings.attachVideo} />    
+                  {Platform.OS !== 'ios' && (
+                    <Menu.Item
+                      key="size"
+                      onPress={() => {
+                        setOptions(false);
+                        setSizeModal(true);
+                      }}
+                      leadingIcon="format-size"
+                      title={state.strings.textSize}
+                    />
                   )}
-                  { Platform.OS !== 'ios' && !disableAudio && (
-                    <Menu.Item key="audio" onPress={addAudio} leadingIcon="volume-high" title={state.strings.attachAudio} />    
-                  )}
-                  { Platform.OS !== 'ios' && !disableBinary && (
-                    <Menu.Item key="binary" onPress={addBinary} leadingIcon="file-outline" title={state.strings.attachFile} />    
-                  )}
-                  { Platform.OS !== 'ios' && (!disableImage || !disableVideo || !disableAudio || !disableBinary) && <Divider />}
-                  { Platform.OS !== 'ios' && (
-                    <Menu.Item key="color" onPress={() => {setOptions(false); setColorMenu(true)}} leadingIcon="format-color-text" title={state.strings.textColor} />  
-                  )}  
-                  { Platform.OS !== 'ios' && (
-                    <Menu.Item key="size" onPress={() => {setOptions(false); setSizeModal(true)}} leadingIcon="format-size" title={state.strings.textSize} /> 
-                  )} 
                 </Menu>
                 <View style={styles.textInput}>
                   <RawInput

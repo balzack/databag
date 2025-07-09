@@ -10,6 +10,9 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
   },
+  menuContent: {
+    borderRadius: 8,
+  },
   inputBorder: {
     borderRadius: 12,
     borderWidth: 0,

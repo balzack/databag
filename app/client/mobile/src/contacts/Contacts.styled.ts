@@ -12,6 +12,9 @@ export const styles = StyleSheet.create({
   menu: {
     borderRadius: 8,
   },
+  menuContent: {
+    borderRadius: 8,
+  },
   blur: {
     position: 'absolute',
     top: 0,
@@ -51,7 +54,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  newContactContent: { 
+  newContactContent: {
     height: 52,
   },
   tabContainer: {

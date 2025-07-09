@@ -237,11 +237,12 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
             <Menu
               mode={Platform.OS === 'ios' ? 'flat' : 'elevated'}
               elevation={Platform.OS === 'ios' ? 8 : 2}
+              contentStyle={styles.menuContent}
               key="actions"
               visible={options}
               onDismiss={() => setOptions(false)}
               anchor={<IconButton style={styles.menuButton} icon="dots-horizontal-circle-outline" size={16} onPress={() => setOptions(true)} />}>
-              { Platform.OS === 'ios' && (
+              {Platform.OS === 'ios' && (
                 <Surface elevation={11} style={styles.menu}>
                   <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} />
                   {!locked && profile && status === 'confirmed' && (
@@ -270,18 +271,10 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
                   )}
                 </Surface>
               )}
-              { Platform.OS !== 'ios' && !locked && profile && status === 'confirmed' && (
-                <Menu.Item key="edit" onPress={edit} leadingIcon="square-edit-outline" title={state.strings.editOption} />
-              )}
-              { Platform.OS !== 'ios' && (host || profile) && (
-                <Menu.Item key="remove" onPress={remove} leadingIcon="trash-can-outline" title={state.strings.deleteOption} />
-              )}
-              { Platform.OS !== 'ios' && !profile && (
-                <Menu.Item key="block" onPress={block} leadingIcon="eye-remove-outline" title={state.strings.blockOption} />
-              )}
-              { Platform.OS !== 'ios' && !profile && (
-                <Menu.Item key="edit" onPress={report} leadingIcon="alert-octagon-outline" title={state.strings.reportOption} />
-              )}
+              {Platform.OS !== 'ios' && !locked && profile && status === 'confirmed' && <Menu.Item key="edit" onPress={edit} leadingIcon="square-edit-outline" title={state.strings.editOption} />}
+              {Platform.OS !== 'ios' && (host || profile) && <Menu.Item key="remove" onPress={remove} leadingIcon="trash-can-outline" title={state.strings.deleteOption} />}
+              {Platform.OS !== 'ios' && !profile && <Menu.Item key="block" onPress={block} leadingIcon="eye-remove-outline" title={state.strings.blockOption} />}
+              {Platform.OS !== 'ios' && !profile && <Menu.Item key="edit" onPress={report} leadingIcon="alert-octagon-outline" title={state.strings.reportOption} />}
             </Menu>
           </View>
         </View>

@@ -15,6 +15,9 @@ export const styles = StyleSheet.create({
   username: {
     fontWeight: 'bold',
   },
+  menuContent: {
+    borderRadius: 8,
+  },
   sectionLabel: {
     width: '100%',
     paddingLeft: 18,

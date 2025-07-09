@@ -726,7 +726,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                           right={<TextInput.Icon style={styles.icon} size={22} icon="dots-horizontal-circle-outline" />}
                         />
                         <Pressable style={styles.navPress} onPress={() => setLanguage(true)}>
-                          <Menu visible={language} onDismiss={() => setLanguage(false)} anchor={<View style={styles.anchor} />}>
+                          <Menu visible={language} onDismiss={() => setLanguage(false)} anchor={<View style={styles.anchor} contentStyle={styles.menuContent} />}>
                             {languageOptions}
                           </Menu>
                         </Pressable>

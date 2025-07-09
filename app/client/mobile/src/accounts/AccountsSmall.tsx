@@ -180,7 +180,7 @@ export function AccountsSmall() {
                       onPress={() => setMore(item.accountId)}
                     />
                   }>
-                  { Platform.OS === 'ios' && (
+                  {Platform.OS === 'ios' && (
                     <Surface elevation={11}>
                       <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackSize={theme.colors.name} />
                       <Pressable key="storage" style={styles.menuOption}>
@@ -209,21 +209,15 @@ export function AccountsSmall() {
                       </Pressable>
                     </Surface>
                   )}
-                  { Platform.OS !== 'ios' && (
-                    <Menu.Item key="storage" disabled={true} leadingIcon="hard-drive" title={`${Math.floor(item.storageUsed / 1048576)} MB`} />
-                  )}
-                  { Platform.OS !== 'ios' && (
-                    <Menu.Item key="access" leadingIcon="reset" onPress={() => accessAccount(item.accountId)} title={state.strings.resetAccount} />
-                  )}
-                  { Platform.OS !== 'ios' && item.disabled && (
+                  {Platform.OS !== 'ios' && <Menu.Item key="storage" disabled={true} leadingIcon="hard-drive" title={`${Math.floor(item.storageUsed / 1048576)} MB`} />}
+                  {Platform.OS !== 'ios' && <Menu.Item key="access" leadingIcon="reset" onPress={() => accessAccount(item.accountId)} title={state.strings.resetAccount} />}
+                  {Platform.OS !== 'ios' && item.disabled && (
                     <Menu.Item key="enable" leadingIcon="enable-chat" onPress={() => blockAccount(item.accountId, false)} title={state.strings.enableAccount} />
                   )}
-                  { Platform.OS !== 'ios' && !item.disabled && (
+                  {Platform.OS !== 'ios' && !item.disabled && (
                     <Menu.Item key="disable" leadingIcon="disable-chat" onPress={() => blockAccount(item.accountId, true)} title={state.strings.disableAccount} />
                   )}
-                  { Platform.OS !== 'ios' && (
-                    <Menu.Item key="delete" leadingIcon="trash-2" onPress={() => showRemove(item.accountId)} title={state.strings.deleteAccount} />
-                  )}
+                  {Platform.OS !== 'ios' && <Menu.Item key="delete" leadingIcon="trash-2" onPress={() => showRemove(item.accountId)} title={state.strings.deleteAccount} />}
                 </Menu>
               );
               return (

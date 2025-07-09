@@ -185,11 +185,12 @@ export function ContentSmall({
                 const action = (
                   <Menu
                     mode={Platform.OS === 'ios' ? 'flat' : 'elevated'}
-                    elevation={Platform.OS === 'ios' ? 8 :  2}
+                    contentStyle={styles.menuContent}
+                    elevation={Platform.OS === 'ios' ? 8 : 2}
                     visible={allTab && more === `${item.cardId}:${item.channelId}`}
                     onDismiss={() => setMore(null)}
                     anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
-                    {  Platform.OS === 'ios' && (
+                    {Platform.OS === 'ios' && (
                       <Surface elevation={11} style={styles.menu}>
                         <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
                         {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
@@ -256,20 +257,59 @@ export function ContentSmall({
                         </Pressable>
                       </Surface>
                     )}
-                    { Platform.OS !== 'ios' && state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
-                      <Menu.Item leadingIcon="star-filled" onPress={() => { setMore(null); actions.clearFavorite(item.cardId, item.channelId) }} title={state.strings.removeFavorites} />
+                    {Platform.OS !== 'ios' && state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                      <Menu.Item
+                        leadingIcon="star-filled"
+                        onPress={() => {
+                          setMore(null);
+                          actions.clearFavorite(item.cardId, item.channelId);
+                        }}
+                        title={state.strings.removeFavorites}
+                      />
                     )}
-                    { Platform.OS !== 'ios' && !state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
-                      <Menu.Item leadingIcon="star" onPress={() => { setMore(null); actions.setFavorite(item.cardId, item.channelId) }} title={state.strings.addFavorites} />
+                    {Platform.OS !== 'ios' && !state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                      <Menu.Item
+                        leadingIcon="star"
+                        onPress={() => {
+                          setMore(null);
+                          actions.setFavorite(item.cardId, item.channelId);
+                        }}
+                        title={state.strings.addFavorites}
+                      />
                     )}
-                    { Platform.OS !== 'ios' && unread && (
-                      <Menu.Item leadingIcon="mail-filled" onPress={() => { setMore(null); actions.clearUnread(item.cardId, item.channelId) }} title={state.strings.markRead} />
+                    {Platform.OS !== 'ios' && unread && (
+                      <Menu.Item
+                        leadingIcon="mail-filled"
+                        onPress={() => {
+                          setMore(null);
+                          actions.clearUnread(item.cardId, item.channelId);
+                        }}
+                        title={state.strings.markRead}
+                      />
                     )}
-                    { Platform.OS !== 'ios' && !unread && (
-                      <Menu.Item leadingIcon="mail" onPress={() => { setMore(null); actions.setUnread(item.cardId, item.channelId) }} title={state.strings.markUnread} />
+                    {Platform.OS !== 'ios' && !unread && (
+                      <Menu.Item
+                        leadingIcon="mail"
+                        onPress={() => {
+                          setMore(null);
+                          actions.setUnread(item.cardId, item.channelId);
+                        }}
+                        title={state.strings.markUnread}
+                      />
                     )}
-                    { Platform.OS !== 'ios' && (
-                      <Menu.Item leadingIcon="trash-2" onPress={() => { setMore(null); if(item.cardId) { setLeave({cardId: item.cardId, channelId: item.channelId}) } else { setRemove({ channelId: item.channelId }) } }} title={hosted ? state.strings.deleteChat : state.strings.leaveChat} />
+                    {Platform.OS !== 'ios' && (
+                      <Menu.Item
+                        leadingIcon="trash-2"
+                        onPress={() => {
+                          setMore(null);
+                          if (item.cardId) {
+                            setLeave({cardId: item.cardId, channelId: item.channelId});
+                          } else {
+                            setRemove({channelId: item.channelId});
+                          }
+                        }}
+                        title={hosted ? state.strings.deleteChat : state.strings.leaveChat}
+                      />
                     )}
                   </Menu>
                 );
@@ -310,10 +350,11 @@ export function ContentSmall({
                   <Menu
                     mode={Platform.OS === 'ios' ? 'flat' : 'elevated'}
                     elevation={Platform.OS === 'ios' ? 8 : 2}
+                    contentStyle={styles.menuContent}
                     visible={unreadTab && more === `${item.cardId}:${item.channelId}`}
                     onDismiss={() => setMore(null)}
                     anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
-                    { Platform.OS === 'ios' && (
+                    {Platform.OS === 'ios' && (
                       <Surface elevation={11} style={styles.menu}>
                         <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
                         {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
@@ -366,17 +407,49 @@ export function ContentSmall({
                         </Pressable>
                       </Surface>
                     )}
-                    { Platform.OS !== 'ios' && state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
-                      <Menu.Item leadingIcon="star-filled" onPress={() => { setMore(null); actions.clearFavorite(item.cardId, item.channelId) }} title={state.strings.removeFavorites} />
+                    {Platform.OS !== 'ios' && state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                      <Menu.Item
+                        leadingIcon="star-filled"
+                        onPress={() => {
+                          setMore(null);
+                          actions.clearFavorite(item.cardId, item.channelId);
+                        }}
+                        title={state.strings.removeFavorites}
+                      />
                     )}
-                    { Platform.OS !== 'ios' && !state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
-                      <Menu.Item leadingIcon="star" onPress={() => { setMore(null); actions.setFavorite(item.cardId, item.channelId) }} title={state.strings.addFavorites} />
+                    {Platform.OS !== 'ios' && !state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                      <Menu.Item
+                        leadingIcon="star"
+                        onPress={() => {
+                          setMore(null);
+                          actions.setFavorite(item.cardId, item.channelId);
+                        }}
+                        title={state.strings.addFavorites}
+                      />
                     )}
-                    { Platform.OS !== 'ios' && (
-                      <Menu.Item leadingIcon="mail-filled" onPress={() => { setMore(null); actions.clearUnread(item.cardId, item.channelId) }} title={state.strings.markRead} />
+                    {Platform.OS !== 'ios' && (
+                      <Menu.Item
+                        leadingIcon="mail-filled"
+                        onPress={() => {
+                          setMore(null);
+                          actions.clearUnread(item.cardId, item.channelId);
+                        }}
+                        title={state.strings.markRead}
+                      />
                     )}
-                    { Platform.OS !== 'ios' && (
-                      <Menu.Item leadingIcon="trash-2" onPress={() => { setMore(null); if(item.cardId) { setLeave({cardId: item.cardId, channelId: item.channelId}) } else { setRemove({ channelId: item.channelId }) } }} title={hosted ? state.strings.deleteChat : state.strings.leaveChat} />
+                    {Platform.OS !== 'ios' && (
+                      <Menu.Item
+                        leadingIcon="trash-2"
+                        onPress={() => {
+                          setMore(null);
+                          if (item.cardId) {
+                            setLeave({cardId: item.cardId, channelId: item.channelId});
+                          } else {
+                            setRemove({channelId: item.channelId});
+                          }
+                        }}
+                        title={hosted ? state.strings.deleteChat : state.strings.leaveChat}
+                      />
                     )}
                   </Menu>
                 );
@@ -417,10 +490,11 @@ export function ContentSmall({
                   <Menu
                     mode={Platform.OS === 'ios' ? 'flat' : 'elevated'}
                     elevation={Platform.OS === 'ios' ? 8 : 2}
+                    contentStyle={styles.menuContent}
                     visible={favoritesTab && more === `${item.cardId}:${item.channelId}`}
                     onDismiss={() => setMore(null)}
                     anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
-                    { Platform.OS === 'ios' && (
+                    {Platform.OS === 'ios' && (
                       <Surface elevation={11} style={styles.menu}>
                         <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
                         {state.favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
@@ -487,17 +561,49 @@ export function ContentSmall({
                         </Pressable>
                       </Surface>
                     )}
-                    { Platform.OS !== 'ios' && (
-                      <Menu.Item leadingIcon="star-filled" onPress={() => { setMore(null); actions.clearFavorite(item.cardId, item.channelId) }} title={state.strings.removeFavorites} />
+                    {Platform.OS !== 'ios' && (
+                      <Menu.Item
+                        leadingIcon="star-filled"
+                        onPress={() => {
+                          setMore(null);
+                          actions.clearFavorite(item.cardId, item.channelId);
+                        }}
+                        title={state.strings.removeFavorites}
+                      />
                     )}
-                    { Platform.OS !== 'ios' && unread && (
-                      <Menu.Item leadingIcon="mail-filled" onPress={() => { setMore(null); actions.clearUnread(item.cardId, item.channelId) }} title={state.strings.markRead} />
+                    {Platform.OS !== 'ios' && unread && (
+                      <Menu.Item
+                        leadingIcon="mail-filled"
+                        onPress={() => {
+                          setMore(null);
+                          actions.clearUnread(item.cardId, item.channelId);
+                        }}
+                        title={state.strings.markRead}
+                      />
                     )}
-                    { Platform.OS !== 'ios' && !unread && (
-                      <Menu.Item leadingIcon="mail" onPress={() => { setMore(null); actions.setUnread(item.cardId, item.channelId) }} title={state.strings.markUnread} />
+                    {Platform.OS !== 'ios' && !unread && (
+                      <Menu.Item
+                        leadingIcon="mail"
+                        onPress={() => {
+                          setMore(null);
+                          actions.setUnread(item.cardId, item.channelId);
+                        }}
+                        title={state.strings.markUnread}
+                      />
                     )}
-                    { Platform.OS !== 'ios' && (
-                      <Menu.Item leadingIcon="trash-2" onPress={() => { setMore(null); if(item.cardId) { setLeave({cardId: item.cardId, channelId: item.channelId}) } else { setRemove({ channelId: item.channelId }) } }} title={hosted ? state.strings.deleteChat : state.strings.leaveChat} />
+                    {Platform.OS !== 'ios' && (
+                      <Menu.Item
+                        leadingIcon="trash-2"
+                        onPress={() => {
+                          setMore(null);
+                          if (item.cardId) {
+                            setLeave({cardId: item.cardId, channelId: item.channelId});
+                          } else {
+                            setRemove({channelId: item.channelId});
+                          }
+                        }}
+                        title={hosted ? state.strings.deleteChat : state.strings.leaveChat}
+                      />
                     )}
                   </Menu>
                 );
