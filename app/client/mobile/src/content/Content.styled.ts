@@ -205,6 +205,8 @@ export const styles = StyleSheet.create({
   },
   action: {
     backgroundColor: 'transparent',
+    borderRadius: 0,
+    margin: 0,
   },
   addHeader: {
     display: 'flex',

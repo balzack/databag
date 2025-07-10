@@ -97,7 +97,8 @@ export const styles = StyleSheet.create({
     paddingRight: 16,
   },
   action: {
-    backgroundColor: 'transparent',
+    borderRadius: 0,
+    margin: 0,
   },
   tab: {
     width: 108,
