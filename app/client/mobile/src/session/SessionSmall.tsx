@@ -48,16 +48,16 @@ function ContentTab({scheme, textCard, contentTab, share}: {scheme: string; text
             />
           )}
         </ContentStack.Screen>
-        <ContentStack.Screen name="assemble" options={{animation: 'simple_push'}}>
+        <ContentStack.Screen name="assemble" options={{...styles.noHeader, animation: Platform.OS === 'ios' ? 'simple_push' : 'none'}}>
           {props => <Assemble close={() => props.navigation.goBack()} openConversation={() => props.navigation.replace('conversation')} />}
         </ContentStack.Screen>
-        <ContentStack.Screen name="edit" options={{animation: 'simple_push'}}>
+        <ContentStack.Screen name="edit" options={{...styles.noHeader, animation: Platform.OS ==='ios' ? 'simple_push' : 'none'}}>
           {props => <Members close={() => props.navigation.goBack()} />}
         </ContentStack.Screen>
-        <ContentStack.Screen name="conversation" options={{...styles.noHeader, animation: 'simple_push'}}>
+        <ContentStack.Screen name="conversation" options={{...styles.noHeader, animation: Platform.OS === 'ios' ? 'simple_push' : 'none'}}>
           {props => <Conversation openDetails={() => props.navigation.navigate('details')} close={() => props.navigation.goBack()} />}
         </ContentStack.Screen>
-        <ContentStack.Screen name="details" options={{...styles.noHeader, animation: 'simple_push'}}>
+        <ContentStack.Screen name="details" options={{...styles.noHeader, animation: Platform.OS === 'ios' ? 'simple_push' : 'none'}}>
           {props => <Details close={() => props.navigation.goBack()} edit={() => props.navigation.navigate('edit')} closeAll={() => props.navigation.popToTop()} />}
         </ContentStack.Screen>
       </ContentStack.Navigator>
@@ -88,7 +88,7 @@ function ContactTab({scheme, textContact, callContact}: {scheme: string; textCon
             />
           )}
         </ContactStack.Screen>
-        <ContactStack.Screen name="registry" options={styles.noHeader}>
+        <ContactStack.Screen name="registry" options={{...styles.noHeader, animation: Platform.OS === 'ios' ? 'simple_push' : 'none'}}>
           {props => (
             <Registry
               close={props.navigation.goBack}
@@ -99,7 +99,7 @@ function ContactTab({scheme, textContact, callContact}: {scheme: string; textCon
             />
           )}
         </ContactStack.Screen>
-        <ContactStack.Screen name="profile" options={styles.noHeader}>
+        <ContactStack.Screen name="profile" options={{...styles.noHeader, animation: Platform.OS === 'ios' ? 'simple_push' : 'none'}}>
           {props => <Profile close={props.navigation.goBack} params={contactParams} />}
         </ContactStack.Screen>
       </ContactStack.Navigator>
@@ -119,7 +119,7 @@ function Onboarding({scheme}: {scheme: string}) {
             <OnboardStack.Screen name="identity" options={{animation: 'fade'}}>
               {props => <Settings setupNav={{back: () => props.navigation.navigate('welcome'), next: () => props.navigation.navigate('request')}} />}
             </OnboardStack.Screen>
-            <OnboardStack.Screen name="request">
+            <OnboardStack.Screen name="request" options={{...styles.noHeader, animation: Platform.OS === 'ios' ? 'simple_push' : 'none'}}>
               {props => <Request setupNav={{back: () => props.navigation.navigate('identity'), next: () => props.navigation.navigate('ready')}} />}
             </OnboardStack.Screen>
             <OnboardStack.Screen name="ready" options={{headerBackTitleVisible: false, animation: 'fade'}}>
