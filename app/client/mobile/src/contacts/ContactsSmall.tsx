@@ -159,7 +159,7 @@ export function ContactsSmall({
                   key="actions"
                   visible={allTab && more === item.cardId}
                   onDismiss={() => setMore(null)}
-                  anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
+                  anchor={<IconButton style={styles.action} contentStyle={styles.actionPad} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
                   {Platform.OS === 'ios' && (
                     <Surface elevation={11} style={styles.menu}>
                       <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
@@ -260,7 +260,7 @@ export function ContactsSmall({
                   key="actions"
                   visible={requestedTab && more === item.cardId}
                   onDismiss={() => setMore(null)}
-                  anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
+                  anchor={<IconButton style={styles.action} contentStyle={styles.actionPad} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
                   {Platform.OS === 'ios' && (
                     <Surface elevation={11} style={styles.menu}>
                       <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
@@ -325,7 +325,7 @@ export function ContactsSmall({
                   key="actions"
                   visible={connectedTab && more === item.cardId}
                   onDismiss={() => setMore(null)}
-                  anchor={<IconButton style={styles.action} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
+                  anchor={<IconButton style={styles.action} contentStyle={styles.actionPad} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
                   {Platform.OS === 'ios' && (
                     <Surface elevation={11} style={styles.menu}>
                       <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />

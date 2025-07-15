@@ -159,7 +159,7 @@ export function Ring() {
             <IconButton
               style={styles.circleIcon}
               iconColor="white"
-              containerColor={theme.colors.connecting}
+              containerColor={theme.colors.connected}
               icon="phone"
               size={28}
               loading={accepting === state.calls[0].callId}
