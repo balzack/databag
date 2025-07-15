@@ -198,7 +198,7 @@ function HomeScreen({nav}) {
           <Content share={nav.share} textCard={nav.textCard} closeAll={() => {}} openConversation={() => nav.setFocus(true)} />
         </Surface>
       </View>
-      <Surface style={styles.right} mode="flat">
+      <Surface elevation={1} style={styles.right} mode="flat">
         {!nav.focus && <Base />}
         <SafeAreaView style={styles.right} edges={['top']}>
           <View style={styles.ring}>
