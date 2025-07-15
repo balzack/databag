@@ -129,7 +129,7 @@ export class LinkModule implements Link {
 
   public setStatusListener(listener: (status: string) => Promise<void>) {
     this.statusListener = listener;
-    this.messages.push(JSON.stringify({ status: this.status }));
+    this.messages.push(JSON.stringify({ status: 'echo' }));
     this.notify();
   }
   public clearStatusListener() {
@@ -138,6 +138,7 @@ export class LinkModule implements Link {
 
   public setMessageListener(listener: (message: any) => Promise<void>) {
     this.messageListener = listener;
+    this.notify();
   }
   public clearMessageListener() {
     this.messageListener = null;
@@ -154,7 +155,7 @@ export class LinkModule implements Link {
   private async notify() {
     if (!this.notifying && !this.closed) {
       this.notifying = true;
-      while(this.messages.length > 0 && !this.error) {
+      while(this.messageListener && this.messages.length > 0 && !this.error) {
         const data = this.messages.shift();
         if (data) {
           try {
@@ -176,7 +177,7 @@ export class LinkModule implements Link {
 
   private async notifyStatus(status: string) {
     try {
-      this.status = status;
+      this.status = status === 'echo' ? this.status : status;
       if (this.statusListener) {
         if (status === 'connected') {
           if (this.connected) {
