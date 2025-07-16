@@ -11,7 +11,6 @@ import ReceiveSharingIntent from 'react-native-receive-sharing-intent';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import DesignIcon from 'react-native-vector-icons/MaterialDesignIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonicIcon from 'react-native-vector-icons/Ionicons';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
@@ -189,11 +188,11 @@ function FontMix(props: {name: string, color: string}) {
   } else if (props.name === 'video-slash') {
     return <FeatherIcon {...{...props, name: 'video-off'}} />;
   } else if (props.name === 'dots-horizontal-circle-outline') {
-    return <DesignIcon {...{...props, name: 'dots-horizontal-circle-outline'}} />;
+    return <IconicIcon {...{...props, name: 'ellipsis-horizontal-circle-outline'}} />;
   } else if (props.name === 'users-four') {
-    return <DesignIcon {...{...props, name: 'account-group-outline'}} />;
+    return <AwesomeIcon {...{...props, name: 'address-book-o'}} />;
   } else if (props.name === 'users-four-filled') {
-    return <DesignIcon {...{...props, name: 'account-group'}} />;
+    return <AwesomeIcon {...{...props, name: 'address-book'}} />;
   } else if (props.name === 'hard-drive') {
     return <FeatherIcon {...{...props, name: 'hard-drive'}} />;
   } else if (props.name === 'lock-open') {
@@ -221,9 +220,9 @@ function FontMix(props: {name: string, color: string}) {
   } else if (props.name === 'reset') {
     return <FeatherIcon {...{...props, name: 'rotate-ccw'}} />;
   } else if (props.name === 'enable-chat') {
-    return <DesignIcon {...{...props, name: 'comment-outline'}} />;
+    return <FeatherIcon {...{...props, name: 'unlock'}} />;
   } else if (props.name === 'disable-chat') {
-    return <DesignIcon {...{...props, name: 'comment-off-outline'}} />;
+    return <FeatherIcon {...{...props, name: 'lock'}} />;
   } else {
     return <CommunityIcon {...props} />;
   }
