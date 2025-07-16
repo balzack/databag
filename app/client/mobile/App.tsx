@@ -12,6 +12,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import IonicIcon from 'react-native-vector-icons/Ionicons';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {useColorScheme} from 'react-native';
 import {MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
@@ -153,9 +154,17 @@ function FontMix(props: {name: string, color: string}) {
   } else if (props.name === 'sensor-occupied') {
     return <MaterialIcon {...props}  />;
   } else if (props.name === 'address-book') {
-    return <AwesomeIcon {...{...props, name: 'address-book'}} />;
-  } else if (props.name === 'address-book-filled') {
     return <AwesomeIcon {...{...props, name: 'address-book-o'}} />;
+  } else if (props.name === 'address-book-filled') {
+    return <AwesomeIcon {...{...props, name: 'address-book'}} />;
+  } else if (props.name === 'chat-circle') {
+    return <AwesomeIcon {...{...props, name: 'comment-o'}} />;
+  } else if (props.name === 'chat-circle-filled') {
+    return <AwesomeIcon {...{...props, name: 'comment'}} />;
+  } else if (props.name === 'gear-six') {
+    return <IonicIcon {...{...props, name: 'settings-outline'}} />;
+  } else if (props.name === 'gear-six-filled') {
+    return <IonicIcon {...{...props, name: 'settings'}} />;
   } else {
     return <CommunityIcon {...props} />;
   }
