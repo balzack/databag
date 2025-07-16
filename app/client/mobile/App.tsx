@@ -12,7 +12,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import AwesomeIcon from 'react-native-vector-icons/FontAwesomeIcons';
+import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {useColorScheme} from 'react-native';
 import {MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
 
