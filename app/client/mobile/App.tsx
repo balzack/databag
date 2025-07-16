@@ -12,6 +12,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import AwesomeIcon from 'react-native-vector-icons/FontAwesomeIcons';
 import {useColorScheme} from 'react-native';
 import {MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
 
@@ -151,6 +152,10 @@ function FontMix(props: {name: string, color: string}) {
     return <FeatherIcon {...props} />;
   } else if (props.name === 'sensor-occupied') {
     return <MaterialIcon {...props}  />;
+  } else if (props.name === 'address-book') {
+    return <AwesomeIcon {...props, name: 'address-book'} />;
+  } else if (props.name === 'address-book-filled') {
+    return <AwesomeIcon {...props, name: 'address-book-o'} />;
   } else {
     return <CommunityIcon {...props} />;
   }
