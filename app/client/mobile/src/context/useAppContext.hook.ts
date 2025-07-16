@@ -5,19 +5,10 @@ import {SessionStore} from '../SessionStore';
 import {NativeCrypto} from '../NativeCrypto';
 import {LocalStore} from '../LocalStore';
 import {StagingFiles} from '../StagingFiles';
-import messaging from '@react-native-firebase/messaging';
 import {UnsentTopic} from 'AppContext';
 
 const DATABAG_DB = 'db_v251.db';
 const SETTINGS_DB = 'ls_v003.db';
-
-async function requestUserPermission() {
-  if (Platform.OS === 'ios') {
-    await messaging().requestPermission();
-  } else {
-    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-  }
-}
 
 const databag = new DatabagSDK(
   {
