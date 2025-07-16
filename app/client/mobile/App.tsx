@@ -11,6 +11,7 @@ import ReceiveSharingIntent from 'react-native-receive-sharing-intent';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import DesignIcon from 'react-native-vector-icons/MaterialDesignIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonicIcon from 'react-native-vector-icons/Ionicons';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
@@ -165,6 +166,64 @@ function FontMix(props: {name: string, color: string}) {
     return <IonicIcon {...{...props, name: 'settings-outline'}} />;
   } else if (props.name === 'gear-six-filled') {
     return <IonicIcon {...{...props, name: 'settings'}} />;
+  } else if (props.name === 'link') {
+    return <MaterialIcon {...{...props, name: 'link'}} />;
+  } else if (props.name === 'link-break') {
+    return <MaterialIcon {...{...props, name: 'link-off'}} />;
+  } else if (props.name === 'warning-circle') {
+    return <FeatherIcon {...{...props, name: 'alert-circle'}} />;
+  } else if (props.name === 'frame-corners') {
+    return <FeatherIcon {...{...props, name: 'maximize'}} />;
+  } else if (props.name === 'microphone-slash') {
+    return <FeatherIcon {...{...props, name: 'mic-off'}} />;
+  } else if (props.name === 'microphone') {
+    return <FeatherIcon {...{...props, name: 'mic'}} />;
+  } else if (props.name === 'phone') {
+    return <FeatherIcon {...{...props, name: 'phone'}} />;
+  } else if (props.name === 'bell-slash') {
+    return <FeatherIcon {...{...props, name: 'bell-off'}} />;
+  } else if (props.name === 'arrows-in') {
+    return <FeatherIcon {...{...props, name: 'minimize'}} />;
+  } else if (props.name === 'video') {
+    return <FeatherIcon {...{...props, name: 'video'}} />;
+  } else if (props.name === 'video-slash') {
+    return <FeatherIcon {...{...props, name: 'video-off'}} />;
+  } else if (props.name === 'dots-horizontal-circle-outline') {
+    return <DesignIcon {...{...props, name: 'dots-horizontal-circle-outline'}} />;
+  } else if (props.name === 'users-four') {
+    return <DesignIcon {...{...props, name: 'account-group-outline'}} />;
+  } else if (props.name === 'users-four-filled') {
+    return <DesignIcon {...{...props, name: 'account-group'}} />;
+  } else if (props.name === 'hard-drive') {
+    return <FeatherIcon {...{...props, name: 'hard-drive'}} />;
+  } else if (props.name === 'lock-open') {
+    return <FeatherIcon {...{...props, name: 'unlock'}} />;
+  } else if (props.name === 'user-minus') {
+    return <FeatherIcon {...{...props, name: 'user-minus'}} />;
+  } else if (props.name === 'play-circle') {
+    return <FeatherIcon {...{...props, name: 'play-circle'}} />;
+  } else if (props.name === 'stop-circle') {
+    return <FeatherIcon {...{...props, name: 'stop-circle'}} />;
+  } else if (props.name === 'award') {
+    return <FeatherIcon {...{...props, name: 'home'}} />;
+  } else if (props.name === 'warning') {
+    return <FeatherIcon {...{...props, name: 'alert-triangle'}} />;
+  } else if (props.name === 'star') {
+    return <AwesomeIcon {...{...props, name: 'star-o'}} />;
+  } else if (props.name === 'star-filled') {
+    return <AwesomeIcon {...{...props, name: 'star'}} />;
+  } else if (props.name === 'mail-filled') {
+    return <IonicIcon {...{...props, name: 'mail'}} />;
+  } else if (props.name === 'mail') {
+    return <IonicIcon {...{...props, name: 'mail-open-outline'}} />;
+  } else if (props.name === 'camera') {
+    return <FeatherIcon {...{...props, name: 'camera'}} />;
+  } else if (props.name === 'reset') {
+    return <FeatherIcon {...{...props, name: 'rotate-ccw'}} />;
+  } else if (props.name === 'enable-chat') {
+    return <DesignIcon {...{...props, name: 'comment-outline'}} />;
+  } else if (props.name === 'disable-chat') {
+    return <DesignIcon {...{...props, name: 'comment-off-outline'}} />;
   } else {
     return <CommunityIcon {...props} />;
   }
