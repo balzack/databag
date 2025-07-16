@@ -153,9 +153,9 @@ function FontMix(props: {name: string, color: string}) {
   } else if (props.name === 'sensor-occupied') {
     return <MaterialIcon {...props}  />;
   } else if (props.name === 'address-book') {
-    return <AwesomeIcon {...props, name: 'address-book'} />;
+    return <AwesomeIcon {...{...props, name: 'address-book'}} />;
   } else if (props.name === 'address-book-filled') {
-    return <AwesomeIcon {...props, name: 'address-book-o'} />;
+    return <AwesomeIcon {...{...props, name: 'address-book-o'}} />;
   } else {
     return <CommunityIcon {...props} />;
   }
