@@ -12,6 +12,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import {ChatTeardropSlash, ChatTeardrop, ArrowCounterClockwise, Camera, EnvelopeSimple, Warning, HouseSimple, Star, HardDrive, LockOpen, UserMinus, PlayCircle, StopCircle, UsersFour, DotsThreeCircle, VideoCamera, VideoCameraSlash, ArrowsInSimple, BellSlash, Phone, Microphone, MicrophoneSlash, FrameCorners, WarningCircle, Link, LinkBreak, AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
 import {useColorScheme} from 'react-native';
 import {MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
 
@@ -49,7 +50,7 @@ const databagColors = {
     inversePrimary: 'rgb(113, 218, 166)',
     elevation: {
       level0: 'rgb(255, 255, 255)',
-      level1: 'rgb(240, 245, 242)',
+      level1: 'rgb(245, 249, 248)',
       level2: '#F0F5F2',
       level3: 'rgb(216, 216, 216)',
       level4: 'rgb(208, 208, 208)',
@@ -67,7 +68,7 @@ const databagColors = {
     backdrop: 'rgba(42, 50, 45, 0.4)',
     base: '#8fbea7',
     bar: 'rgba(240, 245, 242, 0.8)',
-    connected: '#18A42B',
+    connected: '#44cc44',
     requested: '#EDB612',
     pending: '#dd8800',
     unsaved: '#888888',
@@ -128,7 +129,7 @@ const databagColors = {
     backdrop: 'rgba(42, 50, 45, 0.4)',
     base: 'rgb(0,0,0)',
     bar: 'rgba(16, 10, 8, 0.8)',
-    connected: '#18A42B',
+    connected: '#44cc44',
     requested: '#EDB612',
     pending: '#dd8800',
     unsaved: '#888888',
@@ -151,6 +152,76 @@ function FontMix(props: {name: string, color: string}) {
     return <FeatherIcon {...props} />;
   } else if (props.name === 'sensor-occupied') {
     return <MaterialIcon {...props}  />;
+  } else if (props.name === 'address-book') {
+    return <AddressBook color={props.color} size={props.size} />;
+  } else if (props.name === 'address-book-filled') {
+    return <AddressBook weight="fill" color={props.color} size={props.size} />;
+  } else if (props.name === 'chat-circle') {
+    return <ChatCircle color={props.color} size={props.size} />;
+  } else if (props.name === 'chat-circle-filled') {
+    return <ChatCircle weight="fill" color={props.color} size={props.size} />;
+  } else if (props.name === 'gear-six') {
+    return <GearSix color={props.color} size={props.size} />;
+  } else if (props.name === 'gear-six-filled') {
+    return <GearSix weight="fill" color={props.color} size={props.size} />;
+  } else if (props.name === 'link') {
+    return <Link color={props.color} size={props.size} />;
+  } else if (props.name === 'link-break') {
+    return <LinkBreak color={props.color} size={props.size} />;
+  } else if (props.name === 'warning-circle') {
+    return <WarningCircle weight="fill" color={props.color} size={props.size} />;
+  } else if (props.name === 'frame-corners') {
+    return <FrameCorners color={props.color} size={props.size} />;
+  } else if (props.name === 'microphone-slash') {
+    return <MicrophoneSlash color={props.color} size={props.size} />;
+  } else if (props.name === 'microphone') {
+    return <Microphone color={props.color} size={props.size} />;
+  } else if (props.name === 'phone') {
+    return <Phone color={props.color} size={props.size} />;
+  } else if (props.name === 'bell-slash') {
+    return <BellSlash color={props.color} size={props.size} />;
+  } else if (props.name === 'arrows-in') {
+    return <ArrowsInSimple color={props.color} size={props.size} />;
+  } else if (props.name === 'video') {
+    return <VideoCamera color={props.color} size={props.size} />;
+  } else if (props.name === 'video-slash') {
+    return <VideoCameraSlash color={props.color} size={props.size} />;
+  } else if (props.name === 'dots-horizontal-circle-outline') {
+    return <DotsThreeCircle color={props.color} size={props.size} />;
+  } else if (props.name === 'users-four') {
+    return <UsersFour color={props.color} size={props.size} />;
+  } else if (props.name === 'users-four-filled') {
+    return <UsersFour weight="fill" color={props.color} size={props.size} />;
+  } else if (props.name === 'hard-drive') {
+    return <HardDrive color={props.color} size={props.size} />;
+  } else if (props.name === 'lock-open') {
+    return <LockOpen color={props.color} size={props.size} />;
+  } else if (props.name === 'user-minus') {
+    return <UserMinus color={props.color} size={props.size} />;
+  } else if (props.name === 'play-circle') {
+    return <PlayCircle color={props.color} size={props.size} />;
+  } else if (props.name === 'stop-circle') {
+    return <StopCircle color={props.color} size={props.size} />;
+  } else if (props.name === 'award') {
+    return <HouseSimple color={props.color} size={props.size} />;
+  } else if (props.name === 'warning') {
+    return <Warning color={props.color} size={props.size} />;
+  } else if (props.name === 'star') {
+    return <Star color={props.color} size={props.size} />;
+  } else if (props.name === 'star-filled') {
+    return <Star weight="fill" color={props.color} size={props.size} />;
+  } else if (props.name === 'mail-filled') {
+    return <EnvelopeSimple weight="fill" color={props.color} size={props.size} />;
+  } else if (props.name === 'camera') {
+    return <Camera color={props.color} size={props.size} />;
+  } else if (props.name === 'mail') {
+    return <EnvelopeSimple color={props.color} size={props.size} />;
+  } else if (props.name === 'reset') {
+    return <ArrowCounterClockwise color={props.color} size={props.size} />;
+  } else if (props.name === 'enable-chat') {
+    return <ChatTeardrop color={props.color} size={props.size} />;
+  } else if (props.name === 'disable-chat') {
+    return <ChatTeardropSlash color={props.color} size={props.size} />;
   } else {
     return <CommunityIcon {...props} />;
   }
@@ -223,3 +294,4 @@ function App(): React.JSX.Element {
 }
 
 export default App;
+
