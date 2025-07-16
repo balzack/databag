@@ -102,8 +102,8 @@ export function Call() {
 
           {state.remoteVideo && <RTCView style={styles.full} mirror={true} objectFit={'contain'} streamURL={state.remoteStream.toURL()} />}
 
-          {state.localVideo && (
-            <RTCView style={state.fullscreen && state.remoteVideo ? styles.box : styles.full} mirror={true} objectFit={'contain'} streamURL={state.localStream.toURL()} zOrder={!state.fullscreen ? 0 : state.remoteVideo ? 2 : undefined} />
+          {state.localVideo && state.fullscreen && (
+            <RTCView style={state.remoteVideo ? styles.box : styles.full} mirror={true} objectFit={'contain'} streamURL={state.localStream.toURL()} zOrder={!state.fullscreen ? 0 : state.remoteVideo ? 2 : undefined} />
           )}
 
           {!state.remoteVideo && !state.localVideo && showName && (
