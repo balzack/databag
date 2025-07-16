@@ -188,7 +188,7 @@ function FontMix(props: {name: string, color: string}) {
   } else if (props.name === 'video-slash') {
     return <FeatherIcon {...{...props, name: 'video-off'}} />;
   } else if (props.name === 'dots-horizontal-circle-outline') {
-    return <IconicIcon {...{...props, name: 'ellipsis-horizontal-circle-outline'}} />;
+    return <IonicIcon {...{...props, name: 'ellipsis-horizontal-circle-outline'}} />;
   } else if (props.name === 'users-four') {
     return <AwesomeIcon {...{...props, name: 'address-book-o'}} />;
   } else if (props.name === 'users-four-filled') {
