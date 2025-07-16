@@ -31,8 +31,6 @@
     "react": "18.3.1",
     "react-dom": "^18.3.1",
     "react-native": "0.75.4",
-    "phosphor-react-native": "^2.3.1",
-    "react-native-svg-transformer": "^1.5.0",
     "react-native-create-thumbnail": "^2.0.1",
     "react-native-document-picker": "^9.3.1",
     "react-native-edge-to-edge": "^1.6.2",
