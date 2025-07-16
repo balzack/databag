@@ -203,6 +203,9 @@ export const styles = StyleSheet.create({
     width: 500,
     maxWidth: '90%',
   },
+  actionPad: {
+    paddingRight: 8,
+  },
   action: {
     backgroundColor: 'transparent',
     borderRadius: 0,

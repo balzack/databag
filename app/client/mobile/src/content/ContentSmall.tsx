@@ -189,7 +189,7 @@ export function ContentSmall({
                     elevation={Platform.OS === 'ios' ? 8 : 2}
                     visible={allTab && more === `${item.cardId}:${item.channelId}`}
                     onDismiss={() => setMore(null)}
-                    anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
+                    anchor={<IconButton style={styles.action} contentStyle={styles.actionPad} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
                     {Platform.OS === 'ios' && (
                       <Surface elevation={11} style={styles.menu}>
                         <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
@@ -353,7 +353,7 @@ export function ContentSmall({
                     contentStyle={styles.menuContent}
                     visible={unreadTab && more === `${item.cardId}:${item.channelId}`}
                     onDismiss={() => setMore(null)}
-                    anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
+                    anchor={<IconButton style={styles.action} contentStyle={styles.actionPad} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
                     {Platform.OS === 'ios' && (
                       <Surface elevation={11} style={styles.menu}>
                         <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
@@ -493,7 +493,7 @@ export function ContentSmall({
                     contentStyle={styles.menuContent}
                     visible={favoritesTab && more === `${item.cardId}:${item.channelId}`}
                     onDismiss={() => setMore(null)}
-                    anchor={<IconButton style={styles.action} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
+                    anchor={<IconButton style={styles.action} contentStyle={styles.actionPad} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(`${item.cardId}:${item.channelId}`)} />}>
                     {Platform.OS === 'ios' && (
                       <Surface elevation={11} style={styles.menu}>
                         <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
