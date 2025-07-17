@@ -18,4 +18,15 @@ buildscript {
     }
 }
 
+allprojects {
+    repositories {
+        maven {
+            url "https://www.jitpack.io"
+            content {
+                includeModule 'com.github.UnifiedPush', 'android-connector'
+            }
+        }
+    }
+}
+
 apply plugin: "com.facebook.react.rootproject"
