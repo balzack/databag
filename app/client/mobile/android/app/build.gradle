@@ -117,7 +117,7 @@ dependencies {
   implementation 'com.facebook.fresco:animated-webp:3.2.0'
   implementation 'com.facebook.fresco:webpsupport:3.2.0'
 
-    implementation('org.unifiedpush.android:connector:3.0.10')
+    implementation('org.unifiedpush.android:connector:2.5.0')
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
