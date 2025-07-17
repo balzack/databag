@@ -8,10 +8,6 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate
 import android.os.Bundle;
 import org.devio.rn.splashscreen.SplashScreen;
 
-import org.unifiedpush.android.connector.UnifiedPush;
-
-import android.content.Context;
-
 import android.content.Intent;
 
 class MainActivity : ReactActivity() {
@@ -30,16 +26,6 @@ class MainActivity : ReactActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     SplashScreen.show(this)
     super.onCreate(null)
-
-
-UnifiedPush.tryUseCurrentOrDefaultDistributor(this) { success ->
-    if (success) {
-        // We have a distributor
-        // Register your app to the distributor
-        UnifiedPush.register(this)
-    }
-}
-
   }
 
   /**

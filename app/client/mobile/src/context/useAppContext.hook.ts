@@ -50,10 +50,6 @@ export function useAppContext() {
     createSealed: true,
   });
 
-  DeviceEventEmitter.addListener('unifiedPushURL', (e) => {
-    deviceToken.current = e.endpoint;
-  });
-
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
