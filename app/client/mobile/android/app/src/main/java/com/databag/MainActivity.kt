@@ -33,25 +33,25 @@ class MainActivity : ReactActivity() {
     SplashScreen.show(this)
     super.onCreate(null)
 
-    MainActivity activityContext = this;
+val activityContext = this
 
-    this.getSharedPreferences("unifiedpush.connector", Context.MODE_PRIVATE).edit().putBoolean("unifiedpush.no_distrib_dialog", true).apply();
+getSharedPreferences("unifiedpush.connector", Context.MODE_PRIVATE)
+    .edit()
+    .putBoolean("unifiedpush.no_distrib_dialog", true)
+    .apply()
 
-
-    ReactInstanceManager mReactInstanceManager = getReactNativeHost().getReactInstanceManager();
-        mReactInstanceManager.addReactInstanceEventListener(new ReactInstanceManager.ReactInstanceEventListener() {
-            public void onReactContextInitialized(ReactContext validContext) {
-
-              UnifiedPush.registerAppWithDialog(
-                  activityContext,
-                  "default",
-                  new RegistrationDialogContent(),
-                  new ArrayList<String>(),
-                  getApplicationContext().getPackageName()
-              );
-
-            }
-        });
+val mReactInstanceManager = reactNativeHost.reactInstanceManager
+mReactInstanceManager.addReactInstanceEventListener(object : ReactInstanceManager.ReactInstanceEventListener {
+    override fun onReactContextInitialized(validContext: ReactContext) {
+        UnifiedPush.registerAppWithDialog(
+            activityContext,
+            "default",
+            RegistrationDialogContent(),
+            ArrayList<String>(),
+            applicationContext.packageName
+        )
+    }
+})
 
   }
 
