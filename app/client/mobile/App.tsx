@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {View, StatusBar} from 'react-native';
+import {View, StatusBar, PermissionsAndroid} from 'react-native';
 import {AppContextProvider} from './src/context/AppContext';
 import {DisplayContextProvider} from './src/context/DisplayContext';
 import {Routes, Route, MemoryRouter} from 'react-router-dom';
@@ -16,6 +16,7 @@ import IonicIcon from 'react-native-vector-icons/Ionicons';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {useColorScheme} from 'react-native';
 import {MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
+import { initUnifiedPush } from 'react-native-unifiedpush-connector';
 
 const databagColors = {
   light: {
@@ -231,6 +232,12 @@ function FontMix(props: {name: string, color: string}) {
 function App(): React.JSX.Element {
   const colorScheme = useColorScheme();
   const [share, setShare] = useState(null as null | { filePath: string, mimeType: string });
+
+
+  React.useEffect(() => {
+    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+    initUnifiedPush()
+  }, []);
 
   useEffect(() => {
     ReceiveSharingIntent.getReceivedFiles(files => {

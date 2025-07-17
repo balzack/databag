@@ -6,6 +6,7 @@ import {NativeCrypto} from '../NativeCrypto';
 import {LocalStore} from '../LocalStore';
 import {StagingFiles} from '../StagingFiles';
 import {UnsentTopic} from 'AppContext';
+import { DeviceEventEmitter } from 'react-native';
 
 const DATABAG_DB = 'db_v251.db';
 const SETTINGS_DB = 'ls_v003.db';
@@ -32,6 +33,8 @@ export function useAppContext() {
   const local = useRef(new LocalStore());
   const sdk = useRef(databag);
   const topics = useRef(new Map<string, UnsentTopic>());
+  const deviceToken = useRef(null as null | string);
+
   const [state, setState] = useState({
     service: null as null | Service,
     session: null as null | Session,
@@ -45,6 +48,10 @@ export function useAppContext() {
     showWelcome: false,
     sharing: null as null | {cardId: string; channelId: string; filePath: string; mimeType: string},
     createSealed: true,
+  });
+
+  DeviceEventEmitter.addListener('unifiedPushURL', (e) => {
+    deviceToken.current = e.endpoint;
   });
 
   const updateState = (value: any) => {
@@ -82,13 +89,7 @@ export function useAppContext() {
   }, []);
 
   const getToken = async () => {
-    try {
-      const token = await messaging().getToken();
-      return {token, type: 'fcm'};
-    } catch (err) {
-      console.log(err);
-      return {token: '', type: ''};
-    }
+    return {token: deviceToken.current, type: 'up'};
   };
 
   const actions = {
