@@ -12,8 +12,6 @@ import org.unifiedpush.android.connector.UnifiedPush;
 
 import android.content.Context;
 
-import org.unifiedpush.android.connector.RegistrationDialogContent;
-
 import android.content.Intent;
 
 class MainActivity : ReactActivity() {
@@ -33,25 +31,14 @@ class MainActivity : ReactActivity() {
     SplashScreen.show(this)
     super.onCreate(null)
 
-val activityContext = this
 
-getSharedPreferences("unifiedpush.connector", Context.MODE_PRIVATE)
-    .edit()
-    .putBoolean("unifiedpush.no_distrib_dialog", true)
-    .apply()
-
-val mReactInstanceManager = reactNativeHost.reactInstanceManager
-mReactInstanceManager.addReactInstanceEventListener(object : ReactInstanceManager.ReactInstanceEventListener {
-    override fun onReactContextInitialized(validContext: ReactContext) {
-        UnifiedPush.registerAppWithDialog(
-            activityContext,
-            "default",
-            RegistrationDialogContent(),
-            ArrayList<String>(),
-            applicationContext.packageName
-        )
+UnifiedPush.tryUseCurrentOrDefaultDistributor(this) { success ->
+    if (success) {
+        // We have a distributor
+        // Register your app to the distributor
+        UnifiedPush.register(this)
     }
-})
+}
 
   }
 
