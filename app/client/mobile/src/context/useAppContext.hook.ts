@@ -54,6 +54,13 @@ export function useAppContext() {
     setState(s => ({...s, ...value}));
   };
 
+
+  useEffect(() => {
+    DeviceEventEmitter.addListener('unifiedPushURL', (e) => {
+      deviceToken.current = e.endpoint;
+    });
+  }, []);
+
   const setup = async () => {
     await local.current.open(SETTINGS_DB);
     const favorite = JSON.parse(await local.current.get('favorite', JSON.stringify([])));
