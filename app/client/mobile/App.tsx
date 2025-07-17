@@ -16,7 +16,6 @@ import IonicIcon from 'react-native-vector-icons/Ionicons';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {useColorScheme} from 'react-native';
 import {MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
-import { initUnifiedPush } from 'react-native-unifiedpush-connector';
 
 const databagColors = {
   light: {
@@ -236,7 +235,6 @@ function App(): React.JSX.Element {
 
   React.useEffect(() => {
     PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-    initUnifiedPush()
   }, []);
 
   useEffect(() => {
