@@ -51,12 +51,19 @@ export function useRingContext() {
     updateState({calls});
   }, [ringing, cards]);
 
-  const linkStatus = async (status: string) => {
+  const linkStatus = async (status: string, polite: boolean) => {
     if (call.current) {
       if (status === 'connected') {
         const now = new Date();
         const connectedTime = Math.floor(now.getTime() / 1000);
         updateState({connected: true, connectedTime});
+        if (!polite) {
+          try {
+            await actions.enableAudio();
+          } catch (err) {
+            console.log(err);
+          }
+        }
       } else if (status === 'closed') {
         await cleanup();
       }
@@ -179,7 +186,7 @@ export function useRingContext() {
       localStream: localStream.current,
       remoteStream: remoteStream.current,
     });
-    link.setStatusListener(linkStatus);
+    link.setStatusListener(async (status: string) => await linkStatus(status, polite));
     link.setMessageListener((msg: any) => updatePeer('message', msg));
   };
 
