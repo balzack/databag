@@ -53,17 +53,12 @@ export function useRingContext() {
 
   const linkStatus = async (status: string) => {
     if (call.current) {
-      try {
-        if (status === 'connected') {
-          const now = new Date();
-          const connectedTime = Math.floor(now.getTime() / 1000);
-          updateState({connected: true, connectedTime});
-          await actions.enableAudio();
-        } else if (status === 'closed') {
-          await cleanup();
-        }
-      } catch (err) {
-        console.log(err);
+      if (status === 'connected') {
+        const now = new Date();
+        const connectedTime = Math.floor(now.getTime() / 1000);
+        updateState({connected: true, connectedTime});
+      } else if (status === 'closed') {
+        await cleanup();
       }
     }
   };
@@ -220,6 +215,17 @@ export function useRingContext() {
 
   const transmit = (ice: {urls: string; username: string; credential: string}[]) => {
     const peerConnection = new RTCPeerConnection({iceServers: ice});
+
+    peerConnection.onicegatheringstatechange = async (event) => {
+      if (peerConnection.iceGatheringState === 'complete') {
+        try {
+          await actions.enableAudio();
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    }
+
     peerConnection.addEventListener('connectionstatechange', () => {
       if (peerConnection.connectionState === 'failed') {
         cleanup();
