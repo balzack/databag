@@ -60,10 +60,10 @@ export const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingLeft: 8,
     paddingRight: 8,
-    gap: 8,
   },
   smTitle: {
     fontSize: 24,
+    fontWeight: 600,
     minWidth: 0,
     flexShrink: 1,
     color: 'white',

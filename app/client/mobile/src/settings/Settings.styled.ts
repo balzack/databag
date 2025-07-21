@@ -60,7 +60,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingBottom: 16,
-    gap: 8,
   },
   logoutSpace: {
     marginTop: 28,
@@ -68,6 +67,7 @@ export const styles = StyleSheet.create({
   },
   smHeader: {
     fontSize: 24,
+    fontWeight: 600,
     minWidth: 0,
     flexShrink: 1,
     color: 'white',
@@ -82,6 +82,7 @@ export const styles = StyleSheet.create({
   },
   smLabel: {
     fontSize: 24,
+    fontWeight: 600,
     minWidth: 0,
     flexShrink: 1,
     color: 'white',

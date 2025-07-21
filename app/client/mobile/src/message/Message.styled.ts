@@ -146,6 +146,7 @@ export const styles = StyleSheet.create({
   },
   timestamp: {
     fontSize: 12,
+    fontWeight: 500,
   },
   options: {
     display: 'flex',
