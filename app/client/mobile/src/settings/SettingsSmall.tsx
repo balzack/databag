@@ -476,7 +476,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           <Surface style={styles.overlap} elevation={2} mode="flat" />
         </Animated.View>
         <Animated.View style={[styles.scrollWrapper, {opacity: profile}]}>
-          <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
+          <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer} enableOnAndroid={true}>
             <View style={styles.imageSpacer} />
             <Surface mode="flat" elevation={2} style={styles.surfaceMaxWidth}>
               <SafeAreaView style={styles.navForm} edges={['left', 'right']}>
