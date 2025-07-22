@@ -302,7 +302,7 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
         </View>
       </View>
       <Confirm show={confirmShow} busy={removing || reporting || blocking} params={confirmParams} />
-      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={editing} onRequestClose={() => setEditing(false)}>
+      <Modal animationType="fade" statusBarTranslucent={true} transparent={true} supportedOrientations={['portrait', 'landscape']} visible={editing} onRequestClose={() => setEditing(false)}>
         <View style={styles.modal}>
           <Pressable style={styles.blur} onPress={() => setEditing(false)}>
             <BlurView style={styles.blur} blurType="dark" blurAmount={6} reducedTransparencyFallbackColor="dark" />

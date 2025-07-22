@@ -883,7 +883,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           </KeyboardAwareScrollView>
         </Animated.View>
       </View>
-      <Modal animationType="fade" transparent={true} visible={sealing} supportedOrientations={['portrait', 'landscape']} onRequestClose={() => setSealing(false)}>
+      <Modal animationType="fade" statusBarTranslucent={true} transparent={true} visible={sealing} supportedOrientations={['portrait', 'landscape']} onRequestClose={() => setSealing(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
@@ -1124,7 +1124,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           </KeyboardAwareScrollView>
         </View>
       </Modal>
-      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={auth} onRequestClose={() => setAuth(false)}>
+      <Modal animationType="fade" statusBarTranslucent={true} transparent={true} supportedOrientations={['portrait', 'landscape']} visible={auth} onRequestClose={() => setAuth(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
@@ -1201,7 +1201,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           </KeyboardAwareScrollView>
         </View>
       </Modal>
-      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={change} onRequestClose={() => setChange(false)}>
+      <Modal animationType="fade" statusBarTranslucent={true} transparent={true} supportedOrientations={['portrait', 'landscape']} visible={change} onRequestClose={() => setChange(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
@@ -1295,7 +1295,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
           </KeyboardAwareScrollView>
         </View>
       </Modal>
-      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={remove} onRequestClose={() => setRemove(false)}>
+      <Modal animationType="fade" statusBarTranslucent={true} transparent={true} supportedOrientations={['portrait', 'landscape']} visible={remove} onRequestClose={() => setRemove(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
