@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
     minWidth: 0,
     flexShrink: 1,
     color: 'white',
+    fontWeight: 600,
   },
   menuContent: {
     borderRadius: 8,
@@ -33,7 +34,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    borderWidth: 0.2,
+    borderWidth: 0.5,
   },
   compose: {
     borderRadius: 8,
@@ -251,7 +252,6 @@ export const styles = StyleSheet.create({
   send: {
     margin: 2,
     backgroundColor: 'transparent',
-    transform: [{rotate: '45deg'}],
   },
   icon: {
     flexShrink: 0,
@@ -356,7 +356,6 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
     paddingBottom: 16,
     paddingRight: 8,
     paddingLeft: 8,

@@ -20,7 +20,6 @@ export const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingLeft: 8,
     paddingRight: 8,
-    gap: 8,
   },
   field: {
     position: 'relative',
@@ -30,6 +29,7 @@ export const styles = StyleSheet.create({
     minWidth: 0,
     flexShrink: 1,
     color: 'white',
+    fontWeight: 600,
   },
   cover: {
     position: 'absolute',

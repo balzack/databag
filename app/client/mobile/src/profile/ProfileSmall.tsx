@@ -83,7 +83,7 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
         <Surface mode="flat" elevation={9}>
           <SafeAreaView style={styles.navHeader} edges={['left', 'right']}>
             <Pressable style={styles.navIcon} onPress={close}>
-              <Icon size={24} source="left" color={'white'} />
+              <Icon size={32} source="left" color={'white'} />
             </Pressable>
             <View style={styles.title}>
               <Text style={styles.smLabel}>{state.strings.profile}</Text>
@@ -177,6 +177,7 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
                       style={styles.navInput}
                       mode="outlined"
                       outlineStyle={styles.navInputBorder}
+                      readOnly={true}
                       placeholder={state.strings.location}
                       placeholderTextColor={theme.colors.secondary}
                       value={state.location}
@@ -191,6 +192,7 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
                       contentStyle={styles.navDescription}
                       mode="outlined"
                       multiline={true}
+                      readOnly={true}
                       outlineStyle={styles.navInputBorder}
                       placeholder={state.strings.description}
                       placeholderTextColor={theme.colors.secondary}

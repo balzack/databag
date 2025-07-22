@@ -46,6 +46,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
   const [options, setOptions] = useState(false);
   const theme = useTheme();
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [focused, setFocused] = useState(false);
 
   function onKeyboardShow(event: KeyboardEvent) {
     setKeyboardHeight(event.endCoordinates.height);
@@ -241,11 +242,11 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
 
   return (
     <View style={styles.component}>
-      <Surface elevation={1} mode="flat" style={styles.content}>
+      <Surface elevation={2} mode="flat" style={styles.content}>
         <Surface elevation={9} mode="flat" style={styles.surfaceMaxWidth}>
           <SafeAreaView edges={['left', 'right']} style={styles.safeAreaNav}>
             <Pressable style={styles.navIcon} onPress={onClose}>
-              <Icon size={24} source="left" color={'white'} />
+              <Icon size={32} source="left" color={'white'} />
             </Pressable>
             <View style={styles.title}>
               {state.detailSet && state.subject && (
@@ -268,7 +269,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
               )}
             </View>
             <Pressable onPress={openDetails} style={styles.navIcon}>
-              <Icon size={24} source="cog-outline" color={'white'} />
+              <Icon size={24} source="gear-six" color={'white'} />
             </Pressable>
           </SafeAreaView>
         </Surface>
@@ -321,7 +322,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
                   visible={options}
                   onDismiss={() => setOptions(false)}
                   anchorPosition="top"
-                  anchor={<IconButton style={styles.options} mode="contained" iconColor={theme.colors.onSurface} icon="plus-square" size={20} onPress={() => setOptions(true)} />}>
+                  anchor={<IconButton style={styles.options} mode="contained" iconColor={theme.colors.onSurface} icon="plus-square" size={24} onPress={() => setOptions(true)} />}>
                   {Platform.OS === 'ios' && (
                     <Surface elevation={11} style={styles.menu}>
                       <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={8} reducedTransparencyFallbackColor={theme.colors.name} />
@@ -403,6 +404,8 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
                     multiline={true}
                     mode="outlined"
                     dense={true}
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
                     style={{color: state.textColorSet ? state.textColor : theme.colors.onSurface, fontSize: state.textSize}}
                     outlineColor="transparent"
                     activeOutlineColor={Colors.placeholder}
@@ -423,13 +426,15 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
                   mode="contained"
                   iconColor={!state.access || !state.validShare || (!state.message && state.assets.length === 0) ? theme.colors.secondary : theme.colors.onSurface}
                   icon="send"
-                  size={20}
+                  size={24}
                   onPress={sendMessage}
                 />
               </View>
             </Surface>
           </View>
-          <View style={{...styles.keyboardSpacer, height: keyboardHeight - (Platform.OS === 'ios' ? 96 : 80)}} />
+          { focused && (
+            <View style={{...styles.keyboardSpacer, height: keyboardHeight - (Platform.OS === 'ios' ? 96 : 80)}} />
+          )}
         </SafeAreaView>
       </Surface>
       <Confirm show={alert} params={alertParams} />
