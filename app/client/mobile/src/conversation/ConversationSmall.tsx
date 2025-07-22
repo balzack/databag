@@ -46,6 +46,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
   const [options, setOptions] = useState(false);
   const theme = useTheme();
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [focused, setFocused] = useState(false);
 
   function onKeyboardShow(event: KeyboardEvent) {
     setKeyboardHeight(event.endCoordinates.height);
@@ -403,6 +404,8 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
                     multiline={true}
                     mode="outlined"
                     dense={true}
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
                     style={{color: state.textColorSet ? state.textColor : theme.colors.onSurface, fontSize: state.textSize}}
                     outlineColor="transparent"
                     activeOutlineColor={Colors.placeholder}
@@ -429,7 +432,9 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
               </View>
             </Surface>
           </View>
-          <View style={{...styles.keyboardSpacer, height: keyboardHeight - (Platform.OS === 'ios' ? 96 : 80)}} />
+          { focused && (
+            <View style={{...styles.keyboardSpacer, height: keyboardHeight - (Platform.OS === 'ios' ? 96 : 80)}} />
+          )}
         </SafeAreaView>
       </Surface>
       <Confirm show={alert} params={alertParams} />
