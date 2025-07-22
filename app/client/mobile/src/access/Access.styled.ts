@@ -91,6 +91,7 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   submit: {
+    marginTop: 16,
     borderRadius: 8,
   },
   submitContent: {

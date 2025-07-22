@@ -154,19 +154,7 @@ export function Access() {
                     onChangeText={value => actions.setPassword(value)}
                   />
                 </View>
-                <View style={styles.linkline}>
-                  <Checkbox.Android
-                    status={accept ? 'checked' : 'unchecked'}
-                    onPress={() => {
-                      setAccept(!accept);
-                    }}
-                  />
-                  <Text>{state.strings.accept}</Text>
-                  <Button labelStyle={styles.textButton} compact="true" mode="text" onPress={() => setTerms(true)}>
-                    {state.strings.terms}
-                  </Button>
-                </View>
-                <Button mode="contained" style={styles.submit} disabled={!state.password || !state.node || !accept} textColor="white" onPress={login} loading={state.loading}>
+                <Button mode="contained" style={styles.submit} disabled={!state.password || !state.node} textColor="white" onPress={login} loading={state.loading}>
                   {state.strings.access}
                 </Button>
                 <View style={styles.footer}>
@@ -208,19 +196,7 @@ export function Access() {
                     onChangeText={value => actions.setNode(value)}
                   />
                 </View>
-                <View style={styles.linkline}>
-                  <Checkbox.Android
-                    status={accept ? 'checked' : 'unchecked'}
-                    onPress={() => {
-                      setAccept(!accept);
-                    }}
-                  />
-                  <Text>{state.strings.accept}</Text>
-                  <Button labelStyle={styles.textButton} compact="true" mode="text" onPress={() => setTerms(true)}>
-                    {state.strings.terms}
-                  </Button>
-                </View>
-                <Button mode="contained" style={styles.submit} disabled={!state.token || !state.node || !accept} onPress={login} loading={state.loading}>
+                <Button mode="contained" style={styles.submit} disabled={!state.token || !state.node} onPress={login} loading={state.loading}>
                   {state.strings.access}
                 </Button>
                 <Button mode="text" onPress={() => fadeOut('account')}>
@@ -262,7 +238,7 @@ export function Access() {
                     placeholder={state.strings.username}
                     value={state.username}
                     left={<TextInput.Icon style={styles.icon} icon="user" />}
-                    right={state.taken ? <TextInput.Icon styles={styles.icon} color={theme.colors.offsync} icon="warning" /> : <></>}
+                    right={state.taken ? <TextInput.Icon style={styles.icon} color={theme.colors.offsync} icon="warning" /> : <></>}
                     onChangeText={value => actions.setUsername(value)}
                   />
                   <TextInput
@@ -302,19 +278,7 @@ export function Access() {
                     )}
                   </View>
                 </View>
-                <View style={styles.linkline}>
-                  <Checkbox.Android
-                    status={accept ? 'checked' : 'unchecked'}
-                    onPress={() => {
-                      setAccept(!accept);
-                    }}
-                  />
-                  <Text>{state.strings.accept}</Text>
-                  <Button labelStyle={styles.textButton} compact="true" mode="text" onPress={() => setTerms(true)}>
-                    {state.strings.terms}
-                  </Button>
-                </View>
-                <Button mode="contained" style={styles.submit} textColor="white" disabled={!state.username || !state.password || !state.node || !accept} onPress={login} loading={state.loading}>
+                <Button mode="contained" style={styles.submit} textColor="white" disabled={!state.username || !state.password || !state.node} onPress={login} loading={state.loading}>
                   {state.strings.create}
                 </Button>
                 <Button mode="text" onPress={() => fadeOut('account')}>
@@ -379,19 +343,7 @@ export function Access() {
                     onChangeText={value => actions.setPassword(value)}
                   />
                 </View>
-                <View style={styles.linkline}>
-                  <Checkbox.Android
-                    status={accept ? 'checked' : 'unchecked'}
-                    onPress={() => {
-                      setAccept(!accept);
-                    }}
-                  />
-                  <Text>{state.strings.accept}</Text>
-                  <Button labelStyle={styles.textButton} compact="true" mode="text" onPress={() => setTerms(true)}>
-                    {state.strings.terms}
-                  </Button>
-                </View>
-                <Button mode="contained" style={styles.submit} textColor="white" disabled={!state.username || !state.password || !state.node || !accept} onPress={login} loading={state.loading}>
+                <Button mode="contained" style={styles.submit} textColor="white" disabled={!state.username || !state.password || !state.node} onPress={login} loading={state.loading}>
                   {state.strings.login}
                 </Button>
                 <View style={styles.linkline}>
