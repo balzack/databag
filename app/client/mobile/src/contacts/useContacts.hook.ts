@@ -3,7 +3,7 @@ import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {RingContext} from '../context/RingContext';
 import {ContextType} from '../context/ContextType';
-import {Card} from 'databag-client-sdk';
+import {Card, Config} from 'databag-client-sdk';
 
 export function useContacts() {
   const app = useContext(AppContext) as ContextType;
@@ -18,6 +18,7 @@ export function useContacts() {
     connected: [] as Card[],
     sortAsc: false,
     filter: '',
+    enableIce: false,
   });
 
   const updateState = (value: any) => {
@@ -31,12 +32,19 @@ export function useContacts() {
 
   useEffect(() => {
     const contact = app.state.session?.getContact();
+    const settings = app.state.session?.getSettings();
+    const setConfig = (config: Config) => {
+      const { enableIce } = config;
+      updateState({ enableIce });
+    };
     const setCards = (cards: Card[]) => {
       const filtered = cards.filter(card => !card.blocked);
       updateState({cards: filtered});
     };
+    settings.addConfigListener(setConfig);
     contact.addCardListener(setCards);
     return () => {
+      settings.removeConfigListener(setConfig);
       contact.removeCardListener(setCards);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
