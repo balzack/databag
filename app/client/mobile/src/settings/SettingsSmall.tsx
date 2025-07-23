@@ -60,6 +60,11 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.profileSet]);
 
+  const next = () => {
+    console.log("pressed next");
+    setupNav.next();
+  }
+
   const showBlockedMessage = async () => {
     setBlockedError(false);
     try {
@@ -581,7 +586,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                   </Surface>
                 </View>
                 {setupNav && (
-                  <Button mode="contained" style={styles.navSubmit} onPress={setupNav?.next}>
+                  <Button mode="contained" style={styles.navSubmit} onPress={next}>
                     {state.strings.next}
                   </Button>
                 )}
