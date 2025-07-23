@@ -26,7 +26,7 @@ export function Welcome({next}: {next: () => void}) {
           <Image style={styles.typer} source={typer} resizeMode="contain" />
         </View>
         <View style={styles.frame}>
-          <SafeAreaView style={styles.wrapper} edges={['top', 'bottom']}>
+          <View style={styles.wrapper}>
             <View style={styles.form}>
               <View style={styles.header}>
                 <Text style={styles.title} variant="titleMedium">
@@ -58,7 +58,7 @@ export function Welcome({next}: {next: () => void}) {
                 </Button>
               </View>
             </View>
-          </SafeAreaView>
+          </View>
         </View>
       </Animated.View>
     </Surface>
