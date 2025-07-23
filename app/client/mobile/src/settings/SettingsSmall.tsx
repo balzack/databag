@@ -590,6 +590,9 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                     {state.strings.skipSetup}
                   </Button>
                 )}
+                {setupNav && (
+                  <View style={styles.onboardPad} />
+                )}
                 {!setupNav && (
                   <Text variant="headlineSmall" style={styles.sectionLabel}>
                     {state.strings.account}
