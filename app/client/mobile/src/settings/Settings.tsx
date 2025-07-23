@@ -8,6 +8,6 @@ type SettingsProps = {
   showLogout: boolean;
 };
 
-export function Settings({showLogout}: SettingsProps) {
-  return <LayoutSelector SmallComponent={SettingsSmall} LargeComponent={SettingsLarge} props={{showLogout}} />;
+export function Settings({setupNav, showLogout}: SettingsProps) {
+  return <LayoutSelector SmallComponent={SettingsSmall} LargeComponent={SettingsLarge} props={{setupNav, showLogout}} />;
 }
