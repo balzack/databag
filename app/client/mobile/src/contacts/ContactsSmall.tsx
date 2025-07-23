@@ -159,7 +159,7 @@ export function ContactsSmall({
                   key="actions"
                   visible={allTab && more === item.cardId}
                   onDismiss={() => setMore(null)}
-                  anchor={<IconButton style={styles.action} contentStyle={styles.actionPad} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
+                  anchor={<IconButton style={styles.action} contentStyle={styles.actionPad} rippleColor="transparent" loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
                   {Platform.OS === 'ios' && (
                     <Surface elevation={11} style={styles.menu}>
                       <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
@@ -169,7 +169,7 @@ export function ContactsSmall({
                           <Text>{state.strings.resyncAction}</Text>
                         </Pressable>
                       )}
-                      {syncStatus === 'connected' && (
+                      {syncStatus === 'connected' && state.enableIce && (
                         <Pressable key="call" style={styles.menuOption} onPress={() => call(item)}>
                           <Icon style={styles.button} source="phone" size={28} color={theme.colors.primary} />
                           <Text>{state.strings.callAction}</Text>
@@ -260,7 +260,7 @@ export function ContactsSmall({
                   key="actions"
                   visible={requestedTab && more === item.cardId}
                   onDismiss={() => setMore(null)}
-                  anchor={<IconButton style={styles.action} contentStyle={styles.actionPad} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
+                  anchor={<IconButton style={styles.action} contentStyle={styles.actionPad} rippleColor="transparent" loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
                   {Platform.OS === 'ios' && (
                     <Surface elevation={11} style={styles.menu}>
                       <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
@@ -325,7 +325,7 @@ export function ContactsSmall({
                   key="actions"
                   visible={connectedTab && more === item.cardId}
                   onDismiss={() => setMore(null)}
-                  anchor={<IconButton style={styles.action} contentStyle={styles.actionPad} loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
+                  anchor={<IconButton style={styles.action} contentStyle={styles.actionPad} rippleColor="transparent" loading={menuAction === item.cardId} icon="dots-horizontal-circle-outline" size={22} onPress={() => setMore(item.cardId)} />}>
                   {Platform.OS === 'ios' && (
                     <Surface elevation={11} style={styles.menu}>
                       <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
@@ -335,7 +335,7 @@ export function ContactsSmall({
                           <Text>{state.strings.resyncAction}</Text>
                         </Pressable>
                       )}
-                      {syncStatus !== 'offsync' && (
+                      {syncStatus !== 'offsync' && state.enableIce && (
                         <Pressable key="call" style={styles.menuOption} onPress={() => call(item)}>
                           <Icon style={styles.button} source="phone" size={28} color={theme.colors.primary} />
                           <Text>{state.strings.callAction}</Text>

@@ -87,7 +87,8 @@ export function useAccess() {
     setMode: (mode: string) => {
       updateState({mode});
     },
-    setUsername: (username: string) => {
+    setUsername: (login: string) => {
+      const username = login.replace(/\s/g, '.');
       updateState({username});
     },
     setPassword: (password: string) => {
@@ -102,7 +103,8 @@ export function useAccess() {
     setCode: (code: string) => {
       updateState({code});
     },
-    setNode: (node: string) => {
+    setNode: (server: string) => {
+      const node = server.replace(/\s/g, '.');
       const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(node);
       updateState({node, secure: !insecure});
     },

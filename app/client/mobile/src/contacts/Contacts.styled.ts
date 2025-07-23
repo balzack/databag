@@ -97,12 +97,14 @@ export const styles = StyleSheet.create({
     paddingRight: 16,
   },
   actionPad: {
-    paddingRight: 8,
+    paddingLeft: 12,
   },
   action: {
     backgroundColor: 'transparent',
-    borderRadius: 0,
+    borderRadius: 8,
     margin: 0,
+    width: 64,
+    height: 64,
   },
   tab: {
     width: 108,
