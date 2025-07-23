@@ -46,6 +46,7 @@ export function useConversation() {
     layout: 'small',
     topics: [] as Topic[],
     loaded: false,
+    showMessages: false,
     loadingMore: false,
     profile: null as Profile | null,
     cards: new Map<string, Card>(),
@@ -184,6 +185,8 @@ export function useConversation() {
             }
           });
           updateState({topics: sorted, loaded: true});
+          setTimeout(() => updateState({ showMessages: true }), 250);
+        
         }
       };
       const setCards = (cards: Card[]) => {
