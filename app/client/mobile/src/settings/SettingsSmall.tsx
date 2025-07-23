@@ -15,7 +15,7 @@ import Slider from '@react-native-community/slider';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {activateKeepAwake, deactivateKeepAwake} from '@sayem314/react-native-keep-awake';
 
-export function SettingsSmall() {
+export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: () => void}}) {
   const {state, actions} = useSettings();
   const [alert, setAlert] = useState(false);
   const [mediaError, setMediaError] = useState(false);
@@ -59,11 +59,6 @@ export function SettingsSmall() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.profileSet]);
-
-  const next = () => {
-    console.log("pressed next");
-    setupNav.next();
-  }
 
   const showBlockedMessage = async () => {
     setBlockedError(false);
@@ -462,9 +457,20 @@ export function SettingsSmall() {
   return (
     <View>
       <View style={styles.settings}>
-        <Surface mode="flat" elevation={9} style={styles.navHeader}>
-          <Text style={styles.smHeader}>{state.strings.settings}</Text>
-        </Surface>
+        {setupNav && (
+          <Surface elevation={9} mode="flat" style={styles.navHeader}>
+            <Pressable style={styles.navIcon} onPress={setupNav?.back}>
+              <Icon size={24} source="left" color={'white'} />
+            </Pressable>
+            <Text style={styles.smLabel}>{state.strings.yourProfile}</Text>
+            <View style={styles.navIcon} />
+          </Surface>
+        )}
+        {!setupNav && (
+          <Surface mode="flat" elevation={9} style={styles.navHeader}>
+            <Text style={styles.smHeader}>{state.strings.settings}</Text>
+          </Surface>
+        )}
         <Animated.View style={[styles.navImage, {opacity: profile}]}>
           <Image style={styles.navLogo} resizeMode={'contain'} source={{uri: state.imageUrl}} />
           <Surface style={styles.overlap} elevation={2} mode="flat" />
@@ -474,21 +480,25 @@ export function SettingsSmall() {
             <View style={styles.imageSpacer} />
             <Surface mode="flat" elevation={2} style={styles.surfaceMaxWidth}>
               <SafeAreaView style={styles.navForm} edges={['left', 'right']}>
-                <Text variant="headlineSmall" style={styles.sectionLabel}>
-                  {state.strings.profile}
-                </Text>
+                {!setupNav && (
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>
+                    {state.strings.profile}
+                  </Text>
+                )}
                 <View style={styles.navWrapper}>
                   <Surface elevation={0} mode="flat" style={styles.navData}>
-                    <TextInput
-                      style={styles.navInput}
-                      mode="outlined"
-                      outlineStyle={styles.navInputBorder}
-                      textColor={theme.colors.tertiary}
-                      disabled={true}
-                      value={`${state.profile.handle}${state.profile.node ? '@' + state.profile.node : ''}`}
-                      left={<TextInput.Icon style={styles.icon} iconColor={theme.colors.tertiary} size={22} icon="user" />}
-                    />
-                    <Divider style={styles.navDivider} />
+                    {!setupNav && (
+                      <TextInput
+                        style={styles.navInput}
+                        mode="outlined"
+                        outlineStyle={styles.navInputBorder}
+                        textColor={theme.colors.tertiary}
+                        disabled={true}
+                        value={`${state.profile.handle}${state.profile.node ? '@' + state.profile.node : ''}`}
+                        left={<TextInput.Icon style={styles.icon} iconColor={theme.colors.tertiary} size={22} icon="user" />}
+                      />
+                    )}
+                    {!setupNav && <Divider style={styles.navDivider} />}
                     <TextInput
                       style={styles.navInput}
                       mode="outlined"
@@ -497,7 +507,7 @@ export function SettingsSmall() {
                       autoComplete="off"
                       autoCorrect={false}
                       returnKeyType="done"
-                      placeholder={state.strings.name}
+                      placeholder={setupNav ? state.strings.enterName : state.strings.name}
                       placeholderTextColor={theme.colors.secondary}
                       value={state.name}
                       left={<TextInput.Icon style={styles.icon} size={22} icon="idcard" />}
@@ -525,7 +535,7 @@ export function SettingsSmall() {
                       autoComplete="off"
                       autoCorrect={false}
                       returnKeyType="done"
-                      placeholder={state.strings.location}
+                      placeholder={setupNav ? state.strings.yourLocation : state.strings.location}
                       placeholderTextColor={theme.colors.secondary}
                       value={state.location}
                       left={<TextInput.Icon style={styles.icon} size={22} icon="map-pin" />}
@@ -570,9 +580,8 @@ export function SettingsSmall() {
                     </View>
                   </Surface>
                 </View>
-<<<<<<< HEAD
                 {setupNav && (
-                  <Button mode="contained" style={styles.navSubmit} onPress={next}>
+                  <Button mode="contained" style={styles.navSubmit} onPress={setupNav?.next}>
                     {state.strings.next}
                   </Button>
                 )}
@@ -580,6 +589,9 @@ export function SettingsSmall() {
                   <Button mode="text" style={styles.navSkip} onPress={actions.clearWelcome}>
                     {state.strings.skipSetup}
                   </Button>
+                )}
+                {setupNav && (
+                  <View style={styles.onboardPad} />
                 )}
                 {!setupNav && (
                   <Text variant="headlineSmall" style={styles.sectionLabel}>
@@ -623,278 +635,258 @@ export function SettingsSmall() {
                           left={<TextInput.Icon style={styles.icon} size={22} icon="logout" />}
                         />
                         <Pressable style={styles.navPress} onPress={() => setLogout(true)} />
-=======
-                <Text variant="headlineSmall" style={styles.sectionLabel}>
-                  {state.strings.account}
-                </Text>
-                <View style={styles.navWrapper}>
-                  <Surface elevation={0} mode="flat" style={styles.navData}>
-                    <View style={styles.navUpload}>
-                      <TextInput
-                        style={styles.navInput}
-                        mode="outlined"
-                        outlineStyle={styles.navInputBorder}
-                        placeholder={state.strings.mfaTitle}
-                        left={<TextInput.Icon style={styles.icon} size={22} icon="key" />}
-                      />
-                      <View style={styles.controlAlign}>
-                        <Switch style={styles.controlSwitch} value={state.mfaEnabled} disabled={savingAuth} />
->>>>>>> droid-uxir
                       </View>
-                      <Pressable style={styles.navPress} onPress={() => setMfa(!state.mfaEnabled)} />
-                    </View>
-                    <Divider style={styles.navDivider} />
-                    <View style={styles.navUpload}>
-                      <TextInput
-                        style={styles.navInput}
-                        mode="outlined"
-                        outlineStyle={styles.navInputBorder}
-                        placeholder={state.strings.changeLogin}
-                        left={<TextInput.Icon style={styles.icon} size={22} icon="sensor-occupied" />}
-                      />
-                      <Pressable style={styles.navPress} onPress={changeLogin} />
-                    </View>
-                    <Divider style={styles.navDivider} />
-                    <View style={styles.navUpload}>
-                      <TextInput
-                        style={styles.navInput}
-                        mode="outlined"
-                        outlineStyle={styles.navInputBorder}
-                        placeholder={state.strings.logout}
-                        left={<TextInput.Icon style={styles.icon} size={22} icon="logout" />}
-                      />
-                      <Pressable style={styles.navPress} onPress={() => setLogout(true)} />
-                    </View>
-                    <Divider style={styles.navDivider} />
-                    <View style={styles.navUpload}>
-                      <TextInput
-                        style={styles.navInput}
-                        textColor={theme.colors.error}
-                        mode="outlined"
-                        outlineStyle={styles.navInputBorder}
-                        value={state.strings.deleteAccount}
-                        left={<TextInput.Icon style={styles.icon} color={theme.colors.error} size={22} icon="trash-2" />}
-                      />
-                      <Pressable style={styles.navPress} onPress={() => setRemove(true)} />
-                    </View>
-                  </Surface>
-                </View>
-                <Text variant="headlineSmall" style={styles.sectionLabel}>
-                  {state.strings.messaging}
-                </Text>
-                <View style={styles.navWrapper}>
-                  <Surface elevation={0} mode="flat" style={styles.navData}>
-                    <View style={styles.navUpload}>
-                      <TextInput
-                        style={styles.navInput}
-                        mode="outlined"
-                        outlineStyle={styles.navInputBorder}
-                        placeholder={state.strings.enableNotifications}
-                        left={<TextInput.Icon style={styles.icon} size={22} icon="bell-outline" />}
-                      />
-                      <View style={styles.controlAlign}>
-                        <Switch style={styles.controlSwitch} value={state.pushEnabled} disabled={savingNotifications} />
+                      <Divider style={styles.navDivider} />
+                      <View style={styles.navUpload}>
+                        <TextInput
+                          style={styles.navInput}
+                          textColor={theme.colors.error}
+                          mode="outlined"
+                          outlineStyle={styles.navInputBorder}
+                          value={state.strings.deleteAccount}
+                          left={<TextInput.Icon style={styles.icon} color={theme.colors.error} size={22} icon="trash-2" />}
+                        />
+                        <Pressable style={styles.navPress} onPress={() => setRemove(true)} />
                       </View>
-                      <Pressable style={styles.navPress} onPress={() => setNotifications(!state.pushEnabled)} />
-                    </View>
-                    <Divider style={styles.navDivider} />
-                    <View style={styles.navUpload}>
-                      <TextInput
-                        style={styles.navInput}
-                        mode="outlined"
-                        outlineStyle={styles.navInputBorder}
-                        placeholder={state.strings.sealingKey}
-                        left={<TextInput.Icon style={styles.icon} size={22} icon="lock" />}
-                      />
-                      <Pressable style={styles.navPress} onPress={setSeal} />
-                    </View>
-                    {state.allowUnsealed && <Divider style={styles.navDivider} />}
-                    {state.allowUnsealed && (
+                    </Surface>
+                  </View>
+                )}
+                {!setupNav && (
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>
+                    {state.strings.messaging}
+                  </Text>
+                )}
+                {!setupNav && (
+                  <View style={styles.navWrapper}>
+                    <Surface elevation={0} mode="flat" style={styles.navData}>
                       <View style={styles.navUpload}>
                         <TextInput
                           style={styles.navInput}
                           mode="outlined"
-                          placeholderTextColor={state.config.sealSet && state.config.sealUnlocked ? undefined : theme.colors.secondary}
                           outlineStyle={styles.navInputBorder}
-                          placeholder={state.strings.createSealed}
-                          left={<TextInput.Icon style={styles.icon} size={22} icon="sort-variant-lock" />}
+                          placeholder={state.strings.enableNotifications}
+                          left={<TextInput.Icon style={styles.icon} size={22} icon="bell-outline" />}
                         />
                         <View style={styles.controlAlign}>
-                          <Switch
-                            style={styles.controlSwitch}
-                            value={state.createSealed && state.config.sealSet && state.config.sealUnlocked}
-                            disabled={!state.config.sealSet || !state.config.sealUnlocked}
-                          />
+                          <Switch style={styles.controlSwitch} value={state.pushEnabled} disabled={savingNotifications} />
                         </View>
-                        <Pressable
-                          style={styles.navPress}
-                          onPress={() => {
-                            actions.setCreateSealed(!state.createSealed);
-                          }}
+                        <Pressable style={styles.navPress} onPress={() => setNotifications(!state.pushEnabled)} />
+                      </View>
+                      <Divider style={styles.navDivider} />
+                      <View style={styles.navUpload}>
+                        <TextInput
+                          style={styles.navInput}
+                          mode="outlined"
+                          outlineStyle={styles.navInputBorder}
+                          placeholder={state.strings.sealingKey}
+                          left={<TextInput.Icon style={styles.icon} size={22} icon="lock" />}
                         />
+                        <Pressable style={styles.navPress} onPress={setSeal} />
                       </View>
-                    )}
-                  </Surface>
-                </View>
-                <Text variant="headlineSmall" style={styles.sectionLabel}>
-                  {state.strings.appLanguage}
-                </Text>
-                <View style={styles.navWrapper}>
-                  <Surface elevation={0} mode="flat" style={styles.navData}>
-                    <View style={styles.navUpload}>
-                      <TextInput
-                        style={styles.navFullInput}
-                        mode="outlined"
-                        outlineStyle={styles.navInputBorder}
-                        placeholder={state.strings.languageName}
-                        right={<TextInput.Icon style={styles.icon} size={22} icon="dots-horizontal-circle-outline" />}
-                      />
-                      <Pressable style={styles.navPress} onPress={() => setLanguage(true)}>
-                        <Menu visible={language} onDismiss={() => setLanguage(false)} anchor={<View style={styles.anchor} contentStyle={styles.menuContent} />}>
-                          {languageOptions}
-                        </Menu>
-                      </Pressable>
-                    </View>
-                  </Surface>
-                </View>
-                <Text variant="headlineSmall" style={styles.sectionLabel}>
-                  {state.strings.format}
-                </Text>
-                <View style={styles.navWrapper}>
-                  <Surface elevation={0} mode="flat" style={styles.navData}>
-                    <View style={styles.navUpload}>
-                      <TextInput
-                        style={styles.navInput}
-                        mode="outlined"
-                        outlineStyle={styles.navInputBorder}
-                        placeholder={state.strings.hourLabel}
-                        left={<TextInput.Icon style={styles.icon} size={22} icon="clock" />}
-                      />
-                      <View style={styles.controlAlign}>
-                        <View style={styles.radioButtons}>
-                          <RadioButton.Item
-                            style={styles.radio}
-                            rippleColor="transparent"
-                            label={state.strings.timeUs}
-                            labelStyle={styles.option}
-                            mode="android"
-                            status={state.fullDayTime ? 'unchecked' : 'checked'}
+                      {state.allowUnsealed && <Divider style={styles.navDivider} />}
+                      {state.allowUnsealed && (
+                        <View style={styles.navUpload}>
+                          <TextInput
+                            style={styles.navInput}
+                            mode="outlined"
+                            placeholderTextColor={state.config.sealSet && state.config.sealUnlocked ? undefined : theme.colors.secondary}
+                            outlineStyle={styles.navInputBorder}
+                            placeholder={state.strings.createSealed}
+                            left={<TextInput.Icon style={styles.icon} size={22} icon="sort-variant-lock" />}
                           />
-                          <RadioButton.Item
-                            style={styles.radio}
-                            rippleColor="transparent"
-                            label={state.strings.timeEu}
-                            labelStyle={styles.option}
-                            mode="android"
-                            status={state.fullDayTime ? 'checked' : 'unchecked'}
+                          <View style={styles.controlAlign}>
+                            <Switch
+                              style={styles.controlSwitch}
+                              value={state.createSealed && state.config.sealSet && state.config.sealUnlocked}
+                              disabled={!state.config.sealSet || !state.config.sealUnlocked}
+                            />
+                          </View>
+                          <Pressable
+                            style={styles.navPress}
+                            onPress={() => {
+                              actions.setCreateSealed(!state.createSealed);
+                            }}
                           />
                         </View>
+                      )}
+                    </Surface>
+                  </View>
+                )}
+                {!setupNav && (
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>
+                    {state.strings.appLanguage}
+                  </Text>
+                )}
+                {!setupNav && (
+                  <View style={styles.navWrapper}>
+                    <Surface elevation={0} mode="flat" style={styles.navData}>
+                      <View style={styles.navUpload}>
+                        <TextInput
+                          style={styles.navFullInput}
+                          mode="outlined"
+                          outlineStyle={styles.navInputBorder}
+                          placeholder={state.strings.languageName}
+                          right={<TextInput.Icon style={styles.icon} size={22} icon="dots-horizontal-circle-outline" />}
+                        />
+                        <Pressable style={styles.navPress} onPress={() => setLanguage(true)}>
+                          <Menu visible={language} onDismiss={() => setLanguage(false)} anchor={<View style={styles.anchor} contentStyle={styles.menuContent} />}>
+                            {languageOptions}
+                          </Menu>
+                        </Pressable>
                       </View>
-                      <Pressable style={styles.navPress} onPress={() => actions.setFullDayTime(!state.fullDayTime)} />
-                    </View>
-                    <Divider style={styles.navDivider} />
-                    <View style={styles.navUpload}>
-                      <TextInput
-                        style={styles.navInput}
-                        mode="outlined"
-                        outlineStyle={styles.navInputBorder}
-                        placeholder={state.strings.dateLabel}
-                        left={<TextInput.Icon style={styles.icon} size={22} icon="calendar" />}
-                      />
-                      <View style={styles.controlAlign}>
-                        <View style={styles.radioButtons}>
-                          <RadioButton.Item
-                            style={styles.radio}
-                            rippleColor="transparent"
-                            label={state.strings.dateUs}
-                            labelStyle={styles.option}
-                            mode="android"
-                            status={state.monthFirstDate ? 'checked' : 'unchecked'}
-                          />
-                          <RadioButton.Item
-                            style={styles.radio}
-                            rippleColor="transparent"
-                            label={state.strings.dateEu}
-                            labelStyle={styles.option}
-                            mode="android"
-                            status={state.monthFirstDate ? 'unchecked' : 'checked'}
-                          />
+                    </Surface>
+                  </View>
+                )}
+                {!setupNav && (
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>
+                    {state.strings.format}
+                  </Text>
+                )}
+                {!setupNav && (
+                  <View style={styles.navWrapper}>
+                    <Surface elevation={0} mode="flat" style={styles.navData}>
+                      <View style={styles.navUpload}>
+                        <TextInput
+                          style={styles.navInput}
+                          mode="outlined"
+                          outlineStyle={styles.navInputBorder}
+                          placeholder={state.strings.hourLabel}
+                          left={<TextInput.Icon style={styles.icon} size={22} icon="clock" />}
+                        />
+                        <View style={styles.controlAlign}>
+                          <View style={styles.radioButtons}>
+                            <RadioButton.Item
+                              style={styles.radio}
+                              rippleColor="transparent"
+                              label={state.strings.timeUs}
+                              labelStyle={styles.option}
+                              mode="android"
+                              status={state.fullDayTime ? 'unchecked' : 'checked'}
+                            />
+                            <RadioButton.Item
+                              style={styles.radio}
+                              rippleColor="transparent"
+                              label={state.strings.timeEu}
+                              labelStyle={styles.option}
+                              mode="android"
+                              status={state.fullDayTime ? 'checked' : 'unchecked'}
+                            />
+                          </View>
                         </View>
+                        <Pressable style={styles.navPress} onPress={() => actions.setFullDayTime(!state.fullDayTime)} />
                       </View>
-                      <Pressable style={styles.navPress} onPress={() => actions.setMonthFirstDate(!state.monthFirstDate)} />
-                    </View>
-                    <Divider style={styles.navDivider} />
-                    <View style={styles.navFont}>
-                      <TextInput style={styles.navInput} mode="outlined" outlineStyle={styles.navInputBorder} placeholder={state.strings.fontFormat} />
-                      <View style={styles.navPress} />
-                    </View>
-                    <View style={styles.slider}>
-                      <Slider minimumValue={-10} maximumValue={10} minimumTrackTintColor={theme.colors.primary} value={state.fontSize} onSlidingComplete={val => actions.setFontSize(val)} />
-                    </View>
-                  </Surface>
-                </View>
-                <Text variant="headlineSmall" style={styles.sectionLabel}>
-                  {state.strings.blocked}
-                </Text>
-                <View style={styles.navWrapper}>
-                  <Surface elevation={0} mode="flat" style={styles.navData}>
-                    <View style={styles.navUpload}>
-                      <TextInput
-                        style={styles.navInput}
-                        mode="outlined"
-                        outlineStyle={styles.navInputBorder}
-                        placeholder={state.strings.contacts}
-                        left={<TextInput.Icon style={styles.icon} size={22} icon="users" />}
-                      />
-                      <Pressable style={styles.navPress} onPress={showBlockedContact} />
-                    </View>
-                    <Divider style={styles.navDivider} />
-                    <View style={styles.navUpload}>
-                      <TextInput
-                        style={styles.navInput}
-                        mode="outlined"
-                        outlineStyle={styles.navInputBorder}
-                        placeholder={state.strings.topics}
-                        left={<TextInput.Icon style={styles.icon} size={22} icon="text-box-outline" />}
-                      />
-                      <Pressable style={styles.navPress} onPress={showBlockedChannel} />
-                    </View>
-                    <Divider style={styles.navDivider} />
-                    <View style={styles.navUpload}>
-                      <TextInput
-                        style={styles.navInput}
-                        mode="outlined"
-                        outlineStyle={styles.navInputBorder}
-                        placeholder={state.strings.messages}
-                        left={<TextInput.Icon style={styles.icon} size={22} icon="message-circle" />}
-                      />
-                      <Pressable style={styles.navPress} onPress={showBlockedMessage} />
-                    </View>
-                  </Surface>
-                </View>
-                <Text variant="headlineSmall" style={styles.sectionLabel}>
-                  {state.strings.support}
-                </Text>
-                <View style={styles.navWrapper}>
-                  <Surface elevation={0} mode="flat" style={styles.navData}>
-                    <View style={styles.navUpload}>
-                      <TextInput
-                        style={styles.navInput}
-                        mode="outlined"
-                        outlineStyle={styles.navInputBorder}
-                        placeholder="github.com/balzack/databag"
-                        left={<TextInput.Icon style={styles.icon} size={22} icon="github" />}
-                      />
-                      <Pressable style={styles.navPress} onPress={() => Linking.openURL('https://github.com/balzack/databag')} />
-                    </View>
-                  </Surface>
-                </View>
+                      <Divider style={styles.navDivider} />
+                      <View style={styles.navUpload}>
+                        <TextInput
+                          style={styles.navInput}
+                          mode="outlined"
+                          outlineStyle={styles.navInputBorder}
+                          placeholder={state.strings.dateLabel}
+                          left={<TextInput.Icon style={styles.icon} size={22} icon="calendar" />}
+                        />
+                        <View style={styles.controlAlign}>
+                          <View style={styles.radioButtons}>
+                            <RadioButton.Item
+                              style={styles.radio}
+                              rippleColor="transparent"
+                              label={state.strings.dateUs}
+                              labelStyle={styles.option}
+                              mode="android"
+                              status={state.monthFirstDate ? 'checked' : 'unchecked'}
+                            />
+                            <RadioButton.Item
+                              style={styles.radio}
+                              rippleColor="transparent"
+                              label={state.strings.dateEu}
+                              labelStyle={styles.option}
+                              mode="android"
+                              status={state.monthFirstDate ? 'unchecked' : 'checked'}
+                            />
+                          </View>
+                        </View>
+                        <Pressable style={styles.navPress} onPress={() => actions.setMonthFirstDate(!state.monthFirstDate)} />
+                      </View>
+                      <Divider style={styles.navDivider} />
+                      <View style={styles.navFont}>
+                        <TextInput style={styles.navInput} mode="outlined" outlineStyle={styles.navInputBorder} placeholder={state.strings.fontFormat} />
+                        <View style={styles.navPress} />
+                      </View>
+                      <View style={styles.slider}>
+                        <Slider minimumValue={-10} maximumValue={10} minimumTrackTintColor={theme.colors.primary} value={state.fontSize} onSlidingComplete={val => actions.setFontSize(val)} />
+                      </View>
+                    </Surface>
+                  </View>
+                )}
+                {!setupNav && (
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>
+                    {state.strings.blocked}
+                  </Text>
+                )}
+                {!setupNav && (
+                  <View style={styles.navWrapper}>
+                    <Surface elevation={0} mode="flat" style={styles.navData}>
+                      <View style={styles.navUpload}>
+                        <TextInput
+                          style={styles.navInput}
+                          mode="outlined"
+                          outlineStyle={styles.navInputBorder}
+                          placeholder={state.strings.contacts}
+                          left={<TextInput.Icon style={styles.icon} size={22} icon="users" />}
+                        />
+                        <Pressable style={styles.navPress} onPress={showBlockedContact} />
+                      </View>
+                      <Divider style={styles.navDivider} />
+                      <View style={styles.navUpload}>
+                        <TextInput
+                          style={styles.navInput}
+                          mode="outlined"
+                          outlineStyle={styles.navInputBorder}
+                          placeholder={state.strings.topics}
+                          left={<TextInput.Icon style={styles.icon} size={22} icon="text-box-outline" />}
+                        />
+                        <Pressable style={styles.navPress} onPress={showBlockedChannel} />
+                      </View>
+                      <Divider style={styles.navDivider} />
+                      <View style={styles.navUpload}>
+                        <TextInput
+                          style={styles.navInput}
+                          mode="outlined"
+                          outlineStyle={styles.navInputBorder}
+                          placeholder={state.strings.messages}
+                          left={<TextInput.Icon style={styles.icon} size={22} icon="message-circle" />}
+                        />
+                        <Pressable style={styles.navPress} onPress={showBlockedMessage} />
+                      </View>
+                    </Surface>
+                  </View>
+                )}
+                {!setupNav && (
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>
+                    {state.strings.support}
+                  </Text>
+                )}
+                {!setupNav && (
+                  <View style={styles.navWrapper}>
+                    <Surface elevation={0} mode="flat" style={styles.navData}>
+                      <View style={styles.navUpload}>
+                        <TextInput
+                          style={styles.navInput}
+                          mode="outlined"
+                          outlineStyle={styles.navInputBorder}
+                          placeholder="github.com/balzack/databag"
+                          left={<TextInput.Icon style={styles.icon} size={22} icon="github" />}
+                        />
+                        <Pressable style={styles.navPress} onPress={() => Linking.openURL('https://github.com/balzack/databag')} />
+                      </View>
+                    </Surface>
+                  </View>
+                )}
               </SafeAreaView>
             </Surface>
           </KeyboardAwareScrollView>
         </Animated.View>
       </View>
-      <Modal animationType="fade" transparent={true} visible={sealing} supportedOrientations={['portrait', 'landscape']} onRequestClose={() => setSealing(false)}>
+      <Modal animationType="fade" statusBarTranslucent={true} transparent={true} visible={sealing} supportedOrientations={['portrait', 'landscape']} onRequestClose={() => setSealing(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
@@ -1135,7 +1127,7 @@ export function SettingsSmall() {
           </KeyboardAwareScrollView>
         </View>
       </Modal>
-      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={auth} onRequestClose={() => setAuth(false)}>
+      <Modal animationType="fade" statusBarTranslucent={true} transparent={true} supportedOrientations={['portrait', 'landscape']} visible={auth} onRequestClose={() => setAuth(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
@@ -1212,7 +1204,7 @@ export function SettingsSmall() {
           </KeyboardAwareScrollView>
         </View>
       </Modal>
-      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={change} onRequestClose={() => setChange(false)}>
+      <Modal animationType="fade" statusBarTranslucent={true} transparent={true} supportedOrientations={['portrait', 'landscape']} visible={change} onRequestClose={() => setChange(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>
@@ -1306,7 +1298,7 @@ export function SettingsSmall() {
           </KeyboardAwareScrollView>
         </View>
       </Modal>
-      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={remove} onRequestClose={() => setRemove(false)}>
+      <Modal animationType="fade" statusBarTranslucent={true} transparent={true} supportedOrientations={['portrait', 'landscape']} visible={remove} onRequestClose={() => setRemove(false)}>
         <View style={styles.modal}>
           <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackColor="dark" />
           <KeyboardAwareScrollView enableOnAndroid={true} style={styles.container} contentContainerStyle={styles.content}>

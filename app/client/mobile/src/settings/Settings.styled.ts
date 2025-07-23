@@ -31,6 +31,10 @@ export const styles = StyleSheet.create({
   modalInputBorder: {
     borderRadius: 8,
   },
+  onboardPad: {
+    width: '100%',
+    height: 1024,
+  },
   modalWarn: {
     marginTop: 8,
     textAlign: 'center',
