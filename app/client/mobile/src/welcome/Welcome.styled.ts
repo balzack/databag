@@ -28,6 +28,8 @@ export const styles = StyleSheet.create({
   wrapper: {
     display: 'flex',
     flexGrow: 1,
+    paddingTop: '10%',
+    paddingBottom: '10%',
   },
   form: {
     width: '100%',
