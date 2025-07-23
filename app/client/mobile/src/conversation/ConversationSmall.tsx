@@ -244,7 +244,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
     <View style={styles.component}>
       <Surface elevation={2} mode="flat" style={styles.content}>
         <Surface elevation={9} mode="flat" style={styles.surfaceMaxWidth}>
-          <SafeAreaView edges={['left', 'right']} style={styles.safeAreaNav}>
+          <SafeAreaView edges={['left', 'right']} style={{ ...styles.safeAreaNav, opacity: state.showMessages ? 1 : 0 }}>
             <Pressable style={styles.navIcon} onPress={onClose}>
               <Icon size={32} source="left" color={'white'} />
             </Pressable>
@@ -276,7 +276,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
 
         <SafeAreaView style={styles.thread} edges={['left', 'right']}>
           <FlatList
-            style={styles.messageList}
+            style={{...styles.messageList, opacity: state.showMessages ? 1 : 0}}
             inverted
             ref={thread}
             onScroll={onScroll}
@@ -295,13 +295,13 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
             }}
             keyExtractor={topic => topic.topicId}
           />
-          {state.loaded && state.topics.length === 0 && <Text style={styles.empty}>{state.strings.noMessages}</Text>}
-          {!state.loaded && (
+          {state.showMessages && state.topics.length === 0 && <Text style={styles.empty}>{state.strings.noMessages}</Text>}
+          {!state.showMessages && (
             <View style={styles.loading}>
               <ActivityIndicator size="large" />
             </View>
           )}
-          {state.loaded && more && (
+          {state.showMessages && more && (
             <View style={styles.more}>
               <ActivityIndicator />
             </View>
