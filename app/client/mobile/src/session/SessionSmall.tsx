@@ -5,6 +5,7 @@ import {RingContextProvider} from '../context/RingContext';
 import {styles} from './Session.styled';
 import {IconButton, Surface, Text, Icon, useTheme} from 'react-native-paper';
 import {BlurView} from '@react-native-community/blur';
+import {SettingsOnboard} from '../settings/SettingsOnboard';
 import {Settings} from '../settings/Settings';
 import {Contacts} from '../contacts/Contacts';
 import {Content} from '../content/Content';
@@ -51,7 +52,7 @@ function ContentTab({scheme, textCard, contentTab, share}: {scheme: string; text
         <ContentStack.Screen name="assemble" options={{...styles.noHeader, animation: Platform.OS === 'ios' ? 'simple_push' : 'none'}}>
           {props => <Assemble close={() => props.navigation.goBack()} openConversation={() => props.navigation.replace('conversation')} />}
         </ContentStack.Screen>
-        <ContentStack.Screen name="edit" options={{...styles.noHeader, animation: Platform.OS ==='ios' ? 'simple_push' : 'none'}}>
+        <ContentStack.Screen name="edit" options={{...styles.noHeader, animation: Platform.OS === 'ios' ? 'simple_push' : 'none'}}>
           {props => <Members close={() => props.navigation.goBack()} />}
         </ContentStack.Screen>
         <ContentStack.Screen name="conversation" options={{...styles.noHeader, animation: Platform.OS === 'ios' ? 'simple_push' : 'none'}}>
@@ -117,7 +118,7 @@ function Onboarding({scheme}: {scheme: string}) {
               {props => <Welcome next={() => props.navigation.navigate('identity')} />}
             </OnboardStack.Screen>
             <OnboardStack.Screen name="identity" options={{animation: 'fade'}}>
-              {props => <Settings setupNav={{back: () => props.navigation.navigate('welcome'), next: () => props.navigation.navigate('request')}} />}
+              {props => <SettingsOnboard back={() => props.navigation.navigate('welcome')} next={() => props.navigation.navigate('request')} />}
             </OnboardStack.Screen>
             <OnboardStack.Screen name="request" options={{...styles.noHeader, animation: Platform.OS === 'ios' ? 'simple_push' : 'none'}}>
               {props => <Request setupNav={{back: () => props.navigation.navigate('identity'), next: () => props.navigation.navigate('ready')}} />}
