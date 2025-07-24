@@ -79,7 +79,7 @@ export function Request({setupNav}: {setupNav: {back: () => void; next: () => vo
         )}
         <Divider />
         <Surface elevation={2} mode="flat" style={styles.control}>
-          <Button mode="contained" style={styles.submit} onPress={setupNav?.next}>
+          <Button mode="contained" textColor="white" style={styles.submit} onPress={setupNav?.next}>
             {state.strings.next}
           </Button>
           <Button mode="text" style={styles.skip} onPress={actions.clearWelcome}>
