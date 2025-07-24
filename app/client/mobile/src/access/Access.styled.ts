@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     height: '100%',
+    paddingTop: 32,
   },
   typer: {
     width: 286,
@@ -19,6 +20,7 @@ export const styles = StyleSheet.create({
   full: {
     width: '100%',
     height: '100%',
+    paddingTop: 64,
   },
   frame: {
     width: '100%',

@@ -894,7 +894,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                   <>
                     <Text style={styles.modalDescription}>{state.strings.saveDelete}</Text>
                     <View style={styles.modalControls}>
-                      <Button style={styles.modalControl} contentStyle={styles.modalControlContent} textColor="white" mode="contained" onPress={() => setSealReset(true)}>
+                      <Button style={styles.modalControl} contentStyle={styles.modalControlContent} textColor="white" mode="contained" textColor="white" onPress={() => setSealReset(true)}>
                         {state.strings.resave}
                       </Button>
                       <Button
