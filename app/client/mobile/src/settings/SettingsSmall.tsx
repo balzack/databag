@@ -581,7 +581,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                   </Surface>
                 </View>
                 {setupNav && (
-                  <Button mode="contained" style={styles.navSubmit} onPress={setupNav?.next}>
+                  <Button mode="contained" textColor="white" style={styles.navSubmit} onPress={setupNav?.next}>
                     {state.strings.next}
                   </Button>
                 )}

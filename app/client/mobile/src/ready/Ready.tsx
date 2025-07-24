@@ -18,7 +18,7 @@ export function Ready() {
             <Text variant="labelLarge" style={styles.info}>
               {state.strings.moreContacts}
             </Text>
-            <Button mode="contained" style={styles.submit} onPress={actions.done}>
+            <Button mode="contained" textColor="white" style={styles.submit} onPress={actions.done}>
               {state.strings.continue}
             </Button>
           </View>
