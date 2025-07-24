@@ -13,7 +13,7 @@ export function Welcome({next}: {next: () => void}) {
   useEffect(() => {
     Animated.timing(show, {
       toValue: 1,
-      duration: 500,
+      duration: 1000,
       useNativeDriver: true,
     }).start();
     // eslint-disable-next-line react-hooks/exhaustive-deps

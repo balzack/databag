@@ -581,7 +581,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                   </Surface>
                 </View>
                 {setupNav && (
-                  <Button mode="contained" style={styles.navSubmit} onPress={setupNav?.next}>
+                  <Button mode="contained" textColor="white" style={styles.navSubmit} onPress={setupNav?.next}>
                     {state.strings.next}
                   </Button>
                 )}
@@ -589,6 +589,9 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                   <Button mode="text" style={styles.navSkip} onPress={actions.clearWelcome}>
                     {state.strings.skipSetup}
                   </Button>
+                )}
+                {setupNav && (
+                  <View style={styles.onboardPad} />
                 )}
                 {!setupNav && (
                   <Text variant="headlineSmall" style={styles.sectionLabel}>
@@ -894,7 +897,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                   <>
                     <Text style={styles.modalDescription}>{state.strings.saveDelete}</Text>
                     <View style={styles.modalControls}>
-                      <Button style={styles.modalControl} contentStyle={styles.modalControlContent} textColor="white" mode="contained" textColor="white" onPress={() => setSealReset(true)}>
+                      <Button style={styles.modalControl} contentStyle={styles.modalControlContent} textColor="white" mode="contained" onPress={() => setSealReset(true)}>
                         {state.strings.resave}
                       </Button>
                       <Button
