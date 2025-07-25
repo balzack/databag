@@ -131,8 +131,11 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
   };
 
   const onClose = () => {
-    actions.close();
     close();
+
+    setTimeout(() => {
+      actions.close();
+    }, 250);
   };
 
   const onContent = (width, height) => {
@@ -244,11 +247,11 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
     <View style={styles.component}>
       <Surface elevation={2} mode="flat" style={styles.content}>
         <Surface elevation={9} mode="flat" style={styles.surfaceMaxWidth}>
-          <SafeAreaView edges={['left', 'right']} style={{ ...styles.safeAreaNav, opacity: state.showMessages ? 1 : 0 }}>
+          <SafeAreaView edges={['left', 'right']} style={styles.safeAreaNav}>
             <Pressable style={styles.navIcon} onPress={onClose}>
               <Icon size={32} source="left" color={'white'} />
             </Pressable>
-            <View style={styles.title}>
+            <View style={{ ...styles.title, opacity: state.showMessages ? 1 : 0 }}>
               {state.detailSet && state.subject && (
                 <Text numberOfLines={1} style={styles.smLabel}>
                   {state.subject}

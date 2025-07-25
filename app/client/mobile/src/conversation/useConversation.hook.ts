@@ -1,5 +1,5 @@
 import {useState, useContext, useEffect, useRef} from 'react';
-import {Keyboard} from 'react-native';
+import {Keyboard, Platform} from 'react-native';
 import {UnsentTopic, AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {Focus, FocusDetail, Topic, Profile, Card, AssetType, AssetSource, TransformType} from 'databag-client-sdk';
@@ -184,9 +184,12 @@ export function useConversation() {
               return 0;
             }
           });
-          updateState({topics: sorted, loaded: true});
-          setTimeout(() => updateState({ showMessages: true }), 250);
-        
+          if (Platform.OS === 'ios') {
+            updateState({topics: sorted, showMessages: true, loaded: true});
+          } else {
+            updateState({topics: sorted, loaded: true});
+            setTimeout(() => updateState({ showMessages: true }), 250);
+          }
         }
       };
       const setCards = (cards: Card[]) => {
