@@ -131,8 +131,11 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
   };
 
   const onClose = () => {
-    actions.close();
     close();
+
+    setTimeout(() => {
+      actions.close();
+    }, 250);
   };
 
   const onContent = (width, height) => {
