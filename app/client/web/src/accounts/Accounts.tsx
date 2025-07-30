@@ -20,7 +20,8 @@ export function Accounts({ openSetup }: { openSetup: () => void }) {
   const [tokenCopy, setTokenCopy] = useState(false)
   const [linkCopy, setLinkCopy] = useState(false)
   const [token, setToken] = useState('')
-  const link = `${window.location.origin}/#/create?add=${token}`
+  const addLink = `${window.location.origin}/#/access?add=${token}`
+  const resetLink = `${window.location.origin}/#/access?reset=${token}`
 
   useEffect(() => {
     actions.reload()
@@ -52,7 +53,7 @@ export function Accounts({ openSetup }: { openSetup: () => void }) {
     }
   }
 
-  const copyLink = async () => {
+  const copyLink = async (link: string) => {
     if (!linkCopy) {
       try {
         navigator.clipboard.writeText(link)
@@ -216,15 +217,15 @@ export function Accounts({ openSetup }: { openSetup: () => void }) {
         <div className={classes.modal}>
           <Text className={classes.prompt}>{state.strings.addingLink}:</Text>
           <div className={classes.copy}>
-            <Text className={classes.value}>{link}</Text>
-            {linkCopy && <TbCheck size="16" />}
-            {!linkCopy && <TbCopy size="16" className={classes.icon} onClick={copyLink} />}
+            <Text className={classes.value}>{addLink}</Text>
+            {linkCopy && <TbCheck />}
+            {!linkCopy && <TbCopy className={classes.icon} onClick={() => copyLink(addLink)} />}
           </div>
           <Text className={classes.prompt}>{state.strings.addingToken}:</Text>
           <div className={classes.copy}>
             <Text className={classes.value}>{token}</Text>
-            {tokenCopy && <TbCheck size="16" />}
-            {!tokenCopy && <TbCopy size="16" className={classes.icon} onClick={copyToken} />}
+            {tokenCopy && <TbCheck />}
+            {!tokenCopy && <TbCopy className={classes.icon} onClick={copyToken} />}
           </div>
           <div className={classes.control}>
             <Button onClick={addClose}>{state.strings.close}</Button>
@@ -235,9 +236,9 @@ export function Accounts({ openSetup }: { openSetup: () => void }) {
         <div className={classes.modal}>
           <Text className={classes.prompt}>{state.strings.accessingLink}:</Text>
           <div className={classes.copy}>
-            <Text className={classes.value}>{link}</Text>
+            <Text className={classes.value}>{resetLink}</Text>
             {linkCopy && <TbCheck size="16" />}
-            {!linkCopy && <TbCopy size="16" className={classes.icon} onClick={copyLink} />}
+            {!linkCopy && <TbCopy size="16" className={classes.icon} onClick={() => copyLink(resetLink)} />}
           </div>
           <Text className={classes.prompt}>{state.strings.accessingToken}:</Text>
           <div className={classes.copy}>
