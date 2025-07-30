@@ -3,7 +3,7 @@ import { MediaAsset } from '../../conversation/Conversation'
 import { useBinaryAsset } from './useBinaryAsset.hook'
 import { Progress, ActionIcon, Image } from '@mantine/core'
 import classes from './BinaryAsset.module.css'
-import { IconDownload, IconX } from '@tabler/icons-react'
+import { TbDownload, TbX } from "react-icons/tb";
 import binary from '../../images/binary.png'
 
 export function BinaryAsset({ topicId, asset }: { topicId: string; asset: MediaAsset }) {
@@ -46,7 +46,7 @@ export function BinaryAsset({ topicId, asset }: { topicId: string; asset: MediaA
           <div className={classes.label}>{label}</div>
           <div className={classes.extension}>{extension}</div>
         </div>
-        <IconDownload className={classes.download} size={32} />
+        <TbDownload className={classes.download} size={32} />
       </div>
 
       {showModal && (
@@ -57,11 +57,11 @@ export function BinaryAsset({ topicId, asset }: { topicId: string; asset: MediaA
               <div className={classes.label}>{label}</div>
               <div className={classes.extension}>{extension}</div>
             </div>
-            {state.dataUrl && <IconDownload className={classes.download} size={64} onClick={download} />}
+            {state.dataUrl && <TbDownload className={classes.download} size={64} onClick={download} />}
           </div>
           {state.loading && state.loadPercent > 0 && <Progress className={classes.progress} value={state.loadPercent} />}
           <ActionIcon className={classes.close} variant="filled" size="lg" onClick={hide}>
-            <IconX size="lg" />
+            <TbX size="lg" />
           </ActionIcon>
         </div>
       )}

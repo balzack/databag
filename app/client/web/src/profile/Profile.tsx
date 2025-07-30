@@ -3,20 +3,20 @@ import { useProfile } from './useProfile.hook'
 import classes from './Profile.module.css'
 import { modals } from '@mantine/modals'
 import {
-  IconMapPin,
-  IconBook,
-  IconUserX,
-  IconRouteX2,
-  IconRoute2,
-  IconUserCheck,
-  IconVolumeOff,
-  IconArrowsCross,
-  IconRefresh,
-  IconAlertHexagon,
-  IconEyeOff,
-  IconCancel,
-  IconDeviceFloppy,
-} from '@tabler/icons-react'
+  TbMapPin,
+  TbBook,
+  TbUserX,
+  TbRouteX2,
+  TbRoute2,
+  TbUserCheck,
+  TbVolumeOff,
+  TbArrowsCross,
+  TbRefresh,
+  TbAlertHexagon,
+  TbEyeOff,
+  TbCancel,
+  TbDeviceFloppy,
+} from "react-icons/tb";
 import { CloseButton, Text, Image, ActionIcon } from '@mantine/core'
 
 export type ProfileParams = {
@@ -259,14 +259,14 @@ export function Profile({ params, showClose, close }: { params: ProfileParams; s
         {state.name && <Text className={classes.nameSet}>{state.name}</Text>}
         <div className={classes.entry}>
           <div className={classes.entryIcon}>
-            <IconMapPin />
+            <TbMapPin />
           </div>
           {!state.location && <Text className={classes.entryUnset}>{state.strings.location}</Text>}
           {state.location && <Text className={classes.entrySet}>{state.location}</Text>}
         </div>
         <div className={classes.entry}>
           <div className={classes.entryIcon}>
-            <IconBook />
+            <TbBook />
           </div>
           {!state.description && <Text className={classes.entryUnset}>{state.strings.description}</Text>}
           {state.description && <Text className={classes.entrySet}>{state.description}</Text>}
@@ -281,19 +281,19 @@ export function Profile({ params, showClose, close }: { params: ProfileParams; s
           <div className={classes.actions}>
             <div className={classes.action} onClick={applySaveAndConnect}>
               <ActionIcon variant="subtle" loading={connecting} size={32}>
-                <IconRoute2 size={32} />
+                <TbRoute2 size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.connect}</Text>
             </div>
             <div className={classes.action} onClick={applySave}>
               <ActionIcon variant="subtle" loading={saving} size={32}>
-                <IconDeviceFloppy size={32} />
+                <TbDeviceFloppy size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.save}</Text>
             </div>
             <div className={classes.action} onClick={confirmReport}>
               <ActionIcon variant="subtle" loading={reporting} size={32}>
-                <IconAlertHexagon size={32} />
+                <TbAlertHexagon size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.report}</Text>
             </div>
@@ -303,25 +303,25 @@ export function Profile({ params, showClose, close }: { params: ProfileParams; s
           <div className={classes.actions}>
             <div className={classes.action} onClick={applyConnect}>
               <ActionIcon variant="subtle" loading={connecting} size={32}>
-                <IconRoute2 size={32} />
+                <TbRoute2 size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.connect}</Text>
             </div>
             <div className={classes.action} onClick={confirmRemove}>
               <ActionIcon variant="subtle" loading={removing} size={32}>
-                <IconUserX size={32} />
+                <TbUserX size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.remove}</Text>
             </div>
             <div className={classes.action} onClick={confirmBlock}>
               <ActionIcon variant="subtle" loading={blocking} size={32}>
-                <IconEyeOff size={32} />
+                <TbEyeOff size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.block}</Text>
             </div>
             <div className={classes.action} onClick={confirmReport}>
               <ActionIcon variant="subtle" loading={reporting} size={32}>
-                <IconAlertHexagon size={32} />
+                <TbAlertHexagon size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.report}</Text>
             </div>
@@ -331,43 +331,43 @@ export function Profile({ params, showClose, close }: { params: ProfileParams; s
           <div className={classes.actions}>
             <div className={classes.action} onClick={applyConfirm}>
               <ActionIcon variant="subtle" loading={confirming} size={32}>
-                <IconDeviceFloppy size={32} />
+                <TbDeviceFloppy size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.save}</Text>
             </div>
             <div className={classes.action} onClick={applyAccept}>
               <ActionIcon variant="subtle" loading={accepting} size={32}>
-                <IconUserCheck size={32} />
+                <TbUserCheck size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.accept}</Text>
             </div>
             <div className={classes.action} onClick={confirmIgnore}>
               <ActionIcon variant="subtle" loading={ignoring} size={32}>
-                <IconVolumeOff size={32} />
+                <TbVolumeOff size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.ignore}</Text>
             </div>
             <div className={classes.action} onClick={confirmDeny}>
               <ActionIcon variant="subtle" loading={denying} size={32}>
-                <IconArrowsCross size={32} />
+                <TbArrowsCross size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.deny}</Text>
             </div>
             <div className={classes.action} onClick={confirmRemove}>
               <ActionIcon variant="subtle" loading={removing} size={32}>
-                <IconUserX size={32} />
+                <TbUserX size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.remove}</Text>
             </div>
             <div className={classes.action} onClick={confirmBlock}>
               <ActionIcon variant="subtle" loading={blocking} size={32}>
-                <IconEyeOff size={32} />
+                <TbEyeOff size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.block}</Text>
             </div>
             <div className={classes.action} onClick={confirmReport}>
               <ActionIcon variant="subtle" loading={reporting} size={32}>
-                <IconAlertHexagon size={32} />
+                <TbAlertHexagon size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.report}</Text>
             </div>
@@ -377,37 +377,37 @@ export function Profile({ params, showClose, close }: { params: ProfileParams; s
           <div className={classes.actions} onClick={applyAccept}>
             <div className={classes.action}>
               <ActionIcon variant="subtle" loading={accepting} size={32}>
-                <IconUserCheck size={32} />
+                <TbUserCheck size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.accept}</Text>
             </div>
             <div className={classes.action} onClick={confirmIgnore}>
               <ActionIcon variant="subtle" loading={ignoring} size={32}>
-                <IconVolumeOff size={32} />
+                <TbVolumeOff size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.ignore}</Text>
             </div>
             <div className={classes.action} onClick={confirmDeny}>
               <ActionIcon variant="subtle" loading={denying} size={32}>
-                <IconArrowsCross size={32} />
+                <TbArrowsCross size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.deny}</Text>
             </div>
             <div className={classes.action} onClick={confirmRemove}>
               <ActionIcon variant="subtle" loading={removing} size={32}>
-                <IconUserX size={32} />
+                <TbUserX size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.remove}</Text>
             </div>
             <div className={classes.action} onClick={confirmBlock}>
               <ActionIcon variant="subtle" loading={blocking} size={32}>
-                <IconEyeOff size={32} />
+                <TbEyeOff size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.block}</Text>
             </div>
             <div className={classes.action} onClick={confirmReport}>
               <ActionIcon variant="subtle" loading={reporting} size={32}>
-                <IconAlertHexagon size={32} />
+                <TbAlertHexagon size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.report}</Text>
             </div>
@@ -417,25 +417,25 @@ export function Profile({ params, showClose, close }: { params: ProfileParams; s
           <div className={classes.actions}>
             <div className={classes.action} onClick={applyCancel}>
               <ActionIcon variant="subtle" loading={canceling} size={32}>
-                <IconCancel size={32} />
+                <TbCancel size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.cancel}</Text>
             </div>
             <div className={classes.action} onClick={confirmRemove}>
               <ActionIcon variant="subtle" loading={removing} size={32}>
-                <IconUserX size={32} />
+                <TbUserX size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.remove}</Text>
             </div>
             <div className={classes.action} onClick={confirmBlock}>
               <ActionIcon variant="subtle" loading={blocking} size={32}>
-                <IconEyeOff size={32} />
+                <TbEyeOff size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.block}</Text>
             </div>
             <div className={classes.action} onClick={confirmReport}>
               <ActionIcon variant="subtle" loading={reporting} size={32}>
-                <IconAlertHexagon size={32} />
+                <TbAlertHexagon size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.report}</Text>
             </div>
@@ -445,25 +445,25 @@ export function Profile({ params, showClose, close }: { params: ProfileParams; s
           <div className={classes.actions}>
             <div className={classes.action} onClick={confirmDisconnect}>
               <ActionIcon variant="subtle" loading={disconnecting} size={32}>
-                <IconRouteX2 size={32} />
+                <TbRouteX2 size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.disconnect}</Text>
             </div>
             <div className={classes.action} onClick={confirmRemove}>
               <ActionIcon variant="subtle" loading={removing} size={32}>
-                <IconUserX size={32} />
+                <TbUserX size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.remove}</Text>
             </div>
             <div className={classes.action} onClick={confirmBlock}>
               <ActionIcon variant="subtle" loading={blocking} size={32}>
-                <IconEyeOff size={32} />
+                <TbEyeOff size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.block}</Text>
             </div>
             <div className={classes.action} onClick={confirmReport}>
               <ActionIcon variant="subtle" loading={reporting} size={32}>
-                <IconAlertHexagon size={32} />
+                <TbAlertHexagon size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.report}</Text>
             </div>
@@ -473,31 +473,31 @@ export function Profile({ params, showClose, close }: { params: ProfileParams; s
           <div className={classes.actions}>
             <div className={classes.action} onClick={applyResync}>
               <ActionIcon variant="subtle" loading={resyncing} size={32}>
-                <IconRefresh size={32} />
+                <TbRefresh size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.resync}</Text>
             </div>
             <div className={classes.action} onClick={confirmDisconnect}>
               <ActionIcon variant="subtle" loading={disconnecting} size={32}>
-                <IconRouteX2 size={32} />
+                <TbRouteX2 size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.disconnect}</Text>
             </div>
             <div className={classes.action} onClick={confirmRemove}>
               <ActionIcon variant="subtle" loading={removing} size={32}>
-                <IconUserX size={32} />
+                <TbUserX size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.remove}</Text>
             </div>
             <div className={classes.action} onClick={confirmBlock}>
               <ActionIcon variant="subtle" loading={blocking} size={32}>
-                <IconEyeOff size={32} />
+                <TbEyeOff size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.block}</Text>
             </div>
             <div className={classes.action} onClick={confirmReport}>
               <ActionIcon variant="subtle" loading={reporting} size={32}>
-                <IconAlertHexagon size={32} />
+                <TbAlertHexagon size={32} />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.report}</Text>
             </div>

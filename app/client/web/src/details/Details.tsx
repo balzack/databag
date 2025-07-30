@@ -2,22 +2,22 @@ import React, { useState } from 'react'
 import { useDetails } from './useDetails.hook'
 import classes from './Details.module.css'
 import {
-  IconUserCog,
-  IconEyeOff,
-  IconAlertHexagon,
-  IconMessageX,
-  IconLogout2,
-  IconHome,
-  IconServer,
-  IconShield,
-  IconShieldOff,
-  IconCalendarClock,
-  IconExclamationCircle,
-  IconX,
-  IconDeviceFloppy,
-  IconArrowBack,
-  IconLabel,
-} from '@tabler/icons-react'
+  TbUserCog,
+  TbEyeOff,
+  TbAlertHexagon,
+  TbMessageX,
+  TbLogout2,
+  TbHome,
+  TbServer,
+  TbShield,
+  TbShieldOff,
+  TbCalendarClock,
+  TbExclamationCircle,
+  TbX,
+  TbDeviceFloppy,
+  TbArrowBack,
+  TbLabel,
+} from "react-icons/tb";
 import { Switch, Button, Modal, Divider, Text, TextInput, ActionIcon } from '@mantine/core'
 import { Card } from '../card/Card'
 import { modals } from '@mantine/modals'
@@ -210,9 +210,9 @@ export function Details({ showClose, close }: { showClose: boolean; close: () =>
   return (
     <div className={classes.details}>
       <div className={classes.header}>
-        {showClose && <IconX className={classes.match} />}
+        {showClose && <TbX className={classes.match} />}
         <Text className={classes.label}>{state.strings.details}</Text>
-        {showClose && <IconX className={classes.close} onClick={close} />}
+        {showClose && <TbX className={classes.close} onClick={close} />}
       </div>
       {state.access && (
         <div className={classes.body}>
@@ -226,19 +226,19 @@ export function Details({ showClose, close }: { showClose: boolean; close: () =>
                     value={state.editSubject}
                     onChange={(event) => actions.setEditSubject(event.currentTarget.value)}
                     leftSectionPointerEvents="none"
-                    leftSection={<IconLabel />}
+                    leftSection={<TbLabel />}
                     rightSectionPointerEvents="all"
                     rightSectionWidth={64}
                     rightSection={
                       <div className={classes.subjectControls}>
                         {state.editSubject != state.subject && (
                           <ActionIcon key="undo" variant="subtle" onClick={undo}>
-                            <IconArrowBack />
+                            <TbArrowBack />
                           </ActionIcon>
                         )}
                         {state.editSubject != state.subject && (
                           <ActionIcon key="save" variant="subtle" onClick={save} loading={saving}>
-                            <IconDeviceFloppy />
+                            <TbDeviceFloppy />
                           </ActionIcon>
                         )}
                       </div>
@@ -249,41 +249,41 @@ export function Details({ showClose, close }: { showClose: boolean; close: () =>
             )}
             {!state.host && state.subject && (
               <div className={classes.attribute}>
-                <IconLabel size={28} className={classes.subjectValue} />
+                <TbLabel size={28} className={classes.subjectValue} />
                 <Text className={classes.subjectValue}>{state.subject}</Text>
               </div>
             )}
             {!state.host && !state.subject && (
               <div className={classes.attribute}>
-                <IconLabel size={28} className={classes.subjectPlaceholder} />
+                <TbLabel size={28} className={classes.subjectPlaceholder} />
                 <Text className={classes.subjectPlaceholder}>{state.strings.subject}</Text>
               </div>
             )}
             <div className={classes.attribute}>
-              <IconCalendarClock size={20} />
+              <TbCalendarClock size={20} />
               <Text className={classes.attributeValue}>{state.created}</Text>
             </div>
             {state.sealed && (
               <div className={classes.attribute}>
-                <IconShield size={20} />
+                <TbShield size={20} />
                 <Text className={classes.attributeValue}>{state.strings.sealed}</Text>
               </div>
             )}
             {!state.sealed && (
               <div className={classes.attribute}>
-                <IconShieldOff size={20} />
+                <TbShieldOff size={20} />
                 <Text className={classes.attributeValue}>{state.strings.notSealed}</Text>
               </div>
             )}
             {state.host && (
               <div className={classes.attribute}>
-                <IconHome size={20} />
+                <TbHome size={20} />
                 <Text className={classes.attributeValue}>{state.strings.channelHost}</Text>
               </div>
             )}
             {!state.host && (
               <div className={classes.attribute}>
-                <IconServer size={20} />
+                <TbServer size={20} />
                 <Text className={classes.attributeValue}>{state.strings.channelGuest}</Text>
               </div>
             )}
@@ -293,19 +293,19 @@ export function Details({ showClose, close }: { showClose: boolean; close: () =>
             <div className={classes.actions}>
               <div className={classes.action}>
                 <ActionIcon variant="subtle" size={32} loading={removing} onClick={leave}>
-                  <IconLogout2 size={32} />
+                  <TbLogout2 size={32} />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.leave}</Text>
               </div>
               <div className={classes.action}>
                 <ActionIcon variant="subtle" size={32} loading={blocking} onClick={block}>
-                  <IconEyeOff size={32} />
+                  <TbEyeOff size={32} />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.block}</Text>
               </div>
               <div className={classes.action}>
                 <ActionIcon variant="subtle" size={32} loading={reporting} onClick={report}>
-                  <IconAlertHexagon size={32} />
+                  <TbAlertHexagon size={32} />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.report}</Text>
               </div>
@@ -315,13 +315,13 @@ export function Details({ showClose, close }: { showClose: boolean; close: () =>
             <div className={classes.actions}>
               <div className={classes.action}>
                 <ActionIcon variant="subtle" size={32} loading={removing} onClick={remove}>
-                  <IconMessageX size={32} />
+                  <TbMessageX size={32} />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.remove}</Text>
               </div>
               <div className={classes.action}>
                 <ActionIcon variant="subtle" size={32} onClick={setShowModal}>
-                  <IconUserCog size={32} />
+                  <TbUserCog size={32} />
                 </ActionIcon>
                 <Text className={classes.actionLabel}>{state.strings.members}</Text>
               </div>
@@ -340,7 +340,7 @@ export function Details({ showClose, close }: { showClose: boolean; close: () =>
                 placeholder={state.strings.name}
                 handle={state.hostCard.handle}
                 node={state.hostCard.node}
-                actions={[<IconHome key="host" size={20} />]}
+                actions={[<TbHome key="host" size={20} />]}
               />
             )}
             {state.profile && (
@@ -351,7 +351,7 @@ export function Details({ showClose, close }: { showClose: boolean; close: () =>
                 placeholder={state.strings.name}
                 handle={state.profile.handle}
                 node={state.profile.node}
-                actions={state.host ? [<IconHome key="me" size={20} />] : []}
+                actions={state.host ? [<TbHome key="me" size={20} />] : []}
               />
             )}
             {cards}
@@ -365,7 +365,7 @@ export function Details({ showClose, close }: { showClose: boolean; close: () =>
       )}
       {!state.access && (
         <div className={classes.disconnected}>
-          <IconExclamationCircle />
+          <TbExclamationCircle />
           <Text>{state.strings.syncError}</Text>
         </div>
       )}

@@ -3,7 +3,7 @@ import { MediaAsset } from '../../conversation/Conversation'
 import { useImageAsset } from './useImageAsset.hook'
 import { Progress, ActionIcon, Image } from '@mantine/core'
 import classes from './ImageAsset.module.css'
-import { IconX } from '@tabler/icons-react'
+import { TbX } from "react-icons/tb";
 
 export function ImageAsset({ topicId, asset }: { topicId: string; asset: MediaAsset }) {
   const { state, actions } = useImageAsset(topicId, asset)
@@ -48,7 +48,7 @@ export function ImageAsset({ topicId, asset }: { topicId: string; asset: MediaAs
           )}
           {state.loading && state.loadPercent > 0 && <Progress className={classes.progress} value={state.loadPercent} />}
           <ActionIcon className={classes.close} variant="filled" size="lg" onClick={hide}>
-            <IconX size="lg" />
+            <TbX size="lg" />
           </ActionIcon>
         </div>
       )}

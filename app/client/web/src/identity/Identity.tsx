@@ -2,7 +2,7 @@ import React from 'react'
 import classes from './Identity.module.css'
 import { useIdentity } from './useIdentity.hook'
 import { Text, Image, Menu, Switch } from '@mantine/core'
-import { IconLogout, IconChevronRight, IconSettings, IconAddressBook } from '@tabler/icons-react'
+import { TbLogout, TbChevronRight, TbSettings, TbAddressBook } from "react-icons/tb";
 import { modals } from '@mantine/modals'
 
 export function Identity({ settings, contacts }: { settings: () => void; contacts: () => void }) {
@@ -31,18 +31,18 @@ export function Identity({ settings, contacts }: { settings: () => void; contact
             {state.profile.name && <Text className={classes.nameSet}>{state.profile.name}</Text>}
             <Text className={classes.handle}>{`${state.profile.handle}${state.profile.node ? '/' + state.profile.node : ''}`}</Text>
           </div>
-          <IconChevronRight className={classes.icon} />
+          <TbChevronRight className={classes.icon} />
         </div>
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Item onClick={settings} leftSection={<IconSettings />}>
+        <Menu.Item onClick={settings} leftSection={<TbSettings />}>
           {state.strings.settings}
         </Menu.Item>
-        <Menu.Item onClick={contacts} leftSection={<IconAddressBook />}>
+        <Menu.Item onClick={contacts} leftSection={<TbAddressBook />}>
           {state.strings.contacts}
         </Menu.Item>
-        <Menu.Item onClick={logout} leftSection={<IconLogout />}>
+        <Menu.Item onClick={logout} leftSection={<TbLogout />}>
           {state.strings.logout}
         </Menu.Item>
       </Menu.Dropdown>

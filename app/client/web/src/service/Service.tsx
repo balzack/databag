@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Drawer } from '@mantine/core'
 import classes from './Service.module.css'
 import { useService } from './useService.hook'
-import { IconAddressBook, IconSettings } from '@tabler/icons-react'
+import { TbAddressBook, TbSettings } from "react-icons/tb";
 import { Accounts } from '../accounts/Accounts'
 import { Setup } from '../setup/Setup'
 import { useDisclosure } from '@mantine/hooks'
@@ -31,23 +31,23 @@ export function Service() {
           <div className={classes.tabs}>
             {tab === 'accounts' && (
               <div className={classes.activeTabItem}>
-                <IconAddressBook className={classes.tabIcon} />
+                <TbAddressBook className={classes.tabIcon} />
               </div>
             )}
             {tab !== 'accounts' && (
               <div className={classes.idleTabItem} onClick={() => setTab('accounts')}>
-                <IconAddressBook className={classes.tabIcon} />
+                <TbAddressBook className={classes.tabIcon} />
               </div>
             )}
             <div className={classes.tabDivider} />
             {tab === 'setup' && (
               <div className={classes.activeTabItem}>
-                <IconSettings className={classes.tabIcon} />
+                <TbSettings className={classes.tabIcon} />
               </div>
             )}
             {tab !== 'setup' && (
               <div className={classes.idleTabItem} onClick={() => setTab('setup')}>
-                <IconSettings className={classes.tabIcon} />
+                <TbSettings className={classes.tabIcon} />
               </div>
             )}
           </div>

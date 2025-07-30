@@ -4,7 +4,7 @@ import classes from './Base.module.css'
 import light from '../images/lightness.png'
 import dark from '../images/darkness.png'
 import { Image, Text } from '@mantine/core'
-import { IconChevronRight } from '@tabler/icons-react'
+import { TbChevronRight } from "react-icons/tb";
 
 export function Base() {
   const { state } = useBase()
@@ -20,9 +20,9 @@ export function Base() {
         {state.contentSet && (state.profileSet === false || state.cardSet === false || state.channelSet === false) && (
           <div className={classes.steps}>
             {state.profileSet === false && <Text className={classes.step}>{state.strings.setupProfile}</Text>}
-            <IconChevronRight className={classes.icon} />
+            <TbChevronRight className={classes.icon} />
             {(state.profileSet === false || state.cardSet === false) && <Text className={classes.step}>{state.strings.connectPeople}</Text>}
-            <IconChevronRight className={classes.icon} />
+            <TbChevronRight className={classes.icon} />
             <Text className={classes.step}>{state.strings.startConversation}</Text>
           </div>
         )}

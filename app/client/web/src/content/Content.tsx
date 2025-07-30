@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useContent } from './useContent.hook'
 import { Modal, Box, LoadingOverlay, Text, Switch, TextInput, Button } from '@mantine/core'
-import { IconSearch, IconMessagePlus, IconLabel } from '@tabler/icons-react'
+import { TbSearch, TbMessagePlus, TbLabel } from "react-icons/tb";
 import classes from './Content.module.css'
 import { Channel } from '../channel/Channel'
 import { Card } from '../card/Card'
@@ -112,13 +112,13 @@ export function Content({ textCard }: { textCard: { cardId: null | string } }) {
           className={classes.input}
           size="sm"
           leftSectionPointerEvents="none"
-          leftSection={<IconSearch size={20} />}
+          leftSection={<TbSearch size={20} />}
           placeholder={state.strings.topics}
           value={state.filter}
           onChange={(event) => actions.setFilter(event.currentTarget.value)}
         />
         {state.layout === 'small' && (
-          <Button className={classes.add} leftSection={<IconMessagePlus size={20} />} onClick={() => setAdd(true)}>
+          <Button className={classes.add} leftSection={<TbMessagePlus size={20} />} onClick={() => setAdd(true)}>
             {state.strings.add}
           </Button>
         )}
@@ -130,7 +130,7 @@ export function Content({ textCard }: { textCard: { cardId: null | string } }) {
       </Box>
       {state.layout === 'large' && (
         <div className={classes.bar}>
-          <Button className={classes.add} leftSection={<IconMessagePlus size={20} />} onClick={() => setAdd(true)}>
+          <Button className={classes.add} leftSection={<TbMessagePlus size={20} />} onClick={() => setAdd(true)}>
             {state.strings.add}
           </Button>
         </div>
@@ -141,7 +141,7 @@ export function Content({ textCard }: { textCard: { cardId: null | string } }) {
             className={classes.input}
             size="sm"
             leftSectionPointerEvents="none"
-            leftSection={<IconLabel size={20} />}
+            leftSection={<TbLabel size={20} />}
             placeholder={state.strings.subjectOptional}
             value={subject}
             onChange={(event) => setSubject(event.currentTarget.value)}

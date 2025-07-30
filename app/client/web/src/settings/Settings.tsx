@@ -2,34 +2,34 @@ import { useSettings } from './useSettings.hook'
 import { Modal, Textarea, TextInput, PasswordInput, ActionIcon, Radio, Group, Select, Switch, Text, PinInput, Image, Button, UnstyledButton } from '@mantine/core'
 import classes from './Settings.module.css'
 import {
-  IconLock,
-  IconUser,
-  IconClock,
-  IconIdBadge,
-  IconCalendar,
-  IconUsers,
-  IconVideo,
-  IconMicrophone,
-  IconWorld,
-  IconRestore,
-  IconBrightness,
-  IconTicket,
-  IconCloudLock,
-  IconBell,
-  IconEye,
-  IconBook,
-  IconMapPin,
-  IconTrash,
-  IconCaretDown,
-  IconCaretRight,
-  IconLogout,
-  IconLogin,
-  IconCopy,
-  IconCheck,
-  IconMessage2Cancel,
-  IconUserCancel,
-  IconFolderCancel,
-} from '@tabler/icons-react'
+  TbLock,
+  TbUser,
+  TbClock,
+  TbIdBadge,
+  TbCalendar,
+  TbUsers,
+  TbVideo,
+  TbMicrophone,
+  TbWorld,
+  TbRestore,
+  TbBrightness,
+  TbTicket,
+  TbCloudLock,
+  TbBell,
+  TbEye,
+  TbBook,
+  TbMapPin,
+  TbTrash,
+  TbCaretDown,
+  TbCaretRight,
+  TbLogout,
+  TbLogin,
+  TbCopy,
+  TbCheck,
+  TbMessage2Cancel,
+  TbUserCancel,
+  TbFolderCancel,
+} from "react-icons/tb";
 import { modals } from '@mantine/modals'
 import { useDisclosure } from '@mantine/hooks'
 import React, { useCallback, useState, useRef } from 'react'
@@ -79,7 +79,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
     <div key={index} className={classes.blockedItem}>
       <Text className={classes.blockedValue}> {actions.getTimestamp(blocked.timestamp)}</Text>
       <ActionIcon variant="subtle" size="md" onClick={() => unblockCard(blocked)}>
-        <IconRestore />
+        <TbRestore />
       </ActionIcon>
     </div>
   ))
@@ -102,7 +102,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
     <div key={index} className={classes.blockedItem}>
       <Text className={classes.blockedValue}> {actions.getTimestamp(blocked.timestamp)}</Text>
       <ActionIcon variant="subtle" size="md" onClick={() => unblockChannel(blocked)}>
-        <IconRestore />
+        <TbRestore />
       </ActionIcon>
     </div>
   ))
@@ -125,7 +125,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
     <div key={index} className={classes.blockedItem}>
       <Text className={classes.blockedValue}> {actions.getTimestamp(blocked.timestamp)}</Text>
       <ActionIcon variant="subtle" size="md" onClick={() => unblockMessage(blocked)}>
-        <IconRestore />
+        <TbRestore />
       </ActionIcon>
     </div>
   ))
@@ -441,14 +441,14 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             {state.profile.name && <Text className={classes.nameSet}>{state.profile.name}</Text>}
             <div className={classes.entry}>
               <div className={classes.entryIcon}>
-                <IconMapPin />
+                <TbMapPin />
               </div>
               {!state.profile.location && <Text className={classes.entryUnset}>{state.strings.location}</Text>}
               {state.profile.location && <Text className={classes.entrySet}>{state.profile.location}</Text>}
             </div>
             <div className={classes.entry}>
               <div className={classes.entryIcon}>
-                <IconBook />
+                <TbBook />
               </div>
               {!state.profile.description && <Text className={classes.entryUnset}>{state.strings.description}</Text>}
               {state.profile.description && <Text className={classes.entrySet}>{state.profile.description}</Text>}
@@ -456,7 +456,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             <div className={classes.divider} />
             <div className={classes.entry}>
               <div className={classes.entryIcon}>
-                <IconEye />
+                <TbEye />
               </div>
               <Text className={classes.entryLabel} onClick={() => setRegistry(!state.config.searchable)}>
                 {state.strings.registry}
@@ -465,7 +465,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             </div>
             <div className={classes.entry}>
               <div className={classes.entryIcon}>
-                <IconCloudLock />
+                <TbCloudLock />
               </div>
               <Text className={classes.entryLabel} onClick={setSeal}>
                 {state.strings.manageTopics}
@@ -473,7 +473,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             </div>
             <div className={classes.entry}>
               <div className={classes.entryIcon}>
-                <IconBell />
+                <TbBell />
               </div>
               <Text className={classes.entryLabel} onClick={() => setNotifications(!state.config.pushEnabled)}>
                 {state.strings.enableNotifications}
@@ -484,7 +484,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             {showLogout && (
               <div className={classes.entry}>
                 <div className={classes.entryIcon}>
-                  <IconLogout />
+                  <TbLogout />
                 </div>
                 <Text className={classes.entryLabel} onClick={logout}>
                   {state.strings.logout}
@@ -493,7 +493,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             )}
             <div className={classes.entry}>
               <div className={classes.entryIcon}>
-                <IconTicket />
+                <TbTicket />
               </div>
               <Text className={classes.entryLabel} onClick={() => setMfa(!state.config.mfaEnabled)}>
                 {state.strings.mfaTitle}
@@ -502,7 +502,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             </div>
             <div className={classes.entry}>
               <div className={classes.entryIcon}>
-                <IconLogin />
+                <TbLogin />
               </div>
               <Text className={classes.entryLabel} onClick={changeOpen}>
                 {state.strings.changeLogin}
@@ -511,19 +511,19 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             <div className={classes.divider} />
             <div className={classes.entry} onClick={showBlockedCards}>
               <div className={classes.entryIcon}>
-                <IconUserCancel />
+                <TbUserCancel />
               </div>
               <Text className={classes.entryLabel}>{state.strings.blockedContacts}</Text>
             </div>
             <div className={classes.entry} onClick={showBlockedChannels}>
               <div className={classes.entryIcon}>
-                <IconFolderCancel />
+                <TbFolderCancel />
               </div>
               <Text className={classes.entryLabel}>{state.strings.blockedTopics}</Text>
             </div>
             <div className={classes.entry} onClick={showBlockedMessages}>
               <div className={classes.entryIcon}>
-                <IconMessage2Cancel />
+                <TbMessage2Cancel />
               </div>
               <Text className={classes.entryLabel}>{state.strings.blockedMessages}</Text>
             </div>
@@ -531,7 +531,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             <div className={classes.selects}>
               <div className={classes.entry}>
                 <div className={classes.entryIcon}>
-                  <IconClock />
+                  <TbClock />
                 </div>
                 <Text className={classes.controlLabel}>{state.strings.timeFormat}</Text>
                 <Radio.Group name="timeFormat" className={classes.radio} value={state.timeFormat} onChange={actions.setTimeFormat}>
@@ -543,7 +543,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               </div>
               <div className={classes.entry}>
                 <div className={classes.entryIcon}>
-                  <IconCalendar />
+                  <TbCalendar />
                 </div>
                 <Text className={classes.controlLabel}>{state.strings.dateFormat}</Text>
                 <Radio.Group name="dateFormat" className={classes.radio} value={state.dateFormat} onChange={actions.setDateFormat}>
@@ -555,21 +555,21 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               </div>
               <div className={classes.entry}>
                 <div className={classes.entryIcon}>
-                  <IconBrightness />
+                  <TbBrightness />
                 </div>
                 <Text className={classes.controlLabel}>{state.strings.theme}</Text>
                 <Select className={classes.entryControl} size="xs" data={state.themes} value={state.scheme} onChange={(theme) => actions.setTheme(theme as string)} />
               </div>
               <div className={classes.entry}>
                 <div className={classes.entryIcon}>
-                  <IconWorld />
+                  <TbWorld />
                 </div>
                 <Text className={classes.controlLabel}>{state.strings.language}</Text>
                 <Select className={classes.entryControl} size="xs" data={state.languages} value={state.language} onChange={(language) => actions.setLanguage(language as string)} />
               </div>
               <div className={classes.entry}>
                 <div className={classes.entryIcon}>
-                  <IconMicrophone />
+                  <TbMicrophone />
                 </div>
                 <Text className={classes.controlLabel}>{state.strings.microphone}</Text>
                 <Select
@@ -582,7 +582,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               </div>
               <div className={classes.entry}>
                 <div className={classes.entryIcon}>
-                  <IconVideo />
+                  <TbVideo />
                 </div>
                 <Text className={classes.controlLabel}>{state.strings.camera}</Text>
                 <Select
@@ -604,8 +604,8 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             size="md"
             value={state.handle}
             leftSectionPointerEvents="none"
-            leftSection={<IconUser />}
-            rightSection={state.taken ? <IconUsers /> : null}
+            leftSection={<TbUser />}
+            rightSection={state.taken ? <TbUsers /> : null}
             placeholder={state.strings.username}
             onChange={(event) => actions.setHandle(event.currentTarget.value)}
             error={state.taken}
@@ -614,7 +614,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             className={classes.input}
             size="md"
             value={state.password}
-            leftSection={<IconLock />}
+            leftSection={<TbLock />}
             placeholder={state.strings.password}
             onChange={(event) => actions.setPassword(event.currentTarget.value)}
           />
@@ -622,7 +622,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             className={classes.input}
             size="md"
             value={state.confirm}
-            leftSection={<IconLock />}
+            leftSection={<TbLock />}
             placeholder={state.strings.confirmPassword}
             onChange={(event) => actions.setConfirm(event.currentTarget.value)}
           />
@@ -643,7 +643,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             size="md"
             value={state.name || ''}
             leftSectionPointerEvents="none"
-            leftSection={<IconIdBadge />}
+            leftSection={<TbIdBadge />}
             placeholder={state.strings.name}
             onChange={(event) => actions.setName(event.currentTarget.value)}
           />
@@ -652,7 +652,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             size="md"
             value={state.location || ''}
             leftSectionPointerEvents="none"
-            leftSection={<IconMapPin />}
+            leftSection={<TbMapPin />}
             placeholder={state.strings.location}
             onChange={(event) => actions.setLocation(event.currentTarget.value)}
           />
@@ -664,7 +664,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             autosize={true}
             value={state.description || ''}
             leftSectionPointerEvents="none"
-            leftSection={<IconBook />}
+            leftSection={<TbBook />}
             placeholder={state.strings.description}
             onChange={(event) => actions.setDescription(event.currentTarget.value)}
           />
@@ -715,8 +715,8 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             <Image radius="md" className={classes.secretImage} src={state.secretImage} />
             <div className={classes.secretText}>
               <Text>{state.secretText}</Text>
-              {state.secretCopied && <IconCheck />}
-              {!state.secretCopied && <IconCopy className={classes.copyIcon} onClick={actions.copySecret} />}
+              {state.secretCopied && <TbCheck />}
+              {!state.secretCopied && <TbCopy className={classes.copyIcon} onClick={actions.copySecret} />}
             </div>
             <PinInput value={state.code} length={6} className={classes.mfaPin} onChange={(event) => actions.setCode(event)} />
             <Text className={classes.authMessage}>{authMessage}</Text>
@@ -737,8 +737,8 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             <div className={classes.seal}>
               <span>{state.strings.sealForget}</span>
               <div className={classes.buttons}>
-                {!sealConfig && <IconCaretDown className={classes.sealConfig} onClick={() => setSealConfig(true)} />}
-                {sealConfig && <IconCaretRight className={classes.sealConfig} onClick={() => setSealConfig(false)} />}
+                {!sealConfig && <TbCaretDown className={classes.sealConfig} onClick={() => setSealConfig(true)} />}
+                {sealConfig && <TbCaretRight className={classes.sealConfig} onClick={() => setSealConfig(false)} />}
                 {sealConfig && (
                   <Button className={classes.delete} onClick={() => setSealDelete(true)}>
                     {state.strings.remove}
@@ -768,7 +768,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                 size="md"
                 value={state.sealPassword}
                 leftSectionPointerEvents="none"
-                leftSection={<IconLock />}
+                leftSection={<TbLock />}
                 placeholder={state.strings.password}
                 onChange={(event) => actions.setSealPassword(event.currentTarget.value)}
               />
@@ -777,7 +777,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                 size="md"
                 value={state.sealConfirm}
                 leftSectionPointerEvents="none"
-                leftSection={<IconLock />}
+                leftSection={<TbLock />}
                 placeholder={state.strings.confirmPassword}
                 onChange={(event) => actions.setSealConfirm(event.currentTarget.value)}
               />
@@ -798,13 +798,13 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                 className={classes.input}
                 size="md"
                 value={state.sealPassword}
-                leftSection={<IconLock />}
+                leftSection={<TbLock />}
                 placeholder={state.strings.password}
                 onChange={(event) => actions.setSealPassword(event.currentTarget.value)}
               />
               <div className={classes.buttons}>
-                {!sealConfig && <IconCaretDown className={classes.sealConfig} onClick={() => setSealConfig(true)} />}
-                {sealConfig && <IconCaretRight className={classes.sealConfig} onClick={() => setSealConfig(false)} />}
+                {!sealConfig && <TbCaretDown className={classes.sealConfig} onClick={() => setSealConfig(true)} />}
+                {sealConfig && <TbCaretRight className={classes.sealConfig} onClick={() => setSealConfig(false)} />}
                 {sealConfig && (
                   <Button className={classes.delete} onClick={() => setSealDelete(true)}>
                     {state.strings.remove}
@@ -829,7 +829,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                 size="md"
                 value={state.sealDelete}
                 leftSectionPointerEvents="none"
-                leftSection={<IconTrash />}
+                leftSection={<TbTrash />}
                 placeholder={state.strings.deleteKey}
                 onChange={(event) => actions.setSealDelete(event.currentTarget.value)}
               />
@@ -857,7 +857,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                 size="md"
                 value={state.sealPassword}
                 leftSectionPointerEvents="none"
-                leftSection={<IconLock />}
+                leftSection={<TbLock />}
                 placeholder={state.strings.password}
                 onChange={(event) => actions.setSealPassword(event.currentTarget.value)}
               />
@@ -866,7 +866,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                 size="md"
                 value={state.sealConfirm}
                 leftSectionPointerEvents="none"
-                leftSection={<IconLock />}
+                leftSection={<TbLock />}
                 placeholder={state.strings.confirmPassword}
                 onChange={(event) => actions.setSealConfirm(event.currentTarget.value)}
               />

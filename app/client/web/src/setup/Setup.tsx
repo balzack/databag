@@ -3,7 +3,7 @@ import classes from './Setup.module.css'
 import { useSetup } from './useSetup.hook'
 import { PinInput, Image, Button, Radio, Group, Loader, Modal, Divider, Text, TextInput, Switch, ActionIcon } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconCheck, IconLogout, IconCopy } from '@tabler/icons-react'
+import { TbCheck, TbLogout, TbCopy } from "react-icons/tb";
 
 export function Setup() {
   const { state, actions } = useSetup()
@@ -57,7 +57,7 @@ export function Setup() {
         </div>
         <div className={classes.loader}>
           <ActionIcon className={classes.action} variant="light" onClick={actions.logout}>
-            <IconLogout />
+            <TbLogout />
           </ActionIcon>
         </div>
       </div>
@@ -222,8 +222,8 @@ export function Setup() {
             <Image radius="md" className={classes.secretImage} src={state.confirmMFAuthImage} />
             <div className={classes.secretText}>
               <Text>{state.confirmMFAuthText}</Text>
-              {secretCopy && <IconCheck />}
-              {!secretCopy && <IconCopy className={classes.copyIcon} onClick={copySecret} />}
+              {secretCopy && <TbCheck />}
+              {!secretCopy && <TbCopy className={classes.copyIcon} onClick={copySecret} />}
             </div>
             <PinInput value={state.mfaCode} length={6} className={classes.mfaPin} onChange={(event) => actions.setMFAuthCode(event)} />
             <Text className={classes.authMessage}>{state.mfaMessage}</Text>

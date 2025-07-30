@@ -3,7 +3,7 @@ import { ActionIcon, Image, Text } from '@mantine/core'
 import { useAudioFile } from './useAudioFile.hook'
 import classes from './AudioFile.module.css'
 import audio from '../../images/audio.png'
-import { IconX } from '@tabler/icons-react'
+import { TbX } from "react-icons/tb";
 
 export function AudioFile({ source, updateLabel, disabled, remove }: { source: File; updateLabel: (label: string) => void; disabled: boolean; remove: () => void }) {
   const { state } = useAudioFile(source)
@@ -18,7 +18,7 @@ export function AudioFile({ source, updateLabel, disabled, remove }: { source: F
       <Text className={classes.label}>{state.label}</Text>
       {!disabled && (
         <ActionIcon className={classes.close} variant="subtle" onClick={remove}>
-          <IconX />
+          <TbX />
         </ActionIcon>
       )}
     </div>

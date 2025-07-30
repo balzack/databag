@@ -3,7 +3,7 @@ import { ActionIcon, Text, Image } from '@mantine/core'
 import { useBinaryFile } from './useBinaryFile.hook'
 import classes from './BinaryFile.module.css'
 import binary from '../../images/binary.png'
-import { IconX } from '@tabler/icons-react'
+import { TbX } from "react-icons/tb";
 
 export function BinaryFile({ source, disabled, remove }: { source: File; disabled: boolean; remove: () => void }) {
   const { state } = useBinaryFile(source)
@@ -15,7 +15,7 @@ export function BinaryFile({ source, disabled, remove }: { source: File; disable
       <Text className={classes.extension}>{state.extension}</Text>
       {!disabled && (
         <ActionIcon className={classes.close} variant="subtle" onClick={remove}>
-          <IconX />
+          <TbX />
         </ActionIcon>
       )}
     </div>

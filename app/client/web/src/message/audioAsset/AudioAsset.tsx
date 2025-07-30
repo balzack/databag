@@ -3,7 +3,7 @@ import { MediaAsset } from '../../conversation/Conversation'
 import { useAudioAsset } from './useAudioAsset.hook'
 import { Progress, ActionIcon, Image } from '@mantine/core'
 import classes from './AudioAsset.module.css'
-import { IconPlayerPlayFilled, IconPlayerPauseFilled, IconX } from '@tabler/icons-react'
+import { TbPlayerPlayFilled, TbPlayerPauseFilled, TbX } from "react-icons/tb";
 import audio from '../../images/audio.png'
 
 export function AudioAsset({ topicId, asset }: { topicId: string; asset: MediaAsset }) {
@@ -52,7 +52,7 @@ export function AudioAsset({ topicId, asset }: { topicId: string; asset: MediaAs
       <div className={classes.asset} onClick={show}>
         <Image radius="sm" className={classes.thumb} src={audio} fit="contain" />
         <div className={classes.label}>{label}</div>
-        <IconPlayerPlayFilled className={classes.play} size={32} />
+        <TbPlayerPlayFilled className={classes.play} size={32} />
       </div>
 
       {showModal && (
@@ -60,8 +60,8 @@ export function AudioAsset({ topicId, asset }: { topicId: string; asset: MediaAs
           <div className={classes.frame}>
             <Image radius="sm" className={classes.image} src={audio} fit="contain" />
             <div className={classes.label}>{label}</div>
-            {loaded && !playing && <IconPlayerPlayFilled className={classes.play} size={64} onClick={play} />}
-            {loaded && playing && <IconPlayerPauseFilled className={classes.play} size={64} onClick={pause} />}
+            {loaded && !playing && <TbPlayerPlayFilled className={classes.play} size={64} onClick={play} />}
+            {loaded && playing && <TbPlayerPauseFilled className={classes.play} size={64} onClick={pause} />}
           </div>
           {state.dataUrl && (
             <div className={classes.audio}>
@@ -80,7 +80,7 @@ export function AudioAsset({ topicId, asset }: { topicId: string; asset: MediaAs
           )}
           {state.loading && state.loadPercent > 0 && <Progress className={classes.progress} value={state.loadPercent} />}
           <ActionIcon className={classes.close} variant="filled" size="lg" onClick={hide}>
-            <IconX size="lg" />
+            <TbX size="lg" />
           </ActionIcon>
         </div>
       )}

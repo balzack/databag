@@ -4,7 +4,7 @@ import classes from './Call.module.css'
 import { Colors } from '../constants/Colors'
 import { modals } from '@mantine/modals'
 import { Image, Text, ActionIcon } from '@mantine/core'
-import { IconPhone, IconMicrophone, IconMicrophoneOff, IconVideo, IconVideoOff, IconArrowsMinimize } from '@tabler/icons-react'
+import { TbPhone, TbMicrophone, TbMicrophoneOff, TbVideo, TbVideoOff, TbArrowsMinimize } from "react-icons/tb";
 
 export function Call() {
   const { state, actions } = useCall()
@@ -117,18 +117,18 @@ export function Call() {
 
           <div className={classes.buttons}>
             <ActionIcon onClick={() => actions.setFullscreen(false)} color={Colors.confirmed} size="xl">
-              <IconArrowsMinimize />
+              <TbArrowsMinimize />
             </ActionIcon>
             <ActionIcon onClick={toggleAudio} disabled={!state.connected} loading={applyingAudio} color={Colors.primary} size="xl">
-              {state.audioEnabled && <IconMicrophone />}
-              {!state.audioEnabled && <IconMicrophoneOff />}
+              {state.audioEnabled && <TbMicrophone />}
+              {!state.audioEnabled && <TbMicrophoneOff />}
             </ActionIcon>
             <ActionIcon onClick={toggleVideo} disabled={!state.connected} loading={applyingVideo} color={Colors.primary} size="xl">
-              {state.videoEnabled && <IconVideo />}
-              {!state.videoEnabled && <IconVideoOff />}
+              {state.videoEnabled && <TbVideo />}
+              {!state.videoEnabled && <TbVideoOff />}
             </ActionIcon>
             <ActionIcon onClick={end} color={Colors.offsync} size="xl">
-              <IconPhone className={classes.off} />
+              <TbPhone className={classes.off} />
             </ActionIcon>
           </div>
         </div>
