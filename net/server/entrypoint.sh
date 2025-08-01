@@ -18,7 +18,9 @@ fi
 
 cd /app/databag/net/server
 if [[ "$DEV" == "1" ]]; then
-	CGO_ENABLED=1 go run main.go -p $DATABAG_PORT -w /app/databag/net/web/build -s /var/lib/databag -t /opt/databag/transform
+  touch nohup.out
+  CGO_ENABLED=1 nohup go run main.go -p $DATABAG_PORT -w /app/databag/net/web/build -s /var/lib/databag -t /opt/databag/transform &
+  tail -f nohup.out
 else
-	./databag -p $DATABAG_PORT -w /app/databag/net/web/build -s /var/lib/databag -t /opt/databag/transform
+  ./databag -p $DATABAG_PORT -w /app/databag/net/web/build -s /var/lib/databag -t /opt/databag/transform
 fi
