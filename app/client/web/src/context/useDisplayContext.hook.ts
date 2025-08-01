@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { LightTheme, DarkTheme } from '../constants/Colors'
-import { en, fr, sp, pt, de, ru, el } from '../constants/Strings'
+import { en, fr, es, pt, de, ru, el } from '../constants/Strings'
 
 export function useDisplayContext() {
   const [state, setState] = useState({
@@ -16,7 +16,7 @@ export function useDisplayContext() {
     languages: [
       { value: 'en', label: 'English' },
       { value: 'fr', label: 'Français' },
-      { value: 'sp', label: 'Español' },
+      { value: 'es', label: 'Español' },
       { value: 'pt', label: 'Português' },
       { value: 'de', label: 'Deutsch' },
       { value: 'ru', label: 'Русский' },
@@ -172,13 +172,13 @@ export function useDisplayContext() {
           { value: 'light', label: fr.light },
         ],
       })
-    } else if (language && language.startsWith('sp')) {
+    } else if (language && language.startsWith('es')) {
       updateState({
-        language: 'sp',
-        strings: sp,
+        language: 'es',
+        strings: es,
         themes: [
-          { value: 'dark', label: sp.dark },
-          { value: 'light', label: sp.light },
+          { value: 'dark', label: es.dark },
+          { value: 'light', label: es.light },
         ],
       })
     } else if (language && language.startsWith('en')) {
@@ -237,13 +237,13 @@ export function useDisplayContext() {
             { value: 'light', label: fr.light },
           ],
         })
-      } else if (browser && browser.startsWith('sp')) {
+      } else if (browser && browser.startsWith('es')) {
         updateState({
-          language: 'sp',
-          strings: sp,
+          language: 'es',
+          strings: es,
           themes: [
-            { value: 'dark', label: sp.dark },
-            { value: 'light', label: sp.light },
+            { value: 'dark', label: es.dark },
+            { value: 'light', label: es.light },
           ],
         })
       } else if (browser && browser.startsWith('pt')) {
@@ -364,14 +364,14 @@ export function useDisplayContext() {
             { value: 'light', label: fr.light },
           ],
         })
-      } else if (code && code.startsWith('sp')) {
-        localStorage.setItem('language', 'sp')
+      } else if (code && code.startsWith('es')) {
+        localStorage.setItem('language', 'es')
         updateState({
-          language: 'sp',
-          strings: sp,
+          language: 'es',
+          strings: es,
           themes: [
-            { value: 'dark', label: sp.dark },
-            { value: 'light', label: sp.light },
+            { value: 'dark', label: es.dark },
+            { value: 'light', label: es.light },
           ],
         })
       } else if (code && code.startsWith('en')) {
@@ -436,13 +436,13 @@ export function useDisplayContext() {
               { value: 'light', label: fr.light },
             ],
           })
-        } else if (browser && browser.startsWith('sp')) {
+        } else if (browser && browser.startsWith('es')) {
           updateState({
-            language: 'sp',
-            strings: sp,
+            language: 'es',
+            strings: es,
             themes: [
-              { value: 'dark', label: sp.dark },
-              { value: 'light', label: sp.light },
+              { value: 'dark', label: es.dark },
+              { value: 'light', label: es.light },
             ],
           })
         } else if (browser && browser.startsWith('pt')) {

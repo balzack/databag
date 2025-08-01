@@ -227,8 +227,10 @@ export function Profile({ params, showClose, close }: { params: ProfileParams; s
   const setAction = async (action: () => Promise<void>) => {
     try {
       await action()
-    } catch (err) {
+    } catch (err: any) {
       console.log(err)
+      const code = err?.message;
+      const message = code === '405' ? state.strings.yourHostname : code === '406' ? state.strings.theirHostanem : state.strings.tryAgain;
       modals.openConfirmModal({
         title: state.strings.operationFailed,
         withCloseButton: true,
@@ -236,7 +238,7 @@ export function Profile({ params, showClose, close }: { params: ProfileParams; s
           backgroundOpacity: 0.55,
           blur: 3,
         },
-        children: <Text>{state.strings.tryAgain}</Text>,
+        children: <Text>{message}</Text>,
         cancelProps: { display: 'none' },
         confirmProps: { display: 'none' },
       })
