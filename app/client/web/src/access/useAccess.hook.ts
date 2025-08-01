@@ -39,7 +39,7 @@ export function useAccess() {
     const params = new URLSearchParams(location.href)
     const search = url?.search;
     if (search && search.startsWith('?add=')) {
-      updateState({ mode: 'create', token: search.substring(8) })
+      updateState({ mode: 'create', token: search.substring(5) })
     } else if (search && search.startsWith('?reset=')) {
       updateState({ mode: 'reset', token: search.substring(7) })
     } else {
