@@ -34,9 +34,16 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	domain := getStrConfigValue(CNFDomain, "");
-	if domain == "" && identity.Node != "" {
-	  ErrResponse(w, http.StatusMethodNotAllowed, err)
-	  return
+	if domain == "" {
+	  if identity.Node != "" {
+	    ErrResponse(w, http.StatusMethodNotAllowed, err)
+	    return
+	  }
+	  var account store.Account
+	  if err := store.DB.Where("guid = ?", guid).First(&account).Error; err != nil {
+	    ErrResponse(w, http.StatusMethodNotAllowed, err)
+	    return
+	  }
 	}
 	if domain != "" && identity.Node == "" {
 	  ErrResponse(w, http.StatusNotAcceptable, err)
