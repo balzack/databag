@@ -69,6 +69,10 @@ export class SessionModule implements Session {
     this.connection = new Connection(log, token, node, secure);
     this.ring = new RingModule(log, async (cardId: string, callId: string) => { await this.contact.endCall(cardId, callId) });
 
+    const onProfile = (profile: Profile) => {
+      this.contact.setIdentity(profile);
+    }
+
     const onStatus = (ev: string) => {
       this.status = ev;
       this.emitter.emit('status', this.getStatus());
@@ -93,6 +97,7 @@ export class SessionModule implements Session {
     };
 
     this.settings.addSealListener(onSeal);
+    this.identity.addProfileListener(onProfile);
     this.connection.addStatusListener(onStatus);
     this.connection.addRevisionListener(onRevision);
     this.connection.addRingListener(onRing);
