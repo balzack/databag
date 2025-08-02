@@ -51,7 +51,6 @@ export class ContactModule implements Contact {
   private emitter: EventEmitter;
   private channelTypes: string[];
   private seal: { privateKey: string; publicKey: string } | null;
-  private identity: Profile | null;
   private unsealAll: boolean;
   private focus: FocusModule | null;
 
@@ -197,10 +196,6 @@ export class ContactModule implements Contact {
   public async setRevision(rev: number): Promise<void> {
     this.nextRevision = rev;
     await this.sync();
-  }
-
-  public setIdentity(profile: Profile) {
-    this.identity = profile;
   }
 
   public async close() {
@@ -1142,9 +1137,6 @@ export class ContactModule implements Contact {
 
   public async getRegistry(handle: string | null, server: string | null): Promise<Profile[]> {
     const { node, secure } = this;
-    if (server && !this.identity?.node) {
-      throw new Error('admin hostname required to remote registry');
-    }
     const insecure = server ? /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server) : false;
     const listing = server ? await getRegistryListing(handle, server, !insecure) : await getRegistryListing(handle, node, secure);
     return listing.map((entity) => {

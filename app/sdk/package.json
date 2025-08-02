@@ -1,6 +1,6 @@
 {
   "name": "databag-client-sdk",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "description": "an SDK for developing Databag applications",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
