@@ -80,6 +80,7 @@ export class SessionModule implements Session {
     };
 
     const onRevision = async (ev: Revision) => {
+      await this.identity.setRevision(ev.profile);
       await this.settings.setRevision(ev.account);
       await this.contact.setRevision(ev.card);
       await this.attribute.setRevision(ev.article);
@@ -92,7 +93,6 @@ export class SessionModule implements Session {
     };
 
     this.settings.addSealListener(onSeal);
-    this.identity.addProfileListener(onProfile);
     this.connection.addStatusListener(onStatus);
     this.connection.addRevisionListener(onRevision);
     this.connection.addRingListener(onRing);
