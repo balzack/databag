@@ -78,7 +78,7 @@ export function Setup() {
             size="sm"
             disabled={state.loading}
             value={state.setup?.domain || ''}
-            placeholder={state.strings.urlHint}
+            placeholder={state.strings.hostHint}
             onChange={(event) => actions.setDomain(event.currentTarget.value)}
           />
         </div>
