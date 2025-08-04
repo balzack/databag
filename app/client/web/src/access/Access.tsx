@@ -30,7 +30,7 @@ export function Access() {
       } catch (err) {
         const { message } = err as { message: string }
         console.log(message)
-        if (message === '405' || message === '403' || message === '429') {
+        if ((state.mode === 'account' || state.mode === 'admin') && (message === '405' || message === '403' || message === '429')) {
           if (message === '429') {
             setDisabled(true)
           } else {
@@ -85,6 +85,9 @@ export function Access() {
                   leftSection={<TbUser />}
                   placeholder={state.strings.username}
                   onChange={(event) => actions.setUsername(event.currentTarget.value)}
+                  onKeyDown={(ev) => {
+                    if (ev.code === 'Enter' && state.password && state.username) login()
+                  }}
                 />
                 <PasswordInput
                   className={classes.input}
@@ -124,6 +127,9 @@ export function Access() {
                   leftSection={<TbKey />}
                   placeholder={state.strings.accessCode}
                   onChange={(event) => actions.setToken(event.currentTarget.value)}
+                  onKeyDown={(ev) => {
+                    if (ev.code === 'Enter') login()
+                  }}
                 />
                 <Space h="md" />
                 <Button variant="filled" className={classes.submit} disabled={!state.token} onClick={login} loading={state.loading}>
@@ -179,7 +185,7 @@ export function Access() {
                   onChange={(event) => actions.setConfirm(event.currentTarget.value)}
                 />
                 <Space h="md" />
-                <Button variant="filled" className={classes.submit} onClick={login} disabled={state.taken || !state.username || !state.password || state.password !== state.confirm}>
+                <Button variant="filled" className={classes.submit} onClick={login} loading={state.loading} disabled={state.taken || !state.username || !state.password || state.password !== state.confirm}>
                   {state.strings.create}
                 </Button>
                 <Button variant="subtle" onClick={() => actions.setMode('account')} size="compact-sm">
@@ -201,6 +207,9 @@ export function Access() {
                   leftSection={<TbLock />}
                   placeholder={state.strings.password}
                   onChange={(event) => actions.setPassword(event.currentTarget.value)}
+                  onKeyDown={(ev) => {
+                    if (ev.code === 'Enter') login()
+                  }}
                 />
                 <Space h="md" />
                 <Button variant="filled" className={classes.submit} disabled={!state.password} onClick={login} loading={state.loading}>
