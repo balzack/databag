@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useContent } from './useContent.hook'
-import { Modal, Box, LoadingOverlay, Text, Switch, TextInput, Button } from '@mantine/core'
+import { Modal, Box, LoadingOverlay, Text, Divider, Switch, TextInput, Button } from '@mantine/core'
 import { TbSearch, TbMessagePlus, TbLabel } from "react-icons/tb";
 import classes from './Content.module.css'
 import { Channel } from '../channel/Channel'
@@ -117,24 +117,18 @@ export function Content({ textCard }: { textCard: { cardId: null | string } }) {
           value={state.filter}
           onChange={(event) => actions.setFilter(event.currentTarget.value)}
         />
-        {state.layout === 'small' && (
-          <Button className={classes.add} leftSection={<TbMessagePlus size={20} />} onClick={() => setAdd(true)}>
-            {state.strings.add}
-          </Button>
-        )}
+	{ state.layout === 'large' && (
+	  <Divider orientation="vertical" />
+	)}
+        <Button className={classes.add} leftSection={<TbMessagePlus size={20} />} onClick={() => setAdd(true)}>
+          {state.strings.add}
+        </Button>
       </div>
       <Box className={classes.channels} pos="relative" onClick={actions.setLoaded}>
         {channels.length === 0 && <div className={classes.none}>{state.strings.noTopics}</div>}
         {channels.length !== 0 && <div className={classes.channels}>{channels}</div>}
         <LoadingOverlay visible={!state.loaded} zIndex={1000} overlayProps={{ radius: 'sm', blur: 1 }} loaderProps={{ color: Colors.primary, type: 'dots' }} />
       </Box>
-      {state.layout === 'large' && (
-        <div className={classes.bar}>
-          <Button className={classes.add} leftSection={<TbMessagePlus size={20} />} onClick={() => setAdd(true)}>
-            {state.strings.add}
-          </Button>
-        </div>
-      )}
       <Modal title={state.strings.newTopic} opened={add} onClose={() => setAdd(false)} overlayProps={{ backgroundOpacity: 0.65, blur: 3 }} centered>
         <div className={classes.addContainer}>
           <TextInput
