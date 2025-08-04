@@ -362,7 +362,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
     if (!savingSeal) {
       setSavingSeal(true)
       try {
-        await new Promise((r) => setTimeout(r, 100))
+        await new Promise((r) => setTimeout(r, 250))
         await actions.setSeal()
         sealClose()
       } catch (err) {
@@ -745,7 +745,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                   </Button>
                 )}
                 {sealConfig && (
-                  <Button variant="filled" onClick={() => setSealReset(true)}>
+                  <Button variant="filled" className={classes.reset} onClick={() => setSealReset(true)}>
                     {state.strings.resave}
                   </Button>
                 )}
