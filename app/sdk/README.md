@@ -374,6 +374,11 @@ Configure allocates the Service interface for the server
   ```Focus::addDetailListener(ev: (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => void): void```
   ```Focus::removeDetailListener(ev: (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => void): void```
 
+  The channel offsync status can be determined with a boolean  listener
+
+  ```Focus::addOffsyncListener(ev: (offsync: boolean) => void) => void): void```
+  ```Focus::removeOffsyncListener(ev: (offsync: boolean) => void): void```
+
   The current channel id can be retrieved with the helper function getFocused
 
   ```Focus::getFocused(): {cardId: null|string, channelId: string}```
