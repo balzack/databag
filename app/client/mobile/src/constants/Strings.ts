@@ -9,6 +9,8 @@ export const languages = [
 ];
 
 export const en = {
+  yourHostname: 'Your admin has not configured the service hostname',
+  theirHostname: 'The contact\'s admin has not configured the service hostname',
   adminSettings: 'Admin Settings',
   accountKeyType: 'Account Key Type',
   media: 'Media',
@@ -318,7 +320,7 @@ export const en = {
   disableAccount: 'Disable Account',
   enableAccount: 'Enable Account',
   deleteAccount: 'Delete Account',
-  hostHint: 'domain:port/app',
+  hostHint: 'domain[:port][/app]',
   federatedHost: 'Federated Host',
   storageLimit: 'Storage Limit (GB) / Account',
   storageHint: '0 for Unlimited',
@@ -413,6 +415,9 @@ export const en = {
 };
 
 export const fr = {
+  yourHostname: 'Votre administrateur n\'a pas configuré le nom d\'hôte du service',
+  theirHostname: 'L\'administrateur du contact n\'a pas configuré le nom d\'hôte du service',
+
   adminSettings: "Paramètres d'administration",
   accountKeyType: 'Type de clé de compte',
   media: 'Médias',
@@ -743,7 +748,7 @@ export const fr = {
   disableAccount: 'Désactiver le Compte',
   enableAccount: 'Activer le Compte',
   deleteAccount: 'Supprimer le Compte',
-  hostHint: 'domaine:port/app',
+  hostHint: 'domaine[:port][/app]',
   federatedHost: 'Hôte Fédéré',
   storageLimit: 'Limite de Espace (Go) / Compte',
   storageHint: '0 pour Illimité',
@@ -817,6 +822,9 @@ export const fr = {
 };
 
 export const es = {
+  yourHostname: 'Su administrador no ha configurado el nombre de host del servicio',
+  theirHostname: 'El administrador del contacto no ha configurado el nombre de host del servicio',
+
   adminSettings: 'Configuración de administración',
   accountKeyType: 'Tipo de clave de cuenta',
   media: 'Medios',
@@ -1147,7 +1155,7 @@ export const es = {
   disableAccount: 'Desactivar Cuenta',
   enableAccount: 'Activar Cuenta',
   deleteAccount: 'Eliminar Cuenta',
-  hostHint: 'dominio:puerto/aplicación',
+  hostHint: 'dominio[:puerto][/aplicación]',
   federatedHost: 'Anfitrión federado',
   storageLimit: 'Límite de almacenamiento (GB) / cuenta',
   storageHint: '0 para Ilimitado',
@@ -1220,6 +1228,9 @@ export const es = {
 };
 
 export const pt = {
+  yourHostname: 'Seu administrador não configurou o nome do host do serviço',
+  theirHostname: 'O administrador do contato não configurou o nome do host do serviço',
+
   adminSettings: 'Configurações de administração',
   accountKeyType: 'Tipo de chave da conta',
   media: 'Mídia',
@@ -1550,7 +1561,7 @@ export const pt = {
   disableAccount: 'Desativar conta',
   enableAccount: 'Ativar conta',
   deleteAccount: 'Excluir conta',
-  hostHint: 'domínio:porta/aplicação',
+  hostHint: 'domínio[:porta][/aplicação]',
   federatedHost: 'Host federado',
   storageLimit: 'Limite de armazenamento (GB) / conta',
   storageHint: '0 para ilimitado',
@@ -1623,6 +1634,9 @@ export const pt = {
 };
 
 export const de = {
+  yourHostname: 'Ihr Administrator hat den Hostnamen des Dienstes nicht konfiguriert',
+  theirHostname: 'Der Administrator des Kontakts hat den Hostnamen des Dienstes nicht konfiguriert',
+
   adminSettings: 'Admin-Einstellungen',
   accountKeyType: 'Kontoschlüsseltyp',
   media: 'Medien',
@@ -1953,7 +1967,7 @@ export const de = {
   disableAccount: 'Konto deaktivieren',
   enableAccount: 'Konto aktivieren',
   deleteAccount: 'Konto löschen',
-  hostHint: 'Domäne:Port/Anwendung',
+  hostHint: 'domäne[:port][/anwendung]',
   federatedHost: 'Föderierter Host',
   storageLimit: 'Speicherbegrenzung (GB) / Konto',
   storageHint: '0 für unbegrenzt',
@@ -2026,6 +2040,9 @@ export const de = {
 };
 
 export const ru = {
+  yourHostname: 'Ваш администратор не настроил имя хоста службы',
+  theirHostname: 'Администратор контакта не настроил имя хоста службы',
+
   adminSettings: 'Настройки администратора',
   accountKeyType: 'Тип ключа аккаунта',
   media: 'Медиа',
@@ -2356,7 +2373,7 @@ export const ru = {
   disableAccount: 'От ключить аккаунт',
   enableAccount: 'Включить аккаунт',
   deleteAccount: 'Удалить аккаунт',
-  hostHint: 'домен:порт/приложение',
+  hostHint: 'домен[:порт][/приложение]',
   federatedHost: 'Федеративный хост',
   storageLimit: 'Лимит хранения (ГБ) / аккаунт',
   storageHint: '0 для неограниченного',
@@ -2429,6 +2446,9 @@ export const ru = {
 };
 
 export const el = {
+  yourHostname: 'Ο διαχειριστής σας δεν έχει ρυθμίσει το όνομα κεντρικού υπολογιστή της υπηρεσίας',
+  theirHostname: 'Ο διαχειριστής της επαφής δεν έχει ρυθμίσει το όνομα κεντρικού υπολογιστή της υπηρεσίας',
+
   adminSettings: 'Ρυθμίσεις διαχειριστή',
   accountKeyType: 'Τύπος κλειδιού λογαριασμού',
   media: 'Πολυμέσα',
@@ -2720,7 +2740,7 @@ export const el = {
   disableAccount: 'Απενεργοποιήστε τον λογαριασμό',
   enableAccount: 'Ενεργοποίηση λογαριασμού',
   deleteAccount: 'Διαγραφή λογαριασμού',
-  hostHint: 'domain:port/app',
+  hostHint: 'domain[:port][/app]',
   federatedHost: 'Ομοσπονδιακός οικοδεσπότης',
   storageLimit: 'Όριο αποθήκευσης (GB) / λογαριασμός',
   storageHint: '0 για απεριόριστο',

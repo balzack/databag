@@ -30,6 +30,10 @@ export const styles = StyleSheet.create({
       overflow: 'hidden',
     },
   },
+  inputContent: {
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
   inputBorder: {
     borderRadius: 12,
     borderWidth: 0,

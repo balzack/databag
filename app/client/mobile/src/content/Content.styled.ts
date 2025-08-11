@@ -28,6 +28,10 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
   },
+  inputContent: {
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
   inputBorder: {
     borderRadius: 12,
     borderWidth: 0,

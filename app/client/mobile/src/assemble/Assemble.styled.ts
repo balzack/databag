@@ -26,6 +26,10 @@ export const styles = StyleSheet.create({
   newContent: {
     height: 52,
   },
+  inputContent: {
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
   input: {
     flexGrow: 1,
     flexShink: 1,

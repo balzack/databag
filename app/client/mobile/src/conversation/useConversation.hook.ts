@@ -84,13 +84,13 @@ export function useConversation() {
       if (!state.detailSet) {
         validShare = false;
       } else {
-        if (asset.type === 'image' && !state.detail.enableImage) {
+        if (asset.type === 'image' && !state.detail?.enableImage) {
           validShare = false;
-        } else if (asset.type === 'audio' && !state.detail.enableAudio) {
+        } else if (asset.type === 'audio' && !state.detail?.enableAudio) {
           validShare = false;
-        } else if (asset.type === 'video' && !state.detail.enableVideo) {
+        } else if (asset.type === 'video' && !state.detail?.enableVideo) {
           validShare = false;
-        } else if (!state.detail.enableBinary) {
+        } else if (!state.detail?.enableBinary) {
           validShare = false;
         }
       }

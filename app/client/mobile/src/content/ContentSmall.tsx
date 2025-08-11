@@ -697,6 +697,7 @@ export function ContentSmall({
             <Surface mode="flat" elevation={0} style={styles.searchInputContainer}>
               <TextInput
                 style={styles.searchInput}
+                contentStyle={styles.inputContent}
                 outlineStyle={styles.inputBorder}
                 dense={true}
                 autoCapitalize="none"
