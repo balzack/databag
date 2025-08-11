@@ -272,7 +272,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
               )}
             </View>
             <Pressable onPress={openDetails} style={styles.navIcon}>
-              <Icon size={24} source="gear-six" color={'white'} />
+              <Icon size={28} source="gear-six" color={'white'} />
             </Pressable>
           </SafeAreaView>
         </Surface>
