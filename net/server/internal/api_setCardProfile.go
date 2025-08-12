@@ -34,6 +34,20 @@ func SetCardProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+  if identity.Node == "" {
+    domain := getStrConfigValue(CNFDomain, "");
+    if domain == "" {
+      var account store.Account
+      if err := store.DB.Where("guid = ?", guid).First(&account).Error; err != nil {
+        ErrResponse(w, http.StatusMethodNotAllowed, err)
+        return
+      }
+    } else {
+      ErrResponse(w, http.StatusNotAcceptable, err)
+      return
+    }
+  }
+
 	slot := store.CardSlot{}
 	if err := store.DB.Preload("Card.Groups").Where("account_id = ? AND card_slot_id = ?", account.ID, cardID).First(&slot).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
