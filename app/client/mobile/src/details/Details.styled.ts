@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
   offsync: {
     paddingLeft: 16,
     fontWeight: 'bold',
+    paddingBottom: 8,
   },
   option: {
     position: 'relative',

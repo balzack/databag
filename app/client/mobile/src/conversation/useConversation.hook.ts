@@ -65,6 +65,7 @@ export function useConversation() {
     progress: 0,
     avoid: 0,
     validShare: true,
+    offsync: false,
   });
 
   const updateState = (value: any) => {
@@ -207,18 +208,23 @@ export function useConversation() {
         const cardId = focused.cardId;
         updateState({detail, cardId});
       };
+      const setOffsync = (offsync: boolean) => {
+        updateState({ offsync });
+      };
       const setKeyboard = (event: KeyboardEvent) => {
         updateState({avoid: event.endCoordinates.height});
       };
       updateState({topics: [], loaded: false});
       focus.addTopicListener(setTopics);
       focus.addDetailListener(setDetail);
+      focus.addOffsyncListener(setOffsync);
       contact.addCardListener(setCards);
       identity.addProfileListener(setProfile);
       const keyboard = Keyboard.addListener('keyboardDidShow', setKeyboard);
       return () => {
         focus.removeTopicListener(setTopics);
         focus.removeDetailListener(setDetail);
+        focus.removeOffsyncListener(setOffsync);
         contact.removeCardListener(setCards);
         identity.removeProfileListener(setProfile);
         keyboard.remove();
