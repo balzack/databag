@@ -27,7 +27,7 @@ func getAvailableAccounts() (available int64, err error) {
 		return
 	}
 
-	if open && limit > count {
+  if open && (limit == 0 || limit > count) {
 		available = limit - count
 	}
 
