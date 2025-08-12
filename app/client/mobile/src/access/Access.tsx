@@ -73,7 +73,7 @@ export function Access() {
         setOtp(false);
       } catch (err) {
         console.log(err.message);
-        if (err.message === '405' || err.message === '403' || err.message === '429') {
+        if (err.message === '405' || err.message === '429') {
           setOtp(true);
         } else {
           console.log(err);
