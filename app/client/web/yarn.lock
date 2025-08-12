@@ -2006,10 +2006,10 @@ data-view-byte-offset@^1.0.1:
     es-errors "^1.3.0"
     is-data-view "^1.0.1"
 
-databag-client-sdk@^0.0.40:
-  version "0.0.40"
-  resolved "https://registry.yarnpkg.com/databag-client-sdk/-/databag-client-sdk-0.0.40.tgz#65148662dabada4c522dcfe4049bcff5b5a6590f"
-  integrity sha512-sr9Fo2KkI0n9jM+zeDE/3uGX2e/6/sOtROp00Df2AinN5We40JTPQTlKB2Q96zAeAsTSX03meXipegKnLgO/Wg==
+databag-client-sdk@^0.0.41:
+  version "0.0.41"
+  resolved "https://registry.yarnpkg.com/databag-client-sdk/-/databag-client-sdk-0.0.41.tgz#77722abf1259f9d559e098b82cb5aee193f82e7b"
+  integrity sha512-Be1XZ5whT00gtWp1aAMhQgNch3n8UPi2D5GReIPYI8adsbhIk32T1Lu09C5QhEfTI24KrdqRv+SNBCvMDCS4sg==
   dependencies:
     eventemitter3 "^5.0.1"
     prettier "^3.3.3"

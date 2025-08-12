@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import classes from './Conversation.module.css'
 import { useConversation } from './useConversation.hook'
-import { TbSend, TbTextSize, TbTextColor, TbVideo, TbFile, TbDisc, TbCamera, TbSettings, TbHome, TbServer, TbShield, TbExclamationCircle } from "react-icons/tb";
+import { TbSend, TbTextSize, TbTextColor, TbVideo, TbFile, TbDisc, TbAlertTriangle, TbCamera, TbSettings, TbHome, TbServer, TbShield, TbExclamationCircle } from "react-icons/tb";
 import { CloseButton, Menu, Divider, Text, Textarea, ActionIcon, Loader } from '@mantine/core'
 import { Message } from '../message/Message'
 import { modals } from '@mantine/modals'
@@ -155,6 +155,7 @@ export function Conversation({ openDetails }: { openDetails: () => void }) {
           <Divider size="sm" orientation="vertical" />
           {state.detailSet && state.host === true && <TbHome size={24} />}
           {state.detailSet && state.host === false && <TbServer size={24} />}
+          {state.detailSet && state.offsync === true && <TbAlertTriangle size={24} />}
           {state.detailSet && state.sealed === true && <TbShield size={24} />}
           {state.detailSet && state.access === false && <TbExclamationCircle className={classes.alert} size={24} />}
         </div>
