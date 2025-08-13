@@ -180,13 +180,17 @@ export function SetupSmall() {
                       <Switch style={styles.fieldSwitch} value={state.setup?.pushSupported} disabled={state.loading} onValueChange={() => actions.setPushSupported(!state.setup?.pushSupported)} />
                     </View>
                   </View>
-                  <Divider style={styles.separator} />
-                  <View style={styles.field}>
-                    <View style={styles.fieldData}>
-                      <Text style={styles.fieldLabel}>{state.strings.allowUnsealed}</Text>
-                      <Switch style={styles.fieldSwitch} value={state.setup?.allowUnsealed} disabled={state.loading} onValueChange={() => actions.setAllowUnsealed(!state.setup?.allowUnsealed)} />
+                  { false && (
+                    <Divider style={styles.separator} />
+                  )}
+                  { false && (
+                    <View style={styles.field}>
+                      <View style={styles.fieldData}>
+                        <Text style={styles.fieldLabel}>{state.strings.allowUnsealed}</Text>
+                        <Switch style={styles.fieldSwitch} value={state.setup?.allowUnsealed} disabled={state.loading} onValueChange={() => actions.setAllowUnsealed(!state.setup?.allowUnsealed)} />
+                      </View>
                     </View>
-                  </View>
+                  )}
                   <Divider style={styles.separator} />
                   <View style={styles.field}>
                     <View style={styles.fieldData}>
