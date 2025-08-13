@@ -54,6 +54,7 @@ export class FocusModule implements Focus {
   private flagChannelTopic: (id: string)=>Promise<void>;
   private focusDetail: FocusDetail | null;
   private loaded: boolean;
+  private offsync: boolean;
 
   private blocked: Set<string>;
 
@@ -76,6 +77,7 @@ export class FocusModule implements Focus {
     this.flagChannelTopic = flagChannelTopic;
     this.loaded = false;
     this.justAdded = false;
+    this.offsync = false;
 
     this.topicEntries = new Map<string, { item: TopicItem; topic: Topic }>();
     this.blocked = new Set<string>();
@@ -170,6 +172,10 @@ export class FocusModule implements Focus {
             }
             this.emitTopics();
           } catch (err) {
+            if (!this.offsync) {
+              this.offsync = true;
+              this.emitOffsync();
+            }
             this.log.warn(err);
             await new Promise((r) => setTimeout(r, RETRY_POLL_MS));
           } 
@@ -215,6 +221,10 @@ export class FocusModule implements Focus {
             this.emitTopics();
             this.log.info(`topic revision: ${nextRev}`);
           } catch (err) {
+            if (!this.offsync) {
+              this.offsync = true;
+              this.emitOffsync();
+            }
             this.log.warn(err);
             await new Promise((r) => setTimeout(r, RETRY_POLL_MS));
           }
@@ -240,6 +250,10 @@ export class FocusModule implements Focus {
           this.unsealAll = false;
           this.emitTopics();
         }
+      }
+      if (this.offsync) {
+        this.offsync = false;
+        this.emitOffsync();
       }
       this.syncing = false;
       await this.markRead();
@@ -925,6 +939,19 @@ export class FocusModule implements Focus {
     this.emitter.emit('topic', topics);
   }
 
+  public addOffsyncListener(ev: {offsync: boolean}) {
+    this.emitter.on('offsync', ev);
+    ev(this.offsync);
+  }
+
+  public removeOffsyncListener(ev: {offsync: boolean}) {
+    this.emitter.off('offsync', ev);
+  }
+
+  public emitOffsync() {
+    this.emitter.emit('offsync', this.offsync);
+  }
+  
   public addDetailListener(ev: (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => void) {
     const { cardId, channelId } = this;
     const access = Boolean(this.connection && (!this.focusDetail?.sealed || (this.sealEnabled && this.channelKey)))
@@ -1129,8 +1156,6 @@ export class FocusModule implements Focus {
     if (!connection) {
       throw new Error('disconnected channel');
     }
-
-console.log("CONNECTION!", connection);
     const { node, secure, token } = connection
     if (cardId) {
       return await getContactChannelTopics(node, secure, token, channelId, revision, (end || !revision) ? BATCH_COUNT : null, begin, end);

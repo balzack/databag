@@ -158,6 +158,9 @@ export interface Focus {
   addTopicListener(ev: (topics: null | Topic[]) => void): void;
   removeTopicListener(ev: (topics: null | Topic[]) => void): void;
 
+  addOffsyncListener(ev: {offsync: boolean}): void;
+  removeOffsyncListener(ev: {offsync: boolean}): void;
+
   addDetailListener(ev: (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => void): void;
   removeDetailListener(ev: (focused: { cardId: string | null, channelId: string, detail: FocusDetail | null }) => void): void;
 }

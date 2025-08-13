@@ -807,7 +807,7 @@ export class ContactModule implements Contact {
     const channelEntry = channelsEntry?.get(channelId);
     if (cardEntry && channelEntry) {
       // allocate focus
-      const node = cardEntry.item.profile.node;
+      const node = cardEntry.item.profile.node ? cardEntry.item.profile.node : this.node;
       const guid = cardEntry.item.profile.guid;
       const token = cardEntry.item.detail.token;
       const revision = channelEntry.item.summary.revision;

@@ -65,10 +65,9 @@ export class RingModule implements Ring {
     entry.status = 'accepted';
     this.emitRinging();
     const link = new LinkModule(this.log);
-    const node = contactNode ? contactNode : accountNode;
-console.log("NODE: ", node, contactNode, accountNode);
+    const node = contactNode ? contactNode : this.accountNode;
     const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(node);
-    await link.join(contactNode, !insecure, entry.call.calleeToken, entry.call.ice, async ()=>{ await this.endContactCall(cardId, callId) });
+    await link.join(node, !insecure, entry.call.calleeToken, entry.call.ice, async ()=>{ await this.endContactCall(cardId, callId) });
     return link;
   }
 
