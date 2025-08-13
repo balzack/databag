@@ -36,7 +36,7 @@ export function useAssemble() {
     const settings = app.state?.session?.getSettings();
     const setConfig = (config: Config) => {
       const {sealSet, sealUnlocked, allowUnsealed} = config;
-      updateState({sealSet, sealUnlocked, allowUnsealed});
+      updateState({sealSet, sealUnlocked, allowUnsealed: true});
     };
     const setCards = (cards: Card[]) => {
       const sorted = cards.sort(compare);

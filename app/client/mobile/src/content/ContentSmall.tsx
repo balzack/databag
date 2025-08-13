@@ -710,7 +710,7 @@ export function ContentSmall({
                 onChangeText={value => actions.setFilter(value)}
               />
             </Surface>
-            {(state.sealSet || state.allowUnsealed || true) && (
+            {(state.sealSet || state.allowUnsealed) && (
               <Button icon="message1" mode="contained" textColor="white" style={styles.newButton} contentStyle={styles.newContent} onPress={createConversation}>
                 {state.strings.new}
               </Button>

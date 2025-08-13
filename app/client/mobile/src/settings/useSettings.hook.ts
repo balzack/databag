@@ -65,7 +65,7 @@ export function useSettings() {
     const {settings, identity} = getSession();
     const setConfig = (config: Config) => {
       const {searchable, pushEnabled, allowUnsealed, mfaEnabled} = config;
-      updateState({config, searchable, pushEnabled, allowUnsealed, mfaEnabled});
+      updateState({config, searchable, pushEnabled, allowUnsealed: true, mfaEnabled});
     };
     settings.addConfigListener(setConfig);
     const setProfile = (profile: Profile) => {

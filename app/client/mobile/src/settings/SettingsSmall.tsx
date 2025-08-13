@@ -683,8 +683,8 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                         />
                         <Pressable style={styles.navPress} onPress={setSeal} />
                       </View>
-                      {state.allowUnsealed && <Divider style={styles.navDivider} />}
-                      {state.allowUnsealed && (
+                      {(true || state.allowUnsealed) && <Divider style={styles.navDivider} />}
+                      {(true || state.allowUnsealed) && (
                         <View style={styles.navUpload}>
                           <TextInput
                             style={styles.navInput}
