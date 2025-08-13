@@ -45,7 +45,7 @@ export function RegistrySmall({close, openContact}: RegistrySmallProps) {
               <TextInput
                 dense={true}
                 style={styles.input}
-                style={styles.inputContent}
+                contentStyle={styles.inputContent}
                 outlineStyle={styles.inputBorder}
                 autoCapitalize="none"
                 autoComplete="off"
