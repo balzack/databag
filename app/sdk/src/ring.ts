@@ -9,13 +9,15 @@ const EXPIRES = 6000;
 
 export class RingModule implements Ring {
   private log: Logging;
+  private accountNode: string;
   private emitter: EventEmitter;
   private calls: Map<string, { call: Call, expires: number, status: string }>
   private closed: boolean;
   private endContactCall: (cardId: string, callId: string) => Promise<void>;
 
-  constructor(log: Logging, endContactCall: (cardId: string, callId: string) => Promise<void>) {
+  constructor(log: Logging, node: string, endContactCall: (cardId: string, callId: string) => Promise<void>) {
     this.log = log;
+    this.accountNode = node;
     this.endContactCall = endContactCall;
     this.emitter = new EventEmitter();
     this.calls = new Map<string, { call: Call, expires: number, status: string }>();
@@ -63,7 +65,9 @@ export class RingModule implements Ring {
     entry.status = 'accepted';
     this.emitRinging();
     const link = new LinkModule(this.log);
-    const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(contactNode);
+    const node = contactNode ? contactNode : accountNode;
+console.log("NODE: ", node, contactNode, accountNode);
+    const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(node);
     await link.join(contactNode, !insecure, entry.call.calleeToken, entry.call.ice, async ()=>{ await this.endContactCall(cardId, callId) });
     return link;
   }

@@ -67,7 +67,7 @@ export class SessionModule implements Session {
     this.stream = new StreamModule(log, this.store, this.crypto, this.staging, guid, token, node, secure, channelTypes);
     this.content = new ContentModule(log, this.crypto, this.contact, this.stream);
     this.connection = new Connection(log, token, node, secure);
-    this.ring = new RingModule(log, async (cardId: string, callId: string) => { await this.contact.endCall(cardId, callId) });
+    this.ring = new RingModule(log, node, async (cardId: string, callId: string) => { await this.contact.endCall(cardId, callId) });
 
     const onStatus = (ev: string) => {
       this.status = ev;

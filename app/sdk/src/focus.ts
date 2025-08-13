@@ -1129,6 +1129,8 @@ export class FocusModule implements Focus {
     if (!connection) {
       throw new Error('disconnected channel');
     }
+
+console.log("CONNECTION!", connection);
     const { node, secure, token } = connection
     if (cardId) {
       return await getContactChannelTopics(node, secure, token, channelId, revision, (end || !revision) ? BATCH_COUNT : null, begin, end);

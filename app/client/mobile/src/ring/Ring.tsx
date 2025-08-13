@@ -127,7 +127,7 @@ export function Ring() {
           <Surface elevation={10} mode="flat" style={borderStyle}>
             <View style={styles.name}>
               <Text style={styles.nameSet} numberOfLines={1}>
-                {state.calls[0].card.name ? state.calls[0].card.name : `${state.calls[0].card.handle}@${state.calls[0].card.node}`}
+                {state.calls[0].card.name ? state.calls[0].card.name : state.calls[0].card.node ? `${state.calls[0].card.handle}@${state.calls[0].card.node}` : state.calls[0].card.handle }
               </Text>
               <View style={styles.status}>
                 {state.connected && <Text style={styles.duration}>{`${Math.floor(state.duration / 60)}:${(state.duration % 60).toString().padStart(2, '0')}`}</Text>}

@@ -109,7 +109,7 @@ export function Call() {
           {!state.remoteVideo && !state.localVideo && showName && (
             <View style={styles.titleView}>
               <Text style={styles.titleName} adjustsFontSizeToFit={true} numberOfLines={1}>
-                {state.calling.name ? state.calling.name : `${state.calling.handle}@${state.calling.node}`}
+                {state.calling.name ? state.calling.name : state.calling.node ? `${state.calling.handle}@${state.calling.node}` : state.calling.handle}
               </Text>
               <View style={styles.duration}>
                 <Text style={styles.minutes}>{`${Math.floor(state.duration / 60)}`}:</Text>
