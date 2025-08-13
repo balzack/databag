@@ -107,7 +107,7 @@ const AllTab = React.memo(function AllTab({
               </Surface>
             )}
             {Platform.OS !== 'ios' && syncStatus === 'offsync' && <Menu.Item key="resync" leadingIcon="cached" onPress={() => resync(item)} title={strings.resyncAction} />}
-            {Platform.OS !== 'ios' && syncStatus === 'connected' && <Menu.Item key="call" leadingIcon="phone" onPress={() => call(item)} title={strings.callAction} />}
+            {Platform.OS !== 'ios' && syncStatus === 'connected' && enableIce && <Menu.Item key="call" leadingIcon="phone" onPress={() => call(item)} title={strings.callAction} />}
             {Platform.OS !== 'ios' && syncStatus === 'connected' && <Menu.Item key="text" leadingIcon="chat-circle" onPress={() => text(item)} title={strings.textAction} />}
             {Platform.OS !== 'ios' && syncStatus === 'confirmed' && <Menu.Item key="saved" leadingIcon="link" onPress={() => connect(item)} title={strings.connectAction} />}
             {Platform.OS !== 'ios' && syncStatus === 'connecting' && <Menu.Item key="cancel" leadingIcon="cancel" onPress={() => cancel(item)} title={strings.cancelAction} />}
@@ -309,7 +309,7 @@ const ConnectedTab = React.memo(function ConnectedTab({
               </Surface>
             )}
             {Platform.OS !== 'ios' && syncStatus === 'offsync' && <Menu.Item key="resync" leadingIcon="cached" onPress={() => resync(item)} title={strings.resyncAction} />}
-            {Platform.OS !== 'ios' && syncStatus !== 'offsync' && <Menu.Item key="call" leadingIcon="phone" onPress={() => call(item)} title={strings.callAction} />}
+            {Platform.OS !== 'ios' && syncStatus !== 'offsync' && enableIce && <Menu.Item key="call" leadingIcon="phone" onPress={() => call(item)} title={strings.callAction} />}
             {Platform.OS !== 'ios' && syncStatus !== 'offsync' && <Menu.Item key="text" leadingIcon="chat-circle" onPress={() => text(item)} title={strings.textAction} />}
           </Menu>
         );
