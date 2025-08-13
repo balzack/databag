@@ -87,7 +87,8 @@ export function useRegistry() {
     setUsername: (username: string) => {
       updateState({username});
     },
-    setServer: (server: string) => {
+    setServer: (node: string) => {
+      const server = node.replace(/\s/g, '.');
       updateState({server});
     },
   };
