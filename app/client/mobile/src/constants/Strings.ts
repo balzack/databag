@@ -211,6 +211,8 @@ export const en = {
   operationFailed: 'Operation Failed',
   tryAgain: 'Please try again.',
 
+  sealRequired: 'E2EE key not set and required by your admin',
+
   add: 'Add',
   save: 'Save',
   resave: 'Resave',
@@ -660,6 +662,8 @@ export const fr = {
   operationFailed: 'Opération Échouée',
   tryAgain: 'Veuillez réessayer.',
 
+  sealRequired: 'Clé E2EE non définie et requise par votre administrateur',
+
   add: 'Ajouter',
   save: 'Enregistrer',
   resave: 'Réenregistrer',
@@ -1067,6 +1071,8 @@ export const es = {
   operationFailed: 'Operación fallida',
   tryAgain: 'Por favor, inténtalo de nuevo.',
 
+  sealRequired: 'Clave E2EE no establecida y requerida por su administrador',
+
   add: 'Agregar',
   save: 'Guardar',
   resave: 'Guardar',
@@ -1471,6 +1477,8 @@ export const pt = {
 
   operationFailed: 'Operação falhou',
   tryAgain: 'Por favor, tente novamente.',
+
+  sealRequired: 'Chave E2EE não definida e exigida pelo seu administrador',
 
   add: 'Adicionar',
   save: 'Salvar',
@@ -1879,6 +1887,8 @@ export const de = {
   operationFailed: 'Vorgang fehlgeschlagen',
   tryAgain: 'Bitte versuchen Sie es erneut.',
 
+  sealRequired: 'E2EE-Schlüssel nicht gesetzt und von Ihrem Administrator erforderlich',
+
   add: 'Hinzufügen',
   save: 'Speichern',
   resave: 'Erneut Speichern',
@@ -2285,6 +2295,8 @@ export const ru = {
   operationFailed: 'Операция не удалась',
   tryAgain: 'Пожалуйста, попробуйте снова.',
 
+  sealRequired: 'Ключ E2EE не установлен, но требуется вашим администратором',
+
   add: 'Добавить',
   save: 'Сохранить',
   resave: 'Пересохранить',
@@ -2638,6 +2650,7 @@ export const el = {
   dark: 'Σκοτάδι',
   light: 'Φως',
   operationFailed: 'Απέτυχε η λειτουργία',
+  sealRequired: 'Το κλειδί E2EE δεν έχει οριστεί και απαιτείται από τον διαχειριστή σας',
   tryAgain: 'Δοκιμάστε ξανά.',
   add: 'Προσθέτω',
   save: 'Εκτός',

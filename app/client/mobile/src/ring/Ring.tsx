@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Animated, useAnimatedValue, View, Platform} from 'react-native';
+import {Keyboard, Animated, useAnimatedValue, View, Platform} from 'react-native';
 import {useRing} from './useRing.hook';
 import {styles} from './Ring.styled';
 import {useTheme, Text, Surface, IconButton, ActivityIndicator} from 'react-native-paper';
@@ -35,6 +35,11 @@ export function Ring() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accepting, state.calling, state.calls]);
+
+  const fullScreen = () => {
+    Keyboard.dismiss();
+    actions.setFullscreen(true);
+  };
 
   const toggleAudio = async () => {
     if (!applyingAudio) {
@@ -194,7 +199,7 @@ export function Ring() {
               disabled={!state.connected}
               icon={state.remoteVideo || state.localVideo ? 'video-switch-outline' : 'frame-corners'}
               size={28}
-              onPress={() => actions.setFullscreen(true)}
+              onPress={fullScreen}
             />
 
             <View style={styles.end}>
