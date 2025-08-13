@@ -185,7 +185,7 @@ export function useContent() {
   useEffect(() => {
     const setConfig = (config: Config) => {
       const {sealSet, sealUnlocked, allowUnsealed} = config;
-      updateState({sealSet: sealSet && sealUnlocked, allowUnsealed: true});
+      updateState({sealSet: sealSet && sealUnlocked, allowUnsealed});
     };
     const setProfile = (profile: Profile) => {
       const {guid} = profile;
