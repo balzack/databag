@@ -8,6 +8,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  noKey: {
+    fontSize: 12,
+  },
   content: {
     padding: 32,
     borderRadius: 8,
