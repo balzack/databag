@@ -576,10 +576,22 @@ export function ContentSmall({
   const [, setAdding] = useState(false);
   const theme = useTheme();
   const [alert, setAlert] = useState(false);
+  const [admin, setAdmin] = useState(false);
   const [leave, setLeave] = useState(null as null | {cardId: string | null; channelId: string});
   const [leaving, setLeaving] = useState(false);
   const [remove, setRemove] = useState(null as null | {channelId: string});
   const [removing, setRemoving] = useState(false);
+
+  const adminParams = {
+    title: state.strings.operationFailed,
+    prompt: state.strings.sealRequired,
+    close: {
+      label: state.strings.close,
+      action: () => {
+        setAdmin(false);
+      },
+    },
+  };
 
   const alertParams = {
     title: state.strings.operationFailed,
@@ -643,6 +655,14 @@ export function ContentSmall({
       },
     },
   };
+
+  const create = () => {
+    if (state.sealSet || state.allowUnsealed) {
+      createConversation();
+    } else {
+      setAdmin(true);
+    }
+  }
 
   const open = useCallback((cardId: string | null, channelId: string) => {
     actions.setFocus(cardId, channelId);
@@ -710,11 +730,9 @@ export function ContentSmall({
                 onChangeText={value => actions.setFilter(value)}
               />
             </Surface>
-            {(state.sealSet || state.allowUnsealed) && (
-              <Button icon="message1" mode="contained" textColor="white" style={styles.newButton} contentStyle={styles.newContent} onPress={createConversation}>
-                {state.strings.new}
-              </Button>
-            )}
+            <Button icon="message1" mode="contained" textColor="white" style={styles.newButton} contentStyle={styles.newContent} onPress={create}>
+              {state.strings.new}
+            </Button>
           </SafeAreaView>
         </Surface>
 
@@ -793,6 +811,7 @@ export function ContentSmall({
       <Confirm show={alert} params={alertParams} />
       <Confirm show={Boolean(remove)} busy={removing} params={removeParams} />
       <Confirm show={Boolean(leave)} busy={leaving} params={leaveParams} />
+      <Confirm show={Boolean(admin)} params={adminParams} />
     </View>
   );
 }
