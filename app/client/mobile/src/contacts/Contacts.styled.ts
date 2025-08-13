@@ -61,6 +61,10 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  inputContent: {
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
   inputBorder: {
     borderRadius: 12,
     borderWidth: 0,

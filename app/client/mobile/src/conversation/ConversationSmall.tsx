@@ -271,8 +271,11 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
                 <Text numberOfLines={1} style={styles.smUnknown}>{`, ${state.strings.unknownContact} (${state.unknownContacts})`}</Text>
               )}
             </View>
+            {state.offsync && (
+              <Icon size={24} source="warning" color={theme.colors.error} />
+            )}
             <Pressable onPress={openDetails} style={styles.navIcon}>
-              <Icon size={24} source="gear-six" color={'white'} />
+              <Icon size={28} source="gear-six" color={'white'} />
             </Pressable>
           </SafeAreaView>
         </Surface>

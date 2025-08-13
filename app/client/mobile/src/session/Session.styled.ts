@@ -43,6 +43,7 @@ export const styles = StyleSheet.create({
   alertArea: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
     paddingTop: 8,
     paddingBottom: 8,

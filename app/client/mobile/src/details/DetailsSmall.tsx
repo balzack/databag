@@ -142,8 +142,8 @@ export function DetailsSmall({close, edit, closeAll}: {close: () => void; edit: 
         <Surface mode="flat" elevation={2} style={styles.scrollWrapper}>
           <SafeAreaView style={styles.scrollWrapper} edges={['left', 'right']}>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
-              {state.locked && (
-                <Text variant="labelLarge" style={{...styles.offsync, color: theme.colors.offsync}}>
+              {(state.locked || state.offsync) && (
+                <Text variant="labelLarge" style={{...styles.offsync, color: theme.colors.error}}>
                   {state.strings.offsync}
                 </Text>
               )}

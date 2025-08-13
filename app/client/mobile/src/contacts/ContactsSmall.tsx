@@ -463,6 +463,7 @@ export function ContactsSmall({
               <TextInput
                 dense={true}
                 style={styles.input}
+                contentStyle={styles.inputContent}
                 outlineStyle={styles.inputBorder}
                 autoCapitalize="none"
                 autoComplete="off"

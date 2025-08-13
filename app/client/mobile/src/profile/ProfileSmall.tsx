@@ -65,9 +65,11 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
       setConfirmShow(false);
     } catch (err) {
       console.log(err);
+      const code = err?.message;
+      const message = code === '405' ? state.strings.yourHostname : code === '406' ? state.strings.theirHostanem : state.strings.tryAgain;
       setConfirmParams({
         title: state.strings.operationFailed,
-        prompt: state.strings.tryAgain,
+        prompt: message,
         close: {
           label: state.strings.close,
           action: () => setConfirmShow(false),

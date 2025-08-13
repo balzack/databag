@@ -80,13 +80,14 @@ export function Assemble({close, openConversation}: {close: () => void; openConv
             <TextInput
               style={styles.input}
               mode="outlined"
+              contentStyle={styles.inputContent}
               outlineStyle={styles.inputBorder}
               autoCapitalize="none"
               autoComplete="off"
               autoCorrect={false}
               dense={true}
               placeholder={state.strings.addSubject}
-              left={<TextInput.Icon style={styles.icon} icon="search" />}
+              left={<TextInput.Icon style={styles.icon} icon="edit" />}
               value={subject}
               onChangeText={value => setSubject(value)}
             />

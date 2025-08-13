@@ -30,6 +30,10 @@ export const styles = StyleSheet.create({
       overflow: 'hidden',
     },
   },
+  inputContent: {
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
   inputBorder: {
     borderRadius: 12,
     borderWidth: 0,
@@ -89,12 +93,7 @@ export const styles = StyleSheet.create({
   input: {
     flexGrow: 1,
     backgroundColor: 'transparent',
-    paddingTop: 0,
-    paddingBottom: 0,
-    display: 'flex',
-    height: 48,
-    maxHeight: 48,
-    borderRadius: 8,
+    height: 52,
   },
   inputUnderline: {
     display: 'none',

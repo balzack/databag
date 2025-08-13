@@ -27,6 +27,7 @@ export function useDetails() {
     channelCards: [] as Card[],
     unknownContacts: 0,
     layout: 'small',
+    offsync: false,
   });
 
   const updateState = (value: any) => {
@@ -86,6 +87,9 @@ export function useDetails() {
       const setProfile = (profile: Profile) => {
         updateState({profile});
       };
+      const setOffsync  = (offsync: boolean) => {
+        updateState({ offsync });
+      };
       const setDetail = (focused: {cardId: string | null; channelId: string; detail: FocusDetail | null}) => {
         const detail = focused ? focused.detail : null;
         const cardId = focused.cardId;
@@ -99,10 +103,12 @@ export function useDetails() {
         updateState({detail, editSubject: subject, subject, channelId, cardId, access, sealed, locked, host, created});
       };
       focus.addDetailListener(setDetail);
+      focus.addOffsyncListener(setOffsync);
       contact.addCardListener(setCards);
       identity.addProfileListener(setProfile);
       return () => {
         focus.removeDetailListener(setDetail);
+        focus.removeOffsyncListener(setOffsync);
         contact.removeCardListener(setCards);
         identity.removeProfileListener(setProfile);
       };

@@ -252,7 +252,7 @@ export function AccountsSmall() {
                 <Text style={styles.modalDescription}>{state.strings.accessingToken}</Text>
                 <Divider style={styles.divider} />
                 <View style={styles.secretText}>
-                  <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>
+                  <Text style={styles.secret}>
                     {token}
                   </Text>
                   <TouchableOpacity onPress={copyToken}>
@@ -279,7 +279,7 @@ export function AccountsSmall() {
                 <Text style={styles.modalDescription}>{state.strings.addingToken}</Text>
                 <Divider style={styles.divider} />
                 <View style={styles.secretText}>
-                  <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>
+                  <Text style={styles.secret}>
                     {token}
                   </Text>
                   <TouchableOpacity onPress={copyToken}>

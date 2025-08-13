@@ -82,7 +82,7 @@ export function ContactsLarge({
             renderItem={({item}) => {
               const syncStatus = item.offsync ? 'offsync' : item.status;
               const getOptions = () => {
-                if (syncStatus === 'connected') {
+                if (syncStatus === 'connected' && state.enableIce) {
                   return [
                     <Action
                       key="call"
