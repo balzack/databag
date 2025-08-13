@@ -14,8 +14,8 @@ export function Members({close}: {close: () => void}) {
   const [alertParams] = useState({
     title: state.strings.operationFailed,
     prompt: state.strings.tryAgain,
-    confirm: {
-      label: state.strings.ok,
+    close: {
+      label: state.strings.close,
       action: () => setAlert(false),
     },
   });
@@ -55,6 +55,7 @@ export function Members({close}: {close: () => void}) {
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
               const added = Boolean(state.members.find(member => member === item.guid));
+              const action = (state.sealed && !item.sealable) ? <Text style={styles.noKey}>{state.strings.noKey}</Text> : <Switch key="action" style={styles.controlSwitch} value={added} onValueChange={() => update(item.cardId, !added)} />
               return (
                 <Card
                   containerStyle={{...styles.cardContainer, handle: {...styles.cardHandle, color: theme.colors.onSecondary}}}
@@ -64,7 +65,7 @@ export function Members({close}: {close: () => void}) {
                   node={item.node}
                   placeholder={state.strings.name}
                   select={() => {}}
-                  actions={[<Switch key="action" style={styles.controlSwitch} value={added} onValueChange={() => update(item.cardId, !added)} />]}
+                  actions={[action]}
                 />
               );
             }}
