@@ -35,7 +35,7 @@ test('rings correctly', async () => {
   };
 
   const log = new ConsoleLogging();
-  const ringModule = new RingModule(log, endContactCall);
+  const ringModule = new RingModule(log, '', endContactCall);
 
   ringModule.addRingingListener(ringing);
   ringModule.ring({ cardId: 'card1', callId: 'call1', calleeToken: 'token1', ice: [] });

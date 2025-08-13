@@ -939,12 +939,12 @@ export class FocusModule implements Focus {
     this.emitter.emit('topic', topics);
   }
 
-  public addOffsyncListener(ev: {offsync: boolean}) {
+  public addOffsyncListener(ev: (offsync: boolean)=>void) {
     this.emitter.on('offsync', ev);
     ev(this.offsync);
   }
 
-  public removeOffsyncListener(ev: {offsync: boolean}) {
+  public removeOffsyncListener(ev: (offsync: boolean)=>void) {
     this.emitter.off('offsync', ev);
   }
 
