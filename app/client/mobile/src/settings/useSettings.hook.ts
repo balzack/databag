@@ -9,6 +9,9 @@ export function useSettings() {
   const display = useContext(DisplayContext) as ContextType;
   const app = useContext(AppContext) as ContextType;
   const debounce = useRef(setTimeout(() => {}, 0));
+  const saving = useRef(setTimeout(() => {}, 0));
+  const updated = useRef(false);
+  const holding = useRef(false);
 
   const [state, setState] = useState({
     config: {} as Config,
@@ -71,15 +74,24 @@ export function useSettings() {
     const setProfile = (profile: Profile) => {
       const {handle, name, location, description} = profile;
       const url = identity.getProfileImageUrl();
-      updateState({
-        profile,
-        handle,
-        name,
-        location,
-        description,
-        imageUrl: url,
-        profileSet: true,
-      });
+      if (holding.current) {
+        updateState({
+          profile,
+          handle,
+          imageUrl: url,
+          profileSet: true,
+        });
+      } else {
+        updateState({
+          profile,
+          handle,
+          name,
+          location,
+          description,
+          imageUrl: url,
+          profileSet: true,
+        });
+      }
     };
     identity.addProfileListener(setProfile);
     return () => {
@@ -239,18 +251,37 @@ export function useSettings() {
       updateState({remove});
     },
     setName: (name: string) => {
-      updateState({name});
+      if (name !=  state.name) {
+        updated.current = true;
+        holding.current = true;
+        updateState({name});
+      }
     },
     setLocation: (location: string) => {
-      updateState({location});
+      if (location != state.location) {
+        updated.current = true;
+        holding.current = true;
+        updateState({location});
+      }
     },
     setDescription: (description: string) => {
-      updateState({description});
+      if (description != state.description) {
+        updated.current = true;
+        holding.current = true;
+        updateState({description});
+      }
     },
     setDetails: async () => {
-      const {identity} = getSession();
-      const {name, location, description} = state;
-      await identity.setProfileData(name, location, description);
+      updated.current = false;
+      clearTimeout(saving.current);
+      saving.current = setTimeout(async () => {
+        if (!updated.current) {
+          holding.current = false;
+          const {identity} = getSession();
+          const {name, location, description} = state;
+          await identity.setProfileData(name, location, description);
+        }
+      }, 2500);
     },
     setSealDelete: (sealDelete: string) => {
       updateState({sealDelete});
