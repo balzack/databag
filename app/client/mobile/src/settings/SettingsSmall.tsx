@@ -556,6 +556,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                       autoCorrect={false}
                       returnKeyType="done"
                       placeholder={state.strings.description}
+                      placeholderTextColor={theme.colors.secondary}
                       value={state.description}
                       left={<TextInput.Icon style={styles.icon} size={22} icon="align-left" />}
                       onChangeText={value => actions.setDescription(value)}
