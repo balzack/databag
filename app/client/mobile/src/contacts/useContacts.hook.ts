@@ -19,6 +19,8 @@ export function useContacts() {
     sortAsc: false,
     filter: '',
     enableIce: false,
+    allowUnsealed: false,
+    sealSet: false,
   });
 
   const updateState = (value: any) => {
@@ -34,8 +36,8 @@ export function useContacts() {
     const contact = app.state.session?.getContact();
     const settings = app.state.session?.getSettings();
     const setConfig = (config: Config) => {
-      const { enableIce } = config;
-      updateState({ enableIce });
+      const {enableIce, sealSet, sealUnlocked, allowUnsealed} = config;
+      updateState({sealSet: sealSet && sealUnlocked, allowUnsealed, enableIce});
     };
     const setCards = (cards: Card[]) => {
       const filtered = cards.filter(card => !card.blocked);
@@ -102,6 +104,10 @@ export function useContacts() {
     connect: async (cardId: string) => {
       const contact = app.state.session?.getContact();
       await contact.connectCard(cardId);
+    },
+    disconnect: async (cardId: string) => {
+      const contact = app.state.session?.getContact();
+      await contact.disconnectCard(cardId);
     },
     accept: async (cardId: string) => {
       const contact = app.state.session?.getContact();

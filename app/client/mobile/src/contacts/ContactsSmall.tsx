@@ -22,10 +22,12 @@ const AllTab = React.memo(function AllTab({
   call,
   text,
   connect,
+  disconnect,
   cancel,
   accept,
   openContact,
   enableIce,
+  canText,
 }: {
   data: any[];
   theme: any;
@@ -37,6 +39,7 @@ const AllTab = React.memo(function AllTab({
   call: (card: any) => void;
   text: (card: any) => void;
   connect: (card: any) => void;
+  disconnect: (card: any) => void;
   cancel: (card: any) => void;
   accept: (card: any) => void;
   openContact: (params: any) => void;
@@ -74,13 +77,19 @@ const AllTab = React.memo(function AllTab({
                     <Text>{strings.resyncAction}</Text>
                   </Pressable>
                 )}
+                {syncStatus === 'connected' && !enableIce && !canText && (
+                  <Pressable key="call" style={styles.menuOption} onPress={() => disconnect(item)}>
+                    <Icon style={styles.button} source="link-break" size={28} color={theme.colors.primary} />
+                    <Text>{strings.disconnectAction}</Text>
+                  </Pressable>
+                )}
                 {syncStatus === 'connected' && enableIce && (
                   <Pressable key="call" style={styles.menuOption} onPress={() => call(item)}>
                     <Icon style={styles.button} source="phone" size={28} color={theme.colors.primary} />
                     <Text>{strings.callAction}</Text>
                   </Pressable>
                 )}
-                {syncStatus === 'connected' && (
+                {syncStatus === 'connected' && canText && (
                   <Pressable key="text" style={styles.menuOption} onPress={() => text(item)}>
                     <Icon style={styles.button} source="chat-circle" size={28} color={theme.colors.primary} />
                     <Text>{strings.textAction}</Text>
@@ -247,8 +256,10 @@ const ConnectedTab = React.memo(function ConnectedTab({
   resync,
   call,
   text,
+  disconnect,
   openContact,
   enableIce,
+  canText,
 }: {
   data: any[];
   theme: any;
@@ -259,6 +270,7 @@ const ConnectedTab = React.memo(function ConnectedTab({
   resync: (card: any) => void;
   call: (card: any) => void;
   text: (card: any) => void;
+  disconnect: (card: any) => void;
   openContact: (params: any) => void;
   enableIce: boolean;
 }) {
@@ -288,6 +300,12 @@ const ConnectedTab = React.memo(function ConnectedTab({
             {Platform.OS === 'ios' && (
               <Surface elevation={11} style={styles.menu}>
                 <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
+                {syncStatus !== 'offsync' && !enableIce && !canText && (
+                  <Pressable key="call" style={styles.menuOption} onPress={() => disconnect(item)}>
+                    <Icon style={styles.button} source="link-break" size={28} color={theme.colors.primary} />
+                    <Text>{strings.disconnectAction}</Text>
+                  </Pressable>
+                )}
                 {syncStatus === 'offsync' && (
                   <Pressable key="resync" style={styles.menuOption} onPress={() => resync(item)}>
                     <Icon style={styles.button} source="cached" size={28} color={theme.colors.primary} />
@@ -300,7 +318,7 @@ const ConnectedTab = React.memo(function ConnectedTab({
                     <Text>{strings.callAction}</Text>
                   </Pressable>
                 )}
-                {syncStatus !== 'offsync' && (
+                {syncStatus !== 'offsync' && canText && (
                   <Pressable key="text" style={styles.menuOption} onPress={() => text(item)}>
                     <Icon style={styles.button} source="chat-circle" size={28} color={theme.colors.primary} />
                     <Text>{strings.textAction}</Text>
@@ -442,6 +460,18 @@ export function ContactsSmall({
     setMenuAction(null);
   }, [actions]);
 
+  const disconnect = useCallback(async (card: Card) => {
+    setMore(null);
+    setMenuAction(card.cardId);
+    try {
+      await actions.disconnect(card.cardId);
+    } catch (err) {
+      console.log(err);
+      setAlert(true);
+    }
+    setMenuAction(null);
+  }, [actions]);
+
   const accept = useCallback(async (card: Card) => {
     setMore(null);
     setMenuAction(card.cardId);
@@ -494,10 +524,12 @@ export function ContactsSmall({
               call={call}
               text={text}
               connect={connect}
+              disconnect={disconnect}
               cancel={cancel}
               accept={accept}
               openContact={openContact}
               enableIce={state.enableIce}
+              canText={state.allowUnsealed || state.sealSet}
             />
           </View>
           <View style={{...styles.tabContainer, ...(requestedTab ? styles.tabVisible : styles.tabHidden)}}>
@@ -523,8 +555,10 @@ export function ContactsSmall({
               resync={resync}
               call={call}
               text={text}
+              disconnect={disconnect}
               openContact={openContact}
               enableIce={state.enableIce}
+              canText={state.allowUnsealed || state.sealSet}
             />
           </View>
           <View style={{...styles.tabContainer, ...(emptyTab ? styles.tabVisible : styles.tabHidden)}}>
