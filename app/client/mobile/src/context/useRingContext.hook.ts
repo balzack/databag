@@ -60,6 +60,9 @@ export function useRingContext() {
         if (!polite) {
           try {
             await actions.enableAudio();
+            await new Promise((r) => setTimeout(r, 250));
+            console.log("InCallManager::start");
+            InCallManager.start({media: 'audio'});
           } catch (err) {
             console.log(err);
           }
@@ -160,7 +163,6 @@ export function useRingContext() {
         facingMode: 'user',
       },
     });
-    InCallManager.start({media: 'audio'});
     localAudio.current = sourceStream.current.getTracks().find(track => track.kind === 'audio');
     localVideo.current = sourceStream.current.getTracks().find(track => track.kind === 'video');
     if (localAudio.current) {
@@ -227,6 +229,9 @@ export function useRingContext() {
       if (peerConnection.iceGatheringState === 'complete') {
         try {
           await actions.enableAudio();
+          await new Promise((r) => setTimeout(r, 250));
+          console.log("InCallManager.start");
+          InCallManager.start({media: 'audio'});
         } catch (err) {
           console.log(err);
         }
