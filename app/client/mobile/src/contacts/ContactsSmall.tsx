@@ -27,7 +27,8 @@ const AllTab = React.memo(function AllTab({
   accept,
   openContact,
   enableIce,
-  canText,
+  allowUnsealed,
+  sealSet,
 }: {
   data: any[];
   theme: any;
@@ -44,6 +45,8 @@ const AllTab = React.memo(function AllTab({
   accept: (card: any) => void;
   openContact: (params: any) => void;
   enableIce: boolean;
+  allowUnsealed: boolean;
+  sealSet: boolean;
 }) {
   return (
     <FlatList
@@ -77,7 +80,7 @@ const AllTab = React.memo(function AllTab({
                     <Text>{strings.resyncAction}</Text>
                   </Pressable>
                 )}
-                {syncStatus === 'connected' && !enableIce && !canText && (
+                {syncStatus === 'connected' && !enableIce && !(allowUnsealed || (sealSet && item.sealable)) && (
                   <Pressable key="call" style={styles.menuOption} onPress={() => disconnect(item)}>
                     <Icon style={styles.button} source="link-break" size={28} color={theme.colors.primary} />
                     <Text>{strings.disconnectAction}</Text>
@@ -89,7 +92,7 @@ const AllTab = React.memo(function AllTab({
                     <Text>{strings.callAction}</Text>
                   </Pressable>
                 )}
-                {syncStatus === 'connected' && canText && (
+                {syncStatus === 'connected' && (allowUnsealed || (sealSet && item.sealable)) && (
                   <Pressable key="text" style={styles.menuOption} onPress={() => text(item)}>
                     <Icon style={styles.button} source="chat-circle" size={28} color={theme.colors.primary} />
                     <Text>{strings.textAction}</Text>
@@ -117,8 +120,8 @@ const AllTab = React.memo(function AllTab({
             )}
             {Platform.OS !== 'ios' && syncStatus === 'offsync' && <Menu.Item key="resync" leadingIcon="cached" onPress={() => resync(item)} title={strings.resyncAction} />}
             {Platform.OS !== 'ios' && syncStatus === 'connected' && enableIce && <Menu.Item key="call" leadingIcon="phone" onPress={() => call(item)} title={strings.callAction} />}
-            {Platform.OS !== 'ios' && syncStatus === 'connected' && canText && <Menu.Item key="text" leadingIcon="chat-circle" onPress={() => text(item)} title={strings.textAction} />}
-            {Platform.OS !== 'ios' && syncStatus === 'connected' && !enableIce && !canText && <Menu.Item key="text" leadingIcon="link-break" onPress={() => disconnect(item)} title={strings.disconnectAction} />}
+            {Platform.OS !== 'ios' && syncStatus === 'connected' && (allowUnsealed || (sealSet && item.sealable)) && <Menu.Item key="text" leadingIcon="chat-circle" onPress={() => text(item)} title={strings.textAction} />}
+            {Platform.OS !== 'ios' && syncStatus === 'connected' && !enableIce && !(allowUnsealed || (sealSet && item.sealable)) && (allowUnseale) && <Menu.Item key="text" leadingIcon="link-break" onPress={() => disconnect(item)} title={strings.disconnectAction} />}
             {Platform.OS !== 'ios' && syncStatus === 'confirmed' && <Menu.Item key="saved" leadingIcon="link" onPress={() => connect(item)} title={strings.connectAction} />}
             {Platform.OS !== 'ios' && syncStatus === 'connecting' && <Menu.Item key="cancel" leadingIcon="cancel" onPress={() => cancel(item)} title={strings.cancelAction} />}
             {Platform.OS !== 'ios' && syncStatus === 'pending' && <Menu.Item key="pending" leadingIcon="account-check-outline" onPress={() => accept(item)} title={strings.acceptAction} />}
@@ -260,7 +263,8 @@ const ConnectedTab = React.memo(function ConnectedTab({
   disconnect,
   openContact,
   enableIce,
-  canText,
+  allowUnsealed,
+  sealSet,
 }: {
   data: any[];
   theme: any;
@@ -274,6 +278,8 @@ const ConnectedTab = React.memo(function ConnectedTab({
   disconnect: (card: any) => void;
   openContact: (params: any) => void;
   enableIce: boolean;
+  allowUnsealed: boolean;
+  sealSet: boolean;
 }) {
   return (
     <FlatList
@@ -301,7 +307,7 @@ const ConnectedTab = React.memo(function ConnectedTab({
             {Platform.OS === 'ios' && (
               <Surface elevation={11} style={styles.menu}>
                 <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
-                {syncStatus !== 'offsync' && !enableIce && !canText && (
+                {syncStatus !== 'offsync' && !enableIce && !(allowUnsealed || (sealSet && item.unsealed)) && (
                   <Pressable key="call" style={styles.menuOption} onPress={() => disconnect(item)}>
                     <Icon style={styles.button} source="link-break" size={28} color={theme.colors.primary} />
                     <Text>{strings.disconnectAction}</Text>
@@ -319,7 +325,7 @@ const ConnectedTab = React.memo(function ConnectedTab({
                     <Text>{strings.callAction}</Text>
                   </Pressable>
                 )}
-                {syncStatus !== 'offsync' && canText && (
+                {syncStatus !== 'offsync' && (allowUnsealed || (sealSet && item.sealable)) && (
                   <Pressable key="text" style={styles.menuOption} onPress={() => text(item)}>
                     <Icon style={styles.button} source="chat-circle" size={28} color={theme.colors.primary} />
                     <Text>{strings.textAction}</Text>
@@ -329,8 +335,8 @@ const ConnectedTab = React.memo(function ConnectedTab({
             )}
             {Platform.OS !== 'ios' && syncStatus === 'offsync' && <Menu.Item key="resync" leadingIcon="cached" onPress={() => resync(item)} title={strings.resyncAction} />}
             {Platform.OS !== 'ios' && syncStatus !== 'offsync' && enableIce && <Menu.Item key="call" leadingIcon="phone" onPress={() => call(item)} title={strings.callAction} />}
-            {Platform.OS !== 'ios' && syncStatus !== 'offsync' && canText && <Menu.Item key="text" leadingIcon="chat-circle" onPress={() => text(item)} title={strings.textAction} />}
-            {Platform.OS !== 'ios' && syncStatus === 'connected' && !enableIce && !canText && <Menu.Item key="text" leadingIcon="link-break" onPress={() => disconnect(item)} title={strings.disconnectAction} />}
+            {Platform.OS !== 'ios' && syncStatus !== 'offsync' && (allowUnsealed || (sealSet && item.sealable)) && <Menu.Item key="text" leadingIcon="chat-circle" onPress={() => text(item)} title={strings.textAction} />}
+            {Platform.OS !== 'ios' && syncStatus === 'connected' && !enableIce && !(allowUnsealed || (sealSet && item.sealable)) && <Menu.Item key="text" leadingIcon="link-break" onPress={() => disconnect(item)} title={strings.disconnectAction} />}
           </Menu>
         );
         const select = () => {
@@ -531,7 +537,8 @@ export function ContactsSmall({
               accept={accept}
               openContact={openContact}
               enableIce={state.enableIce}
-              canText={state.allowUnsealed || state.sealSet}
+              allowUnsealed={state.allowUnsealed}
+              sealSet={state.sealSet}
             />
           </View>
           <View style={{...styles.tabContainer, ...(requestedTab ? styles.tabVisible : styles.tabHidden)}}>
@@ -560,7 +567,8 @@ export function ContactsSmall({
               disconnect={disconnect}
               openContact={openContact}
               enableIce={state.enableIce}
-              canText={state.allowUnsealed || state.sealSet}
+              allowUnsealed={state.allowUnsealed}
+              sealSet={state.sealSet}
             />
           </View>
           <View style={{...styles.tabContainer, ...(emptyTab ? styles.tabVisible : styles.tabHidden)}}>
