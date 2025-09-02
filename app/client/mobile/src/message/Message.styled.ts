@@ -122,12 +122,24 @@ export const styles = StyleSheet.create({
   labelName: {
     fontWeight: 700,
     fontSize: 16,
+    flexShrink: 1,
+    textWrap: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
   },
   labelHandle: {
     fontSize: 16,
+    flexShrink: 1,
+    textWrap: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
   },
   labelUnknown: {
     fontSize: 16,
+    flexShrink: 1,
+    textWrap: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
   },
   handle: {
     fontSize: 14,

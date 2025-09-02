@@ -229,9 +229,9 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
     <View style={styles.message}>
       <View style={styles.component}>
         <View style={styles.headerContainer}>
-          {name && <Text style={styles.labelName}>{name}</Text>}
-          {!name && handle && <Text style={styles.labelHandle}>{`${handle}${node ? '@' + node : ''}`}</Text>}
-          {!name && !handle && <Text style={styles.labelUnknown}>{state.strings.unknownContact}</Text>}
+          {name && <Text numberOfLines={1} style={styles.labelName}>{name}</Text>}
+          {!name && handle && <Text numberOfLines={1} style={styles.labelHandle}>{`${handle}${node ? '@' + node : ''}`}</Text>}
+          {!name && !handle && <Text numberOfLines={1} style={styles.labelUnknown}>{state.strings.unknownContact}</Text>}
           <View style={styles.headerActions}>
             <Text style={styles.timestamp}> {timestamp}</Text>
             <Menu
