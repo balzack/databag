@@ -73,3 +73,9 @@
 **Auto Archive:** add ability to auto delete old data
 
 **1-1 Sealed:** admin config for defaulting to sealed topic when starting a 1-1 topic from the contact list
+
+**Attachments:** auto detect attachment type and implement as a single button
+
+**Skin Customization:** allow for web UI to be customized
+
+**Progress:** include numerical progress in download or upload indicator
