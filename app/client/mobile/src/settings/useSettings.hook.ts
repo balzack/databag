@@ -43,6 +43,7 @@ export function useSettings() {
     monthFirstDate: true,
     createSealed: false,
     fontSize: 0,
+    keyboardOffset: 0,
     fullDayTime: false,
     allowUnsealed: false,
     blockedContacts: [] as {cardId: string; timestamp: number}[],
@@ -102,8 +103,8 @@ export function useSettings() {
   }, []);
 
   useEffect(() => {
-    const {fullDayTime, monthFirstDate, fontSize, createSealed} = app.state;
-    updateState({fullDayTime, monthFirstDate, fontSize, createSealed});
+    const {fullDayTime, monthFirstDate, fontSize, keyboardOffset, createSealed} = app.state;
+    updateState({fullDayTime, monthFirstDate, fontSize, keyboardOffset, createSealed});
   }, [app.state]);
 
   useEffect(() => {
@@ -309,6 +310,13 @@ export function useSettings() {
     setFontSize: async (fontSize: number) => {
       try {
         await app.actions.setFontSize(fontSize);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    setKeyboardOffset: async (keyboardOffset: number) => {
+      try {
+        await app.actions.setKeyboardOffset(keyboardOffset);
       } catch (err) {
         console.log(err);
       }

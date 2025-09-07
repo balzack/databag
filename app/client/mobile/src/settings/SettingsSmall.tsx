@@ -818,6 +818,25 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                     </Surface>
                   </View>
                 )}
+
+                {!setupNav && (
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>
+                    {state.strings.layout}
+                  </Text>
+                )}
+                {!setupNav && (
+                  <View style={styles.navWrapper}>
+                    <Surface elevation={0} mode="flat" style={styles.navData}>
+                      <View style={styles.navFont}>
+                        <TextInput style={styles.navInput} mode="outlined" outlineStyle={styles.navInputBorder} placeholder={state.strings.keyboardOffset} />
+                        <View style={styles.navPress} />
+                      </View>
+                      <View style={styles.slider}>
+                        <Slider minimumValue={-100} maximumValue={100} minimumTrackTintColor={theme.colors.primary} value={state.keyboardOffset} onSlidingComplete={val => actions.setKeyboardOffset(val)} />
+                      </View>
+                    </Surface>
+                  </View>
+                )}
                 {!setupNav && (
                   <Text variant="headlineSmall" style={styles.sectionLabel}>
                     {state.strings.blocked}

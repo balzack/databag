@@ -27,6 +27,8 @@ export const en = {
   resetAccount: 'Reset Account',
   addAccount: 'Add Account',
   generate: 'Generate',
+  keyboardOffset: 'Additional Keyboard Offset',
+  layout: 'Layout',
 
   appPermission: 'App does not have media access',
 
@@ -436,6 +438,8 @@ export const fr = {
   resetAccount: 'Réinitialiser le Compte',
   addAccount: 'Ajouter un Compte',
   generate: 'Générer',
+  keyboardOffset: 'Décalage Supplémentaire du Clavier',
+  layout: 'Disposition',
 
   appPermission: "L'application n'a pas accès aux médias.",
 
@@ -845,6 +849,8 @@ export const es = {
   resetAccount: 'Restablecer Cuenta',
   addAccount: 'Agregar Cuenta',
   generate: 'Generar',
+  keyboardOffset: 'Desplazamiento Adicional del Teclado',
+  layout: 'Diseño',
 
   appPermission: 'La aplicación no tiene acceso a medios.',
 
@@ -1253,6 +1259,8 @@ export const pt = {
   resetAccount: 'Redefinir Conta',
   addAccount: 'Adicionar Conta',
   generate: 'Gerar',
+  keyboardOffset: 'Deslocamento Adicional do Teclado',
+  layout: 'Layout',
 
   appPermission: 'O aplicativo não tem acesso à mídia.',
 
@@ -1661,6 +1669,8 @@ export const de = {
   resetAccount: 'Konto Zurücksetzen',
   addAccount: 'Konto Hinzufügen',
   generate: 'Erzeugen',
+  keyboardOffset: 'Zusätzlicher Tastaturversatz',
+  layout: 'Layout',
 
   appPermission: 'Die App hat keinen Medienzugriff.',
 
@@ -2069,6 +2079,8 @@ export const ru = {
   resetAccount: 'Сбросить учетную запись',
   addAccount: 'Добавить аккаунт',
   generate: 'Генерировать',
+  keyboardOffset: 'Дополнительное смещение клавиатуры',
+  layout: 'Макет',
 
   appPermission: 'У приложения нет доступа к мультимедиа.',
 
@@ -2477,6 +2489,8 @@ export const el = {
   resetAccount: 'Επαναφορά λογαριασμού',
   addAccount: 'Προσθήκη λογαριασμού',
   generate: 'Παράγω',
+  keyboardOffset: 'Πρόσθετη μετατόπιση πληκτρολογίου',
+  layout: 'Διάταξη',
 
   appPermission: 'Η εφαρμογή δεν έχει πρόσβαση σε πολυμέσα.',
 

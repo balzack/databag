@@ -439,7 +439,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
             </Surface>
           </View>
           { focused && (
-            <View style={{...styles.keyboardSpacer, height: keyboardHeight - (Platform.OS === 'ios' ? 96 : 80)}} />
+            <View style={{...styles.keyboardSpacer, height: state.keyboardOffset + keyboardHeight - (Platform.OS === 'ios' ? 96 : 80)}} />
           )}
         </SafeAreaView>
       </Surface>

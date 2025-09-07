@@ -3717,10 +3717,10 @@ data-view-byte-offset@^1.0.1:
     es-errors "^1.3.0"
     is-data-view "^1.0.1"
 
-databag-client-sdk@^0.0.43:
-  version "0.0.43"
-  resolved "https://registry.yarnpkg.com/databag-client-sdk/-/databag-client-sdk-0.0.43.tgz#51ef8d98fec4aaf91c63df9ebd4132a59dbc3df2"
-  integrity sha512-pRfGSX9cYlkkKOxbIxsBTAqCeRDxzA34BpkMjjvHtTknmTfbaT88RV1zI0di+2tLv8yYhWhKAPE9TIoPgcSSHQ==
+databag-client-sdk@^0.0.44:
+  version "0.0.44"
+  resolved "https://registry.yarnpkg.com/databag-client-sdk/-/databag-client-sdk-0.0.44.tgz#73ad64a32bfc81f4161a96ede5f3f940ef8caef6"
+  integrity sha512-jsQ6ttaT08MfjkrxGg3Q7v2Wub1hdzXv07+8T4iGakUTer36tk1YPyhRp7a2gUyG+orF8ZDFr1ANklZskexsrA==
   dependencies:
     eventemitter3 "^5.0.1"
     prettier "^3.3.3"
@@ -7062,10 +7062,10 @@ react-native-gesture-handler@^2.19.0:
     hoist-non-react-statics "^3.3.0"
     invariant "^2.2.4"
 
-react-native-image-crop-picker@^0.41.2:
-  version "0.41.6"
-  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.41.6.tgz#de2c00102f4c934848fa11ff2335f29f5dc6b3e3"
-  integrity sha512-oyEVkiJX1cnjYJolQluOqXxz9xhLHrv+pyCs7+jA87yaa110/0jv1UCqxjVjxueKug7zk/UnjG7i9Ks1cGyLpA==
+react-native-image-crop-picker@^0.51.0:
+  version "0.51.0"
+  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.51.0.tgz#673748d97459c0f03c63dd835418b1ef94ee7f01"
+  integrity sha512-hY0pxnPkTj75dUTfqoCkwIqCrStd/SK6j2CNEcMww8AIUx7Wp6HQVrF6ZzZK8waxvoO9t7kORwjTG2u1piuGqw==
 
 react-native-incall-manager@^4.2.0:
   version "4.2.1"

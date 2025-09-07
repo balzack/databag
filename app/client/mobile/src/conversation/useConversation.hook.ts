@@ -64,6 +64,7 @@ export function useConversation() {
     textSizeSet: false,
     progress: 0,
     avoid: 0,
+    keyboardOffset: 0,
     validShare: true,
     offsync: false,
   });
@@ -131,6 +132,11 @@ export function useConversation() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [app.state, state.loaded]);
+
+  useEffect(() => {
+    const keyboardOffset = app.state.keyboardOffset * 4;
+    updateState({keyboardOffset});
+  }, [app.state.keyboardOffset]);
 
   useEffect(() => {
     const {layout, strings} = display.state;

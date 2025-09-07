@@ -49,6 +49,7 @@ export function useAppContext() {
     fullDayTime: false,
     monthFirstDate: true,
     fontSize: 0,
+    keyboardOffset: 0,
     lanaguge: null as null | string,
     initialized: false,
     showWelcome: false,
@@ -67,6 +68,7 @@ export function useAppContext() {
     const monthFirstDate = (await local.current.get('date_format', 'month_first')) === 'month_first';
     const setLanguage = await local.current.get('language', null);
     const fontSize = parseInt(await local.current.get('font_size', '0'), 10) || 0;
+    const keyboardOffset = parseInt(await local.current.get('keyboard_offset', '0'), 10) || 0;
     const createSealed = (await local.current.get('create_sealed', 'true')) === 'true';
 
     const locale =
@@ -79,9 +81,9 @@ export function useAppContext() {
     await store.open(DATABAG_DB);
     const session: Session | null = await sdk.current.initOfflineStore(store);
     if (session) {
-      updateState({session, fullDayTime, monthFirstDate, fontSize, createSealed, language, favorite, initialized: true});
+      updateState({session, fullDayTime, monthFirstDate, fontSize, keyboardOffset, createSealed, language, favorite, initialized: true});
     } else {
-      updateState({fullDayTime, monthFirstDate, language, fontSize, createSealed, initialized: true});
+      updateState({fullDayTime, monthFirstDate, language, fontSize, keyboardOffset, createSealed, initialized: true});
     }
   };
 
@@ -123,6 +125,10 @@ export function useAppContext() {
     setFontSize: async (fontSize: number) => {
       updateState({fontSize});
       await local.current.set('font_size', fontSize.toString());
+    },
+    setKeyboardOffset: async (keyboardOffset: number) => {
+      updateState({keyboardOffset});
+      await local.current.set('keyboard_offset', keyboardOffset.toString());
     },
     setCreateSealed: async (createSealed: boolean) => {
       updateState({createSealed});
