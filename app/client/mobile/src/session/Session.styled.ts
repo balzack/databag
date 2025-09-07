@@ -115,12 +115,10 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'transparent',
     opacity: 0.5,
-    paddingBottom: 6,
   },
   activeTab: {
     flex: 1,
     backgroundColor: 'transparent',
-    paddingBottom: 6,
   },
   ring: {
     paddingLeft: 16,

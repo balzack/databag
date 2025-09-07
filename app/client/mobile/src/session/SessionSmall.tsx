@@ -212,7 +212,7 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
                     <View style={styles.tabs}>
                       {tab === 'content' && (
                         <IconButton
-                          style={{...styles.activeTab, paddingBottom: Platform.OS === 'ios' ? 0 : 6}}
+                          style={styles.activeTab}
                           mode="contained"
                           icon={'chat-circle-filled'}
                           size={32}
@@ -223,7 +223,7 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
                       )}
                       {tab !== 'content' && (
                         <IconButton
-                          style={{...styles.idleTab, paddingBottom: Platform.OS === 'ios' ? 0 : 6}}
+                          style={styles.idleTab}
                           mode="contained"
                           icon={'chat-circle'}
                           size={32}
@@ -234,7 +234,7 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
                       )}
                       {tab === 'contacts' && (
                         <IconButton
-                          style={{...styles.activeTab, paddingBottom: Platform.OS === 'ios' ? 0 : 6}}
+                          style={styles.activeTab}
                           mode="contained"
                           icon={'address-book-filled'}
                           size={32}
@@ -245,7 +245,7 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
                       )}
                       {tab !== 'contacts' && (
                         <IconButton
-                          style={{...styles.idleTab, paddingBottom: Platform.OS === 'ios' ? 0 : 6}}
+                          style={styles.idleTab}
                           mode="contained"
                           icon={'address-book'}
                           size={32}
@@ -256,7 +256,7 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
                       )}
                       {tab === 'settings' && (
                         <IconButton
-                          style={{...styles.activeTab, paddingBottom: Platform.OS === 'ios' ? 0 : 6}}
+                          style={styles.activeTab}
                           mode="contained"
                           icon={'gear-six-filled'}
                           size={32}
@@ -267,7 +267,7 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
                       )}
                       {tab !== 'settings' && (
                         <IconButton
-                          style={{...styles.idleTab, paddingBottom: Platform.OS === 'ios' ? 0 : 6}}
+                          style={styles.idleTab}
                           mode="contained"
                           icon={'gear-six'}
                           size={32}
