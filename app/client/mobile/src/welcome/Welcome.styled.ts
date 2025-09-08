@@ -72,9 +72,15 @@ export const styles = StyleSheet.create({
     gap: 12,
     alignItems: 'center',
   },
+  start: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 24,
+  },
   submit: {
     borderRadius: 8,
-    paddingLeft: 32,
-    paddingRight: 32,
+    width: 192,
   },
 });

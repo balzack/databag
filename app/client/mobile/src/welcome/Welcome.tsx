@@ -53,6 +53,8 @@ export function Welcome({next}: {next: () => void}) {
                   <Icon size={24} source="message-circle" color={Colors.icon} />
                   <Text variant="labelLarge">{state.strings.startTopic}</Text>
                 </View>
+              </View>
+              <View style={styles.start}>
                 <Button mode="contained" textColor="white" style={styles.submit} onPress={next}>
                   {state.strings.getStarted}
                 </Button>
