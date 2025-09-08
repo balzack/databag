@@ -38,7 +38,7 @@ export function Members({close}: {close: () => void}) {
       <Surface elevation={9} mode="flat" style={styles.surface}>
         <SafeAreaView edges={['left', 'right']} style={styles.safeAreaNav}>
           <Pressable style={styles.navIcon} onPress={close}>
-            <Icon size={24} source="left" color={'white'} />
+            <Icon size={32} source="left" color={'white'} />
           </Pressable>
           <Text style={styles.navTitle}>{state.strings.chatMembers}</Text>
           <View style={styles.navIcon} />

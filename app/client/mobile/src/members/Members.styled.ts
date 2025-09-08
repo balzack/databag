@@ -143,7 +143,6 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
     paddingRight: 16,
     paddingLeft: 8,
     paddingBottom: 16,
