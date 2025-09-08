@@ -73,9 +73,8 @@ export const styles = StyleSheet.create({
     borderRadius: 16,
   },
   error: {
-    marginLeft: 52,
-    marginTop: 8,
-    marginBottom: 16,
+    fontStyle: 'italic',
+    margin: 16,
     color: Colors.offsync,
   },
   content: {
