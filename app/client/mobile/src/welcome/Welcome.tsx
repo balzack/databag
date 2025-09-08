@@ -56,7 +56,9 @@ export function Welcome({next}: {next: () => void}) {
               </View>
               <View style={styles.start}>
                 <Button mode="contained" textColor="white" style={styles.submit} onPress={next}>
-                  {state.strings.getStarted}
+                  <Text style={styles.submitLabel}>
+                    {state.strings.getStarted}
+                  </Text>
                 </Button>
               </View>
             </View>

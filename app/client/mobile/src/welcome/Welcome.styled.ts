@@ -81,6 +81,12 @@ export const styles = StyleSheet.create({
   },
   submit: {
     borderRadius: 8,
-    width: 192,
   },
+  submitLabel: {
+    width: 128,
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 600,
+  }
 });
