@@ -79,3 +79,5 @@
 **Skin Customization:** allow for web UI to be customized
 
 **Progress:** include numerical progress in download or upload indicator
+
+**Admin PW:** support reset of admin password from dashboard
