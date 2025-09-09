@@ -832,7 +832,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                         <View style={styles.navPress} />
                       </View>
                       <View style={styles.slider}>
-                        <Slider minimumValue={-100} maximumValue={100} minimumTrackTintColor={theme.colors.primary} value={state.keyboardOffset} onSlidingComplete={val => actions.setKeyboardOffset(val)} />
+                        <Slider minimumValue={-128} maximumValue={128} minimumTrackTintColor={theme.colors.primary} value={state.keyboardOffset} onSlidingComplete={val => actions.setKeyboardOffset(val)} />
                       </View>
                     </Surface>
                   </View>

@@ -86,6 +86,8 @@ export function Assemble({close, openConversation}: {close: () => void; openConv
               autoComplete="off"
               autoCorrect={false}
               dense={true}
+              multiline={false}
+              numberofLines={1}
               placeholder={state.strings.addSubject}
               left={<TextInput.Icon style={styles.icon} icon="edit" />}
               value={subject}
