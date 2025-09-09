@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
   },
   typer: {
     width: 286,
-    height: 257,
+    height: 192,
   },
   full: {
     width: '100%',

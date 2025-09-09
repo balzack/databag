@@ -71,7 +71,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 16,
     paddingTop: 16,
-    paddingBottom: 16,
+    paddingBottom: 48,
   },
   linkline: {
     display: 'flex',

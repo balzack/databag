@@ -74,7 +74,7 @@ export function Assemble({close, openConversation}: {close: () => void; openConv
       <Surface elevation={9} mode="flat" style={styles.fullWidthSurface}>
         <SafeAreaView edges={['left', 'right']} style={styles.headerSafeArea}>
           <Pressable style={styles.navIcon} onPress={close}>
-            <Icon size={24} source="left" color={'white'} />
+            <Icon size={32} source="left" color={'white'} />
           </Pressable>
           <Surface mode="flat" elevation={0} style={styles.inputSurface}>
             <TextInput

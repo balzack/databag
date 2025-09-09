@@ -31,7 +31,7 @@ export function Request({setupNav}: {setupNav: {back: () => void; next: () => vo
     <View style={styles.request}>
       <Surface elevation={9} mode="flat" style={styles.navHeader}>
         <Pressable style={styles.navIcon} onPress={setupNav?.back}>
-          <Icon size={24} source="left" color={'white'} />
+          <Icon size={32} source="left" color={'white'} />
         </Pressable>
         <Text style={styles.smLabel}>{state.strings.connectWith}</Text>
         <View style={styles.navIcon} />

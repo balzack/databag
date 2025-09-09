@@ -20,7 +20,7 @@ export function RegistrySmall({close, openContact}: RegistrySmallProps) {
       <View style={styles.registry}>
         <Surface elevation={9} mode="flat" style={styles.headerSurface}>
           <Pressable style={styles.navIcon} onPress={close}>
-            <Icon size={24} source="left" color={'white'} />
+            <Icon size={32} source="left" color={'white'} />
           </Pressable>
 
           <Surface mode="flat" elevation={0} style={styles.inputContainer}>
