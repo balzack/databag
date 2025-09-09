@@ -818,25 +818,6 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                     </Surface>
                   </View>
                 )}
-
-                {!setupNav && (
-                  <Text variant="headlineSmall" style={styles.sectionLabel}>
-                    {state.strings.layout}
-                  </Text>
-                )}
-                {!setupNav && (
-                  <View style={styles.navWrapper}>
-                    <Surface elevation={0} mode="flat" style={styles.navData}>
-                      <View style={styles.navFont}>
-                        <TextInput style={styles.navInput} mode="outlined" outlineStyle={styles.navInputBorder} placeholder={state.strings.keyboardOffset} />
-                        <View style={styles.navPress} />
-                      </View>
-                      <View style={styles.slider}>
-                        <Slider minimumValue={-128} maximumValue={128} minimumTrackTintColor={theme.colors.primary} value={state.keyboardOffset} onSlidingComplete={val => actions.setKeyboardOffset(val)} />
-                      </View>
-                    </Surface>
-                  </View>
-                )}
                 {!setupNav && (
                   <Text variant="headlineSmall" style={styles.sectionLabel}>
                     {state.strings.blocked}
@@ -876,6 +857,27 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                           left={<TextInput.Icon style={styles.icon} size={22} icon="message-circle" />}
                         />
                         <Pressable style={styles.navPress} onPress={showBlockedMessage} />
+                      </View>
+                    </Surface>
+                  </View>
+                )}
+                {!setupNav && (
+                  <Text variant="headlineSmall" style={styles.sectionLabel}>
+                    {state.strings.layout}
+                  </Text>
+                )}
+                {!setupNav && (
+                  <View style={styles.navWrapper}>
+                    <Surface elevation={0} mode="flat" style={styles.navData}>
+                      <View style={styles.navFont}>
+                        <View style={styles.splitLabel}>
+                          <TextInput style={styles.navInput} mode="outlined" outlineStyle={styles.navInputBorder} placeholder={state.strings.keyboardOffset} />
+                          <Text style={{...styles.labelValue, color: theme.colors.tertiary}}>{ Math.floor(state.keyboardOffset) * 4 }px</Text>
+                        </View>
+                        <View style={styles.navPress} />
+                      </View>
+                      <View style={styles.slider}>
+                        <Slider minimumValue={-128} maximumValue={128} minimumTrackTintColor={theme.colors.primary} value={state.keyboardOffset} onSlidingComplete={val => actions.setKeyboardOffset(val)} />
                       </View>
                     </Surface>
                   </View>

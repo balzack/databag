@@ -312,7 +312,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
               <ActivityIndicator />
             </View>
           )}
-          <View style={styles.canvas}>
+          <Surface style={styles.canvas} mode="flat" elevation={2}>
             <Surface style={{...styles.frame, borderColor: theme.colors.outlineVariant}} mode="flat" elevation={0}>
               <Animated.View style={[{}, {height: scale}]}>
                 {state.assets.length > 0 && <View style={styles.assetSpacer} />}
@@ -437,9 +437,9 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
                 />
               </View>
             </Surface>
-          </View>
+          </Surface>
           { focused && (
-            <View style={{...styles.keyboardSpacer, height: state.keyboardOffset + keyboardHeight - (Platform.OS === 'ios' ? 96 : 80)}} />
+            <Surface style={{...styles.keyboardSpacer, height: state.keyboardOffset + keyboardHeight - (Platform.OS === 'ios' ? 96 : 80)}} mode="flat" elevation={2} />
           )}
         </SafeAreaView>
       </Surface>

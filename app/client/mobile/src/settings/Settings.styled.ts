@@ -679,4 +679,15 @@ export const styles = StyleSheet.create({
   navSkip: {
     backgroundColor: 'transparent',
   },
+  splitLabel: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    paddingRight: 24,
+  },
+  labelValue: {
+    fontSize: 14,
+  },
 });
