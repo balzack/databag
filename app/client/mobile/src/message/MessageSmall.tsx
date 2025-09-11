@@ -308,7 +308,7 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
             <BlurView style={styles.blur} blurType="dark" blurAmount={6} reducedTransparencyFallbackColor="dark" />
           </Pressable>
           <View style={styles.editArea}>
-            <Surface elevation={2} style={styles.editContent}>
+            <Surface elevation={2} style={{...styles.editContent, backgroundColor: theme.colors.elevation.level12}}>
               <Text style={styles.title}>{state.strings.editOption}</Text>
               <TextInput
                 multiline={true}
@@ -324,10 +324,10 @@ export function MessageSmall({topic, card, profile, host, select}: {topic: Topic
                 onChangeText={value => setEditText(value)}
               />
               <View style={styles.controls}>
-                <Button style={styles.control} mode="outlined" onPress={() => setEditing(false)}>
+                <Button style={{...styles.control, borderColor: theme.colors.outlineVariant}} mode="outlined" onPress={() => setEditing(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button style={styles.control} mode="contained" loading={saving} onPress={save}>
+                <Button style={styles.control} textColor="white" mode="contained" loading={saving} onPress={save}>
                   {state.strings.save}
                 </Button>
               </View>

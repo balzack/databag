@@ -1123,7 +1123,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                     />
                     <View style={styles.modalControls}>
                       <Button
-                        style={{...styles.modalControl, borderColor: theme.colors.onSecondary}}
+                        style={{...styles.modalControl, borderColor: theme.colors.outlineVariant}}
                         textColor={theme.colors.onSecondary}
                         mode="outlined"
                         contentStyle={styles.modalControlContent}
@@ -1268,7 +1268,7 @@ export function SettingsSmall({setupNav}: {setupNav: {back: () => void; next: ()
                   onChangeText={value => actions.setPassword(value)}
                 />
                 <View style={styles.modalControls}>
-                  <Button mode="outlined" contentStyle={styles.modalControlContent} style={{...styles.modalControl, borderColor: theme.colors.primary}} onPress={() => setChange(false)}>
+                  <Button mode="outlined" contentStyle={styles.modalControlContent} style={{...styles.modalControl, borderColor: theme.colors.outlineVariant}} onPress={() => setChange(false)}>
                     {state.strings.cancel}
                   </Button>
                   <Button
