@@ -36,13 +36,13 @@ export function Identity({openSettings, openContacts}) {
           </View>
           <View style={styles.details}>
             {state.profile.name && (
-              <Text style={styles.name} adjustsFontSizeToFit={true} numberOfLines={1}>
+              <Text style={styles.name} numberOfLines={1}>
                 {state.profile.name}
               </Text>
             )}
             <Text style={styles.username} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.profile.handle}${state.profile.node ? '@' + state.profile.node : ''}`}</Text>
           </View>
-          <Icon size={18} source="chevron-right" />
+          <Icon size={32} source="chevron-right" />
         </TouchableOpacity>
         <Menu
           visible={menu}
@@ -54,7 +54,7 @@ export function Identity({openSettings, openContacts}) {
             </View>
           }>
           <Menu.Item
-            leadingIcon="cog-outline"
+            leadingIcon="gear-six"
             onPress={() => {
               setMenu(false);
               openSettings();
@@ -62,7 +62,7 @@ export function Identity({openSettings, openContacts}) {
             title={state.strings.settings}
           />
           <Menu.Item
-            leadingIcon="contacts-outline"
+            leadingIcon="rolodex"
             onPress={() => {
               setMenu(false);
               openContacts();

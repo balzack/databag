@@ -68,8 +68,8 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    width: '33%',
-    maxWidth: 300,
+    width: '45%',
+    maxWidth: 450,
   },
   right: {
     height: '100%',

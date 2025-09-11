@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 4,
+    padding: 16,
   },
   anchor: {
     backgroundColor: 'red',
@@ -20,8 +20,8 @@ export const styles = StyleSheet.create({
   },
   image: {
     position: 'relative',
-    width: 48,
-    height: 48,
+    width: 64,
+    height: 64,
   },
   logoUnset: {
     aspectRatio: 1,
@@ -44,12 +44,13 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    paddingLeft: 8,
+    paddingLeft: 16,
     paddingRight: 8,
     width: 100,
   },
   name: {
-    fontSize: 14,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   username: {
     fontSize: 16,

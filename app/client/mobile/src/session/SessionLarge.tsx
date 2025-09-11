@@ -195,7 +195,7 @@ function HomeScreen({nav}) {
           <Identity openSettings={nav.settings.openDrawer} openContacts={nav.contacts.openDrawer} />
         </Surface>
         <Surface style={styles.channels} elevation={2} mode="flat">
-          <Content share={nav.share} textCard={nav.textCard} closeAll={() => {}} openConversation={() => nav.setFocus(true)} />
+          <Content share={nav.share} textCard={nav.textCard} closeAll={() => {}} layout="large" openConversation={() => nav.setFocus(true)} />
         </Surface>
       </View>
       <Surface elevation={1} style={styles.right} mode="flat">

@@ -557,14 +557,16 @@ const FavoritesTab = React.memo(function FavoritesTab({
   );
 });
 
-export function ContentSmall({
+export function ContentComponent({
   share,
+  layout,
   closeAll,
   openConversation,
   createConversation,
   textCard,
 }: {
   share: {filePath: string; mimeType: string};
+  layout: string;
   closeAll: () => void;
   openConversation: () => void;
   createConversation: () => void;
@@ -581,6 +583,8 @@ export function ContentSmall({
   const [leaving, setLeaving] = useState(false);
   const [remove, setRemove] = useState(null as null | {channelId: string});
   const [removing, setRemoving] = useState(false);
+
+console.log("LAYOUT:  ", layout);
 
   const adminParams = {
     title: state.strings.operationFailed,
@@ -712,7 +716,7 @@ export function ContentSmall({
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Surface elevation={9} mode="flat">
+        <Surface elevation={layout === 'large' ? 4 : 9} mode="flat" style={layout === 'large' ? styles.searchInputPad : {}}>
           <SafeAreaView style={styles.searchContainer} edges={['left', 'right']}>
             <Surface mode="flat" elevation={0} style={styles.searchInputContainer}>
               <TextInput

@@ -322,6 +322,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 16,
   },
+  searchInputPad: {
+    paddingTop: 8,
+  },
   searchInputContainer: {
     flexGrow: 1,
     flexShrink: 1,
