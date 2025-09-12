@@ -861,12 +861,12 @@ export function SettingsComponent({layout, setupNav}: {layout: string, setupNav:
                     </Surface>
                   </View>
                 )}
-                {!setupNav && (
+                {!setupNav && layout === 'small' && (
                   <Text variant="headlineSmall" style={styles.sectionLabel}>
                     {state.strings.layout}
                   </Text>
                 )}
-                {!setupNav && (
+                {!setupNav && layout === 'small' && (
                   <View style={styles.navWrapper}>
                     <Surface elevation={0} mode="flat" style={styles.navData}>
                       <View style={styles.navFont}>
