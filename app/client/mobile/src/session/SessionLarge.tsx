@@ -3,7 +3,7 @@ import {Pressable, View, useColorScheme} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RingContextProvider} from '../context/RingContext';
 import {styles} from './Session.styled';
-import {Surface, Text, Icon} from 'react-native-paper';
+import {Surface, Text, Icon, useTheme} from 'react-native-paper';
 import {Settings} from '../settings/Settings';
 import {Contacts} from '../contacts/Contacts';
 import {Content} from '../content/Content';
@@ -183,6 +183,8 @@ function SettingsScreen({nav}) {
 }
 
 function HomeScreen({nav}) {
+  const theme = useTheme();
+
   useEffect(() => {
     nav.contacts.closeDrawer();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -191,7 +193,7 @@ function HomeScreen({nav}) {
   return (
     <View style={styles.frame}>
       <View style={styles.left}>
-        <Surface style={styles.identity} elevation={2} mode="flat">
+        <Surface style={{ ...styles.identity, borderColor: theme.colors.base }} elevation={0} mode="flat">
           <Identity openSettings={nav.settings.openDrawer} openContacts={nav.contacts.openDrawer} />
         </Surface>
         <Surface style={styles.channels} elevation={2} mode="flat">

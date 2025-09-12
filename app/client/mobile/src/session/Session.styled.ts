@@ -68,7 +68,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    width: '45%',
+    width: '40%',
     maxWidth: 450,
   },
   right: {
@@ -88,6 +88,7 @@ export const styles = StyleSheet.create({
   identity: {
     flexShrink: 0,
     paddingBottom: 4,
+    borderBottomWidth: 1,
   },
   channels: {
     flexGrow: 1,

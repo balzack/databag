@@ -716,8 +716,8 @@ console.log("LAYOUT:  ", layout);
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Surface elevation={layout === 'large' ? 4 : 9} mode="flat" style={layout === 'large' ? styles.searchInputPad : {}}>
-          <SafeAreaView style={styles.searchContainer} edges={['left', 'right']}>
+        <Surface elevation={layout === 'large' ? 0 : 9} mode="flat" style={layout === 'large' ? styles.searchInputPad : {}}>
+          <SafeAreaView style={layout === 'small' ? styles.searchContainer : {...styles.searchBar, borderColor: theme.colors.base}} edges={['left', 'right']}>
             <Surface mode="flat" elevation={0} style={styles.searchInputContainer}>
               <TextInput
                 style={styles.searchInput}
@@ -728,7 +728,7 @@ console.log("LAYOUT:  ", layout);
                 autoComplete="off"
                 autoCorrect={false}
                 mode="outlined"
-                placeholder={state.strings.searchTopics}
+                placeholder={layout === 'small' ? state.strings.searchTopics : state.strings.topics}
                 left={<TextInput.Icon style={styles.icon} icon="search" />}
                 value={state.filter}
                 onChangeText={value => actions.setFilter(value)}
@@ -789,27 +789,29 @@ console.log("LAYOUT:  ", layout);
             </View>
           </View>
         </View>
-        <View style={styles.tabs}>
-          <Pressable style={tab === 'all' ? styles.opaque : styles.opacity} onPress={() => setTab('all')}>
-            <Surface style={styles.tab} elevation={tab === 'all' ? 10 : 2}>
-              <Text style={tab === 'all' ? styles.tabSet : styles.tabUnset} color="white">
-                {state.strings.all}
-              </Text>
-            </Surface>
-          </Pressable>
-          <Pressable style={tab === 'unread' ? styles.opaque : styles.opacity} onPress={() => setTab('unread')}>
-            <Surface style={styles.tab} elevation={tab === 'unread' ? 10 : 2}>
-              <Text style={tab === 'unread' ? styles.tabSet : styles.tabUnset} color="white">{`${state.strings.unread}${state.unread.length > 0 ? ' (' + state.unread.length + ')' : ''}`}</Text>
-            </Surface>
-          </Pressable>
-          <Pressable style={tab === 'favorites' ? styles.opaque : styles.opacity} onPress={() => setTab('favorites')}>
-            <Surface style={styles.tab} elevation={tab === 'favorites' ? 10 : 2}>
-              <Text style={tab === 'favorites' ? styles.tabSet : styles.tabUnset} color="white">
-                {state.strings.favorites}
-              </Text>
-            </Surface>
-          </Pressable>
-        </View>
+        { layout === 'small' && (
+          <View style={styles.tabs}>
+            <Pressable style={tab === 'all' ? styles.opaque : styles.opacity} onPress={() => setTab('all')}>
+              <Surface style={styles.tab} elevation={tab === 'all' ? 10 : 2}>
+                <Text style={tab === 'all' ? styles.tabSet : styles.tabUnset} color="white">
+                  {state.strings.all}
+                </Text>
+              </Surface>
+            </Pressable>
+            <Pressable style={tab === 'unread' ? styles.opaque : styles.opacity} onPress={() => setTab('unread')}>
+              <Surface style={styles.tab} elevation={tab === 'unread' ? 10 : 2}>
+                <Text style={tab === 'unread' ? styles.tabSet : styles.tabUnset} color="white">{`${state.strings.unread}${state.unread.length > 0 ? ' (' + state.unread.length + ')' : ''}`}</Text>
+              </Surface>
+            </Pressable>
+            <Pressable style={tab === 'favorites' ? styles.opaque : styles.opacity} onPress={() => setTab('favorites')}>
+              <Surface style={styles.tab} elevation={tab === 'favorites' ? 10 : 2}>
+                <Text style={tab === 'favorites' ? styles.tabSet : styles.tabUnset} color="white">
+                  {state.strings.favorites}
+                </Text>
+              </Surface>
+            </Pressable>
+          </View>
+      )}
       </View>
       <Selector share={share} selected={select} channels={state.channels} />
       <Confirm show={alert} params={alertParams} />
