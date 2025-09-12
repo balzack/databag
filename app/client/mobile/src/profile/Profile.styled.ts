@@ -133,7 +133,6 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: 16,
     position: 'absolute',
-    top: 72,
   },
   overlap: {
     position: 'absolute',

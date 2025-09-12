@@ -1,6 +1,5 @@
 import React from 'react';
-import {ProfileSmall} from './ProfileSmall';
-import {ProfileLarge} from './ProfileLarge';
+import {ProfileComponent} from './ProfileComponent';
 import {LayoutSelector} from '../utils/LayoutSelector';
 
 export type ContactParams = {
@@ -17,10 +16,11 @@ export type ContactParams = {
 };
 
 type ProfileProps = {
+  layout: string;
   close: () => void;
   params: ContactParams;
 };
 
-export function Profile({close, params}: ProfileProps) {
-  return <LayoutSelector SmallComponent={ProfileSmall} LargeComponent={ProfileLarge} props={{close, params}} />;
+export function Profile({layout, close, params}: ProfileProps) {
+  return <LayoutSelector ComponentComponent={ProfileComponent} LargeComponent={ProfileComponent} props={{layout, close, params}} />;
 }

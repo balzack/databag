@@ -11,7 +11,10 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
+    paddingTop: 8,
+    paddingBottom: 12,
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   anchor: {
     backgroundColor: 'red',

@@ -69,7 +69,7 @@ function ProfileScreen({nav}) {
   const ProfileComponent = useCallback(
     () => (
       <Surface elevation={3} mode="flat">
-        <Profile params={contactParams} />
+        <Profile layout="large" params={contactParams} />
       </Surface>
     ),
     [contactParams],
@@ -80,7 +80,7 @@ function ProfileScreen({nav}) {
       id="ProfileDrawer"
       drawerContent={ProfileComponent}
       screenOptions={{
-        drawerStyle: {width: 300},
+        drawerStyle: {width: 400},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
@@ -124,8 +124,12 @@ function RegistryScreen({nav}) {
 function ContactsScreen({nav}) {
   const ContactsComponent = useCallback(
     () => (
-      <Surface elevation={3} mode="flat">
+      <Surface elevation={1} mode="flat">
+        <Surface elevation={3} mode="flat">
+        <SafeAreaView edges={['top']}></SafeAreaView>
+        </Surface>
         <Contacts
+          layout="large"
           openRegistry={nav.registry.openDrawer}
           openContact={(params: ContactParams) => {
             nav.openContact(params, nav.profile.openDrawer);
@@ -143,7 +147,7 @@ function ContactsScreen({nav}) {
       id="ContactsDrawer"
       drawerContent={ContactsComponent}
       screenOptions={{
-        drawerStyle: {width: 400},
+        drawerStyle: {width: 450},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
@@ -169,7 +173,7 @@ function SettingsScreen({nav}) {
       id="SettingsDrawer"
       drawerContent={SettingsComponent}
       screenOptions={{
-        drawerStyle: {width: '50%'},
+        drawerStyle: {width: 450},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
@@ -191,10 +195,10 @@ function HomeScreen({nav}) {
   return (
     <View style={styles.frame}>
       <View style={styles.left}>
-        <Surface style={{ ...styles.identity, borderColor: theme.colors.base }} elevation={0} mode="flat">
+        <Surface style={{ ...styles.identity, borderColor: theme.colors.elevation.level0 }} elevation={3} mode="flat">
           <Identity openSettings={nav.settings.openDrawer} openContacts={nav.contacts.openDrawer} />
         </Surface>
-        <Surface style={styles.channels} elevation={2} mode="flat">
+        <Surface style={styles.channels} elevation={1} mode="flat">
           <Content share={nav.share} textCard={nav.textCard} closeAll={() => {}} layout="large" openConversation={() => nav.setFocus(true)} />
         </Surface>
       </View>

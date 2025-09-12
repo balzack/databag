@@ -374,12 +374,14 @@ const ConnectedTab = React.memo(function ConnectedTab({
   );
 });
 
-export function ContactsSmall({
+export function ContactsComponent({
+  layout,
   openRegistry,
   openContact,
   callContact,
   textContact,
 }: {
+  layout: string;
   openRegistry: () => void;
   openContact: (params: ContactParams) => void;
   callContact: (card: null | Card) => void;
@@ -495,8 +497,8 @@ export function ContactsSmall({
   return (
     <View style={styles.component}>
       <View style={styles.contacts}>
-        <Surface elevation={9} mode="flat" style={styles.surfaceMaxWidth}>
-          <SafeAreaView style={styles.headerSurface} edges={['left', 'right']}>
+        <Surface elevation={layout === 'large' ? 3 : 9} mode="flat" style={styles.surfaceMaxWidth}>
+          <SafeAreaView style={{ ...styles.headerSurface, flexDirection: layout === 'large' ? 'row-reverse' : 'row'}} edges={['left', 'right']}>
             <Surface mode="flat" elevation={0} style={styles.searchSurface}>
               <TextInput
                 dense={true}

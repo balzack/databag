@@ -714,8 +714,8 @@ export function ContentComponent({
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Surface elevation={layout === 'large' ? 0 : 9} mode="flat" style={layout === 'large' ? styles.searchInputPad : {}}>
-          <SafeAreaView style={layout === 'small' ? styles.searchContainer : {...styles.searchBar, borderColor: theme.colors.base}} edges={['left', 'right']}>
+        <Surface elevation={layout === 'large' ? 3 : 9} mode="flat" style={layout === 'large' ? styles.searchInputPad : {}}>
+          <SafeAreaView style={layout === 'small' ? styles.searchContainer : {...styles.searchBar, borderColor: theme.colors.elevation.level1}} edges={['left', 'right']}>
             <Surface mode="flat" elevation={0} style={styles.searchInputContainer}>
               <TextInput
                 style={styles.searchInput}

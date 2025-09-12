@@ -7,7 +7,7 @@ import {Confirm} from '../confirm/Confirm';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ContactParams} from './Profile';
 
-export function ProfileSmall({close, params}: {close: () => void; params: ContactParams}) {
+export function ProfileComponent({layout, close, params}: {close: () => void; params: ContactParams}) {
   const {state, actions} = useProfile(params);
   const theme = useTheme();
   const [confirmShow, setConfirmShow] = useState(false);
@@ -82,18 +82,20 @@ export function ProfileSmall({close, params}: {close: () => void; params: Contac
   return (
     <View style={styles.component}>
       <Surface mode="flat" elevation={2} style={styles.profile}>
-        <Surface mode="flat" elevation={9}>
-          <SafeAreaView style={styles.navHeader} edges={['left', 'right']}>
-            <Pressable style={styles.navIcon} onPress={close}>
-              <Icon size={32} source="left" color={'white'} />
-            </Pressable>
-            <View style={styles.title}>
-              <Text style={styles.smLabel}>{state.strings.profile}</Text>
-            </View>
-            <View style={styles.navIcon} />
-          </SafeAreaView>
-        </Surface>
-        <View style={styles.navImage}>
+        { layout !== 'large' && (
+          <Surface mode="flat" elevation={9}>
+            <SafeAreaView style={styles.navHeader} edges={['left', 'right']}>
+              <Pressable style={styles.navIcon} onPress={close}>
+                <Icon size={32} source="left" color={'white'} />
+              </Pressable>
+              <View style={styles.title}>
+                <Text style={styles.smLabel}>{state.strings.profile}</Text>
+              </View>
+              <View style={styles.navIcon} />
+            </SafeAreaView>
+          </Surface>
+        )}
+        <View style={{...styles.navImage, top: layout !== 'large' ? 72 : 0}}>
           <Image style={styles.navLogo} resizeMode={'contain'} source={{uri: state.imageUrl}} />
           <Surface style={styles.overlap} elevation={2} mode="flat" />
         </View>

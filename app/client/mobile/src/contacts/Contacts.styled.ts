@@ -27,7 +27,6 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: 72,
     display: 'flex',
-    flexDirection: 'row',
     paddingBottom: 16,
     paddingLeft: 16,
     paddingRight: 16,
