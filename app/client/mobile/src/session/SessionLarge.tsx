@@ -157,10 +157,8 @@ function ContactsScreen({nav}) {
 function SettingsScreen({nav}) {
   const SettingsComponent = useCallback(
     () => (
-      <Surface elevation={3} mode="flat">
-        <SafeAreaView edges={['top', 'right']}>
-          <Settings />
-        </SafeAreaView>
+      <Surface elevation={2} mode="flat">
+        <Settings layout="large" />
       </Surface>
     ),
     [],

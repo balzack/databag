@@ -584,8 +584,6 @@ export function ContentComponent({
   const [remove, setRemove] = useState(null as null | {channelId: string});
   const [removing, setRemoving] = useState(false);
 
-console.log("LAYOUT:  ", layout);
-
   const adminParams = {
     title: state.strings.operationFailed,
     prompt: state.strings.sealRequired,
