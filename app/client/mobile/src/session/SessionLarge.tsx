@@ -35,7 +35,7 @@ function DetailsScreen({nav}) {
   const DetailsComponent = useCallback(
     props => (
       <Surface elevation={3} mode="flat">
-        <Details closeAll={() => closeAll(props)} />
+        <Details layout="large" closeAll={() => closeAll(props)} />
       </Surface>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,6 +47,7 @@ function DetailsScreen({nav}) {
       id="DetailsDrawer"
       drawerContent={DetailsComponent}
       screenOptions={{
+        drawerStyle: {width: 400},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
@@ -94,8 +95,12 @@ function ProfileScreen({nav}) {
 function RegistryScreen({nav}) {
   const RegistryComponent = useCallback(
     () => (
-      <Surface elevation={3} mode="flat">
+      <Surface elevation={1} mode="flat">
+        <Surface elevation={3} mode="flat">
+          <SafeAreaView edges={['top']}></SafeAreaView>
+        </Surface>
         <Registry
+          layout="large"
           openContact={(params: ContactParams) => {
             nav.openContact(params, nav.profile.openDrawer);
           }}
@@ -110,7 +115,7 @@ function RegistryScreen({nav}) {
       id="RegistryDrawer"
       drawerContent={RegistryComponent}
       screenOptions={{
-        drawerStyle: {width: 350},
+        drawerStyle: {width: 425},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
@@ -126,7 +131,7 @@ function ContactsScreen({nav}) {
     () => (
       <Surface elevation={1} mode="flat">
         <Surface elevation={3} mode="flat">
-        <SafeAreaView edges={['top']}></SafeAreaView>
+          <SafeAreaView edges={['top']}></SafeAreaView>
         </Surface>
         <Contacts
           layout="large"

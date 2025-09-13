@@ -7,21 +7,24 @@ import {useRegistry} from './useRegistry.hook';
 import {Card} from '../card/Card';
 
 type RegistrySmallProps = {
+  layaout: string;
   close?: () => void;
   openContact: (params: ContactParams) => void;
 };
 
-export function RegistrySmall({close, openContact}: RegistrySmallProps) {
+export function RegistryComponent({layout, close, openContact}: RegistryComponentProps) {
   const [search, setSearch] = useState(true);
   const {state, actions} = useRegistry();
 
   return (
     <View style={styles.component}>
       <View style={styles.registry}>
-        <Surface elevation={9} mode="flat" style={styles.headerSurface}>
-          <Pressable style={styles.navIcon} onPress={close}>
-            <Icon size={32} source="left" color={'white'} />
-          </Pressable>
+        <Surface elevation={layout === 'large' ? 3 : 9} mode="flat" style={styles.headerSurface}>
+          { layout !== 'large' && (
+            <Pressable style={styles.navIcon} onPress={close}>
+              <Icon size={32} source="left" color={'white'} />
+            </Pressable>
+          )}
 
           <Surface mode="flat" elevation={0} style={styles.inputContainer}>
             {!search && (

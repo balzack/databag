@@ -135,7 +135,7 @@ export const styles = StyleSheet.create({
     height: 72,
     display: 'flex',
     flexDirection: 'row',
-    paddingLeft: 8,
+    paddingLeft: 16,
     paddingBottom: 16,
     paddingRight: 16,
     alignItems: 'center',

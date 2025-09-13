@@ -1,14 +1,14 @@
 import React from 'react';
-import {DetailsSmall} from './DetailsSmall';
-import {DetailsLarge} from './DetailsLarge';
+import {DetailsComponent} from './DetailsComponent';
 import {LayoutSelector} from '../utils/LayoutSelector';
 
 type DetailsProps = {
+  layout: string;
   close: () => void;
   edit: () => void;
   closeAll: () => void;
 };
 
-export function Details({close, edit, closeAll}: DetailsProps) {
-  return <LayoutSelector SmallComponent={DetailsSmall} LargeComponent={DetailsLarge} props={{close, edit, closeAll}} />;
+export function Details({layout, close, edit, closeAll}: DetailsProps) {
+  return <LayoutSelector SmallComponent={DetailsComponent} LargeComponent={DetailsComponent} props={{layout, close, edit, closeAll}} />;
 }

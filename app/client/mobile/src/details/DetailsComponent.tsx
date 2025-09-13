@@ -7,7 +7,7 @@ import {Confirm} from '../confirm/Confirm';
 import {Card} from '../card/Card';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-export function DetailsSmall({close, edit, closeAll}: {close: () => void; edit: () => void; closeAll: () => void}) {
+export function DetailsComponent({layout, close, edit, closeAll}: {layout: string; close: () => void; edit: () => void; closeAll: () => void}) {
   const {state, actions} = useDetails();
   const [alert, setAlert] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -130,15 +130,17 @@ export function DetailsSmall({close, edit, closeAll}: {close: () => void; edit: 
   return (
     <View style={styles.component}>
       <Surface elevation={2} style={styles.smDetails} mode="flat">
-        <Surface elevation={9} style={styles.surfaceMaxWidth} mode="flat">
-          <SafeAreaView style={styles.smHeader} edges={['left', 'right']}>
-            <Pressable style={styles.smIcon} onPress={close}>
-              <Icon size={32} source="left" color={'white'} />
-            </Pressable>
-            <Text style={styles.smTitle}>{state.strings.chatSettings}</Text>
-            <View style={styles.smIcon} />
-          </SafeAreaView>
-        </Surface>
+        { layout !== 'large' && (
+          <Surface elevation={9} style={styles.surfaceMaxWidth} mode="flat">
+            <SafeAreaView style={styles.smHeader} edges={['left', 'right']}>
+              <Pressable style={styles.smIcon} onPress={close}>
+                <Icon size={32} source="left" color={'white'} />
+              </Pressable>
+              <Text style={styles.smTitle}>{state.strings.chatSettings}</Text>
+              <View style={styles.smIcon} />
+            </SafeAreaView>
+          </Surface>
+        )}
         <Surface mode="flat" elevation={2} style={styles.scrollWrapper}>
           <SafeAreaView style={styles.scrollWrapper} edges={['left', 'right']}>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>

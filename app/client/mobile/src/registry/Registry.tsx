@@ -1,14 +1,14 @@
 import React from 'react';
 import {ContactParams} from '../profile/Profile';
-import {RegistrySmall} from './RegistrySmall';
-import {RegistryLarge} from './RegistryLarge';
+import {RegistryComponent} from './RegistryComponent';
 import {LayoutSelector} from '../utils/LayoutSelector';
 
 type RegistryProps = {
+  layout: string;
   close?: () => void;
   openContact: (params: ContactParams) => void;
 };
 
-export function Registry({close, openContact}: RegistryProps) {
-  return <LayoutSelector SmallComponent={RegistrySmall} LargeComponent={RegistryLarge} props={{close, openContact}} />;
+export function Registry({layout, close, openContact}: RegistryProps) {
+  return <LayoutSelector SmallComponent={RegistryComponent} LargeComponent={RegistryComponent} props={{layout, close, openContact}} />;
 }

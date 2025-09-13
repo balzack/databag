@@ -48,5 +48,6 @@ export const styles = StyleSheet.create({
   },
   status: {
     height: 64,
+    opactiy: 0.5,
   },
 });
