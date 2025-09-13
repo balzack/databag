@@ -14,6 +14,10 @@ export function Base() {
 
   return (
     <View style={{...styles.base, backgroundColor: theme.colors.base}}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Databag</Text>
+        <Text style={styles.label}>{ state.strings.communication }</Text>
+      </View>
       <Image style={styles.image} source={typer} resizeMode="contain" />
       <View style={styles.status}>
         {(state.profileSet === false || state.cardSet === false || state.channelSet === false) && (

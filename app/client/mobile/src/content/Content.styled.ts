@@ -313,7 +313,7 @@ export const styles = StyleSheet.create({
   },
   searchBar: {
     width: '100%',
-    height: 72,
+    height: 64,
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 8,

@@ -195,20 +195,20 @@ function HomeScreen({nav}) {
   return (
     <View style={styles.frame}>
       <View style={styles.left}>
-        <Surface style={{ ...styles.identity, borderColor: theme.colors.elevation.level0 }} elevation={3} mode="flat">
+        <Surface style={{ ...styles.identity, borderColor: theme.colors.elevation.level0 }} elevation={1} mode="flat">
           <Identity openSettings={nav.settings.openDrawer} openContacts={nav.contacts.openDrawer} />
         </Surface>
-        <Surface style={styles.channels} elevation={1} mode="flat">
+        <Surface style={styles.channels} elevation={0} mode="flat">
           <Content share={nav.share} textCard={nav.textCard} closeAll={() => {}} layout="large" openConversation={() => nav.setFocus(true)} />
         </Surface>
       </View>
-      <Surface elevation={1} style={styles.right} mode="flat">
+      <Surface elevation={2} style={styles.right} mode="flat">
         {!nav.focus && <Base />}
-        <SafeAreaView style={styles.right} edges={['top']}>
+        <SafeAreaView style={styles.right} edges={['top', 'bottom']}>
           <View style={styles.ring}>
             <Ring />
           </View>
-          <View style={styles.workarea}>{nav.focus && <Conversation openDetails={nav.details.openDrawer} close={() => nav.setFocus(false)} wide={true} />}</View>
+          <View style={styles.workarea}>{nav.focus && <Conversation layout="large" openDetails={nav.details.openDrawer} close={() => nav.setFocus(false)} wide={true} />}</View>
         </SafeAreaView>
       </Surface>
     </View>

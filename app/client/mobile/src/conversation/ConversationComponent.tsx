@@ -27,7 +27,7 @@ export type MediaAsset = {
   binary?: {label: string; extension: string; data: string};
 };
 
-export function ConversationSmall({close, openDetails}: {close: () => void; openDetails: () => void}) {
+export function ConversationComponent({layout, close, openDetails}: {layotu: string; close: () => void; openDetails: () => void}) {
   const {state, actions} = useConversation();
   const [more, setMore] = useState(false);
   const [alert, setAlert] = useState(false);
@@ -238,6 +238,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
     }
   });
 
+  const offset = state.keyboardOffset + keyboardHeight - (Platform.OS === 'ios' && layout === 'large' ? 24 : Platform.OS === 'ios' ? 96 : 80)
   const disableImage = !state.detailSet || !state.detail?.enableImage;
   const disableVideo = !state.detailSet || !state.detail?.enableVideo;
   const disableAudio = !state.detailSet || !state.detail?.enableAudio;
@@ -245,37 +246,42 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
 
   return (
     <View style={styles.component}>
-      <Surface elevation={2} mode="flat" style={styles.content}>
-        <Surface elevation={9} mode="flat" style={styles.surfaceMaxWidth}>
-          <SafeAreaView edges={['left', 'right']} style={styles.safeAreaNav}>
+      <Surface elevation={2} mode="flat" style={{ ...styles.content, paddingBottom: layout === 'large' ? 0 : 96 }}>
+        <Surface elevation={layout === 'large' ? 2 : 9} mode="flat" style={styles.surfaceMaxWidth}>
+          <SafeAreaView edges={['left', 'right']} style={layout === 'large' ? { ...styles.safeAreaHeader, borderColor: theme.colors.elevation.level9 } : styles.safeAreaNav}>
             <Pressable style={styles.navIcon} onPress={onClose}>
-              <Icon size={32} source="left" color={'white'} />
+              { layout === 'large' && (
+                <Icon size={32} source="close" />
+              )}
+              { layout !== 'large' && (
+                <Icon size={32} source="left" color={'white'} />
+              )}
             </Pressable>
             <View style={{ ...styles.title, opacity: state.showMessages ? 1 : 0 }}>
               {state.detailSet && state.subject && (
-                <Text numberOfLines={1} style={styles.smLabel}>
+                <Text numberOfLines={1} style={{ ...styles.smLabel, color: layout !== 'large' ? 'white' : undefined }}>
                   {state.subject}
                 </Text>
               )}
               {state.detailSet && state.host && !state.subject && state.subjectNames.length === 0 && (
-                <Text numberOfLines={1} style={styles.smLabel}>
+                <Text numberOfLines={1} style={{ ...styles.smLabel, color: layout !== 'large' ? 'white' : undefined }}>
                   {state.strings.notes}
                 </Text>
               )}
               {state.detailSet && !state.subject && state.subjectNames.length > 0 && (
-                <Text numberOfLines={1} style={styles.smLabel}>
+                <Text numberOfLines={1} style={{ ...styles.smLabel, color: layout !== 'large' ? 'white' : undefined }}>
                   {state.subjectNames.join(', ')}
                 </Text>
               )}
               {state.detailSet && !state.subject && state.unknownContacts > 0 && (
-                <Text numberOfLines={1} style={styles.smUnknown}>{`, ${state.strings.unknownContact} (${state.unknownContacts})`}</Text>
+                <Text numberOfLines={1} style={{ ...styles.smUnknown, color: layout !== 'large' ? 'white' : undefined }}>{`, ${state.strings.unknownContact} (${state.unknownContacts})`}</Text>
               )}
             </View>
             {state.offsync && (
               <Icon size={24} source="warning" color={theme.colors.error} />
             )}
             <Pressable onPress={openDetails} style={styles.navIcon}>
-              <Icon size={28} source="gear-six" color={'white'} />
+              <Icon size={28} source="gear-six" color={layout !== 'large' ? 'white' : undefined} />
             </Pressable>
           </SafeAreaView>
         </Surface>
@@ -439,7 +445,7 @@ export function ConversationSmall({close, openDetails}: {close: () => void; open
             </Surface>
           </Surface>
           { focused && (
-            <Surface style={{...styles.keyboardSpacer, height: state.keyboardOffset + keyboardHeight - (Platform.OS === 'ios' ? 96 : 80)}} mode="flat" elevation={2} />
+            <Surface style={{...styles.keyboardSpacer, height: offset}} mode="flat" elevation={2} />
           )}
         </SafeAreaView>
       </Surface>

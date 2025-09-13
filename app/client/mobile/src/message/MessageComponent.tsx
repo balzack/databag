@@ -15,7 +15,7 @@ import {Shimmer} from './shimmer/Shimmer';
 import {BlurView} from '@react-native-community/blur';
 import {sanitizeUrl} from '@braintree/sanitize-url';
 
-export function MessageSmall({topic, card, profile, host, select}: {topic: Topic; card: Card | null; profile: Profile | null; host: boolean; select: (id: null | string) => void}) {
+export function MessageComponent({topic, card, profile, host, select}: {topic: Topic; card: Card | null; profile: Profile | null; host: boolean; select: (id: null | string) => void}) {
   const {state, actions} = useMessage();
   const {locked, data, created, topicId, status, transform} = topic;
   const {name, handle, node} = profile || card || {name: null, handle: null, node: null};

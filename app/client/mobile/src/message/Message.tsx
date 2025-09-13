@@ -1,6 +1,5 @@
 import React from 'react';
-import {MessageSmall} from './MessageSmall';
-import {MessageLarge} from './MessageLarge';
+import {MessageComponent} from './MessageComponent';
 import {LayoutSelector} from '../utils/LayoutSelector';
 
 type MessageProps = {
@@ -13,5 +12,5 @@ type MessageProps = {
 };
 
 export function Message({topic, card, profile, host, select, selected}: MessageProps) {
-  return <LayoutSelector SmallComponent={MessageSmall} LargeComponent={MessageLarge} props={{topic, card, profile, host, select, selected}} />;
+  return <LayoutSelector ComponentComponent={MessageComponent} LargeComponent={MessageComponent} props={{topic, card, profile, host, select, selected}} />;
 }

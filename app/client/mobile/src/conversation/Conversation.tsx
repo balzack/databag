@@ -1,6 +1,5 @@
 import React from 'react';
-import {ConversationSmall} from './ConversationSmall';
-import {ConversationLarge} from './ConversationLarge';
+import {ConversationComponent} from './ConversationComponent';
 import {LayoutSelector} from '../utils/LayoutSelector';
 
 export type MediaAsset = {
@@ -12,11 +11,12 @@ export type MediaAsset = {
 };
 
 type ConversationProps = {
+  layout: string;
   close: () => void;
   openDetails: () => void;
   wide: boolean;
 };
 
-export function Conversation({close, openDetails, wide}: ConversationProps) {
-  return <LayoutSelector SmallComponent={ConversationSmall} LargeComponent={ConversationLarge} props={{close, openDetails, wide}} />;
+export function Conversation({layout, close, openDetails, wide}: ConversationProps) {
+  return <LayoutSelector ComponentComponent={ConversationComponent} LargeComponent={ConversationComponent} props={{layout, close, openDetails, wide}} />;
 }
