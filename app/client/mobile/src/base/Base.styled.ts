@@ -8,9 +8,10 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     position: 'absolute',
     paddingTop: '20%',
+    paddingBottom: '10%',
   },
   header: {
     display: 'flex',

@@ -11,6 +11,8 @@ import {Registry} from '../registry/Registry';
 import {Profile, ContactParams} from '../profile/Profile';
 import {Details} from '../details/Details';
 import {Identity} from '../identity/Identity';
+import {Assemble} from '../assemble/Assemble';
+import {Members} from '../members/Members';
 import {Base} from '../base/Base';
 import {Conversation} from '../conversation/Conversation';
 import {useSession} from './useSession.hook';
@@ -25,6 +27,39 @@ const ContactsDrawer = createDrawerNavigator();
 const RegistryDrawer = createDrawerNavigator();
 const ProfileDrawer = createDrawerNavigator();
 const DetailsDrawer = createDrawerNavigator();
+const MembersDrawer = createDrawerNavigator();
+
+function MembersScreen({nav}) {
+  const closeAll = props => {
+    props.navigation.closeDrawer();
+    nav.setFocus(false);
+  };
+
+  const MembersComponent = useCallback(
+    props => (
+      <Surface elevation={3} mode="flat">
+        <Members layout="large" />
+      </Surface>
+    ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [nav],
+  );
+
+  return (
+    <MembersDrawer.Navigator
+      id="MembersDrawer"
+      drawerContent={MembersComponent}
+      screenOptions={{
+        drawerStyle: {width: 400},
+        drawerPosition: 'right',
+        drawerType: 'front',
+        headerShown: false,
+        overlayColor: 'rgba(8,8,8,.9)',
+      }}>
+      <MembersDrawer.Screen name="details">{({navigation}) => <DetailsScreen nav={{...nav, members: navigation}} />}</MembersDrawer.Screen>
+    </MembersDrawer.Navigator>
+  );
+}
 
 function DetailsScreen({nav}) {
   const closeAll = props => {
@@ -35,7 +70,7 @@ function DetailsScreen({nav}) {
   const DetailsComponent = useCallback(
     props => (
       <Surface elevation={3} mode="flat">
-        <Details layout="large" closeAll={() => closeAll(props)} />
+        <Details layout="large" closeAll={() => closeAll(props)} edit={nav.members.openDrawer} />
       </Surface>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,7 +82,7 @@ function DetailsScreen({nav}) {
       id="DetailsDrawer"
       drawerContent={DetailsComponent}
       screenOptions={{
-        drawerStyle: {width: 400},
+        drawerStyle: {width: 450},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
@@ -204,16 +239,27 @@ function HomeScreen({nav}) {
           <Identity openSettings={nav.settings.openDrawer} openContacts={nav.contacts.openDrawer} />
         </Surface>
         <Surface style={styles.channels} elevation={0} mode="flat">
-          <Content share={nav.share} textCard={nav.textCard} closeAll={() => {}} layout="large" openConversation={() => nav.setFocus(true)} />
+          <Content share={nav.share} textCard={nav.textCard} closeAll={() => {}} layout="large" openConversation={() => { nav.setAssemble(false);  nav.setFocus(true)}} createConversation={() => { nav.setFocus(false); nav.setAssemble(true)}} />
         </Surface>
       </View>
       <Surface elevation={2} style={styles.right} mode="flat">
-        {!nav.focus && <Base />}
+        {!nav.focus && !nav.assemble && <Base />}
         <SafeAreaView style={styles.right} edges={['top', 'bottom']}>
           <View style={styles.ring}>
             <Ring />
           </View>
-          <View style={styles.workarea}>{nav.focus && <Conversation layout="large" openDetails={nav.details.openDrawer} close={() => nav.setFocus(false)} wide={true} />}</View>
+          <View style={styles.workarea}>
+            {nav.focus && (
+              <View style={styles.focus}>
+                <Conversation layout="large" openDetails={nav.details.openDrawer} close={() => nav.setFocus(false)} wide={true} />
+              </View>
+            )}
+            {nav.assemble && (
+              <View style={styles.focus}>
+                <Assemble layout="large" close={() => nav.setAssemble(false)} openConversation={() => { nav.setAssemble(false); nav.setFocus(true)}} />
+              </View>
+            )}
+          </View>
         </SafeAreaView>
       </Surface>
     </View>
@@ -230,6 +276,7 @@ export function SessionLarge({share}: {share: {filePath: string; mimeType: strin
   const [disconnected, setDisconnected] = useState(false);
   const [showDisconnected, setShowDisconnected] = useState(false);
   const [focus, setFocus] = useState(false);
+  const [assemble, setAssemble] = useState(false);
 
   const textContact = (cardId: null | string) => {
     setTextCard({cardId});
@@ -239,7 +286,7 @@ export function SessionLarge({share}: {share: {filePath: string; mimeType: strin
     setCallCard({card});
   };
 
-  const sessionNav = {strings: state.strings, callContact, callCard, textContact, textCard, focus, setFocus, share};
+  const sessionNav = {strings: state.strings, callContact, callCard, textContact, textCard, focus, setFocus, assemble, setAssemble, share};
 
   const dismiss = () => {
     setDismissed(true);
@@ -278,7 +325,7 @@ export function SessionLarge({share}: {share: {filePath: string; mimeType: strin
       <View style={styles.session}>
         <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
           <View style={styles.container}>
-            <DetailsScreen nav={sessionNav} />
+            <MembersScreen nav={sessionNav} />
           </View>
         </NavigationContainer>
         {disconnected && showDisconnected && !dismissed && (

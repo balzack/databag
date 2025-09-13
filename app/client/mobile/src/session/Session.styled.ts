@@ -85,6 +85,11 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
     minWidth: 0,
   },
+  focus: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
   identity: {
     flexShrink: 0,
     borderBottomWidth: 1,

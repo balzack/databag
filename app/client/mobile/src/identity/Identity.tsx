@@ -42,7 +42,7 @@ export function Identity({openSettings, openContacts}) {
             )}
             <Text style={styles.username} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.profile.handle}${state.profile.node ? '@' + state.profile.node : ''}`}</Text>
           </View>
-          <Icon size={32} source="chevron-right" />
+          <Icon size={40} source="chevron-right" />
         </TouchableOpacity>
         <Menu
           visible={menu}

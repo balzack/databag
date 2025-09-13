@@ -24,7 +24,7 @@ function Member({enabled, toggle, placeholder}: {enabled: boolean; toggle: (chec
   }
 }
 
-export function Assemble({close, openConversation}: {close: () => void; openConversation: () => void}) {
+export function Assemble({layout, close, openConversation}: {layout: string, close: () => void; openConversation: () => void}) {
   const {state, actions} = useAssemble();
   const selected = useRef(new Set<string>());
   const [subject, setSubject] = useState(null);
@@ -71,10 +71,15 @@ export function Assemble({close, openConversation}: {close: () => void; openConv
 
   return (
     <View style={styles.request}>
-      <Surface elevation={9} mode="flat" style={styles.fullWidthSurface}>
-        <SafeAreaView edges={['left', 'right']} style={styles.headerSafeArea}>
+      <Surface elevation={layout === 'large' ? 1 : 9} mode="flat" style={styles.fullWidthSurface}>
+        <SafeAreaView edges={['left', 'right']} style={layout === 'large' ? {...styles.headerSafeBar, borderColor: theme.colors.elevation.level9} : styles.headerSafeArea}>
           <Pressable style={styles.navIcon} onPress={close}>
-            <Icon size={32} source="left" color={'white'} />
+            {layout === 'large' && (
+              <Icon size={32} source="close" />
+            )}
+            {layout !== 'large' && (
+              <Icon size={32} source="left" color={'white'} />
+            )}
           </Pressable>
           <Surface mode="flat" elevation={0} style={styles.inputSurface}>
             <TextInput

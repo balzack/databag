@@ -12,6 +12,7 @@ import {Confirm} from '../confirm/Confirm';
 const keyExtractor = (channel: any) => `${channel.cardId}:${channel.channelId}`;
 
 const AllTab = React.memo(function AllTab({
+  layout,
   data,
   theme,
   strings,
@@ -23,6 +24,7 @@ const AllTab = React.memo(function AllTab({
   setLeave,
   setRemove,
 }: {
+  layout: string;
   data: any[];
   theme: any;
   strings: any;
@@ -61,7 +63,7 @@ const AllTab = React.memo(function AllTab({
             {Platform.OS === 'ios' && (
               <Surface elevation={11} style={styles.menu}>
                 <BlurView style={styles.blur} blurType={theme.colors.name} blurAmount={4} reducedTransparencyFallbackSize={theme.colors.name} />
-                {favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                {layout !== 'large' && favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
                   <Pressable
                     key="clearFavorite"
                     style={styles.menuOption}
@@ -73,7 +75,7 @@ const AllTab = React.memo(function AllTab({
                     <Text>{strings.removeFavorites}</Text>
                   </Pressable>
                 )}
-                {!favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
+                {layout !== 'large' && !favorite.some(entry => item.cardId === entry.cardId && item.channelId === entry.channelId) && (
                   <Pressable
                     key="setFavorite"
                     style={styles.menuOption}
@@ -741,6 +743,7 @@ export function ContentComponent({
         <View style={styles.topics}>
           <View style={{...styles.tabView, ...(allTab ? styles.tabVisible : styles.tabHidden)}}>
             <AllTab
+              layout={layout}
               data={state.filtered}
               theme={theme}
               strings={state.strings}

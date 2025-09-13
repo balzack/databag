@@ -7,7 +7,7 @@ import {Card} from '../card/Card';
 import {Confirm} from '../confirm/Confirm';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-export function Members({close}: {close: () => void}) {
+export function Members({layout, close}: {layout: string, close: () => void}) {
   const {state, actions} = useMembers();
   const theme = useTheme();
   const [alert, setAlert] = useState(false);
@@ -35,14 +35,21 @@ export function Members({close}: {close: () => void}) {
 
   return (
     <View style={styles.request}>
-      <Surface elevation={9} mode="flat" style={styles.surface}>
-        <SafeAreaView edges={['left', 'right']} style={styles.safeAreaNav}>
-          <Pressable style={styles.navIcon} onPress={close}>
-            <Icon size={32} source="left" color={'white'} />
-          </Pressable>
-          <Text style={styles.navTitle}>{state.strings.chatMembers}</Text>
-          <View style={styles.navIcon} />
-        </SafeAreaView>
+      <Surface elevation={layout === 'large' ? 3 : 9} mode="flat" style={styles.surface}>
+        {layout === 'large' && (
+          <SafeAreaView edges={['left', 'right', 'top']} style={styles.safeAreaBar}>
+            <Text style={styles.barTitle}>{state.strings.chatMembers}</Text>
+          </SafeAreaView>
+        )}
+        {layout !== 'large' && (
+          <SafeAreaView edges={['left', 'right']} style={styles.safeAreaNav}>
+            <Pressable style={styles.navIcon} onPress={close}>
+              <Icon size={32} source="left" color={'white'} />
+            </Pressable>
+            <Text style={styles.navTitle}>{state.strings.chatMembers}</Text>
+            <View style={styles.navIcon} />
+          </SafeAreaView>
+        )}
       </Surface>
 
       <Surface elevation={1} mode="flat" style={styles.scrollWrapper}>
