@@ -11,7 +11,7 @@ import {BlurView} from '@react-native-community/blur';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-export function SetupSmall() {
+export function SetupComponent() {
   const {state, actions} = useSetup();
   const [updating, setUpdating] = useState(false);
   const [secretCopy, setSecretCopy] = useState(false);

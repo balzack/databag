@@ -9,7 +9,7 @@ import {BlurView} from '@react-native-community/blur';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-export function AccountsSmall() {
+export function AccountsComponent() {
   const {state, actions} = useAccounts();
   const theme = useTheme();
   const [failed, setFailed] = useState(false);

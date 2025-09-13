@@ -6,7 +6,7 @@ import {Accounts} from '../accounts/Accounts';
 import {Setup} from '../setup/Setup';
 import {BlurView} from '@react-native-community/blur';
 
-export function ServiceSmall() {
+export function ServiceComponent() {
   const [tab, setTab] = useState('setup');
   const showAccounts = tab === 'accounts' ? styles.visibleTab : styles.hiddenTab;
   const showSetup = tab === 'setup' ? styles.visibleTab : styles.hiddenTab;

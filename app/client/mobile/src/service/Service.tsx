@@ -1,8 +1,7 @@
 import React from 'react';
-import {ServiceSmall} from './ServiceSmall';
-import {ServiceLarge} from './ServiceLarge';
+import {ServiceComponent} from './ServiceComponent';
 import {LayoutSelector} from '../utils/LayoutSelector';
 
 export function Service() {
-  return <LayoutSelector SmallComponent={ServiceSmall} LargeComponent={ServiceLarge} props={{}} />;
+  return <LayoutSelector SmallComponent={ServiceComponent} LargeComponent={ServiceComponent} props={{}} />;
 }
