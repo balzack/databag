@@ -71,7 +71,7 @@ export function Assemble({layout, close, openConversation}: {layout: string, clo
 
   return (
     <View style={styles.request}>
-      <Surface elevation={layout === 'large' ? 1 : 9} mode="flat" style={styles.fullWidthSurface}>
+      <Surface elevation={layout === 'large' ? 2 : 9} mode="flat" style={styles.fullWidthSurface}>
         <SafeAreaView edges={['left', 'right']} style={layout === 'large' ? {...styles.headerSafeBar, borderColor: theme.colors.elevation.level9} : styles.headerSafeArea}>
           <Pressable style={styles.navIcon} onPress={close}>
             {layout === 'large' && (
@@ -107,7 +107,7 @@ export function Assemble({layout, close, openConversation}: {layout: string, clo
         </SafeAreaView>
       </Surface>
 
-      <Surface elevation={1} mode="flat" style={styles.scrollWrapper}>
+      <Surface elevation={layout === 'large' ? 2 : 1} mode="flat" style={styles.scrollWrapper}>
         {state.connected.length > 0 && (
           <FlatList
             style={styles.cards}
