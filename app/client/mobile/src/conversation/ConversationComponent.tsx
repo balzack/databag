@@ -259,17 +259,17 @@ export function ConversationComponent({layout, close, openDetails}: {layotu: str
             </Pressable>
             <View style={{ ...styles.title, opacity: state.showMessages ? 1 : 0 }}>
               {state.detailSet && state.subject && (
-                <Text numberOfLines={1} style={{ ...styles.smLabel, color: layout !== 'large' ? 'white' : undefined }}>
+                <Text numberOfLines={1} style={{ ...styles.smLabel, color: layout !== 'large' ? 'white' : theme.colors.onSurface }}>
                   {state.subject}
                 </Text>
               )}
               {state.detailSet && state.host && !state.subject && state.subjectNames.length === 0 && (
-                <Text numberOfLines={1} style={{ ...styles.smLabel, color: layout !== 'large' ? 'white' : undefined }}>
+                <Text numberOfLines={1} style={{ ...styles.smLabel, color: layout !== 'large' ? 'white' : theme.colors.onSurface }}>
                   {state.strings.notes}
                 </Text>
               )}
               {state.detailSet && !state.subject && state.subjectNames.length > 0 && (
-                <Text numberOfLines={1} style={{ ...styles.smLabel, color: layout !== 'large' ? 'white' : undefined }}>
+                <Text numberOfLines={1} style={{ ...styles.smLabel, color: layout !== 'large' ? 'white' : theme.colors.onSurface }}>
                   {state.subjectNames.join(', ')}
                 </Text>
               )}

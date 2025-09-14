@@ -56,7 +56,7 @@ function MembersScreen({nav}) {
         headerShown: false,
         overlayColor: 'rgba(8,8,8,.9)',
       }}>
-      <MembersDrawer.Screen name="details">{({navigation}) => <DetailsScreen nav={{...nav, members: navigation}} />}</MembersDrawer.Screen>
+      <MembersDrawer.Screen name="members">{({navigation}) => <DetailsScreen nav={{...nav, members: navigation}} />}</MembersDrawer.Screen>
     </MembersDrawer.Navigator>
   );
 }
