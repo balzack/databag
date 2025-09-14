@@ -36,13 +36,13 @@ export function Identity({openSettings, openContacts}) {
           </View>
           <View style={styles.details}>
             {state.profile.name && (
-              <Text style={styles.name} adjustsFontSizeToFit={true} numberOfLines={1}>
+              <Text style={styles.name} numberOfLines={1}>
                 {state.profile.name}
               </Text>
             )}
             <Text style={styles.username} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.profile.handle}${state.profile.node ? '@' + state.profile.node : ''}`}</Text>
           </View>
-          <Icon size={18} source="chevron-right" />
+          <Icon size={40} source="chevron-right" />
         </TouchableOpacity>
         <Menu
           visible={menu}
@@ -54,22 +54,24 @@ export function Identity({openSettings, openContacts}) {
             </View>
           }>
           <Menu.Item
-            leadingIcon="cog-outline"
+            leadingIcon="gear-six"
             onPress={() => {
               setMenu(false);
               openSettings();
             }}
+            titleStyle={styles.titleStyle}
             title={state.strings.settings}
           />
           <Menu.Item
-            leadingIcon="contacts-outline"
+            leadingIcon="rolodex"
             onPress={() => {
               setMenu(false);
               openContacts();
             }}
+            titleStyle={styles.titleStyle}
             title={state.strings.contacts}
           />
-          <Menu.Item leadingIcon="logout" onPress={showLogout} title={state.strings.logout} />
+          <Menu.Item leadingIcon="logout" onPress={showLogout} titleStyle={styles.titleStyle} title={state.strings.logout} />
         </Menu>
       </SafeAreaView>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={logout} onRequestClose={() => setLogout(false)}>
@@ -89,7 +91,7 @@ export function Identity({openSettings, openContacts}) {
                 <Button mode="outlined" onPress={() => setLogout(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button mode="contained" loading={applyingLogout} onPress={applyLogout}>
+                <Button mode="contained" textColor="white" loading={applyingLogout} onPress={applyLogout}>
                   {state.strings.logout}
                 </Button>
               </View>

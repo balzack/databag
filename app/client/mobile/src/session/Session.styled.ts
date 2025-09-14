@@ -68,8 +68,8 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    width: '33%',
-    maxWidth: 300,
+    width: '40%',
+    maxWidth: 450,
   },
   right: {
     height: '100%',
@@ -85,9 +85,14 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
     minWidth: 0,
   },
+  focus: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
   identity: {
     flexShrink: 0,
-    paddingBottom: 4,
+    borderBottomWidth: 1,
   },
   channels: {
     flexGrow: 1,

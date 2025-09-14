@@ -61,7 +61,7 @@ export function useMembers() {
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [app.state.session]);
+  }, [app.state.session, app.state.focus]);
 
   useEffect(() => {
     const filtered = state.sorted.filter(item => item.status === 'connected' || state.members.includes(item.guid));

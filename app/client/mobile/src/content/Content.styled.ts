@@ -311,6 +311,18 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     borderBottomWidth: 1,
   },
+  searchBar: {
+    width: '100%',
+    height: 64,
+    display: 'flex',
+    flexDirection: 'row',
+    paddingBottom: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
+    alignItems: 'center',
+    gap: 16,
+    borderBottomWidth: 1,
+  },
   searchContainer: {
     width: '100%',
     height: 72,
@@ -321,6 +333,9 @@ export const styles = StyleSheet.create({
     paddingRight: 16,
     alignItems: 'center',
     gap: 16,
+  },
+  searchInputPad: {
+    paddingTop: 8,
   },
   searchInputContainer: {
     flexGrow: 1,

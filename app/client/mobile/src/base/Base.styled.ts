@@ -8,17 +8,30 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     position: 'absolute',
+    paddingTop: '20%',
+    paddingBottom: '10%',
   },
-  image: {
-    width: '50%',
-    height: '50%',
-    opacity: 0.4,
+  header: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    gap: 8,
+    opacity: 0.2,
   },
   title: {
-    fontSize: 20,
-    color: Colors.label,
+    fontSize: 24,
+    fontWeight: 800,
+  },
+  label: {
+    fontSize: 18,
+    fontWeight: 600,
+  },
+  image: {
+    width: '70%',
+    height: '50%',
+    opacity: 0.2,
   },
   description: {
     fontSize: 14,
@@ -36,5 +49,6 @@ export const styles = StyleSheet.create({
   },
   status: {
     height: 64,
+    opactiy: 0.5,
   },
 });

@@ -12,7 +12,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {PaperPlaneRight, PlusSquare, CaretLeft, ChatTeardropSlash, ChatTeardrop, ArrowCounterClockwise, Camera, EnvelopeSimple, Warning, HouseSimple, Star, HardDrive, LockOpen, UserMinus, PlayCircle, StopCircle, UsersFour, DotsThreeCircle, VideoCamera, VideoCameraSlash, ArrowsInSimple, BellSlash, Phone, Microphone, MicrophoneSlash, FrameCorners, WarningCircle, Link, LinkBreak, AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
+import {SignOut, PaperPlaneRight, PlusSquare, CaretLeft, ChatTeardropSlash, ChatTeardrop, ArrowCounterClockwise, Camera, EnvelopeSimple, Warning, HouseSimple, Star, HardDrive, LockOpen, UserMinus, PlayCircle, StopCircle, UsersFour, DotsThreeCircle, VideoCamera, VideoCameraSlash, ArrowsInSimple, BellSlash, Phone, Microphone, MicrophoneSlash, FrameCorners, WarningCircle, Link, LinkBreak, AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
 import {useColorScheme} from 'react-native';
 import {MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
 
@@ -119,7 +119,7 @@ const databagColors = {
       level6: 'rgb(200, 200, 200)',
       level7: 'rgb(200, 200, 200)',
       level8: 'transparent',
-      level9: '#191919',
+      level9: '#8FBEA7',
       level10: '#224433',
       level11: 'rgba(80, 80, 80, 0.5)',
       level12: 'rgba(96,096,96, 0.5)',
@@ -127,7 +127,7 @@ const databagColors = {
     surfaceDisabled: 'rgba(225, 227, 223, 0.12)',
     onSurfaceDisabled: 'rgba(225, 227, 223, 0.38)',
     backdrop: 'rgba(42, 50, 45, 0.4)',
-    base: 'rgb(0,0,0)',
+    base: 'rgb(32,32,32)',
     bar: 'rgba(16, 10, 8, 0.8)',
     connected: '#44cc44',
     requested: '#EDB612',
@@ -228,6 +228,8 @@ function FontMix(props: {name: string, color: string}) {
     return <ChatTeardrop color={props.color} size={props.size} />;
   } else if (props.name === 'disable-chat') {
     return <ChatTeardropSlash color={props.color} size={props.size} />;
+  } else if (props.name === 'logout') {
+    return <SignOut color={props.color} size={props.size} />;
   } else {
     return <CommunityIcon {...props} />;
   }

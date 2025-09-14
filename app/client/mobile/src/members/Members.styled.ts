@@ -75,6 +75,7 @@ export const styles = StyleSheet.create({
   navTitle: {
     fontSize: 24,
     minWidth: 0,
+    fontWeight: 600,
     flexShrink: 1,
     color: 'white',
   },
@@ -137,6 +138,20 @@ export const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingTop: 16,
   },
+  barTitle: {
+    fontSize: 20,
+    fontWeight: 500,
+  },
+  safeAreaBar: {
+    width: '100%',
+    height: 64,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingRight: 16,
+    paddingLeft: 8,
+    paddingBottom: 16,
+  },
   safeAreaNav: {
     width: '100%',
     height: 72,
@@ -166,6 +181,7 @@ export const styles = StyleSheet.create({
     },
   },
   listContainer: {
+    paddingTop: 16,
     paddingBottom: 128,
   },
   cardHandle: {

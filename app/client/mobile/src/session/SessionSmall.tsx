@@ -41,6 +41,7 @@ function ContentTab({scheme, textCard, contentTab, share}: {scheme: string; text
           {props => (
             <Content
               share={share}
+              layout="small"
               textCard={textCard}
               closeAll={() => props.navigation.popToTop()}
               openConversation={() => openConversation(props)}

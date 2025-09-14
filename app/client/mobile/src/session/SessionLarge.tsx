@@ -3,7 +3,7 @@ import {Pressable, View, useColorScheme} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RingContextProvider} from '../context/RingContext';
 import {styles} from './Session.styled';
-import {Surface, Text, Icon} from 'react-native-paper';
+import {Surface, Text, Icon, useTheme} from 'react-native-paper';
 import {Settings} from '../settings/Settings';
 import {Contacts} from '../contacts/Contacts';
 import {Content} from '../content/Content';
@@ -11,6 +11,8 @@ import {Registry} from '../registry/Registry';
 import {Profile, ContactParams} from '../profile/Profile';
 import {Details} from '../details/Details';
 import {Identity} from '../identity/Identity';
+import {Assemble} from '../assemble/Assemble';
+import {Members} from '../members/Members';
 import {Base} from '../base/Base';
 import {Conversation} from '../conversation/Conversation';
 import {useSession} from './useSession.hook';
@@ -25,6 +27,39 @@ const ContactsDrawer = createDrawerNavigator();
 const RegistryDrawer = createDrawerNavigator();
 const ProfileDrawer = createDrawerNavigator();
 const DetailsDrawer = createDrawerNavigator();
+const MembersDrawer = createDrawerNavigator();
+
+function MembersScreen({nav}) {
+  const closeAll = props => {
+    props.navigation.closeDrawer();
+    nav.setFocus(false);
+  };
+
+  const MembersComponent = useCallback(
+    props => (
+      <Surface elevation={3} mode="flat">
+        <Members layout="large" />
+      </Surface>
+    ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [nav],
+  );
+
+  return (
+    <MembersDrawer.Navigator
+      id="MembersDrawer"
+      drawerContent={MembersComponent}
+      screenOptions={{
+        drawerStyle: {width: 400},
+        drawerPosition: 'right',
+        drawerType: 'front',
+        headerShown: false,
+        overlayColor: 'rgba(8,8,8,.9)',
+      }}>
+      <MembersDrawer.Screen name="members">{({navigation}) => <DetailsScreen nav={{...nav, members: navigation}} />}</MembersDrawer.Screen>
+    </MembersDrawer.Navigator>
+  );
+}
 
 function DetailsScreen({nav}) {
   const closeAll = props => {
@@ -35,7 +70,7 @@ function DetailsScreen({nav}) {
   const DetailsComponent = useCallback(
     props => (
       <Surface elevation={3} mode="flat">
-        <Details closeAll={() => closeAll(props)} />
+        <Details layout="large" closeAll={() => closeAll(props)} edit={nav.members.openDrawer} />
       </Surface>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,6 +82,7 @@ function DetailsScreen({nav}) {
       id="DetailsDrawer"
       drawerContent={DetailsComponent}
       screenOptions={{
+        drawerStyle: {width: 450},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
@@ -69,7 +105,7 @@ function ProfileScreen({nav}) {
   const ProfileComponent = useCallback(
     () => (
       <Surface elevation={3} mode="flat">
-        <Profile params={contactParams} />
+        <Profile layout="large" params={contactParams} />
       </Surface>
     ),
     [contactParams],
@@ -80,7 +116,7 @@ function ProfileScreen({nav}) {
       id="ProfileDrawer"
       drawerContent={ProfileComponent}
       screenOptions={{
-        drawerStyle: {width: 300},
+        drawerStyle: {width: 400},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
@@ -94,8 +130,12 @@ function ProfileScreen({nav}) {
 function RegistryScreen({nav}) {
   const RegistryComponent = useCallback(
     () => (
-      <Surface elevation={3} mode="flat">
+      <Surface elevation={1} mode="flat">
+        <Surface elevation={3} mode="flat">
+          <SafeAreaView edges={['top']}></SafeAreaView>
+        </Surface>
         <Registry
+          layout="large"
           openContact={(params: ContactParams) => {
             nav.openContact(params, nav.profile.openDrawer);
           }}
@@ -110,7 +150,7 @@ function RegistryScreen({nav}) {
       id="RegistryDrawer"
       drawerContent={RegistryComponent}
       screenOptions={{
-        drawerStyle: {width: 350},
+        drawerStyle: {width: 425},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
@@ -124,8 +164,12 @@ function RegistryScreen({nav}) {
 function ContactsScreen({nav}) {
   const ContactsComponent = useCallback(
     () => (
-      <Surface elevation={3} mode="flat">
+      <Surface elevation={1} mode="flat">
+        <Surface elevation={3} mode="flat">
+          <SafeAreaView edges={['top']}></SafeAreaView>
+        </Surface>
         <Contacts
+          layout="large"
           openRegistry={nav.registry.openDrawer}
           openContact={(params: ContactParams) => {
             nav.openContact(params, nav.profile.openDrawer);
@@ -143,7 +187,7 @@ function ContactsScreen({nav}) {
       id="ContactsDrawer"
       drawerContent={ContactsComponent}
       screenOptions={{
-        drawerStyle: {width: 400},
+        drawerStyle: {width: 450},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
@@ -157,10 +201,8 @@ function ContactsScreen({nav}) {
 function SettingsScreen({nav}) {
   const SettingsComponent = useCallback(
     () => (
-      <Surface elevation={3} mode="flat">
-        <SafeAreaView edges={['top', 'right']}>
-          <Settings />
-        </SafeAreaView>
+      <Surface elevation={2} mode="flat">
+        <Settings layout="large" />
       </Surface>
     ),
     [],
@@ -171,7 +213,7 @@ function SettingsScreen({nav}) {
       id="SettingsDrawer"
       drawerContent={SettingsComponent}
       screenOptions={{
-        drawerStyle: {width: '50%'},
+        drawerStyle: {width: 450},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
@@ -183,6 +225,8 @@ function SettingsScreen({nav}) {
 }
 
 function HomeScreen({nav}) {
+  const theme = useTheme();
+
   useEffect(() => {
     nav.contacts.closeDrawer();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -191,20 +235,31 @@ function HomeScreen({nav}) {
   return (
     <View style={styles.frame}>
       <View style={styles.left}>
-        <Surface style={styles.identity} elevation={2} mode="flat">
+        <Surface style={{ ...styles.identity, borderColor: theme.colors.elevation.level0 }} elevation={1} mode="flat">
           <Identity openSettings={nav.settings.openDrawer} openContacts={nav.contacts.openDrawer} />
         </Surface>
-        <Surface style={styles.channels} elevation={2} mode="flat">
-          <Content share={nav.share} textCard={nav.textCard} closeAll={() => {}} openConversation={() => nav.setFocus(true)} />
+        <Surface style={styles.channels} elevation={0} mode="flat">
+          <Content share={nav.share} textCard={nav.textCard} closeAll={() => {}} layout="large" openConversation={() => { nav.setAssemble(false);  nav.setFocus(true)}} createConversation={() => { nav.setFocus(false); nav.setAssemble(true)}} />
         </Surface>
       </View>
-      <Surface elevation={1} style={styles.right} mode="flat">
-        {!nav.focus && <Base />}
-        <SafeAreaView style={styles.right} edges={['top']}>
+      <Surface elevation={2} style={styles.right} mode="flat">
+        {!nav.focus && !nav.assemble && <Base />}
+        <SafeAreaView style={styles.right} edges={['top', 'bottom']}>
           <View style={styles.ring}>
             <Ring />
           </View>
-          <View style={styles.workarea}>{nav.focus && <Conversation openDetails={nav.details.openDrawer} close={() => nav.setFocus(false)} wide={true} />}</View>
+          <View style={styles.workarea}>
+            {nav.focus && (
+              <View style={styles.focus}>
+                <Conversation layout="large" openDetails={nav.details.openDrawer} close={() => nav.setFocus(false)} wide={true} />
+              </View>
+            )}
+            {nav.assemble && (
+              <View style={styles.focus}>
+                <Assemble layout="large" close={() => nav.setAssemble(false)} openConversation={() => { nav.setAssemble(false); nav.setFocus(true)}} />
+              </View>
+            )}
+          </View>
         </SafeAreaView>
       </Surface>
     </View>
@@ -221,6 +276,7 @@ export function SessionLarge({share}: {share: {filePath: string; mimeType: strin
   const [disconnected, setDisconnected] = useState(false);
   const [showDisconnected, setShowDisconnected] = useState(false);
   const [focus, setFocus] = useState(false);
+  const [assemble, setAssemble] = useState(false);
 
   const textContact = (cardId: null | string) => {
     setTextCard({cardId});
@@ -230,7 +286,7 @@ export function SessionLarge({share}: {share: {filePath: string; mimeType: strin
     setCallCard({card});
   };
 
-  const sessionNav = {strings: state.strings, callContact, callCard, textContact, textCard, focus, setFocus, share};
+  const sessionNav = {strings: state.strings, callContact, callCard, textContact, textCard, focus, setFocus, assemble, setAssemble, share};
 
   const dismiss = () => {
     setDismissed(true);
@@ -269,7 +325,7 @@ export function SessionLarge({share}: {share: {filePath: string; mimeType: strin
       <View style={styles.session}>
         <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
           <View style={styles.container}>
-            <DetailsScreen nav={sessionNav} />
+            <MembersScreen nav={sessionNav} />
           </View>
         </NavigationContainer>
         {disconnected && showDisconnected && !dismissed && (
