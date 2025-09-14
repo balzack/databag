@@ -59,6 +59,7 @@ export function Identity({openSettings, openContacts}) {
               setMenu(false);
               openSettings();
             }}
+            titleStyle={styles.titleStyle}
             title={state.strings.settings}
           />
           <Menu.Item
@@ -67,9 +68,10 @@ export function Identity({openSettings, openContacts}) {
               setMenu(false);
               openContacts();
             }}
+            titleStyle={styles.titleStyle}
             title={state.strings.contacts}
           />
-          <Menu.Item leadingIcon="logout" onPress={showLogout} title={state.strings.logout} />
+          <Menu.Item leadingIcon="logout" onPress={showLogout} titleStyle={styles.titleStyle} title={state.strings.logout} />
         </Menu>
       </SafeAreaView>
       <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={logout} onRequestClose={() => setLogout(false)}>

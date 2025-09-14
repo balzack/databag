@@ -21,6 +21,9 @@ export const styles = StyleSheet.create({
     width: 1,
     height: 1,
   },
+  titleStyle: {
+    fontSize: 20,
+  },
   image: {
     position: 'relative',
     width: 64,
