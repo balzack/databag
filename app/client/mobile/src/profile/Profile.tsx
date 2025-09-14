@@ -22,5 +22,5 @@ type ProfileProps = {
 };
 
 export function Profile({layout, close, params}: ProfileProps) {
-  return <LayoutSelector ComponentComponent={ProfileComponent} LargeComponent={ProfileComponent} props={{layout, close, params}} />;
+  return <LayoutSelector SmallComponent={ProfileComponent} LargeComponent={ProfileComponent} props={{layout, close, params}} />;
 }

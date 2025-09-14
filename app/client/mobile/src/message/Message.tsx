@@ -12,5 +12,5 @@ type MessageProps = {
 };
 
 export function Message({topic, card, profile, host, select, selected}: MessageProps) {
-  return <LayoutSelector ComponentComponent={MessageComponent} LargeComponent={MessageComponent} props={{topic, card, profile, host, select, selected}} />;
+  return <LayoutSelector SmallComponent={MessageComponent} LargeComponent={MessageComponent} props={{topic, card, profile, host, select, selected}} />;
 }

@@ -75,6 +75,7 @@ export const styles = StyleSheet.create({
   navTitle: {
     fontSize: 24,
     minWidth: 0,
+    fontWeight: 600,
     flexShrink: 1,
     color: 'white',
   },
