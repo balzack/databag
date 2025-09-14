@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, Modal, Image, View, Pressable} from 'react-native';
+import {Platform, TouchableOpacity, Modal, Image, View, Pressable} from 'react-native';
 import {useTheme, Icon, Button, IconButton, Switch, Surface, Divider, TextInput, Text} from 'react-native-paper';
 import {styles} from './Setup.styled';
 import {useSetup} from './useSetup.hook';
@@ -17,6 +17,7 @@ export function Setup() {
   const [secretCopy, setSecretCopy] = useState(false);
   const [confirmingAuth, setConfirmingAuth] = useState(false);
   const theme = useTheme();
+  const layout = Platform.isPad ? 'large' : 'small';
 
   const errorParams = {
     title: state.strings.operationFailed,
@@ -60,7 +61,7 @@ export function Setup() {
   return (
     <View style={styles.fullContainer}>
       <Surface elevation={1} mode="flat" style={styles.fullContainer}>
-        <Surface elevation={9} mode="flat">
+        <Surface elevation={layout === 'large' ? 4 : 9} mode="flat">
           <SafeAreaView edges={['top']}>
             <View style={styles.headerContainer}>
               <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.headerText}>

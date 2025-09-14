@@ -12,6 +12,7 @@ import {Confirm} from '../confirm/Confirm';
 const keyExtractor = (channel: any) => `${channel.cardId}:${channel.channelId}`;
 
 const AllTab = React.memo(function AllTab({
+  focused,
   layout,
   data,
   theme,
@@ -24,6 +25,7 @@ const AllTab = React.memo(function AllTab({
   setLeave,
   setRemove,
 }: {
+  focused: null | {cardId: null | string; channelId: string};
   layout: string;
   data: any[];
   theme: any;
@@ -49,6 +51,7 @@ const AllTab = React.memo(function AllTab({
       showsVerticalScrollIndicator={false}
       renderItem={({item}) => {
         const {sealed, hosted, unread, imageUrl, subject, message} = item;
+        const isFocused = layout === 'large' && item.cardId === focused?.cardId && item.channelId === focused?.channelId;
         const choose = () => {
           open(item.cardId, item.channelId);
         };
@@ -186,7 +189,7 @@ const AllTab = React.memo(function AllTab({
         return (
           <View>
             <Channel
-              containerStyle={{...styles.smChannel, title: {fontWeight: unread ? 'bold' : 'normal'}, message: {color: theme.colors.onSecondary, fontWeight: unread ? 700 : 'normal'}}}
+              containerStyle={{...styles.smChannel, backgroundColor: isFocused ? theme.colors.elevation.level4 : theme.colors.elevation.level0, title: {fontWeight: unread ? 'bold' : 'normal'}, message: {color: theme.colors.onSecondary, fontWeight: unread ? 700 : 'normal'}}}
               select={choose}
               sealed={sealed}
               hosted={hosted}
@@ -743,6 +746,7 @@ export function Content({
         <View style={styles.topics}>
           <View style={{...styles.tabView, ...(allTab ? styles.tabVisible : styles.tabHidden)}}>
             <AllTab
+              focused={state.focused}
               layout={layout}
               data={state.filtered}
               theme={theme}

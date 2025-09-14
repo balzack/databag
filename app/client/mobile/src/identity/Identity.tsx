@@ -91,7 +91,7 @@ export function Identity({openSettings, openContacts}) {
                 <Button mode="outlined" onPress={() => setLogout(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button mode="contained" loading={applyingLogout} onPress={applyLogout}>
+                <Button mode="contained" textColor="white" loading={applyingLogout} onPress={applyLogout}>
                   {state.strings.logout}
                 </Button>
               </View>

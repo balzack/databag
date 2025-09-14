@@ -24,6 +24,7 @@ export function Accounts() {
   const [token, setToken] = useState('');
   const [tokenCopy, setTokenCopy] = useState(false);
   const [more, setMore] = useState(null as null | string);
+  const layout = Platform.isPad ? 'large' : 'small';
 
   useEffect(() => {
     loadAccounts();
@@ -131,7 +132,7 @@ export function Accounts() {
   return (
     <View style={styles.component}>
       <Surface elevation={1} mode="flat" style={styles.fullSurface}>
-        <Surface elevation={9} mode="flat">
+        <Surface elevation={layout === 'large' ? 4 : 9} mode="flat">
           <SafeAreaView edges={['top', 'left', 'right']}>
             <View style={styles.headerLayout}>
               <Surface mode="flat" elevation={0} style={styles.searchSurface}>
