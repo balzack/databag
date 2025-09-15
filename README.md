@@ -56,11 +56,31 @@ Read the [Design Guidelines](https://github.com/balzack/databag/blob/main/.desig
 
 ## Installation
 
-To use databag, you will need a DNS name pointing to your node with a certificate. You can deploy a node manually, but you will have a much easier time using a container service. Containers for arm64 and amd64 are available [here](https://hub.docker.com/r/balzack/databag/tags). 
+To use databag, you will need a DNS name pointing to your node with a certificate. You can deploy a node manually, but you will have a much easier time using a container service. Containers for arm64 and amd64 are available [here](https://github.com/balzack/databag/pkgs/container/databag). 
 
 ### Docker Compose 
 
-Launch with dockerhub container using docker compose:
+#### Example Compose File
+```shell
+services:
+  databag:
+    container_name: databag
+    image: ghcr.io/balzack/databag:main
+    ports:
+      - "7000:7000"
+    volumes:
+      - ./data:/var/lib/databag
+    restart: unless-stopped
+```
+
+#### Example Docker Run Command
+```shell
+docker run -d \
+  -v "$(pwd)/data:/var/lib/databag" \
+  -p "7000:7000" \
+  ghcr.io/balzack/databag:main
+```
+
 
 #### Standard launch
 ```shell
