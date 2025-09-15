@@ -366,7 +366,7 @@ export const styles = StyleSheet.create({
     marginRight: 16,
     marginLeft: 16,
     flexDirection: 'row-reverse',
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     gap: 16,
   },
   assetSpacer: {

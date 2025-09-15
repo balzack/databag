@@ -189,7 +189,7 @@ const AllTab = React.memo(function AllTab({
         return (
           <View>
             <Channel
-              containerStyle={{...styles.smChannel, backgroundColor: isFocused ? theme.colors.elevation.level4 : theme.colors.elevation.level0, title: {fontWeight: unread ? 'bold' : 'normal'}, message: {color: theme.colors.onSecondary, fontWeight: unread ? 700 : 'normal'}}}
+              containerStyle={{...styles.smChannel, backgroundColor: isFocused ? theme.colors.elevation.level4 : theme.colors.elevation.level8, title: {fontWeight: unread ? 'bold' : 'normal'}, message: {color: theme.colors.onSecondary, fontWeight: unread ? 700 : 'normal'}}}
               select={choose}
               sealed={sealed}
               hosted={hosted}

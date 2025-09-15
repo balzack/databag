@@ -72,7 +72,7 @@ export function Assemble({layout, close, openConversation}: {layout: string, clo
   return (
     <View style={styles.request}>
       <Surface elevation={layout === 'large' ? 2 : 9} mode="flat" style={styles.fullWidthSurface}>
-        <SafeAreaView edges={['left', 'right']} style={layout === 'large' ? {...styles.headerSafeBar, borderColor: theme.colors.elevation.level9} : styles.headerSafeArea}>
+        <SafeAreaView edges={['left', 'right']} style={layout === 'large' ? {...styles.headerSafeBar, borderColor: theme.colors.outline} : styles.headerSafeArea}>
           <Pressable style={styles.navIcon} onPress={close}>
             {layout === 'large' && (
               <Icon size={32} source="close" />

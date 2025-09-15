@@ -169,7 +169,7 @@ export const styles = StyleSheet.create({
     marginLeft: 16,
     marginRight: 16,
     flexDirection: 'row-reverse',
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
   },
   inputSurface: {
     flexGrow: 1,

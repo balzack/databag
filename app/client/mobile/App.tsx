@@ -119,7 +119,7 @@ const databagColors = {
       level6: 'rgb(200, 200, 200)',
       level7: 'rgb(200, 200, 200)',
       level8: 'transparent',
-      level9: '#8FBEA7',
+      level9: '#191919',
       level10: '#224433',
       level11: 'rgba(80, 80, 80, 0.5)',
       level12: 'rgba(96,096,96, 0.5)',

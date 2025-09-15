@@ -162,6 +162,7 @@ export const styles = StyleSheet.create({
     paddingTop: 12,
     paddingBottom: 12,
     paddingLeft: 16,
+    borderRadius: 8,
     logo: {
       borderRadius: 28,
     },

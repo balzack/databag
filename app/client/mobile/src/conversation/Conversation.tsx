@@ -248,7 +248,7 @@ export function Conversation({layout, close, openDetails}: {layotu: string; clos
     <View style={styles.component}>
       <Surface elevation={2} mode="flat" style={{ ...styles.content, paddingBottom: layout === 'large' ? 0 : 96 }}>
         <Surface elevation={layout === 'large' ? 2 : 9} mode="flat" style={styles.surfaceMaxWidth}>
-          <SafeAreaView edges={['left', 'right']} style={layout === 'large' ? { ...styles.safeAreaHeader, borderColor: theme.colors.elevation.level9 } : styles.safeAreaNav}>
+          <SafeAreaView edges={['left', 'right']} style={layout === 'large' ? { ...styles.safeAreaHeader, borderColor: theme.colors.outline } : styles.safeAreaNav}>
             <Pressable style={styles.navIcon} onPress={onClose}>
               { layout === 'large' && (
                 <Icon size={32} source="close" />
