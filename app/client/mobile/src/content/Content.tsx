@@ -731,7 +731,7 @@ export function Content({
                 autoComplete="off"
                 autoCorrect={false}
                 mode="outlined"
-                placeholder={layout === 'small' ? state.strings.searchTopics : state.strings.topics}
+                placeholder={layout !== 'large' ? state.strings.searchTopics : state.strings.topics}
                 left={<TextInput.Icon style={styles.icon} icon="search" />}
                 value={state.filter}
                 onChangeText={value => actions.setFilter(value)}
@@ -794,7 +794,7 @@ export function Content({
             </View>
           </View>
         </View>
-        { layout === 'small' && (
+        { layout !== 'large' && (
           <View style={styles.tabs}>
             <Pressable style={tab === 'all' ? styles.opaque : styles.opacity} onPress={() => setTab('all')}>
               <Surface style={styles.tab} elevation={tab === 'all' ? 10 : 2}>

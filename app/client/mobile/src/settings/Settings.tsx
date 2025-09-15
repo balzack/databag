@@ -457,7 +457,7 @@ export function Settings({layout, setupNav}: {layout: string, setupNav: {back: (
   return (
     <View>
       <View style={styles.settings}>
-        {setupNav && layout === 'small' && (
+        {setupNav && layout !== 'large' && (
           <Surface elevation={9} mode="flat" style={styles.navHeader}>
             <Pressable style={styles.navIcon} onPress={setupNav?.back}>
               <Icon size={32} source="left" color={'white'} />
@@ -466,12 +466,12 @@ export function Settings({layout, setupNav}: {layout: string, setupNav: {back: (
             <View style={styles.navIcon} />
           </Surface>
         )}
-        {!setupNav && layout === 'small' && (
+        {!setupNav && layout !== 'large' && (
           <Surface mode="flat" elevation={9} style={styles.navHeader}>
             <Text style={styles.smHeader}>{state.strings.settings}</Text>
           </Surface>
         )}
-        <Animated.View style={[{...styles.navImage, top: layout === 'small' ? 72 : 0}, {opacity: profile}]}>
+        <Animated.View style={[{...styles.navImage, top: layout !== 'large' ? 72 : 0}, {opacity: profile}]}>
           <Image style={styles.navLogo} resizeMode={'contain'} source={{uri: state.imageUrl}} />
           <Surface style={styles.overlap} elevation={2} mode="flat" />
         </Animated.View>
@@ -861,12 +861,12 @@ export function Settings({layout, setupNav}: {layout: string, setupNav: {back: (
                     </Surface>
                   </View>
                 )}
-                {!setupNav && layout === 'small' && (
+                {!setupNav && Platform.OS !== 'ios' && (
                   <Text variant="headlineSmall" style={styles.sectionLabel}>
                     {state.strings.layout}
                   </Text>
                 )}
-                {!setupNav && layout === 'small' && (
+                {!setupNav && Platform.OS !== 'ios' && (
                   <View style={styles.navWrapper}>
                     <Surface elevation={0} mode="flat" style={styles.navData}>
                       <View style={styles.navFont}>
