@@ -251,6 +251,7 @@ export const styles = StyleSheet.create({
   send: {
     margin: 2,
     backgroundColor: 'transparent',
+    transform: [{rotate: '45deg'}],
   },
   icon: {
     flexShrink: 0,
