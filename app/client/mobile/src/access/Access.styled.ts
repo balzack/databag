@@ -71,7 +71,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 16,
     paddingTop: 16,
-    paddingBottom: 48,
+    paddingBottom: 16,
   },
   linkline: {
     display: 'flex',
@@ -93,6 +93,7 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   submit: {
+    marginTop: 16,
     borderRadius: 8,
   },
   submitContent: {

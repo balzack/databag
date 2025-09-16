@@ -5,19 +5,11 @@ import {SessionStore} from '../SessionStore';
 import {NativeCrypto} from '../NativeCrypto';
 import {LocalStore} from '../LocalStore';
 import {StagingFiles} from '../StagingFiles';
-import messaging from '@react-native-firebase/messaging';
 import {UnsentTopic} from 'AppContext';
+import { DeviceEventEmitter } from 'react-native';
 
 const DATABAG_DB = 'db_v251.db';
 const SETTINGS_DB = 'ls_v003.db';
-
-async function requestUserPermission() {
-  if (Platform.OS === 'ios') {
-    await messaging().requestPermission();
-  } else {
-    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-  }
-}
 
 const databag = new DatabagSDK(
   {
@@ -41,6 +33,8 @@ export function useAppContext() {
   const local = useRef(new LocalStore());
   const sdk = useRef(databag);
   const topics = useRef(new Map<string, UnsentTopic>());
+  const deviceToken = useRef(null as null | string);
+
   const [state, setState] = useState({
     service: null as null | Service,
     session: null as null | Session,
@@ -60,6 +54,13 @@ export function useAppContext() {
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
+
+
+  useEffect(() => {
+    DeviceEventEmitter.addListener('unifiedPushURL', (e) => {
+      deviceToken.current = e.endpoint;
+    });
+  }, []);
 
   const setup = async () => {
     await local.current.open(SETTINGS_DB);
@@ -93,13 +94,7 @@ export function useAppContext() {
   }, []);
 
   const getToken = async () => {
-    try {
-      const token = await messaging().getToken();
-      return {token, type: 'fcm'};
-    } catch (err) {
-      console.log(err);
-      return {token: '', type: ''};
-    }
+    return {token: deviceToken.current, type: 'up'};
   };
 
   const actions = {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {View, StatusBar} from 'react-native';
+import {View, StatusBar, PermissionsAndroid} from 'react-native';
 import {AppContextProvider} from './src/context/AppContext';
 import {DisplayContextProvider} from './src/context/DisplayContext';
 import {Routes, Route, MemoryRouter} from 'react-router-dom';
@@ -12,9 +12,11 @@ import AntIcon from 'react-native-vector-icons/AntDesign';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {SignOut, PaperPlaneRight, PlusSquare, CaretLeft, ChatTeardropSlash, ChatTeardrop, ArrowCounterClockwise, Camera, EnvelopeSimple, Warning, HouseSimple, Star, HardDrive, LockOpen, UserMinus, PlayCircle, StopCircle, UsersFour, DotsThreeCircle, VideoCamera, VideoCameraSlash, ArrowsInSimple, BellSlash, Phone, Microphone, MicrophoneSlash, FrameCorners, WarningCircle, Link, LinkBreak, AddressBook, ChatCircle, GearSix} from 'phosphor-react-native';
+import IonicIcon from 'react-native-vector-icons/Ionicons';
+import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {useColorScheme} from 'react-native';
 import {MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
+import { initUnifiedPush } from 'react-native-unifiedpush-connector';
 
 const databagColors = {
   light: {
@@ -146,90 +148,82 @@ function FontMix(props: {name: string, color: string}) {
     props.name = 'contacts';
     return <AntIcon {...props} />;
   }
-  else if (props.name === 'idcard' || props.name === 'picture' || props.name === 'message1') {
+  else if (props.name === 'left' || props.name === 'idcard' || props.name === 'picture' || props.name === 'message1') {
     return <AntIcon {...props} />;
-  } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock' || props.name === 'user' || props.name === 'users' || props.name === 'message-circle' || props.name === 'github' || props.name === 'align-left' || props.name === 'edit' || props.name === 'log-out' || props.name === 'search' || props.name === 'filter') {
+  } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock' || props.name === 'user' || props.name === 'users' || props.name === 'message-circle' || props.name === 'github' || props.name === 'align-left' || props.name === 'edit' || props.name === 'log-out' || props.name === 'search' || props.name === 'filter' || props.name === 'plus-square' || props.name === 'send') {
     return <FeatherIcon {...props} />;
   } else if (props.name === 'sensor-occupied') {
     return <MaterialIcon {...props}  />;
-  } else if (props.name === 'plus-square') {
-    return <PlusSquare color={props.color} size={props.size} />;
-  } else if (props.name === 'send') {
-    return <PaperPlaneRight color={props.color} size={props.size} />;
-  } else if (props.name === 'left') {
-    return <CaretLeft color={props.color} size={props.size} />;
   } else if (props.name === 'address-book') {
-    return <AddressBook color={props.color} size={props.size} />;
+    return <AwesomeIcon {...{...props, name: 'address-book-o'}} />;
   } else if (props.name === 'address-book-filled') {
-    return <AddressBook weight="fill" color={props.color} size={props.size} />;
+    return <AwesomeIcon {...{...props, name: 'address-book'}} />;
   } else if (props.name === 'chat-circle') {
-    return <ChatCircle color={props.color} size={props.size} />;
+    return <AwesomeIcon {...{...props, name: 'comment-o'}} />;
   } else if (props.name === 'chat-circle-filled') {
-    return <ChatCircle weight="fill" color={props.color} size={props.size} />;
+    return <AwesomeIcon {...{...props, name: 'comment'}} />;
   } else if (props.name === 'gear-six') {
-    return <GearSix color={props.color} size={props.size} />;
+    return <IonicIcon {...{...props, name: 'settings-outline'}} />;
   } else if (props.name === 'gear-six-filled') {
-    return <GearSix weight="fill" color={props.color} size={props.size} />;
+    return <IonicIcon {...{...props, name: 'settings'}} />;
   } else if (props.name === 'link') {
-    return <Link color={props.color} size={props.size} />;
+    return <MaterialIcon {...{...props, name: 'link'}} />;
   } else if (props.name === 'link-break') {
-    return <LinkBreak color={props.color} size={props.size} />;
+    return <MaterialIcon {...{...props, name: 'link-off'}} />;
   } else if (props.name === 'warning-circle') {
-    return <WarningCircle weight="fill" color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'alert-circle'}} />;
   } else if (props.name === 'frame-corners') {
-    return <FrameCorners color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'maximize'}} />;
   } else if (props.name === 'microphone-slash') {
-    return <MicrophoneSlash color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'mic-off'}} />;
   } else if (props.name === 'microphone') {
-    return <Microphone color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'mic'}} />;
   } else if (props.name === 'phone') {
-    return <Phone color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'phone'}} />;
   } else if (props.name === 'bell-slash') {
-    return <BellSlash color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'bell-off'}} />;
   } else if (props.name === 'arrows-in') {
-    return <ArrowsInSimple color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'minimize'}} />;
   } else if (props.name === 'video') {
-    return <VideoCamera color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'video'}} />;
   } else if (props.name === 'video-slash') {
-    return <VideoCameraSlash color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'video-off'}} />;
   } else if (props.name === 'dots-horizontal-circle-outline') {
-    return <DotsThreeCircle color={props.color} size={props.size} />;
+    return <IonicIcon {...{...props, name: 'ellipsis-horizontal-circle-outline'}} />;
   } else if (props.name === 'users-four') {
-    return <UsersFour color={props.color} size={props.size} />;
+    return <AwesomeIcon {...{...props, name: 'address-book-o'}} />;
   } else if (props.name === 'users-four-filled') {
-    return <UsersFour weight="fill" color={props.color} size={props.size} />;
+    return <AwesomeIcon {...{...props, name: 'address-book'}} />;
   } else if (props.name === 'hard-drive') {
-    return <HardDrive color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'hard-drive'}} />;
   } else if (props.name === 'lock-open') {
-    return <LockOpen color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'unlock'}} />;
   } else if (props.name === 'user-minus') {
-    return <UserMinus color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'user-minus'}} />;
   } else if (props.name === 'play-circle') {
-    return <PlayCircle color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'play-circle'}} />;
   } else if (props.name === 'stop-circle') {
-    return <StopCircle color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'stop-circle'}} />;
   } else if (props.name === 'award') {
-    return <HouseSimple color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'home'}} />;
   } else if (props.name === 'warning') {
-    return <Warning color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'alert-triangle'}} />;
   } else if (props.name === 'star') {
-    return <Star color={props.color} size={props.size} />;
+    return <AwesomeIcon {...{...props, name: 'star-o'}} />;
   } else if (props.name === 'star-filled') {
-    return <Star weight="fill" color={props.color} size={props.size} />;
+    return <AwesomeIcon {...{...props, name: 'star'}} />;
   } else if (props.name === 'mail-filled') {
-    return <EnvelopeSimple weight="fill" color={props.color} size={props.size} />;
-  } else if (props.name === 'camera') {
-    return <Camera color={props.color} size={props.size} />;
+    return <IonicIcon {...{...props, name: 'mail'}} />;
   } else if (props.name === 'mail') {
-    return <EnvelopeSimple color={props.color} size={props.size} />;
+    return <IonicIcon {...{...props, name: 'mail-open-outline'}} />;
+  } else if (props.name === 'camera') {
+    return <FeatherIcon {...{...props, name: 'camera'}} />;
   } else if (props.name === 'reset') {
-    return <ArrowCounterClockwise color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'rotate-ccw'}} />;
   } else if (props.name === 'enable-chat') {
-    return <ChatTeardrop color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'unlock'}} />;
   } else if (props.name === 'disable-chat') {
-    return <ChatTeardropSlash color={props.color} size={props.size} />;
-  } else if (props.name === 'logout') {
-    return <SignOut color={props.color} size={props.size} />;
+    return <FeatherIcon {...{...props, name: 'lock'}} />;
   } else {
     return <CommunityIcon {...props} />;
   }
@@ -238,6 +232,12 @@ function FontMix(props: {name: string, color: string}) {
 function App(): React.JSX.Element {
   const colorScheme = useColorScheme();
   const [share, setShare] = useState(null as null | { filePath: string, mimeType: string });
+
+
+  React.useEffect(() => {
+    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+    initUnifiedPush();
+  }, []);
 
   useEffect(() => {
     ReceiveSharingIntent.getReceivedFiles(files => {
@@ -302,3 +302,4 @@ function App(): React.JSX.Element {
 }
 
 export default App;
+
