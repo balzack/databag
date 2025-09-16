@@ -36,7 +36,7 @@
     "react-native-fast-image": "^8.6.3",
     "react-native-file-type": "^1.0.0",
     "react-native-fs": "^2.20.0",
-    "react-native-image-crop-picker": "^0.51.0",
+    "react-native-image-crop-picker": "^0.41.2",
     "react-native-incall-manager": "^4.2.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-paper": "^5.12.5",
