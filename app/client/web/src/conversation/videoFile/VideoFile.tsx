@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { ActionIcon, Image } from '@mantine/core'
 import { useVideoFile } from './useVideoFile.hook'
 import classes from './VideoFile.module.css'
-import { IconX, IconChevronLeft, IconChevronRight } from '@tabler/icons-react'
+import { TbX, TbChevronLeft, TbChevronRight } from "react-icons/tb";
 import { placeholder } from '../../constants/Icons'
 
 export function VideoFile({ source, thumbPosition, disabled, remove }: { source: File; thumbPosition: (position: number) => void; disabled: boolean; remove: () => void }) {
@@ -43,17 +43,17 @@ export function VideoFile({ source, thumbPosition, disabled, remove }: { source:
       {error && <Image radius="sm" className={classes.thumb} src={placeholder} />}
       {loaded && !disabled && !error && (
         <ActionIcon className={classes.right} variant="light" onClick={() => seek(1)}>
-          <IconChevronRight />
+          <TbChevronRight />
         </ActionIcon>
       )}
       {loaded && !disabled && !error && (
         <ActionIcon className={classes.left} variant="light" onClick={() => seek(-1)}>
-          <IconChevronLeft />
+          <TbChevronLeft />
         </ActionIcon>
       )}
       {(loaded || error) && !disabled && (
         <ActionIcon className={classes.close} variant="subtle" disabled={disabled} onClick={remove}>
-          <IconX />
+          <TbX />
         </ActionIcon>
       )}
     </div>

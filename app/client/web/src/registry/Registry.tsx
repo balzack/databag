@@ -2,7 +2,7 @@ import React from 'react'
 import { useRegistry } from './useRegistry.hook'
 import { TextInput } from '@mantine/core'
 import classes from './Registry.module.css'
-import { IconX, IconServer, IconUser } from '@tabler/icons-react'
+import { TbX, TbServer, TbUser } from "react-icons/tb";
 import { Card } from '../card/Card'
 import { ProfileParams } from '../profile/Profile'
 
@@ -37,7 +37,7 @@ export function Registry({ close, openContact }: { close?: () => void; openConta
           className={classes.username}
           size="sm"
           leftSectionPointerEvents="none"
-          leftSection={<IconUser size={20} />}
+          leftSection={<TbUser size={20} />}
           placeholder={state.strings.username}
           value={state.username}
           onChange={(event) => actions.setUsername(event.currentTarget.value)}
@@ -46,12 +46,12 @@ export function Registry({ close, openContact }: { close?: () => void; openConta
           className={classes.server}
           size="sm"
           leftSectionPointerEvents="none"
-          leftSection={<IconServer size={20} />}
+          leftSection={<TbServer size={20} />}
           placeholder={state.strings.node}
           value={state.server}
           onChange={(event) => actions.setServer(event.currentTarget.value)}
         />
-        {close && <IconX size={28} className={classes.close} onClick={close} />}
+        {close && <TbX size={28} className={classes.close} onClick={close} />}
       </div>
       {contacts.length !== 0 && <div className={classes.cards}>{contacts}</div>}
       {contacts.length === 0 && <div className={classes.none}>{state.strings.noContacts}</div>}

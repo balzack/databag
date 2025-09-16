@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import classes from './Accounts.module.css'
 import { useAccounts } from './useAccounts.hook'
 import { Modal, Text, ActionIcon, Button } from '@mantine/core'
-import { IconUserPlus, IconUserCheck, IconCopy, IconCheck, IconReload, IconSettings, IconLockOpen2, IconUserCancel, IconTrash } from '@tabler/icons-react'
+import { TbUserPlus, TbUserCheck, TbCopy, TbCheck, TbReload, TbSettings, TbLockOpen2, TbUserCancel, TbTrash } from "react-icons/tb";
 import { Card } from '../card/Card'
 import { Colors } from '../constants/Colors'
 import { modals } from '@mantine/modals'
@@ -20,7 +20,8 @@ export function Accounts({ openSetup }: { openSetup: () => void }) {
   const [tokenCopy, setTokenCopy] = useState(false)
   const [linkCopy, setLinkCopy] = useState(false)
   const [token, setToken] = useState('')
-  const link = `${window.location.origin}/#/create?add=${token}`
+  const addLink = `${window.location.origin}/#/access?add=${token}`
+  const resetLink = `${window.location.origin}/#/access?reset=${token}`
 
   useEffect(() => {
     actions.reload()
@@ -52,7 +53,7 @@ export function Accounts({ openSetup }: { openSetup: () => void }) {
     }
   }
 
-  const copyLink = async () => {
+  const copyLink = async (link: string) => {
     if (!linkCopy) {
       try {
         navigator.clipboard.writeText(link)
@@ -151,7 +152,7 @@ export function Accounts({ openSetup }: { openSetup: () => void }) {
   const members = state.members.map((member, idx) => {
     const options = [
       <ActionIcon key="acess" className={classes.action} variant="light" loading={removing === member.accountId} onClick={() => accessAccount(member.accountId)}>
-        <IconLockOpen2 />
+        <TbLockOpen2 />
       </ActionIcon>,
       <ActionIcon
         key="block"
@@ -161,11 +162,11 @@ export function Accounts({ openSetup }: { openSetup: () => void }) {
         color={Colors.pending}
         onClick={() => blockAccount(member.accountId, !member.disabled)}
       >
-        {member.disabled && <IconUserCheck />}
-        {!member.disabled && <IconUserCancel />}
+        {member.disabled && <TbUserCheck />}
+        {!member.disabled && <TbUserCancel />}
       </ActionIcon>,
       <ActionIcon key="remove" className={classes.action} variant="light" loading={removing === member.accountId} color={Colors.offsync} onClick={() => removeAccount(member.accountId)}>
-        <IconTrash />
+        <TbTrash />
       </ActionIcon>,
     ]
 
@@ -190,7 +191,7 @@ export function Accounts({ openSetup }: { openSetup: () => void }) {
         <div className={classes.header}>
           {state.layout !== 'large' && (
             <ActionIcon className={classes.action} variant="light" onClick={loadAccounts} loading={loading}>
-              <IconReload />
+              <TbReload />
             </ActionIcon>
           )}
           <div className={state.layout === 'large' ? classes.leftTitle : classes.centerTitle}>
@@ -198,15 +199,15 @@ export function Accounts({ openSetup }: { openSetup: () => void }) {
           </div>
           {state.layout === 'large' && (
             <ActionIcon className={classes.action} variant="light" onClick={loadAccounts} loading={loading}>
-              <IconReload />
+              <TbReload />
             </ActionIcon>
           )}
           <ActionIcon className={classes.action} variant="light" onClick={addAccount}>
-            <IconUserPlus />
+            <TbUserPlus />
           </ActionIcon>
           {state.layout === 'large' && (
             <ActionIcon className={classes.action} variant="light" onClick={openSetup}>
-              <IconSettings />
+              <TbSettings />
             </ActionIcon>
           )}
         </div>
@@ -216,15 +217,15 @@ export function Accounts({ openSetup }: { openSetup: () => void }) {
         <div className={classes.modal}>
           <Text className={classes.prompt}>{state.strings.addingLink}:</Text>
           <div className={classes.copy}>
-            <Text className={classes.value}>{link}</Text>
-            {linkCopy && <IconCheck size="16" />}
-            {!linkCopy && <IconCopy size="16" className={classes.icon} onClick={copyLink} />}
+            <Text className={classes.value}>{addLink}</Text>
+            {linkCopy && <TbCheck />}
+            {!linkCopy && <TbCopy className={classes.icon} onClick={() => copyLink(addLink)} />}
           </div>
           <Text className={classes.prompt}>{state.strings.addingToken}:</Text>
           <div className={classes.copy}>
             <Text className={classes.value}>{token}</Text>
-            {tokenCopy && <IconCheck size="16" />}
-            {!tokenCopy && <IconCopy size="16" className={classes.icon} onClick={copyToken} />}
+            {tokenCopy && <TbCheck />}
+            {!tokenCopy && <TbCopy className={classes.icon} onClick={copyToken} />}
           </div>
           <div className={classes.control}>
             <Button onClick={addClose}>{state.strings.close}</Button>
@@ -235,15 +236,15 @@ export function Accounts({ openSetup }: { openSetup: () => void }) {
         <div className={classes.modal}>
           <Text className={classes.prompt}>{state.strings.accessingLink}:</Text>
           <div className={classes.copy}>
-            <Text className={classes.value}>{link}</Text>
-            {linkCopy && <IconCheck size="16" />}
-            {!linkCopy && <IconCopy size="16" className={classes.icon} onClick={copyLink} />}
+            <Text className={classes.value}>{resetLink}</Text>
+            {linkCopy && <TbCheck size="16" />}
+            {!linkCopy && <TbCopy size="16" className={classes.icon} onClick={() => copyLink(resetLink)} />}
           </div>
           <Text className={classes.prompt}>{state.strings.accessingToken}:</Text>
           <div className={classes.copy}>
             <Text className={classes.value}>{token}</Text>
-            {tokenCopy && <IconCheck size="16" />}
-            {!tokenCopy && <IconCopy size="16" className={classes.icon} onClick={copyToken} />}
+            {tokenCopy && <TbCheck size="16" />}
+            {!tokenCopy && <TbCopy size="16" className={classes.icon} onClick={copyToken} />}
           </div>
           <div className={classes.control}>
             <Button onClick={addClose}>{state.strings.close}</Button>

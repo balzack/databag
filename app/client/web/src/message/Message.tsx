@@ -9,7 +9,7 @@ import { VideoAsset } from './videoAsset/VideoAsset'
 import { BinaryAsset } from './binaryAsset/BinaryAsset'
 import type { MediaAsset } from '../conversation/Conversation'
 import { useMessage } from './useMessage.hook'
-import { IconForbid, IconTrash, IconEdit, IconFlag, IconChevronLeft, IconChevronRight, IconFileAlert } from '@tabler/icons-react'
+import { TbForbid, TbTrash, TbEdit, TbFlag, TbChevronLeft, TbChevronRight, TbFileAlert } from "react-icons/tb";
 import { useResizeDetector } from 'react-resize-detector'
 import { modals } from '@mantine/modals'
 import { sanitizeUrl } from '@braintree/sanitize-url'
@@ -196,10 +196,10 @@ export function Message({ topic, card, profile, host }: { topic: Topic; card: Ca
             </div>
             <div className={classes.options}>
               <div className={classes.surface}>
-                {!locked && profile && <IconEdit className={classes.option} onClick={edit} />}
-                {(host || profile) && <IconTrash className={classes.careful} onClick={remove} />}
-                {!profile && <IconForbid className={classes.careful} onClick={block} />}
-                {!profile && <IconFlag className={classes.careful} onClick={report} />}
+                {!locked && profile && <TbEdit className={classes.option} onClick={edit} />}
+                {(host || profile) && <TbTrash className={classes.careful} onClick={remove} />}
+                {!profile && <TbForbid className={classes.careful} onClick={block} />}
+                {!profile && <TbFlag className={classes.careful} onClick={report} />}
               </div>
             </div>
           </div>
@@ -240,14 +240,14 @@ export function Message({ topic, card, profile, host }: { topic: Topic; card: Ca
           {showScroll && (
             <div className={classes.goleft}>
               <ActionIcon variant="light" onClick={scrollLeft}>
-                <IconChevronLeft size={18} stroke={1.5} />
+                <TbChevronLeft size={18} />
               </ActionIcon>
             </div>
           )}
           {showScroll && (
             <div className={classes.goright}>
               <ActionIcon variant="light" onClick={scrollRight}>
-                <IconChevronRight size={18} stroke={1.5} />
+                <TbChevronRight size={18} />
               </ActionIcon>
             </div>
           )}
@@ -260,7 +260,7 @@ export function Message({ topic, card, profile, host }: { topic: Topic; card: Ca
       )}
       {!locked && media.length > 0 && transform !== 'complete' && transform !== 'incomplete' && (
         <div className={classes.failed}>
-          <IconFileAlert />
+          <TbFileAlert />
           <span>{state.strings.processingError}</span>
         </div>
       )}

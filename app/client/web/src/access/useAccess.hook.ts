@@ -2,12 +2,14 @@ import { useRef, useState, useContext, useEffect } from 'react'
 import { DisplayContext } from '../context/DisplayContext'
 import { AppContext } from '../context/AppContext'
 import { ContextType } from '../context/ContextType'
+import { useLocation } from 'react-router-dom'
 
 export function useAccess() {
   const debounceAvailable = useRef(setTimeout(() => {}, 0))
   const debounceTaken = useRef(setTimeout(() => {}, 0))
   const app = useContext(AppContext) as ContextType
   const display = useContext(DisplayContext) as ContextType
+  const url = useLocation();
   const [state, setState] = useState({
     layout: null,
     strings: display.state.strings,
@@ -35,9 +37,9 @@ export function useAccess() {
 
   useEffect(() => {
     const params = new URLSearchParams(location.href)
-    const search = params.get('search')
-    if (search && search.startsWith('?create=')) {
-      updateState({ mode: 'create', token: search.substring(8) })
+    const search = url?.search;
+    if (search && search.startsWith('?add=')) {
+      updateState({ mode: 'create', token: search.substring(5) })
     } else if (search && search.startsWith('?reset=')) {
       updateState({ mode: 'reset', token: search.substring(7) })
     } else {
@@ -73,8 +75,16 @@ export function useAccess() {
     updateState({ taken: false })
     clearTimeout(debounceTaken.current)
     debounceTaken.current = setTimeout(async () => {
-      const available = await app.actions.getUsername(username, token, node, secure)
-      updateState({ taken: !available })
+      try {
+	if (username) {
+          const available = await app.actions.getUsername(username, token, node, secure)
+          updateState({ taken: !available })
+	} else {
+	  updateState({ taken: false });
+	}
+      } catch(err) {
+        console.log(err);
+      }
     }, 2000)
   }
 

@@ -1,7 +1,7 @@
 import React, { useState, ReactNode } from 'react'
 import { useContacts } from './useContacts.hook'
 import { Text, ActionIcon, TextInput, Button } from '@mantine/core'
-import { IconUserCheck, IconCancel, IconRefresh, IconSearch, IconUserPlus, IconSortAscending, IconSortDescending, IconMessage2, IconPhone } from '@tabler/icons-react'
+import { TbUserCheck, TbCancel, TbRefresh, TbSearch, TbUserPlus, TbSortAscending, TbSortDescending, TbMessage2, TbPhone } from "react-icons/tb";
 import classes from './Contacts.module.css'
 import { Card } from '../card/Card'
 import { ProfileParams } from '../profile/Profile'
@@ -54,8 +54,8 @@ export function Contacts({
     const getOptions = () => {
       const status = card.offsync ? 'offsync' : card.status
       if (status === 'connected') {
-        const phone = <IconPhone size={24} />
-        const text = <IconMessage2 size={24} />
+        const phone = <TbPhone size={24} />
+        const text = <TbMessage2 size={24} />
         return [
           <Action
             key="phone"
@@ -70,16 +70,16 @@ export function Contacts({
           <Action key="text" icon={text} color={Colors.connected} select={async () => textContact(card.cardId)} strings={state.strings} />,
         ]
       } else if (status === 'offsync') {
-        const resync = <IconRefresh size={24} />
+        const resync = <TbRefresh size={24} />
         return [<Action key="resync" icon={resync} color={Colors.offsync} select={() => actions.resync(card.cardId)} strings={state.strings} />]
       } else if (status === 'requested') {
-        const accept = <IconUserCheck size={24} />
+        const accept = <TbUserCheck size={24} />
         return [<Action key="accept" icon={accept} color={Colors.requested} select={() => actions.accept(card.cardId)} strings={state.strings} />]
       } else if (status === 'connecting') {
-        const cancel = <IconCancel size={24} />
+        const cancel = <TbCancel size={24} />
         return [<Action key="cancel" icon={cancel} color={Colors.connecting} select={() => actions.cancel(card.cardId)} strings={state.strings} />]
       } else if (status === 'pending') {
-        const accept = <IconUserCheck size={24} />
+        const accept = <TbUserCheck size={24} />
         return [<Action key="accept" icon={accept} color={Colors.pending} select={() => actions.accept(card.cardId)} strings={state.strings} />]
       } else {
         return []
@@ -102,19 +102,19 @@ export function Contacts({
     <div className={classes.contacts}>
       <div className={classes.header}>
         <ActionIcon variant="subtle">
-          {state.sortAsc && <IconSortAscending size={32} onClick={actions.toggleSort} />}
-          {!state.sortAsc && <IconSortDescending size={32} onClick={actions.toggleSort} />}
+          {state.sortAsc && <TbSortAscending size={32} onClick={actions.toggleSort} />}
+          {!state.sortAsc && <TbSortDescending size={32} onClick={actions.toggleSort} />}
         </ActionIcon>
         <TextInput
           className={classes.input}
           size="sm"
           leftSectionPointerEvents="none"
-          leftSection={<IconSearch size={20} />}
+          leftSection={<TbSearch size={20} />}
           placeholder={state.strings.contacts}
           value={state.filter}
           onChange={(event) => actions.setFilter(event.currentTarget.value)}
         />
-        <Button className={classes.add} leftSection={<IconUserPlus size={20} />} onClick={openRegistry}>
+        <Button className={classes.add} leftSection={<TbUserPlus size={20} />} onClick={openRegistry}>
           {state.strings.add}
         </Button>
       </div>

@@ -116,6 +116,7 @@ export function useConversation() {
     textSize: 16,
     textSizeSet: false,
     progress: 0,
+    offsync: false,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -186,14 +187,19 @@ export function useConversation() {
         const cardId = focused.cardId
         updateState({ detail, cardId })
       }
+      const setOffsync = (offsync: boolean) => {
+        updateState({ offsync });
+      }
       updateState({ assets: [], message: '', topics: [], loaded: false })
       focus.addTopicListener(setTopics)
       focus.addDetailListener(setDetail)
+      focus.addOffsyncListener(setOffsync)
       contact.addCardListener(setCards)
       identity.addProfileListener(setProfile)
       return () => {
         focus.removeTopicListener(setTopics)
         focus.removeDetailListener(setDetail)
+        focus.removeOffsyncListener(setOffsync)
         contact.removeCardListener(setCards)
         identity.removeProfileListener(setProfile)
       }

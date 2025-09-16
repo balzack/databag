@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import classes from './Conversation.module.css'
 import { useConversation } from './useConversation.hook'
-import { IconSend, IconTextSize, IconTextColor, IconVideo, IconFile, IconDisc, IconCamera, IconSettings, IconHome, IconServer, IconShield, IconExclamationCircle } from '@tabler/icons-react'
+import { TbSend, TbTextSize, TbTextColor, TbVideo, TbFile, TbDisc, TbAlertTriangle, TbCamera, TbSettings, TbHome, TbServer, TbShield, TbExclamationCircle } from "react-icons/tb";
 import { CloseButton, Menu, Divider, Text, Textarea, ActionIcon, Loader } from '@mantine/core'
 import { Message } from '../message/Message'
 import { modals } from '@mantine/modals'
@@ -150,13 +150,14 @@ export function Conversation({ openDetails }: { openDetails: () => void }) {
       <div className={classes.header}>
         <div className={classes.status}>
           <ActionIcon variant="subtle">
-            <IconSettings size={24} onClick={openDetails} />
+            <TbSettings size={24} onClick={openDetails} />
           </ActionIcon>
           <Divider size="sm" orientation="vertical" />
-          {state.detailSet && state.host === true && <IconHome size={24} />}
-          {state.detailSet && state.host === false && <IconServer size={24} />}
-          {state.detailSet && state.sealed === true && <IconShield size={24} />}
-          {state.detailSet && state.access === false && <IconExclamationCircle className={classes.alert} size={24} />}
+          {state.detailSet && state.host === true && <TbHome size={24} />}
+          {state.detailSet && state.host === false && <TbServer size={24} />}
+          {state.detailSet && state.offsync === true && <TbAlertTriangle size={24} />}
+          {state.detailSet && state.sealed === true && <TbShield size={24} />}
+          {state.detailSet && state.access === false && <TbExclamationCircle className={classes.alert} size={24} />}
         </div>
         <div className={classes.title}>
           {state.detailSet && state.subject && <Text className={classes.label}>{state.subject}</Text>}
@@ -215,29 +216,29 @@ export function Conversation({ openDetails }: { openDetails: () => void }) {
           <div className={classes.controls}>
             {enableImage && (
               <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachImage.current.click()}>
-                <IconCamera />
+                <TbCamera />
               </ActionIcon>
             )}
             {enableVideo && (
               <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachVideo.current.click()}>
-                <IconVideo />
+                <TbVideo />
               </ActionIcon>
             )}
             {enableAudio && (
               <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachAudio.current.click()}>
-                <IconDisc />
+                <TbDisc />
               </ActionIcon>
             )}
             {enableBinary && (
               <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending} onClick={() => attachBinary.current.click()}>
-                <IconFile />
+                <TbFile />
               </ActionIcon>
             )}
             {(enableImage || enableVideo || enableAudio || enableBinary) && <Divider size="sm" orientation="vertical" />}
             <Menu shadow="md" position="top">
               <Menu.Target>
                 <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending}>
-                  <IconTextSize />
+                  <TbTextSize />
                 </ActionIcon>
               </Menu.Target>
               <Menu.Dropdown>
@@ -249,7 +250,7 @@ export function Conversation({ openDetails }: { openDetails: () => void }) {
             <Menu shadow="md" position="top">
               <Menu.Target>
                 <ActionIcon className={classes.attach} variant="light" disabled={!state.detail || state.detail.locked || sending}>
-                  <IconTextColor />
+                  <TbTextColor />
                 </ActionIcon>
               </Menu.Target>
               <Menu.Dropdown>
@@ -270,7 +271,7 @@ export function Conversation({ openDetails }: { openDetails: () => void }) {
                 onClick={sendMessage}
                 loading={sending}
               >
-                <IconSend />
+                <TbSend />
               </ActionIcon>
             </div>
           </div>

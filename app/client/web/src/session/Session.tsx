@@ -3,7 +3,7 @@ import { Text, Drawer } from '@mantine/core'
 import { RingContextProvider } from '../context/RingContext'
 import classes from './Session.module.css'
 import { useSession } from './useSession.hook'
-import { IconAddressBook, IconMessages, IconSettings } from '@tabler/icons-react'
+import { TbAlertCircle, TbAddressBook, TbMessages, TbSettings } from "react-icons/tb";
 import { Settings } from '../settings/Settings'
 import { Identity } from '../identity/Identity'
 import { Contacts } from '../contacts/Contacts'
@@ -13,7 +13,6 @@ import { Details } from '../details/Details'
 import { Content } from '../content/Content'
 import { Conversation } from '../conversation/Conversation'
 import { useDisclosure } from '@mantine/hooks'
-import { IconAlertCircle } from '@tabler/icons-react'
 import { Base } from '../base/Base'
 import { Ring } from '../ring/Ring'
 import { Call } from '../call/Call'
@@ -95,34 +94,34 @@ export function Session() {
             <div className={classes.tabs}>
               {tab === 'content' && (
                 <div className={classes.activeTabItem}>
-                  <IconMessages className={classes.tabIcon} />
+                  <TbMessages className={classes.tabIcon} />
                 </div>
               )}
               {tab !== 'content' && (
                 <div className={classes.idleTabItem} onClick={() => setTab('content')}>
-                  <IconMessages className={classes.tabIcon} />
+                  <TbMessages className={classes.tabIcon} />
                 </div>
               )}
               <div className={classes.tabDivider} />
               {tab === 'contacts' && (
                 <div className={classes.activeTabItem}>
-                  <IconAddressBook className={classes.tabIcon} />
+                  <TbAddressBook className={classes.tabIcon} />
                 </div>
               )}
               {tab !== 'contacts' && (
                 <div className={classes.idleTabItem} onClick={() => setTab('contacts')}>
-                  <IconAddressBook className={classes.tabIcon} />
+                  <TbAddressBook className={classes.tabIcon} />
                 </div>
               )}
               <div className={classes.tabDivider} />
               {tab === 'settings' && (
                 <div className={classes.activeTabItem}>
-                  <IconSettings className={classes.tabIcon} />
+                  <TbSettings className={classes.tabIcon} />
                 </div>
               )}
               {tab !== 'settings' && (
                 <div className={classes.idleTabItem} onClick={() => setTab('settings')}>
-                  <IconSettings className={classes.tabIcon} />
+                  <TbSettings className={classes.tabIcon} />
                 </div>
               )}
             </div>
@@ -188,7 +187,7 @@ export function Session() {
         {state.disconnected && (
           <div className={classes.alert}>
             <div className={classes.alertArea}>
-              <IconAlertCircle className={classes.alertLabel} />
+              <TbAlertCircle className={classes.alertLabel} />
               <Text className={classes.alertLabel}>{state.strings.disconnected}</Text>
             </div>
           </div>

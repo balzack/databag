@@ -4,7 +4,7 @@ import classes from './Access.module.css'
 import { Select, Space, Title, Image, Button, Modal, PasswordInput, TextInput, PinInput } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import left from '../images/login.png'
-import { IconLock, IconUser, IconUsers, IconSettings, IconServer, IconKey } from '@tabler/icons-react'
+import { TbLock, TbUser, TbUsers, TbSettings, TbServer, TbKey } from "react-icons/tb";
 import { modals } from '@mantine/modals'
 
 export function Access() {
@@ -30,7 +30,7 @@ export function Access() {
       } catch (err) {
         const { message } = err as { message: string }
         console.log(message)
-        if (message === '405' || message === '403' || message === '429') {
+        if ((state.mode === 'account' || state.mode === 'admin') && (message === '405' || message === '403' || message === '429')) {
           if (message === '429') {
             setDisabled(true)
           } else {
@@ -65,8 +65,8 @@ export function Access() {
       {state.layout != null && (
         <div className={classes.right}>
           <div className={classes.frame}>
-            {state.mode !== 'admin' && <Button variant="transparent" className={classes.float} leftSection={<IconSettings size={28} />} onClick={() => actions.setMode('admin')} />}
-            {state.mode === 'admin' && <Button variant="transparent" className={classes.float} leftSection={<IconUser size={28} />} onClick={() => actions.setMode('account')} />}
+            {state.mode !== 'admin' && <Button variant="transparent" className={classes.float} leftSection={<TbSettings size={28} />} onClick={() => actions.setMode('admin')} />}
+            {state.mode === 'admin' && <Button variant="transparent" className={classes.float} leftSection={<TbUser size={28} />} onClick={() => actions.setMode('account')} />}
             <Title className={classes.title} order={1}>
               Databag
             </Title>
@@ -82,15 +82,18 @@ export function Access() {
                   size="md"
                   value={state.username}
                   leftSectionPointerEvents="none"
-                  leftSection={<IconUser />}
+                  leftSection={<TbUser />}
                   placeholder={state.strings.username}
                   onChange={(event) => actions.setUsername(event.currentTarget.value)}
+                  onKeyDown={(ev) => {
+                    if (ev.code === 'Enter' && state.password && state.username) login()
+                  }}
                 />
                 <PasswordInput
                   className={classes.input}
                   size="md"
                   value={state.password}
-                  leftSection={<IconLock />}
+                  leftSection={<TbLock />}
                   placeholder={state.strings.password}
                   onChange={(event) => actions.setPassword(event.currentTarget.value)}
                   onKeyDown={(ev) => {
@@ -121,9 +124,12 @@ export function Access() {
                   size="md"
                   value={state.token}
                   leftSectionPointerEvents="none"
-                  leftSection={<IconKey />}
+                  leftSection={<TbKey />}
                   placeholder={state.strings.accessCode}
                   onChange={(event) => actions.setToken(event.currentTarget.value)}
+                  onKeyDown={(ev) => {
+                    if (ev.code === 'Enter') login()
+                  }}
                 />
                 <Space h="md" />
                 <Button variant="filled" className={classes.submit} disabled={!state.token} onClick={login} loading={state.loading}>
@@ -147,7 +153,7 @@ export function Access() {
                   size="md"
                   value={state.token}
                   leftSectionPointerEvents="none"
-                  leftSection={<IconKey />}
+                  leftSection={<TbKey />}
                   placeholder={state.strings.accessCode}
                   onChange={(event) => actions.setToken(event.currentTarget.value)}
                 />
@@ -156,8 +162,8 @@ export function Access() {
                   size="md"
                   value={state.username}
                   leftSectionPointerEvents="none"
-                  leftSection={<IconUser />}
-                  rightSection={state.taken ? <IconUsers /> : null}
+                  leftSection={<TbUser />}
+                  rightSection={state.taken ? <TbUsers /> : null}
                   placeholder={state.strings.username}
                   onChange={(event) => actions.setUsername(event.currentTarget.value)}
                   error={state.taken ? true : false}
@@ -166,7 +172,7 @@ export function Access() {
                   className={classes.input}
                   size="md"
                   value={state.password}
-                  leftSection={<IconLock />}
+                  leftSection={<TbLock />}
                   placeholder={state.strings.password}
                   onChange={(event) => actions.setPassword(event.currentTarget.value)}
                 />
@@ -174,12 +180,12 @@ export function Access() {
                   className={classes.input}
                   size="md"
                   value={state.confirm}
-                  leftSection={<IconLock />}
+                  leftSection={<TbLock />}
                   placeholder={state.strings.confirmPassword}
                   onChange={(event) => actions.setConfirm(event.currentTarget.value)}
                 />
                 <Space h="md" />
-                <Button variant="filled" className={classes.submit} onClick={login} disabled={state.taken || !state.username || !state.password || state.password !== state.confirm}>
+                <Button variant="filled" className={classes.submit} onClick={login} loading={state.loading} disabled={state.taken || !state.username || !state.password || state.password !== state.confirm}>
                   {state.strings.create}
                 </Button>
                 <Button variant="subtle" onClick={() => actions.setMode('account')} size="compact-sm">
@@ -198,9 +204,12 @@ export function Access() {
                   className={classes.input}
                   size="md"
                   value={state.password}
-                  leftSection={<IconLock />}
+                  leftSection={<TbLock />}
                   placeholder={state.strings.password}
                   onChange={(event) => actions.setPassword(event.currentTarget.value)}
+                  onKeyDown={(ev) => {
+                    if (ev.code === 'Enter') login()
+                  }}
                 />
                 <Space h="md" />
                 <Button variant="filled" className={classes.submit} disabled={!state.password} onClick={login} loading={state.loading}>
@@ -220,7 +229,7 @@ export function Access() {
           className={classes.urlInput}
           size="md"
           leftSectionPointerEvents="none"
-          leftSection={<IconServer />}
+          leftSection={<TbServer />}
           placeholder={state.strings.host}
           value={state.host}
           onKeyDown={(ev) => {

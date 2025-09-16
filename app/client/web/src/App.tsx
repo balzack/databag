@@ -11,6 +11,7 @@ import { createHashRouter, RouterProvider } from 'react-router-dom'
 import classes from './App.module.css'
 import { DisplayContext } from './context/DisplayContext'
 import { ContextType } from './context/ContextType'
+import { IconContext } from "react-icons";
 
 const theme = createTheme({
   primaryColor: 'databag-green',
@@ -73,11 +74,13 @@ export function App() {
 
   return (
     <div className={classes.app}>
+      <IconContext.Provider value={{ size: "1.5em" }}>
       <MantineProvider forceColorScheme={scheme} theme={theme}>
         <ModalsProvider>
           <RouterProvider router={router} />
         </ModalsProvider>
       </MantineProvider>
+      </IconContext.Provider>
     </div>
   )
 }

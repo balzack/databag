@@ -11,6 +11,11 @@
   .delete {
     background-color: var(--mantine-color-red-9);
     color: var(--mantine-color-red-0);
+    flex-shrink: 0;
+  }
+
+  .reset {
+    flex-shrink: 0;
   }
 
   .buttons {

@@ -4,7 +4,7 @@ import { type Card } from 'databag-client-sdk'
 import { useCalling } from './useCalling.hook'
 import { Card as Contact } from '../card/Card'
 import { Loader, Image, Text, ActionIcon } from '@mantine/core'
-import { IconEyeX, IconPhone, IconMicrophone, IconMicrophoneOff, IconVideo, IconVideoOff } from '@tabler/icons-react'
+import { TbEyeX, TbPhone, TbMicrophone, TbMicrophoneOff, TbVideo, TbVideoOff } from "react-icons/tb";
 import { modals } from '@mantine/modals'
 import { Colors } from '../constants/Colors'
 
@@ -159,19 +159,19 @@ export function Calling({ callCard }: { callCard: { card: null | Card } }) {
     const { name, handle, node, imageUrl } = ring.card
     const ignoreButton = (
       <ActionIcon key="ignore" variant="subtle" loading={ignoring === ring.callId} onClick={() => ignore(ring)} color={Colors.pending}>
-        <IconEyeX />
+        <TbEyeX />
       </ActionIcon>
     )
     const declineButton = (
       <div key="decline" className={classes.space}>
         <ActionIcon variant="subtle" loading={declining === ring.callId} onClick={() => decline(ring)} color={Colors.offsync}>
-          <IconPhone className={classes.off} />
+          <TbPhone className={classes.off} />
         </ActionIcon>
       </div>
     )
     const acceptButton = (
       <ActionIcon key="accept" variant="subtle" loading={accepting === ring.callId} onClick={() => accept(ring)} color={Colors.primary}>
-        <IconPhone />
+        <TbPhone />
       </ActionIcon>
     )
 
@@ -205,15 +205,15 @@ export function Calling({ callCard }: { callCard: { card: null | Card } }) {
             </div>
             <div className={classes.buttons}>
               <ActionIcon onClick={toggleAudio} disabled={!state.connected} loading={applyingAudio} color={Colors.primary} size="xl">
-                {state.audioEnabled && <IconMicrophone />}
-                {!state.audioEnabled && <IconMicrophoneOff />}
+                {state.audioEnabled && <TbMicrophone />}
+                {!state.audioEnabled && <TbMicrophoneOff />}
               </ActionIcon>
               <ActionIcon onClick={toggleVideo} disabled={!state.connected} loading={applyingVideo} color={Colors.primary} size="xl">
-                {state.videoEnabled && <IconVideo />}
-                {!state.videoEnabled && <IconVideoOff />}
+                {state.videoEnabled && <TbVideo />}
+                {!state.videoEnabled && <TbVideoOff />}
               </ActionIcon>
               <ActionIcon onClick={end} color={Colors.offsync} size="xl">
-                <IconPhone className={classes.off} />
+                <TbPhone className={classes.off} />
               </ActionIcon>
             </div>
           </div>

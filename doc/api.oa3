@@ -1667,6 +1667,10 @@ paths:
           description: invalid data message
         '401':
           description: permission denied
+        '405':
+          description: requestor hostname not set
+        '406':
+          description: requestee hostname not set
         '410':
           description: account disabled
         '500':
@@ -1986,6 +1990,10 @@ paths:
           description: permission denied
         '404':
           description: card not found
+        '405':
+          description: requestor hostname not set
+        '406':
+          description: requestee hostname not set
         '410':
           description: account disabled
         '500':

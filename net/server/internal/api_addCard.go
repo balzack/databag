@@ -33,6 +33,23 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	domain := getStrConfigValue(CNFDomain, "");
+	if domain == "" {
+	  if identity.Node != "" {
+	    ErrResponse(w, http.StatusMethodNotAllowed, err)
+	    return
+	  }
+	  var account store.Account
+	  if err := store.DB.Where("guid = ?", guid).First(&account).Error; err != nil {
+	    ErrResponse(w, http.StatusMethodNotAllowed, err)
+	    return
+	  }
+	}
+	if domain != "" && identity.Node == "" {
+	  ErrResponse(w, http.StatusNotAcceptable, err)
+	  return
+	}
+
 	slot := &store.CardSlot{}
 	var card store.Card
 	if err := store.DB.Preload("CardSlot").Preload("Groups").Where("account_id = ? AND guid = ?", account.GUID, guid).First(&card).Error; err != nil {
