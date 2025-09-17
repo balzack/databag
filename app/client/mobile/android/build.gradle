@@ -1,11 +1,11 @@
 buildscript {
     ext {
-        buildToolsVersion = "33.0.0"
+        buildToolsVersion = "35.0.1"
         minSdkVersion = 24
-        compileSdkVersion = 33
-        targetSdkVersion = 33
+        compileSdkVersion = 35
+        targetSdkVersion = 35
+        ndkVersion = "26.1.10909125"
         kotlinVersion = "1.9.24"
-        ndkVersion = "21.3.6528147"
     }
     repositories {
         google()
