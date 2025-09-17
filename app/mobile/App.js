@@ -20,7 +20,7 @@ import { Dashboard } from 'src/dashboard/Dashboard';
 import { Session } from 'src/session/Session';
 import { Prompt } from 'utils/Prompt';
 import ReceiveSharingIntent from 'react-native-receive-sharing-intent';
-import { Platform, PermissionsAndroid } from 'react-native';
+import {PermissionsAndroid} from 'react-native';
 import { initUnifiedPush } from 'react-native-unifiedpush-connector';
 import { MenuProvider } from 'react-native-popup-menu';
 
@@ -32,11 +32,8 @@ export default function App() {
   const [sharing, setSharing] = useState();
 
   useEffect(() => {
-   
-    if (Platform.OS !== 'ios') { 
-      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-      initUnifiedPush();
-    }
+
+    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
     ReceiveSharingIntent.getReceivedFiles(files => {
       setSharing(files);

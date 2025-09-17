@@ -13,7 +13,6 @@ import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { RingContext } from 'context/RingContext';
 import { getVersion, getApplicationName, getDeviceId } from 'react-native-device-info'
-import messaging from '@react-native-firebase/messaging';
 import { DeviceEventEmitter } from 'react-native';
 
 export function useAppContext() {
@@ -36,7 +35,6 @@ export function useAppContext() {
 
   const ws = useRef(null);
   const deviceToken = useRef(null);
-  const pushType = useRef(null);
   const access = useRef(null);
   const init = useRef(false);
 
@@ -44,32 +42,15 @@ export function useAppContext() {
     setState((s) => ({ ...s, ...value }))
   }
 
-  const setDeviceToken = async () => {
-    if (!deviceToken.current) {
-      try {
-        const token = await messaging().getToken();
-        if (!token) {
-          throw new Error('null push token');
-        }
-        deviceToken.current = token;
-        pushType.current = "fcm";
-      }
-      catch(err) {
-        console.log(err);
-      }
-    }
-  }
 
   useEffect(() => {
 
     // select the unified token if available
     DeviceEventEmitter.addListener('unifiedPushURL', (e) => {
       deviceToken.current = e.endpoint;
-      pushType.current = "up";
     });
 
     (async () => {
-      await setDeviceToken();
       access.current = await store.actions.init();
       if (access.current) {
         await setSession();
@@ -118,62 +99,46 @@ export function useAppContext() {
       if (!init.current || access.current) {
         throw new Error('invalid session state');
       }
-      await setDeviceToken();
       updateState({ loggedOut: false });
       await addAccount(server, username, password, token);
-      const session = await setLogin(username, server, password, null, getApplicationName(), getVersion(), getDeviceId(), deviceToken.current, pushType.current, notifications)
+      const session = await setLogin(username, server, password, null, getApplicationName(), getVersion(), getDeviceId(), deviceToken.current, notifications)
       access.current = { loginTimestamp: session.created, server, token: session.appToken, guid: session.guid };
       await store.actions.setSession(access.current);
       await setSession();
-      if (session.pushSupported) {
-        messaging().requestPermission().then(status => {})
-      }
     },
     access: async (server, token) => {
       if (!init.current || access.current) {
         throw new Error('invalid session state');
       }
-      await setDeviceToken();
       updateState({ loggedOut: false });
-      const session = await setAccountAccess(server, token, getApplicationName(), getVersion(), getDeviceId(), deviceToken.current, pushType.current, notifications);
+      const session = await setAccountAccess(server, token, getApplicationName(), getVersion(), getDeviceId(), deviceToken.current, notifications);
       access.current = { loginTimestamp: session.created, server, token: session.appToken, guid: session.guid };
       await store.actions.setSession(access.current);
       await setSession();
-      if (session.pushSupported) {
-        messaging().requestPermission().then(status => {})
-      }
     },
     login: async (username, password, code) => {
       if (!init.current || access.current) {
         throw new Error('invalid session state');
       }
-      await setDeviceToken();
       updateState({ loggedOut: false });
       const acc = username.includes('/') ? username.split('/') : username.split('@');
-      const session = await setLogin(acc[0], acc[1], password, code, getApplicationName(), getVersion(), getDeviceId(), deviceToken.current, pushType.current, notifications)
+      const session = await setLogin(acc[0], acc[1], password, code, getApplicationName(), getVersion(), getDeviceId(), deviceToken.current, notifications)
       access.current = { loginTimestamp: session.created, server: acc[1], token: session.appToken, guid: session.guid };
       await store.actions.setSession(access.current);
       await setSession(); 
-      if (session.pushSupported) {
-        messaging().requestPermission().then(status => {})
-      }
     },
     logout: async () => {
       if (!access.current) {
         throw new Error('invalid session state');
       }
-      updateState({ loggingOut: true });
       try {
-        if (pushType.current == "fcm") {
-          await messaging().deleteToken();
-          deviceToken.current = await messaging().getToken();
-        }
         const { server, token } = access.current || {};
         await clearLogin(server, token);
       }
       catch (err) {
         console.log(err);
       }
+      updateState({ loggingOut: true });
       await clearSession();
       access.current = null;
       await store.actions.clearSession();

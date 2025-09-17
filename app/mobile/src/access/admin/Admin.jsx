@@ -5,7 +5,6 @@ import { useAdmin } from './useAdmin.hook';
 import Colors from 'constants/Colors';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { tos } from 'constants/TermsOfService';
-import { BlurView } from "@react-native-community/blur";
 import { InputCode } from 'utils/InputCode';
 
 export function Admin() {
@@ -59,24 +58,7 @@ export function Admin() {
             </TouchableOpacity>
           </View>
 
-          { Platform.OS !== 'ios' && (
-            <View style={styles.tos}>
-              <TouchableOpacity style={styles.viewterms} onPress={actions.showTerms}>
-                <Text style={styles.viewtermstext}>{ state.strings.terms }</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.agreeterms} onPress={() => actions.agree(!state.agree)}>
-                { state.agree && (
-                  <MatIcons name={'checkbox-outline'} size={20} color={Colors.primary} />
-                )}
-                { !state.agree && (
-                  <MatIcons name={'checkbox-blank-outline'} size={20} color={Colors.primary} />
-                )}
-                <Text style={styles.agreetermstext}>{ state.strings.agree }</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-
-          { state.enabled && (Platform.OS === 'ios' || state.agree) && (
+          { state.enabled && (
             <TouchableOpacity style={styles.reset} onPress={admin}>
               { state.busy && (
                 <ActivityIndicator size="small" color="#ffffff" />
@@ -86,7 +68,7 @@ export function Admin() {
               )}
             </TouchableOpacity>
           )}
-          { (!state.enabled || (Platform.OS !== 'ios' && !state.agree)) && (
+          { !state.enabled && (
             <View style={styles.noreset}>
               <Text style={styles.noresettext}>{ state.strings.access }</Text>
             </View>
@@ -121,8 +103,7 @@ export function Admin() {
         onRequestClose={actions.dismissMFA}
       >
         <View>
-          <BlurView style={styles.mfaOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
-          <View style={styles.mfaBase}>
+          <View style={styles.modalContainer}>
             <View style={styles.mfaContainer}>
               <Text style={styles.mfaTitle}>{ state.strings.mfaTitle }</Text>
               <Text style={styles.mfaDescription}>{ state.strings.mfaEnter }</Text>

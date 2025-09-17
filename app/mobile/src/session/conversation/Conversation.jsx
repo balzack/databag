@@ -8,7 +8,6 @@ import Ionicons from 'react-native-vector-icons/AntDesign';
 import { Logo } from 'utils/Logo';
 import { AddTopic } from './addTopic/AddTopic';
 import { TopicItem } from './topicItem/TopicItem';
-import { BlurView } from "@react-native-community/blur";
 
 export function Conversation({ navigation, cardId, channelId, closeConversation, openDetails, shareIntent, setShareIntent }) {
 
@@ -123,7 +122,7 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
             onRequestClose={actions.hideEdit}
         >
           <View style={styles.modalOverlay}>
-            <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+            <View style={styles.blur} />
             <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
               <View style={styles.modalContainer}>
                 <Text style={styles.editHeader}>{ state.strings.editMessage }</Text>

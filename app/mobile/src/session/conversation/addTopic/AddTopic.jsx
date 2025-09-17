@@ -13,7 +13,6 @@ import { VideoFile } from './videoFile/VideoFile';
 import { AudioFile } from './audioFile/AudioFile';
 import { ImageFile } from './imageFile/ImageFile';
 import { BinaryFile } from './binaryFile/BinaryFile';
-import { BlurView } from "@react-native-community/blur";
 
 export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
 
@@ -231,48 +230,45 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
         onRequestClose={actions.hideFontSize}
       >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
-          <View style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.editHeader}>{ state.strings.fontSize }</Text>
-              <View style={styles.editSize}>
-                { state.size === 'small' && (
-                  <View style={styles.selected}>
-                    <Text style={styles.selectedText}>{ state.strings.small }</Text>
-                  </View>
-                )}
-                { state.size !== 'small' && (
-                  <TouchableOpacity style={styles.option} onPress={() => actions.setFontSize('small')}>
-                    <Text style={styles.optionText}>{ state.strings.small }</Text>
-                  </TouchableOpacity>
-                )}
-                { state.size === 'medium' && (
-                  <View style={styles.selected}>
-                    <Text style={styles.selectedText}>{ state.strings.medium }</Text>
-                  </View>
-                )}
-                { state.size !== 'medium' && (
-                  <TouchableOpacity style={styles.option} onPress={() => actions.setFontSize('medium')}>
-                    <Text style={styles.optionText}>{ state.strings.medium }</Text>
-                  </TouchableOpacity>
-                )}
-                { state.size === 'large' && (
-                  <View style={styles.selected}>
-                    <Text style={styles.selectedText}>{ state.strings.large }</Text>
-                  </View>
-                )}
-                { state.size !== 'large' && (
-                  <TouchableOpacity style={styles.option} onPress={() => actions.setFontSize('large')}>
-                    <Text style={styles.optionText}>{ state.strings.large }</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-              <View style={styles.editControls}>
-                <View style={styles.selection} />
-                <TouchableOpacity style={styles.close} onPress={actions.hideFontSize}>
-                  <Text style={styles.closeText}>{ state.strings.close }</Text>
+          <View style={styles.modalContainer}>
+            <Text style={styles.editHeader}>{ state.strings.fontSize }</Text>
+            <View style={styles.editSize}>
+              { state.size === 'small' && (
+                <View style={styles.selected}>
+                  <Text style={styles.selectedText}>{ state.strings.small }</Text>
+                </View>
+              )}
+              { state.size !== 'small' && (
+                <TouchableOpacity style={styles.option} onPress={() => actions.setFontSize('small')}>
+                  <Text style={styles.optionText}>{ state.strings.small }</Text>
                 </TouchableOpacity>
-              </View>
+              )}
+              { state.size === 'medium' && (
+                <View style={styles.selected}>
+                  <Text style={styles.selectedText}>{ state.strings.medium }</Text>
+                </View>
+              )}
+              { state.size !== 'medium' && (
+                <TouchableOpacity style={styles.option} onPress={() => actions.setFontSize('medium')}>
+                  <Text style={styles.optionText}>{ state.strings.medium }</Text>
+                </TouchableOpacity>
+              )}
+              { state.size === 'large' && (
+                <View style={styles.selected}>
+                  <Text style={styles.selectedText}>{ state.strings.large }</Text>
+                </View>
+              )}
+              { state.size !== 'large' && (
+                <TouchableOpacity style={styles.option} onPress={() => actions.setFontSize('large')}>
+                  <Text style={styles.optionText}>{ state.strings.large }</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            <View style={styles.editControls}>
+              <View style={styles.selection} />
+              <TouchableOpacity style={styles.close} onPress={actions.hideFontSize}>
+                <Text style={styles.closeText}>{ state.strings.close }</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -285,27 +281,24 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
         onRequestClose={actions.hideFontColor}
       >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
-          <View style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.editHeader}>{ state.strings.fontColor }</Text>
-              <View style={styles.editColor}>
-                <ColorPicker
-                  color={state.color}
-                  onColorChange={actions.setFontColor}
-                  onColorChangeComplete={actions.setFontColor}
-                  swatched={false}
-                  style={{flex: 1, padding: 8}} />
+          <View style={styles.modalContainer}>
+            <Text style={styles.editHeader}>{ state.strings.fontColor }</Text>
+            <View style={styles.editColor}>
+              <ColorPicker
+                color={state.color}
+                onColorChange={actions.setFontColor}
+                onColorChangeComplete={actions.setFontColor}
+                swatched={false}
+                style={{flex: 1, padding: 8}} />
+            </View>
+            <View style={styles.editControls}>
+              <View style={styles.selection}>
+                <Text style={styles.selectionText}>{ state.strings.selectedColor }</Text>
+                <View style={{ marginLeft: 6, borderRadius: 4, width: 16, height: 16, backgroundColor: state.color }} />
               </View>
-              <View style={styles.editControls}>
-                <View style={styles.selection}>
-                  <Text style={styles.selectionText}>{ state.strings.selectedColor }</Text>
-                  <View style={{ marginLeft: 6, borderRadius: 4, width: 16, height: 16, backgroundColor: state.color }} />
-                </View>
-                <TouchableOpacity style={styles.close} onPress={actions.hideFontColor}>
-                  <Text style={styles.closeText}>{ state.strings.close }</Text>
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity style={styles.close} onPress={actions.hideFontColor}>
+                <Text style={styles.closeText}>{ state.strings.close }</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

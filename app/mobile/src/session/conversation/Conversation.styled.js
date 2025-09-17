@@ -10,6 +10,11 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     flexShrink: 1,
   },
+  blur: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.modalOverlay,
+  },
   more: {
     marginTop: 8,
   },
