@@ -5,7 +5,7 @@ import {useAudioAsset} from './useAudioAsset.hook';
 import {MediaAsset} from '../../conversation/Conversation';
 import {styles} from './AudioAsset.styled';
 import {BlurView} from '@react-native-community/blur';
-import Video, {VideoRef} from 'react-native-video';
+import { useVideoPlayer, VideoView } from 'expo-video';
 import thumb from '../../images/audio.png';
 import {activateKeepAwake, deactivateKeepAwake} from '@sayem314/react-native-keep-awake';
 
@@ -13,9 +13,13 @@ export function AudioAsset({topicId, asset, loaded, show}: {topicId: string; ass
   const {state, actions} = useAudioAsset(topicId, asset);
   const [modal, setModal] = useState(false);
   const opacity = useAnimatedValue(0);
-  const videoRef = useRef<VideoRef>(null as null | VideoRef);
   const [status, setStatus] = useState('loading');
   const [downloading, setDownloading] = useState(false);
+
+const player = useVideoPlayer(state.dataUrl, player => {
+    player.loop = true; // Set video to loop
+    player.play();      // Start playing the video automatically
+  });
 
   useEffect(() => {
     if (show) {
@@ -41,15 +45,12 @@ export function AudioAsset({topicId, asset, loaded, show}: {topicId: string; ass
   };
 
   const play = () => {
-    videoRef.current.resume();
   };
 
   const pause = () => {
-    videoRef.current.pause();
   };
 
   const end = () => {
-    videoRef.current.seek(0);
   };
 
   const playbackRateChange = e => {
@@ -91,12 +92,9 @@ export function AudioAsset({topicId, asset, loaded, show}: {topicId: string; ass
           <Image style={styles.full} resizeMode="contain" source={thumb} />
           {state.dataUrl && (
             <Video
-              source={{uri: state.dataUrl}}
+              player={player}
               style={styles.player}
               paused={false}
-              ref={videoRef}
-              onPlaybackRateChange={playbackRateChange}
-              onEnd={end}
               onError={actions.failed}
               audioOnly={true}
               controls={false}

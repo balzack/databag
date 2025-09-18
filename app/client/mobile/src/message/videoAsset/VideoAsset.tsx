@@ -5,18 +5,22 @@ import {useVideoAsset} from './useVideoAsset.hook';
 import {MediaAsset} from '../../conversation/Conversation';
 import {styles} from './VideoAsset.styled';
 import {BlurView} from '@react-native-community/blur';
-import Video, {VideoRef} from 'react-native-video';
+import { useVideoPlayer, VideoView } from 'expo-video';
 import {activateKeepAwake, deactivateKeepAwake} from '@sayem314/react-native-keep-awake';
 
 export function VideoAsset({topicId, asset, loaded, show}: {topicId: string; asset: MediaAsset; loaded: () => void; show: boolean}) {
   const {state, actions} = useVideoAsset(topicId, asset);
   const [modal, setModal] = useState(false);
   const opacity = useAnimatedValue(0);
-  const videoRef = useRef<VideoRef>(null as null | VideoRef);
   const [status, setStatus] = useState('loading');
   const [showControl, setShowControl] = useState(false);
   const clear = useRef();
   const [downloading, setDownloading] = useState(false);
+
+const player = useVideoPlayer(state.dataUrl, player => {
+    player.loop = true; // Set video to loop
+    player.play();      // Start playing the video automatically
+  });
 
   useEffect(() => {
     if (state.loaded && show) {
@@ -31,6 +35,15 @@ export function VideoAsset({topicId, asset, loaded, show}: {topicId: string; ass
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.loaded, show]);
+
+  const play = () => {
+  };
+
+  const pause = () => {
+  };
+
+  const end = () => {
+  };
 
   const showVideo = () => {
     setModal(true);
@@ -50,18 +63,6 @@ export function VideoAsset({topicId, asset, loaded, show}: {topicId: string; ass
     clear.current = setTimeout(() => {
       setShowControl(false);
     }, 3000);
-  };
-
-  const play = () => {
-    videoRef.current.resume();
-  };
-
-  const pause = () => {
-    videoRef.current.pause();
-  };
-
-  const end = () => {
-    videoRef.current.seek(0);
   };
 
   const playbackRateChange = e => {
@@ -101,12 +102,9 @@ export function VideoAsset({topicId, asset, loaded, show}: {topicId: string; ass
           <BlurView style={styles.blur} blurType="dark" blurAmount={16} reducedTransparencyFallbackColor="dark" />
           <Image style={styles.full} resizeMode="contain" source={{uri: state.thumbUrl}} />
           {state.dataUrl && (
-            <Video
-              source={{uri: state.dataUrl}}
+            <VideoView
+              player={player}
               style={styles.full}
-              ref={videoRef}
-              onPlaybackRateChange={playbackRateChange}
-              onEnd={end}
               onError={actions.failed}
               controls={false}
               resizeMode="contain"
