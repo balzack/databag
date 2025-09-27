@@ -4,7 +4,7 @@ import {Surface, Icon, Text, ProgressBar, IconButton} from 'react-native-paper';
 import {useAudioAsset} from './useAudioAsset.hook';
 import {MediaAsset} from '../../conversation/Conversation';
 import {styles} from './AudioAsset.styled';
-import {BlurView} from '../utils/BlurView';
+import {BlurView} from '../../utils/BlurView';
 import Video, {VideoRef} from 'react-native-video';
 import thumb from '../../images/audio.png';
 

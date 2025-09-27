@@ -4,7 +4,7 @@ import {Text, Surface, Icon, ProgressBar, IconButton} from 'react-native-paper';
 import {useVideoAsset} from './useVideoAsset.hook';
 import {MediaAsset} from '../../conversation/Conversation';
 import {styles} from './VideoAsset.styled';
-import {BlurView} from '../utils/BlurView';
+import {BlurView} from '../../utils/BlurView';
 import Video, {VideoRef} from 'react-native-video';
 
 export function VideoAsset({topicId, asset, loaded, show}: {topicId: string; asset: MediaAsset; loaded: () => void; show: boolean}) {
