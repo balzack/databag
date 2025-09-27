@@ -4,7 +4,7 @@ import {Text, Surface, Icon, ProgressBar, IconButton} from 'react-native-paper';
 import {useBinaryAsset} from './useBinaryAsset.hook';
 import {MediaAsset} from '../../conversation/Conversation';
 import {styles} from './BinaryAsset.styled';
-import {BlurView} from '../../BlurView';
+import {BlurView} from '../../utils/BlurView';
 import thumb from '../../images/binary.png';
 
 export function BinaryAsset({topicId, asset, loaded, show}: {topicId: string; asset: MediaAsset; loaded: () => void; show: boolean}) {
