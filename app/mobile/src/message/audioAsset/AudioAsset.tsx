@@ -4,21 +4,17 @@ import {Surface, Icon, Text, ProgressBar, IconButton} from 'react-native-paper';
 import {useAudioAsset} from './useAudioAsset.hook';
 import {MediaAsset} from '../../conversation/Conversation';
 import {styles} from './AudioAsset.styled';
-import {BlurView} from '../../utils/BlurView';
-import { useVideoPlayer, VideoView } from 'expo-video';
+import {BlurView} from '../utils/BlurView';
+import Video, {VideoRef} from 'react-native-video';
 import thumb from '../../images/audio.png';
 
 export function AudioAsset({topicId, asset, loaded, show}: {topicId: string; asset: MediaAsset; loaded: () => void; show: boolean}) {
   const {state, actions} = useAudioAsset(topicId, asset);
   const [modal, setModal] = useState(false);
   const opacity = useAnimatedValue(0);
+  const videoRef = useRef<VideoRef>(null as null | VideoRef);
   const [status, setStatus] = useState('loading');
   const [downloading, setDownloading] = useState(false);
-
-const player = useVideoPlayer(state.dataUrl, player => {
-    player.loop = true; // Set video to loop
-    player.play();      // Start playing the video automatically
-  });
 
   useEffect(() => {
     if (show) {
@@ -42,12 +38,15 @@ const player = useVideoPlayer(state.dataUrl, player => {
   };
 
   const play = () => {
+    videoRef.current.resume();
   };
 
   const pause = () => {
+    videoRef.current.pause();
   };
 
   const end = () => {
+    videoRef.current.seek(0);
   };
 
   const playbackRateChange = e => {
@@ -89,9 +88,12 @@ const player = useVideoPlayer(state.dataUrl, player => {
           <Image style={styles.full} resizeMode="contain" source={thumb} />
           {state.dataUrl && (
             <Video
-              player={player}
+              source={{uri: state.dataUrl}}
               style={styles.player}
               paused={false}
+              ref={videoRef}
+              onPlaybackRateChange={playbackRateChange}
+              onEnd={end}
               onError={actions.failed}
               audioOnly={true}
               controls={false}
@@ -126,3 +128,4 @@ const player = useVideoPlayer(state.dataUrl, player => {
     </Surface>
   );
 }
+
