@@ -459,7 +459,7 @@ export const styles = StyleSheet.create({
   modalOption: {
     flexGrow: 1,
     display: 'flex',
-    alignItems: 'flex-begin',
+    alignItems: 'flex-start',
   },
   modalOther: {
     flexGrow: 1,

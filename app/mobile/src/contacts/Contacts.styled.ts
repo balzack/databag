@@ -204,7 +204,6 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   tabVisible: {
-    display: 'block',
   },
   tabHidden: {
     display: 'none',

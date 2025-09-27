@@ -368,7 +368,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     height: 72,
     justifyContent: 'center',
-    alignItems: 'flex-begin',
+    alignItems: 'flex-start',
     paddingBottom: 16,
     paddingRight: 32,
     paddingLeft: 32,

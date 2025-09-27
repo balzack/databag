@@ -299,7 +299,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-begin',
+    justifyContent: 'flex-start',
     flexGrow: 1,
     flexShrink: 1,
     minWidth: 0,
