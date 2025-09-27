@@ -1,0 +1,96 @@
+import {StyleSheet} from 'react-native';
+
+export const styles = StyleSheet.create({
+  active: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    backgroundColor: 'black',
+  },
+  inactive: {
+    display: 'none',
+  },
+  call: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  collapse: {
+    position: 'absolute',
+    bottom: 0,
+    margin: 32,
+    backgroundColor: 'transparent',
+  },
+  controls: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: '33%',
+    borderRadius: 8,
+    opacity: 0.7,
+  },
+  full: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    width: '100%',
+    height: '100%',
+  },
+  box: {
+    position: 'absolute',
+    top: '10%',
+    right: '10%',
+    width: '20%',
+    height: '20%',
+  },
+  titleView: {
+    marginTop: '33%',
+    marginBottom: 32,
+    width: '100%',
+    flexGrow: 1,
+    flexShrink: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  titleName: {
+    fontSize: 32,
+    paddingBottom: 32,
+    fontWeight: 600,
+    color: 'white',
+  },
+  titleImage: {
+    width: '80%',
+    height: 'auto',
+    aspectRatio: 1,
+    borderRadius: 8,
+  },
+  duration: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  minutes: {
+    fontSize: 24,
+    weight: 400,
+    color: 'white',
+  },
+  seconds: {
+    fontSize: 24,
+    weight: 400,
+    color: 'white',
+    width: 40,
+    display: 'flex',
+    justifyContent: 'flex-begin',
+  },
+  logoView: {
+    height: '100%',
+    width: 'auto',
+    aspectRatio: 1,
+  },
+  clearIcon: {},
+});

@@ -1,0 +1,56 @@
+import React, {ReactNode} from 'react';
+import {SafeAreaView, Image, View, Pressable} from 'react-native';
+import {Text} from 'react-native-paper';
+import {styles} from './Card.styled';
+
+export function Card({
+  imageUrl,
+  name,
+  placeholder,
+  handle,
+  node,
+  select,
+  flair,
+  actions,
+  containerStyle,
+  options,
+}: {
+  containerStyle: any;
+  imageUrl: string;
+  name: string;
+  placeholder: string;
+  handle: string;
+  node: string;
+  select?: () => void;
+  flair: ReactNode;
+  actions: ReactNode[];
+  options: ReactNode;
+}) {
+  return (
+    <Pressable style={containerStyle} onPress={select ? select : () => {}}>
+      <SafeAreaView style={styles.card}>
+        <Image style={{...styles.image, ...containerStyle.icon}} resizeMode={'contain'} source={{uri: imageUrl}} />
+        <View style={styles.details}>
+          <View style={styles.flair}>
+            {name && (
+              <Text numberOfLines={1} style={styles.nameSet}>
+                {name}
+              </Text>
+            )}
+            {!name && (
+              <Text numberOfLines={1} style={styles.nameUnset}>
+                {placeholder}
+              </Text>
+            )}
+            {flair}
+          </View>
+          <Text numberOfLines={1} style={{...styles.handle, ...containerStyle.handle}}>
+            {node ? `${handle}@${node}` : handle}
+          </Text>
+        </View>
+        <View style={styles.actions}>{actions}</View>
+        {options}
+      </SafeAreaView>
+    </Pressable>
+  );
+}
