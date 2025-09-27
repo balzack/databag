@@ -104,8 +104,8 @@ compileOptions {
         applicationId "com.databag"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1018
-        versionName "1.5"
+        versionCode 1022
+        versionName "1.1"
     }
 
     splits {
