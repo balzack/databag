@@ -7,7 +7,7 @@ import {Card} from '../card/Card';
 import {ContactParams} from '../profile/Profile';
 import {Confirm} from '../confirm/Confirm';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {BlurView} from '@react-native-community/blur';
+import {BlurView} from '../utils/BlurView';
 
 const keyExtractor = (card: any) => card.cardId;
 
