@@ -4,7 +4,7 @@ import {Text, Surface, ProgressBar, IconButton} from 'react-native-paper';
 import {useImageAsset} from './useImageAsset.hook';
 import {MediaAsset} from '../../conversation/Conversation';
 import {styles} from './ImageAsset.styled';
-import {BlurView} from '@react-native-community/blur';
+import {BlurView} from '../utils/BlurView';
 import {ReactNativeZoomableView} from '@openspacelabs/react-native-zoomable-view';
 import FastImage from 'react-native-fast-image';
 
