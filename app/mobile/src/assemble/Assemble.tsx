@@ -8,20 +8,7 @@ import {Card} from '../card/Card';
 import {Confirm} from '../confirm/Confirm';
 
 function Member({enabled, toggle, placeholder}: {enabled: boolean; toggle: (checked: boolean) => void; placeholder: string}) {
-  const [checked, setChecked] = useState(false);
-  if (enabled) {
-    return (
-      <Checkbox
-        status={checked ? 'checked' : 'unchecked'}
-        onPress={() => {
-          toggle(!checked);
-          setChecked(!checked);
-        }}
-      />
-    );
-  } else {
-    return <Text style={styles.memberText}>{placeholder}</Text>;
-  }
+    return <Text style={styles.memberText}>!!!</Text>;
 }
 
 export function Assemble({layout, close, openConversation}: {layout: string, close: () => void; openConversation: () => void}) {
