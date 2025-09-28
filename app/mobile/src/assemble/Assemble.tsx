@@ -25,6 +25,10 @@ function Member({enabled, toggle, placeholder}: {enabled: boolean; toggle: (chec
 }
 
 export function Assemble({layout, close, openConversation}: {layout: string, close: () => void; openConversation: () => void}) {
+	return <View style={{ width: '100%', height: '100%', backgroundColor: 'yellow' }}></View>
+}
+
+export function TAssemble({layout, close, openConversation}: {layout: string, close: () => void; openConversation: () => void}) {
   const {state, actions} = useAssemble();
   const selected = useRef(new Set<string>());
   const [subject, setSubject] = useState(null);
