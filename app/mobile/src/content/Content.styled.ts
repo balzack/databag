@@ -349,6 +349,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   newButton: {
+    flexShrink: 0,
     borderRadius: 8,
     display: 'flex',
     alignItems: 'center',
