@@ -358,6 +358,7 @@ export const styles = StyleSheet.create({
   newContent: {
     flexShrink: 0,
     height: 52,
+    minWith: 64,
   },
   tabView: {
     width: '100%',
