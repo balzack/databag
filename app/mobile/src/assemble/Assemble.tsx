@@ -14,7 +14,7 @@ function Member({enabled, toggle, placeholder}: {enabled: boolean; toggle: (chec
       <Switch
 	style={styles.controlSwitch}
         value={checked}
-        onPress={() => {
+        onValueChange={() => {
           toggle(!checked);
           setChecked(!checked);
         }}
