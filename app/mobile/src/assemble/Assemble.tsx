@@ -106,6 +106,33 @@ export function Assemble({layout, close, openConversation}: {layout: string, clo
           )}
         </SafeAreaView>
       </Surface>
+
+      <Surface elevation={layout === 'large' ? 2 : 1} mode="flat" style={styles.scrollWrapper}>
+        {state.connected.length > 0 && (
+          <FlatList
+            style={styles.cards}
+            contentContainerStyle={styles.listContainer}
+            data={state.connected}
+            initialNumToRender={32}
+            showsVerticalScrollIndicator={false}
+            renderItem={({item}) => {
+              return (
+                <Card
+                  containerStyle={{...styles.card, handle: {...styles.cardHandle, color: theme.colors.onSecondary}}}
+                  imageUrl={item.imageUrl}
+                  name={item.name}
+                  handle={item.handle}
+                  node={item.node}
+                  placeholder={state.strings.name}
+                  select={() => {}}
+                  actions={[]}
+                />
+              );
+            }}
+            keyExtractor={profile => profile.cardId}
+          />
+        )}
+      </Surface>
     </View>
  );
 }
