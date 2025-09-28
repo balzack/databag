@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
   },
   offsync: {
     paddingLeft: 16,
-    fontWeight: 600,
+    fontWeight: '600',
     paddingBottom: 8,
   },
   option: {
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
     textAlign: 'auto',
     backgroundColor: 'transparent',
-    fontWeight: 400,
+    fontWeight: '400',
   },
   press: {
     position: 'absolute',
@@ -64,7 +64,7 @@ export const styles = StyleSheet.create({
   },
   smTitle: {
     fontSize: 24,
-    fontWeight: 600,
+    fontWeight: '600',
     minWidth: 0,
     flexShrink: 1,
     color: 'white',
@@ -90,7 +90,7 @@ export const styles = StyleSheet.create({
   },
   smInput: {
     fontSize: 24,
-    fontWeight: 600,
+    fontWeight: '600',
     backgroundColor: 'transparent',
     flexShrink: 1,
   },
@@ -205,7 +205,7 @@ export const styles = StyleSheet.create({
   },
   info: {
     width: '80%',
-    maxWidth: 400,
+    maxWidth: '400',
     paddingBottom: 32,
     paddingTop: 16,
   },

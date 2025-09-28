@@ -115,7 +115,7 @@ export function Details({layout, close, edit, closeAll}: {layout: string; close:
 
   const smCards = state.channelCards.map((card, index) => (
     <Card
-      containerStyle={{...styles.smCard, handle: {color: theme.colors.onSecondary, fontWeight: 400}}}
+      containerStyle={{...styles.smCard, handle: {color: theme.colors.onSecondary, fontWeight: '400'}}}
       key={index}
       imageUrl={card.imageUrl}
       name={card.name}
@@ -196,7 +196,7 @@ export function Details({layout, close, edit, closeAll}: {layout: string; close:
                 <Surface mode="flat" elevation={0} style={styles.content}>
                   {state.hostCard && (
                     <Card
-                      containerStyle={{...styles.smCard, handle: {color: theme.colors.onSecondary, fontWeight: 400}}}
+                      containerStyle={{...styles.smCard, handle: {color: theme.colors.onSecondary, fontWeight: '400'}}}
                       imageUrl={state.hostCard.imageUrl}
                       name={state.hostCard.name}
                       placeholder={state.strings.name}
@@ -208,7 +208,7 @@ export function Details({layout, close, edit, closeAll}: {layout: string; close:
                   )}
                   {state.profile && (
                     <Card
-                      containerStyle={{...styles.smCard, handle: {color: theme.colors.onSecondary, fontWeight: 400}}}
+                      containerStyle={{...styles.smCard, handle: {color: theme.colors.onSecondary, fontWeight: '400'}}}
                       imageUrl={state.profile.imageUrl}
                       name={state.profile.name}
                       placeholder={state.strings.name}

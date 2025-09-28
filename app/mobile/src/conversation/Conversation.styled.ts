@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     minWidth: 0,
     flexShrink: 1,
-    fontWeight: 600,
+    fontWeight: '600',
   },
   menuContent: {
     borderRadius: 8,
