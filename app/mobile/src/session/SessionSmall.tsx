@@ -45,7 +45,7 @@ function ContentTab({scheme, textCard, contentTab, share}: {scheme: string; text
               textCard={textCard}
               closeAll={() => props.navigation.popToTop()}
               openConversation={() => openConversation(props)}
-              createConversation={() => props.navigation.navigate('assemble')}
+              createConversation={() => { console.log("HERE", props?.navigation); props.navigation.navigate('assemble')}}
             />
           )}
         </ContentStack.Screen>
