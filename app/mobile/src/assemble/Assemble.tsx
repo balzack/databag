@@ -11,7 +11,7 @@ function Member({enabled, toggle, placeholder}: {enabled: boolean; toggle: (chec
   const [checked, setChecked] = useState(false);
   if (enabled) {
     return (
-      <Checkbox.Android
+      <Checkbox
         status={checked ? 'checked' : 'unchecked'}
         onPress={() => {
           toggle(!checked);
@@ -116,6 +116,7 @@ export function Assemble({layout, close, openConversation}: {layout: string, clo
             initialNumToRender={32}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
+              const member = <Member key="member" enabled={!seal || item.sealable} toggle={set => toggle(item.cardId, set)} placeholder={state.strings.noKey} />;
               return (
                 <Card
                   containerStyle={{...styles.card, handle: {...styles.cardHandle, color: theme.colors.onSecondary}}}
