@@ -132,7 +132,13 @@ export function Assemble({layout, close, openConversation}: {layout: string, clo
             keyExtractor={profile => profile.cardId}
           />
         )}
+        {state.connected.length === 0 && (
+          <View style={styles.empty}>
+            <Text style={styles.noContacts}>{state.strings.noContacts}</Text>
+          </View>
+        )}
       </Surface>
+      <Confirm show={alert} params={alertParams} />
     </View>
  );
 }
