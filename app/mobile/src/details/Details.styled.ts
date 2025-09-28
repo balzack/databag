@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
   },
   offsync: {
     paddingLeft: 16,
-    fontWeight: 'bold',
+    fontWeight: 600,
     paddingBottom: 8,
   },
   option: {
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
     textAlign: 'auto',
     backgroundColor: 'transparent',
-    fontWeight: 'normal',
+    fontWeight: 400,
   },
   press: {
     position: 'absolute',
