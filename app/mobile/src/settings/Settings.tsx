@@ -868,7 +868,7 @@ export function Settings({layout, setupNav}: {layout: string, setupNav: {back: (
                     <Surface elevation={0} mode="flat" style={styles.navData}>
                       <View style={styles.navFont}>
                         <View style={styles.splitLabel}>
-                          <TextInput style={styles.navInput} mode="outlined" outlineStyle={styles.navInputBorder} placeholder={state.strings.keyboardOffset} />
+                          <TextInput style={styles.inputLabel} mode="outlined" outlineStyle={styles.navInputBorder} placeholder={state.strings.keyboardOffset} />
                           <Text style={{...styles.labelValue, color: theme.colors.tertiary}}>{ Math.floor(state.keyboardOffset) * 4 }px</Text>
                         </View>
                         <View style={styles.navPress} />

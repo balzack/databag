@@ -356,6 +356,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   newContent: {
+    flexShrink: 0,
     height: 52,
   },
   tabView: {

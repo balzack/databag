@@ -157,6 +157,16 @@ export const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     fontWeight: 'normal',
   },
+  inputLabel: {
+    paddingLeft: 16,
+    fontSize: 15,
+    textWrap: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    textAlign: 'auto',
+    backgroundColor: 'transparent',
+    fontWeight: 'normal',
+  },
   navFullInput: {
     fontSize: 16,
     textWrap: 'nowrap',

@@ -114,7 +114,7 @@ const databagColors = {
     elevation: {
       level0: 'rgb(0, 0, 0)',
       level1: 'rgb(16,16,16)',
-      level2: 'rgb(32, 32, 32)',
+      level2: '#202020',
       level3: 'rgb(48, 48, 48)',
       level4: 'rgb(64, 64, 64)',
       level5: 'rgb(80, 80, 80)',
@@ -153,7 +153,7 @@ function FontMix(props: {name: string, color: string}) {
   } else if (props.name === 'message-circle' || props.name === 'server' || props.name === 'lock' || props.name === 'eye' || props.name === 'eye-off' || props.name === 'settings' || props.name === 'map-pin' || props.name === 'book' || props.name === 'user-plus' || props.name === 'key' || props.name === 'trash-2' || props.name === 'calendar' || props.name === 'clock' || props.name === 'user' || props.name === 'users' || props.name === 'message-circle' || props.name === 'github' || props.name === 'align-left' || props.name === 'edit' || props.name === 'log-out' || props.name === 'search' || props.name === 'filter' || props.name === 'plus-square' || props.name === 'send') {
     return <FeatherIcon {...props} />;
   } else if (props.name === 'sensor-occupied') {
-    return <MaterialIcon {...props}  />;
+    return <CommunityIcon {...{...props}, name: 'login-variant'} />;
   } else if (props.name === 'address-book') {
     return <AwesomeIcon {...{...props, name: 'address-book-o'}} />;
   } else if (props.name === 'address-book-filled') {
