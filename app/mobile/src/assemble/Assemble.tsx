@@ -8,7 +8,6 @@ import {Card} from '../card/Card';
 import {Confirm} from '../confirm/Confirm';
 
 function Member({enabled, toggle, placeholder}: {enabled: boolean; toggle: (checked: boolean) => void; placeholder: string}) {
-function Member({enabled, toggle, placeholder}: {enabled: boolean; toggle: (checked: boolean) => void; placeholder: string}) {
   const [checked, setChecked] = useState(false);
   if (enabled) {
     return (
