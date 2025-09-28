@@ -186,4 +186,7 @@ export const styles = StyleSheet.create({
     color: 'onSecondary',
     fontWeight: 'normal',
   },
+  controlSwitch: {
+    transform: [{scaleX: 0.7}, {scaleY: 0.7}],
+  },
 });

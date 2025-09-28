@@ -1,5 +1,5 @@
 import React, {useState, useRef} from 'react';
-import {useTheme, Surface, Checkbox, Button, Text, Icon, TextInput} from 'react-native-paper';
+import {useTheme, Surface, Switch, Checkbox, Button, Text, Icon, TextInput} from 'react-native-paper';
 import {FlatList, Pressable, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {styles} from './Assemble.styled';
@@ -8,7 +8,22 @@ import {Card} from '../card/Card';
 import {Confirm} from '../confirm/Confirm';
 
 function Member({enabled, toggle, placeholder}: {enabled: boolean; toggle: (checked: boolean) => void; placeholder: string}) {
-    return <Text style={styles.memberText}>!!!</Text>;
+function Member({enabled, toggle, placeholder}: {enabled: boolean; toggle: (checked: boolean) => void; placeholder: string}) {
+  const [checked, setChecked] = useState(false);
+  if (enabled) {
+    return (
+      <Switch
+	style={styles.controlSwitch}
+        value={checked}
+        onPress={() => {
+          toggle(!checked);
+          setChecked(!checked);
+        }}
+      />
+    );
+  } else {
+    return <Text style={styles.memberText}>{placeholder}</Text>;
+  }
 }
 
 export function Assemble({layout, close, openConversation}: {layout: string, close: () => void; openConversation: () => void}) {
