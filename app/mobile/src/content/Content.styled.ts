@@ -353,7 +353,6 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
   },
   newContent: {
-    flexShrink: 0,
     height: 52,
   },
   tabView: {
