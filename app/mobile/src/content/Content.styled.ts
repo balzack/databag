@@ -348,9 +348,9 @@ export const styles = StyleSheet.create({
     height: 52,
     backgroundColor: 'transparent',
   },
-  button: {
+  topButton: {
     flexShrink: 0,
-    minWidth: 128,
+    minWidth: 96,
   },
   newButton: {
     flexShrink: 0,

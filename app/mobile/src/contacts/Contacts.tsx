@@ -515,9 +515,11 @@ export function Contacts({
                 onChangeText={value => actions.setFilter(value)}
               />
             </Surface>
-            <Button icon="user-plus" mode="contained" textColor="white" style={styles.newContactButton} contentStyle={styles.newContactContent} onPress={openRegistry}>
-              {state.strings.new}
-            </Button>
+	    <View style={styles.topButton}>
+              <Button icon="user-plus" mode="contained" textColor="white" style={styles.newContactButton} contentStyle={styles.newContactContent} onPress={openRegistry}>
+                {state.strings.new}
+              </Button>
+	    </View>
           </View>
         </Surface>
 

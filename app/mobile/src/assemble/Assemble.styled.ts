@@ -17,6 +17,10 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 16,
   },
+  topButton: {
+    flexShrink: 0,
+    minWidth: 96,
+  },
   newButton: {
     borderRadius: 8,
     display: 'flex',

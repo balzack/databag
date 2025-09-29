@@ -101,9 +101,11 @@ export function Assemble({layout, close, openConversation}: {layout: string, clo
             />
           </Surface>
           {(seal || state.allowUnsealed) && (
-            <Button icon="message1" mode="contained" loading={creating} textColor="white" style={styles.newButton} contentStyle={styles.newContent} onPress={create}>
-              {state.strings.chat}
-            </Button>
+            <View style={styles.topButton}>
+              <Button icon="message1" mode="contained" loading={creating} textColor="white" style={styles.newButton} contentStyle={styles.newContent} onPress={create}>
+                {state.strings.chat}
+              </Button>
+	    </View>
           )}
         </SafeAreaView>
       </Surface>

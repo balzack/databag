@@ -47,6 +47,10 @@ export const styles = StyleSheet.create({
     margin: 16,
     gap: 8,
   },
+  topButton: {
+    flexShrink: 0,
+    minWidth: 96,
+  },
   newContactButton: {
     borderRadius: 8,
     display: 'flex',

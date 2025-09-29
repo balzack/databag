@@ -737,10 +737,10 @@ export function Content({
                 onChangeText={value => actions.setFilter(value)}
               />
             </Surface>
-	    <View style={styles.button}>
-            <Button icon="message1" mode="contained" textColor="white" style={styles.newButton} contentStyle={styles.newContent} onPress={create}>
-              {state.strings.new}
-            </Button>
+	    <View style={styles.topButton}>
+              <Button icon="message1" mode="contained" textColor="white" style={styles.newButton} contentStyle={styles.newContent} onPress={create}>
+                {state.strings.new}
+              </Button>
 	    </View>
           </View>
         </Surface>
