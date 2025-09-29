@@ -348,6 +348,10 @@ export const styles = StyleSheet.create({
     height: 52,
     backgroundColor: 'transparent',
   },
+  button: {
+    flexShrink: 0,
+    minWidth: 128,
+  },
   newButton: {
     flexShrink: 0,
     borderRadius: 8,
