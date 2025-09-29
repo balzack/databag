@@ -351,14 +351,10 @@ export const styles = StyleSheet.create({
   newButton: {
     flexShrink: 0,
     borderRadius: 8,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   newContent: {
     flexShrink: 0,
     height: 52,
-    minWith: 64,
   },
   tabView: {
     width: '100%',
