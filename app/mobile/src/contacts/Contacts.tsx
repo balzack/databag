@@ -498,7 +498,7 @@ export function Contacts({
     <View style={styles.component}>
       <View style={styles.contacts}>
         <Surface elevation={layout === 'large' ? 3 : 9} mode="flat" style={styles.surfaceMaxWidth}>
-          <SafeAreaView style={{ ...styles.headerSurface, flexDirection: layout === 'large' ? 'row-reverse' : 'row'}} edges={['left', 'right']}>
+          <View style={{ ...styles.headerSurface, flexDirection: layout === 'large' ? 'row-reverse' : 'row'}}>
             <Surface mode="flat" elevation={0} style={styles.searchSurface}>
               <TextInput
                 dense={true}
@@ -518,7 +518,7 @@ export function Contacts({
             <Button icon="user-plus" mode="contained" textColor="white" style={styles.newContactButton} contentStyle={styles.newContactContent} onPress={openRegistry}>
               {state.strings.new}
             </Button>
-          </SafeAreaView>
+          </View>
         </Surface>
 
         <View style={styles.tabContainer}>

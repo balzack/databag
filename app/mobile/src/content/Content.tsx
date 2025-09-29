@@ -720,7 +720,7 @@ export function Content({
     <View style={styles.container}>
       <View style={styles.content}>
         <Surface elevation={layout === 'large' ? 3 : 9} mode="flat" style={layout === 'large' ? styles.searchInputPad : {}}>
-          <SafeAreaView style={layout !== 'large' ? styles.searchContainer : {...styles.searchBar, borderColor: theme.colors.elevation.level1}} edges={['left', 'right']}>
+          <View style={layout !== 'large' ? styles.searchContainer : {...styles.searchBar, borderColor: theme.colors.elevation.level1}}>
             <Surface mode="flat" elevation={0} style={styles.searchInputContainer}>
               <TextInput
                 style={styles.searchInput}
@@ -740,7 +740,7 @@ export function Content({
             <Button icon="message1" mode="contained" textColor="white" style={styles.newButton} contentStyle={styles.newContent} onPress={create}>
               {state.strings.new}
             </Button>
-          </SafeAreaView>
+          </View>
         </Surface>
 
         <View style={styles.topics}>
