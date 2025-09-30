@@ -3,6 +3,7 @@ import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
   message: {
+    transform: [{rotate: '180deg'}],
     width: '100%',
   },
   component: {

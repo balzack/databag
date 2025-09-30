@@ -191,6 +191,7 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
   },
   messageList: {
+    transform: [{rotate: '180deg'}],
     width: '100%',
     minWidth: 0,
   },

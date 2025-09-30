@@ -289,7 +289,6 @@ export function Conversation({layout, close, openDetails}: {layotu: string; clos
         <SafeAreaView style={styles.thread} edges={['left', 'right']}>
           <FlatList
             style={{...styles.messageList, opacity: state.showMessages ? 1 : 0}}
-            inverted
             ref={thread}
             onScroll={onScroll}
             data={state.topics}
