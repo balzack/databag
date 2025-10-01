@@ -195,16 +195,18 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
           <SafeAreaView style={styles.full} edges={['top']}>
             <View style={styles.screen}>
               <Ring />
-              <View style={[styles.body, showContent]}>
-                <ContentTab share={share} textCard={textCard} scheme={scheme} contentTab={contentTab} />
-              </View>
-              <View style={[styles.body, showContact]}>
-                <ContactTab textContact={textContact} callContact={callContact} scheme={scheme} />
-              </View>
-              <View style={[styles.body, showSettings]}>
-                <Surface mode="flat" elevation={2}>
-                  <Settings showLogout={true} />
-                </Surface>
+              <View style={styles.body}>
+                <View style={[styles.full, showContent]}>
+                  <ContentTab share={share} textCard={textCard} scheme={scheme} contentTab={contentTab} />
+                </View>
+                <View style={[styles.full, showContact]}>
+                  <ContactTab textContact={textContact} callContact={callContact} scheme={scheme} />
+                </View>
+                <View style={[styles.full, showSettings]}>
+                  <Surface mode="flat" elevation={2}>
+                    <Settings showLogout={true} />
+                  </Surface>
+                </View>
               </View>
               <Surface style={styles.tabContainer} elevation={4}>
                 <BlurView style={styles.blur} blurType="light" blurAmount={8} reducedTransparencyFallbackColor="dark" />
