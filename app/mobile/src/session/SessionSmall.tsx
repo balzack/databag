@@ -137,7 +137,7 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
   const {state} = useSession();
   const scheme = useColorScheme();
   const [tab, setTab] = useState('content');
-  const [next, setNext] = useState('');
+  const [next, setNext] = useState('content');
   const [textCard, setTextCard] = useState({cardId: null} as {cardId: null | string});
   const [, setCallCard] = useState({card: null} as {card: null | Card});
   const [dismissed, setDismissed] = useState(false);
@@ -197,6 +197,10 @@ console.log("SHOW", showContent, showContact, showSettings);
       setTab('content');
     }
   };
+
+  useEffect(() => {
+    setTab(next);
+  }, [next]);
 
   useEffect(() => {
     if (share) {
@@ -263,7 +267,7 @@ console.log("SHOW", showContent, showContact, showSettings);
                           icon={'chat-circle'}
                           size={32}
                           onPress={() => {
-                            transition('content');
+                            setNext('content');
                           }}
                         />
                       )}
@@ -282,7 +286,7 @@ console.log("SHOW", showContent, showContact, showSettings);
                           icon={'address-book'}
                           size={32}
                           onPress={() => {
-                            transition('contacts');
+                            setNext('contacts');
                           }}
                         />
                       )}
@@ -301,7 +305,7 @@ console.log("SHOW", showContent, showContact, showSettings);
                           icon={'gear-six'}
                           size={32}
                           onPress={() => {
-                            transition('settings');
+                            setNext('settings');
                           }}
                         />
                       )}
