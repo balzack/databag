@@ -153,21 +153,21 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
     Animated.parallel([
       Animated.timing(contactsOpacity, {
         toValue: next === 'contacts' ? 1 : 0,
-        duration: 200,
-        useNativeDriver: false,
+        duration: 1000,
+        useNativeDriver: true,
       }),
       Animated.timing(contentOpacity, {
         toValue: next === 'content' ? 1 : 0,
-        duration: 200,
-        useNativeDriver: false,
+        duration: 1000,
+        useNativeDriver: true,
       }),
       Animated.timing(settingsOpacity, {
         toValue: next === 'settings' ? 1 : 0,
-        duration: 200,
-        useNativeDriver: false,
+        duration: 1000,
+        useNativeDriver: true,
       })
     ]).start();
-    await new Promise((r) => setTimeout(r, 200));
+    await new Promise((r) => setTimeout(r, 1000));
     setTab(next);
   };
 
