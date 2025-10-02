@@ -4,7 +4,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {RingContextProvider} from '../context/RingContext';
 import {styles} from './Session.styled';
 import {IconButton, Surface, Text, Icon, useTheme} from 'react-native-paper';
-import {BlurView} from '@react-native-community/blur';
+import {BlurView} from '../utils/BlurView';
 import {Settings} from '../settings/Settings';
 import {Contacts} from '../contacts/Contacts';
 import {Content} from '../content/Content';
