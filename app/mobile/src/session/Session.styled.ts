@@ -17,6 +17,11 @@ export const styles = StyleSheet.create({
     height: '100%',
     position: 'relative',
   },
+  show: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+  },
   onboard: {
     position: 'absolute',
     width: '100%',
