@@ -191,9 +191,7 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
   };
 
   const contentTab = () => {
-    if (tab !== 'content') {
-      setTab('content');
-    }
+    setNext('content');
   };
 
   useEffect(() => {
@@ -216,7 +214,9 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
   }, [state.appState, state.sdkState]);
 
   useEffect(() => {
-    setTab(next);
+    setTimeout(() => {
+    	setTab(next);
+    }, 2000);
   }, [next]);
 
   return (
