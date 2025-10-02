@@ -238,7 +238,7 @@ export function Conversation({layout, close, openDetails}: {layotu: string; clos
     }
   });
 
-  const offset = state.keyboardOffset + keyboardHeight - (Platform.OS === 'ios' && layout === 'large' ? 0 : Platform.OS === 'ios' ? 96 : 64)
+  const offset = state.keyboardOffset + keyboardHeight - (Platform.OS === 'ios' && layout === 'large' ? 0 : 96)
   const disableImage = !state.detailSet || !state.detail?.enableImage;
   const disableVideo = !state.detailSet || !state.detail?.enableVideo;
   const disableAudio = !state.detailSet || !state.detail?.enableAudio;
