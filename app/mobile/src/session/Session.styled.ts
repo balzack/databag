@@ -157,9 +157,9 @@ export const styles = StyleSheet.create({
     height: 96,
   },
   hidden: {
-    display: 'none',
+    zIndex: 0,
   },
   visible: {
-    display: 'flex',
+    zIndex: 1,
   },
 });

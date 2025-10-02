@@ -214,9 +214,7 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
   }, [state.appState, state.sdkState]);
 
   useEffect(() => {
-    setTimeout(() => {
     	setTab(next);
-    }, 2000);
   }, [next]);
 
   return (
