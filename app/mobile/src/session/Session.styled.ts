@@ -150,11 +150,11 @@ export const styles = StyleSheet.create({
   tabWrapper: {
     overflow: 'hidden',
     position: 'relative',
-    height: 96,
+    height: 84,
     width: '100%',
   },
   tabBar: {
-    height: 96,
+    height: 84,
   },
   hidden: {
     zIndex: 0,
