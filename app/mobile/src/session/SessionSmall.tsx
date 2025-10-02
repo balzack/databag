@@ -153,21 +153,21 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
     Animated.parallel([
       Animated.timing(contactsOpacity, {
         toValue: next === 'contacts' ? 1 : 0,
-        duration: 100,
+        duration: 200,
         useNativeDriver: true,
       }),
       Animated.timing(contentOpacity, {
         toValue: next === 'content' ? 1 : 0,
-        duration: 100,
+        duration: 200,
         useNativeDriver: true,
       }),
       Animated.timing(settingsOpacity, {
         toValue: next === 'settings' ? 1 : 0,
-        duration: 100,
+        duration: 200,
         useNativeDriver: true,
       })
     ]).start();
-    await new Promise((r) => setTimeout(r, 100));
+    await new Promise((r) => setTimeout(r, 200));
     setTab(next);
   };
 
@@ -183,8 +183,6 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
   const showContact = tab === 'contacts' || next === 'contacts' ? styles.visible : styles.hidden;
   const showSettings = tab === 'settings' || next === 'settings' ? styles.visible : styles.hidden;
 
-console.log("SHOW", showContent, showContact, showSettings);
-
   const dismiss = () => {
     setDismissed(true);
     setTimeout(() => {
@@ -197,10 +195,6 @@ console.log("SHOW", showContent, showContact, showSettings);
       setTab('content');
     }
   };
-
-  useEffect(() => {
-    setTab(next);
-  }, [next]);
 
   useEffect(() => {
     if (share) {
@@ -221,6 +215,10 @@ console.log("SHOW", showContent, showContact, showSettings);
     }
   }, [state.appState, state.sdkState]);
 
+  useEffect(() => {
+    setTab(next);
+  }, [next]);
+
   return (
     <RingContextProvider>
       <View style={styles.session}>
@@ -230,21 +228,15 @@ console.log("SHOW", showContent, showContact, showSettings);
               <Ring />
               <View style={styles.body}>
                 <View style={[styles.show, showContent]}>
-                  <Animated.View style={[styles.full, {opacity: contentOpacity}]}>
                     <ContentTab share={share} textCard={textCard} scheme={scheme} contentTab={contentTab} />
-                  </Animated.View>
                 </View>
                 <View style={[styles.show, showContact]}>
-                  <Animated.View style={[styles.full, {opacity: contactsOpacity}]}>
                     <ContactTab textContact={textContact} callContact={callContact} scheme={scheme} />
-                  </Animated.View>
                 </View>
                 <View style={[styles.show, showSettings]}>
-                  <Animated.View style={[styles.full, {opacity: settingsOpacity}]}>
                     <Surface mode="flat" elevation={2}>
                       <Settings showLogout={true} />
                     </Surface>
-                  </Animated.View>
                 </View>
               </View>
               <Surface style={styles.tabContainer} elevation={4}>
