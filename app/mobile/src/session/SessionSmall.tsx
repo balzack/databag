@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {Platform, Pressable, View, useColorScheme} from 'react-native';
+import {Animated, useAnimatedValue, Platform, Pressable, View, useColorScheme} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RingContextProvider} from '../context/RingContext';
 import {styles} from './Session.styled';
 import {IconButton, Surface, Text, Icon, useTheme} from 'react-native-paper';
-import {BlurView} from '../utils/BlurView';
+import {BlurView} from '@react-native-community/blur';
 import {Settings} from '../settings/Settings';
 import {Contacts} from '../contacts/Contacts';
 import {Content} from '../content/Content';
@@ -45,7 +45,7 @@ function ContentTab({scheme, textCard, contentTab, share}: {scheme: string; text
               textCard={textCard}
               closeAll={() => props.navigation.popToTop()}
               openConversation={() => openConversation(props)}
-              createConversation={() => { console.log("HERE", props?.navigation); props.navigation.navigate('assemble')}}
+              createConversation={() => props.navigation.navigate('assemble')}
             />
           )}
         </ContentStack.Screen>
@@ -137,12 +137,39 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
   const {state} = useSession();
   const scheme = useColorScheme();
   const [tab, setTab] = useState('content');
+  const [next, setNext] = useState('');
   const [textCard, setTextCard] = useState({cardId: null} as {cardId: null | string});
   const [, setCallCard] = useState({card: null} as {card: null | Card});
   const [dismissed, setDismissed] = useState(false);
   const [disconnected, setDisconnected] = useState(false);
   const [showDisconnected, setShowDisconnected] = useState(false);
   const theme = useTheme();
+  const contentOpacity = useAnimatedValue(1);
+  const contactsOpacity = useAnimatedValue(0);
+  const settingsOpacity = useAnimatedValue(0);
+
+  const transition = async (next: string) => {
+    setNext(next);
+    Animated.parallel([
+      Animated.timing(contactsOpacity, {
+        toValue: next === 'contacts' ? 1 : 0,
+        duration: 200,
+        useNativeDriver: false,
+      }),
+      Animated.timing(contentOpacity, {
+        toValue: next === 'content' ? 1 : 0,
+        duration: 200,
+        useNativeDriver: false,
+      }),
+      Animated.timing(settingsOpacity, {
+        toValue: next === 'settings' ? 1 : 0,
+        duration: 200,
+        useNativeDriver: false,
+      })
+    ]).start();
+    await new Promise((r) => setTimeout(r, 200));
+    setTab(next);
+  };
 
   const textContact = (cardId: null | string) => {
     setTextCard({cardId});
@@ -152,9 +179,11 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
     setCallCard({card});
   };
 
-  const showContent = tab === 'content' ? styles.visible : styles.hidden;
-  const showContact = tab === 'contacts' ? styles.visible : styles.hidden;
-  const showSettings = tab === 'settings' ? styles.visible : styles.hidden;
+  const showContent = tab === 'content' || next === 'content' ? styles.visible : styles.hidden;
+  const showContact = tab === 'contacts' || next === 'contacts' ? styles.visible : styles.hidden;
+  const showSettings = tab === 'settings' || next === 'settings' ? styles.visible : styles.hidden;
+
+console.log("SHOW", showContent, showContact, showSettings);
 
   const dismiss = () => {
     setDismissed(true);
@@ -196,16 +225,22 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
             <View style={styles.screen}>
               <Ring />
               <View style={styles.body}>
-                <View style={[styles.full, showContent]}>
-                  <ContentTab share={share} textCard={textCard} scheme={scheme} contentTab={contentTab} />
+                <View style={[styles.show, showContent]}>
+                  <Animated.View style={[styles.full, {opacity: contentOpacity}]}>
+                    <ContentTab share={share} textCard={textCard} scheme={scheme} contentTab={contentTab} />
+                  </Animated.View>
                 </View>
-                <View style={[styles.full, showContact]}>
-                  <ContactTab textContact={textContact} callContact={callContact} scheme={scheme} />
+                <View style={[styles.show, showContact]}>
+                  <Animated.View style={[styles.full, {opacity: contactsOpacity}]}>
+                    <ContactTab textContact={textContact} callContact={callContact} scheme={scheme} />
+                  </Animated.View>
                 </View>
-                <View style={[styles.full, showSettings]}>
-                  <Surface mode="flat" elevation={2}>
-                    <Settings showLogout={true} />
-                  </Surface>
+                <View style={[styles.show, showSettings]}>
+                  <Animated.View style={[styles.full, {opacity: settingsOpacity}]}>
+                    <Surface mode="flat" elevation={2}>
+                      <Settings showLogout={true} />
+                    </Surface>
+                  </Animated.View>
                 </View>
               </View>
               <Surface style={styles.tabContainer} elevation={4}>
@@ -219,9 +254,6 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
                           mode="contained"
                           icon={'chat-circle-filled'}
                           size={32}
-                          onPress={() => {
-                            setTab('content');
-                          }}
                         />
                       )}
                       {tab !== 'content' && (
@@ -231,7 +263,7 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
                           icon={'chat-circle'}
                           size={32}
                           onPress={() => {
-                            setTab('content');
+                            transition('content');
                           }}
                         />
                       )}
@@ -241,9 +273,6 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
                           mode="contained"
                           icon={'address-book-filled'}
                           size={32}
-                          onPress={() => {
-                            setTab('contacts');
-                          }}
                         />
                       )}
                       {tab !== 'contacts' && (
@@ -253,7 +282,7 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
                           icon={'address-book'}
                           size={32}
                           onPress={() => {
-                            setTab('contacts');
+                            transition('contacts');
                           }}
                         />
                       )}
@@ -263,9 +292,6 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
                           mode="contained"
                           icon={'gear-six-filled'}
                           size={32}
-                          onPress={() => {
-                            setTab('settings');
-                          }}
                         />
                       )}
                       {tab !== 'settings' && (
@@ -275,7 +301,7 @@ export function SessionSmall({share}: {share: {filePath: string; mimeType: strin
                           icon={'gear-six'}
                           size={32}
                           onPress={() => {
-                            setTab('settings');
+                            transition('settings');
                           }}
                         />
                       )}
