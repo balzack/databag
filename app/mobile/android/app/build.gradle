@@ -1,5 +1,4 @@
 apply plugin: "com.android.application"
-apply plugin: 'com.google.gms.google-services'
 apply plugin: "com.facebook.react"
 
 import com.android.build.OutputFile
@@ -59,7 +58,7 @@ react {
  * use App Bundles (https://developer.android.com/guide/app-bundle/)
  * and want to have separate APKs to upload to the Play Store.
  */
-def enableSeparateBuildPerCPUArchitecture = false
+def enableSeparateBuildPerCPUArchitecture = true
 
 /**
  * Set this to true to Run Proguard on Release builds to minify the Java bytecode.
@@ -94,10 +93,10 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-compileOptions {
-	sourceCompatibility JavaVersion.VERSION_1_8
-	targetCompatibility JavaVersion.VERSION_1_8
-}
+    compileOptions {
+      sourceCompatibility JavaVersion.VERSION_1_8
+      targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     namespace "com.databag"
     defaultConfig {
@@ -116,6 +115,7 @@ compileOptions {
             include (*reactNativeArchitectures())
         }
     }
+
     signingConfigs {
       release {
         storeFile file('balzack.keystore')
@@ -124,6 +124,7 @@ compileOptions {
         keyPassword 'balzack'
       }
     }
+
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
@@ -158,7 +159,6 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 
- 
     implementation 'androidx.core:core:1.8.0'
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
