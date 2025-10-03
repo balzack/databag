@@ -13,6 +13,7 @@ import org.unifiedpush.android.connector.UnifiedPush;
 import android.content.Context;
 
 import org.unifiedpush.android.connector.RegistrationDialogContent;
+import org.devio.rn.splashscreen.SplashScreen;
 
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
@@ -34,6 +35,7 @@ public class MainActivity extends ReactActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    SplashScreen.show(this);
     super.onCreate(null);
   }
 
