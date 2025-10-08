@@ -156,6 +156,7 @@ export const styles = StyleSheet.create({
     textAlign: 'auto',
     backgroundColor: 'transparent',
     fontWeight: 'normal',
+    paddingRight: 16,
   },
   navFullInput: {
     fontSize: 16,
