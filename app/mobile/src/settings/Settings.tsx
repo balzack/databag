@@ -892,7 +892,7 @@ export function Settings({layout, setupNav}: {layout: string, setupNav: {back: (
                           style={styles.navInput}
                           mode="outlined"
                           outlineStyle={styles.navInputBorder}
-                          placeholder="github.com/balzack/databag"
+                          placeholder="github.com/balzack/databag&nbsp;"
                           left={<TextInput.Icon style={styles.icon} size={22} icon="github" />}
                         />
                         <Pressable style={styles.navPress} onPress={() => Linking.openURL('https://github.com/balzack/databag')} />
