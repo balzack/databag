@@ -518,7 +518,7 @@ export function Settings({layout, setupNav}: {layout: string, setupNav: {back: (
                         style={styles.navInput}
                         mode="outlined"
                         outlineStyle={styles.navInputBorder}
-                        placeholder=`${state.strings.uploadImage}&nbsp;`
+                        placeholder={`${state.strings.uploadImage}&nbsp;`}
                         left={<TextInput.Icon style={styles.icon} size={22} icon="picture" />}
                       />
                       <Pressable style={styles.navPress} onPress={selectImage} />
@@ -568,7 +568,7 @@ export function Settings({layout, setupNav}: {layout: string, setupNav: {back: (
                         style={styles.navInput}
                         mode="outlined"
                         outlineStyle={styles.navInputBorder}
-                        placeholder=`{state.strings.registry}&nbsp;`
+                        placeholder={`${state.strings.registry}&nbsp;`}
                         left={<TextInput.Icon style={styles.icon} size={22} icon="eye" />}
                       />
                       <View style={styles.controlAlign}>
@@ -604,7 +604,7 @@ export function Settings({layout, setupNav}: {layout: string, setupNav: {back: (
                           style={styles.navInput}
                           mode="outlined"
                           outlineStyle={styles.navInputBorder}
-                          placeholder=`${state.strings.mfaTitle}&nbsp;`
+                          placeholder={`${state.strings.mfaTitle}&nbsp;`}
                           left={<TextInput.Icon style={styles.icon} size={22} icon="key" />}
                         />
                         <View style={styles.controlAlign}>
@@ -618,7 +618,7 @@ export function Settings({layout, setupNav}: {layout: string, setupNav: {back: (
                           style={styles.navInput}
                           mode="outlined"
                           outlineStyle={styles.navInputBorder}
-                          placeholder=`${state.strings.changeLogin}&nbsp;`
+                          placeholder={`${state.strings.changeLogin}&nbsp;`}
                           left={<TextInput.Icon style={styles.icon} size={22} icon="sensor-occupied" />}
                         />
                         <Pressable style={styles.navPress} onPress={changeLogin} />
@@ -662,7 +662,7 @@ export function Settings({layout, setupNav}: {layout: string, setupNav: {back: (
                           style={styles.navInput}
                           mode="outlined"
                           outlineStyle={styles.navInputBorder}
-                          placeholder=`${state.strings.enableNotifications}&nbsp;`
+                          placeholder={`${state.strings.enableNotifications}&nbsp;`}
                           left={<TextInput.Icon style={styles.icon} size={22} icon="bell-outline" />}
                         />
                         <View style={styles.controlAlign}>
@@ -676,7 +676,7 @@ export function Settings({layout, setupNav}: {layout: string, setupNav: {back: (
                           style={styles.navInput}
                           mode="outlined"
                           outlineStyle={styles.navInputBorder}
-                          placeholder=`${state.strings.sealingKey}&nbsp;`
+                          placeholder={`${state.strings.sealingKey}&nbsp;`}
                           left={<TextInput.Icon style={styles.icon} size={22} icon="lock" />}
                         />
                         <Pressable style={styles.navPress} onPress={setSeal} />
@@ -689,7 +689,7 @@ export function Settings({layout, setupNav}: {layout: string, setupNav: {back: (
                             mode="outlined"
                             placeholderTextColor={state.config.sealSet && state.config.sealUnlocked ? undefined : theme.colors.secondary}
                             outlineStyle={styles.navInputBorder}
-                            placeholder=`${state.strings.createSealed}&nbsp;`
+                            placeholder={`${state.strings.createSealed}&nbsp;`}
                             left={<TextInput.Icon style={styles.icon} size={22} icon="sort-variant-lock" />}
                           />
                           <View style={styles.controlAlign}>
@@ -868,7 +868,7 @@ export function Settings({layout, setupNav}: {layout: string, setupNav: {back: (
                     <Surface elevation={0} mode="flat" style={styles.navData}>
                       <View style={styles.navFont}>
                         <View style={styles.splitLabel}>
-                          <TextInput style={styles.inputLabel} mode="outlined" outlineStyle={styles.navInputBorder} placeholder=`${state.strings.keyboardOffset}&nbsp;` />
+                          <TextInput style={styles.inputLabel} mode="outlined" outlineStyle={styles.navInputBorder} placeholder={`${state.strings.keyboardOffset}&nbsp;`} />
                           <Text style={{...styles.labelValue, color: theme.colors.tertiary}}>{ Math.floor(state.keyboardOffset) * 4 }px</Text>
                         </View>
                         <View style={styles.navPress} />
