@@ -806,7 +806,7 @@ export function Settings({layout, setupNav}: {layout: string, setupNav: {back: (
                       </View>
                       <Divider style={styles.navDivider} />
                       <View style={styles.navFont}>
-                        <TextInput style={styles.inputLabel} mode="outlined" outlineStyle={styles.navInputBorder} placeholder={state.strings.fontFormat} />
+                        <TextInput style={styles.inputLabel} mode="outlined" outlineStyle={styles.navInputBorder} placeholder={state.strings.fontFormat + " "} />
                         <View style={styles.navPress} />
                       </View>
                       <View style={styles.slider}>
