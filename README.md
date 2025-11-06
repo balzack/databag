@@ -148,6 +148,12 @@ From Your Browser:
     - Click the user icon to generate a new account link
       - Follow the link to create an account
 
+### Example with nginx-proxy
+
+If you are using [nginx-proxy](https://github.com/nginx-proxy/nginx-proxy) for automatic certification renewall,
+see the example provided in `/examples/docker-nginx-proxy/` directory.
+
+
 ### Other installation options
 
 Install without a container on a Raspberry Pi Zero [here](/doc/pizero.md).
