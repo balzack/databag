@@ -1,0 +1,22 @@
+name: databag
+
+networks:
+  reverse-proxy:
+    external: true
+    name: reverse-proxy
+
+services:
+  app:
+    build: .
+    volumes:
+      - database:/var/lib/databag
+    environment:
+      - ADMIN=password
+      - VIRTUAL_HOST=sub.domain.com
+      - VIRTUAL_PORT=7000
+      - LETSENCRYPT_HOST=sub.domain.com
+      - LETSENCRYPT_EMAIL=your@email.com
+    networks:
+      - reverse-proxy
+volumes:
+  database:
