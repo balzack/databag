@@ -1242,7 +1242,7 @@ export const es = {
 
 export const pt-pt = {
   yourHostname: 'O teu administrador ainda não configurou um nome para o host do serviço',
-  theirHostname: 'O administrador do contacto ainda não configurou um nome o host do serviço',
+  theirHostname: 'O administrador do contacto ainda não configurou um nome para o host do serviço',
 
   adminSettings: 'Configurações da administração',
   accountKeyType: 'Tipo de chave da conta',
@@ -1252,7 +1252,7 @@ export const pt-pt = {
   serviceToken: 'Token do serviço',
   serviceUrl: 'URL do serviço',
   idHint: 'ID / Nome de utilizador',
-  tokenHint: 'Token / Senha',
+  tokenHint: 'Token / Password',
   searchAccounts: 'Pesquisar contas',
   chatMembers: 'Membros do chat',
   tokenRequired: 'Token (requirido)',
@@ -1265,11 +1265,11 @@ export const pt-pt = {
 
   sureLogout: 'Tens a certeza que queres sair?',
   changePrompt: 'Aqui podes alterar o teu nome de utilizador e/ou a password da tua conta',
-  typeDelete: 'Escreve [exclui]',
+  typeDelete: 'Escreve [apagar]',
   encryptionKey: 'Chave de encriptação',
   generateKey: 'Cria uma chave para activar a encriptação de ponta a ponta nos tópicos.',
   moreOptions: 'Mais opções',
-  saveDelete: 'Guardar a chave com uma password diferente ou exclui a chave',
+  saveDelete: 'Guardar a chave com uma password diferente ou apagar a chave',
   removeMessage: 'Apagar a mensagem',
   reportMessage: 'Denunciar a mensagem',
   reportChat: 'Denunciar a conversa',
@@ -1315,7 +1315,7 @@ export const pt-pt = {
   notUser: 'Não é um utilizador?',
   adminAccess: 'Acesso para Administrador',
   yourProfile: 'Configura o teu perfil',
-  connectWith: 'Conecta-te com pessoas',
+  connectWith: 'Liga-te com pessoas',
   startTopic: 'Começa uma conversa',
   getStarted: 'Começar',
   enterName: 'Escreve o teu nome',
