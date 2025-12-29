@@ -3,8 +3,8 @@ export const languages = [
   {name: 'Français', value: 'fr'},
   {name: 'Español', value: 'es'},
   {name: 'Deutsch', value: 'de'},
-  {name: 'Português', value: 'pt-pt'},
-  {name: 'Português Brasil', value: 'pt-br'},
+  {name: 'Português', value: 'pt'},
+  {name: 'Português Brasil', value: 'br'},
   {name: 'Русский', value: 'ru'},
   {name: 'ελληνικά', value: 'el'},
 ];
@@ -1228,7 +1228,7 @@ export const es = {
   disablePrompt: '¿Estás seguro de que quieres desactivar la autenticación de dos factores?',
 };
 
-export const pt-pt = {
+export const pt = {
   yourHostname: 'O teu administrador ainda não configurou um nome para o host do serviço',
   theirHostname: 'O administrador do contacto ainda não configurou um nome para o host do serviço',
 
@@ -1394,7 +1394,7 @@ export const pt-pt = {
   blockMessage: 'Bloquear a mensagem',
   blockMessagePrompt: 'Tens certeza que queres bloquear a mensagem?',
 
-  code: 'pt-pt',
+  code: 'pt',
   settings: 'Definicões',
   contacts: 'Contactos',
   logout: 'Sair',
@@ -1634,7 +1634,7 @@ export const pt-pt = {
   disablePrompt: 'Tens a certeza que queres desactivar a autenticação de dois factores?',
 };
 
-export const pt-br = {
+export const br = {
   yourHostname: 'Seu administrador não configurou o nome do host do serviço',
   theirHostname: 'O administrador do contato não configurou o nome do host do serviço',
 
@@ -1800,7 +1800,7 @@ export const pt-br = {
   blockMessage: 'Bloquear mensagem',
   blockMessagePrompt: 'Tem certeza de que deseja bloquear a mensagem?',
 
-  code: 'pt-br',
+  code: 'br',
   settings: 'Configurações',
   contacts: 'Contatos',
   logout: 'Sair',
