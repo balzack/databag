@@ -1702,8 +1702,9 @@ export function getLanguageStrings() {
     return Strings[6];
   }
   if (lang === 'zh') {
-    if (locale.includes('hans') || locale.includes('cn')) {
-      return Strings[7]
+    const upperLocale = locale.toUpperCase();
+    if (upperLocale.includes('HANS') || upperLocale.includes('CN')) {
+      return Strings[7];
     }
   }
   return Strings[0];
