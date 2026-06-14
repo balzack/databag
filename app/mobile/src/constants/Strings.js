@@ -270,7 +270,7 @@ const Strings = [
 
     cancel: 'Annuler',
     confirmLogout: 'Déconnecter',
-    loggingOut: 'Confirmation de la Déconnexion', 
+    loggingOut: 'Confirmation de la Déconnexion',
     username: 'Nom d\'Utilisateur',
     save: 'Engegistrer',
     notAvailable: 'Nom d\'Utilisateur Indisponible',
@@ -340,7 +340,7 @@ const Strings = [
     topics: 'Sujets',
     subject: 'Titre (optionnel)',
     create: 'Créer',
-    sealed: 'Protégé', 
+    sealed: 'Protégé',
     newTopic: 'Nouveau Sujet',
     new: 'Nouveau',
 
@@ -536,7 +536,7 @@ const Strings = [
     actionReport: 'Reportar',
 
     // contact list page
-    add: 'Agregar', 
+    add: 'Agregar',
     contactFilter: 'Contactos',
     serverFilter: 'Servidor',
     usernameFilter: 'Nombre de Usuario',
@@ -718,7 +718,7 @@ const Strings = [
     registryVisible: 'Im Verzeichnis sichtbar',
     editImage: 'Bild Bearbeiten',
     editDetails: 'Details Bearbeiten',
-    
+
     //contacts page
     back: 'Zurück',
     deleteContact: 'Kontakt löschen',
@@ -756,7 +756,7 @@ const Strings = [
     messageContact: 'Nachricht senden',
     callContact: 'Kontakt Anrufen',
     noContacts: 'Keine Kontakte Gefunden',
-    
+
     // channels list
     profile: 'Profil',
     contacts: 'Kontakte',
@@ -1457,8 +1457,8 @@ const Strings = [
     disable: 'Απενεργοποίηση',
     confirmDisable: 'Απενεργοποίηση Επαλήθευσης Πολλαπλών Παραγόντων ',
     disablePrompt: 'Είστε σίγουροι ότι θέλετε να απενεργοποιήσετε την επαλήθευση πολλαπλών παραγόντων;',
- },
- {
+  },
+  {
     // settings screen
     languageCode: 'cn',
     visibleRegistry: '在注册表中公开',
@@ -1672,7 +1672,222 @@ const Strings = [
     disable: '禁用',
     confirmDisable: '禁用多因素认证',
     disablePrompt: '你确定要禁用多因素认证吗？',
- }
+  },
+  {
+    // settings screen
+    languageCode: 'it',
+    visibleRegistry: 'Visibile nel Registro',
+    edit: 'Modifica',
+    enableNotifications: 'Notifiche Push',
+    allowUnsealed: 'Consenti Non Sigillate',
+    sealedTopics: 'Conversazioni Sigillate',
+    colorMode: 'Modalità Colore',
+    hourMode: 'Ora',
+    dateMode: 'Data',
+    language: 'Lingua',
+    logout: 'Esci',
+    changeLogin: 'Cambia Credenziali',
+    deleteAccount: 'Elimina Account',
+    contacts: 'Contatti',
+    topics: 'Conversazioni',
+    messages: 'Messaggi',
+    support: 'Supporto',
+    blocked: 'Bloccato',
+    account: 'Account',
+    display: 'Formato',
+    messaging: 'Messaggistica',
+    timeFull: '24h',
+    timeHalf: '12h',
+    monthStart: 'mm/gg',
+    monthEnd: 'gg/mm',
+    error: 'Errore',
+    tryAgain: 'Per favore, riprova.',
+
+    // seal wizard
+    sealUnset: 'Genera una chiave per abilitare le conversazioni crittografate end-to-end.',
+    sealUnlocked: 'Disabilitando la chiave di sigillatura bloccherai l\'accesso a tutte le conversazioni crittografate end-to-end da questo dispositivo finché la chiave non verrà sbloccata di nuovo.',
+    sealLocked: 'Sblocca la chiave di sigillatura per supportare le conversazioni crittografate end-to-end su questo dispositivo.',
+    sealDelete: 'Eliminando la chiave di sigillatura rimuoverai in modo permanente l\'accesso a qualsiasi conversazione crittografata end-to-end esistente per TUTTI i tuoi dispositivi.',
+    password: 'Password',
+    confirmPassword: 'Conferma Password',
+    generate: 'Genera',
+    disable: 'Disabilita',
+    delete: 'Elimina',
+    unlock: 'Sblocca',
+    removeSeal: 'Rimuovi Chiave di Sigillatura',
+    disableSeal: 'Disabilita Chiave di Sigillatura',
+    unlockSeal: 'Sblocca Chiave di Sigillatura',
+    typeDelete: 'Digita [elimina]',
+    deleteKey: 'elimina',
+    enableTopics: 'Abilita Conversazioni Sigillate',
+    manageTopics: 'Gestisci Chiave di Sigillatura',
+    changePassword: 'Cambia la password della chiave di sigillatura.',
+    update: 'Modifica',
+    changeKey: 'Cambia Password della Chiave',
+    delayMessage: 'La generazione della chiave può richiedere diversi minuti.',
+    changeMessage: 'Qui puoi cambiare il nome utente e/o la password per il tuo account.',
+
+    // settings modals
+    cancel: 'Annulla',
+    confirmLogout: 'Esci',
+    loggingOut: 'Uscita in corso',
+    username: 'Nome Utente',
+    save: 'Salva',
+    notAvailable: 'Nome Utente Non Disponibile',
+    blockedContacts: 'Contatti Bloccati',
+    restoreContact: 'Ripristinare Contatto?',
+    blockedTopics: 'Conversazioni Bloccate',
+    restoreTopic: 'Ripristinare Conversazione?',
+    blockedMessages: 'Messaggi Bloccati',
+    restoreMessage: 'Ripristinare Messaggio?',
+    close: 'Chiudi',
+    ok: 'OK',
+    noBlockedContacts: 'Nessun Contatto Bloccato',
+    noBlockedTopics: 'Nessuna Conversazione Bloccata',
+    noBlockedMessages: 'Nessun Messaggio Bloccato',
+    restore: 'Ripristina',
+
+    //profile page
+    edit: 'Modifica',
+    name: 'Nome',
+    location: 'Posizione',
+    description: 'Descrizione',
+    registryVisible: 'Visibile nel Registro',
+    editImage: 'Modifica Immagine',
+    editDetails: 'Modifica Dettagli',
+
+    // contacts page
+    back: 'Indietro',
+    deleteContact: 'Elimina Contatto',
+    confirmDelete: 'Elimina',
+    disconnectContact: 'Disconnetti dal Contatto',
+    confirmDisconnect: 'Disconnetti',
+    blockContact: 'Blocca Contatto',
+    confirmBlock: 'Blocca',
+    reportContact: 'Segnala Contatto',
+    confirmReport: 'Segnala',
+    confirmed: 'Salvato',
+    pending: 'Sconosciuto',
+    connecting: 'Richiesta Inviata',
+    connected: 'Connesso',
+    requested: 'Richiesta Ricevuta',
+    unsaved: 'Non Salvato',
+    offsync: 'Non Sincronizzato',
+    actionResync: 'Risincronizza',
+    actionConnect: 'Connetti',
+    actionAccept: 'Accetta',
+    actionSave: 'Salva',
+    actionCancel: 'Annulla',
+    actionDisconnect: 'Disconnetti',
+    actionIgnore: 'Ignora',
+    actionDelete: 'Elimina',
+    actionBlock: 'Blocca',
+    actionReport: 'Segnala',
+    actionLeave: 'Abbandona',
+
+    // contact list page
+    add: 'Aggiungi',
+    contactFilter: 'Contatti',
+    serverFilter: 'Server',
+    usernameFilter: 'Nome Utente',
+    viewProfile: 'Visualizza Profilo',
+    messageContact: 'Invia Messaggio al Contatto',
+    callContact: 'Chiama Contatto',
+    noContacts: 'Nessun Contatto Trovato',
+
+    // channels list
+    profile: 'Profilo',
+    contacts: 'Contatti',
+    topics: 'Conversazioni',
+    subject: 'Oggetto (opzionale)',
+    create: 'Crea',
+    sealed: 'Sigillato',
+    newTopic: 'Nuova Conversazione',
+    new: 'Nuovo',
+
+    // details
+    topic: 'Conversazione',
+    host: 'host',
+    guest: 'ospite',
+    leave: 'Abbandona',
+    members: 'Membri',
+    editSubject: 'Modifica Oggetto',
+    topicMembers: 'Membri della Conversazione',
+    leaveTopic: 'Abbandona Conversazione',
+    deleteTopic: 'Elimina Conversazione',
+    blockTopic: 'Blocca Conversazione',
+    reportTopic: 'Segnala Conversazione',
+    unknown: 'sconosciuto',
+
+    accounts: 'Account',
+    createAccount: 'Crea Account',
+    accessAccount: 'Accedi all\'Account',
+    token: 'Token',
+    settings: 'Impostazioni',
+    federatedHost: 'Host Federato',
+    storageLimit: 'Limite di Archiviazione (GB) / Account',
+    keyType: 'Tipo di Chiave Account',
+    enableImage: 'Abilita Coda Immagini',
+    enableAudio: 'Abilita Coda Audio',
+    enableVideo: 'Abilita Coda Video',
+    enableBinary: 'Abilita File Binari',
+    enableCalls: 'Abilita Chiamate WebRTC',
+    iceService: 'Servizio Cloudflare',
+    relayUrl: 'URL Relay',
+    relayUsername: 'Nome Utente Relay',
+    relayPassword: 'Password Relay',
+
+    newMessage: 'Nuovo Messaggio',
+    fontSize: 'Dimensione Carattere',
+    small: 'Piccolo',
+    medium: 'Medio',
+    large: 'Grande',
+    fontColor: 'Colore Carattere',
+    selectedColor: 'Colore Selezionato',
+
+    login: 'Accedi',
+    createAccount: 'Crea Account',
+    forgotPassword: 'Password Dimenticata',
+    adminAccess: 'Accesso Amministratore',
+    server: 'Server',
+    access: 'Accesso',
+    defaultPublic: 'Il server pubblico predefinito serve per testare il sistema. Altrimenti, usa un server privato.',
+    confirmPassword: 'Conferma Password',
+    accountLogin: 'Accesso Account',
+    accessAccount: 'Accedi all\'Account',
+    agree: 'Accetto i Termini di Servizio',
+    terms: 'Visualizza i Termini di Servizio',
+    policy: 'Termini di Utilizzo e Politica dell\'Utente',
+
+    editMessage: 'Modifica Testo del Messaggio',
+    emptyTopic: 'Conversazione Vuota',
+    noTopics: 'Nessuna Conversazione',
+    notes: 'Note',
+
+    welcome: 'Benvenuto in Databag',
+    communication: 'Comunicazione per il Web Decentralizzato',
+    setup: 'Configura il tuo Profilo',
+    connect: 'Connettiti con le Persone',
+    start: 'Inizia una Conversazione',
+    started: 'Inizia',
+
+    deleteMessage: 'Elimina Messaggio',
+    blockMessage: 'Blocca Messaggio',
+    reportMessage: 'Segnala Messaggio',
+    select: 'Seleziona',
+    selectTopic: 'Seleziona Conversazione da Condividere',
+
+    mfaTitle: 'Autenticazione Multi-Fattore',
+    mfaSteps: 'Salva il segreto e conferma il codice di verifica',
+    mfaError: 'errore codice di verifica',
+    mfaDisabled: 'verifica temporaneamente disabilitata',
+    mfaConfirm: 'Conferma',
+    mfaEnter: 'Inserisci il tuo codice di verifica',
+
+    disable: 'Disabilita',
+    confirmDisable: 'Disabilitazione Autenticazione Multi-Fattore',
+    disablePrompt: 'Sei sicuro di voler disabilitare l\'autenticazione multi-fattore',
+  }
 ];
 
 export function getLanguageStrings() {
@@ -1706,6 +1921,9 @@ export function getLanguageStrings() {
     if (upperLocale.includes('HANS') || upperLocale.includes('CN')) {
       return Strings[7];
     }
+  }
+  if (lang === 'it') {
+    return Strings[8];
   }
   return Strings[0];
 };
